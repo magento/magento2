@@ -72,6 +72,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select->expects($this->any())->method('from')->will($this->returnSelf());
+        $select->expects($this->any())->method('where')->will($this->returnSelf());
+        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
+        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
+            '1' => '1', '2' => '2'
+        ]));
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
@@ -110,16 +121,23 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
         $this->prodAttrColFac = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
+        );
+        $attrCollection = $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
+        $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
+
+        $this->prodAttrColFac->expects($this->any())->method('create')->will(
+            $this->returnValue($attrCollection)
         );
         $this->params = [
             0 => $this->entityModel,
             1 => 'bundle'
         ];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->bundle = $this->objectManagerHelper->getObject(
             'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
             [
@@ -149,14 +167,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(
             $allowImport
         ));
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
+
         $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->will($this->returnValue($adapter));
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
+
         $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
             '1' => [
                 'option_id' => '1',
@@ -210,9 +231,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'position' => '1',
             'is_default' => '1'
         ]]));
-        $this->connection->expects($this->any())->method('fetchPairs')->with($select)->will($this->returnValue([
-            '1' => '1', '2' => '2'
-        ]));
+
         $this->bundle->saveData();
     }
 
