@@ -5,11 +5,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
-use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class ResetPasswordButton
- * @package Magento\Customer\Block\Adminhtml\Edit
  */
 class ResetPasswordButton extends GenericButton implements ButtonProviderInterface
 {
@@ -24,7 +23,7 @@ class ResetPasswordButton extends GenericButton implements ButtonProviderInterfa
             $data = [
                 'label' => __('Reset Password'),
                 'class' => 'reset reset-password',
-                'on_click' => 'setLocation(\'' . $this->getResetPasswordUrl() . '\')',
+                'on_click' => sprintf("location.href = '%s';", $this->getResetPasswordUrl()),
                 'sort_order' => 40,
             ];
         }

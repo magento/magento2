@@ -9,21 +9,19 @@ namespace Magento\CatalogRule\Test\TestCase;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 
 /**
- * Test Coverage for Create Catalog Rule
- *
- * Test Flow:
+ * Steps:
  * 1. Log in as default admin user.
- * 2. Go to Marketing > Catalog Price Rules
- * 3. Press "+" button to start create new catalog price rule
- * 4. Fill in all data according to data set
- * 5. Save rule
- * 6. Apply newly created catalog rule
- * 7. Create simple product
- * 8. Clear cache
- * 9. Perform all assertions
+ * 2. Go to Marketing > Catalog Price Rules.
+ * 3. Press "+" button to start create new catalog price rule.
+ * 4. Fill in all data according to data set.
+ * 5. Save rule.
+ * 6. Apply newly created catalog rule.
+ * 7. Create simple product.
+ * 8. Clear cache.
+ * 9. Perform all assertions.
  *
  * @ticketId MAGETWO-23036
  */
@@ -37,7 +35,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
     /* end tags */
 
     /**
-     * Create Catalog Price Rule
+     * Create Catalog Price Rule.
      *
      * @param CatalogRule $catalogPriceRule
      * @param Customer $customer
@@ -70,9 +68,6 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
 
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
-
         // Apply Catalog Price Rule
         $this->catalogRuleIndex->getGridPageActions()->applyRules();
 
@@ -95,13 +90,13 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      *
      * @param CatalogRule $catalogPriceRule
      * @param Customer|null $customer
-     * @return CustomerGroupInjectable
+     * @return CustomerGroup
      */
     public function applyCustomerGroup(CatalogRule $catalogPriceRule, Customer $customer = null)
     {
         if ($customer !== null) {
             $customer->persist();
-            /** @var \Magento\Customer\Test\Fixture\CustomerGroupInjectable $customerGroup */
+            /** @var \Magento\Customer\Test\Fixture\CustomerGroup $customerGroup */
             $customerGroup = $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup();
             $catalogPriceRule = $this->fixtureFactory->createByCode(
                 'catalogRule',

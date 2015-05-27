@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Resource\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class InvoiceSender
@@ -44,6 +45,13 @@ class InvoiceSender extends Sender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param InvoiceIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
@@ -52,22 +60,25 @@ class InvoiceSender extends Sender
      * @param InvoiceResource $invoiceResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
         InvoiceIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer,
         PaymentHelper $paymentHelper,
         InvoiceResource $invoiceResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        Renderer $addressRenderer
+        ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
         $this->invoiceResource = $invoiceResource;
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -92,31 +103,27 @@ class InvoiceSender extends Sender
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $invoice->getOrder();
 
-            if ($order->getShippingAddress()) {
-                $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
-            } else {
-                $formattedShippingAddress = '';
-            }
-            $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-            
-            $this->templateContainer->setTemplateVars(
-                [
-                    'order' => $order,
-                    'invoice' => $invoice,
-                    'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
-                    'billing' => $order->getBillingAddress(),
-                    'payment_html' => $this->getPaymentHtml($order),
-                    'store' => $order->getStore(),
-                    'formattedShippingAddress' => $formattedShippingAddress,
-                    'formattedBillingAddress' => $formattedBillingAddress
-                ]
+            $transport = [
+                'order' => $order,
+                'invoice' => $invoice,
+                'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
+                'billing' => $order->getBillingAddress(),
+                'payment_html' => $this->getPaymentHtml($order),
+                'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+            ];
+
+            $this->eventManager->dispatch(
+                'email_invoice_set_template_vars_before',
+                ['sender' => $this, 'transport' => $transport]
             );
+
+            $this->templateContainer->setTemplateVars($transport);
 
             if ($this->checkAndSend($order)) {
                 $invoice->setEmailSent(true);
-
                 $this->invoiceResource->saveAttribute($invoice, ['send_email', 'email_sent']);
-
                 return true;
             }
         }

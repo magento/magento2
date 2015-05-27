@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!-- ko if: sortable -->
+    <th
+        class="data-grid-th _sortable"
+        data-bind="css: sortClass, click: sort, visible: visible">
+        <span data-bind="text: label"></span>
+    </th>
+<!-- /ko -->
+
+<!-- ko ifnot: sortable -->
+    <th class="data-grid-th" data-bind="visible: visible">
+        <span data-bind="text: label"></span>
+    </th>
+<!-- /ko -->

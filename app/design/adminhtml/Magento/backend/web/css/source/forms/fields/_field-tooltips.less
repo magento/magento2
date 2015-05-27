@@ -1,0 +1,83 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@field-tooltip-icon__color: @color-brownie;
+@field-tooltip-content__background-color: @color-lazy-sun;
+@field-tooltip-content__border-color: @color-dark-grayish-orange;
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.admin__field-tooltip {
+    display: inline-block;
+    margin-top: 5px;
+    overflow: visible;
+    vertical-align: top;
+    width:0;
+    &:hover {
+        position: relative;
+        z-index: @field-tooltip__z-index;
+    }
+    .admin__field-option & {
+        margin-top: 10px
+    }
+    .admin__field-tooltip-action {
+        margin-left: 20px;
+        display: inline-block;
+        .icon-font(
+            @icon-help__content,
+            @icons-admin__font-name,
+            @_icon-font-size: 2.2rem,
+            @_icon-font-line-height: 1,
+            @_icon-font-color: @field-tooltip-icon__color
+        );
+    }
+    .admin__control-text:focus + .admin__field-tooltip-content,
+    &:hover .admin__field-tooltip-content {
+        display: block;
+    }
+    .admin__field-tooltip-content {
+        &:extend(.abs-admin__field-tooltip-content all);
+        bottom: 42px;
+        display: none;
+        right: -70px;
+        &:after,
+        &:before {
+            .arrow(
+            @_position: down,
+            @_size: 16px,
+            @_color: @field-tooltip-content__border-color
+            );
+            content: "";
+            display: block;
+            position: absolute;
+            right: 20px;
+            top: 100%;
+            z-index: 3;
+        }
+        &:after {
+            border-top-color: @field-tooltip-content__background-color;
+            margin-top: -1px;
+            z-index: 4;
+        }
+    }
+}
+
+.abs-admin__field-tooltip-content {
+    @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+    .css(box-shadow, @_shadow);
+    background: @field-tooltip-content__background-color;
+    border-radius: 1px;
+    border: 1px solid @field-tooltip-content__border-color;
+    padding: 15px 25px;
+    position: absolute;
+    width: 320px;
+    z-index: 1;
+}

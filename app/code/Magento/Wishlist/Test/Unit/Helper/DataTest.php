@@ -40,20 +40,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->url = 'http://magento.com/wishlist/index/index/wishlist_id/1/?___store=default';
-        $encoded = 'encodedUrl';
-
         $this->configureUrl = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
-
-        $urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
-        $urlEncoder->expects($this->any())
-            ->method('encode')
-            ->with($this->url)
-            ->will($this->returnValue($encoded));
-
         $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $store->expects($this->any())
             ->method('getUrl')
-            ->with('wishlist/index/cart', ['item' => '%item%', 'uenc' => $encoded])
+            ->with('wishlist/index/cart', ['item' => '%item%'])
             ->will($this->returnValue($this->url));
 
         $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
@@ -80,9 +71,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($urlBuilder));
-        $context->expects($this->once())
-            ->method('getUrlEncoder')
-            ->will($this->returnValue($urlEncoder));
 
         $this->wishlistProvider = $this->getMock(
             'Magento\Wishlist\Controller\WishlistProviderInterface',

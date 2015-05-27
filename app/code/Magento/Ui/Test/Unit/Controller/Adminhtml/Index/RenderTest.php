@@ -61,26 +61,39 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $name = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->with('component')
+            ->with('namespace')
             ->willReturn($name);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('name')
-            ->willReturn($name);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
         $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->with($renderedData);
 
-        $viewMock = $this->getMock('Magento\Ui\Form\Field', ['render'], [], '', false);
+        /**
+         * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $viewMock
+         */
+        $viewMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponentInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['render']
+        );
         $viewMock->expects($this->once())
             ->method('render')
             ->willReturn($renderedData);
+        $viewMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
         $this->uiFactoryMock->expects($this->once())
-            ->method('createUiComponent')
+            ->method('create')
             ->willReturn($viewMock);
 
-        $this->assertNull($this->render->execute());
+        $this->render->execute();
     }
 }

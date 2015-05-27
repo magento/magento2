@@ -20,8 +20,24 @@ use Magento\Tax\Api\Data\TaxRateInterface;
  * @method \Magento\Tax\Model\Resource\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\TaxRateInterface
+class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ID              = 'id';
+    const KEY_COUNTRY_ID      = 'tax_country_id';
+    const KEY_REGION_ID       = 'tax_region_id';
+    const KEY_REGION_NAME     = 'region_name';
+    const KEY_POSTCODE        = 'tax_postcode';
+    const KEY_ZIP_IS_RANGE    = 'zip_is_range';
+    const KEY_ZIP_RANGE_FROM  = 'zip_from';
+    const KEY_ZIP_RANGE_TO    = 'zip_to';
+    const KEY_PERCENTAGE_RATE = 'rate';
+    const KEY_CODE            = 'code';
+    const KEY_TITLES          = 'titles';
+    /**#@-*/
+
     /**
      * List of tax titles
      *

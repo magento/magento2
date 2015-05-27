@@ -85,8 +85,7 @@ class Manager
     public function clean(array $types)
     {
         foreach ($types as $type) {
-            $frontend = $this->pool->get($type);
-            $frontend->clean();
+            $this->cacheTypeList->cleanType($type);
         }
     }
 

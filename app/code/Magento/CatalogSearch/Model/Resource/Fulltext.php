@@ -5,20 +5,11 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\Search\Model\Resource\Helper;
-
 /**
  * CatalogSearch Fulltext Index resource model
  */
 class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
-    /**
-     * Core string
-     *
-     * @var \Magento\Framework\Filter\FilterManager
-     */
-    protected $filter;
-
     /**
      * Core event manager proxy
      *
@@ -27,29 +18,16 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_eventManager;
 
     /**
-     * CatalogSearch resource helper
-     *
-     * @var \Magento\Search\Model\Resource\Helper
-     */
-    protected $_resourceHelper;
-
-    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Filter\FilterManager $filter
-     * @param Helper $resourceHelper
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Search\Model\Resource\Helper $resourceHelper,
         $resourcePrefix = null
     ) {
         $this->_eventManager = $eventManager;
-        $this->filter = $filter;
-        $this->_resourceHelper = $resourceHelper;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -71,7 +49,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function resetSearchResults()
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->update($this->getTable('search_query'), ['is_processed' => 0]);
+        $adapter->update($this->getTable('search_query'), ['is_processed' => 0], ['is_processed != 0']);
         $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         return $this;
     }

@@ -8,34 +8,36 @@
 
 ?>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<div class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Refunded') ?></span>
     </div>
-    <div class="grid">
-        <table cellspacing="0" class="data">
-            <thead>
-                <tr class="headings">
-                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                    <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="col-tax"><span><?php echo __('Tax Amount') ?></span></th>
-                    <th class="col-discount"><span><?php echo __('Discount Amount') ?></span></th>
-                    <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
-                </tr>
-            </thead>
-            <?php $i = 0; foreach ($_items as $_item): ?>
-                <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
-                <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
-                    <?php echo $block->getItemHtml($_item) ?>
-                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
-                </tbody>
-            <?php endforeach; ?>
-        </table>
+    <div class="admin__page-section-content">
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary order-creditmemo-tables">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?php echo __('Product') ?></span></th>
+                        <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                        <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                        <th class="col-tax"><span><?php echo __('Tax Amount') ?></span></th>
+                        <th class="col-discount"><span><?php echo __('Discount Amount') ?></span></th>
+                        <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
+                    </tr>
+                </thead>
+                <?php $i = 0; foreach ($_items as $_item): ?>
+                    <?php if ($_item->getOrderItem()->getParentItem()) {
+                        continue;
+                    } else {
+                        $i++;
+                    } ?>
+                    <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
+                        <?php echo $block->getItemHtml($_item) ?>
+                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    </tbody>
+                <?php endforeach; ?>
+            </table>
+        </div>
     </div>
 </div>

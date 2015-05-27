@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 abstract class AbstractElement implements ElementInterface
@@ -136,7 +137,7 @@ abstract class AbstractElement implements ElementInterface
         $showInScope = [
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
             \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
         ];
 
         if ($this->_storeManager->isSingleStoreMode()) {

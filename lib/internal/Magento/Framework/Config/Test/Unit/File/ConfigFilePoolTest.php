@@ -27,6 +27,7 @@ class ConfigFilePoolTest extends \PHPUnit_Framework_TestCase
     {
         $expected['new_key'] = 'new_config.php';
         $expected[ConfigFilePool::APP_CONFIG] = 'config.php';
+        $expected[ConfigFilePool::APP_ENV] = 'env.php';
 
         $this->assertEquals($expected, $this->configFilePool->getPaths());
     }

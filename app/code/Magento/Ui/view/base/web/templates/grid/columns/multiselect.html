@@ -1,0 +1,41 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<th class="data-grid-multiselect-cell">
+    <div
+        class="action-multiselect-wrap"
+        data-bind="css: { '_active': menuVisible, '_disabled': !totalRecords()},
+                   outerClick: hideMenu">
+        <input
+            id="mass-select-checkbox"
+            class="admin__control-checkbox"
+            type="checkbox"
+            data-bind="checked: allSelected,
+                       event: { change: toggleSelectAll },
+                       css: { '_indeterminate': indetermine },
+                       enable: totalRecords">
+        <label for="mass-select-checkbox"></label>
+        <button
+            class="action-multiselect-toggle"
+            data-toggle="dropdown"
+            data-bind="css: { '_active': menuVisible },
+                       click: toggleMenu,
+                       enable: totalRecords">
+            <span data-bind="text: $t('Options')"></span>
+        </button>
+        <ul
+            class="action-menu"
+            data-bind="click: hideMenu">
+            <!-- ko foreach: actions -->
+            <li data-bind="click: $parent[value].bind($parent),
+                           visible: $parent.isActionRelevant(value)">
+                <span class="action-menu-item" data-bind="text: label"></span>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</th>

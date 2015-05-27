@@ -24,6 +24,13 @@ class ListProduct extends Block
     protected $productItem = './/*[contains(@class,"product-item-link") and normalize-space(text())="%s"]/ancestor::li';
 
     /**
+     * Locator for product item link.
+     *
+     * @var string
+     */
+    protected $productItemLink = '.product-item-link';
+
+    /**
      * Sorter dropdown selector.
      *
      * @var string
@@ -44,6 +51,23 @@ class ListProduct extends Block
             'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Get product names list.
+     *
+     * @return array
+     */
+    public function getProductNames()
+    {
+        $itemLinks = $this->_rootElement->getElements($this->productItemLink);
+        $productNames = [];
+
+        foreach ($itemLinks as $itemLink) {
+            $productNames[] = trim($itemLink->getText());
+        }
+
+        return $productNames;
     }
 
     /**

@@ -45,11 +45,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
     protected $_eventObject = 'invoice_item';
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|null
-     */
-    protected $_invoice = null;
-
-    /**
      * @var \Magento\Sales\Model\Order\Item|null
      */
     protected $_orderItem = null;
@@ -104,13 +99,12 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Declare invoice instance
      *
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      * @return $this
      */
-    public function setInvoice(\Magento\Sales\Model\Order\Invoice $invoice)
+    public function setInvoice(\Magento\Sales\Api\Data\InvoiceInterface $invoice)
     {
-        $this->_invoice = $invoice;
-        return $this;
+        return $this->setData(self::INVOICE, $invoice);
     }
 
     /**
@@ -120,7 +114,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      */
     public function getInvoice()
     {
-        return $this->_invoice;
+        return $this->getData(self::INVOICE);
     }
 
     /**
@@ -158,29 +152,10 @@ class Item extends AbstractModel implements InvoiceItemInterface
      *
      * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        $qtyToInvoice = sprintf("%F", $this->getOrderItem()->getQtyToInvoice());
-        $qty = sprintf("%F", $qty);
-        if ($qty <= $qtyToInvoice || $this->getOrderItem()->isDummy()) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to invoice item "%1".', $this->getName())
-            );
-        }
-        return $this;
+        return $this->setData(self::QTY, $qty);
     }
 
     /**

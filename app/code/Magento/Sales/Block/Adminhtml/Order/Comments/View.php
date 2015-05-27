@@ -60,7 +60,7 @@ class View extends \Magento\Backend\Block\Template
         $this->addChild(
             'submit_button',
             'Magento\Backend\Block\Widget\Button',
-            ['id' => 'submit_comment_button', 'label' => __('Submit Comment'), 'class' => 'save']
+            ['id' => 'submit_comment_button', 'label' => __('Submit Comment'), 'class' => 'action-secondary save']
         );
         return parent::_prepareLayout();
     }

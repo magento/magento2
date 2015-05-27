@@ -15,8 +15,8 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException as ModelException;
-use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
 use Magento\Tax\Model\Resource\TaxClass\Collection as TaxClassCollection;
 use Magento\Tax\Model\Resource\TaxClass\CollectionFactory as TaxClassCollectionFactory;
@@ -164,19 +164,19 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]));
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => ClassModel::KEY_NAME]));
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]));
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => ClassModel::KEY_TYPE]));
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
             $exception->addError(
                 __(
                     InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                    ['fieldName' => ClassModel::KEY_TYPE, 'value' => $classType]
                 )
             );
         }

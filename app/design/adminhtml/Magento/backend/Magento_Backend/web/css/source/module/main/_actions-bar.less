@@ -12,7 +12,7 @@
 //  Components
 //  ---------------------------------------------
 
-@import 'actions_bar/_store-switcher.less';
+@import 'actions-bar/_store-switcher.less';
 
 //
 //  Variables
@@ -24,8 +24,8 @@
 
 //
 
-.page-main-actions,
-.page-actions.fixed {
+.page-main-actions:not(._hidden),
+.page-actions._fixed {
     .extend__clearfix();
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
@@ -34,7 +34,12 @@
 }
 
 .page-main-actions {
-    margin: 0 0 2rem;
+    margin: 0 0 @indent__l;
+    &._hidden {
+        .store-switcher {
+            display: none;
+        }
+    }
 }
 
 //
@@ -44,23 +49,23 @@
 .page-actions {
     @_page-action__indent: 1.3rem;
     float: right;
-    &.fixed {
-        left: @page-wrapper__indent-left;
-        position: fixed;
-        right: 0;
-        top: 0;
-        z-index: @page-actions__fixed__z-index;
-        .page-actions-inner {
-            &:before {
-                color: @page-title__color;
-                content: attr(data-title);
-                float: left;
-                font-size: @page-title__font-size;
-                margin-top: .3rem;
-                max-width: 50%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+    .page-main-actions & {
+        &._fixed {
+            left: @page-wrapper__indent-left;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: @page-actions__fixed__z-index;
+            .page-actions-inner {
+                &:before {
+                    .text-overflow-ellipsis();
+                    color: @page-title__color;
+                    content: attr(data-title);
+                    float: left;
+                    font-size: @page-title__font-size;
+                    margin-top: .3rem;
+                    max-width: 50%;
+                }
             }
         }
     }
@@ -105,6 +110,7 @@
         }
     }
     .actions-split {
+        &:extend(.abs-actions-split-xl all);
         float: right;
         margin-left: @_page-action__indent;
         .vendor-prefix-order(2);

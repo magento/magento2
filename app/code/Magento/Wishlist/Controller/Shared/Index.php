@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,8 +7,9 @@ namespace Magento\Wishlist\Controller\Shared;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends Action
 {
     /**
      * Core registry
@@ -49,7 +49,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Shared wishlist view page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -57,16 +57,18 @@ class Index extends \Magento\Framework\App\Action\Action
         $customerId = $this->customerSession->getCustomerId();
 
         if ($wishlist && $wishlist->getCustomerId() && $wishlist->getCustomerId() == $customerId) {
-            $this->getResponse()->setRedirect(
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            $resultRedirect->setUrl(
                 $this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId())
             );
-            return;
+            return $resultRedirect;
         }
 
         $this->registry->register('shared_wishlist', $wishlist);
 
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        return $resultPage;
     }
 }

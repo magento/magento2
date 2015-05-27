@@ -1,0 +1,42 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-bind="css: {_active: opened}, outerClick: close" class="admin__action-dropdown-wrap admin__data-grid-action-columns">
+    <button
+        class="admin__action-dropdown"
+        type="button"
+        data-bind="click: toggleOpened"
+        data-toggle="dropdown"
+        aria-haspopup="true">
+        <span class="admin__action-dropdown-text" data-bind="text: $t('Columns')"></span>
+    </button>
+    <div data-bind="css: {_overflow: hasOverflow()}" class="admin__action-dropdown-menu admin__data-grid-action-columns-menu">
+        <div class="admin__action-dropdown-menu-header">
+            <span data-bind="text: getHeaderMessage()"></span>
+        </div>
+        <div class="admin__action-dropdown-menu-content">
+            <!-- ko foreach: elems -->
+            <div class="admin__field-option">
+                <input data-bind="attr: {id: 'grid-controls-columns-' + index}, disable: $parent.isDisabled($data), checked: visible"
+                       class="admin__control-checkbox" type="checkbox"/>
+                <label data-bind="text: label, attr: {for: 'grid-controls-columns-' + index}" class="admin__field-label"></label>
+            </div>
+            <!-- /ko -->
+        </div>
+        <div class="admin__action-dropdown-menu-footer">
+            <div class="admin__action-dropdown-footer-secondary-actions">
+                <button data-bind="click: reset" class="action-tertiary" type="button">
+                    <span data-bind="text: $t('Reset')"></span>
+                </button>
+            </div>
+            <div class="admin__action-dropdown-footer-main-actions">
+                <button data-bind="click: function () { $data.close().cancel(); }" class="action-tertiary" type="button">
+                    <span data-bind="text: $t('Cancel')"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

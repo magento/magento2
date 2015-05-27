@@ -10,7 +10,8 @@
 
 namespace Magento\Config\Model\Config\Backend;
 
-class Encrypted extends \Magento\Framework\App\Config\Value implements \Magento\Framework\App\Config\Data\ProcessorInterface
+class Encrypted extends \Magento\Framework\App\Config\Value implements
+    \Magento\Framework\App\Config\Data\ProcessorInterface
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -58,7 +59,9 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements \Magento\
     public function __wakeup()
     {
         parent::__wakeup();
-        $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\Encryption\EncryptorInterface');
+        $this->_encryptor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            'Magento\Framework\Encryption\EncryptorInterface'
+        );
     }
 
     /**
@@ -81,16 +84,13 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements \Magento\
      */
     public function beforeSave()
     {
+        $this->_dataSaveAllowed = false;
         $value = (string)$this->getValue();
-        // don't change value, if an obscured value came
-        if (preg_match('/^\*+$/', $this->getValue())) {
-            $value = $this->getOldValue();
-        }
-        if (!empty($value)) {
+        // don't save value, if an obscured value was received. This indicates that data was not changed.
+        if (!preg_match('/^\*+$/', $value) && !empty($value)) {
+            $this->_dataSaveAllowed = true;
             $encrypted = $this->_encryptor->encrypt($value);
-            if ($encrypted) {
-                $this->setValue($encrypted);
-            }
+            $this->setValue($encrypted);
         }
     }
 

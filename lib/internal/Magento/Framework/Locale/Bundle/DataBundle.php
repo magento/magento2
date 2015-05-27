@@ -28,10 +28,16 @@ class DataBundle
         $locale = $this->cleanLocale($locale);
         $class = get_class($this);
         if (!isset(static::$bundles[$class][$locale])) {
-            $bundle = new \ResourceBundle($locale, $this->path);
-            if (!$bundle && $this->path != 'ICUDATA') {
-                $bundle = new \ResourceBundle($locale, 'ICUDATA');
+            try {
+                $bundle = new \ResourceBundle($locale, $this->path);
+                if (!$bundle && $this->path != 'ICUDATA') {
+                    $bundle = new \ResourceBundle($locale, 'ICUDATA');
+                }
+            } catch (\Exception $e) {
+                // HHVM compatibility: constructor throws on invalid resource
+                $bundle = null;
             }
+
             static::$bundles[$class][$locale] = $bundle;
         }
         return static::$bundles[$class][$locale];

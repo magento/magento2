@@ -8,34 +8,39 @@
 
 ?>
 <?php if ($_item = $block->getItem()): ?>
-<table cellspacing="0" class="qty-table">
+<table class="qty-table">
     <tr>
-        <td><?php echo __('Ordered') ?></td>
-        <td><strong><?php echo $_item->getQtyOrdered()*1 ?></strong></td>
+        <th><?php echo __('Ordered') ?></th>
+        <td><?php echo $_item->getQtyOrdered()*1 ?></td>
     </tr>
+
     <?php if ((float) $_item->getQtyInvoiced()): ?>
-    <tr>
-        <td><?php echo __('Invoiced') ?></td>
-        <td><strong><?php echo $_item->getQtyInvoiced()*1 ?></strong></td>
-    </tr>
+        <tr>
+            <th><?php echo __('Invoiced') ?></th>
+            <td><?php echo $_item->getQtyInvoiced()*1 ?></td>
+        </tr>
     <?php endif; ?>
+
     <?php if ((float) $_item->getQtyShipped()): ?>
-    <tr>
-        <td><?php echo __('Shipped') ?></td>
-        <td><strong><?php echo $_item->getQtyShipped()*1 ?></strong></td>
-    </tr>
+        <tr>
+            <th><?php echo __('Shipped') ?></th>
+            <td><?php echo $_item->getQtyShipped()*1 ?></td>
+        </tr>
     <?php endif; ?>
+
     <?php if ((float) $_item->getQtyRefunded()): ?>
-    <tr>
-        <td><?php echo __('Refunded') ?></td>
-        <td><strong><?php echo $_item->getQtyRefunded()*1 ?></strong></td>
-    </tr>
+        <tr>
+            <th><?php echo __('Refunded') ?></th>
+            <td><?php echo $_item->getQtyRefunded()*1 ?></td>
+        </tr>
     <?php endif; ?>
+
     <?php if ((float) $_item->getQtyCanceled()): ?>
-    <tr>
-        <td><?php echo __('Canceled') ?></td>
-        <td><strong><?php echo $_item->getQtyCanceled()*1 ?></strong></td>
-    </tr>
+        <tr>
+            <th><?php echo __('Canceled') ?></th>
+            <td><?php echo $_item->getQtyCanceled()*1 ?></td>
+        </tr>
     <?php endif; ?>
+
 </table>
 <?php endif; ?>
