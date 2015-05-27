@@ -11,6 +11,9 @@
             <argument name="secureUrlList" xsi:type="array">
                 <item name="customer" xsi:type="string">/customer/</item>
             </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="customer_sections" xsi:type="string">/customer/section/load</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout">

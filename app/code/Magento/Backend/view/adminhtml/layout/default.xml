@@ -42,9 +42,6 @@
         <referenceContainer name="page.formkey">
             <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
         </referenceContainer>
-        <referenceContainer name="page.js.translate">
-            <block class="Magento\Framework\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
-        </referenceContainer>
         <referenceContainer name="main.top">
             <block class="Magento\Theme\Block\Html\Title" name="page.title" template="title.phtml"/>
         </referenceContainer>

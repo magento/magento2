@@ -83,7 +83,7 @@
                                                                 </item>
                                                                 <!-- Value of region_id field is filtered by the value of county_id attribute -->
                                                                 <item name="filterBy" xsi:type="array">
-                                                                    <item name="target" xsi:type="string"><![CDATA[<%= provider %>:<%= parentScope %>.country_id]]></item>
+                                                                    <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
                                                                     <item name="field" xsi:type="string">country_id</item>
                                                                 </item>
                                                             </item>
@@ -314,7 +314,7 @@
                                 </item>
                             </item>
                             <item name="checkoutProvider" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Ui/js/lib/provider</item>
+                                <item name="component" xsi:type="string">uiComponent</item>
                             </item>
                         </item>
                     </argument>

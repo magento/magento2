@@ -29,17 +29,4 @@ class Multiline extends AbstractElement
     {
         return $this->getData('input_type') ? $this->getData('input_type') : 'text';
     }
-
-    /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this, Input::NAME);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
 }
