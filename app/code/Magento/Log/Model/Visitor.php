@@ -8,25 +8,15 @@ namespace Magento\Log\Model;
 /**
  * @method Resource\Visitor _getResource()
  * @method Resource\Visitor getResource()
- * @api
  * @method Visitor setFirstVisitAt(string $value)
- * @api
  * @method Visitor setLastVisitAt(string $value)
- * @api
  * @method Visitor setVisitorId(int $value)
- * @api
  * @method Visitor setIsNewVisitor(bool $value)
- * @api
  * @method Visitor getIsNewVisitor()
- * @api
  * @method Visitor getVisitorId()
- * @api
  * @method int getLastUrlId()
- * @api
  * @method Visitor setLastUrlId(int $value)
- * @api
  * @method int getStoreId()
- * @api
  * @method Visitor setStoreId(int $value)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
@@ -159,7 +149,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Return First Visit data in internal format.
      *
      * @return string
-     * @api
      */
     public function getFirstVisitAt()
     {
@@ -173,7 +162,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Return Last Visit data in internal format.
      *
      * @return string
-     * @api
      */
     public function getLastVisitAt()
     {
