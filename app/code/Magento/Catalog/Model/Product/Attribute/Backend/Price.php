@@ -41,23 +41,31 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_config;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    protected $localeFormat;
+
+    /**
      * Construct
      *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Locale\FormatInterface $localeFormat
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_helper = $catalogData;
         $this->_config = $config;
+        $this->localeFormat = $localeFormat;
     }
 
     /**
@@ -160,48 +168,15 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Returns whether the value has a valid price format and is greater than, or equal to, zero
+     * Returns whether the value is greater than, or equal to, zero
      *
      * @param mixed $value
      * @return bool
      */
     protected function isPositiveOrZero($value)
     {
-        $value = $this->standardizePrice($value);
-
-        $hasValidFormat = preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value);
+        $value = $this->localeFormat->getNumber($value);
         $isNegative = $value < 0;
-
-        return  $hasValidFormat && !$isNegative;
-    }
-
-    /**
-     * Attempt to return the value in a standardized way.
-     * ex: 1.234,56 -> 1234.56
-     * ex: 1,234.56 -> 1234.56
-     *
-     * @param mixed $value
-     * @return mixed
-     */
-    protected function standardizePrice($value)
-    {
-        // based on the parseNumber() function in our validate.js script
-
-        $value = str_replace(' ', '', $value);
-        $iDot = strpos($value, '.');
-        $iComma = strpos($value, ',');
-
-        if ($iDot && $iComma) {
-            if ($iComma > $iDot) {
-                $value = str_replace('.', '', $value);
-                $value = str_replace(',', '.', $value);
-            } else {
-                $value = str_replace(',', '', $value);
-            }
-        } elseif ($iComma) {
-            $value = str_replace(',', '.', $value);
-        }
-
-        return $value;
+        return  !$isNegative;
     }
 }
