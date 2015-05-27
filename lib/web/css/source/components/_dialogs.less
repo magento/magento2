@@ -24,7 +24,7 @@
 @dialog-slide__first__indent-left: 14.8rem;
 @dialog-slide__indent-left: 4.5rem;
 @dialog-slide__padding: 2.6rem;
-@dialog-slide__z-index: @dialog__z-index - 1;
+@dialog-slide__z-index: @dialog__z-index;
 
 @dialog-slide-header__padding-vertical: 2.1rem;
 
@@ -40,6 +40,7 @@
     right: 0;
     top: 0;
     visibility: hidden;
+    pointer-events: none;
     &._show {
         visibility: visible;
         .dialog-inner-wrap {
@@ -50,6 +51,10 @@
         background-color: @dialog__background-color;
         box-shadow: @dialog__box-shadow;
         opacity: 1;
+        pointer-events: auto;
+    }
+    &._active {
+      z-index: @dialog__z-index + 1;
     }
 }
 

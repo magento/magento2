@@ -23,7 +23,6 @@ define([
     $.widget('mage.newCategoryDialog', {
         _create: function () {
             var widget = this;
-
             $('#new_category_parent').before($('<input>', {
                 id: 'new_category_parent-suggest',
                 placeholder: $.mage.__('start typing to search category')
@@ -53,20 +52,19 @@ define([
                         options.errorClass, options.validClass || '');
                 }
             });
-            this.dialog = this.element.dialog({
+            this.element.dialog({
                 type: 'slide',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
                 buttons: [{
                     text: $.mage.__('Create Category'),
-                    'class': 'action-primary',
+                    class: 'action-primary',
                     click: function () {
-                        widget.insideDialog.trigger('openDialog');
+                        widget.somedialog4.trigger('openDialog');
                         //if (!newCategoryForm.valid()) {
                         //    return;
                         //}
                         //var thisButton = $(this);
-                        //
                         //thisButton.prop('disabled', true);
                         //$.ajax({
                         //    type: 'POST',
@@ -95,7 +93,7 @@ define([
                         //                $('#new_category_name, #new_category_parent-suggest').val('');
                         //                $('#category_ids-suggest').val('');
                         //                clearParentCategory();
-                        //                widget.dialog.trigger('closeDialog');
+                        //                widget.element.trigger('closeDialog');
                         //            } else {
                         //                $('#new_category_messages').html(data.messages);
                         //            }
@@ -108,11 +106,53 @@ define([
                         //);
                     }
                 }]
-            }).data('mage-dialog');
-
-            this.insideDialog = $('<div>Another dialog</div>').dialog({
+            });
+            this.somedialog1 = $('<div></div>').dialog({
                 type: 'slide',
-                dialogClass: 'mage-new-category-dialog form-inline'
+                responsive: true,
+                title: $.mage.__('1 Category'),
+                buttons: [{
+                    text: $.mage.__('Create Category'),
+                    class: 'action-primary',
+                    click: function () {
+                        //widget.somedialog2.trigger('openDialog');
+                    }
+                }]
+            });
+            this.somedialog2 = $('<div></div>').dialog({
+                type: 'slide',
+                title: $.mage.__('2 Category'),
+                buttons: [{
+                    text: $.mage.__('Create Category'),
+                    class: 'action-primary',
+                    click: function () {
+                        widget.somedialog1.trigger('openDialog');
+                    }
+                }]
+            });
+            this.somedialog3 = $('<div></div>').dialog({
+                type: 'slide',
+                title: $.mage.__('3 Category'),
+                buttons: [{
+                    text: $.mage.__('Create Category'),
+                    class: 'action-primary',
+                    click: function () {
+                        widget.somedialog2.trigger('openDialog');
+                    }
+                }]
+            });
+            this.somedialog4 = $('<div></div>').dialog({
+                type: 'modal',
+                responsive: true,
+                innerScroll: true,
+                title: $.mage.__('4 Category'),
+                buttons: [{
+                    text: $.mage.__('Create Category'),
+                    class: 'action-primary',
+                    click: function () {
+                        widget.somedialog3.trigger('openDialog');
+                    }
+                }]
             });
         }
     });

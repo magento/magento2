@@ -7,41 +7,47 @@ define([
     "underscore",
     "mage/template",
     "text!ui/template/dialog/dialog-modal.html",
+    "text!ui/template/dialog/dialog-slide.html",
     "jquery/ui",
     "mage/translate"
-], function($, _,template, dialogTemplate){
+], function($, _, template, modalTpl, slideTpl){
     "use strict";
 
     /**
-     * Dialog Widget - this widget is a wrapper for the jQuery UI Dialog
+     * Dialog Widget
      */
     $.widget('mage.dialog', {
         options: {
             type: 'modal',
             title: '',
-            template: dialogTemplate,
-            buttons: [{
-                text: $.mage.__('Ok'),
-                class: 'action-primary',
-                click: function(){
-                    this.closeDialog();
-                }
-            }],
-            events: [],
             dialogClass: '',
-            dialogActiveClass: '_show',
+            modalTpl: modalTpl,
+            slideTpl: slideTpl,
+            dialogVisibleClass: '_show',
             parentDialogClass: '_has-dialog',
-            overlayClass: 'overlay_magento',
-            responsiveClass: 'dialog-slide',
+            innerScrollClass: '_inner-scroll',
             responsive: false,
+            innerScroll: false,
             dialogBlock: '[data-role="dialog"]',
             dialogCloseBtn: '[data-role="closeBtn"]',
             dialogContent: '[data-role="content"]',
             dialogAction: '[data-role="action"]',
             appendTo: 'body',
-            wrapperId: 'dialogs-wrapper'
+            wrapperClass: 'dialogs-wrapper',
+            overlayClass: 'overlay_magento',
+            responsiveClass: 'dialog-slide',
+            dialogLeftMargin: 45,
+            buttons: [{
+                text: $.mage.__('Ok'),
+                class: '',
+                click: function(){
+                    this.closeDialog();
+                }
+            }]
         },
-
+        /**
+         * Creates dialog widget.
+         */
         _create: function() {
             this.options.transitionEvent = this.whichTransitionEvent();
             this._createWrapper();
@@ -52,14 +58,42 @@ define([
             this.element.on('openDialog', _.bind(this.openDialog, this));
             this.element.on('closeDialog', _.bind(this.closeDialog, this));
         },
+        /**
+         * Returns element from dialog node.
+         * @return {Object} - element.
+         */
         _getElem: function(elem) {
             return this.dialog.find(elem);
         },
+        /**
+         * Gets visible dialog count.
+         * * @return {Number} - visible dialog count.
+         */
+        _getVisibleCount: function() {
+            return this.dialogWrapper.find('.'+this.options.dialogVisibleClass).length;
+        },
+        /**
+         * Gets visible slide type dialog count.
+         * * @return {Number} - visible dialog count.
+         */
+        _getVisibleSlideCount: function() {
+            var elems = this.dialogWrapper.find('[data-type="'+this.options.type+'"]');
+
+            return elems.filter('.'+this.options.dialogVisibleClass).length;
+        },
         openDialog: function() {
+            var that = this;
+
             this.options.isOpen = true;
             this._createOverlay();
-            this.dialog.show();
-            this.dialog.addClass(this.options.dialogActiveClass);
+            this._setActive();
+            this.dialog.one(this.options.transitionEvent, function() {
+                that._trigger('opened');
+            });
+            this.dialog.addClass(this.options.dialogVisibleClass);
+            if ( !this.options.transitionEvent ) {
+                that._trigger('opened');
+            }
 
             return this.element;
         },
@@ -68,39 +102,71 @@ define([
 
             this.options.isOpen = false;
             this.dialog.one(this.options.transitionEvent, function() {
-                that.dialog.removeClass(that.options.dialogActiveClass);
                 that._close();
             });
-            this.dialog.removeClass(this.options.dialogActiveClass);
+            this.dialog.removeClass(this.options.dialogVisibleClass);
             if ( !this.options.transitionEvent ) {
-                that.dialog.removeClass(this.options.dialogActiveClass);
                 that._close();
             }
 
             return this.element;
         },
+        /**
+         * Helper for closeDialog function.
+         */
         _close: function() {
-            this.dialog.hide();
+            var trigger = _.bind(this._trigger, this, 'closed', this.dialog);
+
             this._destroyOverlay();
-            this._trigger('dialogClosed');
+            this._unsetActive();
+            _.defer(trigger, this);
         },
+        /**
+         * Set z-index and margin for dialog and overlay.
+         */
+        _setActive: function() {
+            var zIndex = this.dialog.zIndex();
+
+            this.prevOverlayIndex = this.overlay.zIndex();
+            this.dialog.zIndex(zIndex + this._getVisibleCount());
+            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            if ( this._getVisibleSlideCount() ) {
+                this.dialog.css('marginLeft', this.options.dialogLeftMargin * this._getVisibleSlideCount());
+            }
+        },
+        /**
+         * Unset styles for dialog and set z-index for previous dialog.
+         */
+        _unsetActive: function() {
+            this.dialog.removeAttr('style');
+            this.overlay.zIndex(this.prevOverlayIndex);
+        },
+        /**
+         * Creates wrapper to hold all dialogs.
+         */
         _createWrapper: function() {
-            this.dialogWrapper = $('#'+this.options.wrapperId);
+            this.dialogWrapper = $('.'+this.options.wrapperClass);
             if ( !this.dialogWrapper.length ) {
                 this.dialogWrapper = $('<div></div>')
-                     .attr('id', this.options.wrapperId)
+                     .addClass(this.options.wrapperClass)
                      .appendTo(this.options.appendTo);
             }
         },
+        /**
+         * Compile template and append to wrapper.
+         */
         _renderDialog: function() {
-            this.dialog = $(template(
-                this.options.template,
+            $(template(
+                this.options[this.options.type + 'Tpl'],
                 {
                     data: this.options
                 })).appendTo(this.dialogWrapper);
-
+            this.dialog = this.dialogWrapper.find(this.options.dialogBlock).last();
             this.element.show().appendTo(this._getElem(this.options.dialogContent));
         },
+        /**
+         * Creates buttons pane.
+         */
         _createButtons: function() {
             var that = this;
 
@@ -108,25 +174,25 @@ define([
             _.each(this.options.buttons, function(btn, key) {
                 var button = that.buttons[key];
 
-                $(button).on('click', _.bind(btn.click, that));
+                $(button).on('click', _.bind(btn.click, button));
             });
         },
+        /**
+         * Creates overlay, append it to wrapper, set previous click event on overlay.
+         */
         _createOverlay: function() {
             var that = this,
                 events;
 
             this.overlay = $('.' + this.options.overlayClass);
             if ( !this.overlay.length ) {
-
                 $(this.options.appendTo).addClass(this.options.parentDialogClass);
                 this.overlay = $('<div></div>')
                     .addClass(this.options.overlayClass)
-                    .appendTo( this.options.appendTo );
-            } else {
-                var zIndex =this.overlay.zIndex();
-                this.overlay.zIndex(zIndex + 1);
+                    .appendTo(this.dialogWrapper);
             }
-            events = this.overlay.data('events');
+
+            events = $._data(this.overlay.get(0), 'events');
             if ( events ) {
                 this.prevOverlayHandler = events.click[0].handler;
             }
@@ -134,25 +200,27 @@ define([
                 that.closeDialog();
             });
         },
-
+        /**
+         * Destroy overlay.
+         */
         _destroyOverlay: function() {
-            var dialogCount = this.dialogWrapper.find(this.options.dialogBlock).filter(this.option.dialogClass).length;
+            var dialogCount = this.dialogWrapper.find('.'+this.options.dialogVisibleClass).length;
 
             if ( !dialogCount ) {
-
                 $(this.options.appendTo).removeClass(this.options.parentDialogClass);
-
                 this.overlay.remove();
                 this.overlay = null;
+
             } else {
-                var zIndex =this.overlay.zIndex();
-                this.overlay.zIndex(zIndex - 1);
                 this.overlay.unbind().on('click', this.prevOverlayHandler);
             }
         },
+        /**
+         * Detects browser transition event.
+         */
         whichTransitionEvent: function() {
             var transition,
-                el = document.createElement('fakeelement'),
+                el = document.createElement('element'),
                 transitions = {
                     'transition': 'transitionend',
                     'OTransition': 'oTransitionEnd',

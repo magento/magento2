@@ -6,8 +6,9 @@
 -->
 
 <section
-    class="dialog-<%= data.type %> <% if(data.responsive){ %><%= data.responsiveClass %><% } %> <%= data.dialogClass %>"
-    data-role="dialog">
+    class="dialog-<%= data.type %> <%= data.dialogClass %>"
+    data-role="dialog"
+    data-type="<%= data.type %>">
     <div class="dialog-inner-wrap">
         <header class="dialog-header">
             <h1 class="dialog-title"
