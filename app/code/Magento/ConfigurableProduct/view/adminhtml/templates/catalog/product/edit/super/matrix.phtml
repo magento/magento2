@@ -57,10 +57,12 @@ $productByUsedAttributes = $block->getAssociatedProducts();
             <tbody>
             <?php
             $isEven = true;
+            $productPrice = (float)$block->getProduct()->getPrice();
             foreach ($variations as $variation) {
                 $attributeValues = [];
                 $attributeLabels = [];
                 $attributeStoreLabels = [];
+                $price = $productPrice;
                 foreach ($usedProductAttributes as $attribute) {
                     /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
 
