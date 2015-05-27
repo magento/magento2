@@ -61,7 +61,8 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getValue()
     {
         if (null === $this->value) {
-            // TODO:
+            $this->value = false;
+            $this->value = $this->getAmount()->getValue();
         }
         return $this->value;
     }
@@ -71,7 +72,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     public function getAmount()
     {
-        $amount = 0;
         if (false) {
             // TODO: need to check simple product assignment
         } else {
@@ -86,6 +86,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMaxRegularAmount()
     {
         if (null === $this->maxRegularAmount) {
+            $this->maxRegularAmount = false;
             $this->maxRegularAmount = $this->doGetMaxRegularAmount();
         }
         return $this->maxRegularAmount;
@@ -116,6 +117,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMinRegularAmount()
     {
         if (null === $this->minRegularAmount) {
+            $this->minRegularAmount = false;
             $this->minRegularAmount = $this->doGetMinRegularAmount();
         }
         return $this->minRegularAmount;
