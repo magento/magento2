@@ -27,7 +27,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         );
 
         // Define test input and expectations
-        $items = [['page_id' => 1]];
+        $items = ['data' => ['items' => [['page_id' => 1]]]];
         $fullUrl = 'full-url-including-base.com/href/url/for/edit/action';
         $name = 'item_name';
 
@@ -50,10 +50,11 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($fullUrl);
 
         $model->setName($name);
+        $model->prepareDataSource($items);
         // Run test
         $this->assertEquals(
             $expectedItems,
-            $model->prepareItems($items)
+            $items['data']['items']
         );
     }
 }

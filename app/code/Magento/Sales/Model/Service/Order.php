@@ -84,21 +84,48 @@ class Order
             $item = $this->_convertor->itemToInvoiceItem($orderItem);
             if ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
-            } elseif (!empty($qtys)) {
-                if (isset($qtys[$orderItem->getId()])) {
-                    $qty = (double)$qtys[$orderItem->getId()];
-                }
+            } elseif (isset($qtys[$orderItem->getId()])) {
+                $qty = (double) $qtys[$orderItem->getId()];
             } else {
                 $qty = $orderItem->getQtyToInvoice();
             }
             $totalQty += $qty;
-            $item->setQty($qty);
+            $this->setInvoiceItemQuantity($item, $qty);
             $invoice->addItem($item);
         }
         $invoice->setTotalQty($totalQty);
         $invoice->collectTotals();
         $this->_order->getInvoiceCollection()->addItem($invoice);
         return $invoice;
+    }
+
+    /**
+     * Set quantity to invoice item
+     *
+     * @param \Magento\Sales\Model\Order\Invoice\Item $item
+     * @param float $qty
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function setInvoiceItemQuantity(\Magento\Sales\Model\Order\Invoice\Item $item, $qty)
+    {
+        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
+        $qty = $qty > 0 ? $qty : 0;
+
+        /**
+         * Check qty availability
+         */
+        $qtyToInvoice = sprintf("%F", $item->getOrderItem()->getQtyToInvoice());
+        $qty = sprintf("%F", $qty);
+        if ($qty > $qtyToInvoice && !$item->getOrderItem()->isDummy()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid quantity to invoice item "%1".', $item->getName())
+            );
+        }
+
+        $item->setQty($qty);
+
+        return $this;
     }
 
     /**
