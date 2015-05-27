@@ -68,6 +68,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     protected $_validator;
 
+    protected $_cachedSkuToDelete;
+
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
@@ -197,6 +199,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function deleteAdvancedPricing()
     {
+        $this->_cachedSkuToDelete = null;
         $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
@@ -254,26 +257,23 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes tier prices and group prices.
      *
      * @param array $listSku
-     * @param $table
+     * @param string $tableName
      * @return $this
      */
-    protected function deleteProductTierAndGroupPrices(array $listSku, $table)
+    protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
     {
-        if (isset($table)) {
-            $tableName = $this->_resourceFactory->create()->getTable($table);
-        }
         if ($tableName) {
             if ($listSku) {
-                foreach ($listSku as $delSku) {
-                    $productId = $this->_productModel->getIdBySku($delSku);
-                    $affectedIds[] = $productId;
+                if(!$this->_cachedSkuToDelete) {
+                    $this->_cachedSkuToDelete = $this->_connection->fetchCol($this->_connection->select()
+                        ->from($this->_connection->getTableName('catalog_product_entity'), 'entity_id')
+                        ->where('sku IN (?)', $listSku));
                 }
-                if($affectedIds) {
+                if($this->_cachedSkuToDelete) {
                     $this->_connection->delete(
                         $tableName,
-                        $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
+                        $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
                     );
-                    $this->_productModel->cleanCache();
                 } else {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
                     return false;
