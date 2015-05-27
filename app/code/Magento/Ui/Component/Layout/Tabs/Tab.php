@@ -25,19 +25,6 @@ class Tab extends AbstractComponent implements TabInterface
     }
 
     /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
-
-    /**
      * Return Tab label
      *
      * @return string

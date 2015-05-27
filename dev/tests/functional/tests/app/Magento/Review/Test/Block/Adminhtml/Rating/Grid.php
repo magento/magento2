@@ -28,10 +28,10 @@ class Grid extends AbstractGrid
      */
     protected $filters = [
         'rating_code' => [
-            'selector' => '.filter [name="rating_code"]',
+            'selector' => '[name="rating_code"]',
         ],
         'is_active' => [
-            'selector' => '.filter [name="is_active"]',
+            'selector' => '[name="is_active"]',
             'input' => 'select',
         ],
     ];
