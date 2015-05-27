@@ -12,6 +12,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 {
     const VALUE_ALL = 'all';
 
+    const VALUE_ALL_GROUPS = 'ALL GROUPS';
+
     const COL_SKU = 'sku';
 
     const COL_TIER_PRICE_WEBSITE = 'tier_price_website';
@@ -48,7 +50,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group ID is invalid',
-        ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete'
+        ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
+        ValidatorInterface::ERROR_INVALID_WEBSITE => 'Website data is invalid'
     ];
 
     /** @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory */
@@ -66,9 +69,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /** @var ImportProduct */
     protected $_importProduct;
 
+    /** @var AdvancedPricing\Validator */
     protected $_validator;
 
+    /** @var  array */
     protected $_cachedSkuToDelete;
+
+    /** @var array */
+    protected $_oldSkus;
 
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -95,6 +103,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
         $this->_validator = $validator;
+        $this->_oldSkus = $this->retrieveOldSkus();
     }
 
     /**
@@ -107,7 +116,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         return 'advanced_pricing';
     }
 
-    // todo
+    /**
+     * Row validation.
+     *
+     * @param array $rowData
+     * @param int $rowNum
+     * @return bool
+     */
     public function validateRow(array $rowData, $rowNum)
     {
         $sku = false;
@@ -172,7 +187,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 $rowSku = $rowData[self::COL_SKU];
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
                     $tierPrices[$rowSku][] = [
-                        'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL,
+                        'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
                         'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
                         'value' => $rowData[self::COL_TIER_PRICE],
@@ -182,7 +197,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
                 if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
                     $groupPrices[$rowSku][] = [
-                        'all_groups' => $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL,
+                        'all_groups' => $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
                         'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]),
                         'value' => $rowData[self::COL_GROUP_PRICE],
                         'website_id' => $this->getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
@@ -219,10 +234,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         }
     }
 
-    // todo
-    protected function replaceAdvancedPricing()
+    /**
+     * Replace advanced pricing
+     *
+     * @return bool
+     */
+     protected function replaceAdvancedPricing()
     {
-        return true;
+        //todo implement replace
     }
 
     /**
@@ -235,12 +254,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected function saveProductPrices(array $priceData, $table)
     {
         if ($priceData) {
-            $affectedIds = [];
             $tableName = $this->_resourceFactory->create()->getTable($table);
             $priceIn = [];
             foreach ($priceData as $sku => $priceRows) {
-                $productId = $this->_productModel->getIdBySku($sku);
-                $affectedIds[] = $productId;
+                $productId = $this->_oldSkus[$sku];
                 foreach ($priceRows as $row) {
                     $row['entity_id'] = $productId;
                     $priceIn[] = $row;
@@ -304,6 +321,24 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        return $customerGroup == self::VALUE_ALL ? 0 : $customerGroup;
+        return $customerGroup == self::VALUE_ALL_GROUPS
+            ? \Magento\Customer\Model\Group::CUST_GROUP_ALL
+            : $customerGroup;
+    }
+
+    /**
+     * Retrieve product skus
+     *
+     * @return array
+     */
+    protected function retrieveOldSkus()
+    {
+        $oldSkus = $this->_connection->fetchPairs(
+            $this->_connection->select()->from(
+                $this->_connection->getTableName('catalog_product_entity'),
+                ['sku', 'entity_id']
+            )
+        );
+        return $oldSkus;
     }
 }
