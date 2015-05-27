@@ -10,7 +10,7 @@ define(
         'uiComponent',
         'ko',
         'Magento_Customer/js/model/customer',
-        '../action/check-email-availability',
+        'Magento_Customer/js/action/check-email-availability',
         'Magento_Customer/js/action/login',
         'mage/validation'
     ],
@@ -18,7 +18,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/customer-email'
+                template: 'Magento_Customer/customer-email'
             },
             checkDelay: 2000,
             email: ko.observable(null),

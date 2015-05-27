@@ -7,7 +7,7 @@
 define(
     [
         'mage/storage',
-        '../model/url-builder'
+        'Magento_Checkout/js/model/url-builder'
     ],
     function(storage, urlBuilder) {
         "use strict";
