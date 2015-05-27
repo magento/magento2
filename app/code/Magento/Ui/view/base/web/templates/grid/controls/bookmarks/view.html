@@ -1,0 +1,55 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li
+    data-bind="css: {_edit: editing}, outerClick: endEdit">
+    <!-- ko if: editable -->
+    <div class="action-dropdown-menu-item-edit">
+        <input
+            class="admin__control-text"
+            data-bind="
+                value: value,
+                hasFocus: editing(),
+                attr: {
+                    placeholder: label
+                },
+                keyboard: {
+                    13: function(){ $parent.close().saveView($data) }
+                }"
+            type="text">
+        <button
+            class="action-submit"
+            data-bind="click: function(){ $parent.close().saveView($data) }, attr: {title: $t('Save all changes')}"
+            type="button">
+            <span data-bind="text: $t('Submit')"></span>
+        </button>
+        <div class="action-dropdown-menu-item-actions">
+            <button
+                data-bind="click: function(){ $parent.close().removeView($data) }, attr: {title: $t('Delete bookmark')}"
+                class="action-delete"
+                type="button">
+                <span data-bind="text: $t('Delete')"></span>
+            </button>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="action-dropdown-menu-item">
+        <a
+            class="action-dropdown-menu-link"
+            href=""
+            data-bind="text: label, click: function(){ $data.active(true); $parent.close(); }"></a>
+        <!-- ko if: editable -->
+        <div class="action-dropdown-menu-item-actions">
+            <button
+                class="action-edit"
+                data-bind="click: startEdit, attr: {title: $t('Edit bookmark')}"
+                type="button">
+                <span data-bind="text: $t('Edit')"></span>
+            </button>
+        </div>
+        <!-- /ko -->
+    </div>
+</li> 

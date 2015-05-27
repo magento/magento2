@@ -83,11 +83,11 @@ define(
                 return info;
             },
             getPaymentMethodCallbacks: function() {
-                var callbacks = [this.getActiveMethodView().afterSave];
+                var callbacks = [this.getActiveMethodView().afterSave.bind(this.getActiveMethodView())];
 
                 _.each(this.getAdditionalMethods(), function(elem) {
                     if (elem.isActive()) {
-                        callbacks = _.union(callbacks, [elem.afterSave]);
+                        callbacks = _.union(callbacks, [elem.afterSave.bind(elem)]);
                     }
                 });
 

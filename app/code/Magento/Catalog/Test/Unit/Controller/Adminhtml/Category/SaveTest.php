@@ -239,6 +239,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'setStoreId',
                 'load',
                 'getPath',
+                'getResource',
                 'setPath',
                 'setParentId',
                 'setData',
@@ -491,6 +492,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'catalog_category_prepare_save',
                 ['category' => $categoryMock, 'request' => $this->requestMock]
             );
+
+        $categoryResource = $this->getMock(
+            'Magento\Catalog\Model\Resource\Category',
+            [],
+            [],
+            '',
+            false
+        );
+        $categoryMock->expects($this->once())
+            ->method('getResource')
+            ->will($this->returnValue($categoryResource));
         $categoryMock->expects($this->once())
             ->method('validate')
             ->will($this->returnValue(true));
