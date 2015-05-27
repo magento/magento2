@@ -27,9 +27,9 @@ class DefaultItem extends AbstractItem
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Configuration
+     * @var \Magento\Catalog\Helper\Product\ConfigurationPool
      */
-    protected $configurationHelper;
+    protected $configurationPool;
 
     /**
      * @var \Magento\Checkout\Helper\Data
@@ -40,17 +40,17 @@ class DefaultItem extends AbstractItem
      * @param \Magento\Catalog\Model\Product\Image\View $productImageView
      * @param \Magento\Msrp\Helper\Data $msrpHelper
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
+     * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Image\View $productImageView,
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
+        \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper
     ) {
-        $this->configurationHelper = $configurationHelper;
+        $this->configurationPool = $configurationPool;
         $this->productImageView = $productImageView;
         $this->msrpHelper = $msrpHelper;
         $this->urlBuilder = $urlBuilder;
@@ -95,7 +95,7 @@ class DefaultItem extends AbstractItem
      */
     protected function getOptionList()
     {
-        return $this->configurationHelper->getCustomOptions($this->item);
+        return $this->configurationPool->getByProductType($this->item->getProductType())->getOptions($this->item);
     }
 
     /**

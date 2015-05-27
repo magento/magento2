@@ -10,8 +10,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
- *
- * todo work with interfaces instead of abstractions
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {
