@@ -74,11 +74,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'not_delete' => '72701',  // not deleted address
     ];
 
+    /** @var \Magento\Customer\Model\Resource\Customer */
+    protected $customerResource;
+
     /**
      * Init new instance of address entity adapter
      */
     protected function setUp()
     {
+        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        $this->customerResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Model\Resource\Customer'
+        );
         $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             $this->_testClassName
         );
@@ -336,7 +343,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // set customer defaults
         $defaults = [
-            'customer_entity' => [
+            $this->customerResource->getTable('customer_entity') => [
                 $customerId => ['default_billing' => $addressId, 'default_shipping' => $addressId],
             ],
         ];
