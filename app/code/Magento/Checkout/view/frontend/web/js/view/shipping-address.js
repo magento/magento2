@@ -28,7 +28,7 @@ define(
             isVisible: navigator.isStepVisible(stepName),
             isCustomerLoggedIn: customer.isLoggedIn(),
             isFormPopUpVisible: ko.observable(false),
-            isFormInline: !customer.isLoggedIn() || window.checkoutConfig.customerAddressCount == 0,
+            isFormInline: addressList.getAddresses()().length == 0,
 
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
