@@ -123,7 +123,7 @@ class PageRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['page' => [
+        $requestData = ['id', 'page' => [
                 PageInterface::IDENTIFIER => $pageDataObject->getIdentifier(),
                 PageInterface::TITLE      => $pageDataObject->getTitle(),
             ],
