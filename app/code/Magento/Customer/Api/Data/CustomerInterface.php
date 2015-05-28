@@ -277,7 +277,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Get gender
      *
      * @api
-     * @return string|null
+     * @return int|null
      */
     public function getGender();
 
@@ -285,7 +285,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * Set gender
      *
      * @api
-     * @param string $gender
+     * @param int $gender
      * @return $this
      */
     public function setGender($gender);
