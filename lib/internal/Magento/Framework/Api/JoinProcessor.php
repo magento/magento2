@@ -13,7 +13,7 @@ use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 
 /**
- * JoinProcessor configures a ExtensibleDateInterface type's collection to retrieve data in related tables.
+ * JoinProcessor configures an ExtensibleDateInterface type's collection to retrieve data in related tables.
  */
 class JoinProcessor
 {
@@ -67,11 +67,16 @@ class JoinProcessor
     }
 
     /**
+     * Returns the internal join directive config for a given type.
+     *
+     * Array returned has all of the \Magento\Framework\Api\Config\Converter JOIN* fields set.
+     *
      * @param string $typeName
      * @return array
      */
     private function getJoinDirectivesForType($typeName)
     {
+        $typeName = ltrim($typeName, '\\');
         $config = $this->configReader->read();
         if (!isset($config[$typeName])) {
             return [];
