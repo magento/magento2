@@ -45,13 +45,22 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _construct()
     {
-        $resource = $this->_resource;
-        $this->setType(
-            'customer_address'
-        )->setConnection(
-            $resource->getConnection('customer_read'),
-            $resource->getConnection('customer_write')
-        );
+        $this->_read = 'customer_read';
+        $this->_write = 'customer_write';
+    }
+
+    /**
+     * Getter and lazy loader for _type
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return \Magento\Eav\Model\Entity\Type
+     */
+    public function getEntityType()
+    {
+        if (empty($this->_type)) {
+            $this->setType('customer_address');
+        }
+        return parent::getEntityType();
     }
 
     /**

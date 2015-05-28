@@ -19,7 +19,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method string getTitle()
  * @method string getCarrierCode()
  * @method string getCreatedAt()
- * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface getExtensionAttributes()
  */

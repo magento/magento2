@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice item interface.
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
+ * @api
  */
 interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -111,6 +112,10 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Base hidden tax amount.
      */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    /**
+     * Invoice
+     */
+    const INVOICE = 'invoice';
 
     /**
      * Gets the additional data for the invoice item.

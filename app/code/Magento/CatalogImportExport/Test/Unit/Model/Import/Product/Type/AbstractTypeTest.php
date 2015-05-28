@@ -6,152 +6,146 @@
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as AbstractType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractTypeTest extends \PHPUnit_Framework_TestCase {
+/**
+ * Test class for import product AbstractType class
+ */
+class AbstractTypeTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityModel;
 
     /**
-     * Test attribute code name
+     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\Simple
      */
-    const ATTR_CODE_NAME = 'attr_code_1';
+    protected $simpleType;
 
     /**
-     * Mock for abstractType
-     *
-     * @var AbstractType
+     * @var ObjectManagerHelper
      */
-    protected $_abstractType;
+    protected $objectManagerHelper;
 
-    /**
-     * Test product type attribute sets and attributes parameters
-     *
-     * @var array
-     */
-    protected $_attributes = [
-        'attr_set_name_1' => [
-            self::ATTR_CODE_NAME => [
-                'options' => [],
-                'type' => ['text', 'price', 'textarea', 'select'],
-                'id' => 'id_1'
-            ],
-        ]
-    ];
-
-    /**
-     * Expected attributes sets and attributes parameters
-     *
-     * @var array
-     */
-    protected $_expectedAttributes = [
-        'attr_set_name_1' => [
-            self::ATTR_CODE_NAME => [
-                'options' => ['opt_key_1' => 'opt_val_1'],
-                'type' => ['text', 'price', 'textarea', 'select'],
-                'id' => 'id_1'
-            ],
-        ]
-    ];
-
-    /**
-     * Test new option
-     *
-     * @var array
-     */
-    protected $_option = ['opt_key_1' => 'opt_val_1'];
-
-    public function setUp()
+    protected function setUp()
     {
-        $this->_abstractType = $this->getMockForAbstractClass('Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType', [], '', false);
+        $this->entityModel = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product',
+            [],
+            [],
+            '',
+            false
+        );
+        $attrSetColFactory = $this->getMock(
+            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $attrSetCollection = $this->getMock(
+            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $attrColFactory = $this->getMock(
+            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $attributeSet = $this->getMock(
+            '\Magento\Eav\Model\Entity\Attribute\Set',
+            [],
+            [],
+            '',
+            false
+        );
+        $attrCollection = $this->getMock(
+            '\Magento\Eav\Model\Resource\Entity\Attribute\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $attribute = $this->getMock(
+            '\Magento\Eav\Model\Entity\Attribute',
+            [
+                'getAttributeCode',
+                'getId',
+                'getIsVisible',
+                'getIsGlobal',
+                'getIsRequired',
+                'getIsUnique',
+                'getFrontendLabel',
+                'isStatic',
+                'getApplyTo',
+                'getDefaultValue',
+                'usesSource',
+                'getFrontendInput',
+            ],
+            [],
+            '',
+            false
+        );
+
+        $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
+        $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
+        $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
+        $attrSetCollection->expects($this->any())->method('setEntityTypeFilter')->willReturn([$attributeSet]);
+        $attrColFactory->expects($this->any())->method('create')->willReturn($attrCollection);
+        $attrCollection->expects($this->any())->method('setAttributeSetFilter')->willReturn([$attribute]);
+        $attributeSet->expects($this->any())->method('getId')->willReturn(1);
+        $attributeSet->expects($this->any())->method('getAttributeSetName')->willReturn('attribute_set_name');
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn('attr_code');
+        $attribute->expects($this->any())->method('getId')->willReturn('1');
+        $attribute->expects($this->any())->method('getIsVisible')->willReturn(true);
+        $attribute->expects($this->any())->method('getIsGlobal')->willReturn(true);
+        $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
+        $attribute->expects($this->any())->method('getIsUnique')->willReturn(true);
+        $attribute->expects($this->any())->method('getFrontendLabel')->willReturn('frontend_label');
+        $attribute->expects($this->any())->method('isStatic')->willReturn(true);
+        $attribute->expects($this->any())->method('getApplyTo')->willReturn(['simple']);
+        $attribute->expects($this->any())->method('getDefaultValue')->willReturn('default_value');
+        $attribute->expects($this->any())->method('usesSource')->willReturn(true);
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->simpleType = $this->objectManagerHelper->getObject(
+            'Magento\CatalogImportExport\Model\Import\Product\Type\Simple',
+            [
+                'attrSetColFac' => $attrSetColFactory,
+                'prodAttrColFac' => $attrColFactory,
+                'params' => [$this->entityModel, 'simple'],
+            ]
+        );
     }
 
-    /**
-     * Test constructor on exception throwing in case of wrong params.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @dataProvider constructorParamsDataProvider
-     */
-    public function testConstructorThrowException($params) {
-        $classname = 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType';
-        $mock = $this->getMockBuilder($classname)
-            ->disableOriginalConstructor()
-            ->setMethods(array('_initAttributes'))
-            ->getMockForAbstractClass();
-
-        $reflectedClass = new \ReflectionClass($classname);
-        $constructor = $reflectedClass->getConstructor();
-        $constructor->invokeArgs($mock, array(
-            $this->getMock('\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory', [], [], '', false),
-            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',  [], [], '', false),
-            $this->getMock('\Magento\Framework\App\Resource',  [], [], '', false),
-            $params
-        ));
-    }
-
-    /**
-     * Test addAttributeOption()
-     */
-    public function testAddAttributeOption() {
-        $classname = 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType';
-        $reflectedClass = new \ReflectionClass($classname);
-        $addAttributeOptionMethod = $reflectedClass->getMethod('addAttributeOption');
-
-        $_attributesProperty = $reflectedClass->getProperty("_attributes");
-        $_attributesProperty->setAccessible(TRUE);
-        $_attributesProperty->setValue($this->_abstractType, $this->_attributes);
-
-        $addAttributeOptionMethod->invokeArgs($this->_abstractType, array(
-            self::ATTR_CODE_NAME, key($this->_option), current($this->_option)
-        ));
-
-        $this->assertEquals($this->_expectedAttributes, $_attributesProperty->getValue($this->_abstractType));
-    }
-
-    /**
-     * Data provider constructor params argument
-     *
-     * @return array
-     */
-    public function constructorParamsDataProvider()
+    public function testIsRowValidSuccess()
     {
-        $mock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')->disableOriginalConstructor()->getMock();
-        return [
-            [
-                '$params' => [],
-            ],
-            [
-                '$params' => [$mock],
-            ],
-            [
-                '$params' => [new \stdClass(), 'default'],
-            ],
-        ];
+        $rowData = ['_attribute_set' => 'attribute_set_name'];
+        $rowNum = 1;
+        $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(null);
+        $this->entityModel->expects($this->never())->method('addRowError');
+        $this->assertTrue($this->simpleType->isRowValid($rowData, $rowNum));
     }
 
-    /**
-     * @todo implement it.
-     */
-    public function testGetParticularAttributes() {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo implement it.
-     */
-    public function testIsRowValid() {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo implement it.
-     */
-    public function testPrepareAttributesWithDefaultValueForSave() {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo implement it.
-     */
-    public function testClearEmptyData() {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+    public function testIsRowValidError()
+    {
+        $rowData = ['_attribute_set' => 'attribute_set_name'];
+        $rowNum = 1;
+        $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);
+        $this->entityModel->expects($this->once())->method('addRowError')
+            ->with(
+                \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
+                1,
+                'attr_code'
+            )
+            ->willReturnSelf();
+        $this->assertFalse($this->simpleType->isRowValid($rowData, $rowNum));
     }
 }

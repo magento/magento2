@@ -9,7 +9,7 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Setup\Model\Lists;
+use Magento\Framework\Setup\Lists;
 
 /**
  * Command prints list of available timezones
@@ -48,8 +48,13 @@ class InfoTimezoneListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Timezone', 'Code']);
+
         foreach ($this->lists->getTimezoneList() as $key => $timezone) {
-            $output->writeln($key . ' => ' . $timezone);
+            $table->addRow([$timezone, $key]);
         }
+
+        $table->render($output);
     }
 }

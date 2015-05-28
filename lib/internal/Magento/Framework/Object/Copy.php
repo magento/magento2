@@ -47,6 +47,8 @@ class Copy
      * @param array|\Magento\Framework\Object $target
      * @param string $root
      * @return array|\Magento\Framework\Object|null the value of $target
+     *
+     * @api
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -91,6 +93,8 @@ class Copy
      * @param array|\Magento\Framework\Object $source
      * @param string $root
      * @return array $data
+     *
+     * @api
      */
     public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {

@@ -11,7 +11,7 @@ define([
 
     return Abstract.extend({
         defaults: {
-            dateFormat: 'MM/DD/YYYY',
+            dateFormat: 'MM/dd/YYYY',
             options: {}
         },
 

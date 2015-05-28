@@ -1,38 +1,38 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Search\Controller\Adminhtml\Search;
+use Magento\Search\Controller\Adminhtml\Term as TermController;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Controller\ResultFactory;
 
-class Edit extends \Magento\Search\Controller\Adminhtml\Term
+class Edit extends TermController
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $coreRegistry
+        Context $context,
+        Registry $coreRegistry
     ) {
-        parent::__construct($context, $resultPageFactory);
-        $this->_coreRegistry = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
+        parent::__construct($context);
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
@@ -44,8 +44,10 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Term
             $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This search no longer exists.'));
-                $this->_redirect('search/*');
-                return;
+                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+                $resultRedirect->setPath('search/*');
+                return $resultRedirect;
             }
         }
 
@@ -55,20 +57,17 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Term
             $model->addData($data);
         }
 
-        $this->_coreRegistry->register('current_catalog_search', $model);
+        $this->coreRegistry->register('current_catalog_search', $model);
 
         $resultPage = $this->createPage();
         $resultPage->getConfig()->getTitle()->prepend(__('Search Terms'));
         $resultPage->getConfig()->getTitle()->prepend($id ? $model->getQueryText() : __('New Search'));
-
         $resultPage->getLayout()->getBlock('adminhtml.search.term.edit')
             ->setData('action', $this->getUrl('search/term/save'));
-
         $resultPage->addBreadcrumb(
             $id ? __('Edit Search') : __('New Search'),
             $id ? __('Edit Search') : __('New Search')
         );
-
         return $resultPage;
     }
 }

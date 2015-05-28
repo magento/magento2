@@ -222,12 +222,28 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
         $adapter->query($insertQuery);
 
-        $this->_resourceHelper->updateReportRatingPos('day', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_DAILY));
-        $this->_resourceHelper->updateReportRatingPos('month', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_MONTHLY));
-        $this->_resourceHelper->updateReportRatingPos('year', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_YEARLY));
-
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'day',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_DAILY)
+        );
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'month',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_MONTHLY)
+        );
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'year',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_YEARLY)
+        );
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE);
-
         return $this;
     }
 }

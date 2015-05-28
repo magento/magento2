@@ -99,7 +99,27 @@ define([
         this.initialize.apply(this, arguments);
     }
 
-    Class.prototype.initialize = function () {};
+    Class.prototype.initialize = function (options) {
+        this.initConfig(options);
+
+        return this;
+    };
+
+    Class.prototype.initConfig = function (options) {
+        var defaults = this.constructor.defaults,
+            config = utils.extend({}, defaults, options),
+            templates = config.templates;
+
+        delete config.templates;
+
+        config = utils.template(config, this);
+
+        config.templates = templates;
+
+        _.extend(this, config);
+
+        return this;
+    };
 
     Class.extend = extend;
     Class.defaults = {};

@@ -61,8 +61,8 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
         if (!empty($diff)) {
             $errorMessage = sprintf(
                 "Resources are not equal.\nExpected: %s\nActual: %s",
-                implode(",\n", $fixtureResources),
-                implode(",\n", $formResources)
+                implode(",\n", $formResources),
+                implode(",\n", $topFormResources)
             );
         }
 

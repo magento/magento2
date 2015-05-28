@@ -14,6 +14,7 @@ namespace Magento\Sales\Api\Data;
  * After a customer places and pays for an order and an invoice has been issued, the merchant can create a credit memo
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases.
+ * @api
  */
 interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -383,6 +384,15 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return string Credit memo created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the credit memo created-at timestamp.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
     /**
      * Gets the credit memo status.
      *

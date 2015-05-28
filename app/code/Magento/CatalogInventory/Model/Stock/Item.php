@@ -239,11 +239,11 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * @return int Timestamp
+     * @return string Timestamp
      */
     public function getLowStockDate()
     {
-        return (int) $this->_getData(static::LOW_STOCK_DATE);
+        return $this->_getData(static::LOW_STOCK_DATE);
     }
 
     /**
