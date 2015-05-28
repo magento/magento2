@@ -106,12 +106,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->_view->expects($this->once())
             ->method('loadLayout');
 
-        $this->_view->expects($this->exactly(2))
+        $this->_view->expects($this->exactly(1))
             ->method('getLayout')
             ->will($this->returnValue($layout));
-
-        $layout->expects($this->once())
-            ->method('initMessages');
 
         $this->_view->expects($this->once())
             ->method('renderLayout');

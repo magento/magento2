@@ -43,10 +43,10 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendActionCtxMock;
 
-    /** @var \Magento\Integration\Service\V1\Integration|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_integrationSvcMock;
 
-    /** @var \Magento\Integration\Service\V1\Oauth|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Api\OauthServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_oauthSvcMock;
 
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
@@ -129,10 +129,10 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\TranslateInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_integrationSvcMock = $this->getMockBuilder(
-            'Magento\Integration\Service\V1\Integration'
+            'Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_oauthSvcMock = $this->getMockBuilder(
-            'Magento\Integration\Service\V1\Oauth'
+            'Magento\Integration\Api\OauthServiceInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_requestMock = $this->getMockBuilder(
             'Magento\Framework\App\Request\Http'

@@ -94,34 +94,6 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $pageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resultPageFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(false, [])
-            ->willReturn($pageMock);
-
-        $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
-            ->getMock();
-
-        $pageMock->expects($this->once())
-            ->method('getLayout')
-            ->willReturn($layoutMock);
-
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
-            ->getMock();
-
-        $layoutMock->expects($this->once())
-            ->method('getBlock')
-            ->with('minicart.content')
-            ->willReturn($blockMock);
-
-        $blockMock->expects($this->once())
-            ->method('toHtml')
-            ->willReturn('block html');
-
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
             ->with(
@@ -132,7 +104,6 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
                         'summary_text' => __(' items'),
                         'subtotal' => 0,
                     ],
-                    'content' => 'block html',
                 ]
             )
             ->willReturn('json encoded');

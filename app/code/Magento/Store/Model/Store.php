@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
@@ -57,7 +58,7 @@ class Store extends AbstractModel implements
     const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
     const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-    
+
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
@@ -481,7 +482,7 @@ class Store extends AbstractModel implements
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
         if (!$data) {
-            $data = $this->_config->getValue($path, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+            $data = $this->_config->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         }
         return $data === false ? null : $data;
     }
@@ -790,7 +791,7 @@ class Store extends AbstractModel implements
         if ($configValue == self::PRICE_SCOPE_GLOBAL) {
             return $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
         } else {
             return $this->_getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);

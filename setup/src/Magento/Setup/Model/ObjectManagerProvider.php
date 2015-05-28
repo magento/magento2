@@ -70,4 +70,18 @@ class ObjectManagerProvider
     {
         $this->objectManager = null;
     }
+    
+    /**
+     * Returns ObjectManagerFactory
+     *
+     * @param array $initParams
+     * @return \Magento\Framework\App\ObjectManagerFactory
+     */
+    public function getObjectManagerFactory($initParams = [])
+    {
+        return Bootstrap::createObjectManagerFactory(
+            BP,
+            $initParams
+        );
+    }
 }

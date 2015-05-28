@@ -1,12 +1,15 @@
 <?php
 /**
- * Responsible for internal authorization decision making based on provided role, resource and privilege
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Authorization;
 
+/**
+ * Responsible for internal authorization decision making based on provided role, resource and privilege
+ *
+ * @api
+ */
 interface PolicyInterface
 {
     /**

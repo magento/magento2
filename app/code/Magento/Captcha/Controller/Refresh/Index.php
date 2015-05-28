@@ -33,7 +33,17 @@ class Index extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $formId = $this->_request->getPost('formId');
+        if (null === $formId) {
+            try {
+                $params = \Zend_Json::decode($this->_request->getContent());
+                $formId = isset($params['formId']) ? $params['formId'] : null;
+            } catch (\Zend_Json_Exception $exception) {
+                $formId = null;
+            }
+        }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
+        $captchaModel->generate();
+
         $block = $this->_view->getLayout()->createBlock($captchaModel->getBlockName());
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
         $this->_response->representJson(json_encode(['imgSrc' => $captchaModel->getImgSrc()]));

@@ -25,32 +25,23 @@ define([
             label: '',
             error: '',
             notice: '',
+            customScope: '',
 
             listens: {
                 value: 'onUpdate',
                 visible: 'setPreview',
                 '<%= provider %>:data.reset': 'reset',
-                '<%= provider %>:data.validate': 'validate'
+                '<%= provider %>:<% if (customScope !== "") { %><%= customScope %>.<% } %>data.validate': 'validate'
             },
 
             links: {
-                value: '<%= provider %>:<%= dataScope %>'
-            },
-
-            exports: {
-                visible: '<%= provider %>:config.<%= name %>.visible'
-            },
-
-            imports: {
-                setPreview: '<%= name %>:value'
+                value: '${ $.provider }:${ $.dataScope }'
             }
         },
 
         /**
-         * Invokes initialize method of parent class, contains initialization
-         *     logic
-         *
-         * @param {Object} config - form element configuration
+         * Invokes initialize method of parent class,
+         * contains initialization logic
          */
         initialize: function () {
             _.bindAll(this, 'reset');
@@ -74,7 +65,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible')
+            this.observe('error disabled focused preview visible value')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -118,17 +109,6 @@ define([
         },
 
         /**
-         * Sets value to preview observable
-         *
-         * @returns {Abstract} Chainable.
-         */
-        setPreview: function (value) {
-            this.preview(!this.visible() ? '' : value);
-
-            return this;
-        },
-
-        /**
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
@@ -137,8 +117,6 @@ define([
          */
         setVisible: function (isVisible) {
             this.visible(isVisible);
-
-            this.trigger('toggle', isVisible);
 
             return this;
         },
@@ -149,7 +127,7 @@ define([
          * @returns {String} Value of the preview observable.
          */
         getPreview: function () {
-            return this.preview();
+            return this.value();
         },
 
         /**
@@ -184,6 +162,17 @@ define([
         },
 
         /**
+         * Clears 'value' property.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        clear: function () {
+            this.value('');
+
+            return this;
+        },
+
+        /**
          * Validates itself by it's validation rules using validator object.
          * If validation of a rule did not pass, writes it's message to
          * 'error' observable property.
@@ -197,6 +186,11 @@ define([
 
             this.error(msg);
 
+            //TODO: Implement proper result propagation for form
+            if (!isValid) {
+                this.source.set('params.invalid', true);
+            }
+
             return {
                 valid: isValid,
                 target: this
@@ -207,7 +201,7 @@ define([
          * Callback that fires when 'value' property is updated.
          */
         onUpdate: function () {
-            this.trigger('update', this.hasChanged());
+            this.bubble('update', this.hasChanged());
 
             this.validate();
         }

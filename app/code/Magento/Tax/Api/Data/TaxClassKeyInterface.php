@@ -8,21 +8,16 @@ namespace Magento\Tax\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Tax class key interface.
+ * @api
+ */
 interface TaxClassKeyInterface extends ExtensibleDataInterface
 {
     /**#@+
-     * Constants defined for keys of array, makes typos less likely
-     */
-    const KEY_TYPE = 'type';
-
-    const KEY_VALUE = 'value';
-    /**#@-*/
-
-    /**#@+
      * Constants defined for type of tax class key
      */
-    const TYPE_ID = 'id';
-
+    const TYPE_ID   = 'id';
     const TYPE_NAME = 'name';
     /**#@-*/
 

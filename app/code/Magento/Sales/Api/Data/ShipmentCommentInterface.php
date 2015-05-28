@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
+ * @api
  */
 interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -54,6 +55,14 @@ interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleData
      * @return string Created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the created-at timestamp for the shipment comment.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Gets the ID for the shipment comment.

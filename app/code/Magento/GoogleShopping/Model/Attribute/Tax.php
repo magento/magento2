@@ -8,6 +8,7 @@ namespace Magento\GoogleShopping\Model\Attribute;
 use Magento\Framework\Parse\Zip;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Model\TaxClass\Key;
 
 /**
  * Tax attribute model
@@ -170,21 +171,21 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 foreach ($regions as $region) {
                     $adjustments = $product->getPriceInfo()->getAdjustments();
                     if (array_key_exists('tax', $adjustments)) {
-                        $taxIncluded = true;
+                        $isTaxIncluded = true;
                     } else {
-                        $taxIncluded = false;
+                        $isTaxIncluded = false;
                     }
 
                     $quoteDetailsItemDataArray = [
                         'code' => $product->getSku(),
                         'type' => 'product',
                         'tax_class_key' => [
-                            TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                            TaxClassKeyInterface::KEY_VALUE => $product->getTaxClassId(),
+                            Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                            Key::KEY_VALUE => $product->getTaxClassId(),
                         ],
                         'unit_price' => $product->getPrice(),
                         'quantity' => 1,
-                        'tax_included' => $taxIncluded,
+                        'is_tax_included' => $isTaxIncluded,
                         'short_description' => $product->getName(),
                     ];
 
@@ -204,8 +205,8 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         'billing_address' => $billingAddressDataArray,
                         'shipping_address' => $shippingAddressDataArray,
                         'customer_tax_class_key' => [
-                            TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                            TaxClassKeyInterface::KEY_VALUE => $defaultCustomerTaxClassId,
+                            Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                            Key::KEY_VALUE => $defaultCustomerTaxClassId,
                         ],
                         'items' => [
                             $quoteDetailsItemDataArray,
