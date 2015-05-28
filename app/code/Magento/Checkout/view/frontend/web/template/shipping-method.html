@@ -20,32 +20,6 @@
          role="tabpanel"
          aria-hidden="false"
          data-bind="fadeVisible: isVisible()">
-        <!-- ko if: rates().length == 0 -->
-        <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
-            <div id="checkout-shipping-method-load">
-                <dl class="items methods-shipping">
-            <dt class="item-title freeshipping">Free Shipping</dt>
-            <dd class="item-content freeshipping">
-                <fieldset class="fieldset">
-                    <legend class="legend"><span>Free Shipping</span></legend><br>
-                    <div class="field choice">
-                        <div class="control">
-                            <input name="shipping_method" type="radio" value="freeshipping_freeshipping" id="s_method_freeshipping_freeshipping" class="radio">
-                        </div>
-                        <label class="label" for="s_method_freeshipping_freeshipping">
-                            <span>Free<span class="price"><span class="price">$0.00</span></span></span>
-                        </label>
-                    </div>
-                </fieldset>
-            </dd>
-        </dl>
-            </div>
-            <button data-role="opc-continue" type="submit" class="button action continue primary">
-                <span><!-- ko text: $t('Next')--><!-- /ko --></span>
-            </button>
-        </form>
-
-        <!-- /ko -->
         <!-- ko if: rates().length  -->
         <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
             <div id="checkout-shipping-method-load">
