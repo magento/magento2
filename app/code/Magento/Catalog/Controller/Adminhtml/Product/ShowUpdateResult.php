@@ -6,10 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use \Magento\Catalog\Helper\Product\Composite;
+use Magento\Catalog\Helper\Product\Composite;
 use Magento\Backend\Model\Session;
-use \Magento\Backend\App\Action\Context;
-use \Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Backend\App\Action\Context;
 
 class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -17,14 +16,14 @@ class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productCompositeHelper;
 
     /**
-     * @param Composite $productCompositeHelper
      * @param Context $context
      * @param Builder $productBuilder
+     * @param Composite $productCompositeHelper
      */
     public function __construct(
-        Composite $productCompositeHelper,
         Context $context,
-        Builder $productBuilder
+        Builder $productBuilder,
+        Composite $productCompositeHelper
     ) {
         $this->productCompositeHelper = $productCompositeHelper;
         parent::__construct($context, $productBuilder);
