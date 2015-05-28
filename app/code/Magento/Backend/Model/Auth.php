@@ -175,7 +175,7 @@ class Auth
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
             );
-            self::throwException(__($e->getMessage()? : 'Please correct the user name or password.'));
+            self::throwException(__('Please correct the user name or password.'));
         }
     }
 
