@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\Resource;
 use Magento\Setup\Model\ComposerInformation;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -95,10 +96,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * Constructor
      *
-     * @param ComposerInformation $composer,
+     * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
      * @param DirectoryList $directoryList
+     * @param File $file
      * @param FullModuleList $fullModuleList
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
@@ -140,7 +142,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             self::INPUT_KEY_REMOVE_DATA,
             'r',
             InputOption::VALUE_NONE,
-            'Removes data installed by module(s)'
+            'Remove data installed by module(s)'
         );
         $this->addOption(
             self::INPUT_KEY_CODE_BACKUP,
@@ -236,11 +238,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     {
         $output->writeln('<info>Removing data</info>');
         $uninstalls = $this->collector->collectUninstall();
+        $setupModel = $this->objectManager->get('Magento\Setup\Module\Setup');
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");
                 $uninstalls[$module]->uninstall(
-                    $this->objectManager->create('Magento\Setup\Module\Setup'),
+                    $setupModel,
                     new ModuleContext($this->moduleResource->getDbVersion($module) ?: '')
                 );
             } else {
@@ -314,10 +317,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private function checkUninstalled(array $modules)
     {
         $messages = [];
-        /** @var \Magento\Setup\Module\DataSetup $setup */
-        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
         foreach ($modules as $module) {
-            if (!$setup->getTableRow('setup_module', 'module', $module)) {
+            if ($this->moduleResource->getDbVersion($module) === false) {
                 $messages[] = "<error>$module is already uninstalled.</error>";
             }
         }

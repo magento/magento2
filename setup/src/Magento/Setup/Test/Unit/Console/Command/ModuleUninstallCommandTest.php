@@ -140,11 +140,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Setup\Module\DataSetup', $this->dataSetup],
                 ['Magento\Framework\App\Cache', $this->cache],
                 ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
+                ['Magento\Setup\Module\Setup', $this->setup],
             ]));
         $objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Setup\Module\Setup', [], $this->setup],
                 ['Magento\Framework\Backup\Filesystem', [], $this->backupFS],
             ]));
         $composer = $this->getMock('Magento\Setup\Model\ComposerInformation', [], [], '', false);
@@ -379,14 +379,9 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
-        $this->dataSetup->expects($this->at(0))
-            ->method('getTableRow')
-            ->with('setup_module', 'module', 'Magento_A')
-            ->willReturn(['module' => 'Magento_A', 'schema_version' => '1.0', 'data_version' => '1.0']);
-        $this->dataSetup->expects($this->at(1))
-            ->method('getTableRow')
-            ->with('setup_module', 'module', 'Magento_B')
-            ->willReturn(false);
+        $this->moduleResource->expects($this->any())
+            ->method('getDbVersion')
+            ->will($this->returnValueMap([['Magento_A', '1.0'], ['Magento_B', false]]));
         $this->tester->execute($input);
         $this->assertNotContains('Magento_A is already uninstalled', $this->tester->getDisplay());
         $this->assertContains('Magento_B is already uninstalled', $this->tester->getDisplay());
@@ -398,9 +393,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
-        $this->dataSetup->expects($this->any())
-            ->method('getTableRow')
-            ->willReturn(['module' => 'module', 'schema_version' => '1.0', 'data_version' => '1.0']);
+        $this->moduleResource->expects($this->any())->method('getDbVersion')->willReturn('1.0');
         $this->dataSetup->expects($this->exactly(count($input['module'])))->method('deleteTableRow');
         $this->deploymentConfig->expects($this->once())
             ->method('getConfigData')
