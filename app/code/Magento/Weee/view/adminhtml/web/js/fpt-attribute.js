@@ -44,8 +44,7 @@ define([
                 //Change tax item country/state
                 'change [data-role="select-country"]': function (event, data) {
                     var currentElement = event.target || event.srcElement || event.currentTarget,
-                        parentElement = $(currentElement).closest('[data-role="fpt-item-row"]'),
-                        isCurrentRequired = $(widget.element).hasClass('required');
+                        parentElement = $(currentElement).closest('[data-role="fpt-item-row"]');
 
                     data = data || {};
                     var updater = new RegionUpdater(
@@ -58,7 +57,7 @@ define([
                     if (data.state) {
                         parentElement.find('[data-role="select-state"]').val(data.state);
                     }
-                    if (!isOriginalRequired && isCurrentRequired) {
+                    if (!isOriginalRequired && $(widget.element).hasClass('required')) {
                         $(widget.element).removeClass('required');
                     }
                 }
