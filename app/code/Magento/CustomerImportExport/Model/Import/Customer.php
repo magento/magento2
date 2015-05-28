@@ -305,8 +305,6 @@ class Customer extends AbstractCustomer
     {
         /** @var $passwordAttribute \Magento\Customer\Model\Attribute */
         $passwordAttribute = $this->_customerModel->getAttribute('password_hash');
-        $passwordAttributeId = $passwordAttribute->getId();
-        $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
 
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
