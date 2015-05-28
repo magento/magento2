@@ -54,6 +54,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
      */
     protected $orderSearchResultMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManagerMock;
 
     protected function setUp()
     {
@@ -107,12 +111,18 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(
+            'Magento\Framework\Event\ManagerInterface'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderService = new \Magento\Sales\Model\Service\OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
-            $this->orderNotifierMock
+            $this->orderNotifierMock,
+            $this->eventManagerMock
         );
     }
 
