@@ -435,7 +435,7 @@
     <xs:simpleType name="typePath">
         <xs:annotation>
             <xs:documentation>
-                Path identifier. Item can has only [a-zA-Z0-9/_(inlove). Minimal length 8 symbol. Case sensitive.
+                Path identifier. Item can has only [A-Za-z_0-9/.]. Minimal length 8 symbol. Case sensitive.
             </xs:documentation>
         </xs:annotation>
 
