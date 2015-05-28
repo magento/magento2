@@ -65,13 +65,13 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $resourceConfigFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Resource\ConfigFactory',
-            [],
+            ['create'],
             [],
             '',
             false
         );
 
-        $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', [], [], '', false);
+        $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', ['create'], [], '', false);
 
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
