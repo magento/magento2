@@ -10,7 +10,7 @@ define(
     function(quote, shippingRateService) {
         "use strict";
         quote.getShippingAddress().subscribe(function () {
-            shippingRateService.getRates(quote.getShippingAddress()())
+            shippingRateService.getRates(quote.getShippingAddress()()())
         });
         return function(shippingAddress) {
             quote.setShippingAddress(shippingAddress);
