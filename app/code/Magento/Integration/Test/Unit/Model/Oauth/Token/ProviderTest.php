@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Test\Unit\Model\Oauth;
+namespace Magento\Integration\Test\Unit\Model\Oauth\Token;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Model\Oauth\Token;
