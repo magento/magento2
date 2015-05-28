@@ -28,7 +28,7 @@ $product = $item->getProduct();
     <?php if ($product->isSaleable()): ?>
     <div class="product-item-actions">
         <div class="actions-primary">
-            <button type="button" data-role="tocart" title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart primary">
+            <button type="button" data-role="tocart" data-post='<?php echo $block->getItemAddToCartParams($item)?>' title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart primary">
                 <span><?php echo __('Add to Cart') ?></span>
             </button>
         </div>

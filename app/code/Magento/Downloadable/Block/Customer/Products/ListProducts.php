@@ -50,7 +50,6 @@ class ListProducts extends \Magento\Framework\View\Element\Template
         $this->_linksFactory = $linksFactory;
         $this->_itemsFactory = $itemsFactory;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

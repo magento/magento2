@@ -38,9 +38,9 @@ $id = $block->escapeHtml($attribute['attribute_id']);
            * @TODO refactor collapsable and remove this <div> */?>
     <div class="collapse hidden"></div>
 
-    <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $id ?>-wrapper">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $id ?>-wrapper">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#<?php echo $id ?>-content">
+            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php echo $id ?>-content">
                 <span><?php echo $block->escapeHtml($attribute['label']); ?></span>
             </strong>
             <div class="actions">

@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Model\Plugin;
 
-use Magento\Integration\Service\V1\AuthorizationServiceInterface as AuthorizationService;
+use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationService;
 
 /**
  * Plugin around \Magento\Framework\Authorization::isAllowed

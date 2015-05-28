@@ -6,6 +6,11 @@
 
 namespace Magento\Store\Model;
 
+/**
+ * Store manager interface
+ *
+ * @api
+ */
 interface StoreManagerInterface
 {
     /**

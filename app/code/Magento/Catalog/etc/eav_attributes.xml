@@ -12,12 +12,31 @@
             <field code="is_unique" locked="true" />
         </attribute>
         <attribute code="status">
+            <field code="is_searchable" locked="true" />
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
         </attribute>
         <attribute code="visibility">
+            <field code="is_searchable" locked="true" />
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
+        </attribute>
+        <attribute code="country_of_manufacture">
+            <field code="is_searchable" locked="true" />
+            <field code="is_filterable" locked="true" />
+            <field code="is_filterable_in_search" locked="true" />
+        </attribute>
+        <attribute code="group_price">
+            <field code="is_searchable" locked="true" />
+        </attribute>
+        <attribute code="price_type">
+            <field code="is_searchable" locked="true" />
+        </attribute>
+        <attribute code="category_ids">
+            <field code="is_searchable" locked="true" />
+        </attribute>
+        <attribute code="media_gallery">
+            <field code="is_searchable" locked="true" />
         </attribute>
     </entity>
 </config>

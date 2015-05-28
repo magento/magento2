@@ -50,7 +50,6 @@ abstract class View extends Action\Action
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
 
         /** @var \Magento\Framework\View\Element\Html\Links $navigationBlock */
         $navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation');

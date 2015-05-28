@@ -73,9 +73,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool $resolve
      * @return \Magento\Framework\Url\RouteParamsResolverFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRouteParamsResolver()
+    protected function getRouteParamsResolverFactory($resolve = true)
     {
         $routeParamsResolverFactoryMock = $this->getMock(
             'Magento\Framework\Url\RouteParamsResolverFactory',
@@ -84,8 +85,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $routeParamsResolverFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->routeParamsResolverMock));
+        if ($resolve) {
+            $routeParamsResolverFactoryMock->expects($this->once())->method('create')
+                    ->will($this->returnValue($this->routeParamsResolverMock));
+        }
         return $routeParamsResolverFactoryMock;
     }
 
@@ -111,20 +114,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $port mixed
+     * @param $httpHost string
      * @param $url string
      * @dataProvider getCurrentUrlProvider
      */
-    public function testGetCurrentUrl($port, $url)
+    public function testGetCurrentUrl($httpHost, $url)
     {
         $requestMock = $this->getRequestMock();
-        $requestMock->expects($this->at(0))->method('getServer')->with('SERVER_PORT')
-            ->will($this->returnValue($port));
-        $requestMock->expects($this->at(1))->method('getServer')->with('REQUEST_URI')
-            ->will($this->returnValue('/fancy_uri'));
+        $requestMock->expects($this->once())->method('getServer')->with('REQUEST_URI')->willReturn('/fancy_uri');
         $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
-        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('example.com'));
-
+        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue($httpHost));
         $model = $this->getUrlModel(['request' => $requestMock]);
         $this->assertEquals($url, $model->getCurrentUrl());
     }
@@ -132,9 +131,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function getCurrentUrlProvider()
     {
         return [
-            'without_port' => ['', 'http://example.com/fancy_uri'],
-            'default_port' => [80, 'http://example.com/fancy_uri'],
-            'custom_port' => [8080, 'http://example.com:8080/fancy_uri']
+            'without_port' => ['example.com', 'http://example.com/fancy_uri'],
+            'default_port' => ['example.com:80', 'http://example.com/fancy_uri'],
+            'custom_port' => ['example.com:8080', 'http://example.com:8080/fancy_uri']
         ];
     }
 
@@ -152,7 +151,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlNotLinkType()
     {
         $model = $this->getUrlModel(
-            ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver()]
+            [
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory()
+            ]
         );
 
         $baseUrl = 'base-url';
@@ -184,9 +186,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getRequestMock();
         $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
-            ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
+            [
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
-                'request' => $requestMock, 'routeConfig' => $routeConfigMock, ]
+                'request' => $requestMock, 'routeConfig' => $routeConfigMock,
+            ]
         );
 
         $baseUrl = 'http://localhost/index.php/';
@@ -218,7 +223,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getUrlModel([
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
         ]);
         $model->setData('route_path', 'catalog/product/view');
 
@@ -233,7 +238,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getUrlModel([
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'request' => $this->getRequestMock()
         ]);
         $model->setData('route_name', 'catalog');
@@ -251,7 +256,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['foo' => 'bar', 'true' => false]));
         $model = $this->getUrlModel([
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'request' => $this->getRequestMock()
         ]);
 
@@ -270,7 +275,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->once())->method('getAlias')->will($this->returnValue('/catalog/product/view/'));
         $model = $this->getUrlModel([
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'request' => $request,
         ]);
 
@@ -299,9 +304,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getRequestMock();
         $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
-            ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
+            [
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
-                'request' => $requestMock, 'routeConfig' => $routeConfigMock, ]
+                'request' => $requestMock, 'routeConfig' => $routeConfigMock,
+            ]
         );
 
         $baseUrl = 'http://localhost/index.php/';
@@ -332,9 +340,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getRequestMock();
         $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
-            ['scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(),
+            [
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
-                'request' => $requestMock, 'routeConfig' => $routeConfigMock, ]
+                'request' => $requestMock, 'routeConfig' => $routeConfigMock,
+            ]
         );
 
         $baseUrl = 'http://localhost/index.php/';
@@ -363,7 +374,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'request' => $requestMock,
             'sidResolver' => $this->sidResolverMock,
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false),
             'queryParamsResolver' => $this->queryParamsResolverMock,
         ]);
 
@@ -376,8 +387,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetRedirectUrl()
     {
         $model = $this->getUrlModel(
-            ['routeParamsResolver' => $this->getRouteParamsResolver(), 'session' => $this->sessionMock,
-                'sidResolver' => $this->sidResolverMock, 'queryParamsResolver' => $this->queryParamsResolverMock, ]
+            [
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
+                'session' => $this->sessionMock,
+                'sidResolver' => $this->sidResolverMock,
+                'queryParamsResolver' => $this->queryParamsResolverMock,
+            ]
         );
 
         $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
@@ -396,8 +411,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetRedirectUrlWithSessionId()
     {
         $model = $this->getUrlModel(
-            ['routeParamsResolver' => $this->getRouteParamsResolver(), 'session' => $this->sessionMock,
-                'sidResolver' => $this->sidResolverMock, 'queryParamsResolver' => $this->queryParamsResolverMock, ]
+            [
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false),
+                'session' => $this->sessionMock,
+                'sidResolver' => $this->sidResolverMock,
+                'queryParamsResolver' => $this->queryParamsResolverMock,
+            ]
         );
 
         $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
@@ -422,7 +441,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteUrlWithValidUrl()
     {
-        $model = $this->getUrlModel(['routeParamsResolver' => $this->getRouteParamsResolver()]);
+        $model = $this->getUrlModel(['routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false)]);
 
         $this->routeParamsResolverMock->expects($this->never())->method('unsetData');
         $this->assertEquals('http://example.com', $model->getRouteUrl('http://example.com'));
@@ -485,7 +504,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $urlSecurityInfoMock = $this->getMock('Magento\Framework\Url\SecurityInfoInterface');
         $model = $this->getUrlModel([
             'urlSecurityInfo' => $urlSecurityInfoMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'scopeResolver' => $this->scopeResolverMock,
             'scopeConfig' => $this->scopeConfig,
         ]);
@@ -530,7 +549,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigDataWithSecureIsForcedParam()
     {
         $model = $this->getUrlModel([
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'scopeResolver' => $this->scopeResolverMock,
             'scopeConfig' => $this->scopeConfig,
         ]);
@@ -562,8 +581,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $requestMock = $this->getRequestMock();
         $model = $this->getUrlModel(
-            ['session' => $this->sessionMock, 'request' => $requestMock, 'sidResolver' => $this->sidResolverMock,
-                'scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(), ]
+            [
+                'session' => $this->sessionMock,
+                'request' => $requestMock,
+                'sidResolver' => $this->sidResolverMock,
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
+            ]
         );
 
         $requestMock->expects($this->once())
@@ -585,8 +609,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $requestMock = $this->getRequestMock();
         $model = $this->getUrlModel(
-            ['session' => $this->sessionMock, 'request' => $requestMock, 'sidResolver' => $this->sidResolverMock,
-                'scopeResolver' => $this->scopeResolverMock, 'routeParamsResolver' => $this->getRouteParamsResolver(), ]
+            [
+                'session' => $this->sessionMock,
+                'request' => $requestMock,
+                'sidResolver' => $this->sidResolverMock,
+                'scopeResolver' => $this->scopeResolverMock,
+                'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
+            ]
         );
 
         $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('localhost'));

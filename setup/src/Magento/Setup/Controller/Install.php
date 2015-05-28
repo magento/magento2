@@ -7,7 +7,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\AdminAccount;
-use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;

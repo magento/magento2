@@ -117,7 +117,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|Store $store
      * @param Quote|null $quote
-     * @return array
+     * @return AbstractMethod[]
      */
     public function getStoreMethods($store = null, $quote = null)
     {

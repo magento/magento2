@@ -168,6 +168,18 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testGetCurrencySymbol()
+    {
+        $storeId = 2;
+        $currencySymbol = '$';
+
+        $currencyMock = $this->getCurrentCurrencyMock();
+        $currencyMock->expects($this->once())
+            ->method('getCurrencySymbol')
+            ->willReturn($currencySymbol);
+        $this->assertEquals($currencySymbol, $this->priceCurrency->getCurrencySymbol($storeId, $currencyMock));
+    }
+
     protected function getCurrentCurrencyMock()
     {
         $currency = $this->getMockBuilder('Magento\Directory\Model\Currency')

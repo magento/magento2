@@ -39,7 +39,7 @@ class AsyncSendingTest extends \PHPUnit_Framework_TestCase
 
         $this->config = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
 
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager\Proxy', [], [], '', false);
+        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
 
         $this->context = $this->getMock('Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
@@ -63,7 +63,7 @@ class AsyncSendingTest extends \PHPUnit_Framework_TestCase
     public function testAfterSave($value, $oldValue, $eventName)
     {
         $path = 'sales_email/general/async_sending';
-        $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
+        $scope = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
 
         $this->object->setData(['value' => $value, 'path' => $path, 'scope' => $scope]);
 

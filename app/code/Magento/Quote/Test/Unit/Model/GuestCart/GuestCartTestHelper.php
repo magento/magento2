@@ -40,15 +40,18 @@ class GuestCartTestHelper
     {
         $quoteIdMaskMock = $this->testCase->getMock(
             'Magento\Quote\Model\QuoteIdMask',
-            ['load', 'getId', 'getMaskedId'],
+            ['load', 'getQuoteId', 'getMaskedId'],
             [],
             '',
             false
         );
-        $quoteIdMaskFactoryMock = $this->testCase->getMock('Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
+        $quoteIdMaskFactoryMock = $this->testCase->getMockBuilder('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quoteIdMaskFactoryMock->expects($this->testCase->once())->method('create')->willReturn($quoteIdMaskMock);
         $quoteIdMaskMock->expects($this->testCase->once())->method('load')->with($maskedCartId)->willReturnSelf();
-        $quoteIdMaskMock->expects($this->testCase->once())->method('getId')->willReturn($cartId);
+        $quoteIdMaskMock->expects($this->testCase->once())->method('getQuoteId')->willReturn($cartId);
         return [$quoteIdMaskFactoryMock, $quoteIdMaskMock];
     }
 }

@@ -12,7 +12,7 @@
             <block class="Magento\Framework\View\Element\Js\Components" name="customer_address_head_components" template="Magento_Customer::js/components.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Address\Book" name="address_book" template="address/book.phtml"/>
+            <block class="Magento\Customer\Block\Address\Book" name="address_book" template="address/book.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

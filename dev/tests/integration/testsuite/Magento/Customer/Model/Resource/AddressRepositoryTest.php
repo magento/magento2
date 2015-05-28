@@ -52,25 +52,25 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCustomerId('1')
             ->setPostcode('75477')
             ->setRegion($region)
+            ->setRegionId(1)
             ->setStreet(['Green str, 67'])
             ->setTelephone('3468676')
             ->setCity('CityM')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setCompany('CompanyName')
-            ->setCustomAttributes([]);
+            ->setCompany('CompanyName');
         $address2 = $this->_addressFactory->create()
             ->setId('2')
             ->setCountryId('US')
             ->setCustomerId('1')
             ->setPostcode('47676')
             ->setRegion($region)
+            ->setRegionId(1)
             ->setStreet(['Black str, 48'])
             ->setCity('CityX')
             ->setTelephone('3234676')
             ->setFirstname('John')
-            ->setLastname('Smith')
-            ->setCustomAttributes([]);
+            ->setLastname('Smith');
 
         $this->_expectedAddresses = [$address, $address2];
     }

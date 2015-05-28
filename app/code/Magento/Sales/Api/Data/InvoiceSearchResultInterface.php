@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice search result interface.
  *
  * An invoice is a record of the receipt of payment for an order.
+ * @api
  */
 interface InvoiceSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
