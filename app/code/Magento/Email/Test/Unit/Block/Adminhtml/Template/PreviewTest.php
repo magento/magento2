@@ -50,7 +50,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         ;
         $template->expects($this->once())
             ->method('getProcessedTemplate')
-            ->with($this->equalTo([]), $this->equalTo(true))
+            ->with($this->equalTo([]))
             ->will($this->returnValue(self::MALICIOUS_TEXT));
         $designConfigData = [
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,

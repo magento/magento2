@@ -91,7 +91,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->with(
                 \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
                 [$this->template, 'getProcessedTemplate'],
-                [['subscriber' => null], true]
+                [['subscriber' => null]]
             )
             ->willReturn('Processed Template');
 
@@ -134,8 +134,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'subscriber' => null
-                    ],
-                    true
+                    ]
                 ]
             )
             ->willReturn('Processed Template');
@@ -169,8 +168,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'subscriber' => $subscriber
-                    ],
-                    true
+                    ]
                 ]
             )
             ->willReturn('Processed Template');

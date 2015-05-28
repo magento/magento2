@@ -37,13 +37,6 @@ namespace Magento\Newsletter\Model;
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
-     * Template Text Preprocessed flag
-     *
-     * @var bool
-     */
-    protected $_preprocessFlag = false;
-
-    /**
      * Mail object
      *
      * @var \Zend_Mail
@@ -231,38 +224,13 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
-     * Check is Preprocessed
-     *
-     * @return bool
-     */
-    public function isPreprocessed()
-    {
-        return strlen($this->getTemplateTextPreprocessed()) > 0;
-    }
-
-    /**
-     * Check Template Text Preprocessed
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getTemplateTextPreprocessed()
-    {
-        if ($this->_preprocessFlag) {
-            $this->setTemplateTextPreprocessed($this->getProcessedTemplate());
-        }
-
-        return $this->getData('template_text_preprocessed');
-    }
-
-    /**
      * Retrieve processed template
      *
      * @param array $variables
      * @param bool $usePreprocess
      * @return string
      */
-    public function getProcessedTemplate(array $variables = [], $usePreprocess = false)
+    public function getProcessedTemplate(array $variables = [])
     {
         $this->setUseAbsoluteLinks(true);
 
@@ -291,17 +259,17 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         $processor->setVariables($variables);
 
         try {
+            // Filter the template text so that all HTML content will be present
             $result = $processor->filter($this->getTemplateText());
-            if ($usePreprocess && $this->isPreprocessed()) {
-                return $this->getPreparedTemplateText($result, true);
-            }
+
+            // Now that all HTML has been assembled, run email through CSS inlining process
+            $processedResult = $this->getPreparedTemplateText($result);
         } catch (\Exception $e) {
             if (!$this->getIsChildTemplate()) {
                 $this->_cancelDesignConfig();
             }
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
         }
-        $processedResult = $this->getPreparedTemplateText($result);
 
         if (!$this->getIsChildTemplate()) {
             $this->_cancelDesignConfig();
@@ -312,17 +280,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Makes additional text preparations for HTML templates
      *
-     * @param bool $usePreprocess Use Preprocessed text or original text
      * @param string $html
      * @return string
      */
-    public function getPreparedTemplateText($html, $usePreprocess = false)
+    public function getPreparedTemplateText($html)
     {
-        if ($usePreprocess) {
-            $html = $this->getTemplateTextPreprocessed();
-        }
-
-        if ($this->_preprocessFlag || $this->isPlain()) {
+        if ($this->isPlain()) {
             return $html;
         }
 
