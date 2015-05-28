@@ -7,6 +7,62 @@ namespace Magento\Framework\Api;
 
 class JoinProcessorTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var \Magento\Framework\Config\FileResolverInterface
+     */
+    protected $extensionConfigFileResolverMock;
+
+    protected function setUp()
+    {
+        /** @var \Magento\Framework\ObjectManagerInterface */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->extensionConfigFileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockedFileResolverClass = get_class($this->extensionConfigFileResolverMock);
+        $objectManager->configure(
+            [
+                'Magento\Framework\Api\Config\Reader' => [
+                    'shared' => true,
+                    'arguments' => [
+                        'fileResolver' => ['instance' => $mockedFileResolverClass],
+                    ],
+                ],
+                $mockedFileResolverClass => ['shared' => true]
+            ]
+        );
+        $this->extensionConfigFileResolverMock = $objectManager->get($mockedFileResolverClass);
+        // TODO: Extension classes must be regenerated
+//        $this->regenerateCustomizedExtensionClasses();
+    }
+
+    protected function tearDown()
+    {
+//        $this->regenerateCustomizedExtensionClasses();
+        parent::tearDown();
+    }
+
+    /**
+     * Regenerate customized extension classes to allow custom extension fields.
+     */
+    protected function regenerateCustomizedExtensionClasses()
+    {
+        $customizedExtensions = [
+            'Magento\Catalog\Api\Data\ProductExtensionInterface',
+            'Magento\Catalog\Api\Data\ProductExtension',
+            'Magento\Customer\Api\Data\CustomerExtensionInterface',
+            'Magento\Customer\Api\Data\CustomerExtension',
+        ];
+        foreach ($customizedExtensions as $extensionClass) {
+            $classReflection = new \ReflectionClass($extensionClass);
+            if (file_exists($classReflection->getFileName())) {
+                unlink($classReflection->getFileName());
+            }
+        }
+    }
+
     public function testProcess()
     {
         /** @var \Magento\Framework\ObjectManagerInterface */
@@ -49,7 +105,7 @@ EXPECTED_SQL;
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDbIsolation enabled
      */
     public function testGetListWithExtensionAttributesAbstractModel()
     {
@@ -59,8 +115,16 @@ EXPECTED_SQL;
         $secondProductQty = 22;
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $extensionConfigFilePath = __DIR__ . '/_files/extension_attributes_catalog_inventory.xml';
+        $extensionConfigFileContent = file_get_contents($extensionConfigFilePath);
+        $this->extensionConfigFileResolverMock->expects($this->any())
+            ->method('get')
+            ->willReturn([$extensionConfigFilePath => $extensionConfigFileContent]);
+
+        include __DIR__ . '/../../../Magento/Catalog/_files/products.php';
+
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
         /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = $objectManager->get('Magento\CatalogInventory\Api\StockItemRepositoryInterface');
 
@@ -98,8 +162,7 @@ EXPECTED_SQL;
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_group.php
+     * @magentoDbIsolation enabled
      */
     public function testGetListWithExtensionAttributesAbstractObject()
     {
@@ -107,6 +170,16 @@ EXPECTED_SQL;
         $customerGroupName = 'General';
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $extensionConfigFilePath = __DIR__ . '/_files/extension_attributes_customer_group.xml';
+        $extensionConfigFileContent = file_get_contents($extensionConfigFilePath);
+        $this->extensionConfigFileResolverMock->expects($this->any())
+            ->method('get')
+            ->willReturn([$extensionConfigFilePath => $extensionConfigFileContent]);
+
+        include __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+        include __DIR__ . '/../../../Magento/Customer/_files/customer_group.php';
+
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
         /** @var \Magento\Framework\Api\Search\FilterGroup $searchCriteriaGroup */
