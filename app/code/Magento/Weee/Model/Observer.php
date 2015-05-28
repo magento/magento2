@@ -210,29 +210,41 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      *
      * @param   \Magento\Framework\Event\Observer $observer
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getPriceConfiguration(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_weeeData->isEnabled()) {
             $priceConfigObj=$observer->getData('configObj');
             $priceConfig=$priceConfigObj->getConfig();
-            if (is_array($priceConfig)) {
-                foreach ($priceConfig as $keyConfigs => $configs) {
-                    if (is_array($configs)) {
-                        foreach ($configs as $keyConfig => $config) {
-                            $calcPrice='finalPrice';
-                            if ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
-                                $calcPrice='basePrice';
+            try {
+                if (is_array($priceConfig)) {
+                    foreach ($priceConfig as $keyConfigs => $configs) {
+                        if (is_array($configs)) {
+                            foreach ($configs as $keyConfig => $config) {
+                                $calcPrice = 'finalPrice';
+                                if ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
+                                    $calcPrice = 'basePrice';
+                                }
+                                if (array_key_exists('prices', $configs)) {
+                                    $priceConfig[$keyConfigs]['prices']['weeePrice'] = [
+                                        'amount' => $configs['prices'][$calcPrice]['amount'],
+                                    ];
+                                } else {
+                                    foreach ($configs as $keyConfig => $config) {
+                                        $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice'] = [
+                                            'amount' => $config['prices'][$calcPrice]['amount'],
+                                        ];
+                                    }
+                                }
                             }
-                            $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice']= [
-                                'amount' => $config['prices'][$calcPrice]['amount'],
-                            ];
                         }
-
                     }
                 }
+                $priceConfigObj->setConfig($priceConfig);
+            } catch (Exception $e) {
+                return $this;
             }
-            $priceConfigObj->setConfig($priceConfig);
         }
         return $this;
     }
