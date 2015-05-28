@@ -76,6 +76,16 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $setup;
 
     /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryList;
+
+    /**
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupFS;
+
+    /**
      * @var \Magento\Setup\Model\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
      */
     private $backupRollback;
@@ -113,6 +123,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
+        $this->backupFS = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
         $objectManager->expects($this->any())
             ->method('get')
@@ -128,21 +139,29 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Setup\Module\Setup', [], $this->setup],
+                ['Magento\Framework\Backup\Filesystem', [], $this->backupFS],
             ]));
         $composer = $this->getMock('Magento\Setup\Model\ComposerInformation', [], [], '', false);
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/package-a', 'magento/package-b']);
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $path = realpath(__DIR__ . '/../../_files/');
+        $this->directoryList->expects($this->any())
+            ->method('getRoot')
+            ->willReturn($path);
+        $this->directoryList->expects($this->any())
+            ->method('getPath')
+            ->willReturn($path);
         $this->command = new ModuleUninstallCommand(
             $composer,
             $this->deploymentConfig,
             $this->writer,
-            $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false),
+            $this->directoryList,
             $this->fullModuleList,
             $this->maintenanceMode,
             $objectManagerProvider,
-            $this->uninstallCollector,
-            $this->backupRollback
+            $this->uninstallCollector
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -439,8 +458,35 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = ['module' => ['Magento_A', 'Magento_B'], '--code-backup' => true];
         $this->setUpExecute($input);
-        $this->backupRollback->expects($this->once())
-            ->method('codeBackup');
+        $this->backupFS->expects($this->once())
+            ->method('addIgnorePaths');
+        $this->backupFS->expects($this->once())
+            ->method('setBackupsDir');
+        $this->backupFS->expects($this->once())
+            ->method('setBackupExtension');
+        $this->backupFS->expects($this->once())
+            ->method('setTime');
+        $this->backupFS->expects($this->once())
+            ->method('create');
+        $this->backupFS->expects($this->once())
+            ->method('getBackupFilename')
+            ->willReturn('RollbackFile_A.tgz');
+        $this->backupFS->expects($this->once())
+            ->method('getBackupPath')
+            ->willReturn('pathToFile/RollbackFile_A.tgz');
         $this->tester->execute($input);
+        $expectedMsg = 'Enabling maintenance mode' . PHP_EOL .
+            'Code backup filename: RollbackFile_A.tgz (The archive can be uncompressed with 7-Zip on Windows systems.)'
+            . PHP_EOL . 'Code backup path: pathToFile/RollbackFile_A.tgz' . PHP_EOL .
+            '[SUCCESS]: Code backup is completed successfully.' . PHP_EOL .
+            'Removing Magento_A, Magento_B from module registry in database' . PHP_EOL .
+            'Removing Magento_A, Magento_B from module list in deployment configuration' . PHP_EOL .
+            'Cache cleared successfully.' . PHP_EOL .
+            'Generated classes cleared successfully.' . PHP_EOL .
+            'Alert: Generated static view files were not cleared. You can clear them using the --clear-static-content '
+            . 'option. Failure to clear static view files might cause display issues in the Admin and storefront.'
+            . PHP_EOL . 'To completely remove modules, please run composer remove' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
+        $this->assertEquals($expectedMsg, $this->tester->getDisplay());
     }
 }

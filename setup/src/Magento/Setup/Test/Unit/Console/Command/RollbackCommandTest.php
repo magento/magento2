@@ -21,23 +21,15 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Setup\Model\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $backupRollback;
-
-    /**
-     * @var RollbackCommand
-     */
-    private $command;
+    private $directoryList;
 
     /**
      * @var CommandTester
      */
     private $tester;
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function setUp()
     {
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
@@ -47,17 +39,24 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\ObjectManagerInterface',
             [],
             '',
-            false)
-        ;
+            false
+        );
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->backupRollback = $this->getMock('Magento\Setup\Model\BackupRollback', [], [], '', false);
-        $this->command = new RollbackCommand(
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $path = realpath(__DIR__ . '/../../_files/');
+        $this->directoryList->expects($this->any())
+            ->method('getRoot')
+            ->willReturn($path);
+        $this->directoryList->expects($this->any())
+            ->method('getPath')
+            ->willReturn($path);
+        $command = new RollbackCommand(
             $objectManagerProvider,
             $maintenanceMode,
-            $this->backupRollback,
+            $this->directoryList,
             $this->deploymentConfig
         );
-        $this->tester = new CommandTester($this->command);
+        $this->tester = new CommandTester($command);
     }
 
     public function testExecuteApplicationNotInstalled()
@@ -73,9 +72,38 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
-        $this->backupRollback->expects($this->once())
-            ->method('codeRollback')
-            ->with($this->objectManager, $this->isInstanceOf('Magento\Setup\Model\ConsoleLogger'));
-        $this->tester->execute(['--code' => ['RollbackFile_A']]);
+        $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
+        $helper->expects($this->once())
+            ->method('getInfo')
+            ->willReturn(['writable' => true]);
+        $filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
+        $filesystem->expects($this->once())
+            ->method('addIgnorePaths');
+        $filesystem->expects($this->once())
+            ->method('setBackupsDir');
+        $filesystem->expects($this->once())
+            ->method('setBackupExtension');
+        $filesystem->expects($this->once())
+            ->method('setTime');
+        $filesystem->expects($this->once())
+            ->method('rollback');
+        $filesystem->expects($this->once())
+            ->method('getBackupFilename')
+            ->willReturn('RollbackFile_A.tgz');
+        $filesystem->expects($this->once())
+            ->method('getBackupPath')
+            ->willReturn('pathToFile/RollbackFile_A.tgz');
+        $this->objectManager->expects($this->any())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\Backup\Filesystem\Helper', [], $helper],
+                ['Magento\Framework\Backup\Filesystem', [], $filesystem],
+            ]));
+        $this->tester->execute(['--code' => 'RollbackFile_A.tgz']);
+        $expectedMsg = 'Enabling maintenance mode' . PHP_EOL
+            . 'Code rollback filename: RollbackFile_A.tgz' . PHP_EOL
+            . 'Code rollback file path: pathToFile/RollbackFile_A.tgz' . PHP_EOL
+            . '[SUCCESS]: Code rollback is completed successfully.' . PHP_EOL .'Disabling maintenance mode' . PHP_EOL;
+        $this->assertEquals($expectedMsg, $this->tester->getDisplay());
     }
 }

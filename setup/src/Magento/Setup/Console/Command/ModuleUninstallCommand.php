@@ -13,7 +13,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\Resource;
 use Magento\Setup\Model\ComposerInformation;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -88,11 +87,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $composer;
 
     /**
-     * @var BackupRollback
-     */
-    private $backupRollback;
-
-    /**
      * Constructor
      *
      * @param ComposerInformation $composer,
@@ -103,7 +97,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
-     * @param BackupRollback $backupRollback
      */
     public function __construct(
         ComposerInformation $composer,
@@ -113,8 +106,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
-        UninstallCollector $collector,
-        BackupRollback $backupRollback
+        UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
@@ -127,7 +119,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->collector = $collector;
         $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
-        $this->backupRollback = $backupRollback;
     }
 
     /**
@@ -199,7 +190,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         try {
             if ($input->getOption(self::INPUT_KEY_CODE_BACKUP)) {
-                $this->backupRollback->codeBackup($this->objectManager, new ConsoleLogger($output));
+                $backupRollback = new BackupRollback(
+                    $this->objectManager,
+                    new ConsoleLogger($output),
+                    $this->directoryList
+                );
+                $backupRollback->codeBackup();
             }
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                 $this->removeData($modules, $output);

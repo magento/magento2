@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Model\BackupRollback;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Command to rollback code and DB
@@ -38,9 +39,9 @@ class RollbackCommand extends AbstractSetupCommand
     private $maintenanceMode;
 
     /**
-     * @var BackupRollback
+     * @var DirectoryList
      */
-    private $backupRollback;
+    private $directoryList;
 
     /**
      * @var DeploymentConfig
@@ -52,18 +53,18 @@ class RollbackCommand extends AbstractSetupCommand
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
-     * @param BackupRollback $backupRollback
+     * @param DirectoryList $directoryList
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         MaintenanceMode $maintenanceMode,
-        BackupRollback $backupRollback,
+        DirectoryList $directoryList,
         DeploymentConfig $deploymentConfig
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollback = $backupRollback;
+        $this->directoryList = $directoryList;
         $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
@@ -102,11 +103,12 @@ class RollbackCommand extends AbstractSetupCommand
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
             if ($input->getOption(self::INPUT_KEY_CODE_ROLLBACK)) {
-                $this->backupRollback->codeRollback(
+                $backupRollback = new BackupRollback(
                     $this->objectManager,
                     new ConsoleLogger($output),
-                    $input->getOption(self::INPUT_KEY_CODE_ROLLBACK)
+                    $this->directoryList
                 );
+                $backupRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_ROLLBACK));
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');

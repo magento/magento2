@@ -22,6 +22,20 @@ class BackupRollback
     const DEFAULT_BACKUP_DIRECTORY = 'backups';
 
     /**
+     * Object Manager
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * Logger
+     *
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * Filesystem Directory List
      *
      * @var DirectoryList
@@ -31,25 +45,31 @@ class BackupRollback
     /**
      * Constructor
      *
+     * @param ObjectManagerInterface $objectManager
+     * @param LoggerInterface $log
      * @param DirectoryList $directoryList
      */
-    public function __construct(DirectoryList $directoryList)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        LoggerInterface $log,
+        DirectoryList $directoryList
+    ) {
+        $this->objectManager = $objectManager;
+        $this->log = $log;
         $this->directoryList = $directoryList;
     }
 
     /**
      * Take backup for code base
      *
-     * @param ObjectManagerInterface $objectManager
-     * @param LoggerInterface $log
      * @return void
      */
-    public function codeBackup(ObjectManagerInterface $objectManager, LoggerInterface $log)
+    public function codeBackup()
     {
         /** @var \Magento\Framework\Backup\Filesystem $fsBackup */
-        $fsBackup = $objectManager->create('Magento\Framework\Backup\Filesystem');
-        $fsBackup->setRootDir($this->directoryList->getRoot());
+        $fsBackup = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
+        $a = $this->directoryList->getRoot();
+        $fsBackup->setRootDir($a);
         $fsBackup->addIgnorePaths($this->getIgnorePaths());
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!file_exists($backupsDir)) {
@@ -60,29 +80,29 @@ class BackupRollback
         $fsBackup->setBackupExtension('tgz');
         $fsBackup->setTime(time());
         $fsBackup->create();
-        $log->log('Code backup filename: ' . $fsBackup->getBackupFilename()
-            . ' (The archive can be uncompressed with 7-Zip on Windows systems.)');
-        $log->log('Code backup path: ' . $fsBackup->getBackupPath());
-        $log->logSuccess('Code backup is completed successfully.');
+        $this->log->log(
+            'Code backup filename: ' . $fsBackup->getBackupFilename()
+            . ' (The archive can be uncompressed with 7-Zip on Windows systems.)'
+        );
+        $this->log->log('Code backup path: ' . $fsBackup->getBackupPath());
+        $this->log->logSuccess('Code backup is completed successfully.');
     }
 
     /**
      * Rollback code base
      *
-     * @param ObjectManagerInterface $objectManager
-     * @param LoggerInterface $log
      * @param string $rollbackFile
      * @return void
      * @throws LocalizedException
      */
-    public function codeRollback(ObjectManagerInterface $objectManager, LoggerInterface $log, $rollbackFile)
+    public function codeRollback($rollbackFile)
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!file_exists($backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new \Magento\Framework\Phrase("The rollback file does not exist."));
         }
         /** @var Helper $checkWritable */
-        $checkWritable = $objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
+        $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
         $filesInfo = $checkWritable->getInfo(
             $this->directoryList->getRoot(),
             Helper::INFO_WRITABLE,
@@ -94,7 +114,7 @@ class BackupRollback
             );
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
-        $fsRollback = $objectManager->create('Magento\Framework\Backup\Filesystem');
+        $fsRollback = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
         $fsRollback->setRootDir($this->directoryList->getRoot());
         $fsRollback->addIgnorePaths($this->getIgnorePaths());
 
@@ -103,9 +123,9 @@ class BackupRollback
         $time = explode('_', $rollbackFile);
         $fsRollback->setTime($time[0]);
         $fsRollback->rollback();
-        $log->log('Code rollback filename: ' . $fsRollback->getBackupFilename());
-        $log->log('Code rollback file path: ' . $fsRollback->getBackupPath());
-        $log->logSuccess('Code rollback is completed successfully.');
+        $this->log->log('Code rollback filename: ' . $fsRollback->getBackupFilename());
+        $this->log->log('Code rollback file path: ' . $fsRollback->getBackupPath());
+        $this->log->logSuccess('Code rollback is completed successfully.');
     }
 
     /**
