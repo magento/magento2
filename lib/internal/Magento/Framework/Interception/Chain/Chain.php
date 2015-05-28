@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\Interception\Chain;
 
-use Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace\Interceptor;
+use Magento\Framework\Interception\Interceptor;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\Interception\PluginListInterface;
 

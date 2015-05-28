@@ -58,7 +58,7 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
     /**
      * Add a trait to the class.
      *
-     * @param $trait
+     * @param string $trait
      * @return $this
      */
     public function addTrait($trait);
