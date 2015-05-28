@@ -5,8 +5,9 @@
 /*jshint browser:true*/
 /*global define*/
 define(
-    ['./shipping-rates-list-processor',
-        'Magento_Customer/js/model/shipping-rates-list-processor'
+    [
+        'Magento_Checkout/js/model/shipping-rate-processor/new-address',
+        'Magento_Checkout/js/model/shipping-rate-processor/customer-address'
     ],
     function(defaultProcessor, customerAddressProcessor) {
         "use strict";
