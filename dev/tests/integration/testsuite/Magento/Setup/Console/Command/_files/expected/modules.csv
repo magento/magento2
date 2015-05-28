@@ -1,9 +1,0 @@
-"","All","Hard","Soft"
-"Total number of dependencies","2","2","0"
-
-"Dependencies for each module:","All","Hard","Soft"
-"magento/module-a","1","1","0"
-" -- magento/module-b","","1","0"
-
-"magento/module-b","1","1","0"
-" -- magento/module-a","","1","0"
