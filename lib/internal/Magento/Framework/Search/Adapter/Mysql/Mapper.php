@@ -129,9 +129,9 @@ class Mapper
         $select->limit($request->getSize());
 
         $filtersCount = $queryContainer->getFiltersCount();
-        if ($queryContainer->getFiltersCount() && $filtersCount > 1) {
-            $select->group('product_id');
-            $select->having('count(DISTINCT search_index.attribute_id) = ' . $filtersCount);
+        if ($filtersCount > 1) {
+            $select->group('entity_id');
+            $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
         }
 
         $select = $this->createAroundSelect($select, $scoreBuilder);
@@ -179,7 +179,7 @@ class Mapper
             ->from(
                 ['main_select' => $select],
                 [
-                    $this->entityMetadata->getEntityId() => 'product_id',
+                    $this->entityMetadata->getEntityId() => 'entity_id',
                     'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
                 ]
             )
@@ -209,7 +209,6 @@ class Mapper
             case RequestQueryInterface::TYPE_MATCH:
                 /** @var MatchQuery $query */
                 $select = $queryContainer->addMatchQuery(
-                    $scoreBuilder,
                     $select,
                     $query,
                     $conditionType

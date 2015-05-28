@@ -59,7 +59,7 @@ class IndexBuilder implements IndexBuilderInterface
         $select = $this->getSelect()
             ->from(
                 ['search_index' => $this->resource->getTableName($tableName)],
-                ['product_id']
+                ['entity_id' => 'product_id']
             )
             ->joinLeft(
                 ['category_index' => $this->resource->getTableName('catalog_category_product_index')],

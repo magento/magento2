@@ -30,10 +30,6 @@ class QueryContainer
      */
     private $matchBuilder;
     /**
-     * @var bool
-     */
-    private $hasMatches = false;
-    /**
      * @var IndexBuilderInterface
      */
     private $indexBuilder;
@@ -71,29 +67,22 @@ class QueryContainer
     }
 
     /**
-     * @param ScoreBuilder $scoreBuilder
      * @param Select $select
      * @param RequestQueryInterface $query
      * @param string $conditionType
      * @return Select
      */
     public function addMatchQuery(
-        ScoreBuilder $scoreBuilder,
         Select $select,
         RequestQueryInterface $query,
         $conditionType
     ) {
-        if (!$this->hasMatches) {
-            $subSelect = $this->createSelect();
-            $subScoreBuilder = $this->scoreBuilderFactory->create();
-            $this->buildMatchQuery($subScoreBuilder, $subSelect, $query, $conditionType);
-            $subSelect->columns($subScoreBuilder->build());
-            $subSelect->limit($this->request->getSize());
-            $this->addDerivedQuery($subSelect);
-        } else {
-            $this->hasMatches = true;
-            $select = $this->buildMatchQuery($scoreBuilder, $select, $query, $conditionType);
-        }
+        $subSelect = $this->createSelect();
+        $subScoreBuilder = $this->scoreBuilderFactory->create();
+        $this->buildMatchQuery($subScoreBuilder, $subSelect, $query, $conditionType);
+        $subSelect->columns($subScoreBuilder->build());
+        $subSelect->limit($this->request->getSize());
+        $this->addDerivedQuery($subSelect);
 
         return $select;
     }
