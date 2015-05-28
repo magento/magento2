@@ -88,10 +88,13 @@
 
                 <div class="actions-toolbar">
                     <div class="secondary">
-                        <button type="submit" class="action action-edit" title="Edit">
+                        <button type="submit"
+                                class="action action-edit"
+                                title="<?php echo $block->escapeHtml(__('Edit')); ?>">
                             <span><?php echo __('Edit'); ?></span>
                         </button>
-                        <button class="action action-delete" title="Delete">
+                        <button class="action action-delete"
+                                title="<?php echo $block->escapeHtml(__('Delete')); ?>">
                             <span><?php echo __('Delete'); ?></span>
                         </button>
                     </div>

@@ -10,6 +10,8 @@
 @gift-message-field-label__color: @color-gray40;
 
 @gift-item-block__border-color: @color-gray-light5;
+@gift-item-block__border-width: @border-width__base;
+
 @gift-item-block-title__color: @color-blue1;
 @gift-item-block-title-icon__content: @icon-down;
 @gift-item-block-title-icon__active__content: @icon-up;
@@ -43,6 +45,14 @@
         display: none;
         &._active {
             display: table-row;
+        }
+    }
+
+    .cart.table-wrapper {
+        .item-gift {
+            &._active {
+                .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+            }
         }
     }
 
@@ -99,18 +109,18 @@
     //  ---------------------------------------------
 
     .gift-item-block {
-        border-bottom: 1px solid @gift-item-block__border-color;
+        .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
         margin: 0;
         &._active {
             .title {
                 &:after {
-                    content: @gift-item-block-title-icon__active__content;
+                    .css(content, @gift-item-block-title-icon__active__content);
                 }
             }
         }
 
         .title {
-            color: @gift-item-block-title__color;
+            .css(color, @gift-item-block-title__color);
             cursor: pointer;
             .icon-font(
             @gift-item-block-title-icon__content,
@@ -156,19 +166,23 @@
             }
             .item-options {
                 dt {
-                    font-weight: @font-weight__regular;
+                    .css(font-weight, @font-weight__regular);
                     margin: @indent__s 0;
                 }
             }
         }
     }
 
-    .order-details-items .order-items .order-gift-message {
-        &:not(.expanded-content) {
-            &:extend(.abs-hidden);
-        }
-        .action.close {
-            &:extend(.abs-no-display all);
+    .order-details-items {
+        .order-items {
+            .order-gift-message {
+                &:not(.expanded-content) {
+                    &:extend(.abs-hidden);
+                }
+                .action.close {
+                    &:extend(.abs-no-display all);
+                }
+            }
         }
     }
 
@@ -199,7 +213,7 @@
 
     .gift-item-block {
         border-bottom: 0;
-        border-top: @border-width__base solid @gift-item-block__border-color;
+        .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
         .title {
             &:after {
                 .font-size(12);

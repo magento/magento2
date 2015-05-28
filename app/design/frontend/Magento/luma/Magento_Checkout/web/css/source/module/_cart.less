@@ -95,10 +95,12 @@
                         .radio {
                             float: left;
                         }
-                        .radio + .label {
-                            display: block;
-                            margin: 0;
-                            overflow: hidden;
+                        .radio {
+                            + .label {
+                                display: block;
+                                margin: 0;
+                                overflow: hidden;
+                            }
                         }
                     }
                 }
@@ -604,7 +606,7 @@
     //  Cross sell
     .block.crosssell {
         margin-top: 70px;
-        padding: 0 @mobile-cart-padding;
+        .css(padding, 0 @mobile-cart-padding);
         .product-item-info {
             width: 200px;
         }

@@ -318,9 +318,9 @@
         .product-item-inner {
             @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
 
-            border: 1px solid @color-gray-light2;
-            border-top: none;
             .css(background, @color-white);
+            .css(border, @border-width__base solid @color-gray-light2);
+            border-top: none;
             .css(box-shadow, @_shadow);
             display: none;
             left: 0;

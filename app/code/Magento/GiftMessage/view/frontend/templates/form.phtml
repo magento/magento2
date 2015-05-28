@@ -26,7 +26,6 @@
                 <div class="control">
                     <input type="text"
                            id="gift-message-whole-to"
-                           title="To"
                            class="input-text"
                            name="">
                 </div>
@@ -40,7 +39,6 @@
                 <div class="control">
                     <input type="text"
                            id="gift-message-whole-from"
-                           title="From"
                            class="input-text"
                            name="">
                 </div>
@@ -55,7 +53,6 @@
                             <textarea
                                 id="gift-message-whole-message"
                                 class="input-text"
-                                title="Message"
                                 rows="5"
                                 cols="10"
                                 name=""></textarea>
@@ -64,10 +61,13 @@
         </fieldset>
         <div class="actions-toolbar">
             <div class="secondary">
-                <button type="submit" class="action secondary action-update">
+                <button type="submit"
+                        class="action secondary action-update"
+                        title="<?php echo $block->escapeHtml(__('Update')); ?>">
                     <span><?php echo __('Update'); ?></span>
                 </button>
-                <button class="action action-cancel">
+                <button class="action action-cancel"
+                        title="<?php echo $block->escapeHtml(__('Cancel')); ?>">
                     <span><?php echo __('Cancel'); ?></span>
                 </button>
             </div>
