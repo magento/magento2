@@ -157,10 +157,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultEmailLogo()
     {
-        $model = $this->getModelMock();
+        $model = $this->getModelMock(['getDesignParams']);
         $value = 'urlWithParamsValue';
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->once())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
         $this->assetRepo->method('getUrlWithParams')
-            ->with('Magento_Email::logo_email.png', ['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->with('Magento_Email::logo_email.png', $designParams)
             ->will($this->returnValue($value));
         $this->assertEquals($value, $model->getDefaultEmailLogo());
     }
@@ -525,24 +533,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // is returned from getProcessedTemplate
         $expectedVariables['store'] = $store;
 
-        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
+        $model = $this->getModelMock(['getDesignParams', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
         $filterTemplate->expects($this->any())
             ->method('setVariables')
             ->with(array_merge([ 'this' => $model], $expectedVariables));
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeId = 'storeId';
-        $designConfig->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeId));
-        $model->expects($this->once())
-            ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
