@@ -209,11 +209,32 @@ class Customer extends AbstractCustomer
             $this->_connection->insertMultiple($this->_entityTable, $entitiesToCreate);
         }
 
+        $customerFields = [
+            'group_id',
+            'store_id',
+            'updated_at',
+            'created_at',
+            'created_in',
+            'prefix',
+            'firstname',
+            'middlename',
+            'lastname',
+            'suffix',
+            'dob',
+            'password_hash',
+            'default_billing',
+            'default_shipping',
+            'taxvat',
+            'confirmation',
+            'gender',
+            'rp_token',
+            'rp_token_created_at',
+        ];
         if ($entitiesToUpdate) {
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                ['group_id', 'store_id', 'updated_at', 'created_at']
+                $customerFields
             );
         }
 
