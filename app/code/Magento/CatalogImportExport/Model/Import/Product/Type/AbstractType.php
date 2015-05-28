@@ -204,6 +204,25 @@ abstract class AbstractType
     }
 
     /**
+     * In case we've dynamically added new attribute option during import we need to add it to our cache
+     * in order to keep it up to date.
+     *
+     * @param string $code
+     * @param string $optionKey
+     * @param string $optionValue
+     * @return $this
+     */
+    public function addAttributeOption($code, $optionKey, $optionValue)
+    {
+        foreach ($this->_attributes as $attrSetName => $attrSetValue) {
+            if (isset($attrSetValue[$code])) {
+                $this->_attributes[$attrSetName][$code]['options'][$optionKey] = $optionValue;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Have we check attribute for is_required? Used as last chance to disable this type of check.
      *
      * @param string $attrCode
@@ -247,6 +266,16 @@ abstract class AbstractType
     public function getParticularAttributes()
     {
         return $this->_specialAttributes;
+    }
+
+    /**
+     * Return entity custom Fields mapping
+     *
+     * @return string[]
+     */
+    public function getCustomFieldsMapping()
+    {
+        return $this->_customFieldsMapping;
     }
 
     /**
