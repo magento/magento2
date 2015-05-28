@@ -335,14 +335,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $customerId = $addressCustomer->getId();
 
         // set customer defaults
-        $defaults = [];
-        foreach (Address::getDefaultAddressAttributeMapping() as $attributeCode) {
-            /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
-            $attribute = $addressCustomer->getAttribute($attributeCode);
-            $attributeTable = $attribute->getBackend()->getTable();
-            $attributeId = $attribute->getId();
-            $defaults[$attributeTable][$customerId][$attributeId] = $addressId;
-        }
+        $defaults = [
+            'customer_entity' => [
+                $customerId => ['default_billing' => $addressId, 'default_shipping' => $addressId],
+            ],
+        ];
 
         // invoke _saveCustomerDefaults
         $saveDefaults = new \ReflectionMethod($this->_testClassName, '_saveCustomerDefaults');
