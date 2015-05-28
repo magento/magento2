@@ -23,7 +23,7 @@ class ConfigurableItem extends DefaultItem
      * @param \Magento\Catalog\Model\Product\Image\View $productImageView
      * @param \Magento\Msrp\Helper\Data $msrpHelper
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
+     * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
@@ -31,7 +31,7 @@ class ConfigurableItem extends DefaultItem
         \Magento\Catalog\Model\Product\Image\View $productImageView,
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
+        \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
@@ -39,7 +39,7 @@ class ConfigurableItem extends DefaultItem
             $productImageView,
             $msrpHelper,
             $urlBuilder,
-            $configurationHelper,
+            $configurationPool,
             $checkoutHelper
         );
         $this->_scopeConfig = $scopeConfig;

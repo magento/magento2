@@ -17,6 +17,11 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
     protected $secureUrlsList = [];
 
     /**
+     * List of patterns excluded form secure url list
+     */
+    protected $excludedUrlsList = [];
+
+    /**
      * List of already checked urls
      *
      * @var array
@@ -25,10 +30,12 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 
     /**
      * @param string[] $secureUrlList
+     * @param string[] $excludedUrlList
      */
-    public function __construct($secureUrlList = [])
+    public function __construct($secureUrlList = [], $excludedUrlList = [])
     {
         $this->secureUrlsList = $secureUrlList;
+        $this->excludedUrlsList = $excludedUrlList;
     }
 
     /**
@@ -41,6 +48,11 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
     {
         if (!isset($this->secureUrlsCache[$url])) {
             $this->secureUrlsCache[$url] = false;
+            foreach ($this->excludedUrlsList as $match) {
+                if (strpos($url, (string)$match) === 0) {
+                    return $this->secureUrlsCache[$url];
+                }
+            }
             foreach ($this->secureUrlsList as $match) {
                 if (strpos($url, (string)$match) === 0) {
                     $this->secureUrlsCache[$url] = true;

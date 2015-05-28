@@ -4,12 +4,12 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/lib/provider',
+    'uiComponent',
     './client'
-], function (_, Provider, Client) {
+], function (_, Component, Client) {
     'use strict';
 
-    return Provider.extend({
+    return Component.extend({
         initialize: function () {
             this._super()
                 .initClient();
@@ -20,8 +20,8 @@ define([
         initClient: function () {
             this.client = new Client({
                 urls: {
-                    beforeSave: this.data.validate_url,
-                    save: this.data.submit_url
+                    beforeSave: this.validate_url,
+                    save: this.submit_url
                 }
             });
 
