@@ -43,7 +43,7 @@ class UpgradeData implements UpgradeDataInterface
                 ['backend_model = ?' => 'Magento\Catalog\Model\Product\Attribute\Backend\Startdate']
             );
             /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-            foreach($this->category->getAttributes() as $attribute) {
+            foreach ($this->category->getAttributes() as $attribute) {
                 if ($attribute->getAttributeCode() == 'custom_design_from') {
                     $attribute->setBackendModel($newBackendModel);
                     $attribute->save();
