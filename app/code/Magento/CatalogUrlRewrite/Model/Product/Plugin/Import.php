@@ -42,7 +42,11 @@ class Import
     }
 
     /**
+     * Action after data import.
+     * Save new url rewrites and remove old if exist.
+     *
      * @param Observer $observer
+     *
      * @return void
      */
     public function afterImportData(Observer $observer)
@@ -61,7 +65,10 @@ class Import
     }
 
     /**
+     * Clear product urls.
+     *
      * @param Observer $observer
+     *
      * @return void
      */
     public function clearProductUrls(Observer $observer)

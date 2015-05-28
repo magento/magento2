@@ -40,14 +40,30 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**#@+
      * Form field names (and IDs)
      */
+
+    /**
+     * Import source file.
+     */
     const FIELD_NAME_SOURCE_FILE = 'import_file';
 
+    /**
+     * Import image archive.
+     */
     const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
 
+    /**
+     * Import images file directory.
+     */
     const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
+    /**
+     * Import field separator.
+     */
     const FIELD_FIELD_SEPARATOR = '_import_field_separator';
 
+    /**
+     * Import multiple value separator.
+     */
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**#@-*/

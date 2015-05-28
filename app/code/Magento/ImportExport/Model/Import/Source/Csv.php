@@ -16,6 +16,8 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     protected $_file;
 
     /**
+     * Delimiter.
+     *
      * @var string
      */
     protected $_delimiter = ',';

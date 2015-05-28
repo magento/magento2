@@ -127,36 +127,50 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_resource;
 
     /**
+     * Instance of mysql database adapter.
+     *
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $_connection;
 
     /**
+     * Instance of product collection factory.
+     *
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
     protected $_productColFac;
 
     /**
+     * Product data.
+     *
      * @var array
      */
     protected $_productData;
 
     /**
+     * Product super data.
+     *
      * @var array
      */
     protected $_productSuperData;
 
     /**
+     * Simple product ids to delete.
+     *
      * @var array
      */
     protected $_simpleIdsToDelete;
 
     /**
+     * Super attributes data.
+     *
      * @var array
      */
     protected $_superAttributesData;
 
     /**
+     * Next attribute id.
+     *
      * @var null|int
      */
     protected $_nextAttrId;
@@ -164,19 +178,19 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\Resource $resource
      * @param array $params
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\Resource $resource,
         array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
     ) {
         $this->_productTypesConfig = $productTypesConfig;
@@ -427,7 +441,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Parse variations string to inner format
+     * Parse variations string to inner format.
      *
      * @param array $rowData
      *
@@ -544,8 +558,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  delete unnecessary links
-     *
+     * Delete unnecessary links.
      */
     protected function _deleteData()
     {
@@ -564,8 +577,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  collected link data insertion
-     *
+     * Collected link data insertion.
      */
     protected function _insertData()
     {
@@ -605,7 +617,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  get New supper attribute id
+     * Get new supper attribute id.
      *
      * @return int
      */
@@ -620,11 +632,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  collect super data
+     * Collect super data.
      *
      * @param array $rowData
      * @param int $rowNum
-     *
      */
     protected function _collectSuperData($rowData, $rowNum)
     {
@@ -668,11 +679,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  collect super data price
+     * Collect super data price.
      *
      * @param array $data
      * @param int $productSuperAttrId
-     *
      */
     protected function _collectSuperDataPrice($data, $productSuperAttrId)
     {
@@ -696,10 +706,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  collect assoc ids and simpleIds to break links
+     * Collect assoc ids and simpleIds to break links.
      *
      * @param array $data
-     *
      */
     protected function _collectAssocIds($data)
     {
@@ -724,13 +733,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  collect super data price
+     * Collect super data price.
      *
      * @param array $data
      * @param int $productSuperAttrId
      * @param int $productId
      * @param array $variationLabels
-     *
      */
     protected function _collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels)
     {
@@ -812,6 +820,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @param int $rowNum
      * @param bool $isNewProduct Optional
+     *
      * @return bool
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)

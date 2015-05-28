@@ -70,7 +70,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider constructorParamsDataProvider
      */
-    public function testConstructorThrowException($params, $throwExc) {
+    public function testConstructorThrowException($params) {
         $classname = 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType';
         $mock = $this->getMockBuilder($classname)
             ->disableOriginalConstructor()
@@ -82,6 +82,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase {
         $constructor->invokeArgs($mock, array(
             $this->getMock('\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory', [], [], '', false),
             $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',  [], [], '', false),
+            $this->getMock('\Magento\Framework\App\Resource',  [], [], '', false),
             $params
         ));
     }
@@ -116,15 +117,12 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase {
         return [
             [
                 '$params' => [],
-                '$throwExc' => 1
             ],
             [
                 '$params' => [$mock],
-                '$throwExc' => 1
             ],
             [
                 '$params' => [new \stdClass(), 'default'],
-                '$throwExc' => 1
             ],
         ];
     }

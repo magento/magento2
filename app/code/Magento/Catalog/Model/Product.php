@@ -240,6 +240,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * Instance of category collection.
+     *
      * @var \Magento\Catalog\Model\Resource\Category\Collection
      */
     protected $categoryCollection;
@@ -690,7 +692,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Set product categories
+     * Set product categories.
+     *
      * @param \Magento\Framework\Data\Collection $categoryCollection
      * @return $this
      */

@@ -21,14 +21,17 @@ class Zip extends AbstractArchive implements ArchiveInterface
         $type = 'Zip';
         if (!class_exists('\ZipArchive')) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('\'%1\' file extension is not supported', $type)
+                new \Magento\Framework\Phrase('\'%1\' file extension is not supported', $type)
             );
         }
     }
 
     /**
+     * Pack file.
+     *
      * @param string $source
      * @param string $destination
+     *
      * @return string
      */
     public function pack($source, $destination)
@@ -41,8 +44,11 @@ class Zip extends AbstractArchive implements ArchiveInterface
     }
 
     /**
+     * Unpack file.
+     *
      * @param string $source
      * @param string $destination
+     *
      * @return string
      */
     public function unpack($source, $destination)

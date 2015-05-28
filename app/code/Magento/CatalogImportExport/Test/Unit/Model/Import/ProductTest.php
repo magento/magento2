@@ -471,7 +471,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetMediaGalleryAttributeIdIfNotSetYet()
     {
         // reset possible existing id
-        $this->setPropertyValue($this->importProduct, '_media_gallery_attribute_id', null);
+        $this->setPropertyValue($this->importProduct, '_mediaGalleryAttributeId', null);
 
         $expectedId = '100';
         $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')

@@ -35,7 +35,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected $_resized = false;
 
     /**
-     * For properties reset, e.g. mimeType caching
+     * For properties reset, e.g. mimeType caching.
      *
      * @return void
      */

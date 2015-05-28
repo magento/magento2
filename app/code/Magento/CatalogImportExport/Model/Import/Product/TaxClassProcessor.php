@@ -10,19 +10,26 @@ use Magento\Tax\Model\ClassModel;
 
 class TaxClassProcessor
 {
+    /**
+     * Tax attribute code.
+     */
     const ATRR_CODE = 'tax_class_id';
 
     /**
-     * tax classes
+     * Tax classes.
      */
     protected $taxClasses;
 
     /**
+     * Instance of tax class collection factory.
+     *
      * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
+     * Instance of tax model factory.
+     *
      * @var \Magento\Tax\Model\ClassModelFactory
      */
     protected $classModelFactory;
@@ -41,6 +48,8 @@ class TaxClassProcessor
     }
 
     /**
+     * Initiate tax classes.
+     *
      * @return $this
      */
     protected function initTaxClasses()
@@ -57,10 +66,11 @@ class TaxClassProcessor
     }
 
     /**
-     * Creates new tax class
+     * Creates new tax class.
      *
      * @param $taxClassName
      * @param AbstractType $productTypeModel
+     *
      * @return mixed
      */
     protected function createTaxClass($taxClassName, AbstractType  $productTypeModel)
@@ -80,8 +90,11 @@ class TaxClassProcessor
 
 
     /**
+     * Instantiate instance of tax class.
+     *
      * @param $taxClassName
      * @param AbstractType $productTypeModel
+     *
      * @return mixed
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)

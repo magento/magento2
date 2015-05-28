@@ -41,15 +41,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
-     * pseudo multi line separator in one cell
-     * can be used as custom option value delimiter or in configurable fields cells
+     * Pseudo multi line separator in one cell.
      *
+     * Can be used as custom option value delimiter or in configurable fields cells.
      */
     const PSEUDO_MULTI_LINE_SEPARATOR = '|';
 
     /**
-     * Symbol between Name and Value between Pairs
-     *
+     * Symbol between Name and Value between Pairs.
      */
     const PAIR_NAME_VALUE_SEPARATOR = '=';
 
@@ -75,28 +74,65 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
+
+    /**
+     * Column product store.
+     */
     const COL_STORE = '_store';
 
+    /**
+     * Column website.
+     */
     const COL_WEBSITE = 'website_code';
 
+    /**
+     * Column product attribute set.
+     */
     const COL_ATTR_SET = '_attribute_set';
 
+    /**
+     * Column product type.
+     */
     const COL_TYPE = 'product_type';
 
+    /**
+     * Column product category.
+     */
     const COL_CATEGORY = 'categories';
 
+    /**
+     * Column product sku.
+     */
     const COL_SKU = 'sku';
 
+    /**
+     * Column product name.
+     */
     const COL_NAME = 'name';
 
+    /**
+     * Column product website.
+     */
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
+    /**
+     * Media gallery attribute code.
+     */
     const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
+    /**
+     * Column media image.
+     */
     const COL_MEDIA_IMAGE = '_media_image';
 
+    /**
+     * Inventory use config.
+     */
     const INVENTORY_USE_CONFIG = 'Use Config';
 
+    /**
+     * Inventory use config prefix.
+     */
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
     /**
@@ -143,11 +179,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * attribute id for product images storage
+     * Attribute id for product images storage.
      *
      * @var array
      */
-    protected $_media_gallery_attribute_id = null;
+    protected $_mediaGalleryAttributeId = null;
 
     /**
      * Validation failure message template definitions
@@ -182,11 +218,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * Map between import file fields and system fields/attributes
+     * Map between import file fields and system fields/attributes.
      *
      * @var array
      */
-    protected $_fields_map = [
+    protected $_fieldsMap = [
         'image' => 'base_image',
         'image_label' => "base_image_label",
         'image' => 'base_image',
@@ -448,6 +484,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $categoryProcessor;
 
     /**
+     * Instance of product tax class processor.
+     *
      * @var Product\TaxClassProcessor
      */
     protected $taxClassProcessor;
@@ -458,6 +496,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $validator;
 
     /**
+     * Array of validated rows.
+     *
      * @var array
      */
     protected $validatedRows;
@@ -473,6 +513,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $masterAttributeCode = 'sku';
 
     /**
+     * Instance of catalog product factory.
+     *
      * @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      */
     protected $catalogProductFactory;
@@ -488,7 +530,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $transactionManager;
 
     /**
-     * Flag for replace operation
+     * Flag for replace operation.
      *
      * @var null
      */
@@ -614,7 +656,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $attrParams Attribute params
      * @param array $rowData Row data
      * @param int $rowNum
+     *
      * @return boolean
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
@@ -672,7 +716,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Multiple value separator getter
+     * Multiple value separator getter.
      *
      * @return string
      */
@@ -685,18 +729,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieve id of media gallery attribute
+     * Retrieve id of media gallery attribute.
      *
      * @return int
      */
     public function getMediaGalleryAttributeId()
     {
-        if (!$this->_media_gallery_attribute_id) {
+        if (!$this->_mediaGalleryAttributeId) {
             /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
             $resource = $this->_resourceFactory->create();
-            $this->_media_gallery_attribute_id = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
+            $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }
-        return $this->_media_gallery_attribute_id;
+        return $this->_mediaGalleryAttributeId;
     }
 
     /**
@@ -714,7 +758,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Delete products for replacement
+     * Delete products for replacement.
      *
      * @return $this
      */
@@ -786,7 +830,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Replace imported products
+     * Replace imported products.
      *
      * @return $this
      */
@@ -802,7 +846,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Save products data
+     * Save products data.
      *
      * @return $this
      */
@@ -876,7 +920,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
-            $this->_fields_map = array_merge($this->_fields_map, $model->getCustomFieldsMapping());
+            $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
         }
         // remove doubles
@@ -1976,7 +2020,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse attributes names and values string to array
+     * Parse attributes names and values string to array.
      *
      * @param array $rowData
      *
@@ -1999,7 +2043,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * set values in use_config_ fields
+     * Set values in use_config_ fields.
      *
      * @param array $rowData
      *
@@ -2007,18 +2051,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _setStockUseConfigFieldsValues($rowData)
     {
-        $use_config_fields = array();
+        $useConfigFields = array();
         foreach ($rowData as $key => $value) {
             if (isset($this->defaultStockData[$key]) && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key]) && !empty($value)) {
-                $use_config_fields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
+                $useConfigFields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
             }
         }
-        $rowData = array_merge($rowData, $use_config_fields);
+        $rowData = array_merge($rowData, $useConfigFields);
         return $rowData;
     }
 
     /**
-     * Custom fields mapping for changed purposes of fields and field names
+     * Custom fields mapping for changed purposes of fields and field names.
      *
      * @param array $rowData
      *
@@ -2026,9 +2070,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _customFieldsMapping($rowData)
     {
-        foreach ($this->_fields_map as $system_field_name => $file_field_name) {
-            if (isset($rowData[$file_field_name])) {
-                $rowData[$system_field_name] = $rowData[$file_field_name];
+        foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
+            if (isset($rowData[$fileFieldName])) {
+                $rowData[$systemFieldName] = $rowData[$fileFieldName];
             }
         }
 
@@ -2092,10 +2136,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Create product model from imported data for URL rewrite purposes
+     * Create product model from imported data for URL rewrite purposes.
      *
      * @param $rowData
+     *
      * @return \Magento\Framework\Model\AbstractModel|void
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _populateToUrlGeneration($rowData)

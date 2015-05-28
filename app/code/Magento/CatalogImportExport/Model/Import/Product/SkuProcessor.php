@@ -55,7 +55,7 @@ class SkuProcessor
     }
 
     /**
-     * Get old skus array
+     * Get old skus array.
      *
      * @return array
      */
@@ -68,7 +68,7 @@ class SkuProcessor
     }
 
     /**
-     * Reload old skus
+     * Reload old skus.
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ class SkuProcessor
     }
 
     /**
-     * Get skus data
+     * Get skus data.
      *
      * @return array
      */

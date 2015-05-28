@@ -8,12 +8,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 class CategoryProcessor
 {
     /**
-     * Delimiter in import file between categories
+     * Delimiter in import file between categories.
      */
     const DELIMITER_CATEGORIES = '|';
 
     /**
-     * Delimiter in category path
+     * Delimiter in category path.
      */
     const DELIMITER_CATEGORY = '/';
 
@@ -30,6 +30,8 @@ class CategoryProcessor
     protected $categories = [];
 
     /**
+     * Instance of catalog category factory.
+     *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
@@ -72,10 +74,11 @@ class CategoryProcessor
     }
 
     /**
-     * Creates a category
+     * Creates a category.
      *
      * @param string $name
      * @param int $parentId
+     *
      * @return int
      */
     protected function createCategory($name, $parentId)
@@ -96,9 +99,10 @@ class CategoryProcessor
 
 
     /**
-     * Returns ID of category by string path creating nonexistent ones
+     * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
+     * 
      * @return int
      */
     protected function upsertCategory($categoryPath)
@@ -122,7 +126,10 @@ class CategoryProcessor
     }
 
     /**
+     * Returns IDs of categories by string path creating nonexistent ones.
+     *
      * @param string $categoriesString
+     *
      * @return array
      */
     public function upsertCategories($categoriesString)
