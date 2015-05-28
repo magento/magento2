@@ -30,22 +30,34 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $file;
+
+    /**
+     * @var string
+     */
+    private $path;
+
     public function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->log = $this->getMock('Magento\Setup\Model\LoggerInterface', [], [], '', false);
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $path = realpath(__DIR__ . '/../_files/');
+        $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())
             ->method('getRoot')
-            ->willReturn($path);
+            ->willReturn($this->path);
         $this->directoryList->expects($this->any())
             ->method('getPath')
-            ->willReturn($path);
+            ->willReturn($this->path);
+        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->model = new BackupRollback(
             $this->objectManager,
             $this->log,
-            $this->directoryList
+            $this->directoryList,
+            $this->file
         );
     }
 
@@ -75,6 +87,8 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Magento\Framework\Backup\Filesystem', [], $filesystem],
             ]));
+        $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0777);
         $this->model->codeBackup();
     }
 
@@ -109,6 +123,10 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Framework\Backup\Filesystem\Helper', [], $helper],
                 ['Magento\Framework\Backup\Filesystem', [], $filesystem],
             ]));
+        $this->file->expects($this->once())
+            ->method('isExists')
+            ->with($this->path . '/backups/RollbackFile_A.tgz')
+            ->willReturn(true);
         $this->model->codeRollback('RollbackFile_A.tgz');
     }
 }

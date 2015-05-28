@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
@@ -87,6 +88,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $composer;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer,
@@ -103,6 +109,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
         DirectoryList $directoryList,
+        File $file,
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
@@ -119,6 +126,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->collector = $collector;
         $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
+        $this->file = $file;
     }
 
     /**
@@ -193,7 +201,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 $backupRollback = new BackupRollback(
                     $this->objectManager,
                     new ConsoleLogger($output),
-                    $this->directoryList
+                    $this->directoryList,
+                    $this->file
                 );
                 $backupRollback->codeBackup();
             }

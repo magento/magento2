@@ -12,6 +12,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,6 +92,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $backupRollback;
 
     /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $file;
+
+    /**
      * @var ModuleUninstallCommand
      */
     private $command;
@@ -153,11 +159,13 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->directoryList->expects($this->any())
             ->method('getPath')
             ->willReturn($path);
+        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->command = new ModuleUninstallCommand(
             $composer,
             $this->deploymentConfig,
             $this->writer,
             $this->directoryList,
+            $this->file,
             $this->fullModuleList,
             $this->maintenanceMode,
             $objectManagerProvider,
@@ -474,6 +482,8 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->backupFS->expects($this->once())
             ->method('getBackupPath')
             ->willReturn('pathToFile/RollbackFile_A.tgz');
+        $this->file->expects($this->once())->method('isExists')->willReturn(false);
+        $this->file->expects($this->once())->method('createDirectory');
         $this->tester->execute($input);
         $expectedMsg = 'Enabling maintenance mode' . PHP_EOL .
             'Code backup filename: RollbackFile_A.tgz (The archive can be uncompressed with 7-Zip on Windows systems.)'

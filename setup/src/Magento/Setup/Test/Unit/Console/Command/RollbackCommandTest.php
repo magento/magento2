@@ -11,11 +11,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 class RollbackCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
@@ -30,9 +25,13 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $file;
+
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(
@@ -50,28 +49,19 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
         $this->directoryList->expects($this->any())
             ->method('getPath')
             ->willReturn($path);
+        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+
         $command = new RollbackCommand(
             $objectManagerProvider,
             $maintenanceMode,
             $this->directoryList,
-            $this->deploymentConfig
+            $this->file
         );
         $this->tester = new CommandTester($command);
     }
 
-    public function testExecuteApplicationNotInstalled()
-    {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
-        $this->tester->execute(['--code' => ['RollbackFile_A']]);
-        $this->assertEquals(
-            'You cannot run this command because the Magento application is not installed.' . PHP_EOL,
-            $this->tester->getDisplay()
-        );
-    }
-
     public function testExecute()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
         $helper->expects($this->once())
             ->method('getInfo')
@@ -99,6 +89,7 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Framework\Backup\Filesystem\Helper', [], $helper],
                 ['Magento\Framework\Backup\Filesystem', [], $filesystem],
             ]));
+        $this->file->expects($this->once())->method('isExists')->willReturn(true);
         $this->tester->execute(['--code' => 'RollbackFile_A.tgz']);
         $expectedMsg = 'Enabling maintenance mode' . PHP_EOL
             . 'Code rollback filename: RollbackFile_A.tgz' . PHP_EOL

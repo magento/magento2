@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Filesystem\Driver\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\ConsoleLogger;
@@ -18,6 +19,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Command to rollback code and DB
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RollbackCommand extends AbstractSetupCommand
 {
@@ -44,9 +47,9 @@ class RollbackCommand extends AbstractSetupCommand
     private $directoryList;
 
     /**
-     * @var DeploymentConfig
+     * @var File
      */
-    private $deploymentConfig;
+    private $file;
 
     /**
      * Constructor
@@ -54,18 +57,18 @@ class RollbackCommand extends AbstractSetupCommand
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
      * @param DirectoryList $directoryList
-     * @param DeploymentConfig $deploymentConfig
+     * @param File $file
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         MaintenanceMode $maintenanceMode,
         DirectoryList $directoryList,
-        DeploymentConfig $deploymentConfig
+        File $file
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
         $this->directoryList = $directoryList;
-        $this->deploymentConfig = $deploymentConfig;
+        $this->file = $file;
         parent::__construct();
     }
 
@@ -93,12 +96,6 @@ class RollbackCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln(
-                '<error>You cannot run this command because the Magento application is not installed.</error>'
-            );
-            return;
-        }
         try {
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
@@ -106,7 +103,8 @@ class RollbackCommand extends AbstractSetupCommand
                 $backupRollback = new BackupRollback(
                     $this->objectManager,
                     new ConsoleLogger($output),
-                    $this->directoryList
+                    $this->directoryList,
+                    $this->file
                 );
                 $backupRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_ROLLBACK));
             }

@@ -548,8 +548,12 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     public function unpack($source, $destination)
     {
-        $phar = new \PharData($source);
-        $phar->extractTo($destination);
+        $this->_setCurrentFile($source)->_setCurrentPath($source);
+
+        $this->_initReader();
+        $this->_unpackCurrentTar($destination);
+        $this->_destroyReader();
+
         return $destination;
     }
 
