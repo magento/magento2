@@ -44,11 +44,16 @@ $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
 if (!file_exists($installConfigFile)) {
     $installConfigFile = $installConfigFile . '.dist';
 }
+$globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
+if (!file_exists($installConfigFile)) {
+    $installConfigFile = $installConfigFile . '.dist';
+}
 $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
 $application =  new \Magento\TestFramework\WebApiApplication(
     $shell,
     $dirList->getPath(DirectoryList::VAR_DIR),
     $installConfigFile,
+    $globalConfigFile,
     BP . '/app/etc/',
     $settings->get('TESTS_MAGENTO_MODE'),
     AutoloaderRegistry::getAutoloader()

@@ -2109,6 +2109,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowData = $this->_customFieldsMapping($rowData);
 
             $this->validateRow($rowData, $source->key());
+            $this->_processedRowsCount++;
             $source->next();
         }
         $this->getOptionEntity()->validateAmbiguousData();

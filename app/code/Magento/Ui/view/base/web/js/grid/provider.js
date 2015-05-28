@@ -6,23 +6,40 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/provider'
-], function ($, _, utils, Provider) {
+    'uiComponent'
+], function ($, _, utils, Component) {
     'use strict';
 
-    return Provider.extend({
+    return Component.extend({
+        defaults: {
+            listens: {
+                params: 'reload'
+            }
+        },
+
         initialize: function () {
-            utils.limit(this, 'reload', 50);
+            utils.limit(this, 'reload', 200);
             _.bindAll(this, 'onReload');
 
             return this._super();
+        },
+
+        initConfig: function () {
+            this._super();
+
+            _.extend(this.data, {
+                items: [],
+                totalRecords: 0
+            });
+
+            return this;
         },
 
         reload: function () {
             this.trigger('reload');
 
             $.ajax({
-                url: this.data.update_url,
+                url: this.update_url,
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
@@ -30,8 +47,8 @@ define([
         },
 
         onReload: function (data) {
-            this.set('data', data);
-            this.trigger('reloaded');
+            this.set('data', data)
+                .trigger('reloaded');
         }
     });
 });

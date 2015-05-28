@@ -65,7 +65,7 @@ define([
             }
             var syncOptionTitle = function (event) {
                 var currentValue = $(event.target).val(),
-                    optionBoxTitle = $('.title > span', $(event.target).closest('.fieldset-wrapper')),
+                    optionBoxTitle = $('.admin__collapsible-title > span', $(event.target).closest('.fieldset-wrapper')),
                     newOptionTitle = $.mage.__('New Option');
 
                 optionBoxTitle.text(currentValue === '' ? newOptionTitle : currentValue);

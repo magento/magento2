@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * An order is a document that a web store issues to a customer. Magento generates a sales order that lists the product
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
+ * @api
  */
 interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -577,6 +578,14 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return string Created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the created-at timestamp for the order item.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Gets the description for the order item.

@@ -24,6 +24,7 @@ interface UrlPersistInterface
      *
      * @param array $data
      * @return void
+     * @api
      */
     public function deleteByData(array $data);
 }

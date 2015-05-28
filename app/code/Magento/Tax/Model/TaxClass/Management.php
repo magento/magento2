@@ -9,8 +9,8 @@ namespace Magento\Tax\Model\TaxClass;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Model\ClassModel;
 
 class Management implements \Magento\Tax\Api\TaxClassManagementInterface
 {
@@ -61,10 +61,10 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
                     return $taxClassKey->getValue();
                 case TaxClassKeyInterface::TYPE_NAME:
                     $searchCriteria = $this->searchCriteriaBuilder->addFilter(
-                        [$this->filterBuilder->setField(TaxClassInterface::KEY_TYPE)->setValue($taxClassType)->create()]
+                        [$this->filterBuilder->setField(ClassModel::KEY_TYPE)->setValue($taxClassType)->create()]
                     )->addFilter(
                         [
-                            $this->filterBuilder->setField(TaxClassInterface::KEY_NAME)
+                            $this->filterBuilder->setField(ClassModel::KEY_NAME)
                                 ->setValue($taxClassKey->getValue())
                                 ->create(),
                         ]

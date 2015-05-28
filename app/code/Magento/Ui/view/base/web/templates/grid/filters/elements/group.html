@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<fieldset class="admin__form-field">
-    <legend class="admin__form-field-legend">
-        <span data-bind="text: label"></span>
-    </legend>
-    <!-- ko foreach: elems -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
-</fieldset>
+<legend class="admin__form-field-legend">
+    <span data-bind="text: label"></span>
+</legend>
+<!-- ko foreach: elems -->
+    <div class="admin__form-field">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+<!-- /ko -->

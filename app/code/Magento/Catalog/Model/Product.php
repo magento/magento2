@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -257,14 +257,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /*
-     * @param \Magento\Catalog\Model\ProductLink\ProductLinkManagementInterface
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
-    protected $linkManagement;
+    protected $entityCollectionProvider;
 
     /*
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    protected $linkProvider;
+
+    /*
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
     protected $productLinkFactory;
+
+    /*
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
+     */
+    protected $productLinkExtensionFactory;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
@@ -325,8 +335,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
-     * @param \Magento\Catalog\Model\ProductLink\Management $linkManagement
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
@@ -361,8 +373,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
-        \Magento\Catalog\Model\ProductLink\Management $linkManagement,
+        \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
+        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
@@ -387,8 +401,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
-        $this->linkManagement = $linkManagement;
+        $this->entityCollectionProvider = $entityCollectionProvider;
+        $this->linkTypeProvider = $linkTypeProvider;
         $this->productLinkFactory = $productLinkFactory;
+        $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
@@ -1375,23 +1391,34 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if (empty($this->_links)) {
-            $productLinks = [];
-
-            $productLinks['related'] = $this->getRelatedProducts();
-            $productLinks['upsell'] = $this->getUpSellProducts();
-            $productLinks['crosssell'] = $this->getCrossSellProducts();
-
             $output = [];
-            foreach ($productLinks as $type => $linkTypeArray) {
-                foreach ($linkTypeArray as $link) {
+            $linkTypes = $this->linkTypeProvider->getLinkTypes();
+            foreach (array_keys($linkTypes) as $linkTypeName) {
+                $collection = $this->entityCollectionProvider->getCollection($this, $linkTypeName);
+                foreach ($collection as $item) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
                     $productLink = $this->productLinkFactory->create();
                     $productLink->setProductSku($this->getSku())
-                        ->setLinkType($type)
-                        ->setLinkedProductSku($link['sku'])
-                        ->setLinkedProductType($link['type_id'])
-                        ->setPosition($link['position']);
-
+                        ->setLinkType($linkTypeName)
+                        ->setLinkedProductSku($item['sku'])
+                        ->setLinkedProductType($item['type'])
+                        ->setPosition($item['position']);
+                    if (isset($item['custom_attributes'])) {
+                        $productLinkExtension = $productLink->getExtensionAttributes();
+                        if ($productLinkExtension === null) {
+                            $productLinkExtension = $this->productLinkExtensionFactory->create();
+                        }
+                        foreach ($item['custom_attributes'] as $option) {
+                            $name = $option['attribute_code'];
+                            $value = $option['value'];
+                            $setterName = 'set' . ucfirst($name);
+                            // Check if setter exists
+                            if (method_exists($productLinkExtension, $setterName)) {
+                                call_user_func([$productLinkExtension, $setterName], $value);
+                            }
+                        }
+                        $productLink->setExtensionAttributes($productLinkExtension);
+                    }
                     $output[] = $productLink;
                 }
             }
@@ -2515,19 +2542,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @param ProductAttributeMediaGalleryEntryContentInterface $content
+     * @param ImageContentInterface $content
      * @return array
      */
     protected function convertFromMediaGalleryEntryContentInterface(
-        ProductAttributeMediaGalleryEntryContentInterface $content = null
+        ImageContentInterface $content = null
     ) {
         if ($content == null) {
             return null;
         } else {
             return [
-                "entry_data" => $content->getEntryData(),
-                "mime_type" => $content->getMimeType(),
-                "name" => $content->getName(),
+                'data' => [
+                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                    ImageContentInterface::TYPE => $content->getType(),
+                    ImageContentInterface::NAME => $content->getName(),
+                ],
             ];
         }
     }

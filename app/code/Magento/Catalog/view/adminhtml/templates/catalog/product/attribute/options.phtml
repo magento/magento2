@@ -11,11 +11,11 @@
 <fieldset class="fieldset">
     <legend class="legend"><span><?php echo __('Manage Options (values of your attribute)') ?></span></legend>
     <div id="manage-options-panel">
-        <table class="data-table" cellspacing="0">
+        <table class="admin__control-table">
             <thead>
                 <tr id="attribute-options-table">
                     <th class="col-draggable"></th>
-                    <th class="col-default"><?php echo __('Is Default') ?></th>
+                    <th class="col-default control-table-actions-th"><?php echo __('Is Default') ?></th>
                     <?php
                     $storelist = $block->getStores();
                     foreach ($storelist as $_store):
@@ -49,7 +49,7 @@
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="option[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()): ?> disabled="disabled"<?php endif; ?>/>
             </td>
-            <td class="col-default">
+            <td class="col-default control-table-actions-cell">
                 <input class="input-radio" type="<%- data.intype %>" name="default[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
             </td>
             <?php foreach ($block->getStores() as $_store): ?>
@@ -58,7 +58,7 @@
             <td id="delete_button_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="option[delete][<%- data.id %>]" value="" />
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
-                    <button title="<?php echo __('Delete') ?>" type="button"
+                    <button id="delete_button_<%- data.id %>" title="<?php echo __('Delete') ?>" type="button"
                         class="action- scalable delete delete-option"
                         >
                         <span><?php echo __('Delete') ?></span>
@@ -100,7 +100,6 @@ require([
             if (isNewOption && !this.isReadOnly) {
                 this.enableNewOptionDeleteButton(data.id);
             }
-            this.bindRemoveButtons();
             this.itemCount++;
             this.totalItems++;
             this.updateItemsCountField();
@@ -139,22 +138,16 @@ require([
                 button.removeClassName('disabled');
             });
         },
-        bindRemoveButtons: function() {
-            var buttons = $$('.delete-option');
-            for (var i = 0; i < buttons.length; i++) {
-                if (!$(buttons[i]).binded) {
-                    $(buttons[i]).binded = true;
-                    Event.observe(buttons[i], 'click', this.remove.bind(this));
-                }
-            }
-        }
     };
-
-    attributeOption.bindRemoveButtons();
 
     if ($('add_new_option_button')) {
         Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
     }
+    
+    $('manage-options-panel').on('click', '.delete-option', function(event, element) {
+        attributeOption.remove(event);
+    });
+
     <?php foreach ($block->getOptionValues() as $_value): ?>
     attributeOption.add(<?php echo $_value->toJson() ?>);
     <?php endforeach; ?>

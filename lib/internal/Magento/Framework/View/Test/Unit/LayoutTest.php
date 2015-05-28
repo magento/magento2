@@ -86,6 +86,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $generatorContextFactoryMock;
 
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appStateMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
@@ -134,13 +144,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readerContextFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->readerContextMock);
         $this->generatorContextFactoryMock = $this->getMockBuilder(
             'Magento\Framework\View\Layout\Generator\ContextFactory'
-        )->disableOriginalConstructor()
-        ->getMock();
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMock();
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,
@@ -153,6 +166,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             $this->cacheMock,
             $this->readerContextFactoryMock,
             $this->generatorContextFactoryMock,
+            $this->appStateMock,
+            $this->loggerMock,
             true
         );
     }
@@ -683,6 +698,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateElementsWithoutCache()
     {
+        $this->readerContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->readerContextMock);
         $layoutCacheId = 'layout_cache_id';
         $handles = ['default', 'another'];
         /** @var \Magento\Framework\View\Layout\Element $xml */
@@ -806,5 +824,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturn($elements);
 
         $this->model->generateElements();
+    }
+
+    public function testGetXml()
+    {
+        $xml = '<layout/>';
+        $this->assertSame($xml, \Magento\Framework\View\Layout::LAYOUT_NODE);
     }
 }

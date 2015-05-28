@@ -8,8 +8,8 @@ namespace Magento\Tax\Model\Rate;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\Object as Converter;
-use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Tax\Model\Calculation\Rate;
 
 /**
  * Tax rate source model.
@@ -57,8 +57,8 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
             $searchResults = $this->taxRateRepository->getList($searchCriteria);
             $this->options = $this->converter->toOptionArray(
                 $searchResults->getItems(),
-                TaxRate::KEY_ID,
-                TaxRate::KEY_CODE
+                Rate::KEY_ID,
+                Rate::KEY_CODE
             );
         }
         return $this->options;

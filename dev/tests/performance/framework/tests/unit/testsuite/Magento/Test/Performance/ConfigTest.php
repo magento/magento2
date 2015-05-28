@@ -144,9 +144,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = [
             'option1' => 'value 1',
             'option2' => 'value 2',
-            'backend_frontname' => 'backend',
-            'admin_user' => 'admin',
-            'admin_password' => 'password1',
+            'backend-frontname' => 'backend',
+            'admin-user' => 'admin',
+            'admin-password' => 'password1',
         ];
         $this->assertEquals($expectedOptions, $this->_object->getInstallOptions());
     }

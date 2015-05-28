@@ -4,71 +4,78 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Interface for different HTTP clients
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\HTTP;
 
+/**
+ * Interface for HTTP clients
+ *
+ * @api
+ */
 interface ClientInterface
 {
     /**
      * Set request timeout
-     * @param int $value
+     *
+     * @param int $value value in seconds
      * @return void
      */
     public function setTimeout($value);
 
     /**
      * Set request headers from hash
-     * @param array $headers
+     *
+     * @param array $headers an array of header names as keys and header values as values
      * @return void
      */
     public function setHeaders($headers);
 
     /**
      * Add header to request
-     * @param string $name
-     * @param string $value
+     *
+     * @param string $name name of the HTTP header
+     * @param string $value value of the HTTP header
      * @return void
      */
     public function addHeader($name, $value);
 
     /**
      * Remove header from request
-     * @param string $name
+     *
+     * @param string $name name of the HTTP header
      * @return void
      */
     public function removeHeader($name);
 
     /**
-     * Set login credentials
-     * for basic auth.
-     * @param string $login
-     * @param string $pass
+     * Set login credentials for basic authentication.
+     *
+     * @param string $login user identity/name
+     * @param string $pass user password
      * @return void
      */
     public function setCredentials($login, $pass);
 
     /**
      * Add cookie to request
-     * @param string $name
-     * @param string $value
+     *
+     * @param string $name name of the cookie
+     * @param string $value value of the cookie
      * @return void
      */
     public function addCookie($name, $value);
 
     /**
      * Remove cookie from request
-     * @param string $name
+     *
+     * @param string $name name of the cookie
      * @return void
      */
     public function removeCookie($name);
 
     /**
      * Set request cookies from hash
-     * @param array $cookies
+     *
+     * @param array $cookies an array of cookies with cookie names as keys and cookie values as value
      * @return void
      */
     public function setCookies($cookies);
@@ -82,13 +89,15 @@ interface ClientInterface
 
     /**
      * Make GET request
-     * @param string full uri
+     *
+     * @param string $uri full uri
      * @return array
      */
     public function get($uri);
 
     /**
      * Make POST request
+     *
      * @param string $uri full uri
      * @param array $params POST fields array
      * @return void
@@ -97,30 +106,35 @@ interface ClientInterface
 
     /**
      * Get response headers
+     *
      * @return array
      */
     public function getHeaders();
 
     /**
      * Get response body
+     *
      * @return string
      */
     public function getBody();
 
     /**
      * Get response status code
+     *
      * @return int
      */
     public function getStatus();
 
     /**
      * Get response cookies (k=>v)
+     *
      * @return array
      */
     public function getCookies();
 
     /**
      * Set additional option
+     *
      * @param string $key
      * @param string $value
      * @return void
@@ -129,6 +143,7 @@ interface ClientInterface
 
     /**
      * Set additional options
+     *
      * @param array $arr
      * @return void
      */

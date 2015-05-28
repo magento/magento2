@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model\Config\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
     /**
@@ -62,7 +64,7 @@ class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
     public function read($code = null)
     {
         $config = array_replace_recursive(
-            $this->_scopePool->getScope(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT)->getSource(),
+            $this->_scopePool->getScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT)->getSource(),
             $this->_initialConfig->getData("websites|{$code}")
         );
 

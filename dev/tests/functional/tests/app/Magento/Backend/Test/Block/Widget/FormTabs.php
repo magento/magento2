@@ -273,7 +273,7 @@ class FormTabs extends Form
      * Open tab
      *
      * @param string $tabName
-     * @return Tab
+     * @return FormTabs
      */
     public function openTab($tabName)
     {

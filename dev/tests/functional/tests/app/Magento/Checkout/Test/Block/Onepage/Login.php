@@ -61,9 +61,6 @@ class Login extends Form
         /** @var Checkout $fixture */
         if ($fixture->isRegisteredCustomer()) {
             $this->loginCustomer($fixture->getCustomer());
-        } elseif ($fixture->getCustomer()) {
-            $this->registerCustomer();
-            $this->clickContinue();
         } else {
             $this->guestCheckout();
             $this->clickContinue();
@@ -77,17 +74,8 @@ class Login extends Form
      */
     public function guestCheckout()
     {
+        $this->waitForElementVisible($this->guestCheckout);
         $this->_rootElement->find($this->guestCheckout)->click();
-    }
-
-    /**
-     * Register customer during checkout
-     *
-     * @return void
-     */
-    public function registerCustomer()
-    {
-        $this->_rootElement->find($this->registerCustomer)->click();
     }
 
     /**

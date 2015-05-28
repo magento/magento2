@@ -135,24 +135,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->redirectMock->expects($this->never())
             ->method('redirect');
 
-        $layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
-            [],
-            [],
-            '',
-            false
-        );
-        $layoutMock->expects($this->once())
-            ->method('initMessages')
-            ->willReturnSelf();
-
         $this->pageFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultPageMock);
-
-        $this->resultPageMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
 
         $this->object->execute();
     }
