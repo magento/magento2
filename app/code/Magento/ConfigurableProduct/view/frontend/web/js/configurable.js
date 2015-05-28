@@ -13,21 +13,6 @@ define([
     "jquery/jquery.parsequery"
 ], function($, _, mageTemplate, utils){
 
-    function getPrices(elems){
-        var prices = {};
-
-        elems.forEach(function(elem){
-            var selected    = elem.options[elem.selectedIndex],
-                config      = selected && selected.config;
-
-            prices[elem.attributeId] = config ? 
-                _.clone(config.prices) :
-                {};
-        });
-
-        return prices;
-    }
-
     $.widget('mage.configurable', {
         options: {
             superSelector: '.super-attribute-select',
@@ -167,11 +152,11 @@ define([
 
             while (index--) {
                 option = settings[index];
-                
+
                 !index ?
                     this._fillSelect(option) :
                     (option.disabled = true);
-                
+
                 _.extend(option, {
                     childSettings:  childSettings.slice(),
                     prevSetting:    settings[index - 1],
@@ -215,7 +200,6 @@ define([
          * @param element The element associated with a configurable option.
          */
         _configureElement: function(element) {
-            this._reloadOptionLabels(element);
             if (element.value) {
                 this.options.state[element.config.id] = element.value;
                 if (element.nextSetting) {
@@ -275,26 +259,6 @@ define([
             }
             if (galleryElement.length && galleryElement.data('mageGallery')) {
                 galleryElement.gallery('option', 'images', result);
-            }
-        },
-
-        /**
-         * Option labels show the option value and its price. This method reloads these labels
-         * for a specified option.
-         * @private
-         * @param element The element associated with the configurable option.
-         */
-        _reloadOptionLabels: function(element) {
-            if (!(element && element.options[element.selectedIndex])) {
-                return false;
-            }
-            var selOption = element.options[element.selectedIndex];
-
-            for (var i = 0; i < element.options.length; i++) {
-                if (element.options[i].config) {
-                    element.options[i].text =
-                        this._getOptionLabel(element.options[i].config, selOption.config);
-                }
             }
         },
 
@@ -370,33 +334,7 @@ define([
          * @return {String} The option label with option value and price (e.g. Black +1.99)
          */
         _getOptionLabel: function(option, selOption) {
-            var parsePrice  = this._parsePrice.bind(this, option, selOption),
-                data;
-
-            data = _.map(option.prices, parsePrice);
-            data = _.indexBy(data, 'name');
-
-            data.label = option.label;
-
-            return this.options.optionTemplate({
-                data: data
-            });
-        },
-
-        _parsePrice: function(option, selOption, price, name){
-            var selected = 0;
-
-            if (!this.options.spConfig.stablePrices && selOption) {
-                selected = parseFloat(selOption.prices[name].amount);
-            }
-
-            price = parseFloat(price.amount - selected);
-
-            return {
-                value:      price,
-                name:       name,
-                formatted:  utils.formatPrice(price, this.options.priceFormat, true)
-            };
+            return option.label;
         },
 
         /**
@@ -429,13 +367,31 @@ define([
          * @return {Number} The price of the configurable product including selected options.
          */
         _reloadPrice: function() {
-            var options     = this.options,
-                settings    = _.toArray(options.settings),
-                prices      = getPrices(settings);
+            $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices(this.options.settings));
+        },
 
-            $(options.priceHolderSelector)
-                .trigger('updatePrice', prices);
+        _getPrices: function (elems) {
+            var prices = {};
+            elems = _.toArray(elems);
+
+            _.each(elems, function(elem) {
+                var selected    = elem.options[elem.selectedIndex],
+                    config      = selected && selected.config;
+
+                var productId   = config && config.allowedProducts && config.allowedProducts[0] || 0;
+
+                prices[elem.attributeId] = config && config.allowedProducts.length === 1 ?
+                {
+                    'basePrice':{'amount':this.options.spConfig.optionPrices[productId]},
+                    'finalPrice':{'amount':this.options.spConfig.optionPrices[productId]},
+                    'oldPrice':{'amount':this.options.spConfig.optionPrices[productId]}
+                } :
+                {};
+            }, this);
+
+            return prices;
         }
+
     });
     
     return $.mage.configurable;
