@@ -101,6 +101,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->emailFilterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
