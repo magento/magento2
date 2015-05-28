@@ -2,8 +2,8 @@
 "","2"
 
 "Dependencies for each module:",""
-"Magento\A","1"
+"Magento\B","1"
 " -- Magento\Framework","1"
 
-"Magento\B","1"
+"Magento\A","1"
 " -- Magento\Framework","1"
