@@ -14,8 +14,8 @@ define([
 ], function (_, ko, utils, Component, layout, addressList, quote) {
     'use strict';
     var defaultRendererTemplate = {
-        parent: '<%= $data.parentName %>',
-        name: '<%= $data.name %>',
+        parent: '${ $.$data.parentName }',
+        name: '${ $.$data.name }',
         component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default'
     };
 
@@ -24,7 +24,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/list',
-            visible: window.checkoutConfig.customerAddressCount,
+            visible: (observableAddresses().length > 0),
             rendererTemplates: []
         },
 
