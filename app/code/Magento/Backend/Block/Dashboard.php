@@ -45,7 +45,7 @@ class Dashboard extends \Magento\Backend\Block\Template
             )->setConfigUrl(
                 $this->getUrl(
                     'adminhtml/system_config/edit',
-                    ['section' => 'admin', '_fragment' => 'admin_dashboard_link']
+                    ['section' => 'admin', '_fragment' => 'admin_dashboard-link']
                 )
             );
         }
