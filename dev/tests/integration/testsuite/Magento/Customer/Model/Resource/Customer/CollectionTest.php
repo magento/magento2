@@ -26,6 +26,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_collection->addNameToSelect();
         $joinParts = $this->_collection->getSelect()->getPart(\Zend_Db_Select::FROM);
 
-        $this->assertEmpty($joinParts);
+        $this->assertArrayHasKey('e', $joinParts);
+        $this->assertCount(1, $joinParts);
     }
 }
