@@ -115,7 +115,7 @@
             <div ng-repeat="setting in settings.data">
                 <div ng-show="setting.error && setting.helpUrl" class="rediness-check-side">
                     <p class="side-title">Need Help?</p>
-                    <a href="http://php.net/manual/en/ini.list.php" target="_blank">PHP Documentation</a>
+                    <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
                 </div>
                 <div ng-show="setting.error" class="readiness-check-content">
                     <p>
