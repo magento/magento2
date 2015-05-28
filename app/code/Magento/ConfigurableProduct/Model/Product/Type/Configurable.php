@@ -671,7 +671,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
             $productObject = $productCollection->getFirstItem();
             if ($productObject->getId()) {
-                return $productObject;
+                return $this->productRepository->getById($productObject->getId());
             }
 
             foreach ($this->getUsedProducts($product) as $productObject) {
@@ -758,6 +758,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             $result = parent::_prepareProduct($buyRequest, $product, $processMode);
             if (is_array($result)) {
+                //TODO: MAGETWO-23739 get id from _POST and retrieve product from repository immediately.
+
                 /**
                  * $attributes = array($attributeId=>$attributeValue)
                  */
