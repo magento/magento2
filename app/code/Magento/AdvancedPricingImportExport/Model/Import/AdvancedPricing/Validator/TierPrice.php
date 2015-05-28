@@ -46,33 +46,34 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      */
     public function init()
     {
-        return parent::init();
+        foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
+            $this->customerGroups[$group->getCode()] = $group->getId();
+        }
     }
 
     /**
+     * Validation
+     *
      * @param mixed $value
      * @return bool
      */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if ($this->_isValidValueAndLength($value)) {
+        if (!$this->customerGroups) {
+            $this->init();
+        }
+        if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE_QTY])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE])
-                || $this->_hasEmptyColumns($value)
+                || $this->hasEmptyColumns($value)
             ) {
                 $this->_addMessages([self::ERROR_TIER_DATA_INCOMPLETE]);
                 return false;
-            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE] != self::VALUE_ALL
-                && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_SITE]);
-                return false;
-            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP] != self::VALUE_ALL && !isset(
-                    $this->customerGroups[$value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP]]
-                )
+            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP] != AdvancedPricing::VALUE_ALL_GROUPS
+                && !isset($this->customerGroups[$value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP]])
             ) {
                 $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_GROUP]);
                 return false;
@@ -90,7 +91,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * @param array $value
      * @return bool
      */
-    protected function _isValidValueAndLength(array $value)
+    protected function isValidValueAndLength(array $value)
     {
         $isValid = false;
         foreach ($this->_tierPriceColumns as $column) {
@@ -107,7 +108,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * @param array $value
      * @return bool
      */
-    protected function _hasEmptyColumns(array $value)
+    protected function hasEmptyColumns(array $value)
     {
         $hasEmptyValues = false;
         foreach ($this->_tierPriceColumns as $column) {
