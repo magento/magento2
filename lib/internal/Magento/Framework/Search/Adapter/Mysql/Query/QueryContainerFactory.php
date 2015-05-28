@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 /**
  * MatchContainer Factory
  */
-class MatchContainerFactory
+class QueryContainerFactory
 {
     /**
      * Object Manager instance
@@ -32,7 +32,7 @@ class MatchContainerFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer'
+        $instanceName = 'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer'
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -42,7 +42,7 @@ class MatchContainerFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer
+     * @return \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer
      */
     public function create(array $data = [])
     {

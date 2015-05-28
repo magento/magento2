@@ -11,6 +11,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
 class Preprocessor implements PreprocessorInterface
@@ -65,9 +66,9 @@ class Preprocessor implements PreprocessorInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function process(FilterInterface $filter, $isNegation, $query)
+    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
-        return $resultQuery = $this->processQueryWithField($filter, $isNegation, $query);
+        return $resultQuery = $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
     }
 
     /**
@@ -77,7 +78,7 @@ class Preprocessor implements PreprocessorInterface
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
+    private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
@@ -105,12 +106,14 @@ class Preprocessor implements PreprocessorInterface
                     } else {
                         $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
                     }
-                    return sprintf(
+                    $filterQuery = sprintf(
                         'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
                         $this->scopeResolver->getScope()->getId(),
                         $attribute->getId(),
                         $value
                     );
+                    $queryContainer->addFilter($filterQuery);
+                    return '';
                 }
                 $ifNullCondition = $this->getConnection()->getIfNullSql('current_store.value', 'main_table.value');
 

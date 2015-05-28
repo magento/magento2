@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Filter;
 
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
 interface PreprocessorInterface
@@ -15,5 +16,5 @@ interface PreprocessorInterface
      * @param string $query
      * @return string
      */
-    public function process(FilterInterface $filter, $isNegation, $query);
+    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer);
 }

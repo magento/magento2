@@ -13,11 +13,10 @@ use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilderFactory;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Adapter\Mysql\Query\Builder\QueryInterface as BuilderQueryInterface;
 
-class MatchContainer implements BuilderQueryInterface
+class QueryContainer
 {
-    const QUERY_NAME_PREFIX = 'derived_';
+    const DERIVED_QUERY_PREFIX = 'derived_';
     /**
      * @var array [[$select, $scoreBuilder], [$select, $scoreBuilder]]
      */
@@ -44,6 +43,16 @@ class MatchContainer implements BuilderQueryInterface
     private $request;
 
     /**
+     * @var string[]
+     */
+    private $filters = [];
+
+    /**
+     * @var int
+     */
+    private $filtersCount = 0;
+
+    /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Match $matchBuilder
      * @param IndexBuilderInterface $indexBuilder
@@ -68,19 +77,19 @@ class MatchContainer implements BuilderQueryInterface
      * @param string $conditionType
      * @return Select
      */
-    public function build(
+    public function addMatchQuery(
         ScoreBuilder $scoreBuilder,
         Select $select,
         RequestQueryInterface $query,
         $conditionType
     ) {
-        if ($this->hasMatches) {
+        if (!$this->hasMatches) {
             $subSelect = $this->createSelect();
             $subScoreBuilder = $this->scoreBuilderFactory->create();
             $this->buildMatchQuery($subScoreBuilder, $subSelect, $query, $conditionType);
             $subSelect->columns($subScoreBuilder->build());
             $subSelect->limit($this->request->getSize());
-            $this->addQuery($subSelect);
+            $this->addDerivedQuery($subSelect);
         } else {
             $this->hasMatches = true;
             $select = $this->buildMatchQuery($scoreBuilder, $select, $query, $conditionType);
@@ -90,9 +99,36 @@ class MatchContainer implements BuilderQueryInterface
     }
 
     /**
+     * @param string $filter
+     */
+    public function addFilter($filter)
+    {
+        $this->filters[] = '(' . $filter . ')';
+        $this->filtersCount++;
+    }
+
+    public function clearFilters()
+    {
+        $this->filters = [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    public function getFiltersCount()
+    {
+        return $this->filtersCount;
+    }
+
+    /**
      * @return Select[]
      */
-    public function getQueries()
+    public function getDerivedQueries()
     {
         return $this->queries;
     }
@@ -100,18 +136,18 @@ class MatchContainer implements BuilderQueryInterface
     /**
      * @return array
      */
-    public function getQueryNames()
+    public function getDerivedQueryNames()
     {
-        return array_keys($this->getQueries());
+        return array_keys($this->getDerivedQueries());
     }
 
     /**
      * @param Select $select
      * @return void
      */
-    private function addQuery(Select $select)
+    private function addDerivedQuery(Select $select)
     {
-        $name = self::QUERY_NAME_PREFIX . count($this->queries);
+        $name = self::DERIVED_QUERY_PREFIX . count($this->queries);
         $this->queries[$name] = $select;
     }
 

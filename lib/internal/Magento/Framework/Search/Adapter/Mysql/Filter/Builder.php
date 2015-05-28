@@ -11,6 +11,7 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\FilterInterface;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard;
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\Query\Bool;
 
@@ -57,9 +58,9 @@ class Builder implements BuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(RequestFilterInterface $filter, $conditionType)
+    public function build(RequestFilterInterface $filter, $conditionType, QueryContainer $queryContainer)
     {
-        return $this->processFilter($filter, $this->isNegation($conditionType));
+        return $this->processFilter($filter, $this->isNegation($conditionType), $queryContainer);
     }
 
     /**
@@ -67,7 +68,7 @@ class Builder implements BuilderInterface
      * @param bool $isNegation
      * @return string
      */
-    private function processFilter(RequestFilterInterface $filter, $isNegation)
+    private function processFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
     {
         if ($filter->getType() == RequestFilterInterface::TYPE_BOOL) {
             $query = $this->processBoolFilter($filter, $isNegation);
@@ -77,7 +78,7 @@ class Builder implements BuilderInterface
                 throw new \InvalidArgumentException('Unknown filter type ' . $filter->getType());
             }
             $query = $this->filters[$filter->getType()]->buildFilter($filter, $isNegation);
-            $query = $this->preprocessor->process($filter, $isNegation, $query);
+            $query = $this->preprocessor->process($filter, $isNegation, $query, $queryContainer);
         }
 
         return $query;
