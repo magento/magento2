@@ -38,7 +38,6 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
         parent::__construct($groupRepository, $searchCriteriaBuilder);
     }
 
-
     /**
      * Call parent init()
      *
@@ -46,7 +45,9 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
      */
     public function init()
     {
-        return parent::init();
+        foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
+            $this->customerGroups[$group->getCode()] = $group->getId();
+        }
     }
 
     /**
@@ -58,18 +59,16 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function isValid($value)
     {
         $this->_clearMessages();
-        if ($this->_isValidValueAndLength($value)) {
+        if (!$this->customerGroups) {
+            $this->init();
+        }
+        if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
                 || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
-                || $this->_hasEmptyColumns($value)) {
+                || $this->hasEmptyColumns($value)) {
                 $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
                 return false;
-            } elseif ($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE] != self::VALUE_ALL
-                && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_SITE]);
-                return false;
-            } elseif ($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] != self::VALUE_ALL
+            }  elseif ($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] != AdvancedPricing::VALUE_ALL_GROUPS
                 && !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
             ) {
                 $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
@@ -80,12 +79,25 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
+     * Get existing customers groups
+     *
+     * @return array
+     */
+    public function getCustomerGroups()
+    {
+        if (!$this->customerGroups) {
+            $this->init();
+        }
+        return $this->customerGroups;
+    }
+
+    /**
      * Check if at list one value and length are valid
      *
      * @param array $value
      * @return bool
      */
-    protected function _isValidValueAndLength(array $value)
+    protected function isValidValueAndLength(array $value)
     {
         $isValid = false;
         foreach ($this->_groupPriceColumns as $column) {
@@ -102,7 +114,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
      * @param array $value
      * @return bool
      */
-    protected function _hasEmptyColumns(array $value)
+    protected function hasEmptyColumns(array $value)
     {
         $hasEmptyValues = false;
         foreach ($this->_groupPriceColumns as $column) {

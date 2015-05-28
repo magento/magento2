@@ -10,9 +10,9 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
-    const VALUE_ALL = 'all';
-
     const VALUE_ALL_GROUPS = 'ALL GROUPS';
+
+    const VALUE_ALL_WEBSITES = 'All Websites';
 
     const COL_SKU = 'sku';
 
@@ -42,7 +42,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_messageTemplates = [
         ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exists?)',
         ValidatorInterface::ERROR_SKU_IS_EMPTY => 'SKU is empty',
-        ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exists',
         ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE => 'Product with specified SKU not found',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_QTY => 'Tier Price data price or quantity value is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_SITE => 'Tier Price data website is invalid',
@@ -51,32 +50,57 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group ID is invalid',
         ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
-        ValidatorInterface::ERROR_INVALID_WEBSITE => 'Website data is invalid'
     ];
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory
+     */
     protected $_resourceFactory;
 
-    /** @var \Magento\Catalog\Helper\Data */
+    /**
+     * @var \Magento\Catalog\Helper\Data
+     */
     protected $_catalogData;
 
-    /** @var \Magento\Catalog\Model\Product */
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
     protected $_productModel;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
+     */
     protected $_storeResolver;
 
-    /** @var ImportProduct */
+    /**
+     * @var ImportProduct
+     */
     protected $_importProduct;
 
-    /** @var AdvancedPricing\Validator */
+    /**
+     * @var AdvancedPricing\Validator
+     */
     protected $_validator;
 
-    /** @var  array */
+    /**
+     * @var array
+     */
     protected $_cachedSkuToDelete;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_oldSkus;
+
+    /**
+     * @var AdvancedPricing\Validator\Website
+     */
+    protected $websiteValidator;
+
+    /**
+     * @var AdvancedPricing\Validator\GroupPrice
+     */
+    protected $groupPriceValidator;
 
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -89,7 +113,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         ImportProduct $importProduct,
-        AdvancedPricing\Validator $validator
+        AdvancedPricing\Validator $validator,
+        AdvancedPricing\Validator\Website $websiteValidator,
+        AdvancedPricing\Validator\GroupPrice $groupPriceValidator
     )
     {
         $this->jsonHelper = $jsonHelper;
@@ -104,6 +130,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_importProduct = $importProduct;
         $this->_validator = $validator;
         $this->_oldSkus = $this->retrieveOldSkus();
+        $this->websiteValidator = $websiteValidator;
+        $this->groupPriceValidator = $groupPriceValidator;
     }
 
     /**
@@ -182,23 +210,27 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $groupPrices = [];
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
+                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
                     continue;
                 }
                 $rowSku = $rowData[self::COL_SKU];
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
                     $tierPrices[$rowSku][] = [
                         'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
-                        'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]),
+                        'customer_group_id' => $this->getCustomerGroupId(
+                            $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]
+                        ),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
                         'value' => $rowData[self::COL_TIER_PRICE],
                         'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
-
                     ];
                 }
                 if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
                     $groupPrices[$rowSku][] = [
                         'all_groups' => $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
-                        'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]),
+                        'customer_group_id' => $this->getCustomerGroupId(
+                            $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]
+                        ),
                         'value' => $rowData[self::COL_GROUP_PRICE],
                         'website_id' => $this->getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
                     ];
@@ -219,10 +251,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
-                    continue;
-                } else {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
-                    return false;
+                    continue;
                 }
                 $rowSku = $rowData[self::COL_SKU];
                 $listSku[] = $rowSku;
@@ -241,7 +271,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
      protected function replaceAdvancedPricing()
     {
-        //todo implement replace
     }
 
     /**
@@ -308,7 +337,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getWebSiteId($websiteCode)
     {
-        $result = $websiteCode == self::VALUE_ALL ||
+        $result = $websiteCode == $this->websiteValidator->getAllWebsitesValue() ||
         $this->_catalogData->isPriceGlobal() ? 0 : $this->_storeResolver->getWebsiteCodeToId($websiteCode);
         return $result;
     }
@@ -321,9 +350,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        return $customerGroup == self::VALUE_ALL_GROUPS
-            ? \Magento\Customer\Model\Group::CUST_GROUP_ALL
-            : $customerGroup;
+        $customerGroups = $this->groupPriceValidator->getCustomerGroups();
+        return $customerGroup == self::VALUE_ALL_GROUPS ? 0 : $customerGroups[$customerGroup];
     }
 
     /**

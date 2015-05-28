@@ -21,6 +21,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Check value is valid
+     *
      * @param array $value
      * @return bool
      */
