@@ -6,8 +6,8 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<button data-action="open-steps-wizard" title="Open" class="action-default primary">
-    <span><?= __('Open wizard') ?></span>
+<button data-action="open-steps-wizard" title="Create Product Configurations" class="action-default primary">
+    <span><?= __('Create Product Configurations') ?></span>
 </button>
 <div data-role="step-wizard-dialog">
     <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
@@ -29,6 +29,9 @@
                 </div>
                 <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="step-wizard-prev">
                     <button type="button" class="btn"><?= __('Back') ?></button>
+                </div>
+                <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-action="close-steps-wizard">
+                    <button type="button" class="btn"><?= __('Cancel') ?></button>
                 </div>
             </div>
         </div>

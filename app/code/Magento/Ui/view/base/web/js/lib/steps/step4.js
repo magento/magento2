@@ -12,7 +12,6 @@ define([
     return {
         title: 'step4',
         render: function(el) {
-            el.append(content);
         },
         force: function(wizard) {
             console.log(this.title + ':force');

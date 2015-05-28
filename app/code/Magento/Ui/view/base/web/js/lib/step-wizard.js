@@ -92,7 +92,6 @@ define([
 
     $(document).ready(function () {
        var dialog = $('[data-role="step-wizard-dialog"]').dialog({
-            title: $.mage.__('Wizard Product'),
             autoOpen: false,
             minWidth: 980,
             modal: true,
@@ -117,6 +116,9 @@ define([
         });
         $('[data-action="open-steps-wizard"]').on('click', function () {
             dialog.dialog('open');
+        });
+        $('[data-action="close-steps-wizard"]').on('click', function () {
+            dialog.dialog('close');
         });
     });
 
