@@ -75,7 +75,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $templateProcessed = $this->_appState->emulateAreaCode(
             \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
             [$template, 'getProcessedTemplate'],
-            [$vars, true]
+            [$vars]
         );
         $template->revertDesign();
 
