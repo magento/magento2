@@ -53,6 +53,13 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Model;
 
+/**
+ * This function overrides the native function
+ *
+ * @param string $obj
+ * @param string $className
+ * @return bool
+ */
 function is_subclass_of($obj, $className)
 {
     if ($obj == 'Uninstall Class A' && $className == 'Magento\Framework\Setup\UninstallInterface') {
@@ -61,6 +68,12 @@ function is_subclass_of($obj, $className)
     return false;
 }
 
+/**
+ * This function overrides the native function
+ *
+ * @param string $className
+ * @return bool
+ */
 function class_exists($className)
 {
     if ($className == 'Magento\A\Setup\Uninstall' || $className == 'Magento\B\Setup\Uninstall') {
