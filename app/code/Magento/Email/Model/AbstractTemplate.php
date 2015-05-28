@@ -360,7 +360,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getCssFileContent($file)
     {
-        $designParams = $this->_getDesignParams();
+        $designParams = $this->getDesignParams();
 
         $asset = $this->_assetRepo->createAsset($file, $designParams);
         return $asset->getContent();
@@ -385,30 +385,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Returns the design params for the template being processed
-     *
-     * @return array
-     */
-    protected function _getDesignParams()
-    {
-        $designParams = array(
-            // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
-            // return the emulated area
-            'area' => $this->getDesignConfig()->getArea(),
-            'theme' => $this->_design->getDesignTheme()->getCode(),
-            'locale' => $this->_design->getLocale(),
-        );
-        return $designParams;
-    }
-
-    /**
      * Get default email logo image
      *
      * @return string
      */
     public function getDefaultEmailLogo()
     {
-        $designParams = $this->_getDesignParams();
+        $designParams = $this->getDesignParams();
         return $this->_assetRepo->getUrlWithParams(
             'Magento_Email::logo_email.png',
             $designParams
@@ -555,6 +538,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         $this->_appEmulation->stopEnvironmentEmulation();
         return $this;
+    }
+
+    /**
+     * Returns the design params for the template being processed
+     *
+     * @return array
+     */
+    public function getDesignParams()
+    {
+        $designParams = array(
+            // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
+            // return the emulated area
+            'area' => $this->getDesignConfig()->getArea(),
+            'theme' => $this->_design->getDesignTheme()->getCode(),
+            'locale' => $this->_design->getLocale(),
+        );
+        return $designParams;
     }
 
     /**
