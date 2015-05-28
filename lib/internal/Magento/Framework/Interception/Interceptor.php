@@ -1,7 +1,15 @@
 <?php
-
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Interception;
 
+/**
+ * Interceptor trait that contains the common logic for all interceptor classes.
+ *
+ * A trait is used because our interceptor classes need to extend the class that they are intercepting.
+ */
 trait Interceptor
 {
     /**
@@ -32,7 +40,11 @@ trait Interceptor
      */
     protected $subjectType = null;
 
-
+    /**
+     * Initialize the Interceptor
+     *
+     * @return void
+     */
     public function ___init()
     {
         $this->pluginLocator = \Magento\Framework\App\ObjectManager::getInstance();
@@ -44,28 +56,53 @@ trait Interceptor
         }
     }
 
+    /**
+     * Calls parent class method
+     *
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
     public function ___callParent($method, array $arguments)
     {
-        return call_user_func_array(array('parent', $method), $arguments);
+        return call_user_func_array(['parent', $method], $arguments);
     }
 
+    /**
+     * Calls parent class sleep if defined, otherwise provides own implementation
+     *
+     * @return array
+     */
     public function __sleep()
     {
         if (method_exists(get_parent_class($this), '__sleep')) {
-            return array_diff(parent::__sleep(), array('pluginLocator', 'pluginList', 'chain', 'subjectType'));
+            return array_diff(parent::__sleep(), ['pluginLocator', 'pluginList', 'chain', 'subjectType']);
         } else {
             return array_keys(get_class_vars(get_parent_class($this)));
         }
     }
 
+    /**
+     * Causes Interceptor to be initialized
+     *
+     * @return void
+     */
     public function __wakeup()
     {
-        if (method_exists(get_parent_class(\$this), '__wakeup')) {
+        if (method_exists(get_parent_class($this), '__wakeup')) {
             parent::__wakeup();
         }
         $this->___init();
     }
 
+    /**
+     * Calls plugins for a given method.
+     *
+     * @param string $method
+     * @param array $arguments
+     * @param array $pluginInfo
+     * @return mixed|null
+     */
     protected function ___callPlugins($method, array $arguments, array $pluginInfo)
     {
         $capMethod = ucfirst($method);
@@ -74,7 +111,8 @@ trait Interceptor
             // Call 'before' listeners
             foreach ($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_BEFORE] as $code) {
                 $beforeResult = call_user_func_array(
-                    array($this->pluginList->getPlugin($this->subjectType, $code), 'before'. $capMethod), array_merge(array($this), $arguments)
+                    [$this->pluginList->getPlugin($this->subjectType, $code), 'before'. $capMethod],
+                    array_merge([$this], $arguments)
                 );
                 if ($beforeResult) {
                     $arguments = $beforeResult;
@@ -91,12 +129,12 @@ trait Interceptor
                 return $chain->invokeNext($type, $method, $subject, func_get_args(), $code);
             };
             $result = call_user_func_array(
-                array($this->pluginList->getPlugin($this->subjectType, $code), 'around' . $capMethod),
-                array_merge(array($this, $next), $arguments)
+                [$this->pluginList->getPlugin($this->subjectType, $code), 'around' . $capMethod],
+                array_merge([$this, $next], $arguments)
             );
         } else {
             // Call original method
-            $result = call_user_func_array(array('parent', $method), $arguments);
+            $result = call_user_func_array(['parent', $method], $arguments);
         }
         if (isset($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_AFTER])) {
             // Call 'after' listeners
