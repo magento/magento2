@@ -7,6 +7,8 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+use \Magento\Bundle\Model\Product\Price as BundlePrice;
+
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     const BEFORE_OPTION_VALUE_DELIMITER = ';';
@@ -334,8 +336,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             if (isset($rowData[$oldKey])) {
                 if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
                     $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
-                        \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED :
-                        \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC);
+                        BundlePrice::PRICE_TYPE_FIXED :
+                        BundlePrice::PRICE_TYPE_DYNAMIC);
                 }
             }
         }
