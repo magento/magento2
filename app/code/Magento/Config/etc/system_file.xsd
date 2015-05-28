@@ -435,7 +435,10 @@
     <xs:simpleType name="typePath">
         <xs:annotation>
             <xs:documentation>
-                Path identifier. Item can has only [A-Za-z_0-9/.]. Minimal length 8 symbol. Case sensitive.
+                <![CDATA[
+                    Path identifier. Item can has only [a-zA-Z0-9/_:]. Minimal length 8 symbol. Case sensitive.
+                    For example: <Magento_Module>::path/to/file.xml (path in the "etc/adminhtml" area in module)
+                 ]]>
             </xs:documentation>
         </xs:annotation>
 
