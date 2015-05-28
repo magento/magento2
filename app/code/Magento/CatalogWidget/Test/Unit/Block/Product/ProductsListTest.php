@@ -297,4 +297,9 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->productsList->setTitle('Custom Title');
         $this->assertEquals('Custom Title', $this->productsList->getTitle());
     }
+
+    public function testScope()
+    {
+        $this->assertFalse($this->productsList->isScopePrivate());
+    }
 }
