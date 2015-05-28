@@ -44,14 +44,14 @@ class IndexerCommandCommonTestSetup extends \PHPUnit_Framework_TestCase
             ->willReturn($stateMock);
         $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
 
-        $this->collectionFactory = $this->getMock(
-            'Magento\Indexer\Model\Indexer\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->indexerFactory = $this->getMock('Magento\Indexer\Model\IndexerFactory', [], [], '', false);
+        $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->indexerFactory = $this->getMockBuilder('Magento\Indexer\Model\IndexerFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->objectManager
             ->expects($this->exactly(2))

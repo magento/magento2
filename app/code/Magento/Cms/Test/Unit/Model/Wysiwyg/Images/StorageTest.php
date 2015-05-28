@@ -165,7 +165,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->_storageCollectionFactoryMock = $this->getMock(
             'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
