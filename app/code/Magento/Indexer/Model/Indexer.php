@@ -107,6 +107,16 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     }
 
     /**
+     * Return indexer description
+     *
+     * @return string
+     */
+    public function getFields()
+    {
+        return $this->getData('fields');
+    }
+
+    /**
      * Fill indexer data from config
      *
      * @param string $indexerId
