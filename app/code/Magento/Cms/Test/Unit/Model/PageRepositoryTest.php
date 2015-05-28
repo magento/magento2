@@ -225,80 +225,34 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeFilter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
         $sortOrder = $this->getMockBuilder('Magento\Framework\Api\SortOrder')->getMock();
 
-        $criteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-        $criteria->expects($this->once())
-            ->method('getSortOrders')
-            ->willReturn([$sortOrder]);
-        $criteria->expects($this->once())
-            ->method('getCurrentPage')
-            ->willReturn($currentPage);
-        $criteria->expects($this->once())
-            ->method('getPageSize')
-            ->willReturn($pageSize);
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$storeFilter, $filter]);
-        $filter->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn($condition);
-        $filter->expects($this->any())
-            ->method('getField')
-            ->willReturn($field);
-        $filter->expects($this->once())
-            ->method('getValue')
-            ->willReturn($value);
-        $storeFilter->expects($this->any())
-            ->method('getField')
-            ->willReturn('store_id');
-        $storeFilter->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
-        $sortOrder->expects($this->once())
-            ->method('getField')
-            ->willReturn($sortField);
-        $sortOrder->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(SearchCriteriaInterface::SORT_DESC);
+        $criteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
+        $criteria->expects($this->once())->method('getSortOrders')->willReturn([$sortOrder]);
+        $criteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
+        $criteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
+        $filterGroup->expects($this->once())->method('getFilters')->willReturn([$storeFilter, $filter]);
+        $filter->expects($this->once())->method('getConditionType')->willReturn($condition);
+        $filter->expects($this->any())->method('getField')->willReturn($field);
+        $filter->expects($this->once())->method('getValue')->willReturn($value);
+        $storeFilter->expects($this->any())->method('getField')->willReturn('store_id');
+        $storeFilter->expects($this->once())->method('getValue')->willReturn(1);
+        $sortOrder->expects($this->once())->method('getField')->willReturn($sortField);
+        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SearchCriteriaInterface::SORT_DESC);
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
 
         $this->collection->addItem($this->page);
-        $this->pageSearchResult->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($criteria)
-            ->willReturnSelf();
+        $this->pageSearchResult->expects($this->once())->method('setSearchCriteria')->with($criteria)->willReturnSelf();
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
             ->with($field, [$condition => $value])
             ->willReturnSelf();
-        $this->pageSearchResult->expects($this->once())
-            ->method('setTotalCount')
-            ->with($total)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
-            ->method('getSize')
-            ->willReturn($total);
-        $this->collection->expects($this->once())
-            ->method('setCurPage')
-            ->with($currentPage)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
-            ->method('setPageSize')
-            ->with($pageSize)
-            ->willReturnSelf();
-        $this->collection->expects($this->once())
-            ->method('addOrder')
-            ->with($sortField, 'DESC')
-            ->willReturnSelf();
-        $this->page->expects($this->once())
-            ->method('getData')
-            ->willReturn(['data']);
-        $this->pageSearchResult->expects($this->once())
-            ->method('setItems')
-            ->with(['someData'])
-            ->willReturnSelf();
+        $this->pageSearchResult->expects($this->once())->method('setTotalCount')->with($total)->willReturnSelf();
+        $this->collection->expects($this->once())->method('getSize')->willReturn($total);
+        $this->collection->expects($this->once())->method('setCurPage')->with($currentPage)->willReturnSelf();
+        $this->collection->expects($this->once())->method('setPageSize')->with($pageSize)->willReturnSelf();
+        $this->collection->expects($this->once())->method('addOrder')->with($sortField, 'DESC')->willReturnSelf();
+        $this->page->expects($this->once())->method('getData')->willReturn(['data']);
+        $this->pageSearchResult->expects($this->once())->method('setItems')->with(['someData'])->willReturnSelf();
         $this->dataHelper->expects($this->once())
             ->method('populateWithArray')
             ->with($this->pageData, ['data'], 'Magento\Cms\Api\Data\PageInterface');
