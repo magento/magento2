@@ -202,21 +202,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
-        //@TODO: find appropriate place
         $changedAddresses = [];
-        if ($defaultBillingId != $customer->getData('default_billing')) {
-            $changedAddresses['default_billing'] = $customer->getData('default_billing');
-        }
-        if ($defaultShippingId != $customer->getData('default_shipping')) {
-            $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
-        }
-        if ($changedAddresses) {
-            $this->_getWriteAdapter()->update(
-                $this->getTable('customer_entity'),
-                $changedAddresses,
-                $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
-            );
-        }
+
+        $changedAddresses['default_billing'] = $customer->getData('default_billing');
+        $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
+        $this->_getWriteAdapter()->update(
+            $this->getTable('customer_entity'),
+            $changedAddresses,
+            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
+        );
 
         return $this;
     }
