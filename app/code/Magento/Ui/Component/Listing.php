@@ -32,7 +32,7 @@ class Listing extends AbstractComponent
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDataSourceData()
     {

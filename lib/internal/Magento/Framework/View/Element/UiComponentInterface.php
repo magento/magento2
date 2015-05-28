@@ -118,6 +118,8 @@ interface UiComponentInterface extends BlockInterface
     public function prepareDataSource(array & $dataSource);
 
     /**
+     * Returns Data Source data
+     *
      * @return array
      */
     public function getDataSourceData();
