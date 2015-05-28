@@ -17,9 +17,17 @@ $customer->setWebsiteId(1)
     ->setGroupId(1)
     ->setStoreId(1)
     ->setIsActive(1)
+    ->setCreatedIn('Store Name')
+    ->setPrefix('Mr.')
     ->setFirstname('John')
+    ->setMiddlename('A')
     ->setLastname('Smith')
+    ->setSuffix('Esq.')
+    ->setDob('1970-01-01')
     ->setDefaultBilling(1)
-    ->setDefaultShipping(1);
+    ->setDefaultShipping(1)
+    ->setTaxvat('12')
+    ->setConfirmation('a4fg7h893e39d')
+    ->setGender(0);
 $customer->isObjectNew(true);
 $customer->save();
