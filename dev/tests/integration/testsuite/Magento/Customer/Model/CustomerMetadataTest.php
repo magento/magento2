@@ -101,12 +101,17 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
             'website_id' => 1,
             'store_id' => 1,
             'group_id' => 1,
+            'prefix' => 'Mr.',
             'firstname' => 'John',
+            'middlename' => 'A',
             'lastname' => 'Smith',
+            'suffix' => 'Esq.',
             'email' => 'customer@example.com',
             'default_billing' => '1',
             'default_shipping' => '1',
             'disable_auto_group_change' => 0,
+            'taxvat' => '12',
+            'gender' => 0
         ];
 
         $customer = $this->customerRepository->getById(1);
