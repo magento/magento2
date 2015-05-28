@@ -42,7 +42,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 
         $expectedData = [
             [
-                'file' => ConfigFilePool::APP_CONFIG,
+                'file' => ConfigFilePool::APP_ENV,
                 'segment' => 'backend',
                 'data' => [
                     'backend' => ['frontName' => 'admin']
@@ -62,7 +62,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     public function testValidate()
     {
         $options = [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
-        $errors = $this->object->validate($options);
+        $errors = $this->object->validate($options, $this->deploymentConfig);
         $this->assertEmpty($errors);
     }
 
@@ -73,7 +73,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalid(array $options, $expectedError)
     {
-        $errors = $this->object->validate($options);
+        $errors = $this->object->validate($options, $this->deploymentConfig);
         $this->assertSame([$expectedError], $errors);
     }
 

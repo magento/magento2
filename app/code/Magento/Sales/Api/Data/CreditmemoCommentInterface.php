@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
+ * @api
  */
 interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -56,6 +57,14 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * @return string Created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the credit memo created-at timestamp.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Gets the credit memo ID.

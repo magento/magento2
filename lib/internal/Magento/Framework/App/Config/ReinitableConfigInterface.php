@@ -8,6 +8,9 @@
 
 namespace Magento\Framework\App\Config;
 
+/**
+ * @api
+ */
 interface ReinitableConfigInterface extends \Magento\Framework\App\Config\MutableScopeConfigInterface
 {
     /**

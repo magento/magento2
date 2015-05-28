@@ -747,6 +747,7 @@ class AccountManagementTest extends WebapiAbstract
             'default_shipping' => true,
             'customer_id' => '1',
             'region' => ['region' => 'Alabama', 'region_id' => 1, 'region_code' => 'AL'],
+            'region_id' => 1,
         ];
     }
 }

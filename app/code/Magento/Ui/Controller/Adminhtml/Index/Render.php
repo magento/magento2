@@ -16,17 +16,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 class Render extends AbstractAction
 {
     /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param UiComponentFactory $factory
-     */
-    public function __construct(Context $context, UiComponentFactory $factory)
-    {
-        parent::__construct($context, $factory);
-    }
-
-    /**
      * Action for AJAX request
      *
      * @return void
@@ -46,11 +35,8 @@ class Render extends AbstractAction
      */
     protected function prepareComponent(UiComponentInterface $component)
     {
-        $childComponents = $component->getChildComponents();
-        if (!empty($childComponents)) {
-            foreach ($childComponents as $child) {
-                $this->prepareComponent($child);
-            }
+        foreach ($component->getChildComponents() as $child) {
+            $this->prepareComponent($child);
         }
         $component->prepare();
     }

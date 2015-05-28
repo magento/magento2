@@ -5,6 +5,8 @@
  */
 namespace Magento\Email\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Adminhtml email template model
  *
@@ -78,7 +80,7 @@ class BackendTemplate extends Template
             return [];
         }
 
-        $configData = $this->_scopeConfig->getValue(null, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+        $configData = $this->_scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
         return $paths;
     }

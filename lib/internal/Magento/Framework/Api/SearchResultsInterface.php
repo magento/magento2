@@ -8,6 +8,8 @@ namespace Magento\Framework\Api;
 
 /**
  * Search results interface.
+ *
+ * @api
  */
 interface SearchResultsInterface
 {

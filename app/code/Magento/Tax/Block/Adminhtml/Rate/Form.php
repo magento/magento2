@@ -66,6 +66,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_taxRateCollection;
 
     /**
+     * @var \Magento\Tax\Model\Calculation\Rate\Converter
+     */
+    protected $_taxRateConverter;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -75,6 +80,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param \Magento\Tax\Model\TaxRateCollection $taxRateCollection
+     * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
         \Magento\Tax\Model\TaxRateCollection $taxRateCollection,
+        \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
@@ -96,6 +103,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_taxData = $taxData;
         $this->_taxRateRepository = $taxRateRepository;
         $this->_taxRateCollection = $taxRateCollection;
+        $this->_taxRateConverter = $taxRateConverter;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -127,7 +135,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $sessionFormValues = (array)$this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
-        $formData = isset($taxRateDataObject) ? $this->extractTaxRateData($taxRateDataObject) : [];
+        $formData = isset($taxRateDataObject) ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject) : [];
         $formData = array_merge($formData, $sessionFormValues);
 
         if (isset($formData['zip_is_range']) && $formData['zip_is_range'] && !isset($formData['tax_postcode'])) {
@@ -285,66 +293,5 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         return parent::_prepareForm();
-    }
-
-    /**
-     * Get Tax Rates Collection
-     *
-     * @return mixed
-     */
-    public function getRateCollection()
-    {
-        if ($this->getData('rate_collection') == null) {
-            $items = $this->_taxRateCollection->getItems();
-            $rates = [];
-            foreach ($items as $rate) {
-                $rateData = $rate->getData();
-                if (isset($rateData['titles'])) {
-                    foreach ($rateData['titles'] as $storeId => $value) {
-                        $rateData['title[' . $storeId . ']'] = $value;
-                    }
-                }
-                unset($rateData['titles']);
-                $rates[] = $rateData;
-            }
-
-            $this->setRateCollection($rates);
-        }
-        return $this->getData('rate_collection');
-    }
-
-    /**
-     * Extract tax rate data in a format which is
-     *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
-     * @return array
-     */
-    protected function extractTaxRateData($taxRate)
-    {
-        $formData = [
-            'tax_calculation_rate_id' => $taxRate->getId(),
-            'tax_country_id' => $taxRate->getTaxCountryId(),
-            'tax_region_id' => $taxRate->getTaxRegionId(),
-            'tax_postcode' => $taxRate->getTaxPostcode(),
-            'code' => $taxRate->getCode(),
-            'rate' => $taxRate->getRate(),
-            'zip_is_range' => false,
-        ];
-
-        if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $formData['zip_is_range'] = true;
-            $formData['zip_from'] = $taxRate->getZipFrom();
-            $formData['zip_to'] = $taxRate->getZipTo();
-        }
-
-        if ($taxRate->getTitles()) {
-            $titleData = [];
-            foreach ($taxRate->getTitles() as $title) {
-                $titleData[] = [$title->getStoreId() => $title->getValue()];
-            }
-            $formData['title'] = $titleData;
-        }
-
-        return $formData;
     }
 }

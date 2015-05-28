@@ -74,7 +74,6 @@ class Index extends \Magento\Customer\Controller\Address
         if (count($addresses)) {
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
-            $resultPage->getLayout()->initMessages();
             $block = $resultPage->getLayout()->getBlock('address_book');
             if ($block) {
                 $block->setRefererUrl($this->_redirect->getRefererUrl());

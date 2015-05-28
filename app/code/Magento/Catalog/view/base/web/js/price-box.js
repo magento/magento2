@@ -190,7 +190,7 @@ define([
             if (_.isEmpty(prices)) {
                 priceHolders.each(function (index, element) {
                     var type = $(element).data('priceType'),
-                        amount = $(element).data('priceAmount');
+                        amount = parseFloat($(element).data('priceAmount'));
 
                     if (type && amount) {
                         prices[type] = {

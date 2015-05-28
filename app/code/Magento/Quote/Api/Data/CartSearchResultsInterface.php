@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface CartSearchResultsInterface
+ * @api
+ */
 interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**#@+

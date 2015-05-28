@@ -286,7 +286,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getAttributeType(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
-        if ($attribute->usesSource()) {
+        if ($attribute->usesSource() && in_array($attribute->getFrontendInput(), array('select', 'multiselect'))) {
             return $attribute->getFrontendInput() == 'multiselect' ? 'multiselect' : 'select';
         } elseif ($attribute->isStatic()) {
             return $attribute->getFrontendInput() == 'date' ? 'datetime' : 'varchar';

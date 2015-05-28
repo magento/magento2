@@ -94,11 +94,11 @@ class TaxTest extends \Magento\Backend\Utility\Controller
             ],
             [
                 ['class_type' => 'PRODUCT', 'class_name' => '11111<22222'],
-                ['class_name' => '11111&lt;22222']
+                ['class_name' => '11111<22222']
             ],
             [
                 ['class_type' => 'CUSTOMER', 'class_name' => '   12<>sa&df    '],
-                ['class_name' => '12&lt;&gt;sa&amp;df']
+                ['class_name' => '12<>sa&df']
             ]
         ];
     }
