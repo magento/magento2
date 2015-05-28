@@ -64,13 +64,11 @@ class Fieldset extends AbstractComponent
      */
     public function prepare()
     {
-        parent::prepare();
         foreach ($this->getChildComponents() as $name => $child) {
             if ($child instanceof Container) {
                 $this->fieldsInContainers += $child->getChildComponents();
             }
         }
-
         $fieldsMeta = $this->getContext()->getDataProvider()->getFieldsMetaInfo($this->getName());
         foreach ($fieldsMeta as $name => $fieldData) {
             if (empty($fieldData)) {
@@ -79,9 +77,7 @@ class Fieldset extends AbstractComponent
             $fieldComponent = $this->getComponent($name);
             $this->prepareField($fieldData, $name, $fieldComponent);
         }
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+        parent::prepare();
     }
 
     /**

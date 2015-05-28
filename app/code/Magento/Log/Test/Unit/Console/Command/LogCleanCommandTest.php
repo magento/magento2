@@ -32,7 +32,10 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $mutableConfig = $this->getMock('Magento\Framework\App\Config\MutableScopeConfigInterface', [], [], '', false);
-        $logFactory = $this->getMock('Magento\Log\Model\LogFactory', [], [], '', false);
+        $logFactory = $this->getMockBuilder('Magento\Log\Model\LogFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $returnValueMap = [
             [
                 'Magento\Framework\App\Config\MutableScopeConfigInterface',
