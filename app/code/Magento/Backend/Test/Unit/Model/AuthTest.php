@@ -59,8 +59,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Backend\Model\Auth\Credential\StorageInterface')
             ->will($this->returnValue($this->_credentialStorage));
-        $exceptionMock =
-            new \Magento\Framework\Exception\LocalizedException(__('Please correct the user name or password.'));
+        $exceptionMock = new \Magento\Framework\Exception\LocalizedException(__('message'));
         $this->_credentialStorage
             ->expects($this->once())
             ->method('login')
