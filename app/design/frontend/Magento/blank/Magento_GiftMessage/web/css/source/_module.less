@@ -9,6 +9,7 @@
 
 @gift-message-field-label__color: @color-gray40;
 @gift-item-block__border-color: @color-gray-light5;
+@gift-item-block__border-width: @border-width__base;
 
 //
 //  Common
@@ -88,7 +89,7 @@
             @_button-icon-font-line-height: 16px,
             @_button-icon-font-position: after
             );
-            font-weight: bold;
+            .css(font-weight, @font-weight__bold);
             &:active {
                 .css(box-shadow, @button__shadow);
             }
@@ -96,7 +97,7 @@
 
         .content {
             &:extend(.abs-add-clearfix all);
-            border-bottom: 1px solid @gift-item-block__border-color;
+            .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
             display: none;
             padding: @indent__s 0 @indent__base;
             position: relative;
@@ -112,7 +113,7 @@
         .block-order-details-gift-message {
             .item-options {
                 dt {
-                    font-weight: @font-weight__regular;
+                    .css(font-weight, @font-weight__regular);
                     margin: @indent__s 0;
                 }
             }
@@ -186,7 +187,7 @@
     }
     .gift-item-block {
         border-bottom: 0;
-        border-top: @border-width__base solid @gift-item-block__border-color;
+        .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
         .content {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
