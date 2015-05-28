@@ -154,7 +154,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         \Magento\Framework\App\Resource $resource,
         array $params
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $params);
         $this->_resource = $resource;
         $this->connection = $resource->getConnection('write');
     }
