@@ -121,10 +121,10 @@ class BlockRepository implements BlockRepositoryInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param SearchCriteriaInterface $criteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return Resource\Block\Collection
      */
-    public function getList(SearchCriteriaInterface $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
