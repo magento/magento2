@@ -47,10 +47,6 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $adapter = $this->_getWriteAdapter();
 
         $adapter->beginTransaction();
