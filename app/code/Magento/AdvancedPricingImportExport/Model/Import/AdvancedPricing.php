@@ -102,6 +102,21 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected $groupPriceValidator;
 
+    /**
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\ImportExport\Helper\Data $importExportData
+     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
+     * @param \Magento\Catalog\Model\Product $productModel
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param ImportProduct\StoreResolver $storeResolver
+     * @param ImportProduct $importProduct
+     * @param AdvancedPricing\Validator $validator
+     * @param AdvancedPricing\Validator\Website $websiteValidator
+     * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+     */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
@@ -308,22 +323,20 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
     {
-        if ($tableName) {
-            if ($listSku) {
-                if(!$this->_cachedSkuToDelete) {
-                    $this->_cachedSkuToDelete = $this->_connection->fetchCol($this->_connection->select()
-                        ->from($this->_connection->getTableName('catalog_product_entity'), 'entity_id')
-                        ->where('sku IN (?)', $listSku));
-                }
-                if($this->_cachedSkuToDelete) {
-                    $this->_connection->delete(
-                        $tableName,
-                        $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
-                    );
-                } else {
-                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
-                    return false;
-                }
+        if ($tableName && $listSku) {
+            if(!$this->_cachedSkuToDelete) {
+                $this->_cachedSkuToDelete = $this->_connection->fetchCol($this->_connection->select()
+                    ->from($this->_connection->getTableName('catalog_product_entity'), 'entity_id')
+                    ->where('sku IN (?)', $listSku));
+            }
+            if($this->_cachedSkuToDelete) {
+                $this->_connection->delete(
+                    $tableName,
+                    $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
+                );
+            } else {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
+                return false;
             }
         }
         return $this;

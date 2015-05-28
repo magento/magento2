@@ -12,7 +12,9 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      */
     public function afterSaveAdvancedPricing()
     {
-        $this->invalidateIndexer();
+        if (!$this->getPriceIndexer()->isScheduled()) {
+            $this->invalidateIndexer();
+        }
     }
 
     /**
@@ -20,14 +22,18 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
      */
     public function afterDeleteAdvancedPricing()
     {
-        $this->invalidateIndexer();
+        if (!$this->getPriceIndexer()->isScheduled()) {
+            $this->invalidateIndexer();
+        }
     }
 
     /**
-     * After replace handler
+     * Get price indexer
+     *
+     * @return \Magento\Indexer\Model\IndexerInterface
      */
-    public function afterReplaceAdvancedPricing()
+    protected function getPriceIndexer()
     {
-        $this->invalidateIndexer();
+        return $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID);
     }
 }
