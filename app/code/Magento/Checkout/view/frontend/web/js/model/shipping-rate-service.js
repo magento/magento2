@@ -16,9 +16,9 @@ define(
                 processors[type] = processor;
             },
             getRates: function (address) {
-                var type = address.type||'default';
+                var type = address.type || 'default';
                 var rates = [];
-                if(processors[type]){
+                if (processors[type]) {
                     rates = processors[type].getRates(address);
                 }
                 return rates;
