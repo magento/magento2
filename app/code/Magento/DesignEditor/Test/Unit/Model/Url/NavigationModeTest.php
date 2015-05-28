@@ -90,7 +90,7 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
             [
                 'helper' => $this->_designHelperMock,
                 'data' => $this->_testData,
-                'routeParamsResolver' => $this->_routeParamsMock,
+                'routeParamsResolverFactory' => $this->_routeParamsMock,
                 'scopeResolver' => $this->_scopeResolverMock
             ]
         );

@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
+/**
+ * @api
+ */
 interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

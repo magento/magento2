@@ -100,13 +100,22 @@ class Emulation extends \Magento\Framework\Object
      *
      * @param integer $storeId
      * @param string $area
+     * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
      * @return void
      */
     public function startEnvironmentEmulation(
         $storeId,
-        $area = \Magento\Framework\App\Area::AREA_FRONTEND
+        $area = \Magento\Framework\App\Area::AREA_FRONTEND,
+        $force = false
     ) {
-        if ($storeId == $this->_storeManager->getStore()->getStoreId()) {
+        if (
+            (
+                $storeId == $this->_storeManager->getStore()->getStoreId()
+                && !$force
+            )
+            // Only allow a single level of emulation. Emulation nesting not allowed.
+            || $this->initialEnvironmentInfo !== null
+        ) {
             return;
         }
         $this->storeCurrentEnvironmentInfo();

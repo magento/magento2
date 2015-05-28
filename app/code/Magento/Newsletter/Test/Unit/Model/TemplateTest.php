@@ -63,14 +63,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $emailConfig;
 
     /**
-     * @var \Magento\Newsletter\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $templateFactory;
-
-    /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filterManager;
 
     /**
      * @var \Magento\Newsletter\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -112,11 +107,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        // TODO: Remove the unneeded ones
-        $this->templateFactory = $this->getMockBuilder('Magento\Newsletter\Model\TemplateFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterManager = $this->getMockBuilder('Magento\Framework\Filter\FilterManager')
+        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterFactory = $this->getMockBuilder('Magento\Newsletter\Model\Template\FilterFactory')
@@ -148,7 +139,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
-                    $this->filterManager,
                     $this->filterFactory
                 ]
             )
@@ -169,40 +159,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())
             ->method('hasSingleStore')
             ->will($this->returnValue($isSingleStore));
-
-        if ($isSingleStore) {
-
-        } else {
-            $this->request->expects($this->once())
-                ->method('getParam')
-                ->with('store_id')
-                ->will($this->returnValue($storeId));
-        }
-
-        $data = ['template_text' => 'template text'];
-
-        /** @var \Magento\Newsletter\Model\Template $model */
-        $model = $this->getMock(
-            'Magento\Newsletter\Model\Template',
-            ['_init'],
-            [
-                $this->context,
-                $this->design,
-                $this->registry,
-                $this->appEmulation,
-                $this->storeManager,
-                $this->request,
-                $this->scopeConfig,
-                $this->assetRepo,
-                $this->filesystem,
-                $this->objectManager,
-                $this->emailConfig,
-                $this->templateFactory,
-                $this->filterManager,
-                $this->filterFactory,
-                $data
-            ]
-        );
 
         $filterTemplate = $this->getMockBuilder('Magento\Newsletter\Model\Template\Filter')
             ->setMethods([
@@ -258,7 +214,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // is returned from getProcessedTemplate
         $expectedVariables['store'] = $store;
 
-        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText', 'getTemplateText']);
+        /** @var \Magento\Newsletter\Model\Template $model */
+        $model = $this->getModelMock([
+            'getDesignParams',
+            '_applyDesignConfig',
+            'getPreparedTemplateText',
+            'getTemplateText'
+        ]);
         $filterTemplate->expects($this->any())
             ->method('setVariables')
             ->with(array_merge([ 'this' => $model], $expectedVariables));
@@ -266,17 +228,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeId = 'storeId';
-        $designConfig->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeId));
-        $model->expects($this->once())
-            ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+
+        if ($isSingleStore) {
+            $model->expects($this->once())
+                ->method('getDesignParams')
+                ->will($this->returnValue($designParams));
+        }
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
@@ -339,5 +301,39 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => 'expected result',
             ],
         ];
+    }
+
+    public function testGetProcessedTemplateSubject()
+    {
+        $model = $this->getModelMock([
+            'getTemplateFilter',
+            'getDesignConfig',
+            '_applyDesignConfig',
+            'setVariables',
+        ]);
+
+        $templateSubject = 'templateSubject';
+        $model->setTemplateSubject($templateSubject);
+
+        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
+            ->setMethods(['setVariables', 'setStoreId', 'filter'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $model->expects($this->once())
+            ->method('getTemplateFilter')
+            ->will($this->returnValue($filterTemplate));
+
+        $expectedResult = 'expected';
+        $filterTemplate->expects($this->once())
+            ->method('filter')
+            ->with($templateSubject)
+            ->will($this->returnValue($expectedResult));
+
+        $variables = [ 'key' => 'value' ];
+        $filterTemplate->expects($this->once())
+            ->method('setVariables')
+            ->with(array_merge($variables, ['this' => $model]))
+            ->will($this->returnValue($filterTemplate));
+        $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
     }
 }

@@ -11,4 +11,12 @@
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="logStatusCommand" xsi:type="object">Magento\Log\Console\Command\LogStatusCommand</item>
+                <item name="logCleanCommand" xsi:type="object">Magento\Log\Console\Command\LogCleanCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

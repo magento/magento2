@@ -92,7 +92,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\Config $emailConfig
-     * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
+     *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
      * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -109,7 +110,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Newsletter\Model\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
         array $data = []
     ) {
@@ -263,6 +264,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function getProcessedTemplate(array $variables = [], $usePreprocess = false)
     {
+        $this->setUseAbsoluteLinks(true);
+
         $processor = $this->getTemplateFilter()
             ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
@@ -270,9 +273,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             ->setTemplateProcessor([$this, 'getTemplateContent'])
             ->setTemplateModel($this);
 
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         if (!$this->getIsChildTemplate()) {
@@ -282,9 +283,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->_storeManager->getStore()->getId();
         } else {
-            $storeId = $this->_request->getParam('store_id');
+            $storeId = $this->getDesignConfig()->getStore();
         }
-        $storeId = $this->getDesignConfig()->getStore();
         $processor->setStoreId($storeId);
 
         $variables = $this->_addEmailVariables($variables, $storeId);
@@ -301,7 +301,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             }
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
         }
-        return $this->getPreparedTemplateText($result);
+        $processedResult = $this->getPreparedTemplateText($result);
+
+        if (!$this->getIsChildTemplate()) {
+            $this->_cancelDesignConfig();
+        }
+        return $processedResult;
     }
 
     /**
@@ -332,9 +337,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function getProcessedTemplateSubject(array $variables)
     {
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
+
         return $this->getTemplateFilter()
             ->setVariables($variables)
             ->filter($this->getTemplateSubject());

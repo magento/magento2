@@ -76,13 +76,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     protected $_templateFilter;
 
     /**
-     * Email template preprocessed flag
-     *
-     * @var bool
-     */
-    protected $_preprocessFlag = false;
-
-    /**
      * BCC list
      *
      * @var array
@@ -190,19 +183,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     }
 
     /**
-     * Get default email logo image
-     *
-     * @return string
-     */
-    public function getDefaultEmailLogo()
-    {
-        return $this->_assetRepo->getUrlWithParams(
-            'Magento_Email::logo_email.png',
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
-        );
-    }
-
-    /**
      * Declare template processing filter
      *
      * @param FilterTemplate $filter
@@ -297,20 +277,14 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             ->setTemplateProcessor([$this, 'getTemplateContent'])
             ->setTemplateModel($this);
 
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         if (!$this->getIsChildTemplate()) {
             $this->_applyDesignConfig();
         }
 
-        if (isset($variables['subscriber'])) {
-            $storeId = $variables['subscriber']->getStoreId();
-        } else {
-            $storeId = $this->getDesignConfig()->getStore();
-        }
+        $storeId = $this->getDesignConfig()->getStore();
         $processor->setStoreId($storeId);
 
         // Populate the variables array with store, store info, logo, etc. variables
@@ -319,8 +293,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
 
         try {
             // Filter the template text so that all HTML content will be present
-            $result = $processor->setStoreId($storeId)
-                ->filter($this->getTemplateText());
+            $result = $processor->filter($this->getTemplateText());
 
             // Now that all HTML has been assembled, run email through CSS inlining process
             $processedResult = $this->getPreparedTemplateText($result);
@@ -329,6 +302,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
                 $this->_cancelDesignConfig();
             }
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
+        }
+        if (!$this->getIsChildTemplate()) {
+            $this->_cancelDesignConfig();
         }
         return $processedResult;
     }
@@ -370,9 +346,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     {
         $processor = $this->getTemplateFilter();
 
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
 
         $processor->setVariables($variables);
 

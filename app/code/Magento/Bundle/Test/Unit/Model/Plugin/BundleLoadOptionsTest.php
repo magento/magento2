@@ -35,6 +35,7 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->optionListMock = $this->getMock('\Magento\Bundle\Model\Product\OptionList', [], [], '', false);
         $this->productExtensionFactory = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Bundle\Model\Plugin\BundleLoadOptions(

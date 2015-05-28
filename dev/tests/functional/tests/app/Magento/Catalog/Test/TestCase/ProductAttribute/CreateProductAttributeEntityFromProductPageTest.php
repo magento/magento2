@@ -6,10 +6,7 @@
 
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Scenario;
 
 /**
@@ -41,13 +38,6 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
     /* end tags */
 
     /**
-     * CatalogProductAttribute fixture.
-     *
-     * @var CatalogProductAttribute
-     */
-    protected $attribute;
-
-    /**
      * Prepare data for test.
      *
      * @param FixtureFactory $fixtureFactory
@@ -66,25 +56,10 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
     /**
      * Run CreateProductAttributeEntity from product page test.
      *
-     * @param CatalogProductAttribute $attribute
      * @return void
      */
-    public function test(CatalogProductAttribute $attribute)
+    public function test()
     {
-        $this->attribute = $attribute;
         $this->executeScenario();
-    }
-
-    /**
-     * Delete attribute after test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
-            ['attribute' => $this->attribute]
-        )->run();
     }
 }

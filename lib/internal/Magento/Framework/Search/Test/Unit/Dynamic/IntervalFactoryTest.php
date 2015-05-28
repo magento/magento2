@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -63,7 +64,7 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with(self::CONFIG_PATH, ScopeInterface::SCOPE_DEFAULT)
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn(self::CONFIG_PATH . 't');
         $this->objectManager->expects($this->once())
             ->method('create')
@@ -83,7 +84,7 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with(self::CONFIG_PATH, ScopeInterface::SCOPE_DEFAULT)
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn('t');
 
         $this->factoryCreate();
@@ -97,7 +98,7 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with(self::CONFIG_PATH, ScopeInterface::SCOPE_DEFAULT)
+            ->with(self::CONFIG_PATH, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn(self::CONFIG_PATH . 't');
         $this->objectManager->expects($this->once())
             ->method('create')

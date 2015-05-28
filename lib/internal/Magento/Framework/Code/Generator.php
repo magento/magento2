@@ -68,7 +68,7 @@ class Generator
      * Generate Class
      *
      * @param string $className
-     * @return string
+     * @return string | void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      */
@@ -99,15 +99,17 @@ class Generator
         $generatorClass = $this->_generatedEntities[$entity];
         /** @var EntityAbstract $generator */
         $generator = $this->createGeneratorInstance($generatorClass, $entityName, $className);
-        $this->tryToLoadSourceClass($className, $generator);
-        if (!($file = $generator->generate())) {
-            $errors = $generator->getErrors();
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase(implode(' ', $errors))
-            );
+        if ($generator !== null) {
+            $this->tryToLoadSourceClass($className, $generator);
+            if (!($file = $generator->generate())) {
+                $errors = $generator->getErrors();
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(implode(' ', $errors))
+                );
+            }
+            $this->includeFile($file);
+            return self::GENERATION_SUCCESS;
         }
-        $this->includeFile($file);
-        return self::GENERATION_SUCCESS;
     }
 
     /**

@@ -15,7 +15,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
+use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
@@ -210,7 +210,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected function translateField($field)
     {
         switch ($field) {
-            case TaxRateDataObject::KEY_REGION_NAME:
+            case Rate::KEY_REGION_NAME:
                 return 'region_table.code';
             default:
                 return "main_table." . $field;

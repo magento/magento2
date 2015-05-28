@@ -14,7 +14,6 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @method \Magento\Sales\Model\Resource\Order\Status\History _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Status\History getResource()
- * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
@@ -194,6 +193,14 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     public function getCreatedAt()
     {
         return $this->getData(OrderStatusHistoryInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(OrderStatusHistoryInterface::CREATED_AT, $createdAt);
     }
 
     /**

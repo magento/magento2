@@ -114,6 +114,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->emailFilterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
@@ -156,10 +157,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultEmailLogo()
     {
-        $model = $this->getModelMock();
+        $model = $this->getModelMock(['getDesignParams']);
         $value = 'urlWithParamsValue';
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->once())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
         $this->assetRepo->method('getUrlWithParams')
-            ->with('Magento_Email::logo_email.png', ['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->with('Magento_Email::logo_email.png', $designParams)
             ->will($this->returnValue($value));
         $this->assertEquals($value, $model->getDefaultEmailLogo());
     }
@@ -318,6 +327,75 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Test to ensure that this method handles loading templates from DB vs filesystem, based on whether template ID is
+     * numeric.
+     *
+     * @param bool $loadFromDatabase
+     * @dataProvider loadByConfigPathDataProvider
+     */
+    public function testLoadByConfigPath($loadFromDatabase)
+    {
+        $configPath = 'design/email/header_template';
+        $templateContent = 'Test template content';
+        $model = $this->getModelMock([
+            'getDesignConfig',
+            'loadDefault',
+            'load',
+            'getTemplateText',
+        ]);
+
+        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
+            ->setMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeId = 'storeId';
+        $designConfig->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($storeId));
+        $model->expects($this->once())
+            ->method('getDesignConfig')
+            ->will($this->returnValue($designConfig));
+
+        if ($loadFromDatabase) {
+            $templateId = '1';
+            $model->expects($this->once())
+                ->method('load')
+                ->with($templateId)
+                ->will($this->returnSelf());
+        } else {
+            $templateId = 'design_email_header_template';
+            $model->expects($this->once())
+                ->method('loadDefault')
+                ->with($templateId)
+                ->will($this->returnSelf());
+        }
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            ->will($this->returnValue($templateId));
+
+        $model->expects($this->atLeastOnce())
+            ->method('getTemplateText')
+            ->will($this->returnValue($templateContent));
+
+        $model->loadByConfigPath($configPath);
+
+        $this->assertEquals($templateContent, $model->getTemplateText());
+    }
+
+    /**
+     * @return array
+     */
+    public function loadByConfigPathDataProvider()
+    {
+        return [
+            'Load from filesystem' => [false],
+            'Load from database' => [true],
+        ];
+    }
+
     public function testGetAndSetId()
     {
         $model = $this->getModelMock();
@@ -455,24 +533,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // is returned from getProcessedTemplate
         $expectedVariables['store'] = $store;
 
-        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
+        $model = $this->getModelMock(['getDesignParams', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
         $filterTemplate->expects($this->any())
             ->method('setVariables')
             ->with(array_merge([ 'this' => $model], $expectedVariables));
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeId = 'storeId';
-        $designConfig->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeId));
-        $model->expects($this->once())
-            ->method('getDesignConfig')
-            ->will($this->returnValue($designConfig));
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())

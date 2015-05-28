@@ -47,11 +47,16 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function _toHtml()
     {
+        $storeId = $this->getAnyStoreView()->getId();
+
         /** @var $template \Magento\Email\Model\Template */
         $template = $this->_emailFactory->create(
-            ['data' => ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]]
+            ['data' => [
+                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                'store' => $storeId
+            ]]
         );
-        $id = (int)$this->getRequest()->getParam('id');
+        $id = (int) $this->getRequest()->getParam('id');
         if ($id) {
             $template->load($id);
         } else {
@@ -65,12 +70,13 @@ class Preview extends \Magento\Backend\Block\Widget
         \Magento\Framework\Profiler::start("email_template_proccessing");
         $vars = [];
 
-        $store = $this->getAnyStoreView();
-        $storeId = $store ? $store->getId() : null;
-        $template->setDesignConfig(
-            ['area' => $this->_design->getArea(), 'store' => $storeId]
+        $template->emulateDesign($storeId);
+        $templateProcessed = $this->getAppState()->emulateAreaCode(
+            \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+            [$template, 'getProcessedTemplate'],
+            [$vars, true]
         );
-        $templateProcessed = $template->getProcessedTemplate($vars, true);
+        $template->revertDesign();
 
         if ($template->isPlain()) {
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
@@ -79,6 +85,16 @@ class Preview extends \Magento\Backend\Block\Widget
         \Magento\Framework\Profiler::stop("email_template_proccessing");
 
         return $templateProcessed;
+    }
+
+    /**
+     * Allows for test mocking
+     *
+     * @return \Magento\Framework\App\State
+     */
+    public function getAppState()
+    {
+        return $this->_appState;
     }
 
     /**

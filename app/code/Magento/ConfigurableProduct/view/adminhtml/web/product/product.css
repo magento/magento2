@@ -25,10 +25,6 @@
     width: 43%;
 }
 
-#configurable-attributes-container {
-    margin-bottom: 23px;
-}
-
 #configurable-attributes-container .col-include {
     width: 80px;
 }
@@ -62,9 +58,9 @@
 
 #configurable-attributes-container .field-pricing-value .pricing-value {
     width: 100%;
-    padding: 4px;
+    padding: 4px 10px;
     border-right: none;
-    border-radius: 4px 0 0 4px;
+    border-radius: 1px 0 0 1px;
 }
 
 /* "Generate Variations" button */
@@ -73,6 +69,7 @@
 }
 
 #product-variations-matrix > .title {
+    margin-top: 2rem;
     margin-bottom: 10px;
 }
 

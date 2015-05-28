@@ -5,6 +5,8 @@
  */
 namespace Magento\Email\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Adminhtml email template model
  *
@@ -30,6 +32,7 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
      *
@@ -48,6 +51,7 @@ class BackendTemplate extends Template
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
@@ -64,6 +68,7 @@ class BackendTemplate extends Template
             $objectManager,
             $emailFilterFactory,
             $emailConfig,
+            $templateFactory,
             $data
         );
         $this->_structure = $structure;
@@ -81,7 +86,7 @@ class BackendTemplate extends Template
             return [];
         }
 
-        $configData = $this->_scopeConfig->getValue(null, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+        $configData = $this->_scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
         return $paths;
     }
