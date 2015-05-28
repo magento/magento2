@@ -92,7 +92,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\Config $emailConfig
-     * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
+     *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
      * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -109,7 +110,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Newsletter\Model\TemplateFactory $templateFactory,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
         array $data = []
     ) {

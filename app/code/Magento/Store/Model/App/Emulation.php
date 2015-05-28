@@ -109,8 +109,12 @@ class Emulation extends \Magento\Framework\Object
         $force = false
     ) {
         if (
-            $storeId == $this->_storeManager->getStore()->getStoreId()
-            && !$force
+            (
+                $storeId == $this->_storeManager->getStore()->getStoreId()
+                && !$force
+            )
+            // Only allow a single level of emulation. Emulation nesting not allowed.
+            || $this->initialEnvironmentInfo !== null
         ) {
             return;
         }

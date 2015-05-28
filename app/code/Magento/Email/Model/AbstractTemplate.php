@@ -194,9 +194,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getTemplateContent($configPath, array $variables)
     {
         $template = $this->_getTemplateInstance();
-        if (!$template) {
-            return '';
-        }
         $template->loadByConfigPath($configPath, $variables);
 
         // Ensure child templates have the same area/store context as parent
@@ -210,7 +207,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Load template by XML configuration path. Loads template from database if it exists and has been override in
+     * Load template by XML configuration path. Loads template from database if it exists and has been overridden in
      * configuration. Otherwise loads from the filesystem.
      *
      * @param string $configPath
@@ -411,9 +408,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getDefaultEmailLogo()
     {
+        $designParams = $this->_getDesignParams();
         return $this->_assetRepo->getUrlWithParams(
             'Magento_Email::logo_email.png',
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
+            $designParams
         );
     }
 
@@ -512,7 +510,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         if (!isset($variables['store_email'])) {
             $variables['store_email'] = $this->_scopeConfig->getValue(
-                // TODO: @Erik replace this with constant. Need to create constant.
                 'trans_email/ident_support/email',
                 ScopeInterface::SCOPE_STORE,
                 $store
@@ -527,7 +524,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Applying of design config
+     * Apply design config so that emails are processed within the context of the appropriate area/store/theme
      *
      * @return $this
      */
@@ -669,21 +666,22 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * If child class has set a template factory, return a new object. Else return false.
+     * If class has set a template factory, return a new object. Else throw an exception.
      * This allows child classes like \Magento\Email\Model\Template and \Magento\Newsletter\Model\Template to set
-     * their own factory objects
+     * their own factory objects.
      *
-     * @return null|\Magento\Email\Model\AbstractTemplate
+     * @return \Magento\Email\Model\AbstractTemplate
+     * @throws \UnexpectedValueException
      */
     protected function _getTemplateInstance()
     {
-        if ($this->_templateFactory) {
-            return $this->_templateFactory->create([
-                // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
-                'filesystem' => $this->_filesystem
-            ]);
+        if (!$this->_templateFactory) {
+            throw new \UnexpectedValueException('_templateFactory must be set');
         }
-        return null;
+        return $this->_templateFactory->create([
+            // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
+            'filesystem' => $this->_filesystem
+        ]);
     }
 
     /**

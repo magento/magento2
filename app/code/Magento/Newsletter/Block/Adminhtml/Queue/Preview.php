@@ -69,7 +69,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        $storeId = (int)$this->getRequest()->getParam('store_id');
+        $storeId = (int)$this->getRequest()->getParam('store');
         if (!$storeId) {
             $defaultStore = $this->_storeManager->getDefaultStoreView();
             if (!$defaultStore) {
