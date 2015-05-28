@@ -188,11 +188,16 @@ class ExtensionAttributesFactory
     }
 
     /**
+     * Returns the internal join directive config for a given type.
+     *
+     * Array returned has all of the \Magento\Framework\Api\Config\Converter JOIN* fields set.
+     *
      * @param string $extensibleEntityClass
      * @return array
      */
     private function getJoinDirectivesForType($extensibleEntityClass)
     {
+        $extensibleEntityClass = ltrim($extensibleEntityClass, '\\');
         $extensibleInterfaceName = $this->getExtensibleInterfaceName($extensibleEntityClass);
         $config = $this->configReader->read();
         if (!isset($config[$extensibleInterfaceName])) {
