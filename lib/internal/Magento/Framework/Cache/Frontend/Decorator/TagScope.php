@@ -45,7 +45,7 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        $tags[] = $this->_tag;
+        $tags[] = $this->getTag();
         return parent::save($data, $identifier, $tags, $lifeTime);
     }
 
@@ -59,16 +59,16 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
         if ($mode == \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG) {
             $result = false;
             foreach ($tags as $tag) {
-                if (parent::clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$tag, $this->_tag])) {
+                if (parent::clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$tag, $this->getTag()])) {
                     $result = true;
                 }
             }
         } else {
             if ($mode == \Zend_Cache::CLEANING_MODE_ALL) {
                 $mode = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
-                $tags = [$this->_tag];
+                $tags = [$this->getTag()];
             } else {
-                $tags[] = $this->_tag;
+                $tags[] = $this->getTag();
             }
             $result = parent::clean($mode, $tags);
         }

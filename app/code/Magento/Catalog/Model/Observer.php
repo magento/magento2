@@ -34,7 +34,14 @@ class Observer
      *
      * @var \Magento\Catalog\Model\Layer
      */
-    protected $_catalogLayer;
+    private $_catalogLayer = null;
+
+    /**
+     * Catalog layer resolver
+     *
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    protected $layerResolver;
 
     /**
      * Store manager
@@ -95,7 +102,7 @@ class Observer
         $this->_categoryResource = $categoryResource;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
-        $this->_catalogLayer = $layerResolver->get();
+        $this->layerResolver = $layerResolver;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogData = $catalogData;
         $this->categoryFlatConfig = $categoryFlatState;
@@ -142,27 +149,10 @@ class Observer
             if (!$category->getIsActive()) {
                 continue;
             }
-
-            $nodeId = 'category-node-' . $category->getId();
-
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
-
-            $isActiveCategory = false;
-            /** @var \Magento\Catalog\Model\Category $currentCategory */
-            $currentCategory = $this->_registry->registry('current_category');
-            if ($currentCategory && $currentCategory->getId() == $category->getId()) {
-                $isActiveCategory = true;
-            }
-
-            $categoryData = [
-                'name' => $category->getName(),
-                'id' => $nodeId,
-                'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'has_active' => $this->hasActive($category),
-                'is_active' => $isActiveCategory
-            ];
+            $categoryData = $this->getMenuCategoryData($category);
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
@@ -177,6 +167,34 @@ class Observer
     }
 
     /**
+     * Get category data to be added to the Menu
+     *
+     * @param \Magento\Framework\Data\Tree\Node $category
+     * @return array
+     */
+    public function getMenuCategoryData($category)
+    {
+        $nodeId = 'category-node-' . $category->getId();
+
+        $isActiveCategory = false;
+        /** @var \Magento\Catalog\Model\Category $currentCategory */
+        $currentCategory = $this->_registry->registry('current_category');
+        if ($currentCategory && $currentCategory->getId() == $category->getId()) {
+            $isActiveCategory = true;
+        }
+
+        $categoryData = [
+            'name' => $category->getName(),
+            'id' => $nodeId,
+            'url' => $this->_catalogCategory->getCategoryUrl($category),
+            'has_active' => $this->hasActive($category),
+            'is_active' => $isActiveCategory,
+        ];
+
+        return $categoryData;
+    }
+
+    /**
      * Checks whether category belongs to active category's path
      *
      * @param \Magento\Framework\Data\Tree\Node $category
@@ -184,16 +202,29 @@ class Observer
      */
     protected function hasActive($category)
     {
-        if (!$this->_catalogLayer) {
+        $catalogLayer = $this->getCatalogLayer();
+        if (!$catalogLayer) {
             return false;
         }
 
-        $currentCategory = $this->_catalogLayer->getCurrentCategory();
+        $currentCategory = $catalogLayer->getCurrentCategory();
         if (!$currentCategory) {
             return false;
         }
 
         $categoryPathIds = explode(',', $currentCategory->getPathInStore());
         return in_array($category->getId(), $categoryPathIds);
+    }
+
+    /**
+     * Get catalog layer
+     * @return \Magento\Catalog\Model\Layer
+     */
+    private function getCatalogLayer()
+    {
+        if ($this->_catalogLayer === null) {
+            $this->_catalogLayer = $this->layerResolver->get();
+        }
+        return $this->_catalogLayer;
     }
 }

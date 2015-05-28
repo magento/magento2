@@ -138,6 +138,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param null|string $to
      * @param null|\Zend_Db_Select|string $subSelect
      * @param bool $doNotUseTruncate
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
      * @return $this
      */
     protected function _clearTableByDateRange(
@@ -145,7 +146,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $from = null,
         $to = null,
         $subSelect = null,
-        $doNotUseTruncate = false
+        $doNotUseTruncate = false,
+        $adapter = null
     ) {
         if ($from === null && $to === null && !$doNotUseTruncate) {
             $this->_truncateTable($table);
@@ -153,7 +155,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         }
 
         if ($subSelect !== null) {
-            $deleteCondition = $this->_makeConditionFromDateRangeSelect($subSelect, 'period');
+            $deleteCondition = $this->_makeConditionFromDateRangeSelect($subSelect, 'period', $adapter);
         } else {
             $condition = [];
             if ($from !== null) {
@@ -229,17 +231,24 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      *
      * @param \Magento\Framework\DB\Select $select
      * @param string $periodColumn
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
      * @return array|bool|string
      */
-    protected function _makeConditionFromDateRangeSelect($select, $periodColumn)
+    protected function _makeConditionFromDateRangeSelect($select, $periodColumn, $adapter = null)
     {
+        if (!$adapter) {
+            $adapter = $this->_getReadAdapter();
+        }
+
         static $selectResultCache = [];
         $cacheKey = (string)$select;
 
         if (!array_key_exists($cacheKey, $selectResultCache)) {
             try {
                 $selectResult = [];
-                $query = $this->_getReadAdapter()->query($select);
+
+                $query = $adapter->query($select);
+
                 while (true == ($date = $query->fetchColumn())) {
                     $selectResult[] = $date;
                 }
@@ -255,7 +264,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         }
 
         $whereCondition = [];
-        $adapter = $this->_getReadAdapter();
+
         foreach ($selectResult as $date) {
             $whereCondition[] = $adapter->prepareSqlCondition($periodColumn, ['like' => $date]);
         }
@@ -349,15 +358,26 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param null|mixed $from
      * @param null|mixed $to
      * @param null|int|string|\Magento\Store\Model\Store $store
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $adapter
      * @return string
      */
-    public function getStoreTZOffsetQuery($table, $column, $from = null, $to = null, $store = null)
-    {
-        $column = $this->_getWriteAdapter()->quoteIdentifier($column);
+    public function getStoreTZOffsetQuery(
+        $table,
+        $column,
+        $from = null,
+        $to = null,
+        $store = null,
+        $adapter = null
+    ) {
+        if (!$adapter) {
+            $adapter = $this->_getWriteAdapter();
+        }
+
+        $column = $adapter->quoteIdentifier($column);
 
         if (null === $from) {
-            $selectOldest = $this->_getWriteAdapter()->select()->from($table, ["MIN({$column})"]);
-            $from = $this->_getWriteAdapter()->fetchOne($selectOldest);
+            $selectOldest = $adapter->select()->from($table, ["MIN({$column})"]);
+            $from = $adapter->fetchOne($selectOldest);
         }
 
         $periods = $this->_getTZOffsetTransitions(
@@ -379,7 +399,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
                 $subParts[] = "({$column} between {$ts['from']} and {$ts['to']})";
             }
 
-            $then = $this->_getWriteAdapter()->getDateAddSql(
+            $then = $adapter->getDateAddSql(
                 $column,
                 $offset,
                 \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_SECOND

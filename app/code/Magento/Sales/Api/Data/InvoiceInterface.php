@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice interface.
  *
  * An invoice is a record of the receipt of payment for an order.
+ * @api
  */
 interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -318,6 +319,14 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return string Created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the created-at timestamp for the invoice.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Gets the discount amount for the invoice.

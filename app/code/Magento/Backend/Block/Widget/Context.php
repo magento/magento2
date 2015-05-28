@@ -31,7 +31,6 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Session\Generic $session
@@ -66,7 +65,6 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Session\Generic $session,
@@ -99,7 +97,6 @@ class Context extends \Magento\Backend\Block\Template\Context
             $layout,
             $eventManager,
             $urlBuilder,
-            $translator,
             $cache,
             $design,
             $session,

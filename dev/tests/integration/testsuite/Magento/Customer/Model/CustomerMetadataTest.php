@@ -75,25 +75,16 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomAttributesMetadataWithAttributeNamedCustomAttribute()
     {
         $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
-        $customAttributeCodeOne = 'custom_attribute1';
-        $customAttributeFound = false;
-        $customAttributeCodeTwo = 'custom_attribute2';
-        $customAttributesFound = false;
+        $expectedCustomAttributeCodeArray = ['custom_attribute1', 'custom_attribute2', 'customer_image'];
+        $actual = [];
         foreach ($customAttributesMetadata as $attribute) {
-            if ($attribute->getAttributeCode() == $customAttributeCodeOne) {
-                $customAttributeFound = true;
-            }
-            if ($attribute->getAttributeCode() == $customAttributeCodeTwo) {
-                $customAttributesFound = true;
-            }
+            $actual[] = $attribute->getAttributeCode();
         }
-        if (!$customAttributeFound) {
-            $this->fail("Custom attribute declared in the config not found.");
-        }
-        if (!$customAttributesFound) {
-            $this->fail("Custom attributes declared in the config not found.");
-        }
-        $this->assertCount(3, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertEquals(
+            $expectedCustomAttributeCodeArray,
+            array_intersect($expectedCustomAttributeCodeArray, $actual),
+            "Expected attributes not returned from the service."
+        );
     }
 
     /**

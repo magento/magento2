@@ -21,9 +21,9 @@
         <input value="<%- data.attribute.code %>" type="hidden"
             name="product[configurable_attributes_data][<%- data.attribute.id %>][code]"/>
 
-        <div class="fieldset-wrapper collapsable-wrapper" id="<%- data.attribute.id %>-wrapper">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<%- data.attribute.id %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="title" data-toggle="collapse" data-target="#<%- data.attribute.id %>-content">
+                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<%- data.attribute.id %>-content">
                     <span><%- data.attribute.label %></span>
                 </strong>
                 <div class="actions">

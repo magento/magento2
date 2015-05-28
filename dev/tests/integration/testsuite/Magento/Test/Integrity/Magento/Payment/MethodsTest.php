@@ -60,7 +60,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             /** @var $block \Magento\Framework\View\Element\Template */
             $block = $blockFactory->createBlock($blockClass);
             $block->setArea('frontend');
-            $this->assertFileExists($block->getTemplateFile(), $message);
+            $this->assertFileExists((string)$block->getTemplateFile(), $message);
             if ($model->canUseInternal()) {
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -69,7 +69,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     );
                     $block->setArea('adminhtml');
-                    $this->assertFileExists($block->getTemplateFile(), $message);
+                    $this->assertFileExists((string)$block->getTemplateFile(), $message);
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                         'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
