@@ -470,8 +470,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $checksumOk = $header['checksum'] == $checksum;
         if (isset($header['name']) && $checksumOk) {
+            $header['name'] = trim($header['name']);
             if (!($header['name'] == '././@LongLink' && $header['type'] == 'L')) {
-                $header['name'] = trim($header['name']);
                 return $header;
             }
 
