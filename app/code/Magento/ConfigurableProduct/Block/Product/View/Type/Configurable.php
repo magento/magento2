@@ -213,11 +213,28 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $prices[$product->getId()] = $this->getProduct()
+            $priceInfo = $this->getProduct()
                 ->setSelectedConfigurableOption($product)
-                ->getPriceInfo()->getPrice('final_price')
-                ->getAmount()
-                ->getValue();
+                ->getPriceInfo();
+
+            $prices[$product->getId()] =
+                [
+                    'oldPrice' => [
+                        'amount' => $this->_registerJsPrice(
+                            $this->_convertPrice($priceInfo->getPrice('regular_price')->getAmount()->getValue())
+                        ),
+                    ],
+                    'basePrice' => [
+                        'amount' => $this->_registerJsPrice(
+                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getBaseAmount())
+                        ),
+                    ],
+                    'finalPrice' => [
+                        'amount' => $this->_registerJsPrice(
+                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getValue())
+                        ),
+                    ]
+                ];
         }
         return $prices;
     }

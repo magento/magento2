@@ -367,32 +367,38 @@ define([
          * @return {Number} The price of the configurable product including selected options.
          */
         _reloadPrice: function() {
-            $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices(this.options.settings));
+            $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
         },
 
-        _getPrices: function (elems) {
-            var prices = {};
-            elems = _.toArray(elems);
+        _getPrices: function () {
+            var prices = {},
+                elements = _.toArray(this.options.settings);
 
-            _.each(elems, function(elem) {
-                var selected    = elem.options[elem.selectedIndex],
-                    config      = selected && selected.config;
+            _.each(elements, function(element) {
+                var selected = element.options[element.selectedIndex],
+                    config = selected && selected.config;
 
-                var productId   = config && config.allowedProducts && config.allowedProducts[0] || 0;
-
-                prices[elem.attributeId] = config && config.allowedProducts.length === 1 ?
-                {
-                    'basePrice':{'amount':this.options.spConfig.optionPrices[productId]},
-                    'finalPrice':{'amount':this.options.spConfig.optionPrices[productId]},
-                    'oldPrice':{'amount':this.options.spConfig.optionPrices[productId]}
-                } :
-                {};
+                prices[element.attributeId] = config && config.allowedProducts.length === 1
+                    ? this._calculatePrice(config)
+                    : {};
             }, this);
 
             return prices;
+        },
+
+        _calculatePrice: function (config) {
+            var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices;
+            var newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
+
+            _.each(displayPrices, function (price, code) {
+                if (newPrices[code]) {
+                    displayPrices[code].amount =  newPrices[code].amount - displayPrices[code].amount
+                }
+            });
+            return displayPrices;
         }
 
     });
-    
+
     return $.mage.configurable;
 });
