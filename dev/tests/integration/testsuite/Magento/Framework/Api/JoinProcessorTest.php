@@ -104,7 +104,7 @@ EXPECTED_SQL;
     public function testGetListWithExtensionAttributesAbstractObject()
     {
         $customerId = 1;
-        $customerGroupId = 11;
+        $customerGroupName = 'General';
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
@@ -116,9 +116,9 @@ EXPECTED_SQL;
         $searchCriteria->setFilterGroups([$searchCriteriaGroup]);
         $customers = $customerRepository->getList($searchCriteria)->getItems();
 
-        // TODO: customers[0] is the correct index but the original expectation was $customers[$customerId]. Not
-        // sure that the index is correct.
         /** Ensure that extension attributes were populated correctly */
-        $this->assertEquals($customerGroupId, $customers[0]->getExtensionAttributes()->getGroupId());
+        $customer = $customers[0];
+        $this->assertEquals($customerId, $customer->getId(), 'Precondition failed');
+        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getGroupCode());
     }
 }

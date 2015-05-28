@@ -11,7 +11,6 @@ use Magento\Framework\Api\Config\Converter;
 use Magento\Framework\Data\Collection\Db as DbCollection;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 
 /**
@@ -37,11 +36,6 @@ class ExtensionAttributesFactory
      * @var ExtensionAttributeJoinDataFactory
      */
     private $extensionAttributeJoinDataFactory;
-
-    /**
-     * @var ExtensionAttributesFactory
-     */
-    private $extensionAttributesFactory;
 
     /**
      * @var TypeProcessor
