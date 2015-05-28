@@ -54,7 +54,7 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
 namespace Magento\Setup\Model;
 
 /**
- * This function overrides the native function
+ * This function overrides the native function for the purpose of testing
  *
  * @param string $obj
  * @param string $className
@@ -69,7 +69,7 @@ function is_subclass_of($obj, $className)
 }
 
 /**
- * This function overrides the native function
+ * This function overrides the native function for the purpose of testing
  *
  * @param string $className
  * @return bool
