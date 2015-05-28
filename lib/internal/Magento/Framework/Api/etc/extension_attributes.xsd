@@ -40,7 +40,7 @@
     </xs:complexType>
     <xs:complexType name="joinType">
         <xs:attribute name="reference_table" use="required" type="xs:string"/>
-        <xs:attribute name="reference_field" use="optional" type="xs:string"/>
+        <xs:attribute name="reference_field" use="required" type="xs:string"/>
         <xs:attribute name="select_fields" use="required" type="xs:string"/>
         <xs:attribute name="join_on_field" use="required" type="xs:string"/>
     </xs:complexType>

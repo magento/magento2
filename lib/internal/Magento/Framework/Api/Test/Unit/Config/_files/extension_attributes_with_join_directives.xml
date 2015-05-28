@@ -9,13 +9,14 @@
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="library_card_id" type="string">
             <join reference_table="library_account"
+                  reference_field="customer_id"
                   select_fields="library_card_id"
                   join_on_field="id"
-                  reference_field="customer_id"
             />
         </attribute>
         <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
             <join reference_table="reviews"
+                  reference_field="customer_id"
                   select_fields="comment,rating"
                   join_on_field="customer_id"
             />

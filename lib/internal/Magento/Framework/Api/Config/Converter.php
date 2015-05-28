@@ -55,18 +55,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $joinElement = $attribute->getElementsByTagName('join')->item(0);
                 $join = null;
                 if ($joinElement && $joinElement->nodeType === XML_ELEMENT_NODE) {
-                    $join = [];
-                    $join[self::JOIN_REFERENCE_TABLE] = $joinElement->attributes
-                        ->getNamedItem('reference_table')->nodeValue;
-                    $join[self::JOIN_SELECT_FIELDS] = $joinElement->attributes
-                        ->getNamedItem('select_fields')->nodeValue;
-                    $join[self::JOIN_JOIN_ON_FIELD] = $joinElement->attributes
-                        ->getNamedItem('join_on_field')->nodeValue;
-
-                    $referenceField = $joinElement->attributes->getNamedItem('reference_field');
-                    $join[self::JOIN_REFERENCE_FIELD] = $referenceField
-                        ? $referenceField->nodeValue
-                        : $join[self::JOIN_JOIN_ON_FIELD];
+                    $joinAttributes = $joinElement->attributes;
+                    $join = [
+                        self::JOIN_REFERENCE_TABLE => $joinAttributes->getNamedItem('reference_table')->nodeValue,
+                        self::JOIN_SELECT_FIELDS => $joinAttributes->getNamedItem('select_fields')->nodeValue,
+                        self::JOIN_JOIN_ON_FIELD => $joinAttributes->getNamedItem('join_on_field')->nodeValue,
+                        self::JOIN_REFERENCE_FIELD => $joinAttributes->getNamedItem('reference_field')->nodeValue,
+                    ];
                 }
 
                 $typeConfig[$code] = [
