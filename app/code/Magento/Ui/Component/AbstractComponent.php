@@ -234,7 +234,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDataSourceData()
     {
