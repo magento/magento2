@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         ];
 
         $this->getSelect()->joinLeft(
-            ['customer' => $this->getConnection()->getTableName('customer_entity')],
+            ['customer' => $this->getResource()->getTable('customer_entity')],
             'customer.entity_id=main_table.customer_id',
             $attributes
         );
