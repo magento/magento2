@@ -23,6 +23,11 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     const SESSION_NAMESPACE = 'adminhtml';
 
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * Array of actions which can be processed without secret key validation
      *
      * @var array
@@ -77,9 +82,16 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_formKeyValidator;
 
     /**
+     * Resource used to authorize access to the controller
+     *
+     * @var string
+     */
+    protected $resource;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      */
-    public function __construct(Action\Context $context)
+    public function __construct(Action\Context $context, $resource = '')
     {
         parent::__construct($context);
         $this->_authorization = $context->getAuthorization();
@@ -97,7 +109,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return true;
+        return $this->_authorization->isAllowed($this->resource ?: self::ADMIN_RESOURCE);
     }
 
     /**
@@ -228,14 +240,10 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isUrlChecked()
     {
-        return !$this->_actionFlag->get(
-            '',
-            self::FLAG_IS_URLS_CHECKED
-        ) && !$this->getRequest()->getParam(
-            'forwarded'
-        ) && !$this->_getSession()->getIsUrlNotice(
-            true
-        ) && !$this->_canUseBaseUrl;
+        return !$this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED)
+        && !$this->getRequest()->isForwarded()
+        && !$this->_getSession()->getIsUrlNotice(true)
+        && !$this->_canUseBaseUrl;
     }
 
     /**
