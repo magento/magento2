@@ -57,7 +57,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if ($errors) {
-            $messages = [];
+            $messages = $response->hasMessages() ? $response->getMessages() : [];
             foreach ($errors as $error) {
                 $messages[] = $error;
             }
@@ -92,7 +92,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 
             $errors = $addressForm->validateData($formData);
             if ($errors !== true) {
-                $messages = [];
+                $messages = $response->hasMessages() ? $response->getMessages() : [];
                 foreach ($errors as $error) {
                     $messages[] = $error;
                 }
