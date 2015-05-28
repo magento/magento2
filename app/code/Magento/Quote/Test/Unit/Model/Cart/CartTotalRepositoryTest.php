@@ -6,10 +6,20 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
-use \Magento\Quote\Model\Cart\CartTotalRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $converterMock;
+
     /**
      * @var \Magento\Quote\Model\Cart\CartTotalRepository
      */
@@ -42,6 +52,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->totalsFactoryMock = $this->getMock(
             'Magento\Quote\Api\Data\TotalsInterfaceFactory',
             ['create'],
@@ -55,31 +66,65 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->converterMock = $this->getMock(
+            'Magento\Quote\Model\Cart\Totals\ItemConverter',
+            [],
+            [],
+            '',
+            false
+        );
 
-        $this->model = new CartTotalRepository(
-            $this->totalsFactoryMock,
-            $this->quoteRepositoryMock,
-            $this->dataObjectHelperMock
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Quote\Model\Cart\CartTotalRepository',
+            [
+                'totalsFactory' => $this->totalsFactoryMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'converter' => $this->converterMock,
+            ]
         );
     }
 
-    public function testGetTotals()
+    public function testGet()
     {
         $cartId = 12;
+        $itemMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Item',
+            [],
+            [],
+            '',
+            false
+        );
+        $visibleItems = [
+            11 => $itemMock,
+        ];
+        $itemArray = [
+            'name' => 'item',
+            'options' => [ 4 => ['label' => 'justLabel']],
+        ];
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->addressMock);
         $this->addressMock->expects($this->once())->method('getData')->willReturn(['addressData']);
         $this->quoteMock->expects($this->once())->method('getData')->willReturn(['quoteData']);
 
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
+        $this->quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn($visibleItems);
 
-        $totals = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
-        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totals);
+        $totalsMock = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
+        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
-        $totals->expects($this->once())->method('setItems');
+        $this->converterMock->expects($this->once())
+            ->method('modelToDataObject')
+            ->with($itemMock)
+            ->willReturn($itemArray);
 
-        $this->model->get($cartId);
+        //back in get()
+        $totalsMock->expects($this->once())->method('setItems')->with(
+            [
+            11 => $itemArray,
+            ]
+        );
+
+        $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 }

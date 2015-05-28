@@ -12,15 +12,16 @@ define([
     'use strict';
 
     var inputNode = {
-        parent: '<%= $data.parentName %>',
+        parent: '${ $.$data.parentName }',
         type: 'form.input',
         name: '<%= $data.index %>_input',
         dataScope: '<%= $data.customEntry %>',
+        customScope: '<%= $data.customScope %>',
         sortOrder: {
-            after: '<%= $data.name %>'
+            after: '${ $.$data.name }'
         },
         displayArea: 'body',
-        label: '<%= $data.label %>'
+        label: '${ $.$data.label }'
     };
 
     /**
@@ -94,7 +95,7 @@ define([
 
     return Abstract.extend({
         defaults: {
-            customName: '<%= parentName %>.<%= index %>_input'
+            customName: '${ $.parentName }.${ $.index }_input'
         },
 
         /**
@@ -250,13 +251,14 @@ define([
          * @param {String} value
          * @returns {Select} Chainable.
          */
-        setPreview: function (value) {
-            var option = this.indexedOptions[value],
+        getPreview: function () {
+            var value = this.value(),
+                option = this.indexedOptions[value],
                 preview = option ? option.label : '';
 
             this.preview(preview);
 
-            return this;
+            return preview;
         }
     });
 });

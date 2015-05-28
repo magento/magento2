@@ -87,26 +87,17 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     public function get($sku, $id)
     {
         $product = $this->getProduct($sku);
-        $collection = $this->getConfigurableAttributesCollection($product);
-        $collection->addFieldToFilter($collection->getResource()->getIdFieldName(), $id);
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
-        $configurableAttribute = $collection->getFirstItem();
-        if (!$configurableAttribute->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
-        }
-        $prices = $configurableAttribute->getPrices();
-        if (is_array($prices)) {
-            foreach ($prices as $price) {
-                /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                $value = $this->optionValueFactory->create();
-                $value->setValueIndex($price['value_index'])
-                    ->setPricingValue($price['pricing_value'])
-                    ->setIsPercent($price['is_percent']);
-                $values[] = $value;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
+            foreach ($options as $option) {
+                if ($option->getId() == $id) {
+                    return $option;
+                }
             }
         }
-        $configurableAttribute->setValues($values);
-        return $configurableAttribute;
+        throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
     }
 
     /**
@@ -116,21 +107,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $options = [];
         $product = $this->getProduct($sku);
-        foreach ($this->getConfigurableAttributesCollection($product) as $option) {
-            $values = [];
-            $prices = $option->getPrices();
-            if (is_array($prices)) {
-                foreach ($prices as $price) {
-                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                    $value = $this->optionValueFactory->create();
-                    $value->setValueIndex($price['value_index'])
-                        ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent']);
-                    $values[] = $value;
-                }
-            }
-            $option->setValues($values);
-            $options[] = $option;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
         }
         return $options;
     }
@@ -260,17 +240,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * Retrieve configurable attribute collection through product object
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection
-     */
-    private function getConfigurableAttributesCollection(\Magento\Catalog\Model\Product $product)
-    {
-        return $this->configurableType->getConfigurableAttributeCollection($product);
-    }
-
-    /**
      * Ensure that all necessary data is available for a new option creation.
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
@@ -283,9 +252,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $inputException = new InputException();
         if (!$option->getAttributeId()) {
             $inputException->addError(__('Option attribute ID is not specified.'));
-        }
-        if (!$option->getType()) {
-            $inputException->addError(__('Option type is not specified.'));
         }
         if (!$option->getLabel()) {
             $inputException->addError(__('Option label is not specified.'));

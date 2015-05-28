@@ -5,13 +5,13 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Manages locale config information
+ *
+ * @api
+ */
 interface ResolverInterface
 {
-    /**
-     * Default locale
-     */
-    const DEFAULT_LOCALE = 'en_US';
-
     /**
      * Return path to default locale
      *

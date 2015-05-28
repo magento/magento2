@@ -91,7 +91,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         return (string)$this->_config->getValue(
             $this->getPath(),
-            $this->getScope() ?: \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+            $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             $this->getScopeCode()
         );
     }

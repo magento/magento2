@@ -101,7 +101,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Email/Model/_files/themes.php
+     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
      * @magentoAppIsolation enabled
      * @dataProvider layoutDirectiveDataProvider
      *
@@ -111,6 +111,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
+        // TODO: Do we need this and should we change path?
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             [
                 Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
@@ -126,14 +127,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $themes = ['frontend' => 'test_default', 'adminhtml' => 'test_default'];
+        $themes = ['frontend' => 'Magento/default', 'adminhtml' => 'Magento/default'];
         $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
         $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
         $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
-        $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
+        $themeId = $collection->getThemeByFullPath('frontend/Magento/default')->getId();
         $objectManager->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
@@ -145,7 +146,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $objectManager->create('Magento\Framework\View\Layout');
         $objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('test_default');
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/default');
 
         $actualOutput = $this->_model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
@@ -162,22 +163,22 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                'E-mail content for frontend/test_default theme',
+                'E-mail content for frontend/Magento/default theme',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                'E-mail content for frontend/test_default theme',
+                'E-mail content for frontend/Magento/default theme',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                'E-mail content for adminhtml/test_default theme',
+                'E-mail content for adminhtml/Magento/default theme',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                'Custom E-mail content for frontend/test_default theme',
+                'Custom E-mail content for frontend/Magento/default theme',
             ],
         ];
         return $result;

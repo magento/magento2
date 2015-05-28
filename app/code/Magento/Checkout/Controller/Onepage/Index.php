@@ -30,7 +30,6 @@ class Index extends \Magento\Checkout\Controller\Onepage
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
         $this->getOnepage()->initCheckout();
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         $resultPage->getConfig()->getTitle()->set(__('Checkout'));
         return $resultPage;
     }

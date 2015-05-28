@@ -51,13 +51,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
     /**
-     * The directory in which inline/non-inline CSS files are stored
-     *
-     * @var string
-     */
-    const CSS_DIRECTORY = 'css';
-
-    /**
      * Configuration of design package for template
      *
      * @var \Magento\Framework\Object
@@ -200,9 +193,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getTemplateContent($configPath, array $variables)
     {
-        $thisClass = get_class($this);
-        /* @var \Magento\Email\Model\AbstractTemplate */
-        $template = $this->_objectManager->create($thisClass);
+        $template = $this->_getTemplateInstance();
         $template->loadByConfigPath($configPath, $variables);
 
         // Ensure child templates have the same area/store context as parent
@@ -216,7 +207,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Load template by XML configuration path. Loads template from database if it exists and has been override in
+     * Load template by XML configuration path. Loads template from database if it exists and has been overridden in
      * configuration. Otherwise loads from the filesystem.
      *
      * @param string $configPath
@@ -225,7 +216,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function loadByConfigPath($configPath)
     {
         $templateId = $this->_scopeConfig->getValue(
-            $configPath
+            $configPath,
+            ScopeInterface::SCOPE_STORE,
+            $this->getDesignConfig()->getStore()
         );
 
         if (is_numeric($templateId)) {
@@ -329,11 +322,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function _applyInlineCss($html)
     {
         // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline
-        $inlineCssFiles = $this->getInlineCssFiles();
+        $cssToInline = $this->_getCssFilesContent(
+            $this->getInlineCssFiles()
+        );
         // Only run Emogrify if HTML exists and if there is at least one file to inline
-        if ($html && !empty($inlineCssFiles)) {
+        if ($html && !empty($cssToInline)) {
             try {
-                $cssToInline = $this->_getCssFilesContent($inlineCssFiles);
                 $emogrifier = new \Pelago\Emogrifier();
                 $emogrifier->setHtml($html);
                 $emogrifier->setCss($cssToInline);
@@ -366,15 +360,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getCssFileContent($file)
     {
-        $file = self::CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
-        $designParams = $this->_getDesignParams();
+        $designParams = $this->getDesignParams();
 
         $asset = $this->_assetRepo->createAsset($file, $designParams);
         return $asset->getContent();
     }
 
     /**
-     * Loads CSS content from filesystem
+     * Loads CSS content from filesystem.
      *
      * @param array $files
      * @return string
@@ -386,26 +379,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
         $css = '';
         foreach ($files as $file) {
-            $css .= $this->getCssFileContent($file) . PHP_EOL;
+            $css .= $this->getCssFileContent($file);
         }
         return $css;
     }
 
     /**
-     * Returns the design params for the template being processed
+     * Get default email logo image
      *
-     * @return array
+     * @return string
      */
-    protected function _getDesignParams()
+    public function getDefaultEmailLogo()
     {
-        $designParams = array(
-            // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
-            // return the emulated area
-            'area' => $this->getDesignConfig()->getArea(),
-            'theme' => $this->_design->getDesignTheme()->getCode(),
-            'locale' => $this->_design->getLocale(),
+        $designParams = $this->getDesignParams();
+        return $this->_assetRepo->getUrlWithParams(
+            'Magento_Email::logo_email.png',
+            $designParams
         );
-        return $designParams;
     }
 
     /**
@@ -503,7 +493,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         if (!isset($variables['store_email'])) {
             $variables['store_email'] = $this->_scopeConfig->getValue(
-                // TODO: @Erik replace this with constant. Need to create constant.
                 'trans_email/ident_support/email',
                 ScopeInterface::SCOPE_STORE,
                 $store
@@ -518,7 +507,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Applying of design config
+     * Apply design config so that emails are processed within the context of the appropriate area/store/theme
      *
      * @return $this
      */
@@ -529,7 +518,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
         if ($storeId !== null) {
-            $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
+            $this->_appEmulation->startEnvironmentEmulation(
+                $storeId,
+                $area,
+                // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
+                // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
+                true
+            );
         }
         return $this;
     }
@@ -543,6 +538,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         $this->_appEmulation->stopEnvironmentEmulation();
         return $this;
+    }
+
+    /**
+     * Returns the design params for the template being processed
+     *
+     * @return array
+     */
+    public function getDesignParams()
+    {
+        $designParams = array(
+            // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
+            // return the emulated area
+            'area' => $this->getDesignConfig()->getArea(),
+            'theme' => $this->_design->getDesignTheme()->getCode(),
+            'locale' => $this->_design->getLocale(),
+        );
+        return $designParams;
     }
 
     /**
@@ -617,7 +629,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($storeId) {
             // save current design settings
             $this->_emulatedDesignConfig = clone $this->getDesignConfig();
-            if ($this->getDesignConfig()->getStore() != $storeId) {
+            if (
+                $this->getDesignConfig()->getStore() != $storeId
+                || $this->getDesignConfig()->getArea() != $area
+            ) {
                 $this->setDesignConfig(['area' => $area, 'store' => $storeId]);
                 $this->_applyDesignConfig();
             }
@@ -648,6 +663,25 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function isPlain()
     {
         return $this->getType() == self::TYPE_TEXT;
+    }
+
+    /**
+     * If class has set a template factory, return a new object. Else throw an exception.
+     * This allows child classes like \Magento\Email\Model\Template and \Magento\Newsletter\Model\Template to set
+     * their own factory objects.
+     *
+     * @return \Magento\Email\Model\AbstractTemplate
+     * @throws \UnexpectedValueException
+     */
+    protected function _getTemplateInstance()
+    {
+        if (!$this->_templateFactory) {
+            throw new \UnexpectedValueException('_templateFactory must be set');
+        }
+        return $this->_templateFactory->create([
+            // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
+            'filesystem' => $this->_filesystem
+        ]);
     }
 
     /**

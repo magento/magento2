@@ -17,11 +17,11 @@ class AdminAccount
     /**#@+
      * Data keys
      */
-    const KEY_USER = 'admin_user';
-    const KEY_PASSWORD = 'admin_password';
-    const KEY_EMAIL = 'admin_email';
-    const KEY_FIRST_NAME = 'admin_firstname';
-    const KEY_LAST_NAME = 'admin_lastname';
+    const KEY_USER = 'admin-user';
+    const KEY_PASSWORD = 'admin-password';
+    const KEY_EMAIL = 'admin-email';
+    const KEY_FIRST_NAME = 'admin-firstname';
+    const KEY_LAST_NAME = 'admin-lastname';
     /**#@- */
 
     /**

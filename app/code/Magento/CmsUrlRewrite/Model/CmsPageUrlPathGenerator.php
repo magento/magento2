@@ -5,6 +5,8 @@
  */
 namespace Magento\CmsUrlRewrite\Model;
 
+use Magento\Cms\Api\Data\PageInterface;
+
 class CmsPageUrlPathGenerator
 {
     /** @var \Magento\Framework\Filter\FilterManager */
@@ -17,11 +19,12 @@ class CmsPageUrlPathGenerator
     }
 
     /**
-     * @param \Magento\Cms\Model\Page $cmsPage
+     * @param PageInterface $cmsPage
      *
      * @return string
+     * @api
      */
-    public function getUrlPath($cmsPage)
+    public function getUrlPath(PageInterface $cmsPage)
     {
         return $cmsPage->getIdentifier();
     }
@@ -29,10 +32,11 @@ class CmsPageUrlPathGenerator
     /**
      * Get canonical product url path
      *
-     * @param \Magento\Cms\Model\Page $cmsPage
+     * @param PageInterface $cmsPage
      * @return string
+     * @api
      */
-    public function getCanonicalUrlPath($cmsPage)
+    public function getCanonicalUrlPath(PageInterface $cmsPage)
     {
         return 'cms/page/view/page_id/' . $cmsPage->getId();
     }
@@ -40,10 +44,11 @@ class CmsPageUrlPathGenerator
     /**
      * Generate CMS page url key based on url_key entered by merchant or page title
      *
-     * @param \Magento\Cms\Model\Page $cmsPage
+     * @param PageInterface $cmsPage
      * @return string
+     * @api
      */
-    public function generateUrlKey($cmsPage)
+    public function generateUrlKey(PageInterface $cmsPage)
     {
         $urlKey = $cmsPage->getIdentifier();
         return $this->filterManager->translitUrl($urlKey === '' || $urlKey === null ? $cmsPage->getTitle() : $urlKey);

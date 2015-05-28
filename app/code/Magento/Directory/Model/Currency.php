@@ -123,6 +123,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get currency code
+     *
      * @return string
      */
     public function getCurrencyCode()
@@ -309,6 +311,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
          */
         $price = sprintf("%F", $price);
         return $this->_localeCurrency->getCurrency($this->getCode())->toCurrency($price, $options);
+    }
+
+    /**
+     * Return currency symbol for current locale and currency code
+     *
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        return $this->_localeCurrency->getCurrency($this->getCode())->getSymbol();
     }
 
     /**

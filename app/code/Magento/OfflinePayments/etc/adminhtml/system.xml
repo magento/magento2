@@ -166,7 +166,7 @@
                     <label>Automatically Invoice All Items</label>
                     <source_model>Magento\Payment\Model\Source\Invoice</source_model>
                     <depends>
-                        <field id="order_status" separator=",">processing,processed_ogone</field>
+                        <field id="order_status" separator=",">processing</field>
                     </depends>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
