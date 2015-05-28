@@ -63,7 +63,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $emailConfig;
 
     /**
-     * @var \Magento\Newsletter\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $templateFactory;
 
@@ -107,7 +107,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->templateFactory = $this->getMockBuilder('Magento\Newsletter\Model\TemplateFactory')
+        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterFactory = $this->getMockBuilder('Magento\Newsletter\Model\Template\FilterFactory')
@@ -216,7 +216,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Newsletter\Model\Template $model */
         $model = $this->getModelMock([
-            'getDesignConfig',
+            'getDesignParams',
             '_applyDesignConfig',
             'getPreparedTemplateText',
             'getTemplateText'
@@ -228,15 +228,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
-        $designConfig = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
 
-        if (!$isSingleStore) {
+        if ($isSingleStore) {
             $model->expects($this->once())
-                ->method('getDesignConfig')
-                ->will($this->returnValue($designConfig));
+                ->method('getDesignParams')
+                ->will($this->returnValue($designParams));
         }
 
         $preparedTemplateText = $expectedResult; //'prepared text';
