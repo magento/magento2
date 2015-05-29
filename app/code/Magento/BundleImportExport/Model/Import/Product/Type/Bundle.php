@@ -62,13 +62,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_resource;
 
     /**
-     * Instance of product collection.
-     *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    protected $_productCollection;
-
-    /**
      * Array of cached options.
      *
      * @var array
@@ -88,13 +81,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @var array
      */
     protected $_cachedSkuToProducts = [];
-
-    /**
-     * Array of queries selecting cached options.
-     *
-     * @var array
-     */
-    protected $_cachedOptionSelectQuery = [];
 
     /**
      * Column names that holds values with particular meaning.
@@ -163,11 +149,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Parse selections.
      *
      * @param array $rowData
-     * @param int $entity_id
+     * @param int $entityId
      *
      * @return array
      */
-    protected function _parseSelections($rowData, $entity_id)
+    protected function parseSelections($rowData, $entityId)
     {
         $rowData['bundle_values'] = str_replace(
             self::BEFORE_OPTION_VALUE_DELIMITER,
@@ -177,19 +163,19 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $selections = explode(\Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['bundle_values']);
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
-            $option = $this->_parseOption($values);
+            $option = $this->parseOption($values);
             if (isset($option['sku']) && isset($option['name'])) {
-                if (!isset($this->_cachedOptions[$entity_id])) {
-                    $this->_cachedOptions[$entity_id] = [];
+                if (!isset($this->_cachedOptions[$entityId])) {
+                    $this->_cachedOptions[$entityId] = [];
                 }
                 $this->_cachedSkus[] = $option['sku'];
-                if (!isset($this->_cachedOptions[$entity_id][$option['name']])) {
-                    $this->_cachedOptions[$entity_id][$option['name']] = [];
-                    $this->_cachedOptions[$entity_id][$option['name']] = $option;
-                    $this->_cachedOptions[$entity_id][$option['name']]['selections'] = [];
+                if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
+                    $this->_cachedOptions[$entityId][$option['name']] = [];
+                    $this->_cachedOptions[$entityId][$option['name']] = $option;
+                    $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
-                $this->_cachedOptions[$entity_id][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] = $this->connection->select()->getAdapter()->quoteInto('(parent_id = '.(int)$entity_id.' AND title = ?)', $option['name']);
+                $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
+                $this->_cachedOptionSelectQuery[] = $this->connection->select()->getAdapter()->quoteInto('(parent_id = '.(int)$entityId.' AND title = ?)', $option['name']);
             }
         }
         return $selections;
@@ -202,7 +188,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return array
      */
-    protected function _parseOption($values)
+    protected function parseOption($values)
     {
         $option = [];
         foreach ($values as $keyValue) {
@@ -225,15 +211,15 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Populate the option template.
      *
      * @param array $option
-     * @param int $entity_id
+     * @param int $entityId
      * @param int $index
-     *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _populateOptionTemplate($option, $entity_id, $index = null)
+    protected function populateOptionTemplate($option, $entityId, $index = null)
     {
         $populatedOption = [
-            'parent_id' => $entity_id,
+            'parent_id' => $entityId,
             'required' => isset($option['required']) ? $option['required'] : 1,
             'position' => ($index === null ? 0 : $index),
             'type' => isset($option['type']) ? $option['type'] : 'select',
@@ -248,19 +234,19 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Populate the option value template.
      *
      * @param array $option
-     * @param int $option_id
-     * @param int $store_id
+     * @param int $optionId
+     * @param int $storeId
      *
      * @return array|bool
      */
-    protected function _populateOptionValueTemplate($option, $option_id, $store_id = 0)
+    protected function populateOptionValueTemplate($option, $optionId, $storeId = 0)
     {
-        if (!isset($option['name']) || !$option_id) {
+        if (!isset($option['name']) || !$optionId) {
             return false;
         }
         return [
-            'option_id' => $option_id,
-            'store_id' => $store_id,
+            'option_id' => $optionId,
+            'store_id' => $storeId,
             'title' => $option['name'],
         ];
     }
@@ -269,26 +255,27 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Populate the option value template.
      *
      * @param array $selection
-     * @param int $option_id
-     * @param int $parent_id
+     * @param int $optionId
+     * @param int $parentId
      * @param int $index
-     *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _populateSelectionTemplate($selection, $option_id, $parent_id, $index)
+    protected function populateSelectionTemplate($selection, $optionId, $parentId, $index)
     {
         if (!isset($selection['parent_product_id'])) {
             if (!isset($this->_cachedSkuToProducts[$selection['sku']])) {
                 return false;
             }
-            $product_id = $this->_cachedSkuToProducts[$selection['sku']];
+            $productId = $this->_cachedSkuToProducts[$selection['sku']];
         } else {
-            $product_id = $selection['parent_product_id'];
+            $productId = $selection['parent_product_id'];
         }
         $populatedSelection = [
-            'option_id' => (int)$option_id,
-            'parent_product_id' => (int)$parent_id,
-            'product_id' => (int)$product_id,
+            'option_id' => (int)$optionId,
+            'parent_product_id' => (int)$parentId,
+            'product_id' => (int)$productId,
             'position' => (int)$index,
             'is_default' => (isset($selection['default']) && $selection['default']) ? 1 : 0,
             'selection_price_type' => (isset($selection['price_type']) && $selection['price_type'] == self::VALUE_FIXED)
@@ -308,7 +295,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _retrieveProducsByCachedSkus()
+    protected function retrieveProducsByCachedSkus()
     {
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -350,14 +337,14 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->_parseSelections($rowData, $productData['entity_id']);
+                    $this->parseSelections($rowData, $productData['entity_id']);
                 }
                 if (!empty($this->_cachedOptions)) {
-                    $this->_retrieveProducsByCachedSkus();
-                    $this->_populateExistingOptions();
-                    $this->_insertOptions();
-                    $this->_insertSelections();
-                    $this->_clear();
+                    $this->retrieveProducsByCachedSkus();
+                    $this->populateExistingOptions();
+                    $this->insertOptions();
+                    $this->insertSelections();
+                    $this->clear();
                 }
             }
         }
@@ -396,7 +383,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function transformBundleCustomAttributes($rowData)
     {
         $resultAttrs = [];
-        foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
+        foreach (array_keys($this->_customFieldsMapping) as $oldKey) {
             if (isset($rowData[$oldKey])) {
                 if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
                     $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
@@ -413,7 +400,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _populateExistingOptions()
+    protected function populateExistingOptions()
     {
         $existingOptions = $this->connection->fetchAssoc(
             $this->connection->select()->from(
@@ -427,15 +414,15 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 implode(' OR ', $this->_cachedOptionSelectQuery)
             )
         );
-        foreach ($existingOptions as $option_id => $option) {
-            $this->_cachedOptions[$option['parent_id']][$option['title']]['option_id'] = $option_id;
+        foreach ($existingOptions as $optionId => $option) {
+            $this->_cachedOptions[$option['parent_id']][$option['title']]['option_id'] = $optionId;
             foreach ($option as $key => $value) {
                 if (!isset($this->_cachedOptions[$option['parent_id']][$option['title']][$key])) {
                     $this->_cachedOptions[$option['parent_id']][$option['title']][$key] = $value;
                 }
             }
         }
-        $this->_populateExistingSelections($existingOptions);
+        $this->populateExistingSelections($existingOptions);
         return $this;
     }
 
@@ -446,7 +433,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _populateExistingSelections($existingOptions)
+    protected function populateExistingSelections($existingOptions)
     {
         $existingSelections = $this->connection->fetchAll(
             $this->connection->select()->from(
@@ -459,9 +446,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         foreach ($existingSelections as $existingSelection) {
             $optionTitle = $existingOptions[$existingSelection['option_id']]['title'];
             foreach ($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'] as $selectIndex => $selection) {
-                $product_id = $this->_cachedSkuToProducts[$selection['sku']];
-                if ($product_id == $existingSelection['product_id']) {
-                    foreach ($existingSelection as $origKey => $value) {
+                $productId = $this->_cachedSkuToProducts[$selection['sku']];
+                if ($productId == $existingSelection['product_id']) {
+                    foreach (array_keys($existingSelection) as $origKey) {
                         $key = isset($this->_bundleFieldMapping[$origKey]) ? $this->_bundleFieldMapping[$origKey] : $origKey;
                         if (!isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])) {
                             $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] = $existingSelection[$origKey];
@@ -479,22 +466,22 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _insertOptions()
+    protected function insertOptions()
     {
         $optionTable = $this->_resource->getTableName('catalog_product_bundle_option');
         $optionValueTable = $this->_resource->getTableName('catalog_product_bundle_option_value');
         $productIds = [];
         $insert = [];
-        foreach ($this->_cachedOptions as $entity_id => $options) {
+        foreach ($this->_cachedOptions as $entityId => $options) {
             $index = 0;
-            $productIds[] = $entity_id;
+            $productIds[] = $entityId;
             foreach ($options as $key => $option) {
                 if (isset($option['position'])) {
                     $index = $option['position'];
                 }
-                if ($tmpArray = $this->_populateOptionTemplate($option, $entity_id, $index)) {
+                if ($tmpArray = $this->populateOptionTemplate($option, $entityId, $index)) {
                     $insert[] = $tmpArray;
-                    $this->_cachedOptions[$entity_id][$key]['index'] = $index;
+                    $this->_cachedOptions[$entityId][$key]['index'] = $index;
                     $index++;
                 }
             }
@@ -509,19 +496,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $productIds
             )
         );
-        $insertValues = [];
-        foreach ($this->_cachedOptions as $entity_id => $options) {
-            foreach ($options as $key => $option) {
-                foreach ($optionIds as $option_id => $assoc) {
-                    if ($assoc['position'] == $this->_cachedOptions[$entity_id][$key]['index']
-                        && $assoc['parent_id'] == $entity_id) {
-                        $insertValues[] = $this->_populateOptionValueTemplate($option, $option_id);
-                        $this->_cachedOptions[$entity_id][$key]['option_id'] = $option_id;
-                        break;
-                    }
-                }
-            }
-        }
+        $insertValues = $this->populateInsertOptionValues($optionIds);
         if (!empty($insertValues)) {
             $this->connection->insertOnDuplicate($optionValueTable, $insertValues, ['title']);
         }
@@ -529,22 +504,45 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populate array for insert option values
+     * @param array $optionIds
+     * @return array
+     */
+    protected function populateInsertOptionValues($optionIds)
+    {
+        $insertValues = [];
+        foreach ($this->_cachedOptions as $entityId => $options) {
+            foreach ($options as $key => $option) {
+                foreach ($optionIds as $optionId => $assoc) {
+                    if ($assoc['position'] == $this->_cachedOptions[$entityId][$key]['index']
+                        && $assoc['parent_id'] == $entityId) {
+                        $insertValues[] = $this->populateOptionValueTemplate($option, $optionId);
+                        $this->_cachedOptions[$entityId][$key]['option_id'] = $optionId;
+                        break;
+                    }
+                }
+            }
+        }
+        return $insertValues;
+    }
+
+    /**
      * Insert selections.
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _insertSelections()
+    protected function insertSelections()
     {
         $selectionTable = $this->_resource->getTableName('catalog_product_bundle_selection');
         $selections = [];
-        foreach ($this->_cachedOptions as $product_id => $options) {
-            foreach ($options as $title => $option) {
+        foreach ($this->_cachedOptions as $productId => $options) {
+            foreach ($options as $option) {
                 $index = 0;
                 foreach ($option['selections'] as $selection) {
                     if (isset($selection['position'])) {
                         $index = $selection['position'];
                     }
-                    if ($tmpArray = $this->_populateSelectionTemplate($selection, $option['option_id'], $product_id, $index)) {
+                    if ($tmpArray = $this->populateSelectionTemplate($selection, $option['option_id'], $productId, $index)) {
                         $selections[] = $tmpArray;
                         $index++;
                     }
@@ -591,7 +589,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _clear()
+    protected function clear()
     {
         $this->_cachedOptions = [];
         $this->_cachedOptionSelectQuery = [];
