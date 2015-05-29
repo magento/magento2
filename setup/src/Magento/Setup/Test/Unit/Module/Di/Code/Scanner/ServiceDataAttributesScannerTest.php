@@ -15,14 +15,20 @@ class ServiceDataAttributesScannerTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var string
+     */
+    protected $testFile;
+
     protected function setUp()
     {
         $this->model = new ServiceDataAttributesScanner();
+        $this->testFile = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/service_data_attributes.xml');
     }
 
     public function testCollectEntities()
     {
-        $files = [realpath('../../_files/service_data_attributes.xml')];
+        $files = [$this->testFile];
         $expectedResult = [
             'Magento\Sales\Api\Data\OrderExtensionInterface',
             'Magento\Sales\Api\Data\OrderExtension',
@@ -34,6 +40,6 @@ class ServiceDataAttributesScannerTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Api\Data\TotalsAdditionalDataExtension'
         ];
 
-        $this->assertEquals($expectedResult, $this->model->collectEntities($files));
+        $this->assertSame($expectedResult, $this->model->collectEntities($files));
     }
 }
