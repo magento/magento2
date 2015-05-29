@@ -284,7 +284,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'thumbnail_image',
         'thumbnail_image_label',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'new_from_date',
+        'new_to_date',
+        'display_product_options_in',
+        'map_price',
+        'msrp_price',
+        'map_enabled',
+        'special_price_from_date',
+        'special_price_to_date',
     ];
 
     /**
