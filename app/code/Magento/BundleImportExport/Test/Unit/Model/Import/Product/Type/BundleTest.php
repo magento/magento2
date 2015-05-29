@@ -6,8 +6,7 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\BundleImportExport;
+use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
