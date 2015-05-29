@@ -77,6 +77,7 @@ class Layout extends AbstractComponent
     {
         $this->layoutTypeObject = $this->layoutPool->create($this->type);
         $this->structure = $this->layoutTypeObject->build($this);
+        parent::prepare();
     }
 
     /**

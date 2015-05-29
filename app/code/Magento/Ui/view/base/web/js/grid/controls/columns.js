@@ -5,69 +5,42 @@
 define([
     'mageUtils',
     'mage/translate',
-    'underscore',
     'Magento_Ui/js/lib/collapsible'
-], function (utils, $t, _, Collapsible) {
+], function (utils, $t, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
+            minVisible: 1,
+            maxVisible: 30,
             viewportSize: 18,
-            viewportMaxSize: 30
+            templates: {
+                headerMsg: $t('${ $.visible } out of ${ $.total } visible')
+            }
         },
 
         /**
          * Action Reset
          */
         reset: function () {
-            this.delegate('resetVisible');
-        },
+            this.elems.each('applyState', 'visible', 'default');
 
-        /**
-         * Action Apply
-         */
-        apply: function () {
-            var data = {},
-                current;
-
-            this.close();
-
-            current = this.source.get('config.columns') || {};
-
-            this.elems().forEach(function (elem) {
-                data[elem.index] = {
-                    visible: elem.visible()
-                };
-            });
-
-            utils.extend(current, data);
-
-            this.source.store('config.columns', current);
+            return this;
         },
 
         /**
          * Action Cancel
          */
         cancel: function () {
-            var previous = this.source.get('config.columns'),
-                config;
+            this.elems.each('applyState', 'visible', 'last');
 
-            this.close();
-
-            if (!previous) {
-                return;
-            }
-
-            this.elems().forEach(function (elem) {
-                config = previous[elem.index] || {};
-
-                elem.visible(config.visible);
-            });
+            return this;
         },
 
         /**
-         * Helper, wich helps to stop resizing and
+         * Helper, which helps to stop resizing.
+         * viewportSize limits number of elements.
          * @returns {Boolean}
          */
         hasOverflow: function () {
@@ -82,11 +55,11 @@ define([
          * @returns {Boolean}
          */
         isDisabled: function (elem) {
-            var count = this.countVisible(),
-                isLast = elem.visible() && count === 1,
-                isTooMuch = count > this.viewportMaxSize;
+            var visible = this.countVisible();
 
-            return isLast || isTooMuch;
+            return elem.visible() ?
+                    visible === this.minVisible :
+                    visible === this.maxVisible;
         },
 
         /**
@@ -94,9 +67,7 @@ define([
          * @returns {Number}
          */
         countVisible: function () {
-            return this.elems().filter(function (elem) {
-                return elem.visible();
-            }).length;
+            return this.elems.filter('visible').length;
         },
 
         /**
@@ -105,8 +76,8 @@ define([
          * @param {String} text - underscore-format template
          * @returns {String}
          */
-        getHeaderMessage: function (text) {
-            return _.template(text)({
+        getHeaderMessage: function () {
+            return utils.template(this.templates.headerMsg, {
                 visible: this.countVisible(),
                 total: this.elems().length
             });

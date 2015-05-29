@@ -201,9 +201,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
-        $this->contentFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Api\Data\ImageContentInterfaceFactory'
-        )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
+        $this->contentFactoryMock = $this->getMock('Magento\Framework\Api\Data\ImageContentInterfaceFactory', ['create'], [], '', false);
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -231,7 +229,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
-                'imageProcessor' => $this->imageProcessorMock
+                'imageProcessor' => $this->imageProcessorMock,
             ]
         );
     }
@@ -269,6 +267,19 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->productMock->expects($this->once())->method('load')->with('test_id');
         $this->assertEquals($this->productMock, $this->model->get('test_sku', true));
+    }
+
+    public function testGetWithSetStoreId()
+    {
+        $productId = 123;
+        $sku = 'test-sku';
+        $storeId = 7;
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($this->productMock);
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)->willReturn($productId);
+        $this->productMock->expects($this->once())->method('setData')->with('store_id', $storeId);
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->assertSame($this->productMock, $this->model->get($sku, false, $storeId));
     }
 
     /**
@@ -729,8 +740,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     [ //new option value
                         "title" => "DropdownOptions_3",
                         "price" => 4,
-                    ]
-                ]
+                    ],
+                ],
             ],
             [//new option
                 "type" => "checkbox",
@@ -739,7 +750,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                         "title" => "CheckBoxValue2",
                         "price" => 5,
                     ],
-                ]
+                ],
             ],
         ];
 
@@ -819,7 +830,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                             "price" => 6,
                             "is_delete" => 1,
                         ],
-                    ]
+                    ],
                 ],
                 [
                     "type" => "checkbox",
@@ -827,8 +838,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                         [
                             "title" => "CheckBoxValue2",
                             "price" => 5,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     "option_id" => 11,
@@ -945,32 +956,65 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         // Scenario 1
         // No existing, new links
         $data['scenario_1'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1],
+            'newLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "associated",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+                "qty" => 1,
+            ],
             'existingLinks' => [],
-            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1]]
-            ];
+            'expectedData' => [[
+                "product_sku" => "Simple Product 1",
+                "link_type" => "associated",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+                "qty" => 1,
+            ]],
+        ];
 
         // Scenario 2
         // Existing, no new links
         $data['scenario_2'] = [
             'newLinks' => [],
-            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
-            'expectedData' => []
+            'existingLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
+            'expectedData' => [],
         ];
 
         // Scenario 3
         // Existing and new links
         $data['scenario_3'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
-            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 3", "linked_product_type" => "simple", "position" => 0],
+            'newLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
+            'existingLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 3",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
             'expectedData' => [
-                ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
+                [
+                    "product_sku" => "Simple Product 1",
+                    "link_type" => "related",
+                    "linked_product_sku" => "Simple Product 2",
+                    "linked_product_type" => "simple",
+                    "position" => 0,
+                ],
+            ],
         ];
 
         return $data;
@@ -1142,7 +1186,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $galleryAttributeBackendMock->expects($this->once())
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
-
 
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));

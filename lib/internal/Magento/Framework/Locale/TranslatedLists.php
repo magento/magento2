@@ -73,7 +73,7 @@ class TranslatedLists implements ListsInterface
 
         $options = [];
         $allowedLocales = $this->_config->getAllowedLocales();
-        foreach ($locales as $locale) {
+        foreach ((array)$locales as $locale) {
             if (!in_array($locale, $allowedLocales)) {
                 continue;
             }
@@ -111,9 +111,9 @@ class TranslatedLists implements ListsInterface
                         \IntlTimeZone::DISPLAY_LONG,
                         $locale
                     ) . ' (' . $code . ')',
-                'value' => $code
+                'value' => $code,
             ];
-    }
+        }
         return $this->_sortOptionArray($options);
     }
 
