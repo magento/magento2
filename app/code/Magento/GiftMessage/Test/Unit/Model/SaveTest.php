@@ -21,7 +21,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
-        $this->messageFactoryMock = $this->getMock('\Magento\GiftMessage\Model\MessageFactory', [], [], '', false);
+        $this->messageFactoryMock = $this->getMockBuilder('\Magento\GiftMessage\Model\MessageFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $sessionMock = $this->getMock('\Magento\Backend\Model\Session\Quote', [], [], '', false);
         $giftMessageHelperMock = $this->getMock('\Magento\GiftMessage\Helper\Message', [], [], '', false);
         $this->model = new \Magento\GiftMessage\Model\Save(
