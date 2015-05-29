@@ -6,7 +6,6 @@
 
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Catalog\Category;
 
-
 class ChooserTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -118,7 +117,6 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager->expects($this->once())->method('getGroups')->willReturn($storeGroups);
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($this->store);
-
 
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
