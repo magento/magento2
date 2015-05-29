@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Oauth;
+namespace Magento\Integration\Test\Unit\Model\Oauth;
 
 use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
