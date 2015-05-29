@@ -7,7 +7,7 @@
 define([
     'jquery',
     'jquery/ui',
-    'Magento_Ui/js/dialog/dialog',
+    'Magento_Ui/js/popup/popup',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation'
@@ -52,7 +52,7 @@ define([
                         options.errorClass, options.validClass || '');
                 }
             });
-            this.element.dialog({
+            this.element.popup({
                 type: 'slide',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
