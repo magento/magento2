@@ -75,8 +75,8 @@ class Preprocessor implements PreprocessorInterface
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
+     * @param QueryContainer $queryContainer
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
