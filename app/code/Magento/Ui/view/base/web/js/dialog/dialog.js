@@ -176,7 +176,7 @@ define([
             _.each(this.options.buttons, function(btn, key) {
                 var button = that.buttons[key];
 
-                $(button).on('click', _.bind(btn.click, button));
+                $(button).on('click', _.bind(btn.click, that));
             });
         },
         /**
