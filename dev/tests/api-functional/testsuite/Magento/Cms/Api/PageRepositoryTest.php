@@ -69,7 +69,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test get \Magento\Cms\Api\Data\PageInterface
      */
-    public function _testGet()
+    public function testGet()
     {
         $pageTitle = 'Page title';
         $pageIdentifier = 'page-title' . uniqid();
@@ -139,7 +139,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test update \Magento\Cms\Api\Data\PageInterface
      */
-    public function _testUpdate()
+    public function testUpdate()
     {
         $pageTitle = 'Page title';
         $newPageTitle = 'New Page title';
@@ -182,7 +182,7 @@ class PageRepositoryTest extends WebapiAbstract
      * Test delete \Magento\Cms\Api\Data\PageInterface
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function _testDelete()
+    public function testDelete()
     {
         $pageTitle = 'Page title';
         $pageIdentifier = 'page-title' . uniqid();
@@ -211,7 +211,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test search \Magento\Cms\Api\Data\PageInterface
      */
-    public function _testSearch()
+    public function testSearch()
     {
         $pageTitle = 'Page title';
         $pageIdentifier = 'page-title' . uniqid();
