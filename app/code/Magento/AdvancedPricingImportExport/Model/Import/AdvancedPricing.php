@@ -174,7 +174,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         }
         $this->_validatedRows[$rowNum] = true;
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            if (false) {
+            if (!isset($this->_oldSkus[$rowData[self::COL_SKU]])) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
                 return false;
             }
