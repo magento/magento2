@@ -16,16 +16,16 @@ class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testShortenEntityName($in, $prefix, $expectedOut)
     {
-        $this->assertSame($expectedOut, ExpressionConverter::shortenEntityName($in, $prefix));
+        $this->assertTrue(
+            strpos(ExpressionConverter::shortenEntityName($in, $prefix), $expectedOut) === 0,
+            'Entity name did not start with expected prefix'
+        );
     }
 
     public function shortenEntityNameDataProvider()
     {
-        /** Length of 64 characters, to go over max MySql identifier length */
         $length64 = '________________________________________________________________';
         $length40 = '________________________________________';
-        $length20 = '____________________';
-        echo $length20;
         return [
             'Short identifier' => [
                 'already_short',
@@ -35,18 +35,22 @@ class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
             'Hashed identifer' => [
                 $length64 . '_cannotBeAbbreviated',
                 'pre_',
-                'pre_be55448d703c761bf8a322a9993c9ed3'
+                'pre_'
             ],
             'Abbreviated identifier' => [
-                $length40 . '_enterprise_notification_index',
+                $length40 . 'enterprise_notification_index',
                 'pre_',
-                '_________________________________________ent_ntfc_idx'
-            ],
-            'Reduced hash' => [
-                $length64 . '_cannotBeAbbreviated',
-                $length40,
-                '448d703c761bf8a322a9993c'
+                $length40 . 'ent_ntfc_idx'
             ],
         ];
+    }
+
+    public function testShortenEntityNameReducedHash()
+    {
+        /** Length of 64 characters, to go over max MySql identifier length */
+        $length64 = '________________________________________________________________';
+        $longPrefix = 'pre_____________________________________';
+        $shortenedName = ExpressionConverter::shortenEntityName($length64 . '_cannotBeAbbreviated', $longPrefix );
+        $this->assertNotSame(0, strpos($shortenedName, 'pre'), 'Entity name not supposed to with long prefix');
     }
 }

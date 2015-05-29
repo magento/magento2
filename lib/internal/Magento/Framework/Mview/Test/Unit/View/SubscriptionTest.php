@@ -94,10 +94,12 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $this->mockGetTableName();
-
+        $shortTriggerName = 'short_trigger_name';
+        $this->connectionMock->expects($this->atLeastOnce())->method('getTriggerName')->willReturn($shortTriggerName);
         $triggerMock = $this->getMock('Magento\Framework\DB\Ddl\Trigger', [], [], '', false, false);
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
+            ->with($shortTriggerName)
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(3))
             ->method('getName')
@@ -265,7 +267,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockGetConnection($connection)
     {
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->will($this->returnValue($connection));
     }
