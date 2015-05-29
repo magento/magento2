@@ -604,5 +604,4 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->_cachedSkuToProducts = [];
         return $this;
     }
-
 }

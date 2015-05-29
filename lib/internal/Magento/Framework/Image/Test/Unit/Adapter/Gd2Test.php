@@ -138,5 +138,4 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($type1, $type2);
     }
-
 }

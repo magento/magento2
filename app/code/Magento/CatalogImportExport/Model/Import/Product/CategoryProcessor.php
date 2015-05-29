@@ -144,5 +144,4 @@ class CategoryProcessor
 
         return $categoriesIds;
     }
-
 }
