@@ -7,18 +7,19 @@
 
 function printCopyright(lang) {
     var copyrightText = {
-        firstLine: 'Copyright © 2015 Magento. All rights reserved.',
-        secondLine: 'See COPYING.txt for license details.'
-    };
+            firstLine: 'Copyright © 2015 Magento. All rights reserved.',
+            secondLine: 'See COPYING.txt for license details.'
+        },
+        nlWin = '\r\n';
     switch (lang) {
         case 'css':
-            return '/**\n * ' + copyrightText.firstLine + '\n * ' + copyrightText.secondLine + '\n */\n';
+            return '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin;
             break;
         case 'less':
-            return '// /**\n//  * ' + copyrightText.firstLine + '\n//  * ' + copyrightText.secondLine + '\n//  */\n';
+            return '// /**' + nlWin + '//  * ' + copyrightText.firstLine + nlWin + '//  * ' + copyrightText.secondLine + nlWin + '//  */' + nlWin;
             break;
         case 'html':
-            return '<!--\n/**\n * ' + copyrightText.firstLine + '\n * ' + copyrightText.secondLine + '\n */\n-->\n';
+            return '<!--' + nlWin + '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin + '-->' + nlWin;
             break;
         default:
             return;

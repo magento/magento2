@@ -5,7 +5,10 @@
 
 'use strict';
 
-function findCopyright(lang) {
+var nlWin = '\r\n',
+    nlMac = '\n';
+
+function findCopyright(lang, newLineSystem) {
     var copyrightText = {
         firstLine: 'Copyright © 2015 Magento. All rights reserved.',
         secondLine: 'See COPYING.txt for license details.'
@@ -13,11 +16,11 @@ function findCopyright(lang) {
     switch (lang) {
         case 'less':
             return new RegExp(
-                '// /\\*\\*\r\n//  \\* ' +
+                '// /\\*\\*' + newLineSystem + '//  \\* ' +
                 copyrightText.firstLine +
-                '\r\n//  \\* ' +
+                '' + newLineSystem + '//  \\* ' +
                 copyrightText.secondLine +
-                '\r\n//  \\*/\r\n\r\n'
+                '' + newLineSystem + '//  \\*/' + newLineSystem + newLineSystem
             );
             break;
         default:
@@ -28,10 +31,16 @@ function findCopyright(lang) {
 module.exports = {
     documentation: {
         options: {
-            patterns: [{
-                match: findCopyright('less'),
-                replacement: ''
-            }]
+            patterns: [
+                {
+                    match: findCopyright('less', nlMac),
+                    replacement: ''
+                },
+                {
+                    match: findCopyright('less', nlWin),
+                    replacement: ''
+                }
+            ]
         },
         files: [{
             expand: true,
