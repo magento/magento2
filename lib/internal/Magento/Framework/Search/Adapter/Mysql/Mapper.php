@@ -23,6 +23,7 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Mapper
 {
+    const SQL_ENTITIES_LIMIT = 10000;
     /**
      * @var ScoreBuilder
      */
@@ -126,7 +127,7 @@ class Mapper
         );
         $select = $this->processDimensions($request, $select);
         $select->columns($scoreBuilder->build());
-        $select->limit($request->getSize());
+        $select->limit(self::SQL_ENTITIES_LIMIT);
 
         $filtersCount = $queryContainer->getFiltersCount();
         if ($filtersCount > 1) {
@@ -135,6 +136,7 @@ class Mapper
         }
 
         $select = $this->createAroundSelect($select, $scoreBuilder);
+        $select->limit($request->getSize());
 
         $matchQueries = $queryContainer->getDerivedQueries();
 
