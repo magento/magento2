@@ -90,8 +90,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= label %><% if (finalPrice.value) '.
-                        '{ %> <%= finalPrice.formatted %> (Excl. tax: <%= basePrice.formatted %>)<% } %>',
+                    'optionTemplate' => '<%= data.label %><% if (data.finalPrice.value) '.
+                        '{ %> <%= data.finalPrice.formatted %> (Excl. tax: <%= data.basePrice.formatted %>)<% } %>',
                 ],
                 'displayBothPrices' => true,
                 'priceIncludesTax' => false,
@@ -100,7 +100,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= label %><% if (basePrice.value) { %> <%= basePrice.formatted %><% } %>',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) { %> <%= data.basePrice.formatted %><% } %>',
                 ],
                 'displayBothPrices' => false,
                 'priceIncludesTax' => true,
