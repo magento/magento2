@@ -30,6 +30,7 @@ use Magento\Setup\Model\ConsoleLogger;
  * Command for uninstalling modules
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ModuleUninstallCommand extends AbstractModuleCommand
 {
@@ -157,7 +158,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             self::INPUT_KEY_BACKUP_CODE,
             null,
             InputOption::VALUE_NONE,
-            'Take code backup (excluding temporary files and external dependencies)'
+            'Take code backup (excluding temporary files)'
         );
         parent::configure();
     }
