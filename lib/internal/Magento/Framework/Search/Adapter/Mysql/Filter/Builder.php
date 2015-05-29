@@ -66,12 +66,13 @@ class Builder implements BuilderInterface
     /**
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
+     * @param QueryContainer $queryContainer
      * @return string
      */
     private function processFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
     {
         if ($filter->getType() == RequestFilterInterface::TYPE_BOOL) {
-            $query = $this->processBoolFilter($filter, $isNegation);
+            $query = $this->processBoolFilter($filter, $isNegation, $queryContainer);
             $query = $this->conditionManager->wrapBrackets($query);
         } else {
             if (!isset($this->filters[$filter->getType()])) {
@@ -87,16 +88,18 @@ class Builder implements BuilderInterface
     /**
      * @param RequestFilterInterface|\Magento\Framework\Search\Request\Filter\Bool $filter
      * @param bool $isNegation
+     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function processBoolFilter(RequestFilterInterface $filter, $isNegation)
+    private function processBoolFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
     {
-        $must = $this->buildFilters($filter->getMust(), Select::SQL_AND, $isNegation);
-        $should = $this->buildFilters($filter->getShould(), Select::SQL_OR, $isNegation);
+        $must = $this->buildFilters($filter->getMust(), Select::SQL_AND, $isNegation, $queryContainer);
+        $should = $this->buildFilters($filter->getShould(), Select::SQL_OR, $isNegation, $queryContainer);
         $mustNot = $this->buildFilters(
             $filter->getMustNot(),
             Select::SQL_AND,
-            !$isNegation
+            !$isNegation,
+            $queryContainer
         );
 
         $queries = [
@@ -112,13 +115,14 @@ class Builder implements BuilderInterface
      * @param \Magento\Framework\Search\Request\FilterInterface[] $filters
      * @param string $unionOperator
      * @param bool $isNegation
+     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function buildFilters(array $filters, $unionOperator, $isNegation)
+    private function buildFilters(array $filters, $unionOperator, $isNegation, QueryContainer $queryContainer)
     {
         $queries = [];
         foreach ($filters as $filter) {
-            $queries[] = $this->processFilter($filter, $isNegation);
+            $queries[] = $this->processFilter($filter, $isNegation, $queryContainer);
         }
         return $this->conditionManager->combineQueries($queries, $unionOperator);
     }
