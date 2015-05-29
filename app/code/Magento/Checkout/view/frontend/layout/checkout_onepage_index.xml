@@ -47,12 +47,7 @@
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-form</item>
                                                                 <item name="children" xsi:type="array">
-                                                                    <item name="customer-email" xsi:type="array">
-                                                                        <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
-                                                                        <item name="tooltip" xsi:type="array">
-                                                                            <item name="description" xsi:type="string">Here we’ll send your order confirmation.</item>
-                                                                        </item>
-                                                                    </item>
+                                                                    <!-- before form fields -->
                                                                 </item>
                                                             </item>
                                                             <item name="before-fields" xsi:type="array">

@@ -18,31 +18,35 @@
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
         </div>
-        <div class="field" data-bind="fadeVisible: isPasswordVisible">
-            <span data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
-            <label class="label" for="customer-password">
-                <span data-bind="text: $t('Password')"></span>
-            </label>
-            <div class="control">
-                <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
+
+        <!--Hidden fields -->
+        <fieldset class="fieldset hidden-fields" data-bind="fadeVisible: isPasswordVisible">
+            <div class="field">
+                <span data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
+                <label class="label" for="customer-password">
+                    <span data-bind="text: $t('Password')"></span>
+                </label>
+                <div class="control">
+                    <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
+                </div>
             </div>
-        </div>
-        <div class="additional-fields" data-bind="fadeVisible: isPasswordVisible">
             <!-- ko foreach: getRegion('additional-login-form-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
-        </div>
-        <div class="actions-toolbar" data-bind="fadeVisible: isPasswordVisible">
-            <input name="context" type="hidden" value="checkout" />
-            <div class="primary">
-                <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+            <div class="actions-toolbar">
+                <input name="context" type="hidden" value="checkout" />
+                <div class="primary">
+                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+                </div>
+                <div class="secondary">
+                    <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
+                        <span data-bind="text: $t('Forgot Your Password?')"></span>
+                    </a>
+                </div>
             </div>
-            <div class="secondary">
-                <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
-                    <span data-bind="text: $t('Forgot Your Password?')"></span>
-                </a>
-            </div>
-        </div>
+        </fieldset>
+        <!--Hidden fields -->
+
     </fieldset>
 </form>
 <hr>
