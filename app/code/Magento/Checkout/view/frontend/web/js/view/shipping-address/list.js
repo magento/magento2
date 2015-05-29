@@ -38,9 +38,14 @@ define([
                         // Update last added address (customer can update only one address)
                         this.lastAddedAddress(addresses[addressIndex]);
                     } else if (addresses.length > this.addressCount) {
+                        var address = addresses[addressIndex];
                         // Add a new tile for newly added address
-                        this.createRendererComponent(addresses[addressIndex], addressIndex);
+                        this.createRendererComponent(address, addressIndex);
                         this.addressCount++;
+                        // New address must be selected as shipping address
+                        if (address.hasOwnProperty('customerAddressId') && address.customerAddressId == undefined) {
+                            this.selectAddressTile(addressIndex);
+                        }
                     }
                 },
                 this

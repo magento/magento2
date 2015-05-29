@@ -12,10 +12,11 @@ define(
         '../model/addresslist',
         '../model/address-converter',
         '../model/quote',
+        '../action/select-shipping-address',
         'Magento_Checkout/js/model/step-navigator',
         'mage/translate'
     ],
-    function($, Component, ko, customer, addressList, addressConverter, quote, navigator) {
+    function($, Component, ko, customer, addressList, addressConverter, quote, selectShippingAddress, navigator) {
         'use strict';
         var stepName = 'shippingAddress';
         return Component.extend({
@@ -81,7 +82,8 @@ define(
 
                     var newAddress = addressConverter.formAddressDataToQuoteAddress(addressData);
                     addressList.add(newAddress);
-                    //selectShippingAddress(addressData, additionalData);
+                    // New address must be selected as a shipping address
+                    selectShippingAddress(ko.observable(newAddress));
                     this.isFormPopUpVisible(false);
                     this.isNewAddressAdded(true);
                 }
