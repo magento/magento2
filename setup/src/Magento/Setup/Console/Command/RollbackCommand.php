@@ -81,7 +81,7 @@ class RollbackCommand extends AbstractSetupCommand
             new InputArgument(
                 self::INPUT_KEY_BACKUP_FILE,
                 InputArgument::REQUIRED,
-                'Basename of the backup file'
+                'Basename of the backup file in var/backups'
             ),
         ];
         $this->setName('setup:rollback')
