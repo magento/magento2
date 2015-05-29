@@ -37,4 +37,5 @@ lib/internal/Magento/Framework/App/Utility
 lib/internal/Magento/Framework/Url
 lib/internal/Magento/Framework/UrlInterface
 lib/internal/Magento/Framework/Xml
+lib/internal/Magento/Framework/XsltProcessor
 lib/internal/Magento/Framework
