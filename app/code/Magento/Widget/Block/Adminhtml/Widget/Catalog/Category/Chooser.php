@@ -5,7 +5,7 @@
  */
 
 /**
- * Category chooser for Wysiwyg CMS widget
+ * Category chooser for widget's layout updates
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
