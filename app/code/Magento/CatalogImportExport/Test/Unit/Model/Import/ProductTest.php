@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -317,10 +318,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_dataSourceModel->expects($this->exactly(2))->method('getNextBunch')->willReturnOnConsecutiveCalls(
-             [
-                 $rowNum => $rowData
-             ],
-             null
+            [
+                $rowNum => $rowData
+            ],
+            null
         );
         $this->setPropertyValue($importProduct, '_dataSourceModel', $this->_dataSourceModel);
         $importProduct->expects($this->once())->method('isRowAllowedToImport')->with($rowData, $rowNum)->willReturn(true);
@@ -1137,7 +1138,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    function validateRowIsAlreadyValidatedDataProvider()
+    protected function validateRowIsAlreadyValidatedDataProvider()
     {
         return [
             [
@@ -1154,7 +1155,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed
      */
-    public function returnQuoteCallback() {
+    public function returnQuoteCallback()
+    {
         $args = func_get_args();
         return str_replace('?', (is_array($args[1]) ? implode(',', $args[1]) : $args[1]), $args[0]);
     }

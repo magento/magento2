@@ -132,7 +132,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
             $read = $this->_readFactory->create($url, DriverPool::HTTP);
-            $fileName = preg_replace('/[^a-z0-9\._-]+/i','', $fileName);
+            $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
                 $read->readAll()

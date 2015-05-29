@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +7,8 @@
 
 namespace Magento\ImportExport\Test\Unit\Model;
 
-class ImportTest extends \PHPUnit_Framework_TestCase {
+class ImportTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * Entity adapter.

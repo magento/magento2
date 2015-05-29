@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,7 +10,8 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product\Plugin;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ImportTest extends \PHPUnit_Framework_TestCase {
+class ImportTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -58,7 +60,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->object = $this->getMock('Magento\Catalog\Model\Product',[],[],'',false);
+        $this->object = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['getOldSku', '_populateToUrlGeneration'],
@@ -71,12 +73,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase {
             'sku' => ['sku' => 'sku', 'url_key' => 'value1', 'entity_id' => '1'],
             'sku2' => ['sku' => 'sku2', 'url_key' => 'value2', 'entity_id' => '2']
         ]);
-        $this->event = $this->getMock('\Magento\Framework\Event',['getAdapter', 'getBunch'],[],'',false);
+        $this->event = $this->getMock('\Magento\Framework\Event', ['getAdapter', 'getBunch'], [], '', false);
         $this->event->expects($this->any())->method('getAdapter')->willReturn($this->adapter);
         $this->event->expects($this->any())->method('getBunch')->willReturn([
             ['sku' => 'sku', 'url_key' => 'value1'], ['sku' => 'sku3', 'url_key' => 'value3']
         ]);
-        $this->observer = $this->getMock('\Magento\Framework\Event\Observer',['getEvent'],[],'',false);
+        $this->observer = $this->getMock('\Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
         $this->urlPersist = $this->getMockBuilder('\Magento\UrlRewrite\Model\UrlPersistInterface')
             ->disableOriginalConstructor()
