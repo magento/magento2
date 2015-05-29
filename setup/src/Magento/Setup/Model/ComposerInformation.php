@@ -10,6 +10,7 @@ use Composer\Factory as ComposerFactory;
 use Composer\IO\BufferIO;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 /**
@@ -30,14 +31,24 @@ class ComposerInformation
     /**
      * Constructor
      *
+     * @param Filesystem $filesystem
      * @param BufferIO $io
+     * @throws \Exception
      */
     public function __construct(
+        Filesystem $filesystem,
         BufferIO $io
     ) {
         // composer.json will be in same directory as vendor
-        $vendorDir = require BP . '/app/etc/vendor_path.php';
-        $composerJson = realpath(BP . "/{$vendorDir}/../composer.json");
+        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
+        $vendorDir = require "{$vendorPath}";
+        $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
+            . "{$vendorDir}/../composer.json";
+
+        $composerJsonRealPath = realpath($composerJson);
+        if ($composerJsonRealPath === false) {
+            throw new \Exception('Composer file not found: ' . $composerJson);
+        }
 
         // Create Composer
         $this->composer = ComposerFactory::create($io, $composerJson);
@@ -87,32 +98,27 @@ class ComposerInformation
      */
     public function getRequiredExtensions()
     {
-        if ($this->isMagentoRoot()) {
-            $allPlatformReqs = $this->locker->getPlatformRequirements(true);
-            foreach ($allPlatformReqs as $reqIndex => $constraint) {
-                if (substr($reqIndex, 0, 4) === 'ext-') {
-                    $requiredExtensions[] = substr($reqIndex, 4);
-                }
-            }
-        } else {
-            $requiredExtensions = [];
+        $requiredExtensions = [];
+        $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
 
+        if (!$this->isMagentoRoot()) {
             /** @var \Composer\Package\CompletePackage $package */
             foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-                $requires = $package->getRequires();
-                $requires = array_merge($requires, $package->getDevRequires());
-                foreach ($requires as $reqIndex => $constraint) {
-                    if (substr($reqIndex, 0, 4) === 'ext-') {
-                        $requiredExtensions[] = substr($reqIndex, 4);
-                    }
-                }
+                $requires = array_keys($package->getRequires());
+                $requires = array_merge($requires, array_keys($package->getDevRequires()));
+                $allPlatformReqs = array_merge($allPlatformReqs, $requires);
+            }
+        }
+        foreach ($allPlatformReqs as $reqIndex) {
+            if (substr($reqIndex, 0, 4) === 'ext-') {
+                $requiredExtensions[] = substr($reqIndex, 4);
             }
         }
 
         if (!isset($requiredExtensions)) {
             throw new \Exception('Cannot find extensions in \'composer.lock\' file');
         }
-        return $requiredExtensions;
+        return array_unique($requiredExtensions);
     }
 
     /**
