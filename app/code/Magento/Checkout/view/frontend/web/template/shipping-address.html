@@ -26,7 +26,7 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <input type="button" data-bind="click: showFormPopUp, value: $t('New Address')" />
+        <input type="button" data-bind="click: showFormPopUp, value: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('New Address')" />
         <div data-bind="fadeVisible: isFormPopUpVisible">
             <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
                 <!-- ko foreach: getRegion('before-fields') -->

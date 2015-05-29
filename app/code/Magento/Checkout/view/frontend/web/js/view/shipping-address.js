@@ -29,6 +29,7 @@ define(
             isCustomerLoggedIn: customer.isLoggedIn(),
             isFormPopUpVisible: ko.observable(false),
             isFormInline: addressList.getAddresses()().length == 0,
+            isNewAddressAdded: ko.observable(false),
 
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
@@ -82,8 +83,10 @@ define(
                     addressList.add(newAddress);
                     //selectShippingAddress(addressData, additionalData);
                     this.isFormPopUpVisible(false);
+                    this.isNewAddressAdded(true);
                 }
             },
+
             validate: function() {
                 this.source.set('params.invalid', false);
                 this.source.trigger('shippingAddress.data.validate');
