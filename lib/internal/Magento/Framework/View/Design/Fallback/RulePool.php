@@ -184,6 +184,7 @@ class RulePool
                 [
                     new Theme(new Simple("$emailDir/<theme_path>/<namespace>_<module>")),
                     new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
+                    new Simple("$modulesDir/<namespace>/<module>/view/email"),
                 ]
             )
         );
