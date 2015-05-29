@@ -465,37 +465,4 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
 
         return $tzTransitions;
     }
-
-    /**
-     * Retrieve store timezone offset from UTC in the form acceptable by SQL's CONVERT_TZ()
-     *
-     * @param null|mixed $store
-     * @return string
-     */
-    protected function _getStoreTimezoneUtcOffset($store = null)
-    {
-        return $this->_localeDate->scopeDate($store)->format('P');
-    }
-
-    /**
-     * Retrieve date in UTC timezone
-     *
-     * @param mixed $date
-     * @return null|\DateTime
-     */
-    protected function _dateToUtc($date)
-    {
-        if ($date === null) {
-            return null;
-        }
-
-        if ($date instanceof \DateTimeInterface) {
-            $dateUtc = $date;
-        } else {
-            $dateUtc = new \DateTime($date);
-        }
-
-        $dateUtc->setTimezone(new \DateTimeZone('UTC'));
-        return $dateUtc->format('Y-m-d H:i:s');
-    }
 }
