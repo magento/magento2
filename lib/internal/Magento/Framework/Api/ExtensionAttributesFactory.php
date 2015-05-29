@@ -118,8 +118,15 @@ class ExtensionAttributesFactory
             $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
-                ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
-                ->setSelectFields($selectField[Converter::JOIN_SELECT_FIELD]);
+                ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);
+            if (is_array($directive[Converter::JOIN_SELECT_FIELDS])) {
+                $selectFieldsMapper = function($selectFieldData) {
+                    return $selectFieldData[Converter::JOIN_SELECT_FIELD];
+                };
+                $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
+            } else {
+                $joinData->setSelectFields([]);
+            }
             $collection->joinExtensionAttribute($joinData);
         }
     }
@@ -220,6 +227,12 @@ class ExtensionAttributesFactory
     private function getExtensibleInterfaceName($extensibleClassName)
     {
         $modelReflection = new \ReflectionClass($extensibleClassName);
+        if ($modelReflection->isInterface()
+            && $modelReflection->isSubClassOf(self::EXTENSIBLE_INTERFACE_NAME)
+            && $modelReflection->hasMethod('getExtensionAttributes')
+        ) {
+            return $extensibleClassName;
+        }
         foreach ($modelReflection->getInterfaces() as $interfaceReflection) {
             if ($interfaceReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
                 && $interfaceReflection->hasMethod('getExtensionAttributes')

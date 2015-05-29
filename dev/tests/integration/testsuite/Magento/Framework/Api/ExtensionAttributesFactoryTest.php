@@ -119,7 +119,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
         $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
         $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
-        $this->assertEquals('review_id', $extensionAttributeJoinData->getSelectField());
+        $this->assertEquals(['review_id'], $extensionAttributeJoinData->getSelectFields());
     }
 
     private function getConfig() {
@@ -131,7 +131,11 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
                         Converter::JOIN_REFERENCE_FIELD => "product_id",
-                        Converter::JOIN_SELECT_FIELDS => "review_id",
+                        Converter::JOIN_SELECT_FIELDS => [
+                            [
+                                Converter::JOIN_SELECT_FIELD => "review_id",
+                            ],
+                        ],
                         Converter::JOIN_JOIN_ON_FIELD => "id",
                     ],
                 ],
@@ -142,7 +146,11 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "library_account",
-                        Converter::JOIN_SELECT_FIELDS => "library_card_id",
+                        Converter::JOIN_SELECT_FIELDS => [
+                            [
+                                Converter::JOIN_SELECT_FIELD => "library_card_id",
+                            ],
+                        ],
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
                     ],
                 ],
@@ -151,7 +159,14 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
-                        Converter::JOIN_SELECT_FIELDS => "comment,rating",
+                        Converter::JOIN_SELECT_FIELDS => [
+                            [
+                                Converter::JOIN_SELECT_FIELD => "comment",
+                            ],
+                            [
+                                Converter::JOIN_SELECT_FIELD => "rating",
+                            ],
+                        ],
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
                     ],
                 ],
