@@ -14,7 +14,7 @@ class Timezone implements \Magento\Framework\Option\ArrayInterface
     /**
      * Timezones that works incorrect with php_intl extension
      */
-    const IGNORED_TIMEZONES = [
+    protected $ignoredTimezones = [
         'Antarctica/Troll',
         'Asia/Chita',
         'Asia/Srednekolymsk',
@@ -41,7 +41,7 @@ class Timezone implements \Magento\Framework\Option\ArrayInterface
     {
         $timezones = $this->_localeLists->getOptionTimezones();
         $timezones = array_filter($timezones, function($value) {
-            if (in_array($value['value'], static::IGNORED_TIMEZONES)) {
+            if (in_array($value['value'], $this->ignoredTimezones)) {
                 return false;
             }
             return true;

@@ -27,6 +27,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
+        $ignoredTimezones = [
+            'Antarctica/Troll',
+            'Asia/Chita',
+            'Asia/Srednekolymsk',
+            'Pacific/Bougainville'
+        ];
         $list = \DateTimeZone::listIdentifiers();
         $preparedList = [];
         foreach ($list as $value) {
@@ -37,7 +43,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($preparedList);
         $result = $this->model->toOptionArray();
         foreach ($result as $value) {
-            if (in_array($value['value'], \Magento\Config\Model\Config\Source\Locale\Timezone::IGNORED_TIMEZONES)) {
+            if (in_array($value['value'], $ignoredTimezones)) {
                 $this->fail('Locale ' . $value['value'] . ' shouldn\'t be presented');
             }
         }
