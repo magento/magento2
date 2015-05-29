@@ -111,7 +111,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $superAttributes = array();
+        $superAttributes = [];
         foreach ($this->_getSuperAttributes() as $superAttribute) {
             $item = $this->getMock(
                 '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
@@ -175,7 +175,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $products = array();
+        $products = [];
         $testProducts = [
             ['id' => 1, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
             ['id' => 2, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
@@ -350,7 +350,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'is_static' => false,
                 'backend_type' => 'select',
                 'apply_to' =>
-                    array(),
+                    [],
                 'type' => 'select',
                 'default_value' => NULL,
                 'options' => [
@@ -434,7 +434,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $bunch = $this->_getBunch();
         $this->_entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->_entityModel->expects($this->at(3))->method('getNextBunch')->will($this->returnValue([]));
-        $this->_entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnCallback(array($this, 'isRowAllowedToImport')));
+        $this->_entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnCallback([$this, 'isRowAllowedToImport']));
 
         $this->_entityModel->expects($this->any())->method('getOldSku')->will($this->returnValue([
             'testSimpleOld' => ['entity_id' => 10, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
