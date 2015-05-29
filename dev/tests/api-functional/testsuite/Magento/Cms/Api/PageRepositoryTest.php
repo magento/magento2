@@ -69,10 +69,10 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test get \Magento\Cms\Api\Data\PageInterface
      */
-    public function testGet()
+    public function _testGet()
     {
         $pageTitle = 'Page title';
-        $pageIdentifier = 'page-title';
+        $pageIdentifier = 'page-title' . uniqid();
         /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
         $pageDataObject = $this->pageFactory->create();
         $pageDataObject->setTitle($pageTitle)
@@ -105,7 +105,7 @@ class PageRepositoryTest extends WebapiAbstract
     public function testCreate()
     {
         $pageTitle = 'Page title';
-        $pageIdentifier = 'page-title';
+        $pageIdentifier = 'page-title' . uniqid();
         /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
         $pageDataObject = $this->pageFactory->create();
         $pageDataObject->setTitle($pageTitle)
@@ -123,7 +123,7 @@ class PageRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['id', 'page' => [
+        $requestData = ['page' => [
                 PageInterface::IDENTIFIER => $pageDataObject->getIdentifier(),
                 PageInterface::TITLE      => $pageDataObject->getTitle(),
             ],
@@ -139,11 +139,11 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test update \Magento\Cms\Api\Data\PageInterface
      */
-    public function testUpdate()
+    public function _testUpdate()
     {
         $pageTitle = 'Page title';
         $newPageTitle = 'New Page title';
-        $pageIdentifier = 'page-title';
+        $pageIdentifier = 'page-title' . uniqid();
         /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
         $pageDataObject = $this->pageFactory->create();
         $pageDataObject->setTitle($pageTitle)
@@ -182,10 +182,10 @@ class PageRepositoryTest extends WebapiAbstract
      * Test delete \Magento\Cms\Api\Data\PageInterface
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testDelete()
+    public function _testDelete()
     {
         $pageTitle = 'Page title';
-        $pageIdentifier = 'page-title';
+        $pageIdentifier = 'page-title' . uniqid();
         /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
         $pageDataObject = $this->pageFactory->create();
         $pageDataObject->setTitle($pageTitle)
@@ -211,10 +211,10 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Test search \Magento\Cms\Api\Data\PageInterface
      */
-    public function testSearch()
+    public function _testSearch()
     {
         $pageTitle = 'Page title';
-        $pageIdentifier = 'page-title';
+        $pageIdentifier = 'page-title' . uniqid();
         /** @var  \Magento\Cms\Api\Data\PageInterface $pageDataObject */
         $pageDataObject = $this->pageFactory->create();
         $pageDataObject->setTitle($pageTitle)
