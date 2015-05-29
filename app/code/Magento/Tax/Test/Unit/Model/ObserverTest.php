@@ -100,7 +100,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) { %> <%= data.basePrice.formatted %><% } %>',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '.
+                        '{ %> <%= data.basePrice.formatted %><% } %>',
                 ],
                 'displayBothPrices' => false,
                 'priceIncludesTax' => true,
