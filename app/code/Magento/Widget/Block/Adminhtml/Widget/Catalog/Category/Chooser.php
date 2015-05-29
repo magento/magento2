@@ -11,7 +11,6 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Catalog\Category;
 
-
 class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser
 {
     /**

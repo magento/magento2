@@ -6,7 +6,6 @@
 
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget\Instance;
 
-
 class CategoriesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -69,7 +68,6 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
         $this->resultRaw = $this->getMock('Magento\Framework\Controller\Result\Raw', [], [], '', false);
         $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-
     }
 
     public function testExecute()
