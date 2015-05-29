@@ -6,15 +6,15 @@
 -->
 <td data-bind="attr: { 'data-th': $t(getColName())}" class="col subtotal">
     <!-- ko if: isPriceInclTaxDisplayed() -->
-    <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
+    <span class="price-including-tax" data-bind ="text: getValueInclTax($parent), attr:{'data-label': $t('Incl. Tax')}">
             <!-- ko foreach: getRegion('row_incl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
     </span>
-
     <!-- /ko -->
+
     <!-- ko if: isPriceExclTaxDisplayed() -->
-    <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
+    <span class="price-excluding-tax" data-bind ="text: getValueExclTax($parent), attr:{'data-label': $t('Excl. Tax')}">
             <!-- ko foreach: getRegion('row_excl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
