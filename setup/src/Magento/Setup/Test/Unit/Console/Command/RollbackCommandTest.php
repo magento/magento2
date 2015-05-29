@@ -90,7 +90,7 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Framework\Backup\Filesystem', [], $filesystem],
             ]));
         $this->file->expects($this->once())->method('isExists')->willReturn(true);
-        $this->tester->execute(['--code' => 'RollbackFile_A.tgz']);
+        $this->tester->execute(['file' => 'RollbackFile_A.tgz']);
         $expectedMsg = 'Enabling maintenance mode' . PHP_EOL
             . 'Code rollback filename: RollbackFile_A.tgz' . PHP_EOL
             . 'Code rollback file path: pathToFile/RollbackFile_A.tgz' . PHP_EOL

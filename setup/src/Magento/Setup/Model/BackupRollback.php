@@ -80,8 +80,7 @@ class BackupRollback
     {
         /** @var \Magento\Framework\Backup\Filesystem $fsBackup */
         $fsBackup = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
-        $a = $this->directoryList->getRoot();
-        $fsBackup->setRootDir($a);
+        $fsBackup->setRootDir($this->directoryList->getRoot());
         $fsBackup->addIgnorePaths($this->getIgnorePaths());
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir)) {

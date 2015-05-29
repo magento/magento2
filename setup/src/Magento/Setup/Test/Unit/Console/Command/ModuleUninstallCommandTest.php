@@ -470,7 +470,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteCodeBackup()
     {
-        $input = ['module' => ['Magento_A', 'Magento_B'], '--code-backup' => true];
+        $input = ['module' => ['Magento_A', 'Magento_B'], '--backup-code' => true];
         $this->setUpExecute($input);
         $this->backupFS->expects($this->once())
             ->method('addIgnorePaths');

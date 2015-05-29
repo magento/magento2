@@ -37,7 +37,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Names of input arguments or options
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
-    const INPUT_KEY_CODE_BACKUP = 'code-backup';
+    const INPUT_KEY_BACKUP_CODE = 'backup-code';
 
     /**
      * @var MaintenanceMode
@@ -154,10 +154,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             'Remove data installed by module(s)'
         );
         $this->addOption(
-            self::INPUT_KEY_CODE_BACKUP,
+            self::INPUT_KEY_BACKUP_CODE,
             null,
             InputOption::VALUE_NONE,
-            'Take code backup (excludes \'' . DirectoryList::STATIC_VIEW . '\' and  \'' . DirectoryList::VAR_DIR . '\')'
+            'Take code backup (excluding temporary files)'
         );
         parent::configure();
     }
@@ -208,7 +208,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->maintenanceMode->set(true);
 
         try {
-            if ($input->getOption(self::INPUT_KEY_CODE_BACKUP)) {
+            if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
                 $backupRollback = new BackupRollback(
                     $this->objectManager,
                     new ConsoleLogger($output),

@@ -6,10 +6,10 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Filesystem\Driver\File;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\ConsoleLogger;
-use Symfony\Component\Console\Input\InputOption;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\MaintenanceMode;
@@ -27,7 +27,7 @@ class RollbackCommand extends AbstractSetupCommand
     /**
      * Name of input arguments or options
      */
-    const INPUT_KEY_CODE_ROLLBACK = 'code';
+    const INPUT_KEY_BACKUP_FILE = 'file';
 
     /**
      * Object Manager
@@ -77,17 +77,16 @@ class RollbackCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $inputOptions = [
-            new InputOption(
-                self::INPUT_KEY_CODE_ROLLBACK,
-                'c',
-                InputOption::VALUE_REQUIRED,
-                'Rollback code. Value is the backup filename without path.'
+        $inputArguments = [
+            new InputArgument(
+                self::INPUT_KEY_BACKUP_FILE,
+                InputArgument::REQUIRED,
+                'Basename of the backup file'
             ),
         ];
         $this->setName('setup:rollback')
-            ->setDescription('Rollbacks Magento Application code base or database')
-            ->setDefinition($inputOptions);
+            ->setDescription('Rolls back Magento Application code base')
+            ->setDefinition($inputArguments);
         parent::configure();
     }
 
@@ -99,15 +98,13 @@ class RollbackCommand extends AbstractSetupCommand
         try {
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
-            if ($input->getOption(self::INPUT_KEY_CODE_ROLLBACK)) {
-                $backupRollback = new BackupRollback(
-                    $this->objectManager,
-                    new ConsoleLogger($output),
-                    $this->directoryList,
-                    $this->file
-                );
-                $backupRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_ROLLBACK));
-            }
+            $backupRollback = new BackupRollback(
+                $this->objectManager,
+                new ConsoleLogger($output),
+                $this->directoryList,
+                $this->file
+            );
+            $backupRollback->codeRollback($input->getArgument(self::INPUT_KEY_BACKUP_FILE));
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
