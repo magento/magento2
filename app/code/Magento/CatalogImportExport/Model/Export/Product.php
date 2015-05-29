@@ -85,7 +85,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_indexValueAttributes = [
         'status',
         'gift_message_available',
-        'custom_design',
     ];
 
     /**
@@ -293,6 +292,19 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'map_enabled',
         'special_price_from_date',
         'special_price_to_date',
+        'gift_message_available',
+        'custom_design',
+        'custom_design_from',
+        'custom_design_to',
+        'custom_layout_update',
+        'page_layout',
+        'product_options_container',
+        'msrp_price',
+        'msrp_display_actual_price_type',
+        'map_enabled',
+        'country_of_manufacture',
+        'map_price',
+        'display_product_options_in',
     ];
 
     /**
