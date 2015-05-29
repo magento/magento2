@@ -105,9 +105,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->bundleModelSelection = $this->getMockBuilder('Magento\Bundle\Model\SelectionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\Resource\BundleFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
