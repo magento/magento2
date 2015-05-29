@@ -14,10 +14,6 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
-/**
- * Class Preprocessor
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Preprocessor implements PreprocessorInterface
 {
     /**
@@ -87,7 +83,7 @@ class Preprocessor implements PreprocessorInterface
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
         $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
-        $select = $this->getSelect();
+        $select = $this->getConnection()->select();
         $table = $attribute->getBackendTable();
         if ($filter->getField() == 'price') {
             $query = str_replace('price', 'min_price', $query);
@@ -149,13 +145,5 @@ class Preprocessor implements PreprocessorInterface
     private function getConnection()
     {
         return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
-    }
-
-    /**
-     * @return \Magento\Framework\DB\Select
-     */
-    private function getSelect()
-    {
-        return $this->getConnection()->select();
     }
 }
