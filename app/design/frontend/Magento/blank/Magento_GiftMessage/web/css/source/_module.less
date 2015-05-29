@@ -99,7 +99,7 @@
             &:extend(.abs-add-clearfix all);
             .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
             display: none;
-            padding: @indent__s 0 @indent__base;
+            padding: @indent__s @indent__s @indent__base;
             position: relative;
         }
     }
@@ -188,10 +188,6 @@
     .gift-item-block {
         border-bottom: 0;
         .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
-        .content {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
     }
 }
 
