@@ -222,7 +222,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $_fields_map = [
+    protected $_fieldsMap = [
         'image' => 'base_image',
         'image_label' => "base_image_label",
         'image' => 'base_image',
@@ -841,7 +841,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     if (isset($this->_attributeValues[$code][$attrValue]) && !empty($this->_attributeValues[$code])) {
                         $attrValue = $this->_attributeValues[$code][$attrValue];
                     }
-                    $fieldName = isset($this->_fields_map[$code]) ? $this->_fields_map[$code] : $code;
+                    $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
@@ -1079,7 +1079,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     private function _customFieldsMapping($rowData)
     {
-        foreach ($this->_fields_map as $system_field_name => $file_field_name) {
+        foreach ($this->_fieldsMap as $system_field_name => $file_field_name) {
             if (isset($rowData[$system_field_name])) {
                 $rowData[$file_field_name] = $rowData[$system_field_name];
                 unset($rowData[$system_field_name]);
@@ -1098,8 +1098,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private function _customHeadersMapping($rowData)
     {
         foreach ($rowData as $key => $field_name) {
-            if (isset($this->_fields_map[$field_name])) {
-                $rowData[$key] = $this->_fields_map[$field_name];
+            if (isset($this->_fieldsMap[$field_name])) {
+                $rowData[$key] = $this->_fieldsMap[$field_name];
             }
         }
         return $rowData;
