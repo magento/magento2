@@ -37,14 +37,15 @@ define(
             },
             emailHasChanged: function () {
                 var self = this;
-                if (this.validateEmail()) {
-                    clearTimeout(this.emailCheckTimeout);
-                    this.emailCheckTimeout = setTimeout(function () {
+                clearTimeout(this.emailCheckTimeout);
+                this.emailCheckTimeout = setTimeout(function () {
+                    if (self.validateEmail()) {
                         self.checkEmailAvailability();
-                    }, self.checkDelay);
-                } else {
-                    this.isPasswordVisible(false);
-                }
+                    } else {
+                        self.isPasswordVisible(false);
+                    }
+                }, self.checkDelay);
+
             },
             checkEmailAvailability: function() {
                 var self = this;
@@ -75,7 +76,6 @@ define(
                 var loginFormSelector = 'form[data-role=login]';
                 $(loginFormSelector).validation();
                 var validationResult = $('input[name=username]').valid();
-                $(loginFormSelector).validation('clearError');
                 return Boolean(validationResult);
             },
             login: function(loginForm) {
