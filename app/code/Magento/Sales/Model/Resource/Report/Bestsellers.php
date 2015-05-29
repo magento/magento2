@@ -96,10 +96,6 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 
@@ -117,7 +113,7 @@ class Bestsellers extends AbstractReport
             }
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $this->getTable('sales_order')],
