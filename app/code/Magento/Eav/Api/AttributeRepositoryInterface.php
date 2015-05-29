@@ -6,6 +6,10 @@
  */
 namespace Magento\Eav\Api;
 
+/**
+ * Interface AttributeRepositoryInterface
+ * @api
+ */
 interface AttributeRepositoryInterface
 {
     /**
