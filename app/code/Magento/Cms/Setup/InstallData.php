@@ -254,7 +254,7 @@ class InstallData implements InstallDataInterface
             </tr>
             <tr>
                 <th>FORM_KEY</th>
-                <td>Stores form key for varnish cache to build forms.</td>
+                <td>Stores form key used by page cache functionality.</td>
             </tr>
             <tr>
                 <th>FRONTEND</th>
