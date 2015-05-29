@@ -39,9 +39,10 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_consumerFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\ConsumerFactory'
-        )->disableOriginalConstructor()->getMock();
+        $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Consumer'
         )->disableOriginalConstructor()->getMock();
