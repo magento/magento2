@@ -7,6 +7,8 @@ namespace Magento\Framework\Api;
 
 class JoinProcessorTest extends \PHPUnit_Framework_TestCase
 {
+    // TODO: Cover LogicException case in \Magento\Framework\Api\ExtensionAttributesFactory::populateExtensionAttributes
+
     public function testProcess()
     {
         /** @var \Magento\Framework\ObjectManagerInterface */
@@ -89,12 +91,22 @@ EXPECTED_SQL;
         $searchCriteria->setFilterGroups([$searchCriteriaGroup]);
         $products = $productRepository->getList($searchCriteria)->getItems();
 
-        /** Ensure that extension attributes were populated correctly */
-        $this->assertEquals($firstProductQty, $products[$firstProductId]->getExtensionAttributes()->getStockItemQty());
+        /** Ensure that simple extension attributes were populated correctly */
+        $this->assertEquals(
+            $firstProductQty,
+            $products[$firstProductId]->getExtensionAttributes()->getTestStockItemQty()
+        );
         $this->assertEquals(
             $secondProductQty,
-            $products[$secondProductId]->getExtensionAttributes()->getStockItemQty()
+            $products[$secondProductId]->getExtensionAttributes()->getTestStockItemQty()
         );
+
+        /** Check population of complex extension attributes */
+        $this->assertEquals(
+            $firstProductQty,
+            $products[$firstProductId]->getExtensionAttributes()->getTestStockItem()->getQty()
+        );
+        $this->assertNotEmpty($products[$firstProductId]->getExtensionAttributes()->getTestStockItem()->getItemId());
     }
 
     /**
@@ -105,6 +117,7 @@ EXPECTED_SQL;
     {
         $customerId = 1;
         $customerGroupName = 'General';
+        $taxClassId = 3;
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -117,9 +130,12 @@ EXPECTED_SQL;
         $searchCriteria->setFilterGroups([$searchCriteriaGroup]);
         $customers = $customerRepository->getList($searchCriteria)->getItems();
 
-        /** Ensure that extension attributes were populated correctly */
+        /** Ensure that simple extension attributes were populated correctly */
         $customer = $customers[0];
         $this->assertEquals($customerId, $customer->getId(), 'Precondition failed');
-        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getGroupCode());
+        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getTestGroupCode());
+
+        /** Check population of complex extension attributes */
+        $this->assertEquals($taxClassId, $customer->getExtensionAttributes()->getTestGroup()->getTaxClassId());
     }
 }

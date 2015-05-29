@@ -15,6 +15,7 @@
             <join reference_table="cataloginventory_stock_item"
                   select_fields="qty"
                   join_on_field="id"
+                  reference_field="id"
                     />
         </attribute>
         <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">

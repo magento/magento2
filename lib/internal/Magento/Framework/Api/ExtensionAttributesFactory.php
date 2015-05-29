@@ -25,7 +25,7 @@ class ExtensionAttributesFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $objectManager;
 
     /**
      * @var Reader
@@ -56,7 +56,7 @@ class ExtensionAttributesFactory
         ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor
     ) {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->configReader = $configReader;
         $this->extensionAttributeJoinDataFactory = $extensionAttributeJoinDataFactory;
         $this->typeProcessor = $typeProcessor;
@@ -98,8 +98,114 @@ class ExtensionAttributesFactory
         }
 
         $extensionFactoryName = $extensionClassName . 'Factory';
-        $extensionFactory = $this->_objectManager->create($extensionFactoryName);
+        $extensionFactory = $this->objectManager->create($extensionFactoryName);
         return $extensionFactory->create($data);
+    }
+
+    /**
+     * Processes join instructions to add to the collection for a data interface.
+     *
+     * @param DbCollection $collection
+     * @param string $extensibleEntityClass
+     * @return void
+     */
+    public function process(DbCollection $collection, $extensibleEntityClass)
+    {
+        $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
+        foreach ($joinDirectives as $attributeCode => $directive) {
+            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
+            foreach ($selectFields as $selectField) {
+                /** @var ExtensionAttributeJoinData $joinData */
+                $joinData = $this->extensionAttributeJoinDataFactory->create();
+                $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
+                    ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
+                    ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
+                    ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
+                    ->setSelectField(trim($selectField));
+                $collection->joinExtensionAttribute($joinData);
+            }
+        }
+    }
+
+    /**
+     * Populate extension attributes object of the provided extensible entity based on the provided data.
+     *
+     * @param ExtensibleDataInterface $extensibleEntity
+     * @param array $data
+     * @throws \LogicException
+     */
+    public function populateExtensionAttributes(
+        \Magento\Framework\Api\ExtensibleDataInterface $extensibleEntity,
+        array $data
+    ) {
+        // TODO: Optimize, since will be called on each extensible model setData()
+        $extensibleEntityClass = get_class($extensibleEntity);
+        $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
+        $extensionData = [];
+        foreach ($joinDirectives as $attributeCode => $directive) {
+            $attributeType = $directive[Converter::DATA_TYPE];
+            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
+            foreach ($selectFields as $selectField) {
+                $selectField = trim($selectField);
+                $selectFieldAlias = 'extension_attribute_' . $attributeCode . '_' . $selectField;
+                if (isset($data[$selectFieldAlias])) {
+                    if ($this->typeProcessor->isArrayType($attributeType)) {
+                        throw new \LogicException(
+                            sprintf(
+                                'Join directives cannot be processed for attribute (%s) of extensible entity (%s),'
+                                . ' which has an Array type (%s).',
+                                $attributeCode,
+                                $this->getExtensibleInterfaceName($extensibleEntityClass),
+                                $attributeType
+                            )
+                        );
+                    } elseif ($this->typeProcessor->isTypeSimple($attributeType)) {
+                        $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
+                        break;
+                    } else {
+                        if (!isset($extensionData['data'][$attributeCode])) {
+                            $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
+                        }
+                        $setterName = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($selectField));
+                        $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
+                    }
+                    unset($data[$selectFieldAlias]);
+                }
+            }
+        }
+        if (!empty($extensionData)) {
+            $extensionAttributes = $this->create($extensibleEntityClass, $extensionData);
+            $extensibleEntity->setExtensionAttributes($extensionAttributes);
+        }
+    }
+
+    /**
+     * Returns the internal join directive config for a given type.
+     *
+     * Array returned has all of the \Magento\Framework\Api\Config\Converter JOIN* fields set.
+     *
+     * @param string $extensibleEntityClass
+     * @return array
+     */
+    private function getJoinDirectivesForType($extensibleEntityClass)
+    {
+        $extensibleInterfaceName = $this->getExtensibleInterfaceName($extensibleEntityClass);
+        $extensibleInterfaceName = ltrim($extensibleInterfaceName, '\\');
+        $config = $this->configReader->read();
+        if (!isset($config[$extensibleInterfaceName])) {
+            return [];
+        }
+
+        $typeAttributesConfig = $config[$extensibleInterfaceName];
+        $joinDirectives = [];
+        foreach ($typeAttributesConfig as $attributeCode => $attributeConfig) {
+            if (isset($attributeConfig[Converter::JOIN_DIRECTIVE])) {
+                $joinDirectives[$attributeCode] = $attributeConfig[Converter::JOIN_DIRECTIVE];
+                $joinDirectives[$attributeCode][Converter::DATA_TYPE] = $attributeConfig[Converter::DATA_TYPE];
+            }
+        }
+
+        return $joinDirectives;
     }
 
     /**
@@ -122,97 +228,5 @@ class ExtensionAttributesFactory
             "Class '{$extensibleClassName}' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
         );
-    }
-
-    /**
-     * Processes join instructions to add to the collection for a data interface.
-     *
-     * @param DbCollection $collection
-     * @param string $extensibleEntityClass
-     * @return void
-     */
-    public function process(DbCollection $collection, $extensibleEntityClass)
-    {
-        // TODO: Optimize, since will be called on each collection load
-        $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
-        foreach ($joinDirectives as $attributeCode => $directive) {
-            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
-            foreach ($selectFields as $selectField) {
-                /** @var ExtensionAttributeJoinData $joinData */
-                $joinData = $this->extensionAttributeJoinDataFactory->create();
-                $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
-                    ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
-                    ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
-                    ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
-                    ->setSelectField(trim($selectField));
-                $collection->joinExtensionAttribute($joinData);
-            }
-        }
-    }
-
-    /**
-     * Populate extension attributes object of the provided extensible entity based on the provided data.
-     *
-     * @param ExtensibleDataInterface $extensibleEntity
-     * @param array $data
-     */
-    public function populateExtensionAttributes(
-        \Magento\Framework\Api\ExtensibleDataInterface $extensibleEntity,
-        array $data
-    ) {
-        // TODO: Optimize, since will be called on each extensible model setData()
-        $joinDirectives = $this->getJoinDirectivesForType(get_class($extensibleEntity));
-        foreach ($joinDirectives as $attributeCode => $directive) {
-            $extensionData = [];
-            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
-            foreach ($selectFields as $selectField) {
-                $selectField = trim($selectField);
-                $selectFieldAlias = 'extension_attribute_' . $attributeCode . '_' . $selectField;
-                if ($this->typeProcessor->isTypeSimple($directive[Converter::DATA_TYPE])) {
-                    if (isset($data[$selectFieldAlias])) {
-                        $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
-                        unset($data[$selectFieldAlias]);
-                        break;
-                    }
-                } else {
-                    // TODO: Add processing of case with complex field
-//                    $extensionData['data'][$attributeCode][$selectField] = $collectionItem->getData($selectFieldAlias);
-                }
-            }
-            $extensionAttributes = $this->create(
-                get_class($extensibleEntity),
-                $extensionData
-            );
-            $extensibleEntity->setExtensionAttributes($extensionAttributes);
-        }
-    }
-
-    /**
-     * Returns the internal join directive config for a given type.
-     *
-     * Array returned has all of the \Magento\Framework\Api\Config\Converter JOIN* fields set.
-     *
-     * @param string $extensibleEntityClass
-     * @return array
-     */
-    private function getJoinDirectivesForType($extensibleEntityClass)
-    {
-        $extensibleEntityClass = ltrim($extensibleEntityClass, '\\');
-        $extensibleInterfaceName = $this->getExtensibleInterfaceName($extensibleEntityClass);
-        $config = $this->configReader->read();
-        if (!isset($config[$extensibleInterfaceName])) {
-            return [];
-        }
-
-        $typeAttributesConfig = $config[$extensibleInterfaceName];
-        $joinDirectives = [];
-        foreach ($typeAttributesConfig as $attributeCode => $attributeConfig) {
-            if (isset($attributeConfig[Converter::JOIN_DIRECTIVE])) {
-                $joinDirectives[$attributeCode] = $attributeConfig[Converter::JOIN_DIRECTIVE];
-                $joinDirectives[$attributeCode][Converter::DATA_TYPE] = $attributeConfig[Converter::DATA_TYPE];
-            }
-        }
-
-        return $joinDirectives;
     }
 }
