@@ -10,7 +10,7 @@ class UserConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testUserRequestCreation()
     {
-        $factoryMock = $this->getMock('Magento\Config\Model\Config\Factory', [], [], '', false);
+        $factoryMock = $this->getMock('Magento\Config\Model\Config\Factory', ['create'], [], '', false);
         $responseMock = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
         $configMock = $this->getMock('Magento\Config\Model\Config', [], [], '', false);
 
