@@ -77,7 +77,7 @@ define([
         createRendererComponent: function (address, addressIndex) {
             // rendererTemplates are provided via layout
             var rendererTemplate = (address.type != undefined && this.rendererTemplates[address.type] != undefined)
-                ? utils.extend(defaultRendererTemplate, this.rendererTemplates[address.type])
+                ? utils.extend({}, defaultRendererTemplate, this.rendererTemplates[address.type])
                 : defaultRendererTemplate;
             var templateData = {
                 parentName: this.name,
