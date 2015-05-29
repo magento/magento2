@@ -19,6 +19,7 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
@@ -3118,20 +3119,27 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Retrieve valid table name
-     * Check table name length and allowed symbols
+     * Returns a compressed version of the table name if it is too long
      *
      * @param string $tableName
      * @return string
+     * @codeCoverageIgnore Covered by tests on ExpressionConverter
      */
     public function getTableName($tableName)
     {
         return ExpressionConverter::shortenEntityName($tableName, 't_');
     }
 
+    /**
+     * Returns a compressed version of the trigger name if it is too long
+     *
+     * @param string $triggerName
+     * @return string
+     * @codeCoverageIgnore Covered by tests on ExpressionConverter
+     */
     public function getTriggerName($triggerName)
     {
-        return ExpressionConverter::shortenEntityName($triggerName, 'trg_');
+        return ExpressionConverter::shortenEntityName($triggerName, Subscription::TRIGGER_NAME_QUALIFIER);
     }
 
     /**
