@@ -13,13 +13,6 @@ namespace Magento\Tax\Model\Observer;
 class Session
 {
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $taxData;
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
@@ -30,16 +23,13 @@ class Session
     protected $groupRepository;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->taxData = $taxData;
         $this->groupRepository = $groupRepository;
         $this->customerSession = $customerSession;
     }
