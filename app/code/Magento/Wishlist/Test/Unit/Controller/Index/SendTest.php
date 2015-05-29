@@ -32,6 +32,10 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SendTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  Send |\PHPUnit_Framework_MockObject_MockObject */
@@ -106,6 +110,9 @@ class SendTest extends \PHPUnit_Framework_TestCase
     /** @var  EventManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $eventManager;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
@@ -370,13 +377,16 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ['test text', 100, null, 1, 0, '', 'Email address can\'t be empty.'],
             ['test text', 100, '', 1, 0, '', 'Email address can\'t be empty.'],
             ['test text', 100, 'user1@example.com', 1, 1, '', 'This wishlist can be shared 0 more times.'],
-            ['test text', 100, 'user1@example.com, user2@example.com', 3, 2, '', 'This wishlist can be shared 1 more times.'],
+            ['test text', 100, 'u1@example.com, u2@example.com', 3, 2, '', 'This wishlist can be shared 1 more times.'],
             ['test text', 100, 'wrongEmailAddress', 1, 0, '', 'Please input a valid email address.'],
             ['test text', 100, 'user1@example.com, wrongEmailAddress', 2, 0, '', 'Please input a valid email address.'],
             ['test text', 100, 'wrongEmailAddress, user2@example.com', 2, 0, '', 'Please input a valid email address.'],
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecuteWithException()
     {
         $text = 'test text';
@@ -499,6 +509,9 @@ class SendTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecute()
     {
         $text = 'text';
