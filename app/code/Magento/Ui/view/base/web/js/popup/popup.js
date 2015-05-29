@@ -6,8 +6,8 @@ define([
     "jquery",
     "underscore",
     "mage/template",
-    "text!ui/template/dialog/dialog-modal.html",
-    "text!ui/template/dialog/dialog-slide.html",
+    "text!ui/template/popup/popup-modal.html",
+    "text!ui/template/popup/popup-slide.html",
     "jquery/ui",
     "mage/translate"
 ], function($, _, template, modalTpl, slideTpl){
@@ -16,7 +16,7 @@ define([
     /**
      * Dialog Widget
      */
-    $.widget('mage.dialog', {
+    $.widget('mage.popup', {
         options: {
             type: 'modal',
             title: '',
@@ -239,5 +239,5 @@ define([
         }
     });
 
-    return $.mage.dialog;
+    return $.mage.popup;
 });
