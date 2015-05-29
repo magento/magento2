@@ -59,11 +59,11 @@ define([
                 buttons: [{
                     text: $.mage.__('Create Category'),
                     class: 'action-primary',
-                    click: function () {
+                    click: function (e) {
                         if (!newCategoryForm.valid()) {
                             return;
                         }
-                        var thisButton = $(this);
+                        var thisButton = $(e.currentTarget);
 
                         thisButton.prop('disabled', true);
                         $.ajax({
