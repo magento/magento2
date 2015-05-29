@@ -113,6 +113,24 @@
 
 .dialog-slide {
     .abs-dialog-slide();
+    &._inner-scroll {
+        .dialog-inner-wrap {
+            .vendor-prefix-display(flex);
+            .vendor-prefix-flex-direction(column);
+            overflow-y: visible;
+        }
+        .dialog-header,
+        .dialog-footer {
+            .vendor-prefix-flex-grow(0);
+            .vendor-prefix-flex-shrink(0);
+        }
+        .dialog-content {
+            overflow-y: auto;
+        }
+        .dialog-footer {
+            margin-top: auto;
+        }
+    }
     .dialog-header,
     .dialog-content,
     .dialog-footer {
@@ -128,7 +146,7 @@
     .abs-dialog-modal();
     //  If applied, switching outer modal scroll to inner
     &._inner-scroll {
-        overflow-y: inherit;
+        overflow-y: visible;
         .dialog-inner-wrap {
             max-height: 90%;
         }
