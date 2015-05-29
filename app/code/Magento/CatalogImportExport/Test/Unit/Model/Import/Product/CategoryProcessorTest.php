@@ -65,10 +65,10 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
                     self::CHILD_CATEGORY_ID => $childCategory,
                 ]
             );
-        $map = array(
-            array(self::PARENT_CATEGORY_ID, $parentCategory),
-            array(self::CHILD_CATEGORY_ID, $childCategory),
-        );
+        $map = [
+            [self::PARENT_CATEGORY_ID, $parentCategory],
+            [self::CHILD_CATEGORY_ID, $childCategory],
+        ];
         $categoryCollection->expects($this->any())
             ->method('getItemById')
             ->will($this->returnValueMap($map));

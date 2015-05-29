@@ -367,7 +367,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Check whether the row is valid.
      *
-     * @inherited
+     * @param array $rowData
+     * @param int $rowNum
+     * @param bool $isNewProduct
+     * @return bool
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -378,8 +381,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Prepare attributes with default value for save.
      *
-    * @inherited
-    */
+     * @param array $rowData
+     * @param bool $withDefaultValue
+     * @return array
+     */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
         $resultAttrs = parent::prepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue);
@@ -390,7 +395,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Transform dynamic/fixed values to integer.
      *
-     * @var array $rowData
+     * @param array $rowData
      * @return array
      */
     protected function transformBundleCustomAttributes($rowData)

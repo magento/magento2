@@ -313,7 +313,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $rowNum = 666;
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('isRowAllowedToImport', '_populateToUrlGeneration'))
+            ->setMethods(['isRowAllowedToImport', '_populateToUrlGeneration'])
             ->getMock();
 
         $this->_dataSourceModel->expects($this->exactly(2))->method('getNextBunch')->willReturnOnConsecutiveCalls(
@@ -403,7 +403,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError'))
+            ->setMethods(['addRowError'])
             ->getMock();
         $importProduct->expects($this->once())->method('addRowError');
 
@@ -428,7 +428,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError'))
+            ->setMethods(['addRowError'])
             ->getMock();
         $importProduct->expects($this->once())->method('addRowError');
         $this->setPropertyValue($importProduct, '_uniqueAttributes', [
@@ -476,12 +476,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $expectedId = '100';
         $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
-            ->setMethods(array('getId'))
+            ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $attribute->expects($this->once())->method('getId')->willReturn($expectedId);
         $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource')
             ->disableOriginalConstructor()
-            ->setMethods(array('getAttribute'))
+            ->setMethods(['getAttribute'])
             ->getMock();
         $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
@@ -506,12 +506,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testValidateRowIsAlreadyValidated($isInvalidRow, $expectedResult)
     {
         $rowNum = 0;
-        $this->setPropertyValue($this->importProduct, '_validatedRows', array(
-            $rowNum => true,
-        ));
-        $this->setPropertyValue($this->importProduct, '_invalidRows', array(
-            $rowNum => $isInvalidRow,
-        ));
+        $this->setPropertyValue($this->importProduct, '_validatedRows', [$rowNum => true]);
+        $this->setPropertyValue($this->importProduct, '_invalidRows', [$rowNum => $isInvalidRow]);
         $result = $this->importProduct->validateRow([], $rowNum);
         $this->assertEquals($expectedResult, $result);
     }
@@ -523,7 +519,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('getBehavior', 'getRowScope'))
+            ->setMethods(['getBehavior', 'getRowScope'])
             ->getMock();
         $importProduct->expects($this->once())->method('getBehavior')->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         $importProduct->expects($this->once())->method('getRowScope')->willReturn($rowScope);
@@ -531,9 +527,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $rowData = [
             $skuKey => 'sku',
         ];
-        $this->setPropertyValue($importProduct, '_oldSku', array(
-            $rowData[$skuKey] => $oldSku
-        ));
+        $this->setPropertyValue($importProduct, '_oldSku', [$rowData[$skuKey] => $oldSku]);
         $rowNum = 0;
         $result = $importProduct->validateRow($rowData, $rowNum);
         $this->assertEquals($expectedResult, $result);
@@ -543,7 +537,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('getBehavior', 'getRowScope', 'addRowError'))
+            ->setMethods(['getBehavior', 'getRowScope', 'addRowError'])
             ->getMock();
 
         $importProduct->expects($this->once())->method('getBehavior')->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
@@ -560,7 +554,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->validator->expects($this->once())->method('isValid')->willReturn(false);
@@ -586,7 +580,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity', 'getRowScope'))
+            ->setMethods(['addRowError', 'getOptionEntity', 'getRowScope'])
             ->getMock();
 
         $rowNum = 0;
@@ -623,7 +617,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
         $sku = 'sku';
         $rowNum = 0;
@@ -678,7 +672,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -706,7 +700,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -755,7 +749,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -797,7 +791,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -847,7 +841,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -883,7 +877,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('addRowError', 'getOptionEntity'))
+            ->setMethods(['addRowError', 'getOptionEntity'])
             ->getMock();
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
@@ -1171,7 +1165,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param array $parameters
      * @return mixed
      */
-    protected function invokeMethod(&$object, $methodName, array $parameters = array())
+    protected function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -1213,7 +1207,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param array $parameters
      * @return mixed
      */
-    protected function overrideMethod(&$object, $methodName, array $parameters = array())
+    protected function overrideMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
 

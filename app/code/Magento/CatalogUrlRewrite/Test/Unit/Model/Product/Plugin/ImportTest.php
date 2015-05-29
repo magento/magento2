@@ -83,7 +83,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase {
             ->getMock();
         $this->productUrlRewriteGenerator = $this->getMockBuilder('\Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator')
             ->disableOriginalConstructor()
-            ->setMethods(array('generate'))
+            ->setMethods(['generate'])
             ->getMock();
         $this->productRepository = $this->getMockBuilder('\Magento\Catalog\Api\ProductRepositoryInterface')
             ->disableOriginalConstructor()
