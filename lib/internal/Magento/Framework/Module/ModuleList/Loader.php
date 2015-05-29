@@ -86,7 +86,7 @@ class Loader
     public function load()
     {
         $result = [];
-        foreach ($this->getModuleConfigs() as $contents) {
+        foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
                 $this->parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -107,7 +107,12 @@ class Loader
     }
 
     /**
-     * Returns a traversable yielding content of all module.xml files
+     * Returns module config data and a path to the module.xml file.
+     *
+     * Example of data returned by generator:
+     * <code>
+     *     [ 'vendor/module/etc/module.xml', '<xml>contents</xml>' ]
+     * </code>
      *
      * @return \Traversable
      *
@@ -117,12 +122,12 @@ class Loader
     {
         $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
         foreach ($modulesDir->search('*/*/etc/module.xml') as $filePath) {
-            yield $modulesDir->readFile($filePath);
+            yield [$filePath, $modulesDir->readFile($filePath)];
         }
 
         foreach ($this->moduleRegistry->getModulePaths() as $modulePath) {
             $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
-            yield $this->filesystemDriver->fileGetContents($filePath);
+            yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
         }
     }
 

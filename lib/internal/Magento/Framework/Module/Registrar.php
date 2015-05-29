@@ -24,6 +24,7 @@ class Registrar implements ModuleRegistryInterface
      *
      * @param string $moduleName Fully-qualified module name
      * @param string $path Absolute file path to the module
+     * @return void
      */
     public static function registerModule($moduleName, $path)
     {

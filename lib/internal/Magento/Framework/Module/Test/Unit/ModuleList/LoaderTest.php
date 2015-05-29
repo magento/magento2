@@ -35,17 +35,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $converter;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $parser;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $registry;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $driver;
@@ -75,7 +75,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $fixtures = [
             'a' => ['name' => 'a', 'sequence' => []],    // a is on its own
-            'b' => ['name' => 'b', 'sequence' => ['d']], // b is after c
+            'b' => ['name' => 'b', 'sequence' => ['d']], // b is after d
             'c' => ['name' => 'c', 'sequence' => ['e']], // c is after e
             'd' => ['name' => 'd', 'sequence' => ['c']], // d is after c
             'e' => ['name' => 'e', 'sequence' => ['a']], // e is after a
@@ -89,14 +89,15 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['c', null, null, self::$sampleXml],
         ]));
         $this->driver->expects($this->exactly(2))->method('fileGetContents')->will($this->returnValueMap([
-            ['/path/to/d', null, null, self::$sampleXml],
-            ['/path/to/e', null, null, self::$sampleXml],
+            ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/e/etc/module.xml', null, null, self::$sampleXml],
         ]));
         $index = 0;
         foreach ($fixtures as $name => $fixture) {
             $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
         }
-        $this->parser->expects($this->atLeastOnce())->method('loadXML');
+        $this->parser->expects($this->atLeastOnce())->method('loadXML')
+            ->with(self::$sampleXml);
         $this->parser->expects($this->atLeastOnce())->method('getDom');
         $result = $this->loader->load();
         $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
