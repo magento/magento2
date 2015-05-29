@@ -793,7 +793,6 @@ class Db extends \Magento\Framework\Data\Collection
      */
     public function joinExtensionAttribute($join)
     {
-        $fieldAlias = $join->getReferenceTableAlias() . '_' . $join->getSelectField();
         $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
@@ -804,7 +803,12 @@ class Db extends \Magento\Framework\Data\Collection
                 []
             );
         }
-        $this->getSelect()->columns([$fieldAlias => $join->getReferenceTableAlias() . '.' . $join->getSelectField()]);
+        $columns = [];
+        foreach ($join->getSelectFields() as $selectField) {
+            $fieldAlias = $join->getReferenceTableAlias() . '_' . $selectField;
+            $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
+        }
+        $this->getSelect()->columns($columns);
         return $this;
     }
 

@@ -113,17 +113,14 @@ class ExtensionAttributesFactory
     {
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         foreach ($joinDirectives as $attributeCode => $directive) {
-            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
-            foreach ($selectFields as $selectField) {
-                /** @var ExtensionAttributeJoinData $joinData */
-                $joinData = $this->extensionAttributeJoinDataFactory->create();
-                $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
-                    ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
-                    ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
-                    ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
-                    ->setSelectField(trim($selectField));
-                $collection->joinExtensionAttribute($joinData);
-            }
+            /** @var ExtensionAttributeJoinData $joinData */
+            $joinData = $this->extensionAttributeJoinDataFactory->create();
+            $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
+                ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
+                ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
+                ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
+                ->setSelectFields($directive[Converter::JOIN_SELECT_FIELDS]);
+            $collection->joinExtensionAttribute($joinData);
         }
     }
 

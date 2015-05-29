@@ -35,10 +35,9 @@ class FileResolver extends \Magento\Framework\App\Config\FileResolver
         $arguments = func_get_args();
         $arraysToMerge = [];
         foreach ($arguments as $argument) {
-            $arraysToMerge[] = is_array($argument) ? $argument : $this->convertFileIteratorToArray($argument);
+            $arraysToMerge[] = is_array($argument) ? $argument : $this->convertToArray($argument);
         }
         return call_user_func_array('array_merge', $arraysToMerge);
-
     }
 
     /**
@@ -70,18 +69,18 @@ class FileResolver extends \Magento\Framework\App\Config\FileResolver
     }
 
     /**
-     * Convert FileIterator to an array
+     * Convert an argument to an array
      *
      * If it's not FileIterator instance, then empty array will be returned
      *
-     * @param $iterator
+     * @param mixed $argument
      * @return array
      */
-    protected function convertFileIteratorToArray($iterator)
+    protected function convertToArray($argument)
     {
         $resultArray = [];
-        if ($iterator instanceof \Magento\Framework\Config\FileIterator) {
-            $resultArray = $iterator->toArray();
+        if ($argument instanceof \Magento\Framework\Config\FileIterator) {
+            $resultArray = $argument->toArray();
         }
         return $resultArray;
     }

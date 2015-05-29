@@ -34,9 +34,9 @@ class ExtensionAttributeJoinData
     private $joinField;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $selectField;
+    private $selectFields;
 
     /**
      * Get reference table name.
@@ -127,24 +127,24 @@ class ExtensionAttributeJoinData
     }
 
     /**
-     * Get select field.
+     * Get select fields.
      *
-     * @return string
+     * @return string[]
      */
-    public function getSelectField()
+    public function getSelectFields()
     {
-        return $this->selectField;
+        return $this->selectFields;
     }
 
     /**
      * Set select field.
      *
-     * @param string $selectField
+     * @param string[] $selectFields
      * @return $this
      */
-    public function setSelectField($selectField)
+    public function setSelectFields(array $selectFields)
     {
-        $this->selectField = $selectField;
+        $this->selectFields = $selectFields;
         return $this;
     }
 }
