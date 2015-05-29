@@ -81,6 +81,16 @@ class Generator
     }
 
     /**
+     * Retrieve an array of services
+     *
+     * @return array
+     */
+    public function getListOfServices()
+    {
+        return $this->_apiConfig->getSoapServicesConfig();
+    }
+
+    /**
      * Generate WSDL file based on requested services (uses cache)
      *
      * @param array $requestedServices

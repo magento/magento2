@@ -122,7 +122,16 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
                 $this->_setResponseBody($responseBody);
-            } else {
+            } else if ($this->_isWsdlListRequest()) {
+                $servicesList = [];
+                foreach ($this->_wsdlGenerator->getListOfServices() as $serviceName => $serviceData) {
+                    $servicesList[$serviceName]['wsdl_endpoint'] = $this->_soapServer->getEndpointUri()
+                        . '?' . \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL . '&services=' . $serviceName;
+                }
+                $this->_setResponseContentType('application/json');
+                $this->_setResponseBody(json_encode($servicesList));
+            }
+            else {
                 $this->_soapServer->handle();
             }
         } catch (\Exception $e) {
@@ -139,6 +148,16 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected function _isWsdlRequest()
     {
         return $this->_request->getParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL) !== null;
+    }
+
+    /**
+     * Check if current request is WSDL request. SOAP operation execution request is another type of requests.
+     *
+     * @return bool
+     */
+    protected function _isWsdlListRequest()
+    {
+        return $this->_request->getParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_LIST_WSDL) !== null;
     }
 
     /**
