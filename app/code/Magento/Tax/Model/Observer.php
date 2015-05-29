@@ -320,7 +320,7 @@ class Observer
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
                 . '<%% if (data.basePrice.value) { %%>'
-                . ' <%%= data.basePrice.formatted %%>'
+                . ' +<%%= data.basePrice.formatted %%>'
                 . '<%% } %%>'
             );
         }
