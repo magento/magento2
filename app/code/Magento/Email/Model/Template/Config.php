@@ -1,13 +1,12 @@
 <?php
 /**
+ * High-level interface for email templates data that hides format from the client code
+ *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
-/**
- * High-level interface for email templates data that hides format from the client code
- */
 class Config
 {
     /**
@@ -20,16 +19,24 @@ class Config
      */
     protected $_moduleReader;
 
+
+    /**
+     * @var \Magento\Email\Model\Template|FileSystem
+     */
+    protected $_fileSystem;
+
     /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Email\Model\Template|FileSystem $fileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
-        \Magento\Framework\Module\Dir\Reader $moduleReader
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        \Magento\Email\Model\Template\FileSystem $fileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
+        $this->_fileSystem = $fileSystem;
     }
 
     /**
@@ -85,7 +92,11 @@ class Config
     {
         $module = $this->getTemplateModule($templateId);
         $file = $this->_getInfo($templateId, 'file');
-        return $this->_moduleReader->getModuleDir('view', $module) . '/email/' . $file;
+
+        $result = $this->_fileSystem->getEmailTemplateFileName($file,$module);
+        return $result;
+        //TODO - remove this line, just here so I can compare the old behavior to the new
+        //return $this->_moduleReader->getModuleDir('view', $module) . '/frontend/email/' . $file;
     }
 
     /**

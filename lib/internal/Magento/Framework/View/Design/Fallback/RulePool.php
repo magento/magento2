@@ -28,6 +28,7 @@ class RulePool
     const TYPE_LOCALE_FILE = 'locale';
     const TYPE_TEMPLATE_FILE = 'template';
     const TYPE_STATIC_FILE = 'static';
+    const TYPE_EMAIL_TEMPLATE = 'email';
     /**#@-*/
 
     /**
@@ -60,6 +61,7 @@ class RulePool
     protected function createLocaleFileRule()
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
+
         return new Theme(
             new Simple("$themesDir/<area>/<theme_path>")
         );
@@ -74,6 +76,7 @@ class RulePool
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+
         return new ModularSwitch(
             new Theme(
                 new Simple("$themesDir/<area>/<theme_path>/templates")
@@ -97,6 +100,7 @@ class RulePool
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+
         return new ModularSwitch(
             new Theme(new Simple("$themesDir/<area>/<theme_path>")),
             new Composite(
@@ -119,6 +123,7 @@ class RulePool
         $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
         $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
         $libDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
+
         return new ModularSwitch(
             new Composite(
                 [
@@ -162,7 +167,31 @@ class RulePool
     }
 
     /**
+     * Retrieve newly created fallback rule for template files
+     *
+     * @return RuleInterface
+     */
+    protected function createEmailFileRule()
+    {
+        $emailDir = $this->filesystem->getDirectoryRead(DirectoryList::EMAIL)->getAbsolutePath();
+        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+
+        return new ModularSwitch(
+            new Theme(
+                new Simple("$emailDir/<theme_path>")
+            ),
+            new Composite(
+                [
+                    new Theme(new Simple("$emailDir/<theme_path>/<namespace>_<module>")),
+                    new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
+                ]
+            )
+        );
+    }
+
+    /**
      * @param string $type
+     *
      * @return RuleInterface
      * @throws \InvalidArgumentException
      */
@@ -184,10 +213,14 @@ class RulePool
             case self::TYPE_STATIC_FILE:
                 $rule = $this->createViewFileRule();
                 break;
+            case self::TYPE_EMAIL_TEMPLATE:
+                $rule = $this->createEmailFileRule();
+                break;
             default:
                 throw new \InvalidArgumentException("Fallback rule '$type' is not supported");
         }
         $this->rules[$type] = $rule;
+
         return $this->rules[$type];
     }
 }
