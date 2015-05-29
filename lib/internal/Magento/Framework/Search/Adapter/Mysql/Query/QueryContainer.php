@@ -89,6 +89,7 @@ class QueryContainer
 
     /**
      * @param string $filter
+     * @return void
      */
     public function addFilter($filter)
     {
@@ -96,6 +97,9 @@ class QueryContainer
         $this->filtersCount++;
     }
 
+    /**
+     * @return void
+     */
     public function clearFilters()
     {
         $this->filters = [];
@@ -109,6 +113,9 @@ class QueryContainer
         return $this->filters;
     }
 
+    /**
+     * @return int
+     */
     public function getFiltersCount()
     {
         return $this->filtersCount;

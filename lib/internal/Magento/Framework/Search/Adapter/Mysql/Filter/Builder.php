@@ -66,6 +66,7 @@ class Builder implements BuilderInterface
     /**
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
+     * @param QueryContainer $queryContainer
      * @return string
      */
     private function processFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
