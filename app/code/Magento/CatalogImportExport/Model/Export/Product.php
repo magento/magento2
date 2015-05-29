@@ -282,7 +282,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'small_image',
         'small_image_label',
         'thumbnail_image',
-        'thumbnail_image_label'
+        'thumbnail_image_label',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -863,11 +865,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                 }
 
-                if (!empty($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES])) {
+                if (!empty($additionalAttributes)) {
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
-                    foreach ($additionalAttributes as $fieldName => $value) {
-                        unset($data[$itemId][$storeId][$fieldName]);
-                    }
                 } else {
                     unset($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES]);
                 }
