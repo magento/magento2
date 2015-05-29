@@ -106,7 +106,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
