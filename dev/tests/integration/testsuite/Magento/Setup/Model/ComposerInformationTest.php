@@ -81,7 +81,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
-        foreach($expectedExtensions as $expectedExtension) {
+        foreach ($expectedExtensions as $expectedExtension) {
             $this->assertContains($expectedExtension, $actualRequiredExtensions);
         }
     }
@@ -104,7 +104,8 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Exception
      * @expectedExceptionMessage Composer file not found:
      */
-    public function testNoLock() {
+    public function testNoLock()
+    {
         $this->setupDirectoryMock('notARealDirectory');
         new ComposerInformation($this->filesystemMock, $this->ioMock);
     }
