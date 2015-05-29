@@ -12,6 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
@@ -94,6 +95,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $file;
 
     /**
+     * @var Loader
+     */
+    private $loader;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -102,6 +108,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param DirectoryList $directoryList
      * @param File $file
      * @param FullModuleList $fullModuleList
+     * @param Loader $loader
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
@@ -113,6 +120,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         DirectoryList $directoryList,
         File $file,
         FullModuleList $fullModuleList,
+        Loader $loader,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
         UninstallCollector $collector
@@ -129,6 +137,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
         $this->file = $file;
+        $this->loader = $loader;
     }
 
     /**
@@ -218,7 +227,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             );
             $this->removeModulesFromDeploymentConfig($modules);
             $this->cleanup($input, $output);
-            $output->writeln('<info>To completely remove modules, please run composer remove</info>');
+            $output->writeln(
+                "<info>To completely remove modules, please run 'composer remove <package-name>' for each module</info>"
+            );
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
@@ -349,11 +360,13 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private function removeModulesFromDeploymentConfig(array $modules)
     {
         $existingModules = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_MODULES);
-        foreach ($modules as $module) {
-            unset($existingModules[$module]);
+        $newSort = $this->loader->load($modules);
+        $newModules = [];
+        foreach (array_keys($newSort) as $module) {
+            $newModules[$module] = $existingModules[$module];
         }
         $this->writer->saveConfig(
-            [ConfigFilePool::APP_CONFIG => [ConfigOptionsListConstants::KEY_MODULES => $existingModules]],
+            [ConfigFilePool::APP_CONFIG => [ConfigOptionsListConstants::KEY_MODULES => $newModules]],
             true
         );
     }

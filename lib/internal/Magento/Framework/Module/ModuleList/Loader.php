@@ -53,12 +53,13 @@ class Loader
     }
 
     /**
-     * Loads the full module list information
+     * Loads the full module list information. Excludes modules specified in $exclude.
      *
+     * @param array $exclude
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
-    public function load()
+    public function load(array $exclude = [])
     {
         $result = [];
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
@@ -79,7 +80,9 @@ class Loader
 
             $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
-            $result[$name] = $data[$name];
+            if (!in_array($name, $exclude)) {
+                $result[$name] = $data[$name];
+            }
         }
         return $this->sortBySequence($result);
     }

@@ -97,6 +97,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $file;
 
     /**
+     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loader;
+
+    /**
      * @var ModuleUninstallCommand
      */
     private $command;
@@ -160,6 +165,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->willReturn($path);
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->command = new ModuleUninstallCommand(
             $composer,
             $this->deploymentConfig,
@@ -167,6 +173,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->directoryList,
             $this->file,
             $this->fullModuleList,
+            $this->loader,
             $this->maintenanceMode,
             $objectManagerProvider,
             $this->uninstallCollector
@@ -398,17 +405,23 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('getConfigData')
             ->with(ConfigOptionsListConstants::KEY_MODULES)
-            ->willReturn(['Magento_A' => 1, 'Magento_B' => 1, 'Magento_C' => 1, 'Magento_D' => 1]);
+            ->willReturn(['Magento_A' => 1, 'Magento_B' => 1, 'Magento_C' => 0, 'Magento_D' => 1]);
+
+        $this->loader->expects($this->once())
+            ->method('load')
+            ->with($input['module'])
+            ->willReturn(['Magento_C' => [], 'Magento_D' => []]);
         $this->writer->expects($this->once())
             ->method('saveConfig')
             ->with(
                 [
                     ConfigFilePool::APP_CONFIG =>
-                        [ConfigOptionsListConstants::KEY_MODULES => ['Magento_C' => 1, 'Magento_D' => 1]]
+                        [ConfigOptionsListConstants::KEY_MODULES => ['Magento_C' => 0, 'Magento_D' => 1]]
                 ]
             );
         $this->cache->expects($this->once())->method('clean');
         $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
+
     }
 
     public function testExecute()
@@ -488,8 +501,8 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             'Generated classes cleared successfully.' . PHP_EOL .
             'Alert: Generated static view files were not cleared. You can clear them using the --clear-static-content '
             . 'option. Failure to clear static view files might cause display issues in the Admin and storefront.'
-            . PHP_EOL . 'To completely remove modules, please run composer remove' . PHP_EOL
-            . 'Disabling maintenance mode' . PHP_EOL;
+            . PHP_EOL . "To completely remove modules, please run 'composer remove <package-name>' for each module"
+            . PHP_EOL . 'Disabling maintenance mode' . PHP_EOL;
         $this->assertEquals($expectedMsg, $this->tester->getDisplay());
     }
 }
