@@ -148,7 +148,7 @@ class BackupRollback
         return [
             $this->directoryList->getPath(DirectoryList::STATIC_VIEW),
             $this->directoryList->getPath(DirectoryList::VAR_DIR),
-            $this->directoryList->getROot() . '/vendor',
+            $this->directoryList->getRoot() . '/vendor',
             $this->directoryList->getRoot() . '/.idea',
             $this->directoryList->getRoot() . '/.svn',
             $this->directoryList->getRoot() . '/.git'
