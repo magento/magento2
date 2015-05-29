@@ -13,7 +13,7 @@
             <resource ref="Magento_CatalogInventory::cataloginventory"/>
         </resources>
     </route>
-    <route url="/V1/stockItems/:productSku" method="PUT">
+    <route url="/V1/products/:productSku/stockItems/:itemId" method="PUT">
         <service class="Magento\CatalogInventory\Api\StockRegistryInterface" method="updateStockItemBySku"/>
         <resources>
             <resource ref="Magento_CatalogInventory::cataloginventory"/>
