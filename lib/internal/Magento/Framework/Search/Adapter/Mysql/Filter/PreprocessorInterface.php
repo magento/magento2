@@ -14,6 +14,7 @@ interface PreprocessorInterface
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
+     * @param QueryContainer $queryContainer
      * @return string
      */
     public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer);
