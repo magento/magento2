@@ -223,7 +223,9 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                         if (is_array($configs)) {
                             foreach ($configs as $keyConfig => $config) {
                                 $calcPrice = 'finalPrice';
-                                if ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
+                                if ($this->_taxData->priceIncludesTax() &&
+                                    $this->_taxData->displayPriceExcludingTax()
+                                ) {
                                     $calcPrice = 'basePrice';
                                 }
                                 if (array_key_exists('prices', $configs)) {
