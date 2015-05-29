@@ -82,16 +82,9 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * Resource used to authorize access to the controller
-     *
-     * @var string
-     */
-    protected $resource;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      */
-    public function __construct(Action\Context $context, $resource = '')
+    public function __construct(Action\Context $context)
     {
         parent::__construct($context);
         $this->_authorization = $context->getAuthorization();
@@ -109,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed($this->resource ?: self::ADMIN_RESOURCE);
+        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
     }
 
     /**
