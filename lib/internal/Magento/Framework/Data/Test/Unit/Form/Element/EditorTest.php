@@ -5,7 +5,7 @@
  */
 
 /**
- * Tests for \Magento\Framework\Data\Form\Element\Textarea
+ * Tests for \Magento\Framework\Data\Form\Element\Editor
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
@@ -34,7 +34,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $formMock;
 
@@ -43,8 +43,14 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected $configMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
         $this->collectionFactoryMock = $this->getMock(
             '\Magento\Framework\Data\Form\Element\CollectionFactory',
@@ -56,11 +62,14 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
         $this->configMock = $this->getMock('\Magento\Framework\Object', ['getData'], [], '', false);
 
-        $this->model = new Editor(
-            $this->factoryMock,
-            $this->collectionFactoryMock,
-            $this->escaperMock,
-            ['config' => $this->configMock]
+        $this->model = $this->objectManager->getObject(
+            'Magento\Framework\Data\Form\Element\Editor',
+            [
+                'factoryElement' => $this->factoryMock,
+                'factoryCollection' => $this->collectionFactoryMock,
+                'escaper' => $this->escaperMock,
+                'data' => ['config' => $this->configMock]
+            ]
         );
 
         $this->formMock = $this->getMock(
@@ -83,11 +92,14 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
 
-        $model = new Editor(
-            $this->factoryMock,
-            $this->collectionFactoryMock,
-            $this->escaperMock,
-            ['config' => $this->configMock]
+        $model = $this->objectManager->getObject(
+            'Magento\Framework\Data\Form\Element\Editor',
+            [
+                'factoryElement' => $this->factoryMock,
+                'factoryCollection' => $this->collectionFactoryMock,
+                'escaper' => $this->escaperMock,
+                'data' => ['config' => $this->configMock]
+            ]
         );
 
         $this->assertEquals('wysiwyg', $model->getType());

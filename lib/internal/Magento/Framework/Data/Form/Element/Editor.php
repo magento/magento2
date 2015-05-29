@@ -43,15 +43,15 @@ class Editor extends Textarea
     /**
      * @return array
      */
-    protected function getTranslatedString()
+    protected function getButtonTranslations()
     {
-        $translatedString = [
+        $buttonTranslations = [
             'Insert Image...' => $this->translate('Insert Image...'),
             'Insert Media...' => $this->translate('Insert Media...'),
             'Insert File...' => $this->translate('Insert File...'),
         ];
 
-        return $translatedString;
+        return $buttonTranslations;
     }
 
     /**
@@ -127,7 +127,7 @@ class Editor extends Textarea
                 "\n" .
                 '(function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
-                    $this->getTranslatedString()
+                    $this->getButtonTranslations()
                 ) .
                 ')})(jQuery);' .
                 "\n" .
@@ -174,7 +174,7 @@ class Editor extends Textarea
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend_Json::encode($this->getTranslatedString()) . ')
+                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>
