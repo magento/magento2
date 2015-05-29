@@ -72,7 +72,7 @@ jQuery(function()
         if (parent && config && config.length){
             for (var i = 0; i < config.length; i++) {
                 var node;
-                if (useMassaction && config[i].is_anchor == isAnchorOnly) {
+                if (useMassaction && config[i].level != 1) {
                     config[i].uiProvider = Ext.tree.CheckboxNodeUI;
                 }
                 var _node = Object.clone(config[i]);
@@ -107,7 +107,7 @@ jQuery(function()
 
     categoryLoader.createNode = function(config) {
         var node;
-        if (useMassaction && config.is_anchor == isAnchorOnly) {
+        if (useMassaction && config.level != 1) {
             config.uiProvider = Ext.tree.CheckboxNodeUI;
         }
         var _node = Object.clone(config);
