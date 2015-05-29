@@ -16,6 +16,9 @@ use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\Resource\Item\Option\Collection as OptionCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Cart extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -24,6 +24,10 @@ use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\Resource\Item\Option\Collection as OptionCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  SharedCart |\PHPUnit_Framework_MockObject_MockObject */
