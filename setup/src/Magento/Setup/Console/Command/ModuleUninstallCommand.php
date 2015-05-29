@@ -157,7 +157,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             self::INPUT_KEY_BACKUP_CODE,
             null,
             InputOption::VALUE_NONE,
-            'Take code backup (excluding temporary files)'
+            'Take code backup (excluding temporary files and external dependencies)'
         );
         parent::configure();
     }
