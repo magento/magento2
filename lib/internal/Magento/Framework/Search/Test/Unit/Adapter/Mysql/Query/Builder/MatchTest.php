@@ -3,9 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Builder\Query;
+namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 
-use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Query\Bool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

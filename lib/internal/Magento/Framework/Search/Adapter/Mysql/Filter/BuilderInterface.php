@@ -13,6 +13,7 @@ interface BuilderInterface
     /**
      * @param RequestFilterInterface $filter
      * @param string $conditionType
+     * @param QueryContainer $queryContainer
      * @return string
      */
     public function build(RequestFilterInterface $filter, $conditionType, QueryContainer $queryContainer);
