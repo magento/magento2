@@ -509,14 +509,6 @@ interface AdapterInterface
     public function query($sql, $bind = []);
 
     /**
-     * Executes a SQL statement(s)
-     *
-     * @param string $sql
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    public function multiQuery($sql);
-
-    /**
      * Fetches all SQL result rows as a sequential array.
      * Uses the current fetchMode for the adapter.
      *

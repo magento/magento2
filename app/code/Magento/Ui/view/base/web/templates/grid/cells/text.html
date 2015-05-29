@@ -9,9 +9,10 @@
 <td
     class="_clickable"
     data-bind="click: redirect.bind($data, getClickUrl(row)),
+               visible: visible,
                html: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>
 <!-- /ko -->
 <!-- ko ifnot: isClickable(row) -->
-<td data-bind="html: getLabel(row[field.index])"></td>
+<td data-bind="visible: visible, html: getLabel(row[field.index])"></td>
 <!-- /ko -->
