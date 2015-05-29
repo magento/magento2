@@ -35,7 +35,7 @@ define(['jquery', 'ko'], function($, ko) {
          */
         removeAddress: function(address) {
             $.each(addresses(), function(key, item) {
-                if (address.customerAddressId === item.customerAddressId) {
+                if (item.hasOwnProperty('customerAddressId') && address.customerAddressId === item.customerAddressId) {
                     addresses.splice(key, 1);
                 }
             });
@@ -48,7 +48,7 @@ define(['jquery', 'ko'], function($, ko) {
         getAddressById: function(id) {
             var address = null;
             $.each(addresses(), function(key, item) {
-                if (id === item.customerAddressId) {
+                if (item.hasOwnProperty('customerAddressId') && id === item.customerAddressId) {
                     address = item;
                     return false;
                 }
