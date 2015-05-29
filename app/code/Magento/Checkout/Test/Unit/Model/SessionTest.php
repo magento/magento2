@@ -38,19 +38,19 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLastRealOrder($orderId, $incrementId, $orderMock)
     {
-        $orderFactory = $this->getMockBuilder(
-            'Magento\Sales\Model\OrderFactory'
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        $orderFactory = $this->getMockBuilder('Magento\Sales\Model\OrderFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($orderMock));
 
-        $messageCollectionFactory = $this->getMockBuilder(
-            'Magento\Framework\Message\CollectionFactory'
-        )->disableOriginalConstructor()->getMock();
-        $quoteRepository = $this->getMockBuilder(
-            'Magento\Quote\Model\QuoteRepository'
-        )->disableOriginalConstructor()->getMock();
+        $messageCollectionFactory = $this->getMockBuilder('Magento\Framework\Message\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $quoteRepository = $this->getMockBuilder('Magento\Quote\Model\QuoteRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
         $appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
@@ -323,7 +323,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($replaceQuoteId)->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('save');
 
-        $quoteIdMaskFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
+        $quoteIdMaskFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteIdMaskFactory', ['create'], [], '', false);
         $quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
 
         $session = $this->_helper->getObject(
