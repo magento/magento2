@@ -143,6 +143,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->optionFactory = $this->getMockBuilder('Magento\Wishlist\Model\Item\OptionFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->optionFactory->expects($this->once())
             ->method('create')
@@ -154,6 +155,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->itemFactory = $this->getMockBuilder('Magento\Wishlist\Model\ItemFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->itemFactory->expects($this->once())
             ->method('create')
