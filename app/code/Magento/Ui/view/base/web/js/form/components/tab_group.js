@@ -11,7 +11,7 @@ define([
     return Collapsible.extend({
         defaults: {
             listens: {
-                '<%= provider %>:data.validate': 'onValidate'
+                '${ $.provider }:data.validate': 'onValidate'
             },
             collapsible: false,
             opened: true
