@@ -2,8 +2,8 @@
 "","2"
 
 "Circular dependencies for each module:",""
-"magento/module-b","1"
-"magento/module-b->magento/module-a->magento/module-b"
-
 "magento/module-a","1"
 "magento/module-a->magento/module-b->magento/module-a"
+
+"magento/module-b","1"
+"magento/module-b->magento/module-a->magento/module-b"
