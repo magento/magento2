@@ -3118,23 +3118,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Minus superfluous characters from hash.
-     *
-     * @param  string $hash
-     * @param  string $prefix
-     * @param  int $maxCharacters
-     * @return string
-     */
-    protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
-    {
-        $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
-        $superfluous = $diff / 2;
-        $odd         = $diff % 2;
-        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
-        return $hash;
-    }
-
-    /**
      * Retrieve valid table name
      * Check table name length and allowed symbols
      *
@@ -3143,22 +3126,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function getTableName($tableName)
     {
-        $prefix = 't_';
-        if (strlen($tableName) > self::LENGTH_TABLE_NAME) {
-            $shortName = ExpressionConverter::shortName($tableName);
-            if (strlen($shortName) > self::LENGTH_TABLE_NAME) {
-                $hash = md5($tableName);
-                if (strlen($prefix . $hash) > self::LENGTH_TABLE_NAME) {
-                    $tableName = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_TABLE_NAME);
-                } else {
-                    $tableName = $prefix . $hash;
-                }
-            } else {
-                $tableName = $shortName;
-            }
-        }
+        return ExpressionConverter::shortenEntityName($tableName, 't_');
+    }
 
-        return $tableName;
+    public function getTriggerName($triggerName)
+    {
+        return ExpressionConverter::shortenEntityName($triggerName, 'trg_');
     }
 
     /**
@@ -3179,35 +3152,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         switch (strtolower($indexType)) {
             case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $prefix = 'unq_';
-                $shortPrefix = 'u_';
                 break;
             case AdapterInterface::INDEX_TYPE_FULLTEXT:
                 $prefix = 'fti_';
-                $shortPrefix = 'f_';
                 break;
             case AdapterInterface::INDEX_TYPE_INDEX:
             default:
                 $prefix = 'idx_';
-                $shortPrefix = 'i_';
         }
-
-        $hash = $tableName . '_' . $fields;
-
-        if (strlen($hash) + strlen($prefix) > self::LENGTH_INDEX_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_INDEX_NAME) {
-                $hash = md5($hash);
-                if (strlen($hash) + strlen($shortPrefix) > self::LENGTH_INDEX_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $shortPrefix, self::LENGTH_INDEX_NAME);
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        return strtoupper(ExpressionConverter::shortenEntityName($tableName . '_' . $fields, $prefix));
     }
 
     /**
@@ -3222,25 +3175,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        $prefix = 'fk_';
-        $hash = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
-        if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_FOREIGN_NAME) {
-                $hash = md5($hash);
-                if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_FOREIGN_NAME);
-                } else {
-                    $hash = $prefix . $hash;
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        $fkName = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
+        return strtoupper(ExpressionConverter::shortenEntityName($fkName, 'fk_'));
     }
 
     /**

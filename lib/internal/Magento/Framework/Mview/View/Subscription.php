@@ -8,12 +8,14 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\DB\ExpressionConverter;
+
 class Subscription implements SubscriptionInterface
 {
     /**
      * Trigger name qualifier
      */
-    const TRIGGER_NAME_QUALIFIER = 'trg';
+    const TRIGGER_NAME_QUALIFIER = 'trg_';
 
     /**
      * Database write connection
@@ -239,7 +241,8 @@ class Subscription implements SubscriptionInterface
      */
     protected function getTriggerName($tableName, $time, $event)
     {
-        return self::TRIGGER_NAME_QUALIFIER . '_' . $tableName . '_' . $time . '_' . $event;
+        $triggerName = $tableName . '_' . $time . '_' . $event;
+        return ExpressionConverter::shortenEntityName($triggerName, self::TRIGGER_NAME_QUALIFIER);
     }
 
     /**
