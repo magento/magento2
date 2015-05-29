@@ -110,6 +110,9 @@ define(
                 this.source.set('params.invalid', false);
                 fields.trigger('change');
                 this.source.trigger('billingAddress.data.validate');
+                if (!customer.isLoggedIn()()) {
+                    this.source.trigger('customerDetails.data.validate');
+                }
                 this.validateAdditionalAddressFields();
             },
             validateAdditionalAddressFields: function() {

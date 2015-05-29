@@ -54,31 +54,33 @@ class PageActions extends Column
     }
 
     /**
-     * @param array $items
-     * @return array
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
      */
-    public function prepareItems(array & $items)
+    public function prepareDataSource(array & $dataSource)
     {
-        foreach ($items as & $item) {
-            if (isset($item['page_id'])) {
-                $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl($this->url, ['page_id' => $item['page_id']]),
-                    'label' => __('Edit'),
-                    'hidden' => true
-                ];
-            }
-            if (isset($item['identifier'])) {
-                $item[$this->getData('name')]['preview'] = [
-                    'href' => $this->actionUrlBuilder->getUrl(
-                        $item['identifier'],
-                        isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
-                        isset($item['store_code']) ? $item['store_code'] : null
-                    ),
-                    'label' => __('Preview')
-                ];
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                if (isset($item['page_id'])) {
+                    $item[$this->getData('name')]['edit'] = [
+                        'href' => $this->urlBuilder->getUrl($this->url, ['page_id' => $item['page_id']]),
+                        'label' => __('Edit'),
+                        'hidden' => true
+                    ];
+                }
+                if (isset($item['identifier'])) {
+                    $item[$this->getData('name')]['preview'] = [
+                        'href' => $this->actionUrlBuilder->getUrl(
+                            $item['identifier'],
+                            isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
+                            isset($item['store_code']) ? $item['store_code'] : null
+                        ),
+                        'label' => __('Preview')
+                    ];
+                }
             }
         }
-
-        return $items;
     }
 }
