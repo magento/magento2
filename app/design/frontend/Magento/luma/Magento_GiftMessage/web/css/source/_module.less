@@ -53,6 +53,9 @@
             &._active {
                 .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
             }
+            .action {
+                margin-right: 0;
+            }
         }
     }
 
@@ -227,6 +230,10 @@
             padding-right: 1.5rem;
         }
     }
+
+    .gift-message-summary {
+        padding-right: 7rem;
+    }
 }
 
 //
@@ -265,6 +272,13 @@
     .gift-item-block {
         .title {
             padding: @indent__base 0;
+        }
+    }
+
+    .item-gift {
+        td {
+            padding-left: 0;
+            padding-right: 0;
         }
     }
 }
