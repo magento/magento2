@@ -6,7 +6,8 @@
 -->
 
 <section
-    class="dialog-<%= data.type %> <%= data.dialogClass %>"
+    class="dialog-<%= data.type %> <%= data.dialogClass %>
+    <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
     data-role="dialog"
     data-type="<%= data.type %>">
     <div class="dialog-inner-wrap">
