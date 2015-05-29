@@ -12,7 +12,6 @@ use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
-
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Nonce
  */
@@ -209,8 +208,8 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $verifier = 'verifier';
 
         $this->oauthHelperMock->expects($this->once())->method('generateTokenSecret')->willReturn($secret);
-        $this->oauthHelperMock->expects($this->once())->method('generateToken')->willReturn($token);;
-        $this->oauthHelperMock->expects($this->once())->method('generateVerifier')->willReturn($verifier);;
+        $this->oauthHelperMock->expects($this->once())->method('generateToken')->willReturn($token);
+        $this->oauthHelperMock->expects($this->once())->method('generateVerifier')->willReturn($verifier);
 
         $this->resourceMock->expects($this->once())
             ->method('selectTokenByType')
@@ -301,7 +300,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $secret = 'secret';
 
         $this->oauthHelperMock->expects($this->once())->method('generateTokenSecret')->willReturn($secret);
-        $this->oauthHelperMock->expects($this->once())->method('generateToken')->willReturn($token);;
+        $this->oauthHelperMock->expects($this->once())->method('generateToken')->willReturn($token);
 
         $this->tokenModel->setCallbackUrl($callbackUrl);
         $this->keyLengthFactoryMock->expects($this->once())->method('create')->willReturn(

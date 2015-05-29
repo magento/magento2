@@ -360,7 +360,6 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $oauthVerifier = 1;
         $consumerId = 1;
         $tokenId = 1;
-        $secret = 'secret';
 
         $this->requestTokenMock->expects($this->once())
             ->method('load')
@@ -416,7 +415,6 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $notMatchedVerifier = '123';
         $consumerId = 1;
         $tokenId = 1;
-        $secret = 'secret';
 
         $this->requestTokenMock->expects($this->once())
             ->method('load')
@@ -608,7 +606,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $this->consumerMock->expects($this->any())->method('getId')->willReturn($consumerId);
 
         $this->accessTokenMock->expects($this->once())->method('getType')->willReturn(Token::TYPE_ACCESS);
-        $this->accessTokenMock->expects($this->once())->method('getRevoked')->willReturn(0);;
+        $this->accessTokenMock->expects($this->once())->method('getRevoked')->willReturn(0);
         $this->assertEquals(
             $consumerId,
             $this->tokenProvider->validateAccessToken($accessTokenString)
