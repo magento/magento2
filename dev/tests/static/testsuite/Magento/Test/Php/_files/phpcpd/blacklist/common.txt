@@ -27,8 +27,6 @@ Magento/CatalogInventory/Model/Source
 Magento/CatalogSearch/Model/Resource/Helper
 Magento/CatalogSearch/Model/Resource/Advanced
 Magento/CatalogSearch/Model/Resource/Search
-Magento/Centinel/Controller
-Magento/Centinel/Model/State
 Magento/Checkout/Block/Multishipping
 Magento/Checkout/Model/Type
 Magento/Catalog/Model/Template
