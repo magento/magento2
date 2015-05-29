@@ -5,7 +5,7 @@
  */
 -->
 
-<section
+<aside
     class="dialog-<%= data.type %> <%= data.dialogClass %>
            <% if(data.responsive){ %><%= data.responsiveClass %><% } %>
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
@@ -17,10 +17,9 @@
                 data-role="title"><%= data.title %></h1>
             <button
                 class="action-close"
-                data-action="close-mypopup"
                 data-role="closeBtn"
                 type="button">
-                <span>$t('Close')</span>
+                <span><%= data.closeText %></span>
             </button>
         </header>
         <div
@@ -31,8 +30,8 @@
             <button
                 class="<%= button.class %>"
                 type="button"
-                data-role="action"><%= button.text %></button>
+                data-role="action"><span><%= button.text %></span></button>
             <% }); %>
         </footer>
     </div>
-</section>
+</aside>

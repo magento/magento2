@@ -37,6 +37,7 @@ define([
             overlayClass: 'overlay_magento',
             responsiveClass: 'dialog-slide',
             dialogLeftMargin: 45,
+            closeText: $.mage.__('Close'),
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
