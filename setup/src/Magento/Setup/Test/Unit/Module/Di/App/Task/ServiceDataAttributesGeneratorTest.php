@@ -10,9 +10,9 @@ use Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;
 
 /**
- * Class ServiceDataAttributesGeneratorTtest
+ * Class ServiceDataAttributesGeneratorTest
  */
-class ServiceDataAttributesGeneratorTtest extends \PHPUnit_Framework_TestCase
+class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner|\PHPUnit_Framework_MockObject_MockObject
