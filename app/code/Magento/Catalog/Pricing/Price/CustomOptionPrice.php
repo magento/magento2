@@ -30,6 +30,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * Get minimal and maximal option values
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getValue()
     {
