@@ -372,20 +372,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         } elseif (is_numeric($store)) {
             $key = $store . '|';
         }
-
-//        $productClassIds = $request->getProductClassId();
-//        if (is_array($productClassIds)) {
-//            //$productClassKeys = array_keys($productClassIds);
-//            $productClassIdString = implode("+", $productClassIds);
-//        } else {
-//            $productClassIdString = $productClassIds;
-//        }
-//
-//        $key .= $productClassIdString . '|'
-//            . $request->getCustomerClassId() . '|'
-//            . $request->getCountryId() . '|'
-//            . $request->getRegionId() . '|'
-//            . $request->getPostcode();
         $key .= $request->getProductClassId() . '|'
             . $request->getCustomerClassId() . '|'
             . $request->getCountryId() . '|'
@@ -692,8 +678,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
 
         $ids = $this->taxClassManagement->getTaxClassIds(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_PRODUCT);
         $productRates = [];
-//        $rateRequest->setProductClassId(array_keys($ids));
-//        $productRates = $this->getRate($rateRequest);
         foreach ($ids as $idKey => $idData) {
             $rateRequest->setProductClassId($idKey);
             $rate = $this->getRate($rateRequest);
