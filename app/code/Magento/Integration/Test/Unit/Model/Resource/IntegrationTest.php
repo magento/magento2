@@ -47,13 +47,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
 
-        $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\Context',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->integrationResourceModel = new \Magento\Integration\Model\Resource\Integration($this->contextMock);

@@ -45,7 +45,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->consumerResource = new \Magento\Integration\Model\Resource\Oauth\Consumer(
             $contextMock,
@@ -56,13 +56,19 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $this->consumerMock->expects($this->once())->method('setUpdatedAt');
-        $this->consumerResource->_beforeSave($this->consumerMock);
+        $this->assertInstanceOf(
+            'Magento\Integration\Model\Resource\Oauth\Consumer',
+            $this->consumerResource->_beforeSave($this->consumerMock)
+        );
     }
 
     public function testAfterDelete()
     {
         $this->adapterMock->expects($this->exactly(2))->method('delete');
-        $this->consumerResource->_afterDelete($this->consumerMock);
+        $this->assertInstanceOf(
+            'Magento\Integration\Model\Resource\Oauth\Consumer',
+            $this->consumerResource->_afterDelete($this->consumerMock)
+        );
     }
 
     public function testGetTimeInSecondsSinceCreation()
