@@ -9,12 +9,12 @@
       data-bind="submit:login"
       method="post">
     <fieldset id="customer-email" class="fieldset">
-        <div class="field required">
+        <div class="field">
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email')"></span>
             </label>
             <div class="control">
-                <input class="input-text" type="text" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
+                <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
         </div>
@@ -27,9 +27,11 @@
                 <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
             </div>
         </div>
-        <!-- ko foreach: getRegion('additional-login-form-fields') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <div class="additional-fields" data-bind="fadeVisible: isPasswordVisible">
+            <!-- ko foreach: getRegion('additional-login-form-fields') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </div>
         <div class="actions-toolbar" data-bind="fadeVisible: isPasswordVisible">
             <input name="context" type="hidden" value="checkout" />
             <div class="primary">

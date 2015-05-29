@@ -85,7 +85,10 @@ define(
                 formDataArray.forEach(function (entry) {
                     loginData[entry.name] = entry.value;
                 });
-                if ($(loginFormSelector).validation() && $(loginFormSelector).validation('isValid')) {
+                if (this.isPasswordVisible()
+                    && $(loginFormSelector).validation()
+                    && $(loginFormSelector).validation('isValid')
+                ) {
                     login(loginData);
                 }
             }
