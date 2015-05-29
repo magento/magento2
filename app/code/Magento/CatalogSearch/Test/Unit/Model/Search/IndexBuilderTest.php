@@ -155,7 +155,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->with(
                 ['search_index' => $index . $tableSuffix],
-                ['product_id']
+                ['entity_id' => 'product_id']
             )
             ->will($this->returnSelf());
 
@@ -178,10 +178,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnSelf());
         $this->select->expects($this->at(3))
-            ->method('joinInner')
+            ->method('joinLeft')
             ->with(
                 ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.product_id = cpie.entity_id'
+                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                []
             )
             ->willReturnSelf();
     }
