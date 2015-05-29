@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Block;
 
-use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Adminhtml Cms Block management grid.
+ * Backend Data Grid for managing "CMS Block" entities.
  */
-class CmsGrid extends Grid
+class CmsGrid extends DataGrid
 {
     /**
      * Filters array mapping.
@@ -19,46 +19,37 @@ class CmsGrid extends Grid
      * @var array
      */
     protected $filters = [
+        'block_id_from' => [
+            'selector' => '[name="filters[block_id][from]"]',
+        ],
+        'block_id_to' => [
+            'selector' => '[name="filters[block_id][to]"]',
+        ],
         'title' => [
-            'selector' => '[name="params[filters][title]"]',
+            'selector' => '[name="filters[title]"]',
         ],
         'identifier' => [
-            'selector' => '[name="params[filters][identifier]"]',
+            'selector' => '[name="filters[identifier]"]',
+        ],
+        'store_id' => [
+            'selector' => '[name="filters[store_id]"]',
+            'input' => 'selectstore'
         ],
         'is_active' => [
-            'selector' => '[name="params[filters][is_active]"]',
+            'selector' => '[name="filters[is_active]"]',
             'input' => 'select',
         ],
         'creation_time_from' => [
-            'selector' => '[name="params[filters][creation_time][from]"]',
+            'selector' => '[name="filters[creation_time][from]"]',
+        ],
+        'creation_time_to' => [
+            'selector' => '[name="filters[creation_time][to]"]',
         ],
         'update_time_from' => [
-            'selector' => '[name="params[filters][update_time][from]"]',
+            'selector' => '[name="filters[update_time][from]"]',
         ],
-        'store_id' => [
-            'selector' => '[name="params[filters][store_id]"]',
-            'input' => 'selectstore'
+        'update_time_to' => [
+            'selector' => '[name="filters[update_time][to]"]',
         ],
     ];
-
-    /**
-     * Locator value for 'Search' button.
-     *
-     * @var string
-     */
-    protected $searchButton = '[data-action="grid-filter-apply"]';
-
-    /**
-     * Locator value for 'Reset' button.
-     *
-     * @var string
-     */
-    protected $resetButton = '[data-action="grid-filter-reset"]';
-
-    /**
-     * Locator value for link in action column.
-     *
-     * @var string
-     */
-    protected $editLink = '.action-menu-item';
 }
