@@ -10,6 +10,11 @@ namespace Magento\Framework\DB;
 class ExpressionConverter
 {
     /**
+     * Maximum length for many MySql identifiers, including database, table, trigger, and column names
+     */
+    const MYSQL_IDENTIFIER_LEN = 64;
+
+    /**
      * Dictionary for generate short name
      *
      * @var array
@@ -82,5 +87,45 @@ class ExpressionConverter
     public static function addTranslate($from, $to)
     {
         self::$_translateMap[$from] = $to;
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $prefix
+     * @return string
+     */
+    public static function shortenEntityName($tableName, $prefix)
+    {
+        if (strlen($tableName) > self::MYSQL_IDENTIFIER_LEN) {
+            $shortName = ExpressionConverter::shortName($tableName);
+            if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
+                $hash = md5($tableName);
+                if (strlen($prefix . $hash) > self::MYSQL_IDENTIFIER_LEN) {
+                    $tableName = self::_minusSuperfluous($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
+                } else {
+                    $tableName = $prefix . $hash;
+                }
+            } else {
+                $tableName = $shortName;
+            }
+        }
+        return $tableName;
+    }
+
+    /**
+     * Minus superfluous characters from hash.
+     *
+     * @param  string $hash
+     * @param  string $prefix
+     * @param  int $maxCharacters
+     * @return string
+     */
+    protected static function _minusSuperfluous($hash, $prefix, $maxCharacters)
+    {
+        $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
+        $superfluous = $diff / 2;
+        $odd         = $diff % 2;
+        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
+        return $hash;
     }
 }

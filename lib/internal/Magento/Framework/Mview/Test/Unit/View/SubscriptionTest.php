@@ -276,4 +276,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->will($this->returnArgument(0));
     }
+
+    public function testGetTriggerName()
+    {
+    }
 }
