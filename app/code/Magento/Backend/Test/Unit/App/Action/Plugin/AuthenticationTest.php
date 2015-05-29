@@ -89,7 +89,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      * Calls aroundDispatch to access protected method _processNotLoggedInUser
      *
      * Data provider supplies different possibilities of request parameters and properties
-     * @dataProvider userNotLoggedInRequest
+     * @dataProvider processNotLoggedInUserDataProvider
      */
     public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
     {
@@ -143,14 +143,13 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->exactly($setterCalls))->method('setDispatched')->with(false)->willReturnSelf();
 
         $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult)
-        {
+        $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
         $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
     }
 
-    public function userNotLoggedInRequest()
+    public function processNotLoggedInUserDataProvider()
     {
         return [
             'iFrame' => [true, false, false],
