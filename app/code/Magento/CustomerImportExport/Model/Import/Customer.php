@@ -303,9 +303,6 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        /** @var $passwordAttribute \Magento\Customer\Model\Attribute */
-        $passwordAttribute = $this->_customerModel->getAttribute('password_hash');
-
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
