@@ -20,11 +20,69 @@ class FileResolver extends \Magento\Framework\App\Config\FileResolver
      */
     public function get($filename, $scope)
     {
-        // TODO: Merge parent result with a list of configs located at
-        // TODO: integration/testsuite/Magento/*/etc/extension_attributes.xml
-        // TODO: and integration/testsuite/Magento/Framework/*/etc/extension_attributes.xml
-        // TODO: Result can be an array of file paths according to the interface,
-        // TODO: not necessarily file iterator should be created
-        return parent::get($filename, $scope);
+        return $this->merge(parent::get($filename, $scope), $this->getIntegrationTestConfigFiles());
+    }
+
+    /**
+     * Merge arrays or \Magento\Framework\Config\FileIterator into an array
+     *
+     * @param mixed $array1
+     * @param mixed $array2,...
+     * @return array
+     */
+    protected function merge($array1, $array2)
+    {
+        $arguments = func_get_args();
+        $arraysToMerge = [];
+        foreach ($arguments as $argument) {
+            $arraysToMerge[] = is_array($argument) ? $argument : $this->convertFileIteratorToArray($argument);
+        }
+        return call_user_func_array('array_merge', $arraysToMerge);
+
+    }
+
+    /**
+     * Return a list of test config files
+     *
+     * Looks for config files located at
+     * dev/tests/integration/testsuite/Magento/*\/etc/extension_attributes.xml
+     * dev/tests/integration/testsuite/Magento/Framework/*\/etc/extension_attributes.xml
+     *
+     * @return array
+     */
+    protected function getIntegrationTestConfigFiles()
+    {
+        $filePatterns = [
+            'dev/tests/integration/testsuite/Magento/*/etc/extension_attributes.xml',
+            'dev/tests/integration/testsuite/Magento/Framework/*/etc/extension_attributes.xml'
+        ];
+
+        $filesArray = [];
+        foreach ($filePatterns as $pattern) {
+            foreach (glob(BP . '/' . $pattern) as $file) {
+                $content = file_get_contents($file);
+                if ($content) {
+                    $filesArray[$file] = $content;
+                }
+            }
+        }
+        return $filesArray;
+    }
+
+    /**
+     * Convert FileIterator to an array
+     *
+     * If it's not FileIterator instance, then empty array will be returned
+     *
+     * @param $iterator
+     * @return array
+     */
+    protected function convertFileIteratorToArray($iterator)
+    {
+        $resultArray = [];
+        if ($iterator instanceof \Magento\Framework\Config\FileIterator) {
+            $resultArray = $iterator->toArray();
+        }
+        return $resultArray;
     }
 }
