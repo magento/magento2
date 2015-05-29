@@ -38,11 +38,20 @@
             <xs:element name="resource" type="resourceType" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="selectFieldType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="setter_name" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
     <xs:complexType name="joinType">
-        <xs:attribute name="reference_table" use="required" type="xs:string"/>
-        <xs:attribute name="reference_field" use="required" type="xs:string"/>
-        <xs:attribute name="select_fields" use="required" type="xs:string"/>
-        <xs:attribute name="join_on_field" use="required" type="xs:string"/>
+        <xs:sequence>
+            <xs:element type="selectFieldType" name="select_field" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="reference_table" use="optional"/>
+        <xs:attribute type="xs:string" name="join_on_field" use="optional"/>
+        <xs:attribute type="xs:string" name="reference_field" use="optional"/>
     </xs:complexType>
     <xs:complexType name="resourceType">
         <xs:attribute name="ref" use="required">

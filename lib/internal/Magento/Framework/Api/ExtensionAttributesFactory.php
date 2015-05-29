@@ -119,7 +119,7 @@ class ExtensionAttributesFactory
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD])
-                ->setSelectFields($directive[Converter::JOIN_SELECT_FIELDS]);
+                ->setSelectFields($selectField[Converter::JOIN_SELECT_FIELD]);
             $collection->joinExtensionAttribute($joinData);
         }
     }
@@ -141,10 +141,10 @@ class ExtensionAttributesFactory
         $extensionData = [];
         foreach ($joinDirectives as $attributeCode => $directive) {
             $attributeType = $directive[Converter::DATA_TYPE];
-            $selectFields = explode(',', $directive[Converter::JOIN_SELECT_FIELDS]);
+            $selectFields = $directive[Converter::JOIN_SELECT_FIELDS];
             foreach ($selectFields as $selectField) {
-                $selectField = trim($selectField);
-                $selectFieldAlias = 'extension_attribute_' . $attributeCode . '_' . $selectField;
+                $selectFieldAlias = 'extension_attribute_' . $attributeCode
+                    . '_' . $selectField[Converter::JOIN_SELECT_FIELD];
                 if (isset($data[$selectFieldAlias])) {
                     if ($this->typeProcessor->isArrayType($attributeType)) {
                         throw new \LogicException(
@@ -163,7 +163,13 @@ class ExtensionAttributesFactory
                         if (!isset($extensionData['data'][$attributeCode])) {
                             $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
                         }
-                        $setterName = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($selectField));
+                        $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                            ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                            :'set' . ucfirst(
+                                SimpleDataObjectConverter::snakeCaseToCamelCase(
+                                    $selectField[Converter::JOIN_SELECT_FIELD]
+                                )
+                            );
                         $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
                     }
                     unset($data[$selectFieldAlias]);

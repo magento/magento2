@@ -13,17 +13,21 @@
                 <resource ref="Magento_CatalogInventory::cataloginventory"/>
             </resources>
             <join reference_table="cataloginventory_stock_item"
-                  select_fields="qty"
                   join_on_field="id"
                   reference_field="id"
-                    />
+                    >
+                <select_field>qty</select_field>
+            </join>
         </attribute>
         <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
             <join reference_table="reviews"
                   reference_field="product_id"
-                  select_fields="comment,rating,date"
                   join_on_field="id"
-                    />
+                    >
+                <select_field>comment</select_field>
+                <select_field>rating</select_field>
+                <select_field>date</select_field>
+            </join>
         </attribute>
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductLinkInterface">

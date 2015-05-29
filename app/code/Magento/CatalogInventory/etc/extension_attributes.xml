@@ -18,37 +18,42 @@
                 <resource ref="Magento_CatalogInventory::cataloginventory"/>
             </resources>
             <join reference_table="cataloginventory_stock_item"
-                  select_fields="qty,item_id"
                   join_on_field="entity_id"
                   reference_field="product_id"
-                    />
+                    >
+                <select_field>qty</select_field>
+                <select_field>item_id</select_field>
+            </join>
         </attribute>
         <attribute code="test_stock_item_qty" type="string">
             <resources>
                 <resource ref="Magento_CatalogInventory::cataloginventory"/>
             </resources>
             <join reference_table="cataloginventory_stock_item"
-                  select_fields="qty"
                   join_on_field="entity_id"
                   reference_field="product_id"
-                    />
+                    >
+                <select_field>qty</select_field>
+            </join>
         </attribute>
     </extension_attributes>
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="test_group_code" type="string">
             <join reference_table="customer_group"
-                  select_fields="customer_group_code"
                   join_on_field="group_id"
                   reference_field="customer_group_id"
-                    />
+                    >
+                <select_field>customer_group_code</select_field>
+            </join>
         </attribute>
-        <!--TODO: It is impossible to join fields, which names does not correspond to getters names 1:1. Mapping is required -->
         <attribute code="test_group" type="Magento\Customer\Api\Data\GroupInterface">
             <join reference_table="customer_group"
-                  select_fields="tax_class_id"
                   join_on_field="group_id"
                   reference_field="customer_group_id"
-                    />
+                    >
+                <select_field>tax_class_id</select_field>
+                <select_field setter_name="setCode">customer_group_code</select_field>
+                </join>
         </attribute>
     </extension_attributes>
 </config>

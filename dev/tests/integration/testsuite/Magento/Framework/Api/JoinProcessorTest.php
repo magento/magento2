@@ -137,5 +137,6 @@ EXPECTED_SQL;
 
         /** Check population of complex extension attributes */
         $this->assertEquals($taxClassId, $customer->getExtensionAttributes()->getTestGroup()->getTaxClassId());
+        $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getTestGroup()->getCode());
     }
 }
