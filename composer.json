@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta9",
+    "version": "0.74.0-beta10",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -73,7 +73,6 @@
         "magento/module-catalog-search": "self.version",
         "magento/module-catalog-url-rewrite": "self.version",
         "magento/module-catalog-widget": "self.version",
-        "magento/module-centinel": "self.version",
         "magento/module-checkout": "self.version",
         "magento/module-checkout-agreements": "self.version",
         "magento/module-cms": "self.version",

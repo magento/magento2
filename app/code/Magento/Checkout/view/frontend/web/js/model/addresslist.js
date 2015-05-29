@@ -22,16 +22,8 @@ define(['jquery'], function($) {
             return address;
         },
         getAddresses: function() {
-            if (addresses.indexOf(this.newAddress) == -1) {
-                this.add(this.newAddress);
-            }
-            return addresses;
+            return addresses.slice(0);
         },
-        newAddress: {
-            getAddressInline: function() {
-                return 'New Address';
-            },
-            customerAddressId: null
-        }
+        isBillingSameAsShipping: false
     };
 });
