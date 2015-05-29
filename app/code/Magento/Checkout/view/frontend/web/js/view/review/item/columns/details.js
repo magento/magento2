@@ -16,6 +16,7 @@ define(
                 columnTitle: 'Product Name',
                 template: 'Magento_Checkout/review/item/columns/details'
             },
+            colspan: 2,
             getValue: function(quoteItem) {
                 return quoteItem.name;
             }

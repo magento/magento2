@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
+<td class="col item" data-th="Product Name" data-bind="attr: {'colspan': colspan}"><strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
     Qty: <span data-bind="text: $parent.qty"></span>
     <!-- ko foreach: elems() -->
         <!-- ko template: getTemplate() --><!-- /ko -->

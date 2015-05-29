@@ -131,6 +131,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $directoryHelper;
 
     /**
+     * @var Cart\ImageProvider
+     */
+    protected $imageProvider;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -150,6 +155,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
+     * @param Cart\ImageProvider $imageProvider
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -173,6 +179,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\View\ConfigInterface $viewConfig,
         \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig,
+        Cart\ImageProvider $imageProvider,
         \Magento\Directory\Helper\Data $directoryHelper
     ) {
         $this->checkoutHelper = $checkoutHelper;
@@ -194,6 +201,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->imageHelper = $imageHelper;
         $this->viewConfig = $viewConfig;
         $this->postCodesConfig = $postCodesConfig;
+        $this->imageProvider = $imageProvider;
         $this->directoryHelper = $directoryHelper;
     }
 
@@ -202,6 +210,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $quoteId = $this->checkoutSession->getQuote()->getId();
         return [
             'formKey' => $this->formKey->getFormKey(),
             'customerData' => $this->getCustomerData(),
@@ -225,6 +234,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 $this->currencyManager->getDefaultCurrency()
             ),
             'postCodes' => $this->postCodesConfig->getPostCodes(),
+            'imageData' => $this->imageProvider->getImages($quoteId),
             'countryData' => $this->getCountryData()
         ];
     }
