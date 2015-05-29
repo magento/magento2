@@ -48,7 +48,8 @@ define([
             disabled: [],
             event: "click",
             buttonNextElement: '[data-role="step-wizard-next"]',
-            buttonPrevElement: '[data-role="step-wizard-prev"]'
+            buttonPrevElement: '[data-role="step-wizard-prev"]',
+            buttonFinalElement: '[data-role="step-wizard-final"]'
         },
         _create: function() {
             this._control();
@@ -57,17 +58,23 @@ define([
         },
         _control: function() {
             var self = this;
-            this.element.find(this.options.buttonNextElement).on('click', function(event){
+            this.prev = this.element.find(this.options.buttonPrevElement);
+            this.next = this.element.find(this.options.buttonNextElement);
+            this.final = this.element.find(this.options.buttonFinalElement);
+
+            this.next.on('click.' + this.eventNamespace, function(event){
                 self._activate(self.options.active + 1);
             });
-            this.element.find(this.options.buttonPrevElement).on('click', function(event){
+            this.prev.on('click.' + this.eventNamespace, function(event){
                 self._activate(self.options.active - 1);
             });
+            this.final.hide();
         },
         load: function(index, event) {
             this._disabledTabs(index);
             this._super(index, event);
             this._handlerStep(index);
+            this._actionControl(index);
         },
         _handlerStep: function (index) {
             var tab = this.panels.eq(index);
@@ -77,6 +84,23 @@ define([
         },
         _way: function(index) {
             return this.options.selected > index ? 'back' : 'force';
+        },
+        _actionControl: function (index) {
+            var self = this;
+            if (index < 1) {
+                this.prev.find('button').addClass("disabled");
+            }
+            if (index === 1 && this._way(index) === 'force') {
+                this.prev.find('button').removeClass("disabled");
+            }
+            if (index > this.tabs.length - 2) {
+                this.next.hide();
+                this.final.show();
+            }
+            if (index === this.tabs.length - 2 && this._way(index) === 'back') {
+                this.final.hide();
+                this.next.show();
+            }
         },
         _disabledTabs: function(index) {
             var disabled = [];
@@ -92,6 +116,7 @@ define([
 
     $(document).ready(function () {
        var dialog = $('[data-role="step-wizard-dialog"]').dialog({
+            title: $.mage.__('Create Product Configurations'),
             autoOpen: false,
             minWidth: 980,
             modal: true,
@@ -116,6 +141,7 @@ define([
         });
         $('[data-action="open-steps-wizard"]').on('click', function () {
             dialog.dialog('open');
+            dialog.removeClass('hidden');
         });
         $('[data-action="close-steps-wizard"]').on('click', function () {
             dialog.dialog('close');
