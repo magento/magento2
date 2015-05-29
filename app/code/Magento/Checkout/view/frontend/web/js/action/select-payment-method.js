@@ -21,10 +21,10 @@ define(
                 "paymentMethod": methodData
             };
 
-            var shippingMethodCode = quote.getSelectedShippingMethod()().split("_"),
+            var shippingMethodCode = quote.getSelectedShippingMethod()().slice(0).split("_"),
                 shippingMethodData = {
-                    "shippingCarrierCode" : shippingMethodCode[0],
-                    "shippingMethodCode" : shippingMethodCode[1]
+                    "shippingCarrierCode" : shippingMethodCode.shift(),
+                    "shippingMethodCode" : shippingMethodCode.join('_')
                 },
                 serviceUrl;
             if (quote.getCheckoutMethod()() === 'guest') {

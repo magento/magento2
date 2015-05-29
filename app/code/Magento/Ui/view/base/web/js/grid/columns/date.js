@@ -21,7 +21,7 @@ define([
         },
 
         getLabel: function (data) {
-            return moment(data).format(this.dateFormat);
+            return moment(data).isValid() ? moment(data).format(this.dateFormat) : '';
         }
     });
 });
