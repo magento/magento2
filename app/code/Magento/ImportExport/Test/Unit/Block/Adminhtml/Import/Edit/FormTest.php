@@ -54,14 +54,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->form = $this->getMockBuilder('\Magento\ImportExport\Block\Adminhtml\Import\Edit\Form')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $context,
                 $registry,
                 $formFactory,
                 $this->_importModel,
                 $this->_entityFactory,
                 $this->_behaviorFactory,
-            ))
+            ])
             ->getMock();
     }
 

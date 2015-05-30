@@ -550,7 +550,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
             }
 
-            if (!empty($oneOptionValuePrice['name']) && !empty($oneOptionValuePrice['value']) && isset($oneOptionValuePrice['price'])) {
+            if (!empty($oneOptionValuePrice['name']) &&
+                !empty($oneOptionValuePrice['value']) &&
+                isset($oneOptionValuePrice['price'])
+            ) {
                 $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] = $oneOptionValuePrice['price'];
             }
         }
@@ -761,7 +764,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             'product_super_attribute_id' => $productSuperAttrId,
             'position' => 0,
         ];
-        $label = isset($variationLabels[$data['_super_attribute_code']]) ? $variationLabels[$data['_super_attribute_code']] : $attrParams['frontend_label'];
+        $label = isset($variationLabels[$data['_super_attribute_code']]) ?
+            $variationLabels[$data['_super_attribute_code']] : $attrParams['frontend_label'];
         $this->_superAttributesData['labels'][] = [
             'product_super_attribute_id' => $productSuperAttrId,
             'store_id' => 0,
@@ -807,9 +811,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
                 // remember SCOPE_DEFAULT row data
                 $scope = $this->_entityModel->getRowScope($rowData);
-                if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
+                if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) &&
+                    !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
 
-                    $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]]) ? $newSku[$rowData[ImportProduct::COL_SKU]] : $oldSku[$rowData[ImportProduct::COL_SKU]];
+                    $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]]) ?
+                        $newSku[$rowData[ImportProduct::COL_SKU]] : $oldSku[$rowData[ImportProduct::COL_SKU]];
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;

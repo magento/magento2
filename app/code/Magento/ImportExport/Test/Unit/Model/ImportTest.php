@@ -81,21 +81,43 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')->disableOriginalConstructor()->getMock();
-        $this->_filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')->disableOriginalConstructor()->getMock();
-        $this->_importExportData = $this->getMockBuilder('\Magento\ImportExport\Helper\Data')->disableOriginalConstructor()->getMock();
-        $this->_coreConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+                    ->disableOriginalConstructor()
+                    ->getMock();
+        $this->_filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
+                                ->disableOriginalConstructor()
+                                ->getMock();
+        $this->_importExportData = $this->getMockBuilder('\Magento\ImportExport\Helper\Data')
+                                        ->disableOriginalConstructor()
+                                        ->getMock();
+        $this->_coreConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+                                ->disableOriginalConstructor()
+                                ->getMock();
         $this->_importConfig = $this->getMockBuilder('\Magento\ImportExport\Model\Import\ConfigInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getEntityTypeCode', 'getBehavior'])
             ->getMockForAbstractClass();
-        $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')->disableOriginalConstructor()->getMock();
-        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')->disableOriginalConstructor()->getMock();
-        $this->_csvFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Export\Adapter\CsvFactory')->disableOriginalConstructor()->getMock();
-        $this->_httpFactory = $this->getMockBuilder('\Magento\Framework\HTTP\Adapter\FileTransferFactory')->disableOriginalConstructor()->getMock();
-        $this->_uploaderFactory = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')->disableOriginalConstructor()->getMock();
-        $this->_behaviorFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Source\Import\Behavior\Factory')->disableOriginalConstructor()->getMock();
-        $this->indexerRegistry = $this->getMockBuilder('\Magento\Indexer\Model\IndexerRegistry')->disableOriginalConstructor()->getMock();
+        $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+        $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
+                                ->disableOriginalConstructor()
+                                ->getMock();
+        $this->_csvFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Export\Adapter\CsvFactory')
+                                ->disableOriginalConstructor()
+                                ->getMock();
+        $this->_httpFactory = $this->getMockBuilder('\Magento\Framework\HTTP\Adapter\FileTransferFactory')
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+        $this->_uploaderFactory = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+        $this->_behaviorFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Source\Import\Behavior\Factory')
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+        $this->indexerRegistry = $this->getMockBuilder('\Magento\Indexer\Model\IndexerRegistry')
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
 
         $this->import = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
             ->setConstructorArgs([
@@ -135,19 +157,31 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testImportSource()
     {
         $entityTypeCode = 'code';
-        $this->_importData->expects($this->any())->method('getEntityTypeCode')->will($this->returnValue($entityTypeCode));
+        $this->_importData->expects($this->any())
+                        ->method('getEntityTypeCode')
+                        ->will($this->returnValue($entityTypeCode));
         $behaviour = 'behaviour';
-        $this->_importData->expects($this->once())->method('getBehavior')->will($this->returnValue($behaviour));
-        $this->import->expects($this->any())->method('getDataSourceModel')->will($this->returnValue($this->_importData));
+        $this->_importData->expects($this->once())
+                        ->method('getBehavior')
+                        ->will($this->returnValue($behaviour));
+        $this->import->expects($this->any())
+                        ->method('getDataSourceModel')
+                        ->will($this->returnValue($this->_importData));
 
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
         );
         $phraseClass = '\Magento\Framework\Phrase';
-        $this->import->expects($this->any())->method('addLogComment')->with($this->isInstanceOf($phraseClass));
-        $this->_entityAdapter->expects($this->once())->method('importData')->will($this->returnSelf());
-        $this->import->expects($this->once())->method('_getEntityAdapter')->will($this->returnValue($this->_entityAdapter));
+        $this->import->expects($this->any())
+                    ->method('addLogComment')
+                    ->with($this->isInstanceOf($phraseClass));
+        $this->_entityAdapter->expects($this->once())
+                    ->method('importData')
+                    ->will($this->returnSelf());
+        $this->import->expects($this->once())
+                    ->method('_getEntityAdapter')
+                    ->will($this->returnValue($this->_entityAdapter));
 
         $importOnceMethodsReturnNull = [
             'getEntity',

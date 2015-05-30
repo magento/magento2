@@ -229,7 +229,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
-        $modelClassArgs = array(
+        $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
@@ -253,7 +253,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $scopeConfig,
             new \Magento\Framework\Stdlib\DateTime(),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
-        );
+        ];
 
         $class = new \ReflectionClass($modelClassName);
         $this->_model = $class->newInstanceArgs($modelClassArgs);
@@ -261,7 +261,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->_modelMock = $this->
             getMockBuilder($modelClassName)->
             setConstructorArgs($modelClassArgs)->
-            setMethods(array('_getMultiRowFormat'))->
+            setMethods(['_getMultiRowFormat'])->
             getMock();
     }
 
@@ -655,7 +655,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     private function _bypassModelMethodGetMultiRowFormat($rowData)
     {
-        $this->_modelMock->expects($this->any())->method('_getMultiRowFormat')->will($this->returnValue(array($rowData)));
+        $this->_modelMock->expects($this->any())
+                        ->method('_getMultiRowFormat')
+                        ->will($this->returnValue([$rowData]));
     }
 
     /**
