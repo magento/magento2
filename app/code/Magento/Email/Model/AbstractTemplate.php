@@ -378,7 +378,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
-     * @param $html
+     * @param string $html
      * @return string
      */
     protected function applyInlineCss($html)
@@ -417,7 +417,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Loads CSS file from materialized static view directory
      *
-     * @param $file
+     * @param string $file
      * @return string
      */
     public function getCssFileContent($file)
@@ -509,8 +509,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Add variables that are used by transactional and newsletter emails
      *
-     * @param $variables
-     * @param $storeId
+     * @param array $variables
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return mixed
      */
     protected function addEmailVariables($variables, $storeId)
@@ -609,14 +609,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getDesignParams()
     {
-        $designParams = array(
+        return array(
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
             'theme' => $this->_design->getDesignTheme()->getCode(),
             'locale' => $this->_design->getLocale(),
         );
-        return $designParams;
     }
 
     /**
