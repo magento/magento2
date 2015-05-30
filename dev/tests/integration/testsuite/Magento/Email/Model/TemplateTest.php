@@ -69,6 +69,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Manually set a module directory to allow for testing the loading of email templates from module directories.
+     * TODO: Improve this method of mocking module folders, as it is fragile/error-prone
      *
      * @return \Magento\Framework\Filesystem
      */
