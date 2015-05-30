@@ -39,7 +39,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @var bool
      */
-    protected $_isChildTemplate = false;
+    private $isChildTemplate = false;
 
     /**
      * Store id
@@ -213,7 +213,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->_isChildTemplate = (bool) $isChildTemplate;
+        $this->isChildTemplate = (bool) $isChildTemplate;
         return $this;
     }
 
@@ -224,7 +224,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function getIsChildTemplate()
     {
-        return $this->_isChildTemplate;
+        return $this->isChildTemplate;
     }
 
     /**
