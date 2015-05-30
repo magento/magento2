@@ -34,6 +34,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const TABLE_GROUPED_PRICE = 'catalog_product_entity_group_price';
 
+    const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
+
     /**
      * Validation failure message template definitions
      *
@@ -45,10 +47,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE => 'Product with specified SKU not found',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_QTY => 'Tier Price data price or quantity value is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_SITE => 'Tier Price data website is invalid',
-        ValidatorInterface::ERROR_INVALID_TIER_PRICE_GROUP => 'Tier Price customer group ID is invalid',
+        ValidatorInterface::ERROR_INVALID_TIER_PRICE_GROUP => 'Tier Price customer group is invalid',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
-        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group ID is invalid',
+        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group is invalid',
         ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
     ];
 
@@ -173,12 +175,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             return !isset($this->_invalidRows[$rowNum]);
         }
         $this->_validatedRows[$rowNum] = true;
-        if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            if (!isset($this->_oldSkus[$rowData[self::COL_SKU]])) {
-                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
-                return false;
-            }
-            return true;
+        if (!isset($this->_oldSkus[$rowData[self::COL_SKU]])) {
+            $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+            return false;
         }
         if (!$this->_validator->isValid($rowData)) {
             foreach ($this->_validator->getMessages() as $message) {
@@ -242,7 +241,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
                 if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
                     $groupPrices[$rowSku][] = [
-                        'all_groups' => $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
+                        'all_groups' => self::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
                         'customer_group_id' => $this->getCustomerGroupId(
                             $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]
                         ),
@@ -259,7 +258,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * Deletes Advanced price data from raw data.
      */
-    protected function deleteAdvancedPricing()
+    public function deleteAdvancedPricing()
     {
         $this->_cachedSkuToDelete = null;
         $listSku = [];
@@ -284,7 +283,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @return bool
      */
-     protected function replaceAdvancedPricing()
+    public function replaceAdvancedPricing()
     {
     }
 
