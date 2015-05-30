@@ -79,7 +79,9 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($this->directoryMock));
+        $this->filesystem->expects($this->any())
+                        ->method('getDirectoryWrite')
+                        ->will($this->returnValue($this->directoryMock));
 
         $this->uploader = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
             ->setConstructorArgs([
@@ -116,7 +118,9 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         // Check create() method invoking with expected argument.
-        $this->readFactory->expects($this->once())->method('create')->will($this->returnValue($readMock))->with($expectedHost);
+        $this->readFactory->expects($this->once())
+                        ->method('create')
+                        ->will($this->returnValue($readMock))->with($expectedHost);
 
         $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
             ->setConstructorArgs([

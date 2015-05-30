@@ -84,7 +84,10 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
         $categoryFactory->method('create')->will($this->returnValue($childCategory));
 
         $this->categoryProcessor =
-            new \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor($categoryColFactory, $categoryFactory);
+            new \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor(
+                $categoryColFactory,
+                $categoryFactory
+            );
     }
 
     public function testUpsertCategories()
