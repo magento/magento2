@@ -270,25 +270,25 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'sku',
                     'name' => 'name',
                     'bundle_values' =>
-                        'name=Bundle1,
-                        type=dropdown,
-                        required=1,
-                        sku=1,
-                        price=10,
-                        price_type=fixed,
-                        default_qty=1,
-                        is_defaul=1,
-                        position=1,
-                        option_id=1 | name=Bundle2,
-                        type=dropdown,
-                        required=1,
-                        sku=2,
-                        price=10,
-                        price_type=fixed,
-                        default_qty=1,
-                        is_defaul=1,
-                        position=2,
-                        option_id=2'
+                        'name=Bundle1,'
+                         . 'type=dropdown,'
+                         . 'required=1,'
+                         . 'sku=1,'
+                         . 'price=10,'
+                         . 'price_type=fixed,'
+                         . 'default_qty=1,'
+                         . 'is_defaul=1,'
+                         . 'position=1,'
+                         . 'option_id=1 | name=Bundle2,'
+                         . 'type=dropdown,'
+                         . 'required=1,'
+                         . 'sku=2,'
+                         . 'price=10,'
+                         . 'price_type=fixed,'
+                         . 'default_qty=1,'
+                         . 'is_defaul=1,'
+                         . 'position=2,'
+                         . 'option_id=2'
                 ],
                 'allowImport' => true
             ]

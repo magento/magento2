@@ -259,22 +259,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'name' => 'Configurable Product 21',
             'product_websites' => 'website_1',
             'configurable_variation_prices' =>
-                'name=testattr2,
-                value=attr2val1,
-                price=13|name=testattr3,
-                value=testattr3v1,
-                price=17|name=testattr3,
-                value=testattr3v2,
-                price=19',
+                'name=testattr2,'
+                 . 'value=attr2val1,'
+                 . 'price=13|name=testattr3,'
+                 . 'value=testattr3v1,'
+                 . 'price=17|name=testattr3,'
+                 . 'value=testattr3v2,'
+                 . 'price=19',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
             'configurable_variations' =>
-                'sku=testconf2-attr2val1-testattr3v1,
-                testattr2=attr2val1,
-                testattr3=testattr3v1,
-                display=1|sku=testconf2-attr2val1-testattr3v2,
-                testattr2=attr2val1,
-                testattr3=testattr3v2,
-                display=0',
+                'sku=testconf2-attr2val1-testattr3v1,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v1,'
+                 . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v2,'
+                 . 'display=0',
             '_store' => null,
             '_attribute_set' => 'Default',
             '_type' => 'configurable',
@@ -312,13 +312,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'name' => 'Configurable Product 21 Without Labels',
                 'product_websites' => 'website_1',
                 'configurable_variation_prices' =>
-                    'name=testattr2,
-                    value=attr2val1,
-                    price=13|name=testattr3,
-                    value=testattr3v1,
-                    price=17|name=testattr3,
-                    value=testattr3v2,
-                    price=19',
+                    'name=testattr2,'
+                     . 'value=attr2val1,'
+                     . 'price=13|name=testattr3,'
+                     . 'value=testattr3v1,'
+                     . 'price=17|name=testattr3,'
+                     . 'value=testattr3v2,'
+                     . 'price=19',
                 'configurable_variations' => '
                 sku=testconf2-attr2val1-testattr3v1,testattr2=attr2val1,testattr3=testattr3v1,display=1|
                 sku=testconf2-attr2val1-testattr30v1,testattr2=attr2val1,testattr3=testattr3v1,display=1|
@@ -338,13 +338,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'name' => 'Configurable Product 21 Without Labels',
                 'product_websites' => 'website_1',
                 'configurable_variation_prices' =>
-                    'name=testattr2,
-                    value=attr2val1,
-                    price=13|name=testattr3,
-                    value=testattr3v1,
-                    price=17|name=testattr3,
-                    value=testattr3v2,
-                    price=19',
+                    'name=testattr2,'
+                    . 'value=attr2val1,'
+                    . 'price=13|name=testattr3,'
+                    . 'value=testattr3v1,'
+                    . 'price=17|name=testattr3,'
+                    . 'value=testattr3v2,'
+                    . 'price=19',
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
@@ -358,29 +358,29 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'name' => 'Configurable Product 21',
                 'product_websites' => 'website_1',
                 'configurable_variation_prices' =>
-                    'name=testattr2,
-                    value=attr2val1,
-                    price=13|name=testattr3,
-                    value=testattr3v1,
-                    price=17|name=testattr3,
-                    value=testattr3v2,price=19',
+                    'name=testattr2,'
+                     . 'value=attr2val1,'
+                     . 'price=13|name=testattr3,'
+                     . 'value=testattr3v1,'
+                     . 'price=17|name=testattr3,'
+                     . 'value=testattr3v2,price=19',
                 'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
                 'configurable_variations' =>
-                    'sku=testconf2-attr2val1-testattr3v1,
-                    testattr2=attr2val1,
-                    testattr3=testattr3v1,
-                    testattr3=testattr3v2
-                    ,display=1|
-                    sku=testconf2-attr2val1-testattr3v2,
-                    testattr2=attr2val1,
-                    testattr3=testattr3v1,
-                    testattr3=testattr3v2,
-                    display=1|
-                    sku=testconf2-attr2val1-testattr3v3,
-                    testattr2=attr2val1,
-                    testattr3=testattr3v1,
-                    testattr3=testattr3v2,
-                    display=1',
+                    'sku=testconf2-attr2val1-testattr3v1,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1|'
+                     . 'sku=testconf2-attr2val1-testattr3v2,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1|'
+                     . 'sku=testconf2-attr2val1-testattr3v3,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1',
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
@@ -543,22 +543,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'name' => 'Configurable Product 21 BadPrice',
             'product_websites' => 'website_1',
             'configurable_variation_prices' =>
-                'name=testattr2,
-                value=attr2val1,
-                price=aaa|name=testattr3,
-                value=testattr3v1,
-                price=17|name=testattr3,
-                value=testattr3v2,
-                price=19',
+                'name=testattr2,'
+                 . 'value=attr2val1,'
+                 . 'price=aaa|name=testattr3,'
+                 . 'value=testattr3v1,'
+                 . 'price=17|name=testattr3,'
+                 . 'value=testattr3v2,'
+                 . 'price=19',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
             'configurable_variations' =>
-                'sku=testconf2-attr2val1-testattr3v1,
-                testattr2=attr2val1_DOESNT_EXIST,
-                testattr3=testattr3v1,
-                display=1|sku=testconf2-attr2val1-testattr3v2,
-                testattr2=attr2val1,
-                testattr3=testattr3v2,
-                display=0',
+                'sku=testconf2-attr2val1-testattr3v1,'
+                 . 'testattr2=attr2val1_DOESNT_EXIST,'
+                 . 'testattr3=testattr3v1,'
+                 . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v2,'
+                 . 'display=0',
             '_store' => null,
             '_attribute_set' => 'Default',
             '_type' => 'configurable',
