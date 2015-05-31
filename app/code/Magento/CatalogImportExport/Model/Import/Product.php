@@ -1217,11 +1217,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $this;
     }
 
+    /**
+     * Prepare all media files
+     *
+     * @return $this
+     */
     protected function _prepareAllMediaFiles()
     {
         if(empty($this->cachedImages)) {
-            $mediaFilesList = [];
-
             $allMedia = $this->_connection->fetchAll($this->_connection->select()
                 ->from(
                     ["entity" => $this->_connection->getTableName('catalog_product_entity')],
@@ -1232,17 +1235,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ['value']
                 )
             );
-
-            /*if(count($allMedia)) {
-                foreach($allMedia as $mediaFile) {
-                    $mediaFilesList[$mediaFile['sku']] = $mediaFile['value'];
-                }
-            }*/
-
-            //$this->cachedImages = $mediaFilesList;
             $this->cachedImages = $allMedia;
         }
-
         return $this;
     }
 
