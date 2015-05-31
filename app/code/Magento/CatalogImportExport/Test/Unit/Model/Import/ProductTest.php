@@ -83,12 +83,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     // @codingStandardsIgnoreStart
     /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
-    // @codingStandardsIgnoreEnd
     protected $_resourceFactory;
 
-    // @codingStandardsIgnoreStart
     /** @var  \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
-    // @codingStandardsIgnoreEnd
     protected $_setColFactory;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject */
@@ -127,9 +124,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $skuProcessor;
 
-    // @codingStandardsIgnoreStart
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    // @codingStandardsIgnoreEnd
     protected $categoryProcessor;
 
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\Validator|\PHPUnit_Framework_MockObject_MockObject */
@@ -138,15 +133,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectRelationProcessor;
 
-    // @codingStandardsIgnoreStart
     /** @var  \Magento\Framework\Model\Resource\Db\TransactionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    // @codingStandardsIgnoreEnd
     protected $transactionManager;
 
     /** @var  \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $catalogProductFactory;
 
-    // @codingStandardsIgnoreStart
     /** @var  \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|\PHPUnit_Framework_MockObject_MockObject */
     // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
@@ -499,10 +491,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                         ->willReturnCallback([$this, 'returnQuoteCallback']);
         $this->_connection->expects($this->once())->method('delete')
             ->with($this->equalTo($testTable),
-                $this->equalTo('(store_id NOT IN (' .
-                    $storeId . ') AND attribute_id = ' .
-                    $attributeId . ' AND entity_id = ' .
-                    self::ENTITY_ID . ')')
+                $this->equalTo('(store_id NOT IN ('
+                     . $storeId . ') AND attribute_id = '
+                     . $attributeId . ' AND entity_id = '
+                     . self::ENTITY_ID . ')')
             );
 
         $tableData[] = [

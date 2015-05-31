@@ -107,8 +107,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                                 ->disableOriginalConstructor()
                                 ->getMock();
         $this->_httpFactory = $this->getMockBuilder('\Magento\Framework\HTTP\Adapter\FileTransferFactory')
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
+                                ->disableOriginalConstructor()
+                                ->getMock();
         $this->_uploaderFactory = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')
                                     ->disableOriginalConstructor()
                                     ->getMock();
@@ -165,8 +165,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                         ->method('getBehavior')
                         ->will($this->returnValue($behaviour));
         $this->import->expects($this->any())
-                        ->method('getDataSourceModel')
-                        ->will($this->returnValue($this->_importData));
+                    ->method('getDataSourceModel')
+                    ->will($this->returnValue($this->_importData));
 
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
