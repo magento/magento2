@@ -12,6 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Developer\Model\Tools\Formatter;
+use Magento\Framework\DomDocument\DomDocumentFactory;
+use Magento\Framework\XsltProcessor\XsltProcessorFactory;
 
 /**
  * Class XmlConverterCommand
@@ -40,39 +42,30 @@ class XmlConverterCommand extends Command
     private $formatter;
 
     /**
-     * @var \DOMDocument
+     * @var DomDocumentFactory
      */
-    private $domXml;
+    private $domFactory;
 
     /**
-     * @var \DOMDocument
+     * @var XsltProcessorFactory
      */
-    private $domXsl;
-
-    /**
-     * @var \XSLTProcessor
-     */
-    private $xsltProcessor;
+    private $xsltProcessorFactory;
 
     /**
      * Inject dependencies
      *
      * @param Formatter $formatter
-     * @param \DOMDocument $domXml
-     * @param \DOMDocument $domXsl
-     * @param \XSLTProcessor $xsltProcessor
-     * @SuppressWarnings(Magento.TypeDuplication)
+     * @param DomDocumentFactory $domFactory
+     * @param XsltProcessorFactory $xsltProcessorFactory
      */
     public function __construct(
         Formatter $formatter,
-        \DOMDocument $domXml,
-        \DOMDocument $domXsl,
-        \XSLTProcessor $xsltProcessor
+        DomDocumentFactory $domFactory,
+        XsltProcessorFactory $xsltProcessorFactory
     ) {
         $this->formatter = $formatter;
-        $this->domXml = $domXml;
-        $this->domXsl = $domXsl;
-        $this->xsltProcessor = $xsltProcessor;
+        $this->domFactory = $domFactory;
+        $this->xsltProcessorFactory = $xsltProcessorFactory;
 
         parent::__construct();
     }
@@ -113,16 +106,20 @@ class XmlConverterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $domXml = $this->domFactory->create();
+            $domXsl = $this->domFactory->create();
+            $xsltProcessor = $this->xsltProcessorFactory->create();
+
             $xmlFile = $input->getArgument(self::XML_FILE_ARGUMENT);
-            $this->domXml->preserveWhiteSpace = true;
-            $this->domXml->load($xmlFile);
+            $domXml->preserveWhiteSpace = true;
+            $domXml->load($xmlFile);
 
-            $this->domXsl->preserveWhiteSpace = true;
-            $this->domXsl->load($input->getArgument(self::PROCESSOR_ARGUMENT));
+            $domXsl->preserveWhiteSpace = true;
+            $domXsl->load($input->getArgument(self::PROCESSOR_ARGUMENT));
 
-            $this->xsltProcessor->registerPHPFunctions();
-            $this->xsltProcessor->importStylesheet($this->domXsl);
-            $transformedDoc = $this->xsltProcessor->transformToXml($this->domXml);
+            $xsltProcessor->registerPHPFunctions();
+            $xsltProcessor->importStylesheet($domXsl);
+            $transformedDoc = $xsltProcessor->transformToXml($domXml);
             $result = $this->formatter->format($transformedDoc);
 
             if ($input->getOption(self::OVERWRITE_OPTION)) {

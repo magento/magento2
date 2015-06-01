@@ -119,7 +119,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      * Return captcha model for specified form
      *
      * @param string $formId
-     * @return \Magento\Captcha\Model\ModelInterface
+     * @return \Magento\Captcha\Model\CaptchaInterface
      */
     protected function getCaptchaModel($formId)
     {
