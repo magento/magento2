@@ -153,7 +153,13 @@ class ExtensionAttributesFactory
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         $extensionData = [];
         foreach ($joinDirectives as $attributeCode => $directive) {
-            $this->populateAttributeCodeWithDirective($attributeCode, $directive, $data, $extensionData);
+            $this->populateAttributeCodeWithDirective(
+                $attributeCode,
+                $directive,
+                $data,
+                $extensionData,
+                $extensibleEntityClass
+            );
         }
         if (!empty($extensionData)) {
             $extensionAttributes = $this->create($extensibleEntityClass, $extensionData);
@@ -169,10 +175,16 @@ class ExtensionAttributesFactory
      * @param array $directive
      * @param array &$data
      * @param array &$extensionData
+     * @param string $extensibileEntityClass
      * @return void
      */
-    private function populateAttributeCodeWithDirective($attributeCode, $directive, &$data, &$extensionData)
-    {
+    private function populateAttributeCodeWithDirective(
+        $attributeCode,
+        $directive,
+        &$data,
+        &$extensionData,
+        $extensibleEntityClass
+    ) {
         $attributeType = $directive[Converter::DATA_TYPE];
         $selectFields = $directive[Converter::JOIN_SELECT_FIELDS];
         foreach ($selectFields as $selectField) {
