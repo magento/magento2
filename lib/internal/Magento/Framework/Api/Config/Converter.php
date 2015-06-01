@@ -55,24 +55,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
 
                 $joinElement = $attribute->getElementsByTagName('join')->item(0);
-                $join = null;
-                if ($joinElement && $joinElement->nodeType === XML_ELEMENT_NODE) {
-                    $joinAttributes = $joinElement->attributes;
-                    $join = [
-                        self::JOIN_REFERENCE_TABLE => $joinAttributes->getNamedItem('reference_table')->nodeValue,
-                        self::JOIN_JOIN_ON_FIELD => $joinAttributes->getNamedItem('join_on_field')->nodeValue,
-                        self::JOIN_REFERENCE_FIELD => $joinAttributes->getNamedItem('reference_field')->nodeValue,
-                    ];
-                    $selectElements = $attribute->getElementsByTagName('select_field');
-                    foreach ($selectElements as $selectElement) {
-                        $selectField = $selectElement->nodeValue;
-                        $setterName = $selectElement->getAttribute('setter_name');
-                        $join[self::JOIN_SELECT_FIELDS][] = [
-                            self::JOIN_SELECT_FIELD => $selectField,
-                            self::JOIN_SELECT_FIELD_SETTER => $setterName
-                        ];
-                    }
-                }
+                $join = $this->processJoinElement($joinElement);
 
                 $typeConfig[$code] = [
                     self::DATA_TYPE => $codeType,
@@ -84,5 +67,35 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $output[$typeName] = $typeConfig;
         }
         return $output;
+    }
+
+    /**
+     * Process the join element configuration
+     *
+     * @param \DOMElement $joinElement
+     * @return array
+     */
+    private function processJoinElement($joinElement)
+    {
+        $join = null;
+        if ($joinElement && $joinElement->nodeType === XML_ELEMENT_NODE) {
+            $joinAttributes = $joinElement->attributes;
+            $join = [
+                self::JOIN_REFERENCE_TABLE => $joinAttributes->getNamedItem('reference_table')->nodeValue,
+                self::JOIN_JOIN_ON_FIELD => $joinAttributes->getNamedItem('join_on_field')->nodeValue,
+                self::JOIN_REFERENCE_FIELD => $joinAttributes->getNamedItem('reference_field')->nodeValue,
+            ];
+            $selectElements = $attribute->getElementsByTagName('select_field');
+            foreach ($selectElements as $selectElement) {
+                $selectField = $selectElement->nodeValue;
+                $setterName = $selectElement->getAttribute('setter_name');
+                $join[self::JOIN_SELECT_FIELDS][] = [
+                    self::JOIN_SELECT_FIELD => $selectField,
+                    self::JOIN_SELECT_FIELD_SETTER => $setterName
+                ];
+            }
+        }
+
+        return $join;
     }
 }
