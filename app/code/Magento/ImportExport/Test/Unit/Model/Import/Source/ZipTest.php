@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,7 +24,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
     {
         $this->directory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Write')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRelativePath'))
+            ->setMethods(['getRelativePath'])
             ->getMock();
     }
 
@@ -77,11 +78,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 '\Magento\ImportExport\Model\Import\Source\Zip'
             )
                 ->setConstructorArgs(
-                    array(
+                    [
                         $fileName,
                         $this->directory,
                         [],
-                    )
+                    ]
                 )
                 ->getMock();
 
@@ -90,11 +91,12 @@ class ZipTest extends \PHPUnit_Framework_TestCase
             );
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke(
-                $this->zip, array(
+                $this->zip,
+                [
                 $fileName,
                 $this->directory,
                 [],
-            )
+                ]
             );
         }catch (\PHPUnit_Framework_Error $e){
             // Suppress any errors due to no control of Zip object dependency instantiation.

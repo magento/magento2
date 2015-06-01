@@ -307,7 +307,9 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
+                            // @codingStandardsIgnoreStart
                             \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
+                            // @codingStandardsIgnoreEnd
                             $rowNum,
                             $attrCode
                         );

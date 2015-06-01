@@ -10,6 +10,11 @@ namespace Magento\ImportExport\Model\Import\Source;
  */
 class Zip extends Csv
 {
+    /**
+     * @param string $file
+     * @param \Magento\Framework\Filesystem\Directory\Write $directory
+     * @param string $options
+     */
     public function __construct(
         $file,
         \Magento\Framework\Filesystem\Directory\Write $directory,

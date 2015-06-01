@@ -71,25 +71,27 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Writer')
-            ->setMethods(array('writeFile', 'getRelativePath'))
+            ->setMethods(['writeFile', 'getRelativePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
-            ->setMethods(array('getDirectoryWrite'))
+            ->setMethods(['getDirectoryWrite'])
             ->getMock();
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($this->directoryMock));
+        $this->filesystem->expects($this->any())
+                        ->method('getDirectoryWrite')
+                        ->will($this->returnValue($this->directoryMock));
 
         $this->uploader = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $this->coreFileStorageDb,
                 $this->coreFileStorage,
                 $this->imageFactory,
                 $this->validator,
                 $this->filesystem,
                 $this->readFactory,
-            ))
+            ])
             ->getMock();
     }
 
@@ -106,34 +108,36 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         // Create adjusted reader which does not validate path.
         $readMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\Read')
             ->disableOriginalConstructor()
-            ->setMethods(array('readAll'))
+            ->setMethods(['readAll'])
             ->getMock();
         // Check readAll() method invoking.
         $readMock->expects($this->once())->method('readAll')->will($this->returnValue(null));
 
         $this->readFactory = $this->getMockBuilder('\Magento\Framework\Filesystem\File\ReadFactory')
             ->disableOriginalConstructor()
-            ->setMethods(array('create'))
+            ->setMethods(['create'])
             ->getMock();
         // Check create() method invoking with expected argument.
-        $this->readFactory->expects($this->once())->method('create')->will($this->returnValue($readMock))->with($expectedHost);
+        $this->readFactory->expects($this->once())
+                        ->method('create')
+                        ->will($this->returnValue($readMock))->with($expectedHost);
 
         $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $this->coreFileStorageDb,
                 $this->coreFileStorage,
                 $this->imageFactory,
                 $this->validator,
                 $this->filesystem,
                 $this->readFactory,
-            ))
-            ->setMethods(array('_setUploadFile', 'save', 'getTmpDir'))
+            ])
+            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
             ->getMock();
 
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $uploaderMock->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
         $uploaderMock->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(array('name' => null)));
+        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(['name' => null]));
 
         $uploaderMock->move($fileUrl);
     }
@@ -145,21 +149,21 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
 
         $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $this->coreFileStorageDb,
                 $this->coreFileStorage,
                 $this->imageFactory,
                 $this->validator,
                 $this->filesystem,
                 $this->readFactory,
-            ))
-            ->setMethods(array('_setUploadFile', 'save', 'getTmpDir'))
+            ])
+            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
             ->getMock();
 
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
         $uploaderMock->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
         $uploaderMock->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(array('name' => null)));
+        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(['name' => null]));
 
         $uploaderMock->move($fileName);
     }

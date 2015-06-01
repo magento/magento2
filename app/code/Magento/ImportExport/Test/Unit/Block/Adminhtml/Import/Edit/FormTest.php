@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -53,14 +54,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->form = $this->getMockBuilder('\Magento\ImportExport\Block\Adminhtml\Import\Edit\Form')
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $context,
                 $registry,
                 $formFactory,
                 $this->_importModel,
                 $this->_entityFactory,
                 $this->_behaviorFactory,
-            ))
+            ])
             ->getMock();
     }
 
@@ -69,7 +70,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @todo to implement it.
      */
-    public function test_prepareForm()
+    public function testPrepareForm()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }

@@ -70,10 +70,9 @@ class TaxClassProcessor
      *
      * @param $taxClassName
      * @param AbstractType $productTypeModel
-     *
      * @return mixed
      */
-    protected function createTaxClass($taxClassName, AbstractType  $productTypeModel)
+    protected function createTaxClass($taxClassName, AbstractType $productTypeModel)
     {
         /** @var \Magento\Tax\Model\ClassModelFactory $taxClass */
         $taxClass = $this->classModelFactory->create();
@@ -88,13 +87,11 @@ class TaxClassProcessor
         return $id;
     }
 
-
     /**
      * Instantiate instance of tax class.
      *
      * @param $taxClassName
      * @param AbstractType $productTypeModel
-     *
      * @return mixed
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)
