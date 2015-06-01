@@ -144,6 +144,10 @@ class ExtensionAttributesFactory
     ) {
         // TODO: Optimize, since will be called on each extensible model setData()
         $extensibleEntityClass = get_class($extensibleEntity);
+        if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
+            /* do nothing is there are no extension attributes */
+            return;
+        }
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         $extensionData = [];
         foreach ($joinDirectives as $attributeCode => $directive) {
@@ -244,5 +248,21 @@ class ExtensionAttributesFactory
             "Class '{$extensibleClassName}' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
         );
+    }
+
+    /**
+     * Determine if the type is an actual extensible data interface.
+     *
+     * @param string $typeName
+     * @return string
+     */
+    private function isExtensibleAttributesImplemented($typeName)
+    {
+        try {
+            return $this->getExtensibleInterfaceName($typeName) != null;
+        } catch (\LogicException $e) {
+            /* do nothing */
+        }
+        return false;
     }
 }
