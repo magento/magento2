@@ -84,7 +84,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Entity Type'),
                 'required' => true,
                 'onchange' => 'varienImport.handleEntityTypeSelector();',
-                'values' => $this->_entityFactory->create()->toOptionArray()
+                'values' => $this->_entityFactory->create()->toOptionArray(),
+                'after_element_html' => $this->getDownloadSampleFileHtml(),
             ]
         );
 
@@ -173,5 +174,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
 
         return parent::_prepareForm();
+    }
+
+    /**
+     * Get download sample file html
+     *
+     * @return string
+     */
+    protected function getDownloadSampleFileHtml()
+    {
+        $html = '<span id="sample-file-span" style="display: none;"><a id="sample-file-link" href="#">'
+            . __('Download Sample File')
+            . '</a></span>';
+        return $html;
     }
 }
