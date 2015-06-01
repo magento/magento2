@@ -10,6 +10,11 @@ namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
 
+/**
+ * Class Bundle
+ * @package Magento\BundleImportExport\Model\Import\Product\Type
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+*/
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
 
