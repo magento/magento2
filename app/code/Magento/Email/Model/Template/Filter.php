@@ -675,7 +675,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $file = isset($params['file']) ? $params['file'] : null;
         if ($file) {
             $css = $this->getTemplateModel()
-                ->getCssFileContent($params['file']);
+                ->getCssFilesContent($params['file']);
 
             if (!empty($css)) {
                 return $css;
@@ -691,6 +691,8 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * This directive will cause CSS files to be applied inline to the HTML in the email template.
+     * This directive does not inline the CSS itself, but adds the files to the parent template model so that the model
+     * can handle the inlining at a later point, once all HTML has been assembled.
      * Syntax: {{inlinecss file=""}}
      *
      * @param string[] $construction

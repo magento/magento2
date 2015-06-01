@@ -217,6 +217,19 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Return a new instance of the template object. Used by the template directive.
+     *
+     * @return \Magento\Email\Model\AbstractTemplate
+     */
+    protected function getTemplateInstance()
+    {
+        return $this->templateFactory->create([
+            // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
+            'filesystem' => $this->filesystem
+        ]);
+    }
+
+    /**
      * Load template by XML configuration path. Loads template from database if it exists and has been overridden in
      * configuration. Otherwise loads from the filesystem.
      *
@@ -242,11 +255,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         // Templates loaded via the {{template config_path=""}} syntax don't support the subject/vars/styles
         // comment blocks, so strip them out
         $templateText = preg_replace('/<!--@(\w+)\s*(.*?)\s*@-->/us', '', $this->getTemplateText());
+        // trim copyright message
+        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
+            && strpos($matches[0], 'Copyright') > 0
+        ) {
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
         // Remove comment lines and extra spaces
         $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
 
         $this->setTemplateText($templateText);
-
         return $this;
     }
 
@@ -387,12 +405,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function applyInlineCss($html)
     {
-        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline
+        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
-        // Only run Emogrify if HTML exists and if there is at least one file to inline
-        if ($html && !empty($cssToInline)) {
+        // Only run Emogrify if HTML and CSS contain content
+        if ($html && $cssToInline) {
             try {
                 $emogrifier = new \Pelago\Emogrifier();
                 $emogrifier->setHtml($html);
@@ -421,31 +439,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Loads CSS file from materialized static view directory
      *
-     * @param string $file
+     * @param string|array $files
      * @return string
      */
-    public function getCssFileContent($file)
+    public function getCssFilesContent($files)
     {
-        $designParams = $this->getDesignParams();
+        if (!is_array($files)) {
+            $files = [$files];
+        }
 
-        $asset = $this->assetRepo->createAsset($file, $designParams);
-        return $asset->getContent();
-    }
-
-    /**
-     * Loads CSS content from filesystem.
-     *
-     * @param array $files
-     * @return string
-     */
-    protected function getCssFilesContent($files)
-    {
         // Remove duplicate files
         $files = array_unique($files);
 
+        $designParams = $this->getDesignParams();
         $css = '';
         foreach ($files as $file) {
-            $css .= $this->getCssFileContent($file);
+            $asset = $this->assetRepo->createAsset($file, $designParams);
+            $css .= $asset->getContent();
         }
         return $css;
     }
@@ -758,25 +768,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function isPlain()
     {
         return $this->getType() == self::TYPE_TEXT;
-    }
-
-    /**
-     * If class has set a template factory, return a new object. Else throw an exception.
-     * This allows child classes like \Magento\Email\Model\Template and \Magento\Newsletter\Model\Template to set
-     * their own factory objects.
-     *
-     * @return \Magento\Email\Model\AbstractTemplate
-     * @throws \UnexpectedValueException
-     */
-    protected function getTemplateInstance()
-    {
-        if (!$this->templateFactory) {
-            throw new \UnexpectedValueException('templateFactory must be set');
-        }
-        return $this->templateFactory->create([
-            // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
-            'filesystem' => $this->filesystem
-        ]);
     }
 
     /**
