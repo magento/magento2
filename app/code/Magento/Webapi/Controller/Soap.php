@@ -69,6 +69,11 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
+     * @var \Magento\Framework\Webapi\Rest\Response\RendererFactory
+     */
+    protected $rendererFactory;
+
+    /**
      * Initialize dependencies.
      *
      * @param Soap\Request $request
@@ -90,6 +95,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         PathProcessor $pathProcessor,
+        \Magento\Framework\Webapi\Rest\Response\RendererFactory $rendererFactory,
         \Magento\Framework\App\AreaList $areaList
     ) {
         $this->_request = $request;
@@ -101,6 +107,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
         $this->_localeResolver = $localeResolver;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
+        $this->rendererFactory = $rendererFactory;
     }
 
     /**
@@ -128,8 +135,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
                     $servicesList[$serviceName]['wsdl_endpoint'] = $this->_soapServer->getEndpointUri()
                         . '?' . \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL . '&services=' . $serviceName;
                 }
-                $this->_setResponseContentType('application/json');
-                $this->_setResponseBody(json_encode($servicesList));
+                $renderer = $this->rendererFactory->get();
+                $this->_setResponseContentType($renderer->getMimeType());
+                $this->_setResponseBody($renderer->render($servicesList));
             }
             else {
                 $this->_soapServer->handle();
