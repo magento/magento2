@@ -305,17 +305,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * numeric.
      *
      * @param bool $loadFromDatabase
+     * @param string $templateContent
+     * @param string $expectedOutput
      * @dataProvider loadByConfigPathDataProvider
      */
-    public function testLoadByConfigPath($loadFromDatabase)
+    public function testLoadByConfigPath($loadFromDatabase, $templateContent, $expectedOutput)
     {
         $configPath = 'design/email/header_template';
-        $templateContent = 'Test template content';
         $model = $this->getModelMock([
             'getDesignConfig',
             'loadDefault',
             'load',
             'getTemplateText',
+            'setTemplateText',
         ]);
 
         $designConfig = $this->getMockBuilder('Magento\Framework\Object')
@@ -349,13 +351,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue($templateId));
 
-        $model->expects($this->atLeastOnce())
+        $model->expects($this->once())
             ->method('getTemplateText')
             ->will($this->returnValue($templateContent));
 
-        $model->loadByConfigPath($configPath);
+        $model->expects($this->once())
+            ->method('setTemplateText')
+            ->with($expectedOutput)
+            ->will($this->returnSelf());
 
-        $this->assertEquals($templateContent, $model->getTemplateText());
+        $model->loadByConfigPath($configPath);
     }
 
     /**
@@ -364,8 +369,36 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function loadByConfigPathDataProvider()
     {
         return [
-            'Load from filesystem' => [false],
-            'Load from database' => [true],
+            'Load from filesystem' => [
+                false,
+                'Test template content',
+                'Test template content',
+            ],
+            'Load from database - @subject comment' => [
+                true,
+                'Test template content<!--@subject Test subject @-->',
+                'Test template content',
+            ],
+            'Load from database - @vars comment' => [
+                true,
+                'Test template content<!--@vars Test vars @-->',
+                'Test template content',
+            ],
+            'Load from database - @styles comment' => [
+                true,
+                'Test template content<!--@styles Test styles @-->',
+                'Test template content',
+            ],
+            'Load from database - copyright comment' => [
+                true,
+                "Test template content\n<!--
+                /**
+                 * Copyright © 2015 Magento. All rights reserved.
+                 * See COPYING.txt for license details.
+                */
+                -->",
+                'Test template content',
+            ],
         ];
     }
 
