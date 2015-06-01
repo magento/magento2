@@ -75,7 +75,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $templateProcessed = $this->_appState->emulateAreaCode(
             \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
             [$template, 'getProcessedTemplate'],
-            [$vars, true]
+            [$vars]
         );
         $template->revertDesign();
 
@@ -95,7 +95,7 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store_id');
+        $storeId = (int)$this->getRequest()->getParam('store');
         if ($storeId) {
             return $storeId;
         }
