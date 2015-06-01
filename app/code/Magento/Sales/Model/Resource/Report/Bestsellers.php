@@ -96,10 +96,6 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 
@@ -117,7 +113,7 @@ class Bestsellers extends AbstractReport
             }
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $this->getTable('sales_order')],
@@ -134,25 +130,9 @@ class Bestsellers extends AbstractReport
                 'period' => $periodExpr,
                 'store_id' => 'source_table.store_id',
                 'product_id' => 'order_item.product_id',
-                'product_name' => new \Zend_Db_Expr(
-                    sprintf('MIN(%s)', $adapter->getIfNullSql('product_name.value', 'product_default_name.value'))
-                ),
+                'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
                 'product_price' => new \Zend_Db_Expr(
-                    sprintf(
-                        '%s * %s',
-                        new \Zend_Db_Expr(
-                            sprintf(
-                                'MIN(%s)',
-                                $adapter->getIfNullSql(
-                                    $adapter->getIfNullSql('product_price.value', 'product_default_price.value'),
-                                    0
-                                )
-                            )
-                        ),
-                        new \Zend_Db_Expr(
-                            sprintf('MIN(%s)', $adapter->getIfNullSql('source_table.base_to_global_rate', '0'))
-                        )
-                    )
+                    'MIN(order_item.base_price) * MIN(source_table.base_to_global_rate)'
                 ),
                 'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
             ];
@@ -167,61 +147,9 @@ class Bestsellers extends AbstractReport
             )->where(
                 'source_table.state != ?',
                 \Magento\Sales\Model\Order::STATE_CANCELED
-            );
-
-            $joinExpr = [
-                'product.entity_id = order_item.product_id',
-                $adapter->quoteInto('product.type_id NOT IN(?)', $this->ignoredProductTypes),
-            ];
-
-            $joinExpr = implode(' AND ', $joinExpr);
-            $select->joinInner(['product' => $this->getTable('catalog_product_entity')], $joinExpr, []);
-
-            // join product attributes Name & Price
-            $attr = $this->_productResource->getAttribute('name');
-            $joinExprProductName = [
-                'product_name.entity_id = product.entity_id',
-                'product_name.store_id = source_table.store_id',
-                $adapter->quoteInto('product_name.attribute_id = ?', $attr->getAttributeId()),
-            ];
-            $joinExprProductName = implode(' AND ', $joinExprProductName);
-            $joinProductName = [
-                'product_default_name.entity_id = product.entity_id',
-                'product_default_name.store_id = 0',
-                $adapter->quoteInto('product_default_name.attribute_id = ?', $attr->getAttributeId()),
-            ];
-            $joinProductName = implode(' AND ', $joinProductName);
-            $select->joinLeft(
-                ['product_name' => $attr->getBackend()->getTable()],
-                $joinExprProductName,
-                []
-            )->joinLeft(
-                ['product_default_name' => $attr->getBackend()->getTable()],
-                $joinProductName,
-                []
-            );
-            $attr = $this->_productResource->getAttribute('price');
-            $joinExprProductPrice = [
-                'product_price.entity_id = product.entity_id',
-                'product_price.store_id = source_table.store_id',
-                $adapter->quoteInto('product_price.attribute_id = ?', $attr->getAttributeId()),
-            ];
-            $joinExprProductPrice = implode(' AND ', $joinExprProductPrice);
-
-            $joinProductPrice = [
-                'product_default_price.entity_id = product.entity_id',
-                'product_default_price.store_id = 0',
-                $adapter->quoteInto('product_default_price.attribute_id = ?', $attr->getAttributeId()),
-            ];
-            $joinProductPrice = implode(' AND ', $joinProductPrice);
-            $select->joinLeft(
-                ['product_price' => $attr->getBackend()->getTable()],
-                $joinExprProductPrice,
-                []
-            )->joinLeft(
-                ['product_default_price' => $attr->getBackend()->getTable()],
-                $joinProductPrice,
-                []
+            )->where(
+                'order_item.product_type NOT IN(?)',
+                $this->ignoredProductTypes
             );
 
             if ($subSelect !== null) {

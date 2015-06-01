@@ -38,20 +38,12 @@ class Engine extends AbstractDb implements EngineInterface
     protected $_catalogSearchData = null;
 
     /**
-     * Catalog search data
-     *
-     * @var \Magento\Search\Model\Resource\Helper
-     */
-    protected $_resourceHelper;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param \Magento\Search\Model\Resource\Helper $resourceHelper
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -59,13 +51,11 @@ class Engine extends AbstractDb implements EngineInterface
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\Search\Model\Resource\Helper $resourceHelper,
         $resourcePrefix = null
     ) {
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
-        $this->_resourceHelper = $resourceHelper;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -118,7 +108,7 @@ class Engine extends AbstractDb implements EngineInterface
         }
 
         if ($data) {
-            $this->_resourceHelper->insertOnDuplicate($this->getMainTable(), $data, ['data_index']);
+            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $data, ['data_index']);
         }
 
         return $this;

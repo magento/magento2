@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice item interface.
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
+ * @api
  */
 interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -111,7 +112,10 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Base discount tax compensation amount.
      */
     const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
-
+    /**
+     * Invoice
+     */
+    const INVOICE = 'invoice';
     /**
      * Gets the additional data for the invoice item.
      *

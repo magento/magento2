@@ -8,8 +8,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
-
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -688,6 +688,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
+     *
      * @return array
      */
     protected function configureSaveTest()
@@ -998,24 +999,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'disabled' => false,
                     'types' => ['image'],
                     'content' => [
-                        'entry_data' => 'content_data',
-                        'mime_type' => 'image/jpg',
-                        'name' => 'product_image',
+                        'data' => [
+                            ImageContentInterface::NAME => 'product_image',
+                            ImageContentInterface::TYPE => 'image/jpg',
+                            ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
+                        ]
                     ]
                 ]
             ],
         ];
 
         $contentMock =
-            $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface')
-                ->setMethods(['getEntryData', 'getMimeType', 'getName'])
+            $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
+                ->setMethods(['getBase64EncodedData', 'getType', 'getName'])
+                ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
-        $contentMock->expects($this->once())->method('getEntryData')
-            ->willReturn($expectedResult['images'][0]['content']['entry_data']);
-        $contentMock->expects($this->once())->method('getMimeType')
-            ->willReturn($expectedResult['images'][0]['content']['mime_type']);
+        $contentMock->expects($this->once())->method('getBase64EncodedData')
+            ->willReturn($expectedResult['images'][0]['content']['data']['base64_encoded_data']);
+        $contentMock->expects($this->once())->method('getType')
+            ->willReturn($expectedResult['images'][0]['content']['data']['type']);
         $contentMock->expects($this->once())->method('getName')
-            ->willReturn($expectedResult['images'][0]['content']['name']);
+            ->willReturn($expectedResult['images'][0]['content']['data']['name']);
 
         $entryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
             ->setMethods(['getId', 'getFile', 'getLabel', 'getPosition', 'isDisabled', 'types', 'getContent'])
@@ -1138,5 +1142,63 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'receive null' => [null],
             'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
         ];
+    }
+
+    public function testGetOptions()
+    {
+        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // the productModel
+        $productModel = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductOption' => $optionInstanceMock,
+            ]
+        );
+        $productModel->setHasOptions(true);
+
+        $option1Id = 2;
+        $optionMock1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock1->expects($this->once())
+            ->method('getId')
+            ->willReturn($option1Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+
+        $option2Id = 3;
+        $optionMock2 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock2->expects($this->once())
+            ->method('getId')
+            ->willReturn($option2Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+        $options = [$optionMock1, $optionMock2];
+
+        $optionInstanceMock->expects($this->once())
+            ->method('getProductOptionCollection')
+            ->with($productModel)
+            ->willReturn($options);
+
+        $expectedOptions = [
+            $option1Id => $optionMock1,
+            $option2Id => $optionMock2
+        ];
+        $this->assertEquals($expectedOptions, $productModel->getOptions());
+
+        //Calling the method again, empty options array will be returned
+        $productModel->setOptions([]);
+        $this->assertEquals([], $productModel->getOptions());
     }
 }

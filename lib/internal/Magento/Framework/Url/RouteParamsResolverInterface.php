@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Route parameters resolver.
+ *
+ * @api
+ */
 interface RouteParamsResolverInterface
 {
     /**

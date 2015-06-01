@@ -381,9 +381,9 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
      */
     protected function getCustomerToken()
     {
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         return $token;

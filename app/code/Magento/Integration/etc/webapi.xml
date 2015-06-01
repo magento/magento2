@@ -8,13 +8,13 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <route url="/V1/integration/admin/token" method="POST">
-        <service class="Magento\Integration\Service\V1\AdminTokenServiceInterface" method="createAdminAccessToken"/>
+        <service class="Magento\Integration\Api\AdminTokenServiceInterface" method="createAdminAccessToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/integration/customer/token" method="POST">
-        <service class="Magento\Integration\Service\V1\CustomerTokenServiceInterface" method="createCustomerAccessToken"/>
+        <service class="Magento\Integration\Api\CustomerTokenServiceInterface" method="createCustomerAccessToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

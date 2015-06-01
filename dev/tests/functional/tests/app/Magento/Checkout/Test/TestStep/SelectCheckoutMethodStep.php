@@ -61,11 +61,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
         $checkoutMethodBlock = $this->checkoutOnepage->getLoginBlock();
         switch ($this->checkoutMethod) {
             case 'guest':
-                $checkoutMethodBlock->guestCheckout();
-                $checkoutMethodBlock->clickContinue();
-                break;
-            case 'register':
-                $checkoutMethodBlock->registerCustomer();
                 $checkoutMethodBlock->clickContinue();
                 break;
             case 'login':

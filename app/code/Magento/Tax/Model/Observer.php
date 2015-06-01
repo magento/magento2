@@ -26,7 +26,7 @@ class Observer
     protected $_orderTaxFactory;
 
     /**
-     * @var \Magento\Tax\Model\Sales\Order\Tax\ItemFactory
+     * @var \Magento\Sales\Model\Order\Tax\ItemFactory
      */
     protected $_taxItemFactory;
 
@@ -58,7 +58,7 @@ class Observer
     /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
-     * @param \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory
+     * @param \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
@@ -68,7 +68,7 @@ class Observer
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
-        \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory,
+        \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory,
@@ -241,7 +241,7 @@ class Observer
                                 'real_base_amount' => $quoteItemId['real_base_amount'],
                                 'taxable_item_type' => $quoteItemId['item_type'],
                             ];
-                            /** @var $taxItem \Magento\Tax\Model\Sales\Order\Tax\Item */
+                            /** @var $taxItem \Magento\Sales\Model\Order\Tax\Item */
                             $taxItem = $this->_taxItemFactory->create();
                             $taxItem->setData($data)->save();
                         }
@@ -312,7 +312,7 @@ class Observer
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
                 . '<%% if (data.finalPrice.value) { %%>'
-                . ' <%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
+                . ' +<%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
                 . '<%% } %%>',
                 __('Excl. tax:')
             );
@@ -320,7 +320,7 @@ class Observer
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
                 . '<%% if (data.basePrice.value) { %%>'
-                . ' <%%= data.basePrice.formatted %%>'
+                . ' +<%%= data.basePrice.formatted %%>'
                 . '<%% } %%>'
             );
         }

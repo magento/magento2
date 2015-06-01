@@ -457,9 +457,6 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 break;
         }
 
-        $dateStart->setTimezone(new \DateTimeZone('Etc/UTC'));
-        $dateEnd->setTimezone(new \DateTimeZone('Etc/UTC'));
-
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
         } else {
@@ -900,8 +897,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $this->addFieldToFilter(
             $fieldToFilter,
             [
-                'from' => $from->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
-                'to' => $to->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                'from' => $from->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+                'to' => $to->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             ]
         );
 

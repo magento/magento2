@@ -17,7 +17,7 @@ use Magento\Customer\Model\Context;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * @var Category

@@ -10,9 +10,6 @@
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
     </type>
-    <type name="Magento\Framework\View\Layout">
-        <plugin name="exception_handler" type="Magento\Developer\Model\View\Layout\Plugin" sortOrder="10"/>
-    </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>
@@ -31,6 +28,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>
                 <item name="dev_css_deploy" xsi:type="object">Magento\Developer\Console\Command\CssDeployCommand</item>
+                <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
             </argument>
         </arguments>
     </type>

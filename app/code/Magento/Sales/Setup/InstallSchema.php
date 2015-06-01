@@ -584,13 +584,13 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'increment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            32,
             [],
             'Increment Id'
         )->addColumn(
             'applied_rule_ids',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Applied Rule Ids'
         )->addColumn(
@@ -602,43 +602,43 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'customer_email',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Customer Email'
         )->addColumn(
             'customer_firstname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Customer Firstname'
         )->addColumn(
             'customer_lastname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Customer Lastname'
         )->addColumn(
             'customer_middlename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Customer Middlename'
         )->addColumn(
             'customer_prefix',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Customer Prefix'
         )->addColumn(
             'customer_suffix',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Customer Suffix'
         )->addColumn(
             'customer_taxvat',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Customer Taxvat'
         )->addColumn(
@@ -650,13 +650,13 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'ext_customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Ext Customer Id'
         )->addColumn(
             'ext_order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Ext Order Id'
         )->addColumn(
@@ -668,25 +668,25 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'hold_before_state',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Hold Before State'
         )->addColumn(
             'hold_before_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Hold Before Status'
         )->addColumn(
             'order_currency_code',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            3,
             [],
             'Order Currency Code'
         )->addColumn(
             'original_increment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            32,
             [],
             'Original Increment Id'
         )->addColumn(
@@ -716,13 +716,13 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'remote_ip',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Remote Ip'
         )->addColumn(
             'shipping_method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Shipping Method'
         )->addColumn(
@@ -734,13 +734,13 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'store_name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Store Name'
         )->addColumn(
             'x_forwarded_for',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'X Forwarded For'
         )->addColumn(
@@ -1845,79 +1845,79 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'cc_exp_month',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            12,
             [],
             'Cc Exp Month'
         )->addColumn(
             'cc_ss_start_year',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            12,
             [],
             'Cc Ss Start Year'
         )->addColumn(
             'echeck_bank_name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Echeck Bank Name'
         )->addColumn(
             'method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Method'
         )->addColumn(
             'cc_debug_request_body',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Debug Request Body'
         )->addColumn(
             'cc_secure_verify',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Secure Verify'
         )->addColumn(
             'protection_eligibility',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Protection Eligibility'
         )->addColumn(
             'cc_approval',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Approval'
         )->addColumn(
             'cc_last_4',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            4,
             [],
             'Cc Last 4'
         )->addColumn(
             'cc_status_description',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Status Description'
         )->addColumn(
             'echeck_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Echeck Type'
         )->addColumn(
             'cc_debug_response_serialized',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Debug Response Serialized'
         )->addColumn(
             'cc_ss_start_month',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Cc Ss Start Month'
         )->addColumn(
@@ -1929,103 +1929,103 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'last_trans_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Last Trans Id'
         )->addColumn(
             'cc_cid_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Cid Status'
         )->addColumn(
             'cc_owner',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             [],
             'Cc Owner'
         )->addColumn(
             'cc_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Type'
         )->addColumn(
             'po_number',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Po Number'
         )->addColumn(
             'cc_exp_year',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            4,
             ['nullable' => true, 'default' => null],
             'Cc Exp Year'
         )->addColumn(
             'cc_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            4,
             [],
             'Cc Status'
         )->addColumn(
             'echeck_routing_number',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Echeck Routing Number'
         )->addColumn(
             'account_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Account Status'
         )->addColumn(
             'anet_trans_method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Anet Trans Method'
         )->addColumn(
             'cc_debug_response_body',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Debug Response Body'
         )->addColumn(
             'cc_ss_issue',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Ss Issue'
         )->addColumn(
             'echeck_account_name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Echeck Account Name'
         )->addColumn(
             'cc_avs_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Avs Status'
         )->addColumn(
             'cc_number_enc',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Number Enc'
         )->addColumn(
             'cc_trans_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Cc Trans Id'
         )->addColumn(
             'address_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            32,
             [],
             'Address Status'
         )->addColumn(
@@ -5037,6 +5037,105 @@ class InstallSchema implements InstallSchemaInterface
             'Sales Order Tax Table'
         );
         $installer->getConnection()->createTable($table);
+
+        /**
+         * Create table 'sales_order_tax_item'
+         */
+        $table = $setup->getConnection()->newTable(
+            $setup->getTable('sales_order_tax_item')
+        )->addColumn(
+            'tax_item_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Tax Item Id'
+        )->addColumn(
+            'tax_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false],
+            'Tax Id'
+        )->addColumn(
+            'item_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true],
+            'Item Id'
+        )->addColumn(
+            'tax_percent',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            ['nullable' => false],
+            'Real Tax Percent For Item'
+        )->addColumn(
+            'amount',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            ['nullable' => false],
+            'Tax amount for the item and tax rate'
+        )->addColumn(
+            'base_amount',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            ['nullable' => false],
+            'Base tax amount for the item and tax rate'
+        )->addColumn(
+            'real_amount',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            ['nullable' => false],
+            'Real tax amount for the item and tax rate'
+        )->addColumn(
+            'real_base_amount',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            ['nullable' => false],
+            'Real base tax amount for the item and tax rate'
+        )->addColumn(
+            'associated_item_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => true, 'unsigned' => true],
+            'Id of the associated item'
+        )->addColumn(
+            'taxable_item_type',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            ['nullable' => false],
+            'Type of the taxable item'
+        )->addIndex(
+            $setup->getIdxName('sales_order_tax_item', ['item_id']),
+            ['item_id']
+        )->addIndex(
+            $setup->getIdxName(
+                'sales_order_tax_item',
+                ['tax_id', 'item_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['tax_id', 'item_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        )->addForeignKey(
+            $setup->getFkName('sales_order_tax_item', 'associated_item_id', 'sales_order_item', 'item_id'),
+            'associated_item_id',
+            $setup->getTable('sales_order_item'),
+            'item_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        )->addForeignKey(
+            $setup->getFkName('sales_order_tax_item', 'tax_id', 'sales_order_tax', 'tax_id'),
+            'tax_id',
+            $setup->getTable('sales_order_tax'),
+            'tax_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        )->addForeignKey(
+            $setup->getFkName('sales_order_tax_item', 'item_id', 'sales_order_item', 'item_id'),
+            'item_id',
+            $setup->getTable('sales_order_item'),
+            'item_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        )->setComment(
+            'Sales Order Tax Item'
+        );
+        $setup->getConnection()->createTable($table);
 
         /**
          * Create table 'sales_order_status'

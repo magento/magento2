@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Fixture\Customer;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -48,15 +48,15 @@ class GroupId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet'])) {
-            /** @var CustomerGroupInjectable $customerGroup */
-            $customerGroup = $fixtureFactory->createByCode('customerGroupInjectable', ['dataSet' => $data['dataSet']]);
+            /** @var CustomerGroup $customerGroup */
+            $customerGroup = $fixtureFactory->createByCode('customerGroup', ['dataSet' => $data['dataSet']]);
             if (!$customerGroup->hasData('customer_group_id')) {
                 $customerGroup->persist();
             }
             $this->data = $customerGroup->getCustomerGroupCode();
             $this->customerGroupFixture = $customerGroup;
         }
-        if (isset($data['customerGroup']) && $data['customerGroup'] instanceof CustomerGroupInjectable) {
+        if (isset($data['customerGroup']) && $data['customerGroup'] instanceof CustomerGroup) {
             $this->data = $data['customerGroup']->getCustomerGroupCode();
             $this->customerGroupFixture = $data['customerGroup'];
         }
