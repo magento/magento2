@@ -183,7 +183,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function getDownloadSampleFileHtml()
     {
-        $html = '<span id="sample-file-span" style="display: none;"><a id="sample-file-link" href="#">'
+        $html = '<span id="sample-file-span" class="no-display"><a id="sample-file-link" href="#">'
             . __('Download Sample File')
             . '</a></span>';
         return $html;
