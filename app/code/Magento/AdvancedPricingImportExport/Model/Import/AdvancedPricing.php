@@ -187,9 +187,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         if (isset($rowData[self::COL_SKU])) {
             $sku = $rowData[self::COL_SKU];
         }
-        if (null === $sku) {
-            $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
-        } elseif (false === $sku) {
+        if (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         }
         return !isset($this->_invalidRows[$rowNum]);
