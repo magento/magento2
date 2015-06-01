@@ -55,11 +55,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $filesystem,
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
-                $objectManager->create('Magento\Framework\View\FileSystem'),
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
-                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\TemplateFactory')
             ]
         )->getMock();
@@ -70,6 +69,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Manually set a module directory to allow for testing the loading of email templates from module directories.
+     * TODO: Improve this method of mocking module folders, as it is fragile/error-prone
      *
      * @return \Magento\Framework\Filesystem
      */
@@ -645,18 +645,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $templateTypeId = 'test_template';
         $this->_model->setTemplateType($templateTypeId);
         $this->assertEquals($templateTypeId, $this->_model->getType());
-    }
-
-    public function testGetPreparedTemplateText()
-    {
-        $this->_mockModel();
-        $this->_model->loadDefault('customer_create_account_email_template');
-        $this->assertContains(
-            '<body style',
-            $this->_model->getPreparedTemplateText(
-                $this->_model->getTemplateText()
-            )
-        );
     }
 
     public function testGetSendingException()

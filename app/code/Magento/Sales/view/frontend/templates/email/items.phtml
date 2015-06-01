@@ -9,64 +9,53 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <?php if ($_order): ?>
-    <?php $_items = $_order->getAllItems(); ?>
-    <?php $_itemCount = count($_items); ?>
-    <tr>
-        <td>
-            <table class="items" cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                    <tr>
-                        <th class="cell-name">
-                            <?php if($_itemCount > 1): ?>
-                                <?php echo __('Items in your order'); ?>
-                            <?php else: ?>
-                                <?php echo __('Item in your order'); ?>
-                            <?php endif; ?>
-                        </th>
-                        <th class="cell-name align-center">
-                            <?php echo __('Qty'); ?>
-                        </th>
-                        <th class="cell-name align-right">
-                            <?php echo __('Price'); ?>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $i=0; foreach ($_items as $_item): ?>
-                        <?php if($_item->getParentItem()) continue; else $i++; ?>
-                        <?php echo $this->getItemHtml($_item) ?>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <?php echo $block->getChildHtml('order_totals') ?>
-        </td>
-    </tr>
-    <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
-        <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
-        <?php if ($_giftMessage): ?>
-            <br />
-            <table cellspacing="0" cellpadding="0" border="0">
-                <thead>
-                    <tr>
-                        <th><strong><?php echo __('Gift Message for this Order') ?></strong></th>
-                    </tr>
-                </thead>
+<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
+    <thead>
+        <tr>
+            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Item') ?></th>
+            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Sku') ?></th>
+            <th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Qty') ?></th>
+            <th align="right" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Subtotal') ?></th>
+        </tr>
+    </thead>
 
-                <tbody>
+    <?php $i = 0; foreach ($_order->getAllItems() as $_item): ?>
+    <?php if ($_item->getParentItem()) {
+    continue;
+} else {
+    $i++;
+} ?>
+    <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
+        <?php echo $block->getItemHtml($_item) ?>
+    </tbody>
+    <?php endforeach; ?>
 
-                    <tr>
-                        <td colspan="4">
-                            <strong><?php echo __('From:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?php echo __('To:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?php echo __('Message:'); ?></strong><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        <?php endif; ?>
+    <tbody>
+        <?php echo $block->getChildHtml('order_totals') ?>
+    </tbody>
+</table>
+<?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
+    <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
+    <?php if ($_giftMessage): ?>
+<br />
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #EAEAEA;">
+    <thead>
+        <tr>
+            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><strong><?php echo __('Gift Message for this Order') ?></strong></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td colspan="4" align="left" style="padding:3px 9px">
+            <strong><?php echo __('From:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><strong><?php echo __('To:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><strong><?php echo __('Message:'); ?></strong><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
     <?php endif; ?>
+<?php endif; ?>
 <?php endif; ?>

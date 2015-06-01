@@ -27,11 +27,10 @@ class BackendTemplate extends Template
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
+     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
@@ -46,11 +45,10 @@ class BackendTemplate extends Template
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
@@ -63,11 +61,10 @@ class BackendTemplate extends Template
             $storeManager,
             $filesystem,
             $assetRepo,
-            $viewFileSystem,
             $scopeConfig,
             $objectManager,
-            $emailFilterFactory,
             $emailConfig,
+            $filterFactory,
             $templateFactory,
             $data
         );
