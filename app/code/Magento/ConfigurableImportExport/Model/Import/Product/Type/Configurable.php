@@ -9,6 +9,12 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
+/**
+ * Importing configurable products
+ * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
@@ -299,6 +305,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $newSku - imported variations list
      * @param array $oldSku - present variations list
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
     {
@@ -385,6 +392,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Validate and prepare data about super attributes and associated products.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _processSuperData()
     {
@@ -405,7 +413,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                             continue;
                         }
                         $usedCombParts[] = $skuSuperValues[$usedAttrId];
-                        $superData['used_attributes'][$usedAttrId][$skuSuperValues[$usedAttrId]] = true;
+                        $this->_productSuperData['used_attributes'][$usedAttrId][$skuSuperValues[$usedAttrId]] = true;
                     }
                     $comb = implode('|', $usedCombParts);
 
@@ -446,6 +454,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseVariations($rowData)
     {
@@ -526,6 +536,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _parseVariationPrices($rowData)
     {
@@ -645,10 +656,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *  Collect super data.
      *
      * @param $rowData
-     * @param $rowNum
      * @return $this
      */
-    protected function _collectSuperData($rowData, $rowNum)
+    protected function _collectSuperData($rowData)
     {
         $productId = $this->_productData['entity_id'];
 
@@ -823,7 +833,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                         $this->_productData = null;
                         continue;
                     }
-                    $this->_collectSuperData($rowData, $rowNum);
+                    $this->_collectSuperData($rowData);
                 }
             }
 

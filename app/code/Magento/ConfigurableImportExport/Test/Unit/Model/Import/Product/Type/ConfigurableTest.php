@@ -9,6 +9,11 @@ namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\ConfigurableImportExport;
 
+/**
+ * Class ConfigurableTest
+ * @package Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ConfigurableImportExport\Model\Import\Product\Type\Configurable */
@@ -68,6 +73,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
     protected $_connection;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->setCollectionFactory = $this->getMock(
@@ -249,6 +257,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function _getBunch()
     {
         return [[
@@ -524,6 +536,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->configurable->saveData();
     }
 
+    /**
+     * @param $rowData
+     * @param $rowNum
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function isRowAllowedToImport($rowData, $rowNum)
     {
         if ($rowNum == 2) {

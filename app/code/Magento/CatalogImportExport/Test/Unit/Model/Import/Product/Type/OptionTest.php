@@ -7,6 +7,9 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 /**
  * Test class for import product options module
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OptionTest extends \PHPUnit_Framework_TestCase
 {
