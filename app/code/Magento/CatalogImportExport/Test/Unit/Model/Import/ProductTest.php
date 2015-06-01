@@ -1316,7 +1316,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected function validateRowIsAlreadyValidatedDataProvider()
+    public function validateRowIsAlreadyValidatedDataProvider()
     {
         return [
             [
