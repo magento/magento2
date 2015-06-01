@@ -70,8 +70,8 @@ class Messages extends Block
         $elements = $this->_rootElement->getElements($this->successMessage);
 
         $messages = [];
-        foreach ($elements as $key => $element) {
-            $messages[$key] = $element->getText();
+        foreach ($elements as $element) {
+            $messages[] = $element->getText();
         }
 
         return count($messages) > 1 ? $messages : $messages[0];
