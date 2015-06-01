@@ -80,7 +80,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 1],
-                ['store_id', null, 1]
+                ['store', null, 1]
             ]
         );
 
@@ -147,7 +147,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 2],
-                ['store_id', null, 1],
+                ['store', null, 1],
                 ['subscriber', null, 3]
             ]
         );
