@@ -33,6 +33,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $store;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $request;
@@ -89,6 +94,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->setMethods(['getFrontendName', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->store->expects($this->any())
+            ->method('getFrontendName')
+            ->will($this->returnValue('frontendName'));
+        $this->store->expects($this->any())
+            ->method('getFrontendName')
+            ->will($this->returnValue('storeId'));
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->store));
+
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -177,5 +197,155 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with(array_merge($variables, ['this' => $model]))
             ->will($this->returnValue($filterTemplate));
         $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
+    }
+
+    /**
+     * This test is nearly identical to the
+     * \Magento\Email\Test\Unit\Model\AbstractTemplateTest::testGetProcessedTemplate test, except this test also tests
+     * to ensure that if a "subscriber" variable is passed to method, the store ID from that object will be used for
+     * filtering.
+     *
+     * @param $variables array
+     * @param $templateType string
+     * @param $storeId int
+     * @param $expectedVariables array
+     * @param $expectedResult string
+     * @dataProvider getProcessedTemplateProvider
+     */
+    public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
+    {
+        $filterTemplate = $this->getMockBuilder('Magento\Newsletter\Model\Template\Filter')
+            ->setMethods([
+                'setUseSessionInUrl',
+                'setPlainTemplateMode',
+                'setIsChildTemplate',
+                'setTemplateModel',
+                'setVariables',
+                'setStoreId',
+                'filter',
+                'getStoreId',
+                'getInlineCssFiles',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $filterTemplate->expects($this->once())
+            ->method('setUseSessionInUrl')
+            ->with(false)
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setPlainTemplateMode')
+            ->with($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT)
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setIsChildTemplate')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setTemplateModel')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('setStoreId')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue($storeId));
+
+        // The following block of code tests to ensure that the store id of the subscriber will be used, if the
+        // 'subscriber' variable is set.
+        $subscriber = $this->getMockBuilder('Magento\Newsletter\Model\Subscriber')
+            ->setMethods([
+                'getStoreId',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $subscriber->expects($this->once())
+            ->method('getStoreId')
+            ->will($this->returnValue('3'));
+        $expectedVariables['subscriber'] = $subscriber;
+        $variables['subscriber'] = $subscriber;
+
+        $expectedVariables['store'] = $this->store;
+
+        $model = $this->getModelMock([
+            'getDesignParams',
+            'applyDesignConfig',
+            'getTemplateText',
+            'isPlain',
+        ]);
+        $filterTemplate->expects($this->any())
+            ->method('setVariables')
+            ->with(array_merge(['this' => $model], $expectedVariables));
+        $model->setTemplateFilter($filterTemplate);
+        $model->setTemplateType($templateType);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
+
+        $model->expects($this->atLeastOnce())
+            ->method('isPlain')
+            ->will($this->returnValue($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT));
+
+        $preparedTemplateText = $expectedResult; //'prepared text';
+        $model->expects($this->once())
+            ->method('getTemplateText')
+            ->will($this->returnValue($preparedTemplateText));
+
+        $filterTemplate->expects($this->once())
+            ->method('filter')
+            ->with($preparedTemplateText)
+            ->will($this->returnValue($expectedResult));
+
+        $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
+    }
+
+    /**
+     * @return array
+     */
+    public function getProcessedTemplateProvider()
+    {
+        return [
+            'default' => [
+                'variables' => [],
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
+                'storeId' => 1,
+                'expectedVariables' => [
+                    'logo_url' => null,
+                    'logo_alt' => 'frontendName',
+                    'store' => null,
+                    'logo_width' => null,
+                    'logo_height' => null,
+                    'store_phone' => null,
+                    'store_hours' => null,
+                    'store_email' => null,
+                ],
+                'expectedResult' => 'expected result',
+            ],
+            'logo variables set' => [
+                'variables' => [
+                    'logo_url' => 'http://example.com/logo',
+                    'logo_alt' => 'Logo Alt',
+                ],
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
+                'storeId' => 1,
+                'expectedVariables' => [
+                    'logo_url' => 'http://example.com/logo',
+                    'logo_alt' => 'Logo Alt',
+                    'store' => null,
+                    'logo_width' => null,
+                    'logo_height' => null,
+                    'store_phone' => null,
+                    'store_hours' => null,
+                    'store_email' => null,
+                    'template_styles' => null,
+                ],
+                'expectedResult' => 'expected result',
+            ],
+        ];
     }
 }

@@ -323,7 +323,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $this->applyDesignConfig();
         }
 
-        $storeId = $this->getDesignConfig()->getStore();
+        if (isset($variables['subscriber'])) {
+            $storeId = $variables['subscriber']->getStoreId();
+        } else {
+            $storeId = $this->getDesignConfig()->getStore();
+        }
         $processor->setStoreId($storeId);
 
         // Populate the variables array with store, store info, logo, etc. variables
