@@ -191,7 +191,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
     {
         $productForm = $this->catalogProductEdit->getProductForm();
         $productForm->openTab('variations');
-        $productForm->getTabElement('variations')->deleteAttributes();
+        $productForm->getTab('variations')->deleteAttributes();
         $this->catalogProductEdit->getProductForm()->fill($product);
     }
 }

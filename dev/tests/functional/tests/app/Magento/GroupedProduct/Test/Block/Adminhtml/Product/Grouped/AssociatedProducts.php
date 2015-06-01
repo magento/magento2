@@ -43,7 +43,7 @@ class AssociatedProducts extends Tab
      *
      * @var string
      */
-    protected $deleteButton = '.delete';
+    protected $deleteButton = '[data-role="delete"]';
 
     /**
      * Get search grid
@@ -104,6 +104,8 @@ class AssociatedProducts extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {

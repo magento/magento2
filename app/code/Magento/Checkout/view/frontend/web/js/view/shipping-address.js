@@ -12,23 +12,37 @@ define(
         'Magento_Customer/js/model/customer',
         '../model/quote',
         'Magento_Checkout/js/model/step-navigator',
-        '../model/addresslist'
+        '../model/addresslist',
+        'underscore'
     ],
-    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
+    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList, _) {
         'use strict';
         var stepName = 'shippingAddress';
         var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
-                visible: true
+                visible: true,
+                formVisible: customer.getShippingAddressList().length === 0
             },
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
             },
             stepNumber: navigator.getStepNumber(stepName),
-            addresses: customer.getShippingAddressList(),
-            selectedAddressId: ko.observable(addressList.getAddresses()[0].customerAddressId),
+            addresses: function() {
+                var newAddress = {
+                        getAddressInline: function() {
+                            return $.mage.__('New address');
+                        },
+                        customerAddressId: null
+                    },
+                    addresses = addressList.getAddresses();
+                addresses.push(newAddress);
+                return addresses;
+            },
+            selectedAddressId: ko.observable(
+                addressList.getAddresses().length ? addressList.getAddresses()[0].customerAddressId : null
+            ),
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
             isVisible: navigator.isStepVisible(stepName),
@@ -73,6 +87,7 @@ define(
                 }
             },
             sameAsBillingClick: function() {
+                addressList.isBillingSameAsShipping = !addressList.isBillingSameAsShipping;
                 if (this.sameAsBilling()) {
                     var billingAddress = quote.getBillingAddress()();
                     if (billingAddress.customerAddressId) {
@@ -83,7 +98,11 @@ define(
                         var shippingAddress = this.source.get('shippingAddress');
                         for (var property in billingAddress) {
                             if (billingAddress.hasOwnProperty(property) && shippingAddress.hasOwnProperty(property)) {
-                                this.source.set('shippingAddress.' + property, billingAddress[property]);
+                                if (typeof billingAddress[property] === 'string') {
+                                    this.source.set('shippingAddress.' + property, billingAddress[property]);
+                                } else {
+                                    this.source.set('shippingAddress.' + property, _.clone(billingAddress[property]));
+                                }
                             }
                         }
                         this.selectedAddressId(null);
@@ -94,10 +113,10 @@ define(
             },
             onAddressChange: function() {
                 var billingAddress = quote.getBillingAddress();
-                if (this.selectedAddressId() != billingAddress().customerAddressId) {
+                if (this.selectedAddressId() !== billingAddress().customerAddressId) {
                     this.sameAsBilling(false);
                 }
-                if (this.selectedAddressId() == null) {
+                if (this.selectedAddressId() === null) {
                     newAddressSelected(true);
                 } else {
                     newAddressSelected(false);

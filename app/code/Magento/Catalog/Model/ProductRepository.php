@@ -16,7 +16,6 @@ use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -228,6 +227,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($editMode) {
                 $product->setData('_edit_mode', true);
             }
+            if ($storeId !== null) {
+                $product->setData('store_id', $storeId);
+            }
             $product->load($productId);
             $this->instances[$sku][$cacheKey] = $product;
             $this->instancesById[$product->getId()][$cacheKey] = $product;
@@ -243,7 +245,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $cacheKey = $this->getCacheKey(func_get_args());
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
-
             if ($editMode) {
                 $product->setData('_edit_mode', true);
             }
