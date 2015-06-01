@@ -211,7 +211,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validateRowResultDataProvider
      */
-    public function testValidateRowResult($rowData, $validatedRows, $invalidRows, $oldSkus, $expectedResult)
+    public function testValidateRowResult($rowData, $validatedRows, $invalidRows, $behavior, $expectedResult)
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock([
@@ -220,11 +220,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'saveProductPrices',
             'getCustomerGroupId',
             'getWebSiteId',
+            'getBehavior',
         ]);
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', $validatedRows);
         $this->setPropertyValue($advancedPricingMock, '_invalidRows', $invalidRows);
-        $this->setPropertyValue($advancedPricingMock, '_oldSkus', $oldSkus);
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
+        $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
 
         $result = $advancedPricingMock->validateRow($rowData, $rowNum);
         $this->assertEquals($expectedResult, $result);
@@ -233,7 +234,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validateRowAddRowErrorCallDataProvider
      */
-    public function testValidateRowAddRowErrorCall($rowData, $validatedRows, $invalidRows, $oldSkus, $error)
+    public function testValidateRowAddRowErrorCall($rowData, $validatedRows, $invalidRows, $behavior, $error)
     {
         $rowNum = 0;
         $advancedPricingMock = $this->getAdvancedPricingMock([
@@ -242,11 +243,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'saveProductPrices',
             'getCustomerGroupId',
             'getWebSiteId',
+            'getBehavior',
         ]);
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', $validatedRows);
         $this->setPropertyValue($advancedPricingMock, '_invalidRows', $invalidRows);
-        $this->setPropertyValue($advancedPricingMock, '_oldSkus', $oldSkus);
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
+        $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $advancedPricingMock->expects($this->once())->method('addRowError')->with($error, $rowNum);
 
         $advancedPricingMock->validateRow($rowData, $rowNum);
@@ -265,11 +267,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'getCustomerGroupId',
             'getWebSiteId',
         ]);
-        $oldSkus = [
-            'sku value' => 'value',
-        ];
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', []);
-        $this->setPropertyValue($advancedPricingMock, '_oldSkus', $oldSkus);
         $this->validator->expects($this->once())->method('isValid')->willReturn(false);
         $messages = ['value'];
         $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
@@ -329,25 +327,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         )->will($this->returnSelf());
 
         $this->advancedPricing->saveAdvancedPricing();
-    }
-
-    public function testDeleteAdvancedPricingAddRowCall()
-    {
-        $rowNum = 0;
-        $data = [
-            $rowNum => [
-                AdvancedPricing::COL_SKU => 'sku value'
-            ]
-        ];
-
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
-        $this->advancedPricing->expects($this->once())->method('addRowError')->with(
-            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_SKU_IS_EMPTY,
-            $rowNum
-        )->willReturn(false);
-
-        $this->advancedPricing->deleteAdvancedPricing();
     }
 
     public function testDeleteAdvancedPricingFormListSkuToDelete()
@@ -556,7 +535,18 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$invalidRows' => [
                     0 => ['value']
                 ],
-                '$oldSkus' => ['sku value' => 'value'],
+                '$behavior' => null,
+                '$expectedResult' => false,
+            ],
+            [
+                '$rowData' => [
+                    AdvancedPricing::COL_SKU => null,
+                ],
+                '$validatedRows' => [],
+                '$invalidRows' => [
+                    0 => ['value']
+                ],
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$expectedResult' => false,
             ],
             [
@@ -567,8 +557,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$invalidRows' => [
                     0 => ['value']
                 ],
-                '$oldSkus' => ['sku value' => null],
-                '$expectedResult' => false,
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                '$expectedResult' => true,
             ],
             [
                 '$rowData' => [
@@ -578,7 +568,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$invalidRows' => [
                     0 => ['value']
                 ],
-                '$oldSkus' => ['sku value' => 'value'],
+                '$behavior' => null,
                 '$expectedResult' => false,
             ],
             [
@@ -587,7 +577,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$validatedRows' => [],
                 '$invalidRows' => [],
-                '$oldSkus' => ['sku value' => 'value'],
+                '$behavior' => null,
                 '$expectedResult' => true,
             ],
         ];
@@ -598,13 +588,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 '$rowData' => [
-                    AdvancedPricing::COL_SKU => 'sku value',
+                    AdvancedPricing::COL_SKU => null,
                 ],
                 '$validatedRows' => [],
                 '$invalidRows' => [
                     0 => ['value']
                 ],
-                '$oldSkus' => ['sku value' => null],
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$error' => RowValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE,
             ],
             [
@@ -615,7 +605,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 '$invalidRows' => [
                     0 => ['value']
                 ],
-                '$oldSkus' => [0 => 'value'],
+                '$behavior' => null,
                 '$error' => RowValidatorInterface::ERROR_ROW_IS_ORPHAN,
             ],
         ];
