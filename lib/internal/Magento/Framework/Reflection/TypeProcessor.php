@@ -473,20 +473,46 @@ class TypeProcessor
      *
      * @param ParameterReflection $param
      * @return string
+     * @throws \Exception
      */
     public function getParamType(ParameterReflection $param)
     {
         $type = $param->getType();
+        if ($param->getType() == 'null') {
+            throw new \Exception(sprintf(
+                    'Type declaration is incorrect for the parameter "%s" in annotation for a method in the class "%s".'
+                     . ' First declared type should not be null. E.g. string|null',
+                    $param->getName(),
+                    $param->getDeclaringClass()->getName()
+                ));
+        }
         if ($type == 'array') {
             // try to determine class, if it's array of objects
             $docBlock = $param->getDeclaringFunction()->getDocBlock();
             $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
+            $matches = [];
             if (preg_match($pattern, $docBlock->getContents(), $matches)) {
                 return $matches[1];
             }
             return "{$type}[]";
         }
         return $type;
+    }
+
+    /**
+     * Get parameter description
+     *
+     * @param ParameterReflection $param
+     * @return mixed
+     */
+    public function getParamDescription(ParameterReflection $param)
+    {
+        $docBlock = $param->getDeclaringFunction()->getDocBlock();
+        $pattern = "/\@param\s+([\w\\\_\[\]]+)\s+(\\\${$param->getName()})(.*)\n/";
+        $matches = [];
+        if (preg_match($pattern, $docBlock->getContents(), $matches)) {
+            return $matches[3];
+        }
     }
 
     /**
