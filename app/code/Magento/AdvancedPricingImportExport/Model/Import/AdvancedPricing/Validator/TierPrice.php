@@ -77,7 +77,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
             ) {
                 $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_GROUP]);
                 return false;
-            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_QTY] <= 0 || $value['tier_price'] <= 0) {
+            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_QTY] <= 0 || $value[AdvancedPricing::COL_TIER_PRICE] <= 0) {
                 $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_QTY]);
                 return false;
             }
