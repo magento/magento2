@@ -55,7 +55,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
 
                 $joinElement = $attribute->getElementsByTagName('join')->item(0);
-                $join = $this->processJoinElement($joinElement);
+                $join = $this->processJoinElement($joinElement, $attribute);
 
                 $typeConfig[$code] = [
                     self::DATA_TYPE => $codeType,
@@ -73,9 +73,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Process the join element configuration
      *
      * @param \DOMElement $joinElement
+     * @param \DOMElement $attribute
      * @return array
      */
-    private function processJoinElement($joinElement)
+    private function processJoinElement($joinElement, $attribute)
     {
         $join = null;
         if ($joinElement && $joinElement->nodeType === XML_ELEMENT_NODE) {
