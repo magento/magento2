@@ -25,7 +25,6 @@ class Login extends \Magento\Customer\Controller\Account
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setHeader('Login-Required', 'true');
-        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }

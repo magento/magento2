@@ -278,6 +278,15 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="bookmark" xml:base="ui_element">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <!-- Global groups -->
     <xs:group name="configurable">
         <xs:sequence>
@@ -301,6 +310,21 @@
         <xs:attribute type="xs:string" name="layout" use="optional"/>
         <xs:attribute type="xs:string" name="dataSource" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="url" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <!-- Simple types -->
     <xs:simpleType name="referenceAttributeType">

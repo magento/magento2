@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -125,6 +125,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var array
      */
     protected $_options = [];
+
+    /**
+     * @var bool
+     */
+    protected $optionsInitialized = false;
 
     /**
      * @var array
@@ -1925,6 +1930,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptions()
     {
+        if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
+            foreach ($this->getProductOptionsCollection() as $option) {
+                $option->setProduct($this);
+                $this->addOption($option);
+            }
+            $this->optionsInitialized = true;
+        }
         return $this->_options;
     }
 
@@ -1938,6 +1950,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (is_array($options) && empty($options)) {
             $this->setData('is_delete_options', true);
         }
+        $this->optionsInitialized = true;
         return $this;
     }
 
@@ -2519,19 +2532,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @param ProductAttributeMediaGalleryEntryContentInterface $content
+     * @param ImageContentInterface $content
      * @return array
      */
     protected function convertFromMediaGalleryEntryContentInterface(
-        ProductAttributeMediaGalleryEntryContentInterface $content = null
+        ImageContentInterface $content = null
     ) {
         if ($content == null) {
             return null;
         } else {
             return [
-                "entry_data" => $content->getEntryData(),
-                "mime_type" => $content->getMimeType(),
-                "name" => $content->getName(),
+                'data' => [
+                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                    ImageContentInterface::TYPE => $content->getType(),
+                    ImageContentInterface::NAME => $content->getName(),
+                ],
             ];
         }
     }

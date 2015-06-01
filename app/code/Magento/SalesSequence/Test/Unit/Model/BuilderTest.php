@@ -225,7 +225,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('write')
+            ->with('sales_write')
             ->willReturn($this->adapter);
         $this->sequence->expects($this->once())
             ->method('getCreateSequenceDdl')

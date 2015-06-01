@@ -35,6 +35,7 @@ class Options
      * @param \Magento\Catalog\Model\Product $product
      * @param null $visibility
      * @return bool|null
+     * @api
      */
     public function isEnabled($product, $visibility = null)
     {

@@ -105,7 +105,7 @@ class Selection extends \Magento\Backend\Block\Widget
         $this->addChild(
             'selection_delete_button',
             'Magento\Backend\Block\Widget\Button',
-            ['label' => __('Delete'), 'class' => 'delete icon-btn', 'on_click' => 'bSelection.remove(event)']
+            ['label' => __('Delete'), 'class' => 'action-delete', 'on_click' => 'bSelection.remove(event)']
         );
         return parent::_prepareLayout();
     }

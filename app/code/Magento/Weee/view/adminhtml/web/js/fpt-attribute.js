@@ -27,7 +27,8 @@ define([
             });
         },
         _initOptionItem: function () {
-            var widget = this;
+            var widget = this,
+                isOriginalRequired = $(widget.element).hasClass('required');
 
             this._on({
                 //Add new tax item
@@ -44,6 +45,7 @@ define([
                 'change [data-role="select-country"]': function (event, data) {
                     var currentElement = event.target || event.srcElement || event.currentTarget,
                         parentElement = $(currentElement).closest('[data-role="fpt-item-row"]');
+
                     data = data || {};
                     var updater = new RegionUpdater(
                         parentElement.find('[data-role="select-country"]').attr('id'), null,
@@ -54,6 +56,9 @@ define([
                     //set selected state value if set
                     if (data.state) {
                         parentElement.find('[data-role="select-state"]').val(data.state);
+                    }
+                    if (!isOriginalRequired && $(widget.element).hasClass('required')) {
+                        $(widget.element).removeClass('required');
                     }
                 }
             });

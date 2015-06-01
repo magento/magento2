@@ -7,11 +7,12 @@ namespace Magento\Quote\Api;
 
 /**
  * Shipping address management interface for guest carts.
+ * @api
  */
 interface GuestShippingAddressManagementInterface
 {
     /**
-     * Assigns a specified shipping address to a specified cart.
+     * Assign a specified shipping address to a specified cart.
      *
      * @param string $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\AddressInterface $address The shipping address data.
@@ -22,7 +23,7 @@ interface GuestShippingAddressManagementInterface
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address);
 
     /**
-     * Returns the shipping address for a specified quote.
+     * Return the shipping address for a specified quote.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\AddressInterface Shipping address object.

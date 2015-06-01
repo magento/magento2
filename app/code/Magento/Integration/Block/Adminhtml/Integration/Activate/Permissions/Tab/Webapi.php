@@ -31,7 +31,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoder;
 
-    /** @var \Magento\Integration\Service\V1\Integration */
+    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
     protected $integrationService;
 
     /**
@@ -44,7 +44,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Json\Encoder $encoder
-     * @param \Magento\Integration\Service\V1\Integration $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param array $data
      */
     public function __construct(
@@ -55,7 +55,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Json\Encoder $encoder,
-        \Magento\Integration\Service\V1\Integration $integrationService,
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;
@@ -67,8 +67,9 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * Set the selected resources, which is an array of resource ids. If everything is allowed, the
-     * array will contain just the root resource id, which is "Magento_Backend::all".
+     * Set the selected resources, which is an array of resource ids.
+     *
+     * If everything is allowed, the array will contain just the root resource id, which is "Magento_Backend::all".
      *
      * @return void
      */
@@ -101,6 +102,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -109,6 +112,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -117,6 +122,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -147,7 +154,9 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * Return an array of selected resource ids. If everything is allowed then iterate through all
+     * Return an array of selected resource ids.
+     *
+     * If everything is allowed then iterate through all
      * available resources to generate a comprehensive array of all resource ids, rather than just
      * returning "Magento_Backend::all".
      *
@@ -167,6 +176,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Whether tree has any resources.
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isTreeEmpty()
     {

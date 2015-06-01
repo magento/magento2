@@ -36,20 +36,28 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
      */
     protected $productExtensionFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sampleRepositoryMock;
+
     protected function setUp()
     {
         $this->linkRepositoryMock = $this->getMock('\Magento\Downloadable\Api\LinkRepositoryInterface');
+        $this->sampleRepositoryMock = $this->getMock('Magento\Downloadable\Api\SampleRepositoryInterface');   
         $this->productExtensionFactory = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Downloadable\Model\Plugin\AfterProductLoad(
             $this->linkRepositoryMock,
+            $this->sampleRepositoryMock,
             $this->productExtensionFactory
         );
-        $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtension')
+        $this->productExtensionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductExtension')
             ->setMethods(['setDownloadableProductLinks', 'setDownloadableProductSamples'])->getMock();
     }
 
@@ -63,13 +71,13 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->productExtensionMock);
 
-        $linkMock = $this->getMock('\Magento\Downloadable\Api\Data\LinkInterface');
+        $linkMock = $this->getMock('Magento\Downloadable\Api\Data\LinkInterface');
         $this->linkRepositoryMock->expects($this->once())
             ->method('getLinksByProduct')
             ->with($this->productMock)
             ->willReturn([$linkMock]);
-        $sampleMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
-        $this->linkRepositoryMock->expects($this->once())
+        $sampleMock = $this->getMock('Magento\Downloadable\Api\Data\SampleInterface');
+        $this->sampleRepositoryMock->expects($this->once())
             ->method('getSamplesByProduct')
             ->with($this->productMock)
             ->willReturn([$sampleMock]);
@@ -104,13 +112,13 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         $this->productExtensionFactory->expects($this->never())
             ->method('create');
 
-        $linkMock = $this->getMock('\Magento\Downloadable\Api\Data\LinkInterface');
+        $linkMock = $this->getMock('Magento\Downloadable\Api\Data\LinkInterface');
         $this->linkRepositoryMock->expects($this->once())
             ->method('getLinksByProduct')
             ->with($this->productMock)
             ->willReturn([$linkMock]);
-        $sampleMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
-        $this->linkRepositoryMock->expects($this->once())
+        $sampleMock = $this->getMock('Magento\Downloadable\Api\Data\SampleInterface');
+        $this->sampleRepositoryMock->expects($this->once())
             ->method('getSamplesByProduct')
             ->with($this->productMock)
             ->willReturn([$sampleMock]);
@@ -143,12 +151,12 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->productExtensionMock);
 
-        $linkMock = $this->getMock('\Magento\Downloadable\Api\Data\LinkInterface');
+        $linkMock = $this->getMock('Magento\Downloadable\Api\Data\LinkInterface');
         $this->linkRepositoryMock->expects($this->once())
             ->method('getLinksByProduct')
             ->with($this->productMock)
             ->willReturn([$linkMock]);
-        $this->linkRepositoryMock->expects($this->once())
+        $this->sampleRepositoryMock->expects($this->once())
             ->method('getSamplesByProduct')
             ->with($this->productMock)
             ->willReturn(null);
@@ -183,8 +191,8 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->method('getLinksByProduct')
             ->with($this->productMock)
             ->willReturn(null);
-        $sampleMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
-        $this->linkRepositoryMock->expects($this->once())
+        $sampleMock = $this->getMock('Magento\Downloadable\Api\Data\SampleInterface');
+        $this->sampleRepositoryMock->expects($this->once())
             ->method('getSamplesByProduct')
             ->with($this->productMock)
             ->willReturn([$sampleMock]);

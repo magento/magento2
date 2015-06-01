@@ -14,11 +14,16 @@ use Magento\Developer\Model\Config\Source\WorkflowType;
 class DeveloperChainFactory implements ChainFactoryInterface
 {
     /**
+     * Name of entity to create
+     */
+    const ENTITY_NAME = 'Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain';
+
+    /**
      * Object manager
      *
      * @var ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * @var ChainFactory
@@ -40,7 +45,7 @@ class DeveloperChainFactory implements ChainFactoryInterface
         ChainFactory $chainFactory,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->chainFactory = $chainFactory;
         $this->scopeConfig = $scopeConfig;
     }
@@ -51,8 +56,8 @@ class DeveloperChainFactory implements ChainFactoryInterface
     public function create(array $arguments = [])
     {
         if (WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)) {
-            return $this->_objectManager->create(
-                'Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain',
+            return $this->objectManager->create(
+                self::ENTITY_NAME,
                 $arguments
             );
         }

@@ -50,7 +50,7 @@ class Option extends Form
      *
      * @var string
      */
-    protected $removeSelection = 'button.delete';
+    protected $removeSelection = '.col-actions .action-delete';
 
     /**
      * Get grid for assigning products for bundle option

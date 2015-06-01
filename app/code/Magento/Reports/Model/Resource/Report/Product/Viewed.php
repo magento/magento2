@@ -98,10 +98,6 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $mainTable = $this->getMainTable();
         $adapter = $this->_getWriteAdapter();
 
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
                 $this->getTable('report_event'),
@@ -114,7 +110,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             $subSelect = null;
         }
         $this->_clearTableByDateRange($mainTable, $from, $to, $subSelect);
-        // convert dates from UTC to current admin timezone
+        // convert dates to current admin timezone
         $periodExpr = $adapter->getDatePartSql(
             $this->getStoreTZOffsetQuery(
                 ['source_table' => $this->getTable('report_event')],
@@ -222,12 +218,28 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
         $adapter->query($insertQuery);
 
-        $this->_resourceHelper->updateReportRatingPos('day', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_DAILY));
-        $this->_resourceHelper->updateReportRatingPos('month', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_MONTHLY));
-        $this->_resourceHelper->updateReportRatingPos('year', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_YEARLY));
-
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'day',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_DAILY)
+        );
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'month',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_MONTHLY)
+        );
+        $this->_resourceHelper->updateReportRatingPos(
+            $adapter,
+            'year',
+            'views_num',
+            $mainTable,
+            $this->getTable(self::AGGREGATION_YEARLY)
+        );
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE);
-
         return $this;
     }
 }
