@@ -175,9 +175,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             return !isset($this->_invalidRows[$rowNum]);
         }
         $this->_validatedRows[$rowNum] = true;
-        if (!isset($this->_oldSkus[$rowData[self::COL_SKU]])) {
-            $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
-            return false;
+        // BEHAVIOR_DELETE use specific validation logic
+        if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
+            if (!isset($rowData[self::COL_SKU])) {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                return false;
+            }
+            return true;
         }
         if (!$this->_validator->isValid($rowData)) {
             foreach ($this->_validator->getMessages() as $message) {
@@ -262,12 +266,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->validateRow($rowData, $rowNum)) {
-                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
-                    continue;
+                if ($this->validateRow($rowData, $rowNum)) {
+                    $rowSku = $rowData[self::COL_SKU];
+                    $listSku[] = $rowSku;
                 }
-                $rowSku = $rowData[self::COL_SKU];
-                $listSku[] = $rowSku;
             }
         }
         if ($listSku) {
