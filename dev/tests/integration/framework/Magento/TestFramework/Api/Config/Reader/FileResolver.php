@@ -29,6 +29,7 @@ class FileResolver extends \Magento\Framework\App\Config\FileResolver
      * @param mixed $array1
      * @param mixed $array2,...
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function merge($array1, $array2)
     {
