@@ -6,57 +6,43 @@ define([
     'ko',
     'mageUtils',
     'underscore',
-    'uiRegistry'
+    'uiRegistry',
+    'Magento_Ui/js/lib/storage'
 ], function (ko, utils, _, registry) {
     'use strict';
 
-    /**
-     * Wrapper for ko.observable and ko.observableArray.
-     * Assignes one or another ko property to obj[key]
-     * @param  {Object} obj   - object to store property to
-     * @param  {String} key   - key
-     * @param  {*} value      - initial value of observable
-     */
-    function observe(obj, key, value) {
-        var method = Array.isArray(value) ? 'observableArray' : 'observable';
-
-        if (!ko.isObservable(obj[key])) {
-            obj[key] = ko[method](value);
-        } else {
-            obj[key](value);
-        }
-    }
-
     return {
         defaults: {
-            parentName: '<%= $data.getPart(name, -2) %>',
-            parentScope: '<%= $data.getPart(dataScope, -2) %>',
             template: 'ui/collection',
+            parentName: '${ $.$data.getPart( $.name, -2) }',
+            parentScope: '${ $.$data.getPart( $.dataScope, -2) }',
             containers: [],
             _elems: [],
+            elems: [],
+            storageConfig: {
+                provider: 'localStorage',
+                namespace: '${ $.name }',
+                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+            },
             additionalClasses: false
         },
 
-        initialize: function (options) {
-            _.bindAll(this, '_insert');
+        /**
+         * Initializes component.
+         *
+         * @returns {Component} Chainable.
+         */
+        initialize: function () {
+            _.bindAll(this, '_insert', 'trigger');
 
-            this.initConfig(options)
+            this._super()
                 .initProperties()
                 .initObservable()
+                .initStorage()
+                .initModules()
                 .initUnique()
                 .initLinks()
                 .setListners(this.listens);
-
-            return this;
-        },
-
-        initConfig: function (options) {
-            var defaults = this.constructor.defaults,
-                config = utils.extend({}, defaults, options);
-
-            config = utils.template(config, this);
-
-            _.extend(this, config);
 
             return this;
         },
@@ -67,8 +53,9 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
-            this.regions = [];
-            this.source = registry.get(this.provider);
+            _.extend(this, {
+                source: registry.get(this.provider)
+            });
 
             return this;
         },
@@ -79,23 +66,51 @@ define([
          * @returns {Component} Chainable.
          */
         initObservable: function () {
-            this.observe({
-                'elems': []
-            });
-
-            this.regions.forEach(function (region) {
-                this.observe(region, []);
-            }, this);
+            this.observe('elems');
 
             return this;
         },
 
+        /**
+         * Creates async wrapper on a specified storage component.
+         *
+         * @returns {Component} Chainable.
+         */
+        initStorage: function () {
+            this.storage = registry.async(this.storageConfig.provider);
+
+            return this;
+        },
+
+        /**
+         * Initializes links between properties.
+         *
+         * @returns {Component} Chainbale.
+         */
         initLinks: function () {
+            this.setLinks(this.links, 'imports')
+                .setLinks(this.links, 'exports');
+
             _.each({
-                both: this.links,
                 exports: this.exports,
                 imports: this.imports
             }, this.setLinks, this);
+
+            return this;
+        },
+
+        /**
+         * Parses 'modules' object and creates
+         * async wrappers on specified components.
+         *
+         * @returns {Component} Chainable.
+         */
+        initModules: function () {
+            var modules = this.modules || {};
+
+            _.each(modules, function (component, property) {
+                this[property] = registry.async(component);
+            }, this);
 
             return this;
         },
@@ -143,6 +158,14 @@ define([
         },
 
         /**
+         * Returns path to components' template.
+         * @returns {String}
+         */
+        getTemplate: function () {
+            return this.template;
+        },
+
+        /**
          * Splits incoming string and returns its' part specified by offset.
          *
          * @param {String} parts
@@ -161,14 +184,6 @@ define([
         },
 
         /**
-         * Returns path to components' template.
-         * @returns {String}
-         */
-        getTemplate: function () {
-            return this.template;
-        },
-
-        /**
          * Updates property specified in uniqueNs
          * if components' unique property is set to 'true'.
          *
@@ -179,32 +194,6 @@ define([
 
             if (this[property]()) {
                 this.source.set(this.uniqueNs, this.name);
-            }
-
-            return this;
-        },
-
-        /**
-         * If 2 params passed, path is considered as key.
-         * Else, path is considered as object.
-         * Assignes props to this based on incoming params
-         * @param  {Object|String} path
-         */
-        observe: function (path) {
-            var type = typeof path;
-
-            if (type === 'string') {
-                path = path.split(' ');
-            }
-
-            if (Array.isArray(path)) {
-                path.forEach(function (key) {
-                    observe(this, key, this[key]);
-                }, this);
-            } else if (type === 'object') {
-                _.each(path, function (value, key) {
-                    observe(this, key, value);
-                }, this);
             }
 
             return this;

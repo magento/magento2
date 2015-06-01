@@ -2164,6 +2164,7 @@ return [
     ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
+    ['isStateProtected', 'Magento\Sales\Model\Order'],
     ['_getBundleOptions', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
     ['_getSelectionFinalPrice', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
     ['_getSelectionQty', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
@@ -2229,4 +2230,6 @@ return [
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
 ];
