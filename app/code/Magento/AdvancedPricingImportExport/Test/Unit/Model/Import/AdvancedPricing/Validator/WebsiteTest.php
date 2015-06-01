@@ -6,6 +6,8 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
+use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,7 +21,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected $storeResolver;
 
     /**
-     * @var  \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var  AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $website;
 
@@ -60,40 +62,51 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider isValidReturnDataProvider
+     *
+     * @param array  $value
+     * @param string $allWebsitesValue
+     * @param string $colTierPriceWebsite
+     * @param string $colGroupPriceWebsite
+     * @param bool   $expectedResult
      */
-    public function testIsValidReturn($value, $allWebsitesValue, $allWebsitesValueColTierPriceWebsite, $allWebsitesValueColGroupPriceWebsite, $expectedResult)
-    {
+    public function testIsValidReturn(
+        $value,
+        $allWebsites,
+        $colTierPriceWebsite,
+        $colGroupPriceWebsite,
+        $expectedResult
+    ) {
         $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
+        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsites);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
-            [$value[\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE], $allWebsitesValueColTierPriceWebsite],
-            [$value[\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $allWebsitesValueColGroupPriceWebsite],
+            [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
+            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $result = $this->website->isValid($value);
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testIsValidReturn_addMessagesCall()
+    public function testIsValidReturnAddMessagesCall()
     {
         $value = [
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+            AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+            AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
         ];
         $allWebsitesValue = 'not tier|group price website value';
-        $allWebsitesValueColTierPriceWebsite = false;
-        $allWebsitesValueColGroupPriceWebsite = 'value';
-        $expectedMessages = [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
+        $colTierPriceWebsite = false;
+        $colGroupPriceWebsite = 'value';
+        $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
-            [$value[\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE], $allWebsitesValueColTierPriceWebsite],
-            [$value[\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $allWebsitesValueColGroupPriceWebsite],
+            [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
+            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $this->website->expects($this->once())->method('_addMessages')->with($expectedMessages);
-        $result = $this->website->isValid($value);
+        $this->website->isValid($value);
     }
 
     public function testGetAllWebsitesValue()
@@ -104,7 +117,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
         $this->webSiteModel->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
 
-        $expectedResult = \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
+        $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
 
         $website = $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website',
@@ -123,86 +136,86 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     public function isValidReturnDataProvider()
     {
         return [
-            //false cases
+            // False cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => false,
-                '$allWebsitesValueColGroupPriceWebsite' => 'value',
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => false,
+                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => false,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => false,
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => false,
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => false,
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
-            //true cases
+            // True cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'tier value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => 'value',
+                '$allWebsites' => 'tier value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'group value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => 'value',
+                '$allWebsites' => 'group value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => 'value',
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => false,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => false,
                 ],
-                '$allWebsitesValue' => 'not tier|group price website value',
-                '$allWebsitesValueColTierPriceWebsite' => 'value',
-                '$allWebsitesValueColGroupPriceWebsite' => 'value',
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => 'value',
+                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
         ];
