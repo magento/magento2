@@ -455,7 +455,7 @@ class Menu extends \Magento\Backend\Block\Template
             }
 
             $id = $this->getJsId($menuItem->getId());
-            if (count($menu) > 1 || $level != 1) {
+            if (count($menu) > 0 || $level != 1) {
                 $output .= '<li ' . $this->getUiId(
                         $menuItem->getId()
                     ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
