@@ -43,7 +43,7 @@ class ComposerInformation
         $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
         $vendorDir = require "{$vendorPath}";
         $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
-            . "{$vendorDir}/../composer.json";
+            . "/{$vendorDir}/../composer.json";
 
         $composerJsonRealPath = realpath($composerJson);
         if ($composerJsonRealPath === false) {
