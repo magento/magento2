@@ -11,6 +11,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime;
 use Zend\Server\Reflection\ReflectionClass;
 
+/**
+ * Class ProductTest
+ * @package Magento\CatalogImportExport\Test\Unit\Model\Import
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     const MEDIA_DIRECTORY = 'media/import';
