@@ -271,7 +271,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const TAX_CANCELED = 'tax_canceled';
     /*
-     * Hidden-tax-canceled flag.
+     * Discount-tax-compensation-canceled flag.
      */
     const DISCOUNT_TAX_COMPENSATION_CANCELED = 'discount_tax_compensation_canceled';
     /*
