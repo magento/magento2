@@ -120,7 +120,7 @@ class ExtensionAttributesFactory
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);
             if (is_array($directive[Converter::JOIN_SELECT_FIELDS])) {
-                $selectFieldsMapper = function($selectFieldData) {
+                $selectFieldsMapper = function ($selectFieldData) {
                     return $selectFieldData[Converter::JOIN_SELECT_FIELD];
                 };
                 $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
@@ -136,6 +136,7 @@ class ExtensionAttributesFactory
      *
      * @param ExtensibleDataInterface $extensibleEntity
      * @param array $data
+     * @return void
      * @throws \LogicException
      */
     public function populateExtensionAttributes(

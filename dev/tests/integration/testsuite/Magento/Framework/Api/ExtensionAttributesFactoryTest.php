@@ -122,7 +122,8 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['review_id'], $extensionAttributeJoinData->getSelectFields());
     }
 
-    private function getConfig() {
+    private function getConfig()
+    {
         return [
             'Magento\Catalog\Api\Data\ProductInterface' => [
                 'review_id' => [
