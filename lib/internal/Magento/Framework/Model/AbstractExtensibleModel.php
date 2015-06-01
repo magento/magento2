@@ -191,7 +191,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         $this->customAttributesChanged = true;
         parent::setData($key, $value);
         // TODO: Consider removing second argument, check abstract extensible object
-        $this->extensionAttributesFactory->populateExtensionAttributes($this, $this->getData());
+        if ($this->extensionAttributesFactory) {
+            $this->extensionAttributesFactory->populateExtensionAttributes($this, $this->getData());
+        }
         return $this;
     }
 
