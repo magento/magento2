@@ -1031,17 +1031,21 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     public function getCurrentUrl()
     {
-        $port = $this->_request->getServer('SERVER_PORT');
-        if ($port) {
+        $httpHostWithPort = $this->_request->getHttpHost(false);
+        $httpHostWithPort = explode(':', $httpHostWithPort);
+        $httpHost = isset($httpHostWithPort[0]) ? $httpHostWithPort[0] : '';
+        $port = '';
+        if (isset($httpHostWithPort[1])) {
             $defaultPorts = [
                 \Magento\Framework\App\Request\Http::DEFAULT_HTTP_PORT,
                 \Magento\Framework\App\Request\Http::DEFAULT_HTTPS_PORT,
             ];
-            $port = in_array($port, $defaultPorts) ? '' : ':' . $port;
+            if (!in_array($httpHostWithPort[1], $defaultPorts)) {
+                /** Custom port */
+                $port = ':' . $httpHostWithPort[1];
+            }
         }
-        $requestUri = $this->_request->getServer('REQUEST_URI');
-        $url = $this->_request->getScheme() . '://' . $this->_request->getHttpHost() . $port . $requestUri;
-        return $url;
+        return $this->_request->getScheme() . '://' . $httpHost . $port . $this->_request->getServer('REQUEST_URI');
     }
 
     /**

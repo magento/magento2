@@ -177,6 +177,15 @@ class File extends AbstractIo
         if (!$this->_streamHandler) {
             return false;
         }
+        /**
+         * Security enhancement for CSV data processing by Excel-like applications.
+         * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
+         */
+        foreach ($row as $key => $value) {
+            if (isset($value[0]) && $value[0] === '=') {
+                $row[$key] = ' ' . $value;
+            }
+        }
         return @fputcsv($this->_streamHandler, $row, $delimiter, $enclosure);
     }
 
