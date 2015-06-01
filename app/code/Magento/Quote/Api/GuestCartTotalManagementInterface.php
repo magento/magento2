@@ -14,7 +14,7 @@ interface GuestCartTotalManagementInterface
      * Set shipping/billing methods and additional data for cart and collect totals for guest.
      *
      * @param string $cartId The cart ID.
-     * @param \Magento\Quote\Api\Data\PaymentInterface Payment method data.
+     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod Payment method data.
      * @param string $shippingCarrierCode The carrier code.
      * @param string $shippingMethodCode The shipping method code.
      * @param \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData Additional data to collect totals.
