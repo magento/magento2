@@ -670,7 +670,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
-                $valid = (string)(double)$val === $val;
+                $valid = is_numeric($val);
                 break;
             case 'select':
             case 'multiselect':
