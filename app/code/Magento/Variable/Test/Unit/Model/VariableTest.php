@@ -75,7 +75,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider missingInfoProvider
+     * @dataProvider validateMissingInfoDataProvider
      */
     public function testValidateMissingInfo($code, $name)
     {
@@ -85,7 +85,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider variableAndIdProvider
+     * @dataProvider validateDataProvider
      */
     public function testValidate($variableArray, $objectId, $expectedResult)
     {
@@ -156,7 +156,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
     }
 
-    public function variableAndIdProvider()
+    public function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -168,7 +168,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function missingInfoProvider()
+    public function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
