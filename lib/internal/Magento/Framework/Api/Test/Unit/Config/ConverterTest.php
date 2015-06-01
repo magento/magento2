@@ -105,7 +105,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "library_account",
-                        Converter::JOIN_SELECT_FIELDS => "library_card_id",
+                        Converter::JOIN_SELECT_FIELDS => [
+                            [
+                                Converter::JOIN_SELECT_FIELD => "library_card_id",
+                                Converter::JOIN_SELECT_FIELD_SETTER => ""
+                            ]
+                        ],
                         Converter::JOIN_JOIN_ON_FIELD => "id",
                         Converter::JOIN_REFERENCE_FIELD => "customer_id",
                     ],
@@ -115,7 +120,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
-                        Converter::JOIN_SELECT_FIELDS => "comment,rating",
+                        Converter::JOIN_SELECT_FIELDS => [
+                            [
+                                Converter::JOIN_SELECT_FIELD => "comment",
+                                Converter::JOIN_SELECT_FIELD_SETTER => ""
+                            ],
+                            [
+                                Converter::JOIN_SELECT_FIELD => "rating",
+                                Converter::JOIN_SELECT_FIELD_SETTER => ""
+                            ]
+                        ],
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
                         Converter::JOIN_REFERENCE_FIELD => "customer_id",
                     ],

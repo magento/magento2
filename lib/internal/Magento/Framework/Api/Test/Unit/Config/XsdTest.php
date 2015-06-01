@@ -87,9 +87,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <attribute code="custom_1" type="Magento\Customer\Api\Data\CustomerCustom">
                             <join reference_table="library_account"
                                   reference_field="customer_id"
-                                  select_fields="library_card_id"
                                   join_on_field="id"
-                            />
+                            >
+                                <select_field>library_card_id</select_field>
+                            </join>
                         </attribute>
                     </extension_attributes>
                 </config>',
@@ -104,9 +105,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                             </resources>
                             <join reference_table="library_account"
                                   reference_field="customer_id"
-                                  select_fields="library_card_id"
                                   join_on_field="id"
-                            />
+                            >
+                                <select_field>library_card_id</select_field>
+                            </join>
                         </attribute>
                     </extension_attributes>
                 </config>',
@@ -138,9 +140,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </config>',
                 [
                     "Element 'join': The attribute 'reference_table' is required but missing.",
-                    "Element 'join': The attribute 'reference_field' is required but missing.",
-                    "Element 'join': The attribute 'select_fields' is required but missing.",
                     "Element 'join': The attribute 'join_on_field' is required but missing.",
+                    "Element 'join': The attribute 'reference_field' is required but missing.",
+                    "Element 'join': Missing child element(s). Expected is ( select_field ).",
                 ],
             ],
         ];
