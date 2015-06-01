@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model;
-
-use Magento\Setup\Model\ComposerInformation;
+namespace Magento\Setup\Model;
 
 /**
  * Tests Magento\Setup\Model\ComposerInformation
