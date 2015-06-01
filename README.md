@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mazhalai/magento2.svg?branch=develop)](https://travis-ci.org/mazhalai/magento2)
+[![Build Status](https://travis-ci.org/mazhalai/magento2.svg?branch=/TestTravisBuild)](https://travis-ci.org/mazhalai/magento2)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
 
