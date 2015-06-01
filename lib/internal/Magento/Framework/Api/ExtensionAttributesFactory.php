@@ -149,48 +149,64 @@ class ExtensionAttributesFactory
             /* do nothing is there are no extension attributes */
             return;
         }
+
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         $extensionData = [];
         foreach ($joinDirectives as $attributeCode => $directive) {
-            $attributeType = $directive[Converter::DATA_TYPE];
-            $selectFields = $directive[Converter::JOIN_SELECT_FIELDS];
-            foreach ($selectFields as $selectField) {
-                $selectFieldAlias = 'extension_attribute_' . $attributeCode
-                    . '_' . $selectField[Converter::JOIN_SELECT_FIELD];
-                if (isset($data[$selectFieldAlias])) {
-                    if ($this->typeProcessor->isArrayType($attributeType)) {
-                        throw new \LogicException(
-                            sprintf(
-                                'Join directives cannot be processed for attribute (%s) of extensible entity (%s),'
-                                . ' which has an Array type (%s).',
-                                $attributeCode,
-                                $this->getExtensibleInterfaceName($extensibleEntityClass),
-                                $attributeType
-                            )
-                        );
-                    } elseif ($this->typeProcessor->isTypeSimple($attributeType)) {
-                        $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
-                        break;
-                    } else {
-                        if (!isset($extensionData['data'][$attributeCode])) {
-                            $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
-                        }
-                        $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                            ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                            :'set' . ucfirst(
-                                SimpleDataObjectConverter::snakeCaseToCamelCase(
-                                    $selectField[Converter::JOIN_SELECT_FIELD]
-                                )
-                            );
-                        $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
-                    }
-                    unset($data[$selectFieldAlias]);
-                }
-            }
+            $this->populateAttributeCodeWithDirective($attributeCode, $directive, $data, $extensionData);
         }
         if (!empty($extensionData)) {
             $extensionAttributes = $this->create($extensibleEntityClass, $extensionData);
             $extensibleEntity->setExtensionAttributes($extensionAttributes);
+        }
+    }
+
+
+    /**
+     * Populate a specific attribute code with join directive instructions.
+     *
+     * @param string $attributeCode
+     * @param array $directive
+     * @param array &$data
+     * @param array &$extensionData
+     * @return void
+     */
+    private function populateAttributeCodeWithDirective($attributeCode, $directive, &$data, &$extensionData)
+    {
+        $attributeType = $directive[Converter::DATA_TYPE];
+        $selectFields = $directive[Converter::JOIN_SELECT_FIELDS];
+        foreach ($selectFields as $selectField) {
+            $selectFieldAlias = 'extension_attribute_' . $attributeCode
+                . '_' . $selectField[Converter::JOIN_SELECT_FIELD];
+            if (isset($data[$selectFieldAlias])) {
+                if ($this->typeProcessor->isArrayType($attributeType)) {
+                    throw new \LogicException(
+                        sprintf(
+                            'Join directives cannot be processed for attribute (%s) of extensible entity (%s),'
+                            . ' which has an Array type (%s).',
+                            $attributeCode,
+                            $this->getExtensibleInterfaceName($extensibleEntityClass),
+                            $attributeType
+                        )
+                    );
+                } elseif ($this->typeProcessor->isTypeSimple($attributeType)) {
+                    $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
+                    break;
+                } else {
+                    if (!isset($extensionData['data'][$attributeCode])) {
+                        $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
+                    }
+                    $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                        ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                        :'set' . ucfirst(
+                            SimpleDataObjectConverter::snakeCaseToCamelCase(
+                                $selectField[Converter::JOIN_SELECT_FIELD]
+                            )
+                        );
+                    $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
+                }
+                unset($data[$selectFieldAlias]);
+            }
         }
     }
 
