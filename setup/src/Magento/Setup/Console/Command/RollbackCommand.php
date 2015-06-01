@@ -105,6 +105,7 @@ class RollbackCommand extends AbstractSetupCommand
                 $this->file
             );
             $backupRollback->codeRollback($input->getArgument(self::INPUT_KEY_BACKUP_FILE));
+            $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
