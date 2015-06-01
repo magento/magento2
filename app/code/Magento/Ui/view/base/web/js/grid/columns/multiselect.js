@@ -19,7 +19,7 @@ define([
             indetermine: false,
             selected: [],
             excluded: [],
-            ns: '<%= provider %>:params',
+            ns: '${ $.provider }:params',
             actions: [{
                 value: 'selectAll',
                 label: $t('Select all')
@@ -35,14 +35,18 @@ define([
             }],
 
             imports: {
-                totalRecords: '<%= provider %>:data.totalRecords',
-                rows: '<%= provider %>:data.items'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                rows: '${ $.provider }:data.items'
             },
 
             listens: {
-                '<%= ns %>.applyFilters': 'deselectAll',
+                '${ $.ns }.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
+            },
+
+            modules: {
+                source: '${ $.provider }'
             }
         },
 
@@ -60,7 +64,9 @@ define([
                     'excludeMode',
                     'totalSelected',
                     'allSelected',
-                    'indetermine'
+                    'indetermine',
+                    'totalRecords',
+                    'rows'
                 ]);
 
             return this;
@@ -214,7 +220,7 @@ define([
             data[type] = this[type]();
             data.total = this.totalSelected();
 
-            this.source.set('config.multiselect', data);
+            this.source('set', 'config.multiselect', data);
         },
 
         /**

@@ -1143,4 +1143,62 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
         ];
     }
+
+    public function testGetOptions()
+    {
+        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // the productModel
+        $productModel = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductOption' => $optionInstanceMock,
+            ]
+        );
+        $productModel->setHasOptions(true);
+
+        $option1Id = 2;
+        $optionMock1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock1->expects($this->once())
+            ->method('getId')
+            ->willReturn($option1Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+
+        $option2Id = 3;
+        $optionMock2 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock2->expects($this->once())
+            ->method('getId')
+            ->willReturn($option2Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+        $options = [$optionMock1, $optionMock2];
+
+        $optionInstanceMock->expects($this->once())
+            ->method('getProductOptionCollection')
+            ->with($productModel)
+            ->willReturn($options);
+
+        $expectedOptions = [
+            $option1Id => $optionMock1,
+            $option2Id => $optionMock2
+        ];
+        $this->assertEquals($expectedOptions, $productModel->getOptions());
+
+        //Calling the method again, empty options array will be returned
+        $productModel->setOptions([]);
+        $this->assertEquals([], $productModel->getOptions());
+    }
 }
