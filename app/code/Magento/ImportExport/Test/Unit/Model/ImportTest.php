@@ -7,6 +7,11 @@
 
 namespace Magento\ImportExport\Test\Unit\Model;
 
+/**
+ * Class ImportTest
+ * @package Magento\ImportExport\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
 
