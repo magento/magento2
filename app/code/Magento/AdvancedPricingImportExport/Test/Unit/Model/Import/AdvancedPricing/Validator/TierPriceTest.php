@@ -6,10 +6,13 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
+use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class TierPriceTest extends \PHPUnit_Framework_TestCase
 {
-
-
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -26,7 +29,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     protected $storeResolver;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tierPrice;
 
@@ -69,8 +72,17 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
-        $groupSearchResult = $this->getMockForAbstractClass('\Magento\Customer\Api\Data\GroupSearchResultsInterface', [], '', false);
-        $this->groupRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($groupSearchResult);
+        $groupSearchResult = $this->getMockForAbstractClass(
+            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            [],
+            '',
+            false
+        );
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($groupSearchResult);
 
         $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
             ->disableOriginalConstructor()
@@ -88,8 +100,17 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
-        $groupSearchResult = $this->getMockForAbstractClass('\Magento\Customer\Api\Data\GroupSearchResultsInterface', [], '', false);
-        $this->groupRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($groupSearchResult);
+        $groupSearchResult = $this->getMockForAbstractClass(
+            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            [],
+            '',
+            false
+        );
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($groupSearchResult);
 
         $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
             ->disableOriginalConstructor()
@@ -131,6 +152,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider isValidResultFalseDataProvider
+     *
+     * @param array $value
+     * @param bool  $hasEmptyColumns
+     * @param array $customerGroups
      */
     public function testIsValidResultFalse($value, $hasEmptyColumns, $customerGroups)
     {
@@ -152,9 +177,14 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider isValid_addMessagesCallDataProvider
+     * @dataProvider isValidAddMessagesCallDataProvider
+     *
+     * @param array $value
+     * @param bool  $hasEmptyColumns
+     * @param array $customerGroups
+     * @param array $expectedMessages
      */
-    public function testIsValid_addMessagesCall($value, $hasEmptyColumns, $customerGroups, $expectedMessages)
+    public function testIsValidAddMessagesCall($value, $hasEmptyColumns, $customerGroups, $expectedMessages)
     {
         $this->tierPrice->expects($this->once())->method('isValidValueAndLength')->willReturn(true);
         $this->tierPrice->expects($this->any())->method('hasEmptyColumns')->willReturn($hasEmptyColumns);
@@ -167,13 +197,13 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function isValidResultFalseDataProvider()
     {
         return [
-            //first if condition cases
+            // First if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -182,10 +212,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => null,
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -194,10 +224,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => null,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -206,10 +236,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => null,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => null,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -218,36 +248,36 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => true,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
             ],
-            //second if condition  cases
+            // Second if condition  cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
             ],
-            //third if condition cases
+            // Third if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -256,10 +286,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => -1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => -1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -269,50 +299,50 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function isValid_addMessagesCallDataProvider()
+    public function isValidAddMessagesCallDataProvider()
     {
         return [
-            //first if condition cases
+            // First if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::ERROR_TIER_DATA_INCOMPLETE],
+                '$expectedMessages' => [AdvancedPricing\Validator::ERROR_TIER_DATA_INCOMPLETE],
             ],
-            //second if condition cases
+            // Second if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::ERROR_INVALID_TIER_PRICE_GROUP],
+                '$expectedMessages' => [AdvancedPricing\Validator::ERROR_INVALID_TIER_PRICE_GROUP],
             ],
-            //third if condition cases
+            // Third if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE => 1000,
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
+                    AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::ERROR_INVALID_TIER_PRICE_QTY],
+                '$expectedMessages' => [AdvancedPricing\Validator::ERROR_INVALID_TIER_PRICE_QTY],
             ],
         ];
     }
@@ -320,8 +350,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Get any object property value.
      *
-     * @param $object
-     * @param $property
+     * @param object $object
+     * @param string $property
      */
     protected function getPropertyValue($object, $property)
     {
@@ -335,9 +365,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set object property value.
      *
-     * @param $object
-     * @param $property
-     * @param $value
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
      */
     protected function setPropertyValue(&$object, $property, $value)
     {

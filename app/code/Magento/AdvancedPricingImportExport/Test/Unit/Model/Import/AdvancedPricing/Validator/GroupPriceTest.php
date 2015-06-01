@@ -6,6 +6,11 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
+use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class GroupPriceTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -25,7 +30,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     protected $storeResolver;
 
     /**
-     * @var  \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var  AdvancedPricing\Validator\GroupPrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $groupPrice;
 
@@ -66,8 +71,17 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
-        $groupSearchResult = $this->getMockForAbstractClass('\Magento\Customer\Api\Data\GroupSearchResultsInterface', [], '', false);
-        $this->groupRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($groupSearchResult);
+        $groupSearchResult = $this->getMockForAbstractClass(
+            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            [],
+            '',
+            false
+        );
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($groupSearchResult);
 
         $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
             ->disableOriginalConstructor()
@@ -85,8 +99,17 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteria = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
-        $groupSearchResult = $this->getMockForAbstractClass('\Magento\Customer\Api\Data\GroupSearchResultsInterface', [], '', false);
-        $this->groupRepository->expects($this->once())->method('getList')->with($searchCriteria)->willReturn($groupSearchResult);
+        $groupSearchResult = $this->getMockForAbstractClass(
+            '\Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            [],
+            '',
+            false
+        );
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($groupSearchResult);
 
         $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
             ->disableOriginalConstructor()
@@ -128,6 +151,10 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider isValidResultFalseDataProvider
+     *
+     * @param array $value
+     * @param array $hasEmptyColumns
+     * @param array $customerGroups
      */
     public function testIsValidResultFalse($value, $hasEmptyColumns, $customerGroups)
     {
@@ -149,9 +176,14 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider isValid_addMessagesCallDataProvider
+     * @dataProvider isValidAddMessagesCallDataProvider
+     *
+     * @param array $value
+     * @param bool  $hasEmptyColumns
+     * @param array $customerGroups
+     * @param array $expectedMessages
      */
-    public function testIsValid_addMessagesCall($value, $hasEmptyColumns, $customerGroups, $expectedMessages)
+    public function testIsValidAddMessagesCall($value, $hasEmptyColumns, $customerGroups, $expectedMessages)
     {
         $this->groupPrice->expects($this->once())->method('isValidValueAndLength')->willReturn(true);
         $this->groupPrice->expects($this->any())->method('hasEmptyColumns')->willReturn($hasEmptyColumns);
@@ -182,11 +214,11 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     public function isValidResultFalseDataProvider()
     {
         return [
-            //first if condition cases
+            // First if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => null,
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -195,8 +227,8 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => null,
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => null,
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
@@ -205,19 +237,19 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
                 ],
                 '$hasEmptyColumns' => true,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
             ],
-            //second if condition cases
+            // Second if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::VALUE_ALL_GROUPS,
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => AdvancedPricing::VALUE_ALL_GROUPS,
                 ],
                 '$hasEmptyColumns' => false,
                 '$customerGroups' => [
@@ -226,8 +258,8 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer value',
                 ],
                 '$hasEmptyColumns' => false,
                 '$customerGroups' => [
@@ -237,34 +269,34 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function isValid_addMessagesCallDataProvider()
+    public function isValidAddMessagesCallDataProvider()
     {
         return [
-            //first if condition cases
+            // First if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => null,
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::VALUE_ALL_GROUPS => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => null,
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::VALUE_ALL_GROUPS => 'value',
                 ],
                 '$hasEmptyColumns' => null,
                 '$customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::ERROR_GROUP_PRICE_DATA_INCOMPLETE],
+                '$expectedMessages' => [AdvancedPricing\Validator::ERROR_GROUP_PRICE_DATA_INCOMPLETE],
             ],
-            //second if condition cases
+            // Second if condition cases.
             [
                 '$value' => [
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
-                    \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::VALUE_ALL_GROUPS => 'not ALL GROUPS',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'value',
+                    AdvancedPricing::VALUE_ALL_GROUPS => 'not ALL GROUPS',
                 ],
                 '$hasEmptyColumns' => false,
                 '$customerGroups' => [
                     'value' => null
                 ],
-                '$expectedMessages' => [\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::ERROR_INVALID_GROUP_PRICE_GROUP],
+                '$expectedMessages' => [AdvancedPricing\Validator::ERROR_INVALID_GROUP_PRICE_GROUP],
             ],
         ];
     }

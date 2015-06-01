@@ -5,20 +5,23 @@
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
 
+use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
+use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validators;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RowValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorTest;
 
@@ -43,6 +46,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider isValidDataProvider
+     *
+     * @param array $validatorResult
+     * @param bool  $expectedResult
      */
     public function testIsValid($validatorResult, $expectedResult)
     {
@@ -54,7 +60,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testIsValid_addMessagesCall()
+    public function testIsValidAddMessagesCall()
     {
         $value = 'value';
         $this->validatorTest->expects($this->once())->method('isValid')->willReturn(false);
