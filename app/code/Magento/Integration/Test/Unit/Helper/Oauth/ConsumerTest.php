@@ -124,6 +124,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $secret = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
 
         $consumerData = ['name' => 'Integration Name', 'key' => $key, 'secret' => $secret];
+        $this->_consumerMock->expects($this->once())->method('setData')->will($this->returnSelf());
         $this->_consumerMock->expects($this->once())->method('save')->will($this->returnSelf());
 
         /** @var \Magento\Integration\Model\Oauth\Consumer $consumer */
