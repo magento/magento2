@@ -6,13 +6,13 @@
 -->
 
 <aside
-    class="dialog-<%= data.type %> <%= data.dialogClass %>
+    class="modal-<%= data.type %> <%= data.modalClass %>
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
-    data-role="dialog"
+    data-role="modal"
     data-type="<%= data.type %>">
-    <div class="dialog-inner-wrap">
-        <header class="dialog-header">
-            <h1 class="dialog-title"
+    <div class="modal-inner-wrap">
+        <header class="modal-header">
+            <h1 class="modal-title"
                 data-role="title"><%= data.title %></h1>
             <button
                 class="action-close"
@@ -34,6 +34,6 @@
                 </div>
             </div>
         </header>
-        <div class="dialog-content" data-role="content"></div>
+        <div class="modal-content" data-role="content"></div>
     </div>
 </aside>
