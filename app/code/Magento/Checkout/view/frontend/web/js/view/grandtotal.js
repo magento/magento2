@@ -15,8 +15,8 @@ define(
             defaults: {
                 template: 'Magento_Checkout/review/subtotal'
             },
-            title: 'Grand Total',
-            colspan: 2,
+            title: 'Order Total',
+            colspan: 3,
             getValue: function() {
                 var totals = quote.getTotals()();
                 if (totals) {
