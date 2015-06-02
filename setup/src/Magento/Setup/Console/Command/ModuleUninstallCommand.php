@@ -208,13 +208,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
-        // check if modules are already uninstalled
-        $uninstallMessages = $this->checkUninstalled($modules);
-        if (!empty($uninstallMessages)) {
-            $output->writeln($uninstallMessages);
-            return;
-        }
-
         $output->writeln('<info>Enabling maintenance mode</info>');
         $this->maintenanceMode->set(true);
 
@@ -286,7 +279,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $packages[] = $this->packageInfo->getPackageName($module);
         }
         $this->composerApp->setAutoExit(false);
-        $this->composerApp->run(new ArrayInput(['command' => 'remove', 'packages' => $packages]));
+        $this->composerApp->run(
+            new ArrayInput(
+                ['command' => 'remove', 'packages' => $packages, '--working-dir' => $this->directoryList->getRoot()]
+            )
+        );
     }
 
     /**
@@ -340,23 +337,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     "<error>Cannot uninstall module '$module' because the following module(s) depend on it:</error>" .
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", array_keys($dependingModules)) .
                     "</error>";
-            }
-        }
-        return $messages;
-    }
-
-    /**
-     * Check for uninstalled modules, return error messages
-     *
-     * @param string[] $modules
-     * @return string[]
-     */
-    private function checkUninstalled(array $modules)
-    {
-        $messages = [];
-        foreach ($modules as $module) {
-            if ($this->moduleResource->getDbVersion($module) === false) {
-                $messages[] = "<error>$module is already uninstalled.</error>";
             }
         }
         return $messages;

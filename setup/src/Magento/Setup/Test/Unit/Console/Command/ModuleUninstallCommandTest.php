@@ -385,21 +385,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testExecuteFailedUninstall()
-    {
-        $input = ['module' => ['Magento_A', 'Magento_B']];
-        $this->setUpPassValidation();
-        $this->dependencyChecker->expects($this->once())
-            ->method('checkDependenciesWhenDisableModules')
-            ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
-        $this->moduleResource->expects($this->any())
-            ->method('getDbVersion')
-            ->will($this->returnValueMap([['Magento_A', '1.0'], ['Magento_B', false]]));
-        $this->tester->execute($input);
-        $this->assertNotContains('Magento_A is already uninstalled', $this->tester->getDisplay());
-        $this->assertContains('Magento_B is already uninstalled', $this->tester->getDisplay());
-    }
-
     private function setUpExecute($input)
     {
         $this->setUpPassValidation();
@@ -408,7 +393,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
-        $this->moduleResource->expects($this->any())->method('getDbVersion')->willReturn('1.0');
         $this->dataSetup->expects($this->exactly(count($input['module'])))->method('deleteTableRow');
         $this->deploymentConfig->expects($this->once())
             ->method('getConfigData')
