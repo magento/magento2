@@ -73,7 +73,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->objectManager->expects($this->once())->method('configure');
-        $this->manager->expects($this->exactly(5))->method('addOperation');
+        $this->manager->expects($this->exactly(6))->method('addOperation');
         $this->manager->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
