@@ -1,0 +1,30 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page components
+//  ---------------------------------------------
+
+@import 'checkout/_checkout.less';
+@import 'checkout/_status-bar.less';
+@import 'checkout/_tooltip.less';
+@import 'checkout/_shipping.less';
+@import 'checkout/_order-summary.less';
+
+//
+//  Extends
+//  ---------------------------------------------
+
+.abs-checkout-title {
+    .css(border-bottom, @checkout-step-title__border);
+    .css(padding-bottom, @checkout-step-title__padding);
+    .typography(
+        @_font-size: @checkout-step-title__font-size,
+        @_font-weight: @checkout-step-title__font-weight,
+        @_font-family: false,
+        @_font-style: false,
+        @_line-height: false
+    );
+}

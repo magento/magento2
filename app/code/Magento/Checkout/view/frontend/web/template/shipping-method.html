@@ -4,13 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<style type="text/css">
-    .shippingMethod {
-        margin-top: 120px;
-    }
-</style>
 <li id="opc-shipping_method" data-bind="fadeVisible: isActive(), attr: {'class': stepClassAttributes() }" role="presentation">
-    <div class="shippingMethod ">
+    <div class="checkout-shipping-method">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <h2 data-bind="text: $t('Shipping Method')"></h2>
     </div>
@@ -23,46 +18,51 @@
         <!-- ko if: rates().length  -->
         <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
             <div id="checkout-shipping-method-load">
-                <table border="1" width="100%">
-                    <tr>
-                        <td></td>
-                        <td>Price</td>
-                        <td>Method Title</td>
-                        <td>Carrier Title</td>
-                    </tr>
-                    <!--ko foreach: { data: rates(), as: 'method'}-->
+                <table class="table table-checkout-shipping-method">
+                    <thead>
+                        <tr>
+                            <td class="col">&nbsp;</td>
+                            <td class="col col-price">Price</td>
+                            <td class="col col-method">Method Title</td>
+                            <td class="col col-carrier">Carrier Title</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!--ko foreach: { data: rates(), as: 'method'}-->
                         <!--ko foreach: { data: items, as: 'item'}-->
-                            <tr>
-                                <td>
-                                    <!-- ko if:  item.error_message -->
-                                    <div class="message error">
-                                        <div data-bind="text: $t(item.error_message)"></div>
-                                    </div>
-                                    <span class="no-display">
-                                        <input name="shipping_method" type="radio" data-bind="attr: {'value' : item.method_code, 'id': 's_method_' + item.method_code}"/>
-                                    </span>
-                                    <!-- /ko -->
-                                    <!-- ko ifnot: item.error_message -->
-                                        <!-- ko if: $parent.items.length && $parents[1].rates().length == 1 -->
-                                        <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
-                                               name="shipping_method"
-                                               class="radio"
-                                               type="radio"
-                                               checked="checked"/>
-                                        <!-- /ko -->
-                                        <!--ko ifnot: ($parent.items.length && $parents[1].rates().length == 1)-->
-                                        <input name="shipping_method" type="radio"
-                                               data-bind="checked:$parents[1].verifySelectedMethodCode(item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
-                                               class="radio"/>
-                                        <!--/ko-->
-                                    <!-- /ko -->
-                                </td>
-                                <td data-bind="text: $t(item.amount)"></td>
-                                <td data-bind="text: $t(item.method_title)"></td>
-                                <td data-bind="text: $t(method.carrier_title)"></td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <!-- ko if:  item.error_message -->
+                                <div class="message error">
+                                    <div data-bind="text: $t(item.error_message)"></div>
+                                </div>
+                                        <span class="no-display">
+                                            <input name="shipping_method" type="radio" data-bind="attr: {'value' : item.method_code, 'id': 's_method_' + item.method_code}"/>
+                                        </span>
+                                <!-- /ko -->
+                                <!-- ko ifnot: item.error_message -->
+                                <!-- ko if: $parent.items.length && $parents[1].rates().length == 1 -->
+                                <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
+                                       name="shipping_method"
+                                       class="radio"
+                                       type="radio"
+                                       checked="checked"/>
+                                <!-- /ko -->
+                                <!--ko ifnot: ($parent.items.length && $parents[1].rates().length == 1)-->
+                                <input name="shipping_method" type="radio"
+                                       data-bind="checked:$parents[1].verifySelectedMethodCode(item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
+                                       class="radio"/>
+                                <!--/ko-->
+                                <!-- /ko -->
+                            </td>
+                            <td class="col col-price" data-bind="text: $t(item.amount)"></td>
+                            <td class="col col-method" data-bind="text: $t(item.method_title)"></td>
+                            <td class="col col-carrier" data-bind="text: $t(method.carrier_title)"></td>
+                        </tr>
                         <!-- /ko -->
-                    <!-- /ko -->
+                        <!-- /ko -->
+                    </tbody>
                 </table>
             </div>
 
