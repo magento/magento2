@@ -78,7 +78,7 @@ class ExtensionAttributesFactory
         if ($methodReflection->getDeclaringClass() == self::EXTENSIBLE_INTERFACE_NAME) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
-                . "which extend 'Magento\\Framework\\Api\\ExtensibleDataInterface'. "
+                . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
                 . "Concrete return type should be specified."
             );
         }
@@ -93,7 +93,7 @@ class ExtensionAttributesFactory
         if (!preg_match($pattern, $methodDocBlock)) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
-                . "which extend 'Magento\\Framework\\Api\\ExtensibleDataInterface'. "
+                . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
                 . "Concrete return type must be specified. Please fix :" . $interfaceName
             );
         }
