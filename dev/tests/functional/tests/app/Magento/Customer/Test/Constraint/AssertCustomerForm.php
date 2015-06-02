@@ -13,8 +13,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCustomerForm
- *
+ * Assert customer data on customer backend form.
  */
 class AssertCustomerForm extends AbstractConstraint
 {
@@ -23,7 +22,7 @@ class AssertCustomerForm extends AbstractConstraint
     /* end tags */
 
     /**
-     * Skipped fields for verify data
+     * Skipped fields for verify data.
      *
      * @var array
      */
@@ -32,10 +31,11 @@ class AssertCustomerForm extends AbstractConstraint
         'password',
         'password_confirmation',
         'is_subscribed',
+        'address'
     ];
 
     /**
-     * Assert that displayed customer data on edit page(backend) equals passed from fixture
+     * Assert that displayed customer data on edit page(backend) equals passed from fixture.
      *
      * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
@@ -81,7 +81,7 @@ class AssertCustomerForm extends AbstractConstraint
     }
 
     /**
-     * Verify data in form equals to passed from fixture
+     * Verify data in form equals to passed from fixture.
      *
      * @param array $dataFixture
      * @param array $dataForm
@@ -111,7 +111,6 @@ class AssertCustomerForm extends AbstractConstraint
                 } else {
                     $result[] = "\naddress #{$key} {$name}: Field absent. Expected value \"{$value}\"";
                 }
-
             }
         }
 
@@ -119,7 +118,7 @@ class AssertCustomerForm extends AbstractConstraint
     }
 
     /**
-     * Text success verify Customer form
+     * Text success verify Customer form.
      *
      * @return string
      */

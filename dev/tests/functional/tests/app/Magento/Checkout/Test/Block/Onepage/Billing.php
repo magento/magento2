@@ -9,38 +9,35 @@ namespace Magento\Checkout\Test\Block\Onepage;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Billing
- * One page checkout status billing block
+ * One page checkout status billing block.
  */
 class Billing extends Form
 {
     /**
-     * Continue checkout button
+     * Continue checkout button.
      *
      * @var string
      */
     protected $continue = '#billing-buttons-container button';
 
     /**
-     * 'Ship to different address' radio button
+     * 'Ship to different address' radio button.
      *
      * @var string
      */
     protected $useForShipping = '[id="billing:use_for_shipping_no"]';
 
     /**
-     * Wait element
+     * Wait element.
      *
      * @var string
      */
     protected $waitElement = '.loading-mask';
 
     /**
-     * Fill billing address
+     * Fill billing address.
      *
      * @param Address $billingAddress
      * @param bool $isShippingAddress
@@ -51,10 +48,8 @@ class Billing extends Form
         $isShippingAddress = false
     ) {
         if ($billingAddress) {
-            $fields = $this->dataMapping($billingAddress->getData());
-            foreach ($fields as $field) {
-                $this->waitForElementVisible($field['selector'], $field['strategy']);
-            }
+            //@TODO: MAGETWO-34756
+            sleep(5);
             $this->fill($billingAddress);
         }
         if ($isShippingAddress) {
@@ -64,7 +59,7 @@ class Billing extends Form
     }
 
     /**
-     * Click continue on billing information block
+     * Click continue on billing information block.
      *
      * @return void
      */
