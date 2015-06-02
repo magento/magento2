@@ -122,6 +122,10 @@ define([
             delete node.type;
             delete node.config;
 
+            if (children) {
+                node.initChildCount = _.size(children);
+            }
+
             if (node.isTemplate) {
                 node.isTemplate = false;
 

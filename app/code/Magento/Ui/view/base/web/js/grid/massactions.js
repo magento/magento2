@@ -5,14 +5,15 @@
 define([
     'underscore',
     'mageUtils',
+    'mage/translate',
     'Magento_Ui/js/lib/collapsible'
-], function (_, utils, Collapsible) {
+], function (_, utils, $t, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/actions',
-            noItems:  'You haven\'t selected any items!'
+            noItemsMsg:  $t('You haven\'t selected any items!')
         },
 
         applyAction: function (action) {
@@ -22,7 +23,7 @@ define([
             if (!selections || !selections.total) {
                 proceed = false;
 
-                alert(this.noItems);
+                alert(this.noItemsMsg);
             }
 
             if (proceed && action.confirm) {

@@ -13,6 +13,7 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
+            sortable: false,
             menuVisible: false,
             excludeMode: false,
             allSelected: false,
@@ -87,7 +88,10 @@ define([
         },
 
         /**
-         * Selects all grid records, even those that are not visible on the page.
+         * Selects all grid records, even those that
+         * are not visible on the page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         selectAll: function () {
             this.excludeMode(true);
@@ -100,44 +104,54 @@ define([
 
         /**
          * Deselects all grid records.
+         *
+         * @returns {Multiselect} Chainable.
          */
         deselectAll: function () {
             this.excludeMode(false);
 
             this.clearExcluded()
-                .deselectPage();
-            this.selected.removeAll();
+                .selected.removeAll();
 
             return this;
         },
 
         /**
          * Selects or deselects all records.
+         *
+         * @returns {Multiselect} Chainable.
          */
         toggleSelectAll: function () {
-            return this.allSelected() ?
-                    this.deselectAll() :
-                    this.selectAll();
+            this.allSelected() ?
+                this.deselectAll() :
+                this.selectAll();
+
+            return this;
         },
 
         /**
          * Selects all records on the current page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         selectPage: function () {
-            this.selected(
-                _.union(this.selected(), this.getIds())
-            );
+            var selected = _.union(this.selected(), this.getIds());
+
+            this.selected(selected);
 
             return this;
         },
 
         /**
          * Deselects all records on the current page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         deselectPage: function () {
-            var currentPageIds = this.getIds();
+            var pageIds = this.getIds();
+
             this.selected.remove(function (value) {
-                return currentPageIds.indexOf(value) !== -1;
+                return !!~pageIds.indexOf(value);
             });
 
             return this;
@@ -286,6 +300,8 @@ define([
         /**
          * Updates values of the 'allSelected'
          * and 'indetermine' properties.
+         *
+         * @returns {Multiselect} Chainable.
          */
         updateState: function () {
             var selected        = this.selected().length,
@@ -309,9 +325,9 @@ define([
         },
 
         /**
-         * Callback method to handle change of the selected items.
+         * Callback method to handle changes of selected items.
          *
-         * @param {Array} selected - List of the currently selected items.
+         * @param {Array} selected - An array of currently selected items.
          */
         onSelectedChange: function (selected) {
             this.updateExcluded(selected)

@@ -4,15 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
-
 <div class="admin__data-grid-wrap">
-    <table class="data-grid">
+    <table class="data-grid data-grid-draggable" data-bind="gridDnd">
         <thead data-part="head">
             <tr data-part="head.row">
                 <!-- ko foreach: elems -->
-                    <!-- ko if: visible -->
-                        <!-- ko template: getHeader() --><!-- /ko -->
-                    <!-- /ko -->
+                    <!-- ko template: getHeader() --><!-- /ko -->
                 <!-- /ko -->
             </tr>
         </thead>
@@ -21,9 +18,7 @@
                 <!-- ko foreach: { data: rows, as: 'row' } -->
                     <tr data-part="body.row">
                         <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-                            <!-- ko if: visible -->
-                                <!-- ko template: getBody() --><!-- /ko -->
-                            <!-- /ko -->
+                            <!-- ko template: getBody() --><!-- /ko -->
                         <!-- /ko -->
                     </tr>
                 <!-- /ko -->
@@ -37,4 +32,5 @@
             <!-- /ko -->
         </tbody>
     </table>
+    <!-- ko template: 'ui/grid/dnd/listing' --><!-- /ko -->
 </div>
