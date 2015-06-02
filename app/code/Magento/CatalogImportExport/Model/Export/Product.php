@@ -1097,7 +1097,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @return array
      */
-    private function _customFieldsMapping($rowData)
+    protected function _customFieldsMapping($rowData)
     {
         foreach ($this->_fieldsMap as $system_field_name => $file_field_name) {
             if (isset($rowData[$system_field_name])) {
@@ -1115,7 +1115,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @return array
      */
-    private function _customHeadersMapping($rowData)
+    protected function _customHeadersMapping($rowData)
     {
         foreach ($rowData as $key => $field_name) {
             if (isset($this->_fieldsMap[$field_name])) {
