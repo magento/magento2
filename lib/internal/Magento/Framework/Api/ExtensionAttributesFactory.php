@@ -12,6 +12,7 @@ use Magento\Framework\Data\Collection\Db as DbCollection;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Factory class for instantiation of extension attributes objects.
@@ -136,18 +137,18 @@ class ExtensionAttributesFactory
      *
      * @param ExtensibleDataInterface $extensibleEntity
      * @param array $data
-     * @return void
+     * @return array
      * @throws \LogicException
      */
-    public function populateExtensionAttributes(
-        \Magento\Framework\Api\ExtensibleDataInterface $extensibleEntity,
+    public function extractExtensionAttributes(
+        ExtensibleDataInterface $extensibleEntity,
         array $data
     ) {
         // TODO: Optimize, since will be called on each extensible model setData()
         $extensibleEntityClass = get_class($extensibleEntity);
         if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
             /* do nothing is there are no extension attributes */
-            return;
+            return $data;
         }
 
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
@@ -163,10 +164,10 @@ class ExtensionAttributesFactory
         }
         if (!empty($extensionData)) {
             $extensionAttributes = $this->create($extensibleEntityClass, $extensionData);
-            $extensibleEntity->setExtensionAttributes($extensionAttributes);
+            $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
         }
+        return $data;
     }
-
 
     /**
      * Populate a specific attribute code with join directive instructions.
@@ -175,7 +176,7 @@ class ExtensionAttributesFactory
      * @param array $directive
      * @param array &$data
      * @param array &$extensionData
-     * @param string $extensibileEntityClass
+     * @param string $extensibleEntityClass
      * @return void
      */
     private function populateAttributeCodeWithDirective(
@@ -203,6 +204,7 @@ class ExtensionAttributesFactory
                     );
                 } elseif ($this->typeProcessor->isTypeSimple($attributeType)) {
                     $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
+                    unset($data[$selectFieldAlias]);
                     break;
                 } else {
                     if (!isset($extensionData['data'][$attributeCode])) {
@@ -216,8 +218,8 @@ class ExtensionAttributesFactory
                             )
                         );
                     $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
+                    unset($data[$selectFieldAlias]);
                 }
-                unset($data[$selectFieldAlias]);
             }
         }
     }

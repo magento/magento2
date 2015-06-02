@@ -184,16 +184,13 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
+            $key = $this->extensionAttributesFactory->extractExtensionAttributes($this, $key);
         } else if ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
         $this->customAttributesChanged = true;
         parent::setData($key, $value);
-        // TODO: Consider removing second argument, check abstract extensible object
-        if ($this->extensionAttributesFactory) {
-            $this->extensionAttributesFactory->populateExtensionAttributes($this, $this->getData());
-        }
         return $this;
     }
 

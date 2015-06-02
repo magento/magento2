@@ -85,7 +85,7 @@ class DataObjectHelper
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
         if ($dataObject instanceof ExtensibleDataInterface) {
-            $this->extensionFactory->populateExtensionAttributes($dataObject, $data);
+            $data = $this->extensionFactory->extractExtensionAttributes($dataObject, $data);
         }
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {

@@ -107,6 +107,12 @@ EXPECTED_SQL;
             $products[$firstProductId]->getExtensionAttributes()->getTestStockItem()->getQty()
         );
         $this->assertNotEmpty($products[$firstProductId]->getExtensionAttributes()->getTestStockItem()->getItemId());
+
+        $this->assertArrayNotHasKey(
+            'extension_attribute_test_stock_item_qty_qty',
+            $products[$firstProductId]->getData(),
+            "Selected extension field should be unset after it is added to extension attributes object."
+        );
     }
 
     /**
