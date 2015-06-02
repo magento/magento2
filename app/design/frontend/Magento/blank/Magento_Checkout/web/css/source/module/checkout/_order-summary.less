@@ -25,10 +25,6 @@
     //  Order Summary
     //  ---------------------------------------------
 
-    .opc-block-summary-wrapper {
-        .css(margin, @checkout-summary__margin__xl 0 @checkout-summary__margin);
-    }
-
     .opc-block-summary {
         .css(background, @checkout-summary__background-color);
         .css(padding, @checkout-summary__padding);
@@ -52,7 +48,8 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-block-summary-wrapper {
-        float: right;
+        .css(margin, @checkout-summary__margin__xl 0 @checkout-summary__margin);
         .css(width, @checkout-summary__width);
+        float: right;
     }
 }
