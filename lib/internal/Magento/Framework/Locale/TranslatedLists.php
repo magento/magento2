@@ -67,13 +67,13 @@ class TranslatedLists implements ListsInterface
     protected function _getOptionLocales($translatedName = false)
     {
         $currentLocale = $this->localeResolver->getLocale();
-        $locales = \ResourceBundle::getLocales(null);
+        $locales = \ResourceBundle::getLocales('') ?: [];
         $languages = (new LanguageBundle())->get($currentLocale)['Languages'];
         $countries = (new RegionBundle())->get($currentLocale)['Countries'];
 
         $options = [];
         $allowedLocales = $this->_config->getAllowedLocales();
-        foreach ((array)$locales as $locale) {
+        foreach ($locales as $locale) {
             if (!in_array($locale, $allowedLocales)) {
                 continue;
             }
@@ -103,7 +103,7 @@ class TranslatedLists implements ListsInterface
     {
         $options = [];
         $locale = $this->localeResolver->getLocale();
-        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
+        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL) ?: [];
         foreach ($zones as $code) {
             $options[] = [
                 'label' => \IntlTimeZone::createTimeZone($code)->getDisplayName(
@@ -123,9 +123,8 @@ class TranslatedLists implements ListsInterface
     public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false)
     {
         $options = [];
-        $days = (new DataBundle())->get(
-            $this->localeResolver->getLocale()
-        )['calendar']['gregorian']['dayNames']['format']['wide'];
+        $days = (new DataBundle())
+            ->get($this->localeResolver->getLocale())['calendar']['gregorian']['dayNames']['format']['wide'] ?: [];
         $englishDays = (new DataBundle())->get('en_US')['calendar']['gregorian']['dayNames']['format']['abbreviated'];
         foreach ($days as $code => $name) {
             $code = $preserveCodes ? $englishDays[$code] : $code;
@@ -140,7 +139,7 @@ class TranslatedLists implements ListsInterface
     public function getOptionCountries()
     {
         $options = [];
-        $countries = (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'];
+        $countries = (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'] ?: [];
         foreach ($countries as $code => $name) {
             $options[] = ['label' => $name, 'value' => $code];
         }
@@ -152,7 +151,7 @@ class TranslatedLists implements ListsInterface
      */
     public function getOptionCurrencies()
     {
-        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
+        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'] ?: [];
         $options = [];
         $allowed = $this->_config->getAllowedCurrencies();
         foreach ($currencies as $code => $data) {
@@ -169,7 +168,7 @@ class TranslatedLists implements ListsInterface
      */
     public function getOptionAllCurrencies()
     {
-        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
+        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'] ?: [];
         $options = [];
         foreach ($currencies as $code => $data) {
             $options[] = ['label' => $data[1], 'value' => $code];
