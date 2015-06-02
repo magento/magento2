@@ -223,7 +223,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
-     * @return Template\FilterFactory
+     * @return \Magento\Newsletter\Model\Template\FilterFactory
      */
     protected function getFilterFactory()
     {

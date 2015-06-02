@@ -100,6 +100,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_store;
 
     /**
+     * Tracks whether design has been applied within the context of this template model. Important as there are multiple
+     * entry points for the applyDesignConfig method.
+     *
+     * @var bool
+     */
+    private $hasDesignBeenApplied = false;
+
+    /**
      * @var \Magento\Email\Model\TemplateFactory
      */
     private $templateFactory = null;
@@ -204,10 +212,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getTemplateContent($configPath, array $variables)
     {
         $template = $this->getTemplateInstance();
-        $template->loadByConfigPath($configPath, $variables);
-
         // Ensure child templates have the same area/store context as parent
         $template->setDesignConfig($this->getDesignConfig()->toArray());
+
+        $template->loadByConfigPath($configPath, $variables);
 
         // Indicate that this is a child template so that when the template is being filtered, directives such as
         // inlinecss can respond accordingly
@@ -337,9 +345,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
-        if (!$this->getIsChildTemplate()) {
-            $this->applyDesignConfig();
-        }
+        $isDesignApplied = $this->applyDesignConfig();
 
         if (isset($variables['subscriber'])) {
             $storeId = $variables['subscriber']->getStoreId();
@@ -363,12 +369,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 $processedResult = $result;
             }
         } catch (\Exception $e) {
-            if (!$this->getIsChildTemplate()) {
-                $this->cancelDesignConfig();
-            }
+            $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
         }
-        if (!$this->getIsChildTemplate()) {
+        if ($isDesignApplied) {
             $this->cancelDesignConfig();
         }
         return $processedResult;
@@ -583,12 +587,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Apply design config so that emails are processed within the context of the appropriate area/store/theme
+     * Apply design config so that emails are processed within the context of the appropriate area/store/theme.
+     * Can be called multiple times without issue.
      *
-     * @return $this
+     * @return bool
      */
     protected function applyDesignConfig()
     {
+        if (
+            $this->getIsChildTemplate()
+            || $this->hasDesignBeenApplied
+        ) {
+            return false;
+        }
+        $this->hasDesignBeenApplied = true;
+
         $designConfig = $this->getDesignConfig();
         $store = $designConfig->getStore();
         $storeId = is_object($store) ? $store->getId() : $store;
@@ -602,7 +615,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 true
             );
         }
-        return $this;
+        return true;
     }
 
     /**
@@ -613,6 +626,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function cancelDesignConfig()
     {
         $this->_appEmulation->stopEnvironmentEmulation();
+        $this->hasDesignBeenApplied = false;
         return $this;
     }
 
@@ -628,6 +642,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
             'theme' => $this->_design->getDesignTheme()->getCode(),
+            'themeModel' => $this->_design->getDesignTheme(),
             'locale' => $this->_design->getLocale(),
         );
     }
