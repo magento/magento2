@@ -5,9 +5,11 @@
  */
 -->
 
-<div style="background-color: #F5F5F5; width: 25%;">
-    <span data-bind="text: $t(title)"></span>
-    <!-- ko foreach: elems() -->
+<div class="opc-block-summary">
+    <span data-bind="text: $t(title)" class="opc-block-summary-title"></span>
+    <table class="table table-opc-block-summary">
+        <!-- ko foreach: elems() -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
+        <!-- /ko -->
+    </table>
 </div>

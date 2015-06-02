@@ -26,7 +26,9 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <input type="button" data-bind="click: showFormPopUp, value: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('New Address')" />
+        <button type="button" aria-haspopup="true" class="action action-show-popup" data-open-dialog="co-shipping-form">
+            <span data-bind="click: showFormPopUp, text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('New Address')"></span>
+        </button>
         <div data-bind="fadeVisible: isFormPopUpVisible">
             <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
                 <!-- ko foreach: getRegion('before-fields') -->
@@ -37,7 +39,7 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
                 <!--/ko-->
                 <!-- ko if: (isCustomerLoggedIn) -->
-                    <div class="choice field">
+                    <div class="field choice">
                         <input type="checkbox" class="checkbox" name="shipping[save_in_address_book]" id="shipping-save-in-address-book" checked="checked" />
                         <label class="label" for="shipping-save-in-address-book">
                             <span data-bind="text: $t('Save in address book')"></span>
@@ -46,8 +48,12 @@
                 <!-- /ko -->
                 </fieldset>
             </form>
-            <input type="button" data-bind="click: saveNewAddress, value: $t('Save Address')" />
-            <input type="button" data-bind="click: hideFormPopUp, value: $t('Cancel')" />
+            <button type="button" class="action action-save-address">
+                <span data-bind="click: saveNewAddress, text: $t('Save Address')"></span>
+            </button>
+            <button type="button" class="action action-hide-popup">
+                <span data-bind="click: hideFormPopUp, text: $t('Cancel')"></span>
+            </button>
         </div>
         <!-- /ko -->
 

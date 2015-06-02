@@ -1,0 +1,121 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkout-shipping-item-icon__background-color: @checkout-shipping-item__active__border-color;
+@checkout-shipping-item-icon__color: @color-white;
+@checkout-shipping-item-icon__content: @icon-checkmark;
+
+@checkout-shipping-item__border: 2px solid transparent;
+@checkout-shipping-item__line-height: 21px;
+@checkout-shipping-item__margin: 0 2% 2% 0;
+@checkout-shipping-item__padding: @indent__base @indent__l @indent__base @indent__base;
+@checkout-shipping-item__width: 31%;
+@checkout-shipping-item__active__border-color: @color-orange-red1;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    .opc-wrapper {
+
+        //
+        //  Shipping Information
+        //  _____________________________________________
+
+        .shipping-address-items {
+            font-size: 0;
+        }
+
+        .shipping-address-item {
+            &:extend(.abs-add-box-sizing all);
+            .css(border, @checkout-shipping-item__border);
+            .css(font-size, @font-size__base);
+            .css(line-height, @checkout-shipping-item__line-height);
+            .css(margin, @checkout-shipping-item__margin);
+            .css(padding, @checkout-shipping-item__padding);
+            .css(width, @checkout-shipping-item__width);
+            display: inline-block;
+            position: relative;
+            transition: all .3s;
+            vertical-align: top;
+            word-wrap: break-word;
+
+            .action-select-shipping-item {
+                .css(margin, @indent__base 0);
+                float: right;
+            }
+
+            &.selected-item {
+                .css(border-color, @checkout-shipping-item__active__border-color);
+
+                &:after {
+                    .css(background, @checkout-shipping-item-icon__background-color);
+                    .css(color, @checkout-shipping-item-icon__color);
+                    .css(content, @checkout-shipping-item-icon__content);
+                    .css(font-family, @icons__font-name);
+                    font-size: 19px;
+                    height: 27px;
+                    padding-top: 2px;
+                    position: absolute;
+                    right: 0;
+                    text-align: center;
+                    top: 0;
+                    width: 29px;
+                }
+
+                .select-item-button {
+                    visibility: hidden;
+                }
+            }
+        }
+
+        .field {
+            &.addresses {
+                &:extend(.abs-add-clearfix all);
+            }
+        }
+
+        .action-show-popup {
+            .css(margin, @indent__base 0);
+
+        }
+    }
+
+    //
+    //  Shipping Methods
+    //  _____________________________________________
+
+    .checkout-shipping-method {
+        .step-title {
+            h2 {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .table-checkout-shipping-method {
+        .css(margin, 0 0 @indent__base);
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .chechkout-shipping-method {
+        .actions-toolbar {
+            .primary {
+                float: right;
+            }
+        }
+    }
+}

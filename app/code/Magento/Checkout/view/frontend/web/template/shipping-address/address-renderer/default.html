@@ -10,5 +10,7 @@
     <!-- ko text: address().city --><!-- /ko -->, <!-- ko text: address().region --><!-- /ko --> <!-- ko text: address().postcode --><!-- /ko --><br/>
     <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
     <!-- ko text: address().telephone --><!-- /ko --><br/>
-    <input type="button" class="select-item-button" data-bind="click: selectAddress, value: $t('Ship Here')" />
+    <button type="button" class="action action-select-shipping-item">
+        <span data-bind="click: selectAddress, text: $t('Ship Here')"></span>
+    </button>
 </div>
