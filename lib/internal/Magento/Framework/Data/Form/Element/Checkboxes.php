@@ -48,8 +48,6 @@ class Checkboxes extends AbstractElement
             'onchange',
             'disabled',
             'data-role',
-            'data-action',
-            'data-role',
             'data-action'
         ];
     }
