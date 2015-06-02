@@ -106,6 +106,13 @@
     width: 100vw;
 }
 
+// Modals overlay
+
+.modals-overlay {
+    &:extend(.ui-widget-overlay all);
+    z-index: @overlay__z-index;
+}
+
 .modal-slide,
 .modal-popup {
     .abs-modal();
