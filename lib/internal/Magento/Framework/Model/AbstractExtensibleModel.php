@@ -63,7 +63,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     ) {
         $this->extensionAttributesFactory = $extensionFactory;
         $this->customAttributeFactory = $customAttributeFactory;
-
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         if (isset($data['id'])) {
