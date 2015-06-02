@@ -6,15 +6,16 @@
 /*global alert*/
 define(
     [
-        '../column'
+        'uiComponent'
     ],
-    function (column) {
+    function (Component) {
         "use strict";
         var imageData = window.checkoutConfig.imageData;
-        return column.extend({
+        return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/item/columns/thumbnail'
+                template: 'Magento_Checkout/review/item/details/thumbnail'
             },
+            displayArea: 'before_details',
             imageData: imageData,
             getValue: function(item) {
                 if (this.imageData[item.item_id]) {
