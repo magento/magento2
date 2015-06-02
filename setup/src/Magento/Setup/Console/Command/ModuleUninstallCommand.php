@@ -41,6 +41,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
+    const INPUT_KEY_BACKUP_DATA = 'backup-data';
 
     /**
      * @var MaintenanceMode
@@ -170,6 +171,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             InputOption::VALUE_NONE,
             'Take code backup (excluding temporary files)'
         );
+        $this->addOption(
+            self::INPUT_KEY_BACKUP_DATA,
+            null,
+            InputOption::VALUE_NONE,
+            'Take complete database and media backup'
+        );
         parent::configure();
     }
 
@@ -208,21 +215,55 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
+        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$dialog->askConfirmation(
+            $output,
+            '<question>You are about to remove code and database tables. Are you sure?[y/N]</question>'
+        ) && $input->isInteractive()) {
+            return;
+        }
+
         $output->writeln('<info>Enabling maintenance mode</info>');
         $this->maintenanceMode->set(true);
 
         try {
             if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
-                $backupRollback = new BackupRollback(
+                $codeBackup = new BackupRollback(
                     $this->objectManager,
                     new ConsoleLogger($output),
                     $this->directoryList,
                     $this->file
                 );
-                $backupRollback->codeBackup();
+                $codeBackup->codeBackup();
             }
+            $dataBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DATA);
+            if ($dataBackupOption) {
+                $dataBackup = new BackupRollback(
+                    $this->objectManager,
+                    new ConsoleLogger($output),
+                    $this->directoryList,
+                    $this->file
+                );
+                $dataBackup->dataBackup();
+            }
+
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
-                $this->removeData($modules, $output);
+                $this->removeData($modules, $output, $dataBackupOption);
+            } else {
+                if (!empty($this->collector->collectUninstall())) {
+                    if ($dialog->askConfirmation(
+                        $output,
+                        '<question>You are about to remove a module(s) that might have database data. '
+                        . 'Do you want to remove the data from database?[y/N]</question>'
+                    ) || !$input->isInteractive()) {
+                        $this->removeData($modules, $output, $dataBackupOption);
+                    }
+                } else {
+                    $output->writeln(
+                        '<info>You are about to remove a module(s) that might have database data. '
+                        . 'Remove the database data manually after uninstalling, if desired.</info>'
+                    );
+                }
             }
             $output->writeln('<info>Removing ' . implode(', ', $modules) . ' from module registry in database</info>');
             $this->removeModulesFromDb($modules);
@@ -246,11 +287,16 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      *
      * @param string[] $modules
      * @param OutputInterface $output
+     * @param bool $dataBackupOption
      * @return void
      */
-    private function removeData(array $modules, OutputInterface $output)
+    private function removeData(array $modules, OutputInterface $output, $dataBackupOption)
     {
-        $output->writeln('<info>Removing data</info>');
+        if (!$dataBackupOption) {
+            $output->writeln('<error>You are removing data without a backup.</error>');
+        } else {
+            $output->writeln('<info>Removing data</info>');
+        }
         $uninstalls = $this->collector->collectUninstall();
         $setupModel = $this->objectManager->get('Magento\Setup\Module\Setup');
         foreach ($modules as $module) {
