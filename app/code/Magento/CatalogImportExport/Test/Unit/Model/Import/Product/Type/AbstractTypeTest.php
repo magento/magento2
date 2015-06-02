@@ -38,7 +38,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $attrSetColFactory = $this->getMock(
             '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -52,7 +52,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $attrColFactory = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false

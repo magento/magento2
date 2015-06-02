@@ -57,15 +57,7 @@ class DataSource extends AbstractComponent implements DataSourceInterface
      */
     public function prepare()
     {
-        parent::prepare();
-
-        $config = $this->getData('config');
-        if (isset($config['update_url'])) {
-            $config['update_url'] = $this->getContext()->getUrl($config['update_url']);
-            $this->setData('config', $config);
-        }
-
-        $jsConfig = $this->getConfiguration($this);
+        $jsConfig = $this->getJsConfig($this);
         unset($jsConfig['extends']);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }

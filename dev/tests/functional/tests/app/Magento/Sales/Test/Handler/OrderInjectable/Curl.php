@@ -317,9 +317,9 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
     protected function prepareOrderProductsData(array $data)
     {
         $result = [];
-        foreach ($data['products'] as $value) {
-            if (isset($value->getCheckoutData()['qty'])) {
-                $result[$value->getId()] = ['qty' => ['qty' => $value->getCheckoutData()['qty']]];
+        foreach ($data['products'] as $product) {
+            if (isset($product->getCheckoutData()['qty'])) {
+                $result[$product->getId()] = ['qty' => ['qty' => $product->getCheckoutData()['qty']]];
             }
         }
 
