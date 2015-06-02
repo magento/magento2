@@ -86,7 +86,7 @@
                 <?php endif; ?>
             </span>
             <?php if ($_item->getComment()): ?>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u']) ?></div>
+                <div class="note-list-comment"><?php echo $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
