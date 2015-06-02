@@ -13,7 +13,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 {
     public function testRender()
     {
-        $testCacheValue = time();
+        $testCacheValue = '1433259723';
         $testDatetime   = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
         $formattedDate  = (\IntlDateFormatter::formatObject($testDatetime));
         $htmlId         = 'test_HTML_id';

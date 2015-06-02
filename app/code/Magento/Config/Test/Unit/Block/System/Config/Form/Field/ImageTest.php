@@ -21,30 +21,23 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field\Image
      */
-    protected $_image;
+    protected $image;
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilderMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $this->_image = new \Magento\Config\Block\System\Config\Form\Field\Image(
-            $factoryMock,
-            $collectionFactoryMock,
-            $escaperMock,
-            $this->urlBuilderMock
+        $this->image = $objectManager->getObject(
+            'Magento\Config\Block\System\Config\Form\Field\Image',
+            [
+                'urlBuilder' => $this->urlBuilderMock,
+            ]
         );
+
         $formMock = new \Magento\Framework\Object();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
-        $this->_image->setForm($formMock);
+        $this->image->setForm($formMock);
     }
 
     /**
@@ -57,8 +50,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
             ->with(['_type' => $type])->will($this->returnValue($url));
 
-        $this->_image->setValue('test_value');
-        $this->_image->setFieldConfig(
+        $this->image->setValue('test_value');
+        $this->image->setFieldConfig(
             [
                 'id' => 'placeholder',
                 'type' => 'image',
@@ -82,7 +75,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'path' => 'catalog/placeholder',
             ]);
 
-        $html = $this->_image->getElementHtml();
+        $html = $this->image->getElementHtml();
         $this->assertContains('class="input-file"', $html);
         $this->assertContains('<input', $html);
         $this->assertContains('type="file"', $html);
