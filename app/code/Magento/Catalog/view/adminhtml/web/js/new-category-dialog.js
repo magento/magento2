@@ -7,7 +7,7 @@
 define([
     'jquery',
     'jquery/ui',
-    'Magento_Ui/js/popup/popup',
+    'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation'
@@ -52,9 +52,9 @@ define([
                         options.errorClass, options.validClass || '');
                 }
             });
-            this.element.popup({
-                type: 'slide',
-                dialogClass: 'mage-new-category-dialog form-inline',
+            this.element.modal({
+                type: 'popup',
+                modalClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
                 buttons: [{
                     text: $.mage.__('Create Category'),
@@ -93,7 +93,7 @@ define([
                                 $('#new_category_name, #new_category_parent-suggest').val('');
                                 $suggest.val('');
                                 clearParentCategory();
-                                widget.element.trigger('closeDialog');
+                                widget.element.trigger('closeModal');
                             } else {
                                 $('#new_category_messages').html(data.messages);
                             }
