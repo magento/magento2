@@ -1354,23 +1354,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 5. Media gallery phase
-                $dispretionPath = Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
+                $dispertionPath = Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
                 $imageName = preg_replace('/[^a-z0-9\._-]+/i','', $rowData[self::COL_MEDIA_IMAGE]);
-                $fullDispretionPath = $dispretionPath.'/'.$imageName;
+                $fullDispertionPath = $dispertionPath.'/'.$imageName;
                 $imageIsSet = null;
                 $imageFromProduct = null;
                 $imageInProductIsSet = null;
                 foreach($this->cachedImages as $image) {
-                    if($image['sku']==$rowData[self::COL_SKU] && preg_replace('/_[0-9]+/','', $image['value'])==$fullDispretionPath) {
+                    if($image['sku'] == $rowData[self::COL_SKU] && preg_replace('/_[0-9]+/','', $image['value']) == $fullDispertionPath) {
                         $imageInProductIsSet = true;
                         $imageFromProduct = $image['value'];
                         break;
-                    } elseif(in_array($fullDispretionPath, $image)) {
+                    } elseif(in_array($fullDispertionPath, $image)) {
                         $imageIsSet = true;
                         break;
                     }
                 }
-                if( ($imageInProductIsSet && $imageFromProduct!=$fullDispretionPath) || (!isset($imageIsSet) && !isset($imageInProductIsSet)) ) {
+                if( ($imageInProductIsSet && $imageFromProduct != $fullDispertionPath) || (!isset($imageIsSet) && !isset($imageInProductIsSet)) ) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
@@ -1419,7 +1419,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ];
                         }
                     }
-                } elseif($imageInProductIsSet && $imageFromProduct==$fullDispretionPath) {
+                } elseif($imageInProductIsSet && $imageFromProduct == $fullDispertionPath) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
