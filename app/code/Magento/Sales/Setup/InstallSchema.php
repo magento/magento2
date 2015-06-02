@@ -5024,12 +5024,6 @@ class InstallSchema implements InstallSchemaInterface
             '12,4',
             [],
             'Base Real Amount'
-        )->addColumn(
-            'hidden',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Hidden'
         )->addIndex(
             $installer->getIdxName('sales_order_tax', ['order_id', 'priority', 'position']),
             ['order_id', 'priority', 'position']

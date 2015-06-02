@@ -29,8 +29,6 @@ namespace Magento\Sales\Model\Order;
  * @method \Magento\Sales\Model\Order\Tax setProcess(int $value)
  * @method float getBaseRealAmount()
  * @method \Magento\Sales\Model\Order\Tax setBaseRealAmount(float $value)
- * @method int getHidden()
- * @method \Magento\Sales\Model\Order\Tax setHidden(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
