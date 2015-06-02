@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<td
+<td 
     data-bind="visible: visible,
-           click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
-           text: getLabel(row[field.index])"
+               css: { _dragging: dragging },
+               click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
+               html: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>

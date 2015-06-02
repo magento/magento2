@@ -59,8 +59,8 @@ define([
          */
         initialize: function () {
             utils.limit(this, 'saveSate', 2000);
-            utils.limit(this, 'checkChanges', 200);
             utils.limit(this, '_defaultPolyfill', 1000);
+            utils.limit(this, 'checkChanges', 50);
 
             this._super()
                 .initViews();
@@ -223,7 +223,9 @@ define([
          */
         applyView: function (view) {
             if (typeof view === 'string') {
-                view = this.elems.findWhere({index: view});
+                view = this.elems.findWhere({
+                    index: view
+                });
             }
 
             view.active(true);

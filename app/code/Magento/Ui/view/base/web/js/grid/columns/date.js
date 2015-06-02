@@ -5,11 +5,11 @@
 define([
     'mageUtils',
     'moment',
-    './sortable'
-], function (utils, moment, Sortable) {
+    './column'
+], function (utils, moment, Column) {
     'use strict';
 
-    return Sortable.extend({
+    return Column.extend({
         defaults: {
             dateFormat: 'MMM D, YYYY h:mm:ss A'
         },

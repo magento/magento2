@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    './sortable'
-], function (Sortable) {
+    './column'
+], function (Column) {
     'use strict';
 
-    return Sortable.extend({
+    return Column.extend({
         getLabel: function (data) {
             var options = this.options || [],
                 label = '';

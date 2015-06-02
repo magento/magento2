@@ -3,18 +3,25 @@
  * See COPYING.txt for license details.
  */
 define([
+    'mageUtils',
+    'underscore',
     'uiComponent',
     'Magento_Ui/js/lib/spinner'
-], function (Component, loader) {
+], function (utils, _, Component, loader) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'ui/grid/listing',
+            positions: false,
+            storageConfig: {
+                positions: '${ $.storageConfig.path }.positions'
+            },
             imports: {
                 rows: '${ $.provider }:data.items'
             },
             listens: {
+                elems: 'setPositions',
                 '${ $.provider }:reload': 'showLoader',
                 '${ $.provider }:reloaded': 'hideLoader'
             }
@@ -28,6 +35,79 @@ define([
         initObservable: function () {
             this._super()
                 .observe('rows');
+
+            return this;
+        },
+
+        /**
+         * Called when another element was added to current component.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initElement: function () {
+            var currentCount = this.elems().length,
+                totalCount = this.initChildCount;
+
+            if (totalCount === currentCount) {
+                this.initPositions();
+            }
+
+            return this._super();
+        },
+
+        /**
+         * Defines initial order of child elements.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initPositions: function () {
+            var link = {
+                positions: this.storageConfig.positions
+            };
+
+            this.on('positions', this.applyPositions.bind(this));
+
+            this.setLinks(link, 'imports')
+                .setLinks(link, 'exports');
+
+            return this;
+        },
+
+        /**
+         * Updates current state of child positions.
+         *
+         * @returns {Listing} Chainable.
+         */
+        setPositions: function () {
+            var positions = {};
+
+            this.elems.each(function (elem, index) {
+                positions[elem.index] = index;
+            });
+
+            this.set('positions', positions);
+
+            return this;
+        },
+
+        /**
+         * Reseorts child elements array according to provided positions.
+         *
+         * @param {Object} positions - Object where key represents child
+         *      index and value is its' position.
+         * @returns {Listing} Chainable.
+         */
+        applyPositions: function (positions) {
+            var sorting;
+
+            sorting = this.elems.map(function (elem) {
+                return {
+                    elem: elem,
+                    position: positions[elem.index]
+                };
+            });
+
+            this.insertChild(sorting);
 
             return this;
         },

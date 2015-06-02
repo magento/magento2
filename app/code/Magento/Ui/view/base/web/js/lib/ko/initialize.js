@@ -14,6 +14,7 @@ define([
     './bind/optgroup',
     './bind/fadeVisible',
     './bind/mage-init',
+    './bind/dnd',
     './extender/observable_array'
 ], function(ko, templateEngine) {
     'use strict';

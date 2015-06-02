@@ -3,10 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     'mageUtils',
     'mage/translate',
     'Magento_Ui/js/lib/collapsible'
-], function (utils, $t, Collapsible) {
+], function (_, utils, $t, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
@@ -15,13 +16,21 @@ define([
             minVisible: 1,
             maxVisible: 30,
             viewportSize: 18,
+            columnsData: {
+                container: 'elems'
+            },
+            imports: {
+                addColumns: '${ $.columnsData.provider }:${ $.columnsData.container }'
+            },
             templates: {
                 headerMsg: $t('${ $.visible } out of ${ $.total } visible')
             }
         },
 
         /**
-         * Action Reset
+         * Resets columns visibility to theirs default state.
+         *
+         * @returns {Columns} Chainable.
          */
         reset: function () {
             this.elems.each('applyState', 'visible', 'default');
@@ -30,7 +39,9 @@ define([
         },
 
         /**
-         * Action Cancel
+         * Applies last saved state of columns visibility.
+         *
+         * @returns {Columns} Chainable.
          */
         cancel: function () {
             this.elems.each('applyState', 'visible', 'last');
@@ -39,8 +50,25 @@ define([
         },
 
         /**
-         * Helper, which helps to stop resizing.
-         * viewportSize limits number of elements.
+         * Extends child elements array with provided one.
+         *
+         * @param {Array} columns - Elements array that will be added to component.
+         * @returns {Columns} Chainable.
+         */
+        addColumns: function (columns) {
+            columns = _.where(columns, {
+                controlVisibility: true
+            });
+
+            this.insertChild(columns);
+
+            return this;
+        },
+
+        /**
+         * Defines whether child elements array length
+         * is greater than the 'viewportSize' property.
+         *
          * @returns {Boolean}
          */
         hasOverflow: function () {
@@ -51,6 +79,7 @@ define([
          * Helper, checks
          *  - if less than one item choosen
          *  - if more then viewportMaxSize choosen
+         *
          * @param {Object} elem
          * @returns {Boolean}
          */
@@ -63,7 +92,8 @@ define([
         },
 
         /**
-         * Helper, returns number of visible checkboxes
+         * Counts number of visible columns.
+         *
          * @returns {Number}
          */
         countVisible: function () {
@@ -72,8 +102,7 @@ define([
 
         /**
          * Compile header message from headerMessage setting.
-         * Expects Underscore template format
-         * @param {String} text - underscore-format template
+         *
          * @returns {String}
          */
         getHeaderMessage: function () {
