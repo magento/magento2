@@ -167,26 +167,21 @@ class RulePool
     }
 
     /**
-     * Retrieve newly created fallback rule for template files
+     * Retrieve newly created fallback rule for email templates. Emails are only loaded in a modular context, so a
+     * non-modular rule is not specified.
      *
      * @return RuleInterface
      */
-    protected function createEmailFileRule()
+    protected function createEmailTemplateFileRule()
     {
-        $emailDir = $this->filesystem->getDirectoryRead(DirectoryList::EMAIL)->getAbsolutePath();
-        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+        $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
+        $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
 
-        return new ModularSwitch(
-            new Theme(
-                new Simple("$emailDir/<theme_path>")
-            ),
-            new Composite(
-                [
-                    new Theme(new Simple("$emailDir/<theme_path>/<namespace>_<module>")),
-                    new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
-                    new Simple("$modulesDir/<namespace>/<module>/view/email"),
-                ]
-            )
+        return new Composite(
+            [
+                new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/" . DirectoryList::EMAIL)),
+                new Simple("$modulesDir/<namespace>/<module>/view/<area>/" . DirectoryList::EMAIL),
+            ]
         );
     }
 
@@ -215,7 +210,7 @@ class RulePool
                 $rule = $this->createViewFileRule();
                 break;
             case self::TYPE_EMAIL_TEMPLATE:
-                $rule = $this->createEmailFileRule();
+                $rule = $this->createEmailTemplateFileRule();
                 break;
             default:
                 throw new \InvalidArgumentException("Fallback rule '$type' is not supported");

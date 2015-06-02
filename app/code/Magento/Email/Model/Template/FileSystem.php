@@ -37,19 +37,22 @@ class FileSystem
     }
 
     /**
-     * Get existing file name, using fallback mechanism
+     * Get file name, using fallback mechanism
+     *
+     * @param string $filePath
+     * @param string $module
+     * @param array $designParams
+     * @return string|false
      */
-
-    public function getEmailTemplateFileName($filePath, $module)
+    public function getEmailTemplateFileName($filePath, $module, $designParams)
     {
-        //TODO - Not sure if the themeModel is generated correctly
-        //       Might need to use appemulation as in AbstractTemplate
-
-        $params = [];
-        $this->_assetRepo->updateDesignParams($params);
-
         return $this->_resolver->resolve(
-            $this->getFallbackType(), $filePath, $params['area'], $params['themeModel'], null, $module
+            $this->getFallbackType(),
+            $filePath,
+            $designParams['area'],
+            $designParams['themeModel'],
+            $designParams['locale'],
+            $module
         );
     }
 

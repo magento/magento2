@@ -86,17 +86,15 @@ class Config
      * Retrieve full path to an email template file
      *
      * @param string $templateId
+     * @param array $designParams
      * @return string
      */
-    public function getTemplateFilename($templateId)
+    public function getTemplateFilename($templateId, $designParams)
     {
         $module = $this->getTemplateModule($templateId);
         $file = $this->_getInfo($templateId, 'file');
 
-        $result = $this->_fileSystem->getEmailTemplateFileName($file,$module);
-        return $result;
-        //TODO - remove this line, just here so I can compare the old behavior to the new
-        //return $this->_moduleReader->getModuleDir('view', $module) . '/frontend/email/' . $file;
+         return $this->_fileSystem->getEmailTemplateFileName($file, $module, $designParams);
     }
 
     /**
