@@ -120,14 +120,10 @@ class ExtensionAttributesFactory
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);
-            if (is_array($directive[Converter::JOIN_SELECT_FIELDS])) {
-                $selectFieldsMapper = function ($selectFieldData) {
-                    return $selectFieldData[Converter::JOIN_SELECT_FIELD];
-                };
-                $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
-            } else {
-                $joinData->setSelectFields([]);
-            }
+            $selectFieldsMapper = function ($selectFieldData) {
+                return $selectFieldData[Converter::JOIN_SELECT_FIELD];
+            };
+            $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
             $collection->joinExtensionAttribute($joinData);
         }
     }
@@ -146,7 +142,7 @@ class ExtensionAttributesFactory
     ) {
         $extensibleEntityClass = get_class($extensibleEntity);
         if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
-            /* do nothing is there are no extension attributes */
+            /* do nothing as there are no extension attributes */
             return $data;
         }
 
