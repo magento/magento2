@@ -144,7 +144,6 @@ class ExtensionAttributesFactory
         ExtensibleDataInterface $extensibleEntity,
         array $data
     ) {
-        // TODO: Optimize, since will be called on each extensible model setData()
         $extensibleEntityClass = get_class($extensibleEntity);
         if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
             /* do nothing is there are no extension attributes */
@@ -277,7 +276,7 @@ class ExtensionAttributesFactory
         }
         throw new \LogicException(
             "Class '{$extensibleClassName}' must implement an interface, "
-            . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"
+            . "which extends from '" . self::EXTENSIBLE_INTERFACE_NAME . "'"
         );
     }
 
