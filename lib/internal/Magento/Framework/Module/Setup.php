@@ -129,7 +129,7 @@ class Setup implements SetupInterface
      */
     public function run($sql)
     {
-        $this->getConnection()->multiQuery($sql);
+        $this->getConnection()->query($sql);
         return $this;
     }
 

@@ -17,7 +17,6 @@
         <arguments>
             <argument name="specifications" xsi:type="array">
                 <item name="enabled" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Enabled</item>
-                <item name="3dsecure" xsi:type="string">Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</item>
             </argument>
         </arguments>
     </virtualType>

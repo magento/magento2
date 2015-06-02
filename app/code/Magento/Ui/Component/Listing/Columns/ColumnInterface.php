@@ -12,11 +12,5 @@ use Magento\Framework\View\Element\UiComponentInterface;
  */
 interface ColumnInterface extends UiComponentInterface
 {
-    /**
-     * To prepare items of a column
-     *
-     * @param array $items
-     * @return array
-     */
-    public function prepareItems(array & $items);
+    //
 }
