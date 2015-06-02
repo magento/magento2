@@ -1363,7 +1363,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 foreach($this->cachedImages as $image) {
                     if($image['sku'] == $rowData[self::COL_SKU] && preg_replace('/_[0-9]+/','', $image['value']) == $fullDispertionPath) {
                         $imageInProductIsSet = true;
-                        $imageFromProduct = $image['value'];
+                        $imageFromProduct = preg_replace('/_[0-9]+/','', $image['value']);
                         break;
                     } elseif(in_array($fullDispertionPath, $image)) {
                         $imageIsSet = true;
