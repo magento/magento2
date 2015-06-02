@@ -7,14 +7,14 @@
 <!-- ko if: quoteIsVirtual == 0 -->
     <!-- ko if: isBothPricesDisplayed() -->
     <tr class="totals shipping excl">
-        <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
+        <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
             <p data-bind="text: $t(getExcludingLabel())"></p>
             <p data-bind="text: $t(getShippingMethodTitle())"></p>
         </th>
         <td class="amount" data-bind="text: $t(getExcludingValue()), attr: {'style':style, 'data-th': $t(getExcludingLabel())}"></td>
     </tr>
     <tr class="totals shipping incl">
-        <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
+        <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
             <p data-bind="text: $t(getIncludingLabel())"></p>
             <p data-bind="text: $t(getShippingMethodTitle())"></p>
         </th>
@@ -23,20 +23,20 @@
     <!-- /ko -->
     <!-- ko if: isIncludingDisplayed() -->
     <tr class="totals shipping incl">
-        <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
-            <p data-bind="text: $t(getTitle())"></p>
+        <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
+            <p data-bind="text: $t(title)"></p>
             <p data-bind="text: $t(getShippingMethodTitle())"></p>
         </th>
-        <td class="amount" data-bind="text: $t(getIncludingValue()), attr: {'style':style, 'data-th': $t(getTitle())}"></td>
+        <td class="amount" data-bind="text: $t(getIncludingValue()), attr: {'style':style, 'data-th': $t(title)}"></td>
     </tr>
     <!-- /ko -->
     <!-- ko if: isExcludingDisplayed() -->
     <tr class="totals shipping excl">
-        <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
-            <p data-bind="text: $t(getTitle())"></p>
+        <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
+            <p data-bind="text: $t(title)"></p>
             <p data-bind="text: $t(getShippingMethodTitle())"></p>
         </th>
-        <td  data-bind="text: $t(getValue()), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
+        <td  data-bind="text: $t(getValue()), attr: {'style':style, 'data-th': $t(title)}" class="amount"></td>
     </tr>
     <!-- /ko -->
 <!-- /ko -->
