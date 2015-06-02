@@ -1421,7 +1421,7 @@ class Payment extends Info implements OrderPaymentInterface
     protected function _appendTransactionToMessage($transaction, $message)
     {
         if ($transaction) {
-            $txnId = is_object($transaction) ? $transaction->getTxnId() : $transaction;
+            $txnId = is_object($transaction) ? $transaction->getHtmlTxnId() : $transaction;
             $message .= ' ' . __('Transaction ID: "%1"', $txnId);
         }
         return $message;
