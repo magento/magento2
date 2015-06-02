@@ -53,7 +53,7 @@ define([
                 }
             });
             this.element.modal({
-                type: 'popup',
+                type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
                 buttons: [{
