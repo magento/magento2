@@ -6,13 +6,13 @@
 /*global define*/
 define(
     [
-        'Magento_Weee/js/view/checkout/review/item/price/weee'
+        'Magento_Weee/js/view/checkout/summary/item/price/weee'
     ],
     function (weee) {
         "use strict";
         return weee.extend({
             defaults: {
-                template: 'Magento_Weee/checkout/review/item/price/row_excl_tax'
+                template: 'Magento_Weee/checkout/summary/item/price/row_excl_tax'
             },
 
             getFinalRowDisplayPriceExclTax: function(item) {
