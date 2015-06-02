@@ -50,7 +50,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $object = $this->getMock('Magento\Catalog\Model\Product', ['__wakeup'], [], '', false);
 
-        $object->setData(['test_attr' => 'test_attr', 'attribute_set_id' => $set]);
+        $object->setData('test_attr', 'test_attr');
+        $object->setData('attribute_set_id', $set);
 
         $entityType = new \Magento\Framework\Object();
         $entityType->setEntityTypeCode('test');
