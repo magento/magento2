@@ -80,7 +80,13 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->selectMock));
 
         $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+
+        try {
+            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
+                ->create($_SERVER);
+        }
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

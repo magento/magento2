@@ -43,7 +43,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Email\Model\Resource\Template')
             ->will($this->returnValue($objectManagerHelper->getObject('Magento\Email\Model\Resource\Template')));
-        $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+
+        try {
+            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
+                ->create($_SERVER);
+        }
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->template = $objectManagerHelper->getObject(
