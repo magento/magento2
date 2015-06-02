@@ -14,19 +14,12 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                colspan: 3,
-                displayArea: 'before_grandtotal',
-                title: 'FPT',
-                template: 'Magento_Weee/checkout/review/weee_total'
+                template: 'Magento_Weee/checkout/summary/weee_total'
             },
             isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
             totals: quote.getTotals(),
-            getColspan: function() {
-                return this.colspan;
-            },
-            getTitle: function() {
-                return this.title;
-            },
+            title: 'FPT',
+            colspan: 3,
             getPureValue: function() {
                 var items = quote.getItems();
                 var sum = 0;
