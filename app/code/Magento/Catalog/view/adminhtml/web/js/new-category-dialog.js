@@ -56,6 +56,24 @@ define([
                 type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
+                opened: function () {
+                    var enteredName = $('#category_ids-suggest').val();
+
+                    $('#new_category_name').val(enteredName);
+                    if (enteredName === '') {
+                        $('#new_category_name').focus();
+                    }
+                    $('#new_category_messages').html('');
+                },
+                closed: function () {
+                    var validationOptions = newCategoryForm.validation('option');
+
+                    $('#new_category_name, #new_category_parent-suggest').val('');
+                    validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
+                        validationOptions.errorClass, validationOptions.validClass || '');
+                    newCategoryForm.validation('clearError');
+                    $('#category_ids-suggest').focus();
+                },
                 buttons: [{
                     text: $.mage.__('Create Category'),
                     class: 'action-primary',
