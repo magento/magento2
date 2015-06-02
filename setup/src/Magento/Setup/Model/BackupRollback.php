@@ -74,14 +74,22 @@ class BackupRollback
     /**
      * Take backup for code base
      *
+     * @param array $mediaIgnorePaths
      * @return void
      */
-    public function codeBackup()
+    public function codeBackup($mediaIgnorePaths = [])
     {
         /** @var \Magento\Framework\Backup\Filesystem $fsBackup */
         $fsBackup = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
         $fsBackup->setRootDir($this->directoryList->getRoot());
-        $fsBackup->addIgnorePaths($this->getIgnorePaths());
+        $type = 'Code';
+        if (empty($mediaIgnorePaths)) {
+            $fsBackup->addIgnorePaths($this->getCodeBackupIgnorePaths());
+        } else {
+            $fsBackup->addIgnorePaths($mediaIgnorePaths);
+            $type = 'Media';
+            $fsBackup->setName('media');
+        }
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir)) {
             $this->file->createDirectory($backupsDir, 0777);
@@ -91,11 +99,11 @@ class BackupRollback
         $fsBackup->setTime(time());
         $fsBackup->create();
         $this->log->log(
-            'Code backup filename: ' . $fsBackup->getBackupFilename()
-            . ' (The archive can be uncompressed with 7-Zip on Windows systems.)'
+            $type. ' backup filename: ' . $fsBackup->getBackupFilename()
+            . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
-        $this->log->log('Code backup path: ' . $fsBackup->getBackupPath());
-        $this->log->logSuccess('Code backup is completed successfully.');
+        $this->log->log($type . ' backup path: ' . $fsBackup->getBackupPath());
+        $this->log->logSuccess($type . ' backup is completed successfully.');
     }
 
     /**
@@ -139,18 +147,76 @@ class BackupRollback
     }
 
     /**
-     * Get paths that should be excluded during iterative searches for locations
+     * Take backup for user data
+     *
+     * @return void
+     */
+    public function dataBackup()
+    {
+        // DB Backup
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\App\ObjectManager\ConfigLoader $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+        $this->objectManager->configure($configLoader->load($areaCode));
+
+        /** @var \Magento\Framework\Backup\Db $dbBackup */
+        $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
+        $dbBackup->setRootDir($this->directoryList->getRoot());
+        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
+        if (!$this->file->isExists($backupsDir)) {
+            $this->file->createDirectory($backupsDir, 0777);
+        }
+        $dbBackup->setBackupsDir($backupsDir);
+        $dbBackup->setBackupExtension('gz');
+        $dbBackup->setTime(time());
+        $dbBackup->create();
+        $this->log->log('DB backup filename: ' . $dbBackup->getBackupFilename()
+            . ' (The archive can be uncompressed with 7-Zip on Windows systems)');
+        $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
+        $this->log->logSuccess('DB backup is completed successfully.');
+
+        // Media Backup
+        $this->codeBackup($this->getMediaBackupIgnorePaths());
+    }
+
+    /**
+     * Get paths that should be excluded during iterative searches for locations for code backup only
      *
      * @return array
      */
-    private function getIgnorePaths()
+    private function getCodeBackupIgnorePaths()
     {
         return [
+            $this->directoryList->getPath(DirectoryList::MEDIA),
             $this->directoryList->getPath(DirectoryList::STATIC_VIEW),
             $this->directoryList->getPath(DirectoryList::VAR_DIR),
             $this->directoryList->getRoot() . '/.idea',
             $this->directoryList->getRoot() . '/.svn',
             $this->directoryList->getRoot() . '/.git'
         ];
+    }
+
+    /**
+     * Get paths that should be excluded during iterative searches for locations for media backup only
+     *
+     * @return array
+     */
+    private function getMediaBackupIgnorePaths()
+    {
+        $ignorePaths = [];
+        foreach (new \DirectoryIterator($this->directoryList->getRoot()) as $item) {
+            if (!$item->isDot() && ($this->directoryList->getPath(DirectoryList::PUB) !== $item->getPathname())) {
+                $ignorePaths[] = str_replace('\\', '/', $item->getPathname());
+            }
+        }
+        foreach (new \DirectoryIterator($this->directoryList->getPath(DirectoryList::PUB)) as $item) {
+            if (!$item->isDot() && ($this->directoryList->getPath(DirectoryList::MEDIA) !== $item->getPathname())) {
+                $ignorePaths[] = str_replace('\\', '/', $item->getPathname());
+            }
+        }
+        return $ignorePaths;
     }
 }
