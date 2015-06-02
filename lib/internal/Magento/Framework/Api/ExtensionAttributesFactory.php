@@ -13,6 +13,7 @@ use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\App\Resource as AppResource;
 
 /**
  * Factory class for instantiation of extension attributes objects.
@@ -44,23 +45,31 @@ class ExtensionAttributesFactory
     private $typeProcessor;
 
     /**
+     * @var AppResource
+     */
+    private $appResource;
+
+    /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Reader $configReader
      * @param ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
+     * @param AppResource $appResource
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Reader $configReader,
         ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory,
-        TypeProcessor $typeProcessor
+        TypeProcessor $typeProcessor,
+        AppResource $appResource
     ) {
         $this->objectManager = $objectManager;
         $this->configReader = $configReader;
         $this->extensionAttributeJoinDataFactory = $extensionAttributeJoinDataFactory;
         $this->typeProcessor = $typeProcessor;
+        $this->appResource = $appResource;
     }
 
     /**
@@ -116,7 +125,7 @@ class ExtensionAttributesFactory
         foreach ($joinDirectives as $attributeCode => $directive) {
             /** @var ExtensionAttributeJoinData $joinData */
             $joinData = $this->extensionAttributeJoinDataFactory->create();
-            $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
+            $joinData->setReferenceTable($this->appResource->getTableName($directive[Converter::JOIN_REFERENCE_TABLE]))
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);

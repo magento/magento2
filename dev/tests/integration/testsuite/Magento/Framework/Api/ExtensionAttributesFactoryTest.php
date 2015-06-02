@@ -10,6 +10,7 @@ use Magento\Framework\Api\Config\Reader;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\App\Resource;
 
 class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,11 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
      * @var TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     private $typeProcessor;
+
+    /**
+     * @var AppResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appResource;
 
     protected function setUp()
     {
@@ -52,11 +58,15 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->appResource = $objectManager->get('Magento\Framework\App\Resource');
+
         $this->factory = new ExtensionAttributesFactory(
             $objectManager,
             $this->configReader,
             $this->extensionAttributeJoinDataFactory,
-            $this->typeProcessor
+            $this->typeProcessor,
+            $this->appResource
         );
     }
 
@@ -115,7 +125,8 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('joinExtensionAttribute')->with($extensionAttributeJoinData);
 
         $this->factory->process($collection, 'Magento\Catalog\Api\Data\ProductInterface');
-        $this->assertEquals('reviews', $extensionAttributeJoinData->getReferenceTable());
+        $expectedTableName = $this->appResource->getTableName('reviews');
+        $this->assertEquals($expectedTableName, $extensionAttributeJoinData->getReferenceTable());
         $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
         $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
         $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
@@ -202,14 +213,17 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 
         $extensionAttributesFactory->process($collection, $productClassName);
 
+        $catalogProductEntity = $this->appResource->getTableName('catalog_product_entity');
+        $catalogInventoryStockItem = $this->appResource->getTableName('cataloginventory_stock_item');
+        $reviews = $this->appResource->getTableName('reviews');
         $expectedSql = <<<EXPECTED_SQL
 SELECT `e`.*,
      `extension_attribute_stock_item`.`qty` AS `extension_attribute_stock_item_qty`,
      `extension_attribute_reviews`.`comment` AS `extension_attribute_reviews_comment`,
      `extension_attribute_reviews`.`rating` AS `extension_attribute_reviews_rating`,
-     `extension_attribute_reviews`.`date` AS `extension_attribute_reviews_date` FROM `catalog_product_entity` AS `e`
- LEFT JOIN `cataloginventory_stock_item` AS `extension_attribute_stock_item` ON e.id = extension_attribute_stock_item.id
- LEFT JOIN `reviews` AS `extension_attribute_reviews` ON e.id = extension_attribute_reviews.product_id
+     `extension_attribute_reviews`.`date` AS `extension_attribute_reviews_date` FROM `$catalogProductEntity` AS `e`
+ LEFT JOIN `$catalogInventoryStockItem` AS `extension_attribute_stock_item` ON e.id = extension_attribute_stock_item.id
+ LEFT JOIN `$reviews` AS `extension_attribute_reviews` ON e.id = extension_attribute_reviews.product_id
 EXPECTED_SQL;
         $resultSql = $collection->getSelectSql(true);
         $formattedResultSql = str_replace(',', ",\n    ", $resultSql);
