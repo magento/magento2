@@ -18,26 +18,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectionFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\CollectionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->file = $objectManager->getObject(
             'Magento\Config\Block\System\Config\Form\Field\File',
             [
-                'factoryElement'    => $factoryMock,
-                'factoryCollection' => $collectionFactoryMock,
-                'escaper'           => $escaperMock,
                 'data'              =>
                 [
                     'before_element_html' => 'test_before_element_html',
