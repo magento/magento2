@@ -505,29 +505,25 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * Trans directive for localized strings support
      *
+     * Example {{trans "string to translate"}}
+     *
+     * Supports modifiers,
+     *
      * @param string[] $construction
      * @return string
      */
     public function transDirective($construction)
     {
-        list($directive, $modifiers) = $this->_explodeModifiers($construction[2]);
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2]);
 
-        $params = $this->_getTransParameters($directive);
-        if (!isset($params['__trans'])) {
+        list($text, $params) = $this->getTransParameters($directive);
+        if (empty($text)) {
             return '';
         }
 
-        $text = $params['__trans'];
-        unset($params['__trans']);
-
         $text = (new \Magento\Framework\Phrase($text, $params))->render();
+        $text = $this->applyModifiers($text, $modifiers ? $modifiers : 'escape');
 
-        if ($modifiers !== null) {
-            $text = $this->_amplifyModifiers($text, $modifiers);
-        } else {
-            $text = $this->_escaper->escapeHtml($text);
-        }
-        
         // todo: run through translator
 
         return $text;
@@ -537,20 +533,24 @@ class Filter extends \Magento\Framework\Filter\Template
      * Return associative array of parameters, using
      * __trans to identify the nameless text argument
      *
+     * Returns: [value, [param, ...]]
+     *
      * @param string $value raw parameters
      * @return array
      */
-    protected function _getTransParameters($value) {
+    protected function getTransParameters($value) {
         if (preg_match('/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/s', $value, $matches) !== 1) {
             return [];  // malformed directive
         }
 
-        $params['__trans'] = stripslashes($matches[2]);
+        $text = stripslashes($matches[2]);
+
+        $params = [];
         if (!empty($matches[3])) {
-            $params += $this->_getParameters($matches[3]); // todo: implement |modifier support
+            $params = $this->_getParameters($matches[3]);
         }
 
-        return $params;
+        return [$text, $params];
     }
 
     /**
@@ -566,9 +566,9 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        list($directive, $modifiers) = $this->_explodeModifiers($construction[2]);
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2]);
         if ($modifiers) {
-            return $this->_amplifyModifiers($this->_getVariable($directive, ''), $modifiers);
+            return $this->applyModifiers($this->_getVariable($directive, ''), $modifiers);
         }
         return $this->_getVariable($directive, '');
     }
@@ -585,7 +585,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param $value
      * @return array
      */
-    protected function _explodeModifiers($value)
+    protected function explodeModifiers($value)
     {
         $parts = explode('|', $value, 2);
         if (2 === count($parts)) {
@@ -603,7 +603,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $modifiers
      * @return string
      */
-    protected function _amplifyModifiers($value, $modifiers)
+    protected function applyModifiers($value, $modifiers)
     {
         foreach (explode('|', $modifiers) as $part) {
             if (empty($part)) {
