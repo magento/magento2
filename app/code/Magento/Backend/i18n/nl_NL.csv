@@ -287,7 +287,7 @@ Synchronizing...,Synchronizing...
 "Current Month","Current Month"
 YTD,YTD
 2YTD,2YTD
-"Please correct the user name or password.","Please correct the user name or password."
+"You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
 "Authentication error occurred.","Authentication error occurred."
 "Please specify the admin custom URL.","Please specify the admin custom URL."
 "Invalid %1. %2","Invalid %1. %2"
