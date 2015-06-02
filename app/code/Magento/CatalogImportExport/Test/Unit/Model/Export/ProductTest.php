@@ -6,7 +6,11 @@
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use \Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -77,7 +81,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_typeFactory;
+    protected $typeFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider|\PHPUnit_Framework_MockObject_MockObject
@@ -90,25 +94,26 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $rowCustomizer;
 
     /**
+     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $writer;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Export\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $product;
 
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
 
     /**
      * @var StubProduct|\Magento\CatalogImportExport\Model\Export\Product
      */
-    protected $_object;
+    protected $object;
 
     protected function setUp()
     {
         $this->localeDate = $this->getMock(
             'Magento\Framework\Stdlib\DateTime\Timezone',
-            [''],
+            [],
             [],
             '',
             false
@@ -116,15 +121,23 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->config = $this->getMock(
             'Magento\Eav\Model\Config',
-            [''],
+            ['getEntityType'],
             [],
             '',
             false
         );
+        $type = $this->getMock(
+            '\Magento\Eav\Model\Entity\Type',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
 
         $this->resource = $this->getMock(
             'Magento\Framework\App\Resource',
-            [''],
+            [],
             [],
             '',
             false
@@ -132,14 +145,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMock(
             'Magento\Store\Model\StoreManager',
-            [''],
+            [],
             [],
             '',
             false
         );
         $this->logger = $this->getMock(
             'Magento\Framework\Logger\Monolog',
-            [''],
+            [],
             [],
             '',
             false
@@ -147,14 +160,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->collection = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Collection',
-            [''],
+            [
+                'count',
+                'setOrder',
+                'setStoreId',
+                'getCurPage',
+                'getLastPageNumber',
+            ],
             [],
             '',
             false
         );
         $this->exportConfig = $this->getMock(
             'Magento\ImportExport\Model\Export\Config',
-            [''],
+            [],
             [],
             '',
             false
@@ -162,7 +181,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->productFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\ProductFactory',
-            ['create', 'getTypeId'],
+            [
+                'create',
+                'getTypeId',
+            ],
             [],
             '',
             false
@@ -170,7 +192,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->attrSetColFactory = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
-            ['create', 'setEntityTypeFilter'],
+            [
+                'create',
+                'setEntityTypeFilter',
+            ],
             [],
             '',
             false
@@ -178,7 +203,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryColFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Category\CollectionFactory',
-            ['create', 'addNameToResult'],
+            [
+                'create',
+                'addNameToResult',
+            ],
             [],
             '',
             false
@@ -186,14 +214,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->itemFactory = $this->getMock(
             'Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
-            [''],
+            [],
             [],
             '',
             false
         );
         $this->optionColFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
-            [''],
+            [],
             [],
             '',
             false
@@ -201,14 +229,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeColFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [''],
+            [],
             [],
             '',
             false
         );
-        $this->_typeFactory = $this->getMock(
+        $this->typeFactory = $this->getMock(
             'Magento\CatalogImportExport\Model\Export\Product\Type\Factory',
-            [''],
+            [],
             [],
             '',
             false
@@ -216,32 +244,84 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->linkTypeProvider = $this->getMock(
             'Magento\Catalog\Model\Product\LinkTypeProvider',
-            [''],
+            [],
             [],
             '',
             false
         );
         $this->rowCustomizer = $this->getMock(
             'Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite',
-            [''],
+            [],
             [],
             '',
             false
         );
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->product = $this->objectManagerHelper->getObject(
-            'Magento\CatalogImportExport\Model\Export\Product',
+        $this->writer = $this->getMock(
+            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
             [
-                'localeDate' => $this->localeDate,
-                'config' => $this->config,
-                'resource' => $this->resource,
-                'storeManager' => $this->storeManager
-            ]
+                'setHeaderCols',
+                'writeRow',
+                'getContents',
+            ],
+            [],
+            '',
+            false
         );
 
-        $this->_object = new StubProduct();
+        $constructorMethods = [
+            'initTypeModels',
+            'initAttributes',
+            '_initStores',
+            'initAttributeSets',
+            'initWebsites',
+            'initCategories'
+        ];
+
+        $mockMethods = array_merge($constructorMethods, [
+            '_customHeadersMapping',
+            '_prepareEntityCollection',
+            '_getEntityCollection',
+            'getWriter',
+            'getExportData',
+            '_headerColumns',
+            '_customFieldsMapping',
+            'getItemsPerPage',
+            'paginateCollection',
+            '_getHeaderColumns',
+        ]);
+        $this->product = $this->getMock(
+            'Magento\CatalogImportExport\Model\Export\Product',
+            $mockMethods,
+            [],
+            '',
+            false
+        );
+
+        foreach ($constructorMethods as $method) {
+            $this->product->expects($this->once())->method($method)->will($this->returnSelf());
+        }
+
+        $this->product->__construct(
+            $this->localeDate,
+            $this->config,
+            $this->resource,
+            $this->storeManager,
+            $this->logger,
+            $this->collection,
+            $this->exportConfig,
+            $this->productFactory,
+            $this->attrSetColFactory,
+            $this->categoryColFactory,
+            $this->itemFactory,
+            $this->optionColFactory,
+            $this->attributeColFactory,
+            $this->typeFactory,
+            $this->linkTypeProvider,
+            $this->rowCustomizer
+        );
+
+        $this->object = new StubProduct();
     }
 
     /**
@@ -258,11 +338,130 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
         $rowCategories = [$productId => []];
 
-        $this->assertTrue($this->_object->updateDataWithCategoryColumns($dataRow, $rowCategories, $productId));
+        $this->assertTrue($this->object->updateDataWithCategoryColumns($dataRow, $rowCategories, $productId));
+    }
+
+    public function testGetHeaderColumns()
+    {
+        $product = $this->getMock(
+            'Magento\CatalogImportExport\Model\Export\Product',
+            ['_customHeadersMapping'],
+            [],
+            '',
+            false
+        );
+        $headerColumnsValue = ['headerColumns value'];
+        $expectedResult = 'result';
+        $this->setPropertyValue($product, '_headerColumns', $headerColumnsValue);
+        $product
+            ->expects($this->once())
+            ->method('_customHeadersMapping')
+            ->with($headerColumnsValue)
+            ->willReturn($expectedResult);
+
+        $result = $product->_getHeaderColumns();
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testExportCountZeroBreakInternalCalls()
+    {
+        $page = 1;
+        $itemsPerPage = 10;
+
+        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
+        $this->product->expects($this->exactly(4))->method('_getEntityCollection')->willReturn($this->collection);
+        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->collection);
+        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
+        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
+        $this->collection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->collection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+
+        $this->collection->expects($this->once())->method('count')->willReturn(0);
+
+        $this->collection->expects($this->never())->method('getCurPage');
+        $this->collection->expects($this->never())->method('getLastPageNumber');
+        $this->product->expects($this->never())->method('_getHeaderColumns');
+        $this->writer->expects($this->never())->method('setHeaderCols');
+        $this->writer->expects($this->never())->method('writeRow');
+        $this->product->expects($this->never())->method('getExportData');
+        $this->product->expects($this->never())->method('_customFieldsMapping');
+
+        $this->writer->expects($this->once())->method('getContents');
+
+        $this->product->export();
+    }
+
+    public function testExportCurPageEqualToLastBreakInternalCalls()
+    {
+        $curPage = $lastPage = $page = 1;
+        $itemsPerPage = 10;
+
+        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
+        $this->product->expects($this->exactly(6))->method('_getEntityCollection')->willReturn($this->collection);
+        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->collection);
+        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
+        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
+        $this->collection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->collection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+
+        $this->collection->expects($this->once())->method('count')->willReturn(1);
+
+        $this->collection->expects($this->once())->method('getCurPage')->willReturn($curPage);
+        $this->collection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
+        $headers = ['headers'];
+        $this->product->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
+        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
+        $row = 'value';
+        $data = [$row];
+        $this->product->expects($this->once())->method('getExportData')->willReturn($data);
+        $customFieldsMappingResult = ['result'];
+        $this->product
+            ->expects($this->once())
+            ->method('_customFieldsMapping')
+            ->with($row)
+            ->willReturn($customFieldsMappingResult);
+        $this->writer->expects($this->once())->method('writeRow')->with($customFieldsMappingResult);
+
+        $this->writer->expects($this->once())->method('getContents');
+
+        $this->product->export();
     }
 
     protected function tearDown()
     {
-        unset($this->_object);
+        unset($this->object);
+    }
+
+    /**
+     * Get any object property value.
+     *
+     * @param $object
+     * @param $property
+     */
+    protected function getPropertyValue($object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * Set object property value.
+     *
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+
+        return $object;
     }
 }
