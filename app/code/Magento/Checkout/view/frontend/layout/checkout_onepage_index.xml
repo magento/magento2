@@ -158,6 +158,9 @@
                                                     <item name="discount" xsi:type="array">
                                                         <item name="component"  xsi:type="string">Magento_Checkout/js/view/discount</item>
                                                     </item>
+                                                    <item name="grandtotal" xsi:type="array">
+                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/grandtotal</item>
+                                                    </item>
                                                 </item>
                                             </item>
                                             <item name="itemsBefore" xsi:type="array">
@@ -166,7 +169,7 @@
                                                     <!-- merge your components here -->
                                                 </item>
                                             </item>
-                                            <item name="columns" xsi:type="array">
+                                            <item name="cart_items" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart_items</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="details" xsi:type="array">
