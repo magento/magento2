@@ -111,7 +111,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
-        // TODO: Do we need this and should we change path?
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             [
                 Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
