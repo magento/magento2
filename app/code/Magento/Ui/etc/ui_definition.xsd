@@ -43,11 +43,12 @@
             <xs:element type="dataTypeBoolean" name="boolean"/>
             <xs:element type="dataTypeNumber" name="number"/>
             <xs:element type="dataTypePrice" name="price"/>
-            <xs:element type="dataTypeMedia" name="media"/>
+            <xs:element type="dataTypeMedia" name="image"/>
             <xs:element type="dataTypeDate" name="date"/>
             <xs:element type="dataTypeEmail" name="email"/>
             <xs:element type="nav" name="nav"/>
             <xs:element type="actions" name="actions"/>
+            <xs:element type="bookmark" name="bookmark"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->

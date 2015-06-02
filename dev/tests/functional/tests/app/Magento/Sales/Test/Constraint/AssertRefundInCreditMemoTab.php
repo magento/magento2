@@ -36,7 +36,7 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         $salesOrderView->getOrderForm()->openTab('creditmemos');
         /** @var Grid $grid */
-        $grid = $salesOrderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock();
+        $grid = $salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock();
         $amount = $order->getPrice();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [
@@ -46,7 +46,7 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
             ];
             $grid->search($filter);
             $filter['amount_from'] = number_format($amount[$key]['grand_creditmemo_total'], 2);
-            $filter['amount_to'] = number_format($amount[$key]['grand_creditmemo_total'], 2);
+            unset($filter['amount_to']);
             \PHPUnit_Framework_Assert::assertTrue(
                 $grid->isRowVisible($filter, false, false),
                 'Credit memo is absent on credit memos tab.'

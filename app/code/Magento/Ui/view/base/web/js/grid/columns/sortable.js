@@ -15,17 +15,24 @@ define([
                 'asc': '_ascend',
                 'desc': '_descend'
             },
+            links: {
+                sorting: '${ $.storageConfig.path }.sorting'
+            },
+            imports: {
+                setSortClass: 'sorting',
+                push: 'sorting'
+            },
             listens: {
-                '<%= provider %>:params.sorting.field': 'onSortChange',
-                sorting: 'setSortClass push'
+                '${ $.provider }:params.sorting.field': 'onSortChange'
+            },
+            modules: {
+                source: '${ $.provider }'
             }
         },
 
         initObservable: function () {
             this._super()
                 .observe('sorting sortClass');
-
-            this.setSortClass(this.sorting());
 
             return this;
         },
@@ -47,12 +54,10 @@ define([
                 return;
             }
 
-            this.source.set('params.sorting', {
+            this.source('set', 'params.sorting', {
                 field: this.index,
                 direction: sorting
             });
-
-            this.source.reload();
         },
 
         toggleDirection: function () {
