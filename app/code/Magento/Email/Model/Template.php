@@ -117,7 +117,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
-     * @param Template\FilterFactory $filterFactory
+     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param array $data
      *
@@ -354,6 +354,9 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function processTemplate()
     {
+        // Necessary to support theme fallback for email templates
+        $isDesignApplied = $this->applyDesignConfig();
+
         $templateId = $this->getId();
         if (is_numeric($templateId)) {
             $this->load($templateId);
@@ -369,6 +372,10 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
 
         $this->setUseAbsoluteLinks(true);
         $text = $this->getProcessedTemplate($this->_getVars());
+
+        if ($isDesignApplied) {
+            $this->cancelDesignConfig();
+        }
         return $text;
     }
 
@@ -406,7 +413,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     }
 
     /**
-     * @return Template\FilterFactory
+     * @return \Magento\Email\Model\Template\FilterFactory
      */
     protected function getFilterFactory()
     {
