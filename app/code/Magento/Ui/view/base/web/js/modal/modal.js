@@ -34,7 +34,7 @@ define([
             modalAction: '[data-role="action"]',
             appendTo: 'body',
             wrapperClass: 'modals-wrapper',
-            overlayClass: 'overlay_magento',
+            overlayClass: 'modals-overlay',
             responsiveClass: 'modal-slide',
             modalLeftMargin: 45,
             closeText: $.mage.__('Close'),
