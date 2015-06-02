@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Composer\Console\Application;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
@@ -20,6 +21,7 @@ use Magento\Setup\Model\ComposerInformation;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -101,8 +103,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $loader;
 
     /**
+     * @var Application
+     */
+    private $composerApp;
+
+    /**
      * Constructor
      *
+     * @param Application $composerApp
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
@@ -115,6 +123,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param UninstallCollector $collector
      */
     public function __construct(
+        Application $composerApp,
         ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
@@ -127,6 +136,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
+        $this->composerApp = $composerApp;
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList = $directoryList;
@@ -227,10 +237,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
             );
             $this->removeModulesFromDeploymentConfig($modules);
+            $output->writeln('<info>Removing code from Magento codebase:</info>');
+            $this->removeCode($modules);
             $this->cleanup($input, $output);
-            $output->writeln(
-                "<info>To completely remove modules, please run 'composer remove <package-name>' for each module</info>"
-            );
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
@@ -262,6 +271,21 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 $output->writeln("<info>No data to clear in $module</info>");
             }
         }
+    }
+
+    /**
+     * Run 'composer remove' to remove code
+     *
+     * @param array $modules
+     */
+    private function removeCode(array $modules)
+    {
+        $packages = [];
+        foreach ($modules as $module) {
+            $packages[] = $this->packageInfo->getPackageName($module);
+        }
+        $this->composerApp->setAutoExit(false);
+        $this->composerApp->run(new ArrayInput(['command' => 'remove', 'packages' => $packages]));
     }
 
     /**

@@ -102,6 +102,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $loader;
 
     /**
+     * @var \Composer\Console\Application|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $app;
+
+    /**
      * @var ModuleUninstallCommand
      */
     private $command;
@@ -167,6 +172,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->command = new ModuleUninstallCommand(
+            $this->app,
             $composer,
             $this->deploymentConfig,
             $this->writer,
@@ -397,6 +403,8 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private function setUpExecute($input)
     {
         $this->setUpPassValidation();
+        $this->app->expects($this->once())->method('setAutoExit')->with(false);
+        $this->app->expects($this->once())->method('run');
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
@@ -497,11 +505,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '[SUCCESS]: Code backup is completed successfully.' . PHP_EOL .
             'Removing Magento_A, Magento_B from module registry in database' . PHP_EOL .
             'Removing Magento_A, Magento_B from module list in deployment configuration' . PHP_EOL .
+            'Removing code from Magento codebase:' . PHP_EOL .
             'Cache cleared successfully.' . PHP_EOL .
             'Generated classes cleared successfully.' . PHP_EOL .
             'Alert: Generated static view files were not cleared. You can clear them using the --clear-static-content '
             . 'option. Failure to clear static view files might cause display issues in the Admin and storefront.'
-            . PHP_EOL . "To completely remove modules, please run 'composer remove <package-name>' for each module"
             . PHP_EOL . 'Disabling maintenance mode' . PHP_EOL;
         $this->assertEquals($expectedMsg, $this->tester->getDisplay());
     }
