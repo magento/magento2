@@ -3,28 +3,28 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sendfriend\Block;
+namespace Magento\SendFriend\Block;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 class SendTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sendfriend\Block\Send
+     * @var \Magento\SendFriend\Block\Send
      */
     protected $_block;
 
     protected function setUp()
     {
-        $this->_block = Bootstrap::getObjectManager()->create('Magento\Sendfriend\Block\Send');
+        $this->_block = Bootstrap::getObjectManager()->create('Magento\SendFriend\Block\Send');
     }
 
     /**
      * @param string $field
      * @param string $value
      * @dataProvider formDataProvider
-     * @covers \Magento\Sendfriend\Block\Send::getUserName
-     * @covers \Magento\Sendfriend\Block\Send::getEmail
+     * @covers \Magento\SendFriend\Block\Send::getUserName
+     * @covers \Magento\SendFriend\Block\Send::getEmail
      */
     public function testGetCustomerFieldFromFormData($field, $value)
     {
@@ -48,8 +48,8 @@ class SendTest extends \PHPUnit_Framework_TestCase
      * @param string $field
      * @param string $value
      * @dataProvider customerSessionDataProvider
-     * @covers \Magento\Sendfriend\Block\Send::getUserName
-     * @covers \Magento\Sendfriend\Block\Send::getEmail
+     * @covers \Magento\SendFriend\Block\Send::getUserName
+     * @covers \Magento\SendFriend\Block\Send::getEmail
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testGetCustomerFieldFromSession($field, $value)
