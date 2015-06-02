@@ -51,10 +51,12 @@ body {
 
 //  Scroll bar appearing compensation
 @media (min-width: @window__min-width) {
-    html {
-        width: 100vw;
-        overflow-x: hidden;
-    }
+  html {
+    width: 100vw;
+  }
+  body {
+    overflow-x: hidden;
+  }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
