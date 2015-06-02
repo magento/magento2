@@ -178,7 +178,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         // BEHAVIOR_DELETE use specific validation logic
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             if (!isset($rowData[self::COL_SKU])) {
-                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Cannot find required columns: %1', self::COL_SKU)
+                );
                 return false;
             }
             return true;
