@@ -277,6 +277,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Run 'composer remove' to remove code
      *
      * @param array $modules
+     * @return void
      */
     private function removeCode(array $modules)
     {
