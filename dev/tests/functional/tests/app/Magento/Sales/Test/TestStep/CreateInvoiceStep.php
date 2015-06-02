@@ -130,7 +130,7 @@ class CreateInvoiceStep implements TestStepInterface
     protected function getInvoiceIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('invoices');
-        return $this->salesOrderView->getOrderForm()->getTabElement('invoices')->getGridBlock()->getIds();
+        return $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock()->getIds();
     }
 
     /**
@@ -141,6 +141,6 @@ class CreateInvoiceStep implements TestStepInterface
     protected function getShipmentIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
-        return $this->salesOrderView->getOrderForm()->getTabElement('shipments')->getGridBlock()->getIds();
+        return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
     }
 }

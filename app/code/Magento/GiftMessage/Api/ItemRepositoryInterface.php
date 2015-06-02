@@ -5,6 +5,10 @@
  */
 namespace Magento\GiftMessage\Api;
 
+/**
+ * Interface ItemRepositoryInterface
+ * @api
+ */
 interface ItemRepositoryInterface
 {
     /**
