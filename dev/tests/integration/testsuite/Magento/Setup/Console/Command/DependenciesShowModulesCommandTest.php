@@ -38,12 +38,20 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
             ['--directory' => __DIR__ . '/_files/root', '--output' => __DIR__ . '/_files/output/modules.csv']
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
-        $fileContents = file(__DIR__ . '/_files/output/modules.csv');
-        $this->assertContains('"Total number of dependencies","2","2","0"'. PHP_EOL, $fileContents);
-        $this->assertContains('"magento/module-a","1","1","0"'. PHP_EOL, $fileContents);
-        $this->assertContains('" -- magento/module-b","","1","0"'. PHP_EOL, $fileContents);
-        $this->assertContains('"magento/module-b","1","1","0"'. PHP_EOL, $fileContents);
-        $this->assertContains('" -- magento/module-a","","1","0"'. PHP_EOL, $fileContents);
+        $fileContents = file_get_contents(__DIR__ . '/_files/output/modules.csv');
+        $this->assertContains(
+            '"","All","Hard","Soft"' . PHP_EOL . '"Total number of dependencies","2","2","0"' . PHP_EOL,
+            $fileContents
+        );
+        $this->assertContains('"Dependencies for each module:","All","Hard","Soft"'. PHP_EOL, $fileContents);
+        $this->assertContains(
+            '"magento/module-a","1","1","0"' . PHP_EOL . '" -- magento/module-b","","1","0"' . PHP_EOL,
+            $fileContents
+        );
+        $this->assertContains(
+            '"magento/module-b","1","1","0"' . PHP_EOL . '" -- magento/module-a","","1","0"' . PHP_EOL,
+            $fileContents
+        );
     }
 
     public function testExecuteInvalidDirectory()
