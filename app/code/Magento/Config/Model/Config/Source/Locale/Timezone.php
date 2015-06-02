@@ -40,7 +40,7 @@ class Timezone implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         $timezones = $this->_localeLists->getOptionTimezones();
-        $timezones = array_filter($timezones, function($value) {
+        $timezones = array_filter($timezones, function ($value) {
             if (in_array($value['value'], $this->ignoredTimezones)) {
                 return false;
             }
