@@ -6,8 +6,10 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Click "Save" button on attribute form on product page.
@@ -22,12 +24,33 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
     protected $catalogProductEdit;
 
     /**
+     * Product attribute fixture.
+     *
+     * @var CatalogProductAttribute
+     */
+    protected $attribute;
+
+    /**
+     * Object manager instance.
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * @constructor
      * @param CatalogProductEdit $catalogProductEdit
+     * @param CatalogProductAttribute $attribute
+     * @param ObjectManager $objectManager
      */
-    public function __construct(CatalogProductEdit $catalogProductEdit)
-    {
+    public function __construct(
+        CatalogProductEdit $catalogProductEdit,
+        CatalogProductAttribute $attribute,
+        ObjectManager $objectManager
+    ) {
         $this->catalogProductEdit = $catalogProductEdit;
+        $this->attribute = $attribute;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -38,5 +61,18 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
     public function run()
     {
         $this->catalogProductEdit->getProductForm()->saveAttributeForm();
+    }
+
+    /**
+     * Delete attribute after test.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->objectManager->create(
+            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
+            ['attribute' => $this->attribute]
+        )->run();
     }
 }
