@@ -114,7 +114,7 @@
             <field name="street" xsi:type="string">7700 W. Parmer Lane Bldg. D</field>
             <field name="city" xsi:type="string">Austin</field>
             <field name="region_id" xsi:type="string">Texas</field>
-            <field name="postcode" xsi:type="string">78729 </field>
+            <field name="postcode" xsi:type="string">78729</field>
             <field name="country_id" xsi:type="string">United States</field>
             <field name="telephone" xsi:type="string">512-691-4400</field>
             <field name="default_billing" xsi:type="string">Yes</field>
