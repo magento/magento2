@@ -81,8 +81,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @var array
      */
     protected $_fieldMap = [
-        'customer_firstname' => 'customer_firstname_table.value',
-        'customer_lastname' => 'customer_lastname_table.value',
+        'customer_firstname' => 'customer_email_table.firstname',
+        'customer_lastname' => 'customer_email_table.lastname',
         'customer_email' => 'customer_email_table.email',
         'customer_id' => 'customer_table.customer_id',
         'url' => 'url_info_table.url',
