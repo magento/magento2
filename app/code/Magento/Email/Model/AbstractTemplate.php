@@ -284,12 +284,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function loadDefault($templateId)
     {
-        $templateFile = $this->emailConfig->getTemplateFilename($templateId);
+        $designParams = $this->getDesignParams();
+        $templateFile = $this->emailConfig->getTemplateFilename($templateId, $designParams);
         $templateType = $this->emailConfig->getTemplateType($templateId);
         $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         $this->setTemplateType($templateTypeCode);
 
-        $modulesDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $modulesDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
 
         /**
