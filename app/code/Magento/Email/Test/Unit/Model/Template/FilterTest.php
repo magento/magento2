@@ -169,14 +169,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'Hello cruel coder...',
             ],
 
-            [   // escaped double-quotes
+            [   // capture escaped double-quotes inside text
                 '{{trans "Hello \"tested\" world!"}}',
-                'Hello "tested" world!',
+                'Hello &quot;tested&quot; world!',
             ],
 
-            [   // escaped single-quotes
-                "{{trans 'Hello \\'tested\\' world!'}}",
-                "Hello 'tested' world!",
+            [   // capture escaped single-quotes inside text
+                "{{trans 'Hello \\'tested\\' world!'|escape}}",
+                "Hello &#039;tested&#039; world!",
             ],
 
             [   // basic var
@@ -184,18 +184,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'Hello tested world!',
             ],
 
-            [   // auto-escaped var
-                '{{trans "Hello %adjective world!" adjective="<b>bad</b>"}}',
-                'Hello &lt;b&gt;bad&lt;/b&gt; world!',
+            [   // auto-escaped output
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"}}',
+                'Hello &lt;em&gt;bad&lt;/em&gt; &lt;strong&gt;world&lt;/strong&gt;!',
             ],
 
-            [   // unescaped var
-                '{{trans "Hello %adjective world!" adjective="<b>bad</b>"|raw}}',
-                'Hello <b>bad</b> world!',
+            [   // unescaped modifier
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"|raw}}',
+                'Hello <em>bad</em> <strong>world</strong>!',
             ],
 
             [   // object.var
-                '{{trans "Hello %adjective world!" adjective="$world.personality"|raw}}',
+                '{{trans "Hello %adjective world!" adjective="$world.personality"}}',
                 'Hello happy world!',
             ],
         ];

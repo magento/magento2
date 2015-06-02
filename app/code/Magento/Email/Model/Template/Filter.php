@@ -510,7 +510,9 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function transDirective($construction)
     {
-        $params = $this->_getTransParameters($construction[2]);
+        list($directive, $modifiers) = $this->_explodeModifiers($construction[2]);
+
+        $params = $this->_getTransParameters($directive);
         if (!isset($params['__trans'])) {
             return '';
         }
@@ -518,14 +520,17 @@ class Filter extends \Magento\Framework\Filter\Template
         $text = $params['__trans'];
         unset($params['__trans']);
 
-        foreach ($params as $key => $value) {
-            $params[$key] = $this->_escaper->escapeHtml($value);
+        $text = (new \Magento\Framework\Phrase($text, $params))->render();
+
+        if ($modifiers !== null) {
+            $text = $this->_amplifyModifiers($text, $modifiers);
+        } else {
+            $text = $this->_escaper->escapeHtml($text);
         }
-
+        
         // todo: run through translator
-        // todo: implement auto-escaping |modifier support
 
-        return (new \Magento\Framework\Phrase($text, $params))->render();
+        return $text;
     }
 
     /**
@@ -561,12 +566,32 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        $parts = explode('|', $construction[2], 2);
-        if (2 === count($parts)) {
-            list($variableName, $modifiersString) = $parts;
-            return $this->_amplifyModifiers($this->_getVariable($variableName, ''), $modifiersString);
+        list($directive, $modifiers) = $this->_explodeModifiers($construction[2]);
+        if ($modifiers) {
+            return $this->_amplifyModifiers($this->_getVariable($directive, ''), $modifiers);
         }
-        return $this->_getVariable($construction[2], '');
+        return $this->_getVariable($directive, '');
+    }
+
+    /**
+     * Explodes modifiers out of a given string value returning
+     * the value and modifiers in a two-element array. If none
+     * are found, returns an array with null modifier string.
+     *
+     * Syntax: some text value, etc|modifier string
+     *
+     * Result: ['some text value, etc', 'modifier string']
+     *
+     * @param $value
+     * @return array
+     */
+    protected function _explodeModifiers($value)
+    {
+        $parts = explode('|', $value, 2);
+        if (2 === count($parts)) {
+            return $parts;
+        }
+        return [$value, null];
     }
 
     /**
