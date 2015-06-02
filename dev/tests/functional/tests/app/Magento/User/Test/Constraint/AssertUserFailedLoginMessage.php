@@ -11,7 +11,7 @@ use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertUserWrongCredentialsMessage
+ * Class AssertUserFailedLoginMessage
  */
 class AssertUserFailedLoginMessage extends AbstractConstraint
 {
