@@ -26,13 +26,6 @@
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/shipping</item>
                                                     <item name="sortOrder" xsi:type="string">20</item>
                                                 </item>
-                                                <!--<item name="before_grandtotal" xsi:type="array">-->
-                                                    <!--<item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/before_grandtotal</item>-->
-                                                    <!--<item name="sortOrder" xsi:type="string">30</item>-->
-                                                    <!--<item name="children" xsi:type="array">-->
-                                                        <!--&lt;!&ndash; merge your components here &ndash;&gt;-->
-                                                    <!--</item>-->
-                                                <!--</item>-->
                                                 <item name="grandtotal" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/grandtotal</item>
                                                     <item name="sortOrder" xsi:type="string">40</item>

@@ -161,13 +161,19 @@
                                                     <item name="shipping" xsi:type="array">
                                                         <item name="component"  xsi:type="string">Magento_Checkout/js/view/shipping</item>
                                                     </item>
+                                                    <item name="before_grandtotal" xsi:type="array">
+                                                        <item name="component"  xsi:type="string">uiComponent</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
+                                                    </item>
                                                     <item name="grandtotal" xsi:type="array">
                                                         <item name="component"  xsi:type="string">Magento_Checkout/js/view/grandtotal</item>
                                                     </item>
                                                 </item>
                                             </item>
                                             <item name="itemsBefore" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/itemsBefore</item>
+                                                <item name="component" xsi:type="string">uiComponent</item>
                                                 <item name="children" xsi:type="array">
                                                     <!-- merge your components here -->
                                                 </item>
@@ -192,7 +198,7 @@
                                                 </item>
                                             </item>
                                             <item name="itemsAfter" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/itemsAfter</item>
+                                                <item name="component" xsi:type="string">uiComponent</item>
                                                 <item name="children" xsi:type="array">
                                                     <!-- merge your components here -->
                                                 </item>
