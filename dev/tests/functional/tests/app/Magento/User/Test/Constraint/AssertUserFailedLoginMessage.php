@@ -13,9 +13,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Class AssertUserWrongCredentialsMessage
  */
-class AssertUserWrongCredentialsMessage extends AbstractConstraint
+class AssertUserFailedLoginMessage extends AbstractConstraint
 {
-    const INVALID_CREDENTIALS_MESSAGE = 'Please correct the user name or password.';
+    const FAILED_LOGIN_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Verify incorrect credentials message while login to admin
