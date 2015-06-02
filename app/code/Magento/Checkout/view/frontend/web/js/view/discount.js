@@ -14,8 +14,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/discount',
-                displayArea: 'totals'
+                template: 'Magento_Checkout/review/discount'
             },
         colspan: 3,
         style: '',

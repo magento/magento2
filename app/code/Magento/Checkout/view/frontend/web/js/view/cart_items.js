@@ -13,10 +13,8 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/cart_items',
-                displayArea: 'columns'
+                template: 'Magento_Checkout/review/cart_items'
             },
-            colspan: 3,
             getItemsCount: function() {
                 var totals = quote.getTotals()();
                 return totals.items.length;
