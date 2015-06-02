@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
- // @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
@@ -59,6 +58,9 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\Result\Json */
     protected $resultJson;
+
+    /** @var \Magento\Customer\Controller\Adminhtml\Index\Validate */
+    protected $controller;
 
     public function setUp()
     {
@@ -130,6 +132,21 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resultJsonFactory->expects($this->once())->method('create')->willReturn($this->resultJson);
+
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->controller = $objectHelper->getObject(
+            'Magento\Customer\Controller\Adminhtml\Index\Validate',
+            [
+                'request' => $this->request,
+                'response' => $this->response,
+                'customerDataFactory' => $this->customerDataFactory,
+                'formFactory' => $this->formFactory,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
+                'customerAccountManagement' => $this->customerAccountManagement,
+                'resultJsonFactory' => $this->resultJsonFactory,
+                'dataObjectHelper' => $this->dataObjectHelper,
+            ]
+        );
     }
 
     public function testExecute()
@@ -169,7 +186,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->getController()->execute();
+        $this->controller->execute();
     }
 
     public function testExecuteWithoutAddresses()
@@ -208,7 +225,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->getController()->execute();
+        $this->controller->execute();
     }
 
     public function testExecuteWithException()
@@ -254,24 +271,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($validationResult);
 
-        $this->getController()->execute();
-    }
-
-    public function getController()
-    {
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        return $objectHelper->getObject(
-            'Magento\Customer\Controller\Adminhtml\Index\Validate',
-            [
-                'request' => $this->request,
-                'response' => $this->response,
-                'customerDataFactory' => $this->customerDataFactory,
-                'formFactory' => $this->formFactory,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
-                'customerAccountManagement' => $this->customerAccountManagement,
-                'resultJsonFactory' => $this->resultJsonFactory,
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
-        );
+        $this->controller->execute();
     }
 }
