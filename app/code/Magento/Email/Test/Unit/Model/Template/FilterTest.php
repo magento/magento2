@@ -80,6 +80,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $this->escaper = $this->getMockBuilder('\Magento\Framework\Escaper')
             ->disableOriginalConstructor()
+            ->enableProxyingToOriginalMethods()
             ->getMock();
 
         $this->assetRepo = $this->getMockBuilder('\Magento\Framework\View\Asset\Repository')
@@ -137,6 +138,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransDirective($value, $expected)
     {
+        // todo: add an actual language pack translation
         $this->assertEquals($expected, $this->filter->filter($value));
     }
 
@@ -183,13 +185,13 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
 
             [   // auto-escaped var
-                '{{trans "Hello %adjective world!" adjective="<bad>"}}',
-                'Hello &gt;bad&lt; world!',
+                '{{trans "Hello %adjective world!" adjective="<b>bad</b>"}}',
+                'Hello &lt;b&gt;bad&lt;/b&gt; world!',
             ],
 
             [   // unescaped var
-                '{{trans "Hello %adjective world!" adjective="<bad>"|raw}}',
-                'Hello <bad> world!',
+                '{{trans "Hello %adjective world!" adjective="<b>bad</b>"|raw}}',
+                'Hello <b>bad</b> world!',
             ],
 
             [   // object.var

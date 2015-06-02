@@ -503,6 +503,52 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Trans directive for localized strings support
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function transDirective($construction)
+    {
+        $params = $this->_getTransParameters($construction[2]);
+        if (!isset($params['__trans'])) {
+            return '';
+        }
+
+        $text = $params['__trans'];
+        unset($params['__trans']);
+
+        foreach ($params as $key => $value) {
+            $params[$key] = $this->_escaper->escapeHtml($value);
+        }
+
+        // todo: run through translator
+        // todo: implement auto-escaping |modifier support
+
+        return (new \Magento\Framework\Phrase($text, $params))->render();
+    }
+
+    /**
+     * Return associative array of parameters, using
+     * __trans to identify the nameless text argument
+     *
+     * @param string $value raw parameters
+     * @return array
+     */
+    protected function _getTransParameters($value) {
+        if (preg_match('/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/s', $value, $matches) !== 1) {
+            return [];  // malformed directive
+        }
+
+        $params['__trans'] = stripslashes($matches[2]);
+        if (!empty($matches[3])) {
+            $params += $this->_getParameters($matches[3]); // todo: implement |modifier support
+        }
+
+        return $params;
+    }
+
+    /**
      * Var directive with modifiers support
      *
      * @param string[] $construction
