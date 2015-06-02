@@ -604,7 +604,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getModelMock([
             'load',
             'loadDefault',
-            'getProcessedTemplate'
+            'getProcessedTemplate',
+            'applyDesignConfig',
+            'cancelDesignConfig',
         ]);
         $model->setId($templateId);
         if (is_numeric($templateId)) {
@@ -616,6 +618,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ->method('loadDefault')
                 ->with($templateId);
         }
+
+        $model->expects($this->once())
+            ->method('applyDesignConfig')
+            ->will($this->returnValue(true));
+        $model->expects($this->once())
+            ->method('cancelDesignConfig')
+            ->will($this->returnValue(true));
 
         $vars = [ 'key' => 'value' ];
         $model->setVars($vars);
