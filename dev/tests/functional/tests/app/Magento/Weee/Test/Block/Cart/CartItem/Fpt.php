@@ -19,7 +19,7 @@ class Fpt extends Block
      *
      * @var string
      */
-    protected $price = './*[@class="price-excluding-tax"]/span';
+    protected $price = './/*[@class="price"]';
 
     /**
      * Selector for fpt
