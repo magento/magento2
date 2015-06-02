@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<td data-bind="attr: { 'data-th': $t(getColName())}" class="col subtotal">
+<div class="subtotal">
     <!-- ko if: isPriceInclTaxDisplayed() -->
-    <span class="price-including-tax" data-bind ="text: getValueInclTax($parent), attr:{'data-label': $t('Incl. Tax')}">
+    <span class="price-including-tax" data-bind ="text: getValueInclTax($parents[1]), attr:{'data-label': $t('Incl. Tax')}">
             <!-- ko foreach: getRegion('row_incl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
@@ -14,10 +14,10 @@
     <!-- /ko -->
 
     <!-- ko if: isPriceExclTaxDisplayed() -->
-    <span class="price-excluding-tax" data-bind ="text: getValueExclTax($parent), attr:{'data-label': $t('Excl. Tax')}">
+    <span class="price-excluding-tax" data-bind ="text: getValueExclTax($parents[1]), attr:{'data-label': $t('Excl. Tax')}">
             <!-- ko foreach: getRegion('row_excl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
     </span>
     <!-- /ko -->
-</td>
+</div>

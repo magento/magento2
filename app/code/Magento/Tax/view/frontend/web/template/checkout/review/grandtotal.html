@@ -6,8 +6,8 @@
 -->
 <!-- ko if: isTaxDisplayedInGrandTotal -->
 <tr class="grand totals excl">
-    <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
-        <strong data-bind="text: exclTaxLabel"></strong>
+    <th data-bind="attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+        <strong data-bind="text: $t(exclTaxLabel)"></strong>
     </th>
     <td data-bind="attr: {'style': style, 'data-th': exclTaxLabel }" class="amount">
         <strong data-bind="text: getGrandTotalExclTax()"></strong>
@@ -17,7 +17,7 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
 <tr class="grand totals incl">
-    <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
+    <th data-bind="attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
         <strong data-bind="text: $t(inclTaxLabel)"></strong>
     </th>
     <td data-bind="attr: {'style': style, 'data-th': $t(inclTaxLabel) }" class="amount">
@@ -27,7 +27,7 @@
 <!-- /ko -->
 <!-- ko if: !isTaxDisplayedInGrandTotal -->
 <tr class="grand totals">
-    <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
+    <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
         <strong data-bind="text: $t(getTitle())"></strong>
     </th>
     <td data-bind="attr: {'style':style, 'data-th': getTitle()}" class="amount">
@@ -37,7 +37,7 @@
 <!-- /ko -->
 <!-- ko if: isBaseGrandTotalDisplayNeeded() -->
 <tr class="totals charge">
-    <th class="mark" data-bind="text: $t(basicCurrencyMessage), attr: { 'colspan': getColspan }" scope="row"></th>
+    <th class="mark" data-bind="text: $t(basicCurrencyMessage), attr: { 'colspan': colspan }" scope="row"></th>
     <td class="amount" data-bind="text: getBaseValue(), attr: {'data-th': $t(basicCurrencyMessage)}"></td>
 </tr>
 <!-- /ko -->

@@ -6,7 +6,7 @@
 /*global alert*/
 define(
     [
-        'Magento_Checkout/js/view/review/item/columns/subtotal'
+        'Magento_Checkout/js/view/review/item/details/subtotal'
     ],
     function (subtotal) {
         "use strict";
@@ -14,9 +14,7 @@ define(
         return subtotal.extend({
             defaults: {
                 displayPriceMode: displayPriceMode,
-                ownClass: 'subtotal',
-                columnTitle: 'Subtotal',
-                template: 'Magento_Tax/checkout/review/item/columns/subtotal'
+                template: 'Magento_Tax/checkout/review/item/details/subtotal'
             },
             isPriceInclTaxDisplayed: function() {
                 return 'both' == displayPriceMode || 'including' == displayPriceMode;
