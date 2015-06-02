@@ -169,9 +169,20 @@
                                             <item name="columns" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart_items</item>
                                                 <item name="children" xsi:type="array">
-                                                    <item name="thumbnail" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/thumbnail</item></item>
-                                                    <item name="details" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/details</item></item>
-                                                    <item name="subtotal" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/subtotal</item></item>
+                                                    <item name="details" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="thumbnail" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details/thumbnail</item>
+                                                                <item name="displayArea" xsi:type="string">before_details</item>
+                                                            </item>
+                                                            <item name="subtotal" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details/subtotal</item>
+                                                                <item name="displayArea" xsi:type="string">after_details</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+
                                                 </item>
                                             </item>
                                             <item name="itemsAfter" xsi:type="array">

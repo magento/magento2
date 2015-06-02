@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<td class="col item" data-th="Product Name" data-bind="attr: {'colspan': colspan}"><strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
-    Qty: <span data-bind="text: $parent.qty"></span>
-    <!-- ko foreach: elems() -->
+<div data-th="Product Name">
+    <!-- ko foreach: getRegion('before_details') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
+    <strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
+    Qty: <span data-bind="text: $parent.qty"></span>
 
     <!-- ko if: (JSON.parse($parent.options).length > 0)-->
     <dl class="item-options">
@@ -23,4 +24,7 @@
         <!-- /ko -->
     </dl>
     <!-- /ko -->
-</td>
+    <!-- ko foreach: getRegion('after_details') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</div>

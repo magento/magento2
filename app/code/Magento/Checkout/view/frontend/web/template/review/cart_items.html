@@ -4,13 +4,17 @@
  * See COPYING.txt for license details.
  */
 -->
-<tr>
-    <td data-bind="attr: {'colspan': colspan}"><span data-bind="text: getItems().length"></span> Items in cart</td>
-</tr>
-<!-- ko foreach: getItems() -->
-<tr>
-    <!-- ko foreach: $parent.elems() -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
+<div data-collapsible="true">
+<div class="title">
+    <strong role="heading" data-bind="attr: {'colspan': colspan}"><span data-bind="text: getItems().length"></span> Items in cart</strong>
+</div>
+    <div class="content">
+    <!-- ko foreach: getItems() -->
+        <div class="cart_item">
+        <!-- ko foreach: $parent.elems() -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+        </div>
     <!-- /ko -->
-</tr>
-<!-- /ko -->
+    </div>
+</div>

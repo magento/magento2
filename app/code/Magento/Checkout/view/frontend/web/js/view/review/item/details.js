@@ -6,20 +6,25 @@
 /*global alert*/
 define(
     [
-        '../column'
+        'uiComponent',
+        '../../../model/quote',
+        'Magento_Catalog/js/price-utils'
     ],
-    function (column) {
+    function (Component, quote, priceUtils) {
         "use strict";
-        return column.extend({
+        return Component.extend({
             defaults: {
                 ownClass: 'name',
                 columnTitle: 'Product Name',
-                template: 'Magento_Checkout/review/item/columns/details'
+                template: 'Magento_Checkout/review/item/details'
             },
-            colspan: 2,
             getValue: function(quoteItem) {
                 return quoteItem.name;
+            },
+            getFormattedPrice: function (price) {
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
+
         });
     }
 );
