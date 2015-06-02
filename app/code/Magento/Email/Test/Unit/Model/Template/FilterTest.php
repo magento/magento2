@@ -134,11 +134,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests proper parsing of the {{trans ...}} directive used in email templates
      *
-     * @dataProvider transDirectiveScenarios
+     * @dataProvider transDirectiveDataProvider
+     * @param $value
+     * @param $expected
+     * @param array $variables
      */
-    public function testTransDirective($value, $expected)
+    public function testTransDirective($value, $expected, array $variables = [])
     {
-        // todo: add an actual language pack translation
+        $this->filter->setVariables($variables);
         $this->assertEquals($expected, $this->filter->filter($value));
     }
 
@@ -147,7 +150,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function transDirectiveScenarios() {
+    public function transDirectiveDataProvider() {
         return [
             [   // empty string
                 '{{trans}}',
@@ -194,9 +197,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'Hello <em>bad</em> <strong>world</strong>!',
             ],
 
-            [   // object.var
-                '{{trans "Hello %adjective world!" adjective="$world.personality"}}',
+            [   // variable replacement
+                '{{trans "Hello %adjective world!" adjective="$mood"}}',
                 'Hello happy world!',
+                [
+                    'mood' => 'happy'
+                ],
             ],
         ];
     }
