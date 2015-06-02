@@ -27,7 +27,7 @@
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
         <button type="button" aria-haspopup="true" class="action action-show-popup" data-open-dialog="co-shipping-form">
-            <span data-bind="click: showFormPopUp, text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('New Address')"></span>
+            <span data-bind="click: showFormPopUp, text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('+ New Address')"></span>
         </button>
         <div data-bind="fadeVisible: isFormPopUpVisible">
             <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">

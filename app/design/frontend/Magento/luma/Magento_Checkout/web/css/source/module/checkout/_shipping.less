@@ -12,11 +12,15 @@
 @checkout-shipping-item-icon__content: @icon-checkmark;
 
 @checkout-shipping-item__border: 2px solid transparent;
-@checkout-shipping-item__line-height: 21px;
-@checkout-shipping-item__margin: 0 2% 2% 0;
-@checkout-shipping-item__padding: @indent__base @indent__l @indent__base @indent__base;
-@checkout-shipping-item__width: 31%;
+@checkout-shipping-item__line-height: 30px;
+@checkout-shipping-item__margin: 0 0 @indent__base;
+@checkout-shipping-item__padding: @indent__base (@indent__l + 5px) @indent__base @indent__base;
+@checkout-shipping-item__transition: .3s border-color;
+@checkout-shipping-item__width: 100/3%;
 @checkout-shipping-item__active__border-color: @color-orange-red1;
+
+@checkout-shipping-item-before__border-color: @color-gray80;
+@checkout-shipping-item-before__height: calc(~"100% - 20px");
 
 //
 //  Common
@@ -41,15 +45,15 @@
             .css(line-height, @checkout-shipping-item__line-height);
             .css(margin, @checkout-shipping-item__margin);
             .css(padding, @checkout-shipping-item__padding);
+            .css(transition, @checkout-shipping-item__transition);
             .css(width, @checkout-shipping-item__width);
             display: inline-block;
             position: relative;
-            transition: all .3s;
             vertical-align: top;
             word-wrap: break-word;
 
             .action-select-shipping-item {
-                .css(margin, @indent__base 0);
+                .css(margin, @indent__base 0 0);
                 float: right;
             }
 
@@ -63,6 +67,7 @@
                     .css(font-family, @icons__font-name);
                     font-size: 19px;
                     height: 27px;
+                    line-height: 21px;
                     padding-top: 2px;
                     position: absolute;
                     right: 0;
@@ -74,6 +79,32 @@
                 .select-item-button {
                     visibility: hidden;
                 }
+
+                &:before {
+                    &:extend(.abs-no-display all);
+                }
+
+                + .shipping-address-item {
+                    &:before {
+                        &:extend(.abs-no-display all);
+                    }
+                }
+            }
+
+            &:before {
+                .css(background, @checkout-shipping-item-before__border-color);
+                .css(height, @checkout-shipping-item-before__height);
+                content: '';
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 1px;
+            }
+
+            &:nth-child(3n+1) {
+                &:before {
+                    &:extend(.abs-no-display all);
+                }
             }
         }
 
@@ -84,7 +115,7 @@
         }
 
         .action-show-popup {
-            .css(margin, @indent__base 0);
+            .css(margin, 0 0 @indent__base);
 
         }
     }
