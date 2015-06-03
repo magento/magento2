@@ -22,11 +22,8 @@
 User-agent: *
 Disallow: /index.php/
 Disallow: /*?
-Disallow: /*.js$
-Disallow: /*.css$
 Disallow: /checkout/
 Disallow: /app/
-Disallow: /js/
 Disallow: /lib/
 Disallow: /*.php$
 Disallow: /pkginfo/
