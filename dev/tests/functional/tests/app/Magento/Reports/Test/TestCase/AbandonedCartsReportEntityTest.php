@@ -36,6 +36,7 @@ class AbandonedCartsReportEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -86,7 +87,6 @@ class AbandonedCartsReportEntityTest extends Injectable
      */
     public function test($products, Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-31737');
         // Precondition
         $products = $this->createProducts($products);
         $customer->persist();
