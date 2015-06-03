@@ -24,6 +24,7 @@ use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Magento\Setup\Model\BackupRollback;
 use Magento\Setup\Model\ConsoleLogger;
 
@@ -214,11 +215,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$dialog->askConfirmation(
-            $output,
-            '<question>You are about to remove code and database tables. Are you sure?[y/N]</question>'
-        ) && $input->isInteractive()) {
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion(
+            'You are about to remove code and database tables. Are you sure?[y/N]',
+            false
+        );
+        if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
             return;
         }
 
@@ -250,11 +252,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 $this->removeData($modules, $output, $dataBackupOption);
             } else {
                 if (!empty($this->collector->collectUninstall())) {
-                    if ($dialog->askConfirmation(
-                        $output,
-                        '<question>You are about to remove a module(s) that might have database data. '
-                        . 'Do you want to remove the data from database?[y/N]</question>'
-                    ) || !$input->isInteractive()) {
+                    $question = new ConfirmationQuestion(
+                        'You are about to remove a module(s) that might have database data. '
+                        . 'Do you want to remove the data from database?[y/N]',
+                        false
+                    );
+                    if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
                         $this->removeData($modules, $output, $dataBackupOption);
                     }
                 } else {
