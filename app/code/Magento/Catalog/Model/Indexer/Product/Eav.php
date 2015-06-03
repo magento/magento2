@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 class Eav implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
+    use \Magento\Indexer\Model\IndexerTrait;
+
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row
      */
