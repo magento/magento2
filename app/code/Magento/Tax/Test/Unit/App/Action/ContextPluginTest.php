@@ -23,6 +23,20 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected $taxCalculationMock;
 
     /**
+     * Module manager
+     *
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManagerMock;
+
+    /**
+     * Cache config
+     *
+     * @var \Magento\PageCache\Model\Config
+     */
+    private $cacheConfigMock;
+
+    /**
      * @var \Magento\Tax\Model\App\Action\ContextPlugin
      */
     protected $contextPlugin;
@@ -50,20 +64,39 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
+        $this->moduleManagerMock = $this->getMockBuilder('Magento\Framework\Module\Manager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cacheConfigMock = $this->getMockBuilder('Magento\PageCache\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->contextPlugin = $this->objectManager->getObject(
             'Magento\Tax\Model\App\Action\ContextPlugin',
             [
                 'customerSession' => $this->customerSessionMock,
                 'httpContext' => $this->httpContextMock,
                 'calculation' => $this->taxCalculationMock,
-                'taxHelper' => $this->taxHelperMock
+                'taxHelper' => $this->taxHelperMock,
+                'moduleManager' => $this->moduleManagerMock,
+                'cacheConfig' => $this->cacheConfigMock
             ]
         );
     }
 
     public function testAroundDispatch()
     {
-        $this->taxHelperMock->expects($this->once())
+        $this->moduleManagerMock->expects($this->any())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->willReturn(true);
+
+        $this->cacheConfigMock->expects($this->any())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->taxHelperMock->expects($this->any())
             ->method('isCatalogPriceDisplayAffectedByTax')
             ->willReturn(true);
 
