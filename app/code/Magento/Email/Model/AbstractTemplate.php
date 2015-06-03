@@ -594,10 +594,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function applyDesignConfig()
     {
-        if (
-            $this->getIsChildTemplate()
-            || $this->hasDesignBeenApplied
-        ) {
+        if ($this->getIsChildTemplate() || $this->hasDesignBeenApplied) {
             return false;
         }
         $this->hasDesignBeenApplied = true;
@@ -607,13 +604,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
         if ($storeId !== null) {
-            $this->_appEmulation->startEnvironmentEmulation(
-                $storeId,
-                $area,
-                // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
-                // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
-                true
-            );
+            // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
+            // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
+            $this->_appEmulation->startEnvironmentEmulation($storeId, $area, true);
         }
         return true;
     }
