@@ -1,1 +1,5 @@
-This file is to create a vendor directory for testing
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ This file is to create a vendor directory for testing
