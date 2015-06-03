@@ -312,7 +312,7 @@ class Observer
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
                 . '<%% if (data.finalPrice.value) { %%>'
-                . ' <%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
+                . ' +<%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
                 . '<%% } %%>',
                 __('Excl. tax:')
             );
@@ -320,7 +320,7 @@ class Observer
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
                 . '<%% if (data.basePrice.value) { %%>'
-                . ' <%%= data.basePrice.formatted %%>'
+                . ' +<%%= data.basePrice.formatted %%>'
                 . '<%% } %%>'
             );
         }

@@ -9,6 +9,22 @@
     <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure" />
     <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Config\Model\Resource\Config" />
+    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
+        <arguments>
+            <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
+            <argument name="compilerAttribute" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute</argument>
+            <argument name="compilerCdata" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Cdata</argument>
+            <argument name="compilerComment" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Comment</argument>
+            <argument name="elementCompilers" xsi:type="array">
+                <item name="include" xsi:type="object">Magento\Config\Model\Config\Compiler\IncludeElement</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Model\Config\Structure\Reader">
+        <arguments>
+            <argument name="compiler" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Controller\Adminhtml\System\Config\Save">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
