@@ -61,7 +61,8 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressManagement = $this->getMock('\Magento\Quote\Api\ShippingAddressManagementInterface');
         $this->paymentMethodManagement = $this->getMock('\Magento\Quote\Api\PaymentMethodManagementInterface');
         $this->shippingMethodManagement = $this->getMock('\Magento\Quote\Api\ShippingMethodManagementInterface');
-        $this->addressDetailsFactory = $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', [], [], '', false);
+        $this->addressDetailsFactory =
+            $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', ['create'], [], '', false);
         $this->dataProcessor = $this->getMock('\Magento\Quote\Model\AddressAdditionalDataProcessor', [], [], '', false);
         $this->quoteRepository = $this->getMock(
             '\Magento\Quote\Model\QuoteRepository',
