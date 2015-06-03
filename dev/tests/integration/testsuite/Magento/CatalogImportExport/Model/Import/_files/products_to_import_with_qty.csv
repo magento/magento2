@@ -1,2 +1,2 @@
-sku,_store,name,price,qty,_type,_attribute_set,manage_stock
+sku,store_view_code,name,price,qty,product_type,attribute_set_code,manage_stock
 simple1,,"simple 1",25,0.0000,simple,Default,1
