@@ -16,16 +16,22 @@ use Magento\Framework\Filesystem\DriverPool;
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
     /**
+     * Temp directory.
+     *
      * @var string
      */
     protected $_tmpDir = '';
 
     /**
+     * Destination directory.
+     *
      * @var string
      */
     protected $_destDir = '';
 
     /**
+     * All mime types.
+     *
      * @var array
      */
     protected $_allowedMimeTypes = [
@@ -38,11 +44,15 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     const DEFAULT_FILE_TYPE = 'application/octet-stream';
 
     /**
+     * Image factory.
+     *
      * @var \Magento\Framework\Image\AdapterFactory
      */
     protected $_imageFactory;
 
     /**
+     * Validator.
+     *
      * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_validator;
