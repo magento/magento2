@@ -208,7 +208,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected $_scopeConfig;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
@@ -219,9 +219,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Logger $logger
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -230,6 +232,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -245,7 +248,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         );
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
-        $this->logger = $context->getLogger();
+        $this->logger = $logger;
         $this->initializeData($data);
     }
 
@@ -880,14 +883,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Log debug data to file
      *
-     * @param mixed $debugData
+     * @param array $debugData
      * @return void
      */
     protected function _debug($debugData)
     {
-        if ($this->getDebugFlag()) {
-            $this->logger->debug(var_export($debugData, true));
-        }
+        $this->logger->debug($debugData, $this->getDebugReplacePrivateDataKeys(), $this->getDebugFlag());
     }
 
     /**
@@ -933,5 +934,15 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentMethodExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Return replace keys for debug data
+     *
+     * @return array
+     */
+    public function getDebugReplacePrivateDataKeys()
+    {
+        return (array) $this->_debugReplacePrivateDataKeys;
     }
 }
