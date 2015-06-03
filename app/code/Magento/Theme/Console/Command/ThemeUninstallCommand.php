@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\BackupRollback;
-use Magento\Setup\Model\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -44,7 +43,7 @@ class ThemeUninstallCommand extends Command
     private $maintenanceMode;
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -98,7 +97,7 @@ class ThemeUninstallCommand extends Command
         $this->addArgument(
             self::INPUT_KEY_THEMES,
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-            'Name of the theme'
+            'Path of the theme'
         );
         parent::configure();
     }
