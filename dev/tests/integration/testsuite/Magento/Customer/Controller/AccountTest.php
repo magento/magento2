@@ -194,10 +194,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $this->assertSessionMessages(
             $this->equalTo([
-                'Account confirmation is required. Please, check your email for the confirmation link. ' .
-                'To resend the confirmation email please ' .
-                '<a href="http://localhost/index.php/customer/account/confirmation/email/' .
-                $email . '/">click here</a>.',
+                'You must confirm your account. Please check your e-mail for the confirmation link or <a href="'
+                . $email . '">click here</a> for a new link.',
             ]),
             MessageInterface::TYPE_SUCCESS
         );

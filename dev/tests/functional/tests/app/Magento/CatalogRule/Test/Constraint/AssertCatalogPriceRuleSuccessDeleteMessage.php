@@ -14,10 +14,10 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCatalogPriceRuleSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_DELETE_MESSAGE = 'The rule has been deleted.';
+    const SUCCESS_DELETE_MESSAGE = 'You deleted the rule.';
 
     /**
-     * Assert that message "The rule has been deleted." is appeared on Catalog Price Rules page.
+     * Assert that message "You deleted the rule." is appeared on Catalog Price Rules page.
      *
      * @param CatalogRuleIndex $pageCatalogRuleIndex
      * @return void

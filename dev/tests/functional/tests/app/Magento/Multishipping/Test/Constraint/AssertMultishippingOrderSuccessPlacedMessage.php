@@ -21,7 +21,7 @@ class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
     /**
      * Expected success message
      */
-    const SUCCESS_MESSAGE = 'Your order has been received.';
+    const SUCCESS_MESSAGE = 'We received your order!';
 
     /**
      * Assert that success message is correct.

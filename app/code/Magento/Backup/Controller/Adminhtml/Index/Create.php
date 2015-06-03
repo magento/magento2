@@ -60,8 +60,8 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
                         __(
                             'You need more permissions to activate maintenance mode right now.'
                         ) . ' ' . __(
-                            'To continue with the backup, you need to either deselect ' .
-                            '"Put store on the maintenance mode" or update your permissions.'
+                            'To create the backup, please deselect '
+                            . '"Put store into maintenance mode" or update your permissions.'
                         )
                     );
                     $backupManager->setErrorMessage(

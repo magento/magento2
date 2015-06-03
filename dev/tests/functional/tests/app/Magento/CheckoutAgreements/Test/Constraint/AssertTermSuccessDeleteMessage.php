@@ -18,7 +18,7 @@ class AssertTermSuccessDeleteMessage extends AbstractConstraint
     /**
      * Success terms and conditions delete message
      */
-    const SUCCESS_DELETE_MESSAGE = 'The condition has been deleted.';
+    const SUCCESS_DELETE_MESSAGE = 'You deleted the condition.';
 
     /**
      * Assert that after deleting Term successful delete message appears.

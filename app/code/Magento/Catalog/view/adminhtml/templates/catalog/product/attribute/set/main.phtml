@@ -27,7 +27,7 @@ require([
         </div>
         <?php if (!$block->getIsReadOnly()): ?>
         <?php echo $block->getAddGroupButton() ?>&nbsp;<?php echo $block->getDeleteGroupButton() ?>
-        <p class="note-block"><?php echo __('Double click on a group to rename it') ?></p>
+        <p class="note-block"><?php echo __('Double click on a group to rename it.') ?></p>
         <?php endif; ?>
 
         <?php echo $block->getSetsFilterHtml() ?>
@@ -322,7 +322,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                     },
 
                     failure : function(o) {
-                        alert('<?php echo $block->escapeJsQuote(__('We\'re unable to complete this request.')) ?>');
+                        alert('<?php echo $block->escapeJsQuote(__('Sorry, we\'re unable to complete this request.')) ?>');
                     },
 
                     groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
@@ -337,7 +337,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
 
                     rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                         if (node.attributes.is_user_defined == 0) {
-                            alert('<?php echo $block->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
                             return false;
                         } else {
                             return true;
@@ -351,7 +351,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                         }
 
                         if (node.attributes.is_unassignable == 0) {
-                            alert('<?php echo $block->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
                             return false;
                         } else {
                             return true;

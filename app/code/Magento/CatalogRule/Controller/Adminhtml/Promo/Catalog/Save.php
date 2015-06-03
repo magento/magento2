@@ -57,7 +57,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 
                 $model->save();
 
-                $this->messageManager->addSuccess(__('The rule has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the rule.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData(false);
                 if ($this->getRequest()->getParam('auto_apply')) {
                     $this->getRequest()->setParam('rule_id', $model->getId());
@@ -75,7 +75,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('An error occurred while saving the rule data. Please review the log and try again.')
+                    __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);

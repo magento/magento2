@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCmsBlockDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_DELETE_MESSAGE = 'The block has been deleted.';
+    const SUCCESS_DELETE_MESSAGE = 'You deleted the block.';
 
     /**
      * Assert that after delete CMS block successful message appears.

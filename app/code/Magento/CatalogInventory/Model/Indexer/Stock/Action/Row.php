@@ -27,7 +27,7 @@ class Row extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
     {
         if (!isset($id) || empty($id)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Could not rebuild index for undefined product')
+                __('We can\'t rebuild the index for an undefined product.')
             );
         }
         try {

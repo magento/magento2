@@ -21,7 +21,7 @@ class DeleteTest extends \Magento\Backend\Utility\Controller
 
         $this->assertNull($this->getAttributeSetByName('empty_attribute_set'));
         $this->assertSessionMessages(
-            $this->equalTo(['The attribute set has been removed.']),
+            $this->equalTo(['The product template has been removed.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('catalog/product_set/index/'));

@@ -90,8 +90,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
             $rewrite = $this->urlFinder->findOneByData($data);
             if (!$rewrite) {
                 $message = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
-                    ? __('Chosen product does not associated with the chosen store or category.')
-                    : __('Chosen category does not associated with the chosen store.');
+                    ? __('The product you chose is not associated with the selected store or category.')
+                    : __('The category you chose is not associated with the selected store.');
                 throw new LocalizedException($message);
             }
             $targetPath = $rewrite->getRequestPath();
@@ -166,7 +166,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 $this->messageManager->addError($e->getMessage());
                 $session->setUrlRewriteData($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('An error occurred while saving URL Rewrite.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving URL Rewrite.'));
                 $session->setUrlRewriteData($data);
             }
         }

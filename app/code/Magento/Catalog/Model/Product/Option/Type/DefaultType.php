@@ -240,7 +240,7 @@ class DefaultType extends \Magento\Framework\Object
             return $this->getUserValue();
         }
         throw new LocalizedException(
-            __('We couldn\'t add the product to the cart because of an option validation issue.')
+            __('We can\'t add the product to the cart because of an option validation issue.')
         );
     }
 

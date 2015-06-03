@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCartPriceRuleSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The rule has been saved.';
+    const SUCCESS_MESSAGE = 'You saved the rule.';
 
     /**
      * Assert that success message is displayed after sales rule save.

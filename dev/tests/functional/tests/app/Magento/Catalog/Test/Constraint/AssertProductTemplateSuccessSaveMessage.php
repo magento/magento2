@@ -18,7 +18,7 @@ class AssertProductTemplateSuccessSaveMessage extends AbstractConstraint
     /**
      * Text value to be checked
      */
-    const SUCCESS_MESSAGE = 'You saved the attribute set.';
+    const SUCCESS_MESSAGE = 'You saved the product template.';
 
     /**
      * Assert that after save a product template "You saved the attribute set." successful message appears

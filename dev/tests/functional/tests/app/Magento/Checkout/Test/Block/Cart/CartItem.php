@@ -36,7 +36,7 @@ class CartItem extends AbstractCartItem
     protected $bundleOptions = './/dl[contains(@class, "item-options")]/dd[%d]/span[@class="price"][%d]';
 
     /**
-     * 'Move to Wishlist' button
+     * Locator value for "Move to Wish List" button.
      *
      * @var string
      */
@@ -249,7 +249,7 @@ class CartItem extends AbstractCartItem
     }
 
     /**
-     * Click on move to wishlist button
+     * Click "Move to Wish List".
      *
      * @return void
      */

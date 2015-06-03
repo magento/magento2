@@ -110,7 +110,7 @@ class QuantityValidator
                     'stock',
                     'cataloginventory',
                     \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    __('Some of the products are currently out of stock.')
+                    __('Some of the products are out of stock.')
                 );
                 return;
             } else {

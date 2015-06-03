@@ -21,11 +21,11 @@ define([
         ], function ($) {
             $('[data-role=compare-products-sidebar]').mage('compareItems', {
                 "removeConfirmMessage": $.mage.__(
-                    "Are you sure you would like to remove this item from the compare products?"
+                    "Are you sure you want to remove this item from your Compare Products list?"
                 ),
                 "removeSelector": "#compare-items a.action.delete",
                 "clearAllConfirmMessage": $.mage.__(
-                    "Are you sure you would like to remove all products from your comparison?"
+                    "Are you sure you want to remove all items from your Compare Products list?"
                 ),
                 "clearAllSelector": "#compare-clear-all"
             });

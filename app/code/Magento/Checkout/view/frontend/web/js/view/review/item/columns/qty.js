@@ -13,7 +13,7 @@ define(
         return column.extend({
             defaults: {
                 ownClass: 'qty',
-                columnTitle: 'Qty',
+                columnTitle: 'Quantity',
                 template: 'Magento_Checkout/review/item/columns/qty'
             },
             getValue: function(quoteItem) {

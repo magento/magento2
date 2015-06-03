@@ -18,7 +18,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
      */
     public function execute()
     {
-        $errorMessage = __('Unable to apply rules.');
+        $errorMessage = __('We can\'t apply the rules.');
         /** @var Job $ruleJob */
         $ruleJob = $this->_objectManager->get('Magento\CatalogRule\Model\Rule\Job');
         $ruleJob->applyAll();
