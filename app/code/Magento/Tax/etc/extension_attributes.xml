@@ -10,5 +10,3 @@
         <attribute code="tax_grandtotal_details" type="Magento\Tax\Api\Data\GrandTotalDetailsInterface[]" />
     </extension_attributes>
 </config>
-
-
