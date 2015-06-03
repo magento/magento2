@@ -15,7 +15,7 @@ define(
                         'required': true,
                         'min-length': 3
                     },
-                    'countryId': {
+                    'country_id': {
                         'required': true
                     }
                 };
