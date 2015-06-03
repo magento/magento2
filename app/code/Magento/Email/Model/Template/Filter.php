@@ -505,7 +505,8 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * Trans directive for localized strings support
      *
-     * Example {{trans "string to translate"}}
+     * Example 1: {{trans "string to translate"}}
+     * Example 2: {{trans "string to %var" var="$variable"}}
      *
      * The |escape modifier is applied by default, use |raw to override
      *
@@ -562,6 +563,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
+        // todo: @davidalger: apply default 'escape' modifier, updating email templates to use |raw where needed
         list($directive, $modifiers) = $this->explodeModifiers($construction[2]);
         if ($modifiers) {
             return $this->applyModifiers($this->_getVariable($directive, ''), $modifiers);
