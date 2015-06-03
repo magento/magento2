@@ -106,8 +106,12 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->setMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
+        $extensionAttributesFactory->expects($this->any())
+            ->method('extractExtensionAttributes')
+            ->willReturnArgument(1);
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
