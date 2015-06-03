@@ -9,6 +9,11 @@ namespace Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions;
 
 use Magento\Backend\Block\Widget\Tabs as TabsWidget;
 
+/**
+ * Integration activation tabs.
+ *
+ * @codeCoverageIgnore
+ */
 class Tabs extends TabsWidget
 {
     /**

@@ -157,14 +157,20 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function stepAddressFormat($billingAddress)
+    public function stepAddressFormat($billingAddress, $isVirtual = false)
     {
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
             ->will($this->returnValue($billingAddress));
-        $this->orderMock->expects($this->any())
-            ->method('getShippingAddress')
-            ->will($this->returnValue($billingAddress));
+        if ($isVirtual) {
+            $this->orderMock->expects($this->never())
+                ->method('getShippingAddress');
+        } else {
+            $this->orderMock->expects($this->once())
+                ->method('getShippingAddress')
+                ->will($this->returnValue($billingAddress));
+        }
+
     }
 
     public function stepSendWithoutSendCopy()

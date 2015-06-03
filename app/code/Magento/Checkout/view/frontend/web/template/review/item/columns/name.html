@@ -1,0 +1,25 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t(item.name)"></strong>
+    <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: (JSON.parse(item.options).length > 0)-->
+    <dl class="item-options">
+        <!--ko foreach: JSON.parse(item.options)-->
+        <dt data-bind="text: $t(label)"></dt>
+            <!-- ko if: ($data.full_view)-->
+            <dd data-bind="html: full_view"></dd>
+            <!-- /ko -->
+            <!-- ko ifnot: ($data.full_view)-->
+            <dd data-bind="html: value"></dd>
+            <!-- /ko -->
+        <!-- /ko -->
+    </dl>
+    <!-- /ko -->
+</td>

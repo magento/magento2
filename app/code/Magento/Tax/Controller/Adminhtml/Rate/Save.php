@@ -32,7 +32,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
             }
 
             try {
-                $taxData = $this->populateTaxRateData($ratePost);
+                $taxData = $this->_taxRateConverter->populateTaxRateData($ratePost);
                 $this->_taxRateRepository->save($taxData);
 
                 $this->messageManager->addSuccess(__('The tax rate has been saved.'));

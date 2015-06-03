@@ -6,6 +6,13 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Reflection\MethodsMap;
+
+/**
+ * Data object helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectHelper
 {
     /**
@@ -29,21 +36,29 @@ class DataObjectHelper
     protected $extensionFactory;
 
     /**
+     * @var MethodsMap
+     */
+    protected $methodsMapProcessor;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param MethodsMap $methodsMapProcessor
      */
     public function __construct(
         ObjectFactory $objectFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        MethodsMap $methodsMapProcessor
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
         $this->typeProcessor = $typeProcessor;
         $this->extensionFactory = $extensionFactory;
+        $this->methodsMapProcessor = $methodsMapProcessor;
     }
 
     /**
@@ -128,7 +143,7 @@ class DataObjectHelper
         if ($interfaceName == null) {
             $interfaceName = get_class($dataObject);
         }
-        $returnType = $this->objectProcessor->getMethodReturnType($interfaceName, $getterMethodName);
+        $returnType = $this->methodsMapProcessor->getMethodReturnType($interfaceName, $getterMethodName);
         if ($this->typeProcessor->isTypeSimple($returnType)) {
             $dataObject->$methodName($value);
             return $this;
@@ -161,7 +176,7 @@ class DataObjectHelper
     /**
      * Merges second object onto the first
      *
-     * @param string                  $interfaceName
+     * @param string $interfaceName
      * @param mixed $firstDataObject
      * @param mixed $secondDataObject
      * @return $this
@@ -178,5 +193,26 @@ class DataObjectHelper
         $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $interfaceName);
         $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);
         return $this;
+    }
+
+    /**
+     * Filter attribute value objects for a provided data interface type from an array of custom attribute value objects
+     *
+     * @param AttributeValue[] $attributeValues Array of custom attribute
+     * @param string $type Data interface type
+     * @return AttributeValue[]
+     */
+    public function getCustomAttributeValueByType(array $attributeValues, $type)
+    {
+        $attributeValueArray = [];
+        if (empty($attributeValues)) {
+            return $attributeValueArray;
+        }
+        foreach ($attributeValues as $attributeValue) {
+            if ($attributeValue->getValue() instanceof $type) {
+                $attributeValueArray[] = $attributeValue;
+            }
+        }
+        return $attributeValueArray;
     }
 }

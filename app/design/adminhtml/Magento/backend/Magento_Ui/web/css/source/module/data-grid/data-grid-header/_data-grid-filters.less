@@ -26,6 +26,7 @@
 @data-grid-filters-action__active__border-color: @color-gray80;
 @data-grid-filters-action__active__color: @color-phoenix;
 
+@data-grid-filters-current__margin-borrom: .9rem;
 @data-grid-filters-current-action-remove__background-color: @color-gray68;
 @data-grid-filters-current-action-remove__hover__background-color: darken(@data-grid-filters-current-action-remove__background-color, 10%);
 @data-grid-filters-current-action-remove__size: 1.6rem;
@@ -144,7 +145,7 @@
     clear: both;
     font-size: @data-grid-filters__font-size;
     max-height: 0;
-    transition: opacity .3s ease, padding .3s ease;
+    transition: opacity .3s ease;
     &._show {
         .appearing__on();
         border-bottom: 1px solid @data-grid-filters-action__active__border-color;
@@ -255,21 +256,30 @@
 
 //  Current chips
 .admin__data-grid-filters-current {
-    border-bottom: 1px solid @data-grid-filters-action__active__border-color;
-    border-top: 1px solid @data-grid-filters-action__active__border-color;
+    border-bottom: .1rem solid @data-grid-filters-action__active__border-color;
+    border-top: .1rem solid @data-grid-filters-action__active__border-color;
     display: none;
     font-size: @data-grid-filters__font-size;
-    margin-bottom: .9rem;
+    margin-bottom: @data-grid-filters-current__margin-borrom;
     padding-bottom: .8rem;
     padding-top: 1.1rem;
     width: 100%;
     &._show {
         display: table;
+        position: relative;
+        top: -1px;
+        z-index: 3;
+        + .admin__data-grid-filters-wrap {
+            &._show {
+                margin-top: -(@data-grid-filters-current__margin-borrom + .1rem);
+            }
+        }
     }
 }
 
 .admin__current-filters-list-wrap,
-.admin__current-filters-title-wrap {
+.admin__current-filters-title-wrap,
+.admin__current-filters-actions-wrap {
     display: table-cell;
     vertical-align: top;
 }
@@ -316,5 +326,14 @@
         > span {
             .hidden();
         }
+    }
+}
+
+.admin__current-filters-actions-wrap {
+    .action-clear {
+        border: none;
+        padding-bottom: 0;
+        padding-top: 0;
+        white-space: nowrap;
     }
 }

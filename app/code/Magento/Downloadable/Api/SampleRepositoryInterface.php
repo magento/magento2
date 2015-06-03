@@ -5,31 +5,49 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Downloadable\Api\Data\SampleContentInterface;
+use Magento\Downloadable\Api\Data\SampleInterface;
 
+/**
+ * Interface SampleRepositoryInterface
+ * @api
+ */
 interface SampleRepositoryInterface
 {
     /**
-     * Update downloadable sample of the given product (sample type and its resource cannot be changed)
+     * List of samples for downloadable product
      *
-     * @param string $productSku
-     * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
-     * @param int $sampleId
+     * @param string $sku
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getList($sku);
+
+    /**
+     * List of links with associated samples
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product);
+
+    /**
+     * Update downloadable sample of the given product
+     *
+     * @param string $sku
+     * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
      */
     public function save(
-        $productSku,
-        SampleContentInterface $sampleContent,
-        $sampleId = null,
+        $sku,
+        SampleInterface $sample,
         $isGlobalScopeContent = false
     );
 
     /**
      * Delete downloadable sample
      *
-     * @param int $sampleId
+     * @param int $id
      * @return bool
      */
-    public function delete($sampleId);
+    public function delete($id);
 }

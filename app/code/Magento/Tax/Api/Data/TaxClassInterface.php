@@ -7,17 +7,12 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Tax class interface.
+ * @api
+ */
 interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     *
-     * Tax class field key.
-     */
-    const KEY_ID = 'class_id';
-    const KEY_NAME = 'class_name';
-    const KEY_TYPE = 'class_type';
-    /**#@-*/
-
     /**
      * Get tax class ID.
      *

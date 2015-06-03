@@ -26,7 +26,7 @@ class Generic implements LayoutInterface
         $children = [];
         $context = $component->getContext();
         $this->addChildren($children, $component, $component->getName());
-        $dataSources = $component->getDataSourceData();
+        $dataSources = $component->getContext()->getDataSourceData($component);
         $configuration = [
             'types' => $context->getComponentsDefinitions(),
             'components' => [
@@ -62,10 +62,10 @@ class Generic implements LayoutInterface
                 self::addChildren($childrenNode, $child, $child->getComponentName());
             }
         }
-        /** @var JsConfigInterface $component */
-        $config = $component->getJsConfig();
+
+        $config = $component->getConfiguration();
         if (is_string($config)) {
-            $topNode[] = $config;
+            $topNode[$config] = $config;
         } else {
             $nodeData = [
                 'type' => $componentType,
@@ -81,7 +81,7 @@ class Generic implements LayoutInterface
             if (!empty($config)) {
                 $nodeData['config'] = $config;
             }
-            $topNode[] = $nodeData;
+            $topNode[$component->getName()] = $nodeData;
         }
     }
 }

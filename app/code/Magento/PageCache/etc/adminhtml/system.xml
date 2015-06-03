@@ -60,7 +60,7 @@
                 </group>
                 <field id="ttl" type="text" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>TTL for public content</label>
-                    <comment>Public content cache lifetime in seconds. If field is empty default value 120 will be saved. </comment>
+                    <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
                     <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
                 </field>
             </group>
