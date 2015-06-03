@@ -289,7 +289,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             }
             $productId = $this->_cachedSkuToProducts[$selection['sku']];
         } else {
-            $productId = $selection['parent_product_id'];
+            $productId = $selection['product_id'];
         }
         $populatedSelection = [
             'option_id' => (int)$optionId,
