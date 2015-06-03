@@ -6,9 +6,10 @@
 namespace Magento\Ui\TemplateEngine\Xhtml\Compiler\Element;
 
 use Magento\Framework\Object;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler;
-use Magento\Ui\TemplateEngine\Xhtml\Result;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
 
 /**
  * Class Render
@@ -18,26 +19,24 @@ class Render implements ElementInterface
     /**
      * Compiles the Element node
      *
-     * @param Compiler $compiler
+     * @param CompilerInterface $compiler
      * @param \DOMElement $node
-     * @param UiComponentInterface $component
+     * @param Object $processedObject
      * @param Object $context
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function compile(
-        Compiler $compiler,
-        \DOMElement $node,
-        UiComponentInterface $component,
-        Object $context
-    ) {
-        $result = $component->renderChildComponent($node->getAttribute('name'));
-        if ($result instanceof Result) {
+    public function compile(CompilerInterface $compiler, \DOMElement $node, Object $processedObject, Object $context)
+    {
+        /** @var UiComponentInterface $processedObject */
+        $result = $processedObject->renderChildComponent($node->getAttribute('name'));
+        if ($result instanceof ResultInterface) {
             $node->parentNode->replaceChild($result->getDocumentElement(), $node);
         } else if (!empty($result) && is_scalar($result)) {
             $newFragment = $node->ownerDocument->createDocumentFragment();
             $newFragment->appendXML($result);
             $node->parentNode->replaceChild($newFragment, $node);
-            $node->parentNode->removeChild($node);
         } else {
             $node->parentNode->removeChild($node);
         }
