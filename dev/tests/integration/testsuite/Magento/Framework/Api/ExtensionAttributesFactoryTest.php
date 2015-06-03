@@ -61,12 +61,15 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->appResource = $objectManager->get('Magento\Framework\App\Resource');
 
-        $this->factory = new ExtensionAttributesFactory(
-            $objectManager,
-            $this->configReader,
-            $this->extensionAttributeJoinDataFactory,
-            $this->typeProcessor,
-            $this->appResource
+        $this->factory = $objectManager->create(
+            'Magento\Framework\Api\ExtensionAttributesFactory',
+            [
+                'objectManager' => $objectManager,
+                'configReader' => $this->configReader,
+                'extensionAttributeJoinDataFactory' => $this->extensionAttributeJoinDataFactory,
+                'typeProcessor' => $this->typeProcessor,
+                'appResource' => $this->appResource
+            ]
         );
     }
 
