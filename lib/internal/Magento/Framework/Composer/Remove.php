@@ -36,6 +36,12 @@ class Remove
         $this->directoryList = $directoryList;
     }
 
+    /**
+     * Run 'composer remove'
+     *
+     * @param array $packages
+     * @return void
+     */
     public function remove(array $packages)
     {
         $this->composerApp->setAutoExit(false);
