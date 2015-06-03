@@ -1029,6 +1029,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getMultiRowFormat($rowData)
     {
@@ -1074,6 +1075,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Import data rows
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _importData()
     {

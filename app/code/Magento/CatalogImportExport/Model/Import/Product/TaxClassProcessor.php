@@ -17,6 +17,8 @@ class TaxClassProcessor
 
     /**
      * Tax classes.
+     *
+     * @var array
      */
     protected $taxClasses;
 
@@ -68,9 +70,9 @@ class TaxClassProcessor
     /**
      * Creates new tax class.
      *
-     * @param $taxClassName
+     * @param string $taxClassName
      * @param AbstractType $productTypeModel
-     * @return mixed
+     * @return integer
      */
     protected function createTaxClass($taxClassName, AbstractType $productTypeModel)
     {
@@ -90,9 +92,9 @@ class TaxClassProcessor
     /**
      * Instantiate instance of tax class.
      *
-     * @param $taxClassName
+     * @param string $taxClassName
      * @param AbstractType $productTypeModel
-     * @return mixed
+     * @return object
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)
     {
