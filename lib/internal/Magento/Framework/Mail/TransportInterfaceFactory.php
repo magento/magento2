@@ -49,4 +49,14 @@ class TransportInterfaceFactory
     {
         return $this->_objectManager->create($this->_instanceName, $data);
     }
+
+    /**
+     * @param $name
+     * @return $this
+     */
+    public function setInstanceName($name)
+    {
+        $this->_instanceName    = $name;
+        return $this;
+    }
 }

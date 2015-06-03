@@ -162,6 +162,17 @@ class Send extends Action\Action implements IndexInterface
                 $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
                 $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 foreach ($emails as $email) {
+                    $from = $this->_transportBuilder->getFrom(
+                        $scopeConfig->getValue(
+                            'wishlist/email/email_identity',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        )
+                    );
+                    $this->_transportBuilder->getMessage()
+                        ->setFrom($from['email'],$from['name'])
+                        ->addTo(
+                            $email
+                        );
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $scopeConfig->getValue(
                             'wishlist/email/email_template',
@@ -183,13 +194,6 @@ class Send extends Action\Action implements IndexInterface
                             'message' => $message,
                             'store' => $storeManager->getStore(),
                         ]
-                    )->setFrom(
-                        $scopeConfig->getValue(
-                            'wishlist/email/email_identity',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                        )
-                    )->addTo(
-                        $email
                     )->getTransport();
 
                     $transport->sendMessage();

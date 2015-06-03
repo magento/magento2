@@ -46,6 +46,12 @@ class Post extends \Magento\Contact\Controller\Index
             }
 
             $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $from = $this->_transportBuilder->getFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope));
+            $this->_transportBuilder->getMessage()
+                ->setFrom($from['email'],$from['name'])
+                ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
+                ->setReplyTo($post['email']);
+
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
                 ->setTemplateOptions(
@@ -55,9 +61,6 @@ class Post extends \Magento\Contact\Controller\Index
                     ]
                 )
                 ->setTemplateVars(['data' => $postObject])
-                ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
-                ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
-                ->setReplyTo($post['email'])
                 ->getTransport();
 
             $transport->sendMessage();

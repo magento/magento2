@@ -856,6 +856,14 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     protected function _sendEmailTemplate($template, $sender, $templateParams = [], $storeId = null)
     {
+        $from = $this->_transportBuilder->getFrom($this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId));
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $from['email'],$from['name']
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
@@ -863,11 +871,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
-        )->setFrom(
-            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         )->getTransport();
         $transport->sendMessage();
 

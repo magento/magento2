@@ -50,7 +50,7 @@ class SenderBuilder
     {
         $this->configureEmailTemplate();
 
-        $this->transportBuilder->addTo(
+        $this->transportBuilder->getMessage()->addTo(
             $this->identityContainer->getCustomerEmail(),
             $this->identityContainer->getCustomerName()
         );
@@ -59,7 +59,7 @@ class SenderBuilder
 
         if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'bcc') {
             foreach ($copyTo as $email) {
-                $this->transportBuilder->addBcc($email);
+                $this->transportBuilder->getMessage()->addBcc($email);
             }
         }
 
@@ -80,7 +80,7 @@ class SenderBuilder
             foreach ($copyTo as $email) {
                 $this->configureEmailTemplate();
 
-                $this->transportBuilder->addTo($email);
+                $this->transportBuilder->getMessage()->addTo($email);
 
                 $transport = $this->transportBuilder->getTransport();
                 $transport->sendMessage();
@@ -98,6 +98,7 @@ class SenderBuilder
         $this->transportBuilder->setTemplateIdentifier($this->templateContainer->getTemplateId());
         $this->transportBuilder->setTemplateOptions($this->templateContainer->getTemplateOptions());
         $this->transportBuilder->setTemplateVars($this->templateContainer->getTemplateVars());
-        $this->transportBuilder->setFrom($this->identityContainer->getEmailIdentity());
+        $from = $this->transportBuilder->getFrom($this->identityContainer->getEmailIdentity());
+        $this->transportBuilder->getMessage()->setFrom($from['email'],$from['name']);
     }
 }

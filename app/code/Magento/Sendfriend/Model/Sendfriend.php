@@ -182,6 +182,10 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
 
         foreach ($this->getRecipients()->getEmails() as $k => $email) {
             $name = $this->getRecipients()->getNames($k);
+            $from = $this->_transportBuilder->getFrom($sender);
+            $this->_transportBuilder->getMessage()
+                ->setFrom($from['email'],$from['name'])
+                ->addTo($email,$name);
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_sendfriendData->getEmailTemplate()
             )->setTemplateOptions(
@@ -189,8 +193,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
                     'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                     'store' => $this->_storeManager->getStore()->getId(),
                 ]
-            )->setFrom(
-                $sender
             )->setTemplateVars(
                 [
                     'name' => $name,
@@ -202,9 +204,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
                     'sender_email' => $sender['email'],
                     'product_image' => $this->_catalogImage->init($this->getProduct(), 'small_image')->resize(75),
                 ]
-            )->addTo(
-                $email,
-                $name
             );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();

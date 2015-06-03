@@ -270,6 +270,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $total = $checkout->getStoreCurrencyCode() . ' ' . $checkout->getGrandTotal();
 
         foreach ($sendTo as $recipient) {
+            $from = $this->_transportBuilder->getFrom($this->scopeConfig->getValue(
+                'checkout/payment_failed/identity',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $checkout->getStoreId()
+            ));
+            $this->_transportBuilder->getMessage()
+                ->setFrom($from['email'],$from['name'])
+                ->addTo($recipient['email'],
+                        $recipient['name'])
+                ->addBcc($bcc);
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $template
             )->setTemplateOptions(
@@ -298,17 +308,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'items' => nl2br($items),
                     'total' => $total,
                 ]
-            )->setFrom(
-                $this->scopeConfig->getValue(
-                    'checkout/payment_failed/identity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $checkout->getStoreId()
-                )
-            )->addTo(
-                $recipient['email'],
-                $recipient['name']
-            )->addBcc(
-                $bcc
             )->getTransport();
 
             $transport->sendMessage();
