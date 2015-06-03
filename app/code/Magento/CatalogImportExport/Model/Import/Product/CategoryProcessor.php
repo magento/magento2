@@ -38,6 +38,7 @@ class CategoryProcessor
 
     /**
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
@@ -143,5 +144,4 @@ class CategoryProcessor
 
         return $categoriesIds;
     }
-
 }

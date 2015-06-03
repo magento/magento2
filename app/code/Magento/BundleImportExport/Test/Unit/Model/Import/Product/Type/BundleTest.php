@@ -6,8 +6,7 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\BundleImportExport;
+use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
@@ -126,7 +125,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $attrCollection = $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
+        $attrCollection =
+            $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
 
         $this->prodAttrColFac->expects($this->any())->method('create')->will(
@@ -268,7 +268,27 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 'bunch' => [
                     'sku' => 'sku',
                     'name' => 'name',
-                    'bundle_values' => 'name=Bundle1,type=dropdown,required=1,sku=1,price=10,price_type=fixed, default_qty=1, is_defaul=1, position=1, option_id=1 | name=Bundle2,type=dropdown,required=1,sku=2,price=10, price_type=fixed, default_qty=1,is_defaul=1, position=2, option_id=2'],
+                    'bundle_values' =>
+                        'name=Bundle1,'
+                         . 'type=dropdown,'
+                         . 'required=1,'
+                         . 'sku=1,'
+                         . 'price=10,'
+                         . 'price_type=fixed,'
+                         . 'default_qty=1,'
+                         . 'is_defaul=1,'
+                         . 'position=1,'
+                         . 'option_id=1 | name=Bundle2,'
+                         . 'type=dropdown,'
+                         . 'required=1,'
+                         . 'sku=2,'
+                         . 'price=10,'
+                         . 'price_type=fixed,'
+                         . 'default_qty=1,'
+                         . 'is_defaul=1,'
+                         . 'position=2,'
+                         . 'option_id=2'
+                ],
                 'allowImport' => true
             ]
         ];

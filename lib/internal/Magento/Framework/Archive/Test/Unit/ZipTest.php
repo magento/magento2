@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -31,8 +32,8 @@ class ZipTest extends \PHPUnit_Framework_TestCase
         try{
             $reflectedClass = new \ReflectionClass('\Magento\Framework\Archive\Zip');
             $constructor = $reflectedClass->getConstructor();
-            $constructor->invoke($this->zip, array());
-        }catch (\Exception $e){
+            $constructor->invoke($this->zip, []);
+        } catch (\Exception $e){
             $this->fail('Failed asserting that no exceptions is thrown');
         }
     }
