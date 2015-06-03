@@ -5,7 +5,7 @@
 /*global define*/
 define(
     [
-        "jquery",
+        'jquery',
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
@@ -14,9 +14,21 @@ define(
         '../model/quote',
         '../action/select-shipping-address',
         'Magento_Checkout/js/model/step-navigator',
+        '../model/shipping-rates-validator',
         'mage/translate'
     ],
-    function($, Component, ko, customer, addressList, addressConverter, quote, selectShippingAddress, navigator) {
+    function(
+        $,
+        Component,
+        ko,
+        customer,
+        addressList,
+        addressConverter,
+        quote,
+        selectShippingAddress,
+        navigator,
+        shippingRatesValidator
+    ) {
         'use strict';
         var stepName = 'shippingAddress';
         return Component.extend({
@@ -31,6 +43,12 @@ define(
             isFormPopUpVisible: ko.observable(false),
             isFormInline: addressList.getAddresses()().length == 0,
             isNewAddressAdded: ko.observable(false),
+
+            initElement: function(element) {
+                if (element.index == 'shipping-address-fieldset') {
+                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                }
+            },
 
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);

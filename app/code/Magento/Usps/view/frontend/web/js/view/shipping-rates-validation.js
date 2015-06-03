@@ -16,12 +16,12 @@ define(
         Component,
         defaultShippingRatesValidator,
         defaultShippingRatesValidationRules,
-        upsShippingRatesValidator,
-        upsShippingRatesValidationRules
+        uspsShippingRatesValidator,
+        uspsShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(upsShippingRatesValidator);
-        defaultShippingRatesValidationRules.registerRules('ups', upsShippingRatesValidationRules);
+        defaultShippingRatesValidator.registerValidator(uspsShippingRatesValidator);
+        defaultShippingRatesValidationRules.registerRules('usps', uspsShippingRatesValidationRules);
         return Component;
     }
 );

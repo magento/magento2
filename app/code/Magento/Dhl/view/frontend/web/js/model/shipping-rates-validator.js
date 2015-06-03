@@ -13,7 +13,7 @@ define(
         return {
             validate: function(address) {
                 //TODO: provide validation
-                return true;
+                return false;
             }
         };
     }
