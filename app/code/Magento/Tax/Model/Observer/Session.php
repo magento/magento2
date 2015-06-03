@@ -57,6 +57,7 @@ class Session
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function customerLoggedIn(\Magento\Framework\Event\Observer $observer)

@@ -23,6 +23,20 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $groupRepositoryMock;
 
     /**
+     * Module manager
+     *
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManagerMock;
+
+    /**
+     * Cache config
+     *
+     * @var \Magento\PageCache\Model\Config
+     */
+    private $cacheConfigMock;
+
+    /**
      * @var \Magento\Tax\Model\Observer\Session
      */
     protected $session;
@@ -46,17 +60,36 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
+        $this->moduleManagerMock = $this->getMockBuilder('Magento\Framework\Module\Manager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cacheConfigMock = $this->getMockBuilder('Magento\PageCache\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->session = $this->objectManager->getObject(
             'Magento\Tax\Model\Observer\Session',
             [
                 'groupRepository' => $this->groupRepositoryMock,
-                'customerSession' => $this->customerSessionMock
+                'customerSession' => $this->customerSessionMock,
+                'moduleManager' => $this->moduleManagerMock,
+                'cacheConfig' => $this->cacheConfigMock
             ]
         );
     }
 
     public function testCustomerLoggedIn()
     {
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->willReturn(true);
+
+        $this->cacheConfigMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
         $customerMock = $this->getMockBuilder('Magento\Customer\Model\Data\Customer')
             ->disableOriginalConstructor()
             ->getMock();
