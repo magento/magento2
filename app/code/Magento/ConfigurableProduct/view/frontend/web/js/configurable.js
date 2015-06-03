@@ -16,6 +16,7 @@ define([
     $.widget('mage.configurable', {
         options: {
             superSelector: '.super-attribute-select',
+            selectSimpleProduct: '[name="selected_configurable_option"]',
             priceHolderSelector: '.price-box',
             state: {},
             priceFormat: {},
@@ -68,6 +69,7 @@ define([
 
             this.options.values = this.options.spConfig.defaultValues || {};
             this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
+            this.inputSimpleProduct = this.element.find(this.options.selectSimpleProduct);
         },
 
         /**
@@ -206,6 +208,8 @@ define([
                     element.nextSetting.disabled = false;
                     this._fillSelect(element.nextSetting);
                     this._resetChildren(element.nextSetting);
+                } else {
+                    this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]);
                 }
             }
             else {
