@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Composer\Console\Application;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\Composer\Remove;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Driver\File;
@@ -17,11 +17,10 @@ use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
-use Magento\Setup\Model\ComposerInformation;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -104,14 +103,13 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $loader;
 
     /**
-     * @var Application
+     * @var Remove
      */
-    private $composerApp;
+    private $remove;
 
     /**
      * Constructor
      *
-     * @param Application $composerApp
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
@@ -121,10 +119,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param Loader $loader
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param Remove $removeCode
      * @param UninstallCollector $collector
      */
     public function __construct(
-        Application $composerApp,
         ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
@@ -134,10 +132,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         Loader $loader,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
+        Remove $removeCode,
         UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
-        $this->composerApp = $composerApp;
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList = $directoryList;
@@ -150,6 +148,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
         $this->file = $file;
         $this->loader = $loader;
+        $this->removeCode = $removeCode;
     }
 
     /**
@@ -324,12 +323,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         foreach ($modules as $module) {
             $packages[] = $this->packageInfo->getPackageName($module);
         }
-        $this->composerApp->setAutoExit(false);
-        $this->composerApp->run(
-            new ArrayInput(
-                ['command' => 'remove', 'packages' => $packages, '--working-dir' => $this->directoryList->getRoot()]
-            )
-        );
+        $this->remove->remove($packages);
+
     }
 
     /**
