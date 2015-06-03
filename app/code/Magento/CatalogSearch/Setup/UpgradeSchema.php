@@ -49,6 +49,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     10,
                     ['unsigned' => true, 'nullable' => false]
                 )->addColumn(
+                    'store_id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    null,
+                    ['unsigned' => true, 'nullable' => false],
+                    'Store ID'
+                )->addColumn(
                     'data_index',
                     Table::TYPE_TEXT,
                     '4g',
