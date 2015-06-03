@@ -11,17 +11,15 @@
 
 @checkout-tooltip-icon-arrow__font-size: 10px;
 @checkout-tooltip-icon__color: @color-gray-light2;
-@checkout-tooltip-icon__content: '?'; // ToDo UI: replace to blank font icon
-@checkout-tooltip-icon__font-size: 17px;
-@checkout-tooltip-icon__width: 21px;
-@checkout-tooltip-icon__height: @checkout-tooltip-icon__width;
+@checkout-tooltip-icon__content: @icon-help;
+@checkout-tooltip-icon__font-size: 24px;
 @checkout-tooltip-icon__hover__color: @primary__color;
 
-@checkout-tooltip-content__width: 270px;
-@checkout-tooltip-content__border-width: 1px;
 @checkout-tooltip-content__border-color: @color-gray60;
+@checkout-tooltip-content__border-width: 1px;
 @checkout-tooltip-content__background-color: @color-gray-light01;
 @checkout-tooltip-content__padding: 12px;
+@checkout-tooltip-content__width: 270px;
 
 //
 //  Common
@@ -43,7 +41,6 @@
                 &:before {
                     .css(border-color, @checkout-tooltip-icon__hover__color);
                     .css(color, @checkout-tooltip-icon__hover__color);
-                    .css(font-weight, @font-weight__bold);
                 }
             }
         }
@@ -51,27 +48,18 @@
         .field-tooltip-action {
             .icon-font(
                 @checkout-tooltip-icon__content,
-                @_icon-font: @font-family__base,
                 @_icon-font-size: @checkout-tooltip-icon__font-size,
                 @_icon-font-text-hide: true,
                 @_icon-font-color: @checkout-tooltip-icon__color,
                 @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
                 @_icon-font-color-active: false
             );
-            &:before {
-                .css(border, 1px solid @checkout-tooltip-icon__color);
-                .css(height, @checkout-tooltip-icon__height);
-                .css(width, @checkout-tooltip-icon__width);
-                border-radius: 50%;
-            }
             &:focus {
                 + .field-tooltip-content {
                     display: block;
                 }
                 &:before {
-                    .css(border-color, @checkout-tooltip-icon__hover__color);
                     .css(color, @checkout-tooltip-icon__hover__color);
-                    .css(font-weight, @font-weight__bold);
                 }
             }
         }
