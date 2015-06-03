@@ -108,14 +108,13 @@ class Emulation extends \Magento\Framework\Object
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $force = false
     ) {
-        if (
-            (
-                $storeId == $this->_storeManager->getStore()->getStoreId()
-                && !$force
-            )
-            // Only allow a single level of emulation. Emulation nesting not allowed.
-            || $this->initialEnvironmentInfo !== null
-        ) {
+        // Only allow a single level of emulation. Emulation nesting not allowed.
+        if ($this->initialEnvironmentInfo !== null) {
+            // todo: log or throw exception; no nesting support
+            return;
+        }
+
+        if ($storeId == $this->_storeManager->getStore()->getStoreId() && !$force) {
             return;
         }
         $this->storeCurrentEnvironmentInfo();
