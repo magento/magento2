@@ -7,6 +7,8 @@
 //  Variables
 //  _____________________________________________
 
+@checkout-shipping-address__max-width: 500px;
+
 @checkout-shipping-item-icon__background-color: @checkout-shipping-item__active__border-color;
 @checkout-shipping-item-icon__color: @color-white;
 @checkout-shipping-item-icon__content: @icon-checkmark;
@@ -37,6 +39,23 @@
         //
         //  Shipping Information
         //  ---------------------------------------------
+
+        .form-shipping-address {
+            .css(max-width, @checkout-shipping-address__max-width);
+            .fieldset {
+                .field {
+                    .label {
+                        .css(font-weight, @font-weight__regular);
+                    }
+                }
+            }
+            //  Not implemented markup yet
+            .field {
+                &.tooltip {
+                    &:extend(.abs-field-tooltip all);
+                }
+            }
+        }
 
         .shipping-address-items {
             font-size: 0;
