@@ -507,14 +507,14 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * Example {{trans "string to translate"}}
      *
-     * Supports modifiers,
+     * The |escape modifier is applied by default, use |raw to override
      *
      * @param string[] $construction
      * @return string
      */
     public function transDirective($construction)
     {
-        list($directive, $modifiers) = $this->explodeModifiers($construction[2]);
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
 
         list($text, $params) = $this->getTransParameters($directive);
         if (empty($text)) {
@@ -522,11 +522,7 @@ class Filter extends \Magento\Framework\Filter\Template
         }
 
         $text = (new \Magento\Framework\Phrase($text, $params))->render();
-        $text = $this->applyModifiers($text, $modifiers ? $modifiers : 'escape');
-
-        // todo: run through translator
-
-        return $text;
+        return $this->applyModifiers($text, $modifiers);
     }
 
     /**
@@ -540,7 +536,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     protected function getTransParameters($value) {
         if (preg_match('/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/s', $value, $matches) !== 1) {
-            return [];  // malformed directive
+            return ['', []];  // malformed directive body; return without breaking list
         }
 
         $text = stripslashes($matches[2]);
@@ -583,15 +579,16 @@ class Filter extends \Magento\Framework\Filter\Template
      * Result: ['some text value, etc', 'modifier string']
      *
      * @param $value
+     * @param null $default assumed modifier if none present
      * @return array
      */
-    protected function explodeModifiers($value)
+    protected function explodeModifiers($value, $default = null)
     {
         $parts = explode('|', $value, 2);
         if (2 === count($parts)) {
             return $parts;
         }
-        return [$value, null];
+        return [$value, $default];
     }
 
     /**
