@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Composer\Test\Unit;
+namespace Magento\Framework\Composer;
 
-use Magento\Framework\Composer\Remove;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,11 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock('Composer\Console\Application', [], [], '', false);
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $directoryList->expects($this->once())->method('getRoot');
+        $directoryList->expects($this->any())->method('getRoot');
+        $directoryList->expects($this->any())
+            ->method('getPath')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn(BP . '/app/etc');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
         $composerApp->expects($this->once())->method('run');
         $remove = new Remove($composerApp, $directoryList);
