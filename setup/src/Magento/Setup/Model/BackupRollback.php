@@ -124,7 +124,7 @@ class BackupRollback
         $filesInfo = $checkWritable->getInfo(
             $this->directoryList->getRoot(),
             Helper::INFO_WRITABLE,
-            $this->getIgnorePaths()
+            $this->getCodeBackupIgnorePaths()
         );
         if (!$filesInfo['writable']) {
             throw new NotEnoughPermissions(
@@ -134,7 +134,7 @@ class BackupRollback
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
         $fsRollback = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
         $fsRollback->setRootDir($this->directoryList->getRoot());
-        $fsRollback->addIgnorePaths($this->getIgnorePaths());
+        $fsRollback->addIgnorePaths($this->getCodeBackupIgnorePaths());
 
         $fsRollback->setBackupsDir($backupsDir);
         $fsRollback->setBackupExtension('tgz');
