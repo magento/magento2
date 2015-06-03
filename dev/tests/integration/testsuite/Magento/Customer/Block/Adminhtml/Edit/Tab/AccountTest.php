@@ -93,8 +93,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('field-confirmation', $result);
         $this->assertNotContains('_accountconfirmation', $result);
 
-        // Prefix is present but empty
-        $this->assertRegExp('/<input id="_accountprefix"[^>]*value=""/', $result);
+        // Prefix is present and not empty
+        $this->assertRegExp('/<input id="_accountprefix"[^>]*value="Mr."/', $result);
 
         // Does not contain send email controls
         $this->assertNotContains('<input id="_accountsendemail"', $result);
