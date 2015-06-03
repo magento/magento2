@@ -498,22 +498,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = ['module' => ['Magento_A', 'Magento_B'], '--backup-code' => true];
         $this->setUpExecute($input);
-        $this->backupFS->expects($this->once())
-            ->method('addIgnorePaths');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupsDir');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupExtension');
-        $this->backupFS->expects($this->once())
-            ->method('setTime');
-        $this->backupFS->expects($this->once())
-            ->method('create');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupFilename')
-            ->willReturn('RollbackFile_A.tgz');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');
+        $this->setupBackup();
         $this->file->expects($this->once())->method('isExists')->willReturn(false);
         $this->file->expects($this->once())->method('createDirectory');
         $this->tester->execute($input);
@@ -523,7 +508,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = ['module' => ['Magento_A', 'Magento_B'], '--backup-data' => true];
         $this->setUpExecute($input);
-
         $this->backupDB->expects($this->once())
             ->method('setBackupsDir');
         $this->backupDB->expects($this->once())
@@ -538,22 +522,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->backupDB->expects($this->once())
             ->method('getBackupPath')
             ->willReturn('pathToFile/RollbackFile_A.tgz');
-        $this->backupFS->expects($this->once())
-            ->method('addIgnorePaths');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupsDir');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupExtension');
-        $this->backupFS->expects($this->once())
-            ->method('setTime');
-        $this->backupFS->expects($this->once())
-            ->method('create');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupFilename')
-            ->willReturn('RollbackFile_A.tgz');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');
+        $this->setupBackup();
         $this->file->expects($this->exactly(2))->method('isExists')->willReturn(false);
         $this->file->expects($this->exactly(2))->method('createDirectory');
         $this->tester->execute($input);
@@ -575,5 +544,23 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
         $this->tester->execute($input);
+    }
+
+    private function setupBackup()
+    {
+        $this->backupFS->expects($this->once())
+            ->method('addIgnorePaths');
+        $this->backupFS->expects($this->once())
+            ->method('setBackupsDir');
+        $this->backupFS->expects($this->once())
+            ->method('setBackupExtension');
+        $this->backupFS->expects($this->once())
+            ->method('setTime');
+        $this->backupFS->expects($this->once())
+            ->method('getBackupFilename')
+            ->willReturn('RollbackFile_A.tgz');
+        $this->backupFS->expects($this->once())
+            ->method('getBackupPath')
+            ->willReturn('pathToFile/RollbackFile_A.tgz');;
     }
 }
