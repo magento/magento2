@@ -64,8 +64,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function convertChild(\DOMNode $childNode, $data)
     {
-        $data['source']  = isset($data['source']) ? $data['source'] : [];
-        $data['handler'] = isset($data['handler']) ? $data['handler'] : [];
+        $data['sources']  = isset($data['sources']) ? $data['sources'] : [];
+        $data['handlers'] = isset($data['handlers']) ? $data['handlers'] : [];
         switch ($childNode->nodeName) {
             case 'title':
                 $data['title'] = $this->getTranslatedNodeValue($childNode);
@@ -77,11 +77,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $data = $this->convertField($childNode, $data);
                 break;
             case 'source':
-                $data['source'][$this->getAttributeValue($childNode, 'name')]
+                $data['sources'][$this->getAttributeValue($childNode, 'name')]
                     = $this->getAttributeValue($childNode, 'class');
                 break;
             case 'handler':
-                $data['handler'][$this->getAttributeValue($childNode, 'name')]
+                $data['handlers'][$this->getAttributeValue($childNode, 'name')]
                     = $this->getAttributeValue($childNode, 'class');
                 break;
         }
