@@ -54,7 +54,9 @@ class GeneralDependencyChecker
         foreach ($packages as $package) {
             $buffer = new BufferedOutput();
             $this->composerApp->run(
-                new ArrayInput(['command' => 'depends', '--working-dir' => $this->directoryList->getRoot()]),
+                new ArrayInput(
+                    ['command' => 'depends', '--working-dir' => $this->directoryList->getRoot(), 'package' => $package]
+                ),
                 $buffer
             );
             $dependingPackages = $this->parseComposerOutput($buffer->fetch());
