@@ -23,58 +23,81 @@ class Session
     protected $groupRepository;
 
     /**
+     * Module manager
+     *
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManager;
+
+    /**
+     * Cache config
+     *
+     * @var \Magento\PageCache\Model\Config
+     */
+    private $cacheConfig;
+
+    /**
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\PageCache\Model\Config $cacheConfig
     ) {
         $this->groupRepository = $groupRepository;
         $this->customerSession = $customerSession;
+        $this->moduleManager = $moduleManager;
+        $this->cacheConfig = $cacheConfig;
     }
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
+     * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function customerLoggedIn(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Customer\Model\Data\Customer $customer */
-        $customer = $observer->getData('customer');
-        $customerGroupId = $customer->getGroupId();
-        $customerGroup = $this->groupRepository->getById($customerGroupId);
-        $customerTaxClassId = $customerGroup->getTaxClassId();
-        $this->customerSession->setCustomerTaxClassId($customerTaxClassId);
+        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled()) {
+            /** @var \Magento\Customer\Model\Data\Customer $customer */
+            $customer = $observer->getData('customer');
+            $customerGroupId = $customer->getGroupId();
+            $customerGroup = $this->groupRepository->getById($customerGroupId);
+            $customerTaxClassId = $customerGroup->getTaxClassId();
+            $this->customerSession->setCustomerTaxClassId($customerTaxClassId);
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
-        $addresses = $customer->getAddresses();
-        if (isset($addresses)) {
-            $defaultShippingFound = false;
-            $defaultBillingFound = false;
-            foreach ($addresses as $address) {
-                if ($address->isDefaultBilling()) {
-                    $defaultBillingFound = true;
-                    $this->customerSession->setDefaultTaxBillingAddress(
-                        [
-                            'country_id' => $address->getCountryId(),
-                            'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                            'postcode'   => $address->getPostcode(),
-                        ]
-                    );
-                }
-                if ($address->isDefaultShipping()) {
-                    $defaultShippingFound = true;
-                    $this->customerSession->setDefaultTaxShippingAddress(
-                        [
-                            'country_id' => $address->getCountryId(),
-                            'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                            'postcode'   => $address->getPostcode(),
-                        ]
-                    );
-                }
-                if ($defaultShippingFound && $defaultBillingFound) {
-                    break;
+            /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
+            $addresses = $customer->getAddresses();
+            if (isset($addresses)) {
+                $defaultShippingFound = false;
+                $defaultBillingFound = false;
+                foreach ($addresses as $address) {
+                    if ($address->isDefaultBilling()) {
+                        $defaultBillingFound = true;
+                        $this->customerSession->setDefaultTaxBillingAddress(
+                            [
+                                'country_id' => $address->getCountryId(),
+                                'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
+                                'postcode'   => $address->getPostcode(),
+                            ]
+                        );
+                    }
+                    if ($address->isDefaultShipping()) {
+                        $defaultShippingFound = true;
+                        $this->customerSession->setDefaultTaxShippingAddress(
+                            [
+                                'country_id' => $address->getCountryId(),
+                                'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
+                                'postcode'   => $address->getPostcode(),
+                            ]
+                        );
+                    }
+                    if ($defaultShippingFound && $defaultBillingFound) {
+                        break;
+                    }
                 }
             }
         }
