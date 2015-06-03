@@ -28,12 +28,4 @@ interface TaxClassManagementInterface
      * @return int|null
      */
     public function getTaxClassId($taxClassKey, $taxClassType = self::TYPE_PRODUCT);
-
-    /**
-     * Return all tax class ids of a tax class type
-     *
-     * @param string $taxClassType
-     * @return int[]|null
-     */
-    public function getTaxClassIds($taxClassType);
 }

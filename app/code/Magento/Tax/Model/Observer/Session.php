@@ -36,6 +36,7 @@ class Session
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function customerLoggedIn(\Magento\Framework\Event\Observer $observer)
     {
@@ -48,34 +49,33 @@ class Session
 
         /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
         $addresses = $customer->getAddresses();
-        if (!isset($addresses)) {
-            return;
-        }
-        $defaultShippingFound = false;
-        $defaultBillingFound = false;
-        foreach ($addresses as $address) {
-            if ($address->isDefaultBilling()) {
-                $defaultBillingFound = true;
-                $this->customerSession->setDefaultTaxBillingAddress(
-                    [
-                        'country_id' => $address->getCountryId(),
-                        'region_id' => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                        'postcode' => $address->getPostcode(),
-                    ]
-                );
-            }
-            if ($address->isDefaultShipping()) {
-                $defaultShippingFound = true;
-                $this->customerSession->setDefaultTaxShippingAddress(
-                    [
-                        'country_id' => $address->getCountryId(),
-                        'region_id' => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                        'postcode' => $address->getPostcode(),
-                    ]
-                );
-            }
-            if ($defaultShippingFound && $defaultBillingFound) {
-                break;
+        if (isset($addresses)) {
+            $defaultShippingFound = false;
+            $defaultBillingFound = false;
+            foreach ($addresses as $address) {
+                if ($address->isDefaultBilling()) {
+                    $defaultBillingFound = true;
+                    $this->customerSession->setDefaultTaxBillingAddress(
+                        [
+                            'country_id' => $address->getCountryId(),
+                            'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
+                            'postcode'   => $address->getPostcode(),
+                        ]
+                    );
+                }
+                if ($address->isDefaultShipping()) {
+                    $defaultShippingFound = true;
+                    $this->customerSession->setDefaultTaxShippingAddress(
+                        [
+                            'country_id' => $address->getCountryId(),
+                            'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
+                            'postcode'   => $address->getPostcode(),
+                        ]
+                    );
+                }
+                if ($defaultShippingFound && $defaultBillingFound) {
+                    break;
+                }
             }
         }
     }

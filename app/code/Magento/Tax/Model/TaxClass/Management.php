@@ -76,20 +76,4 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
         }
         return null;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxClassIds($taxClassType)
-    {
-        if ($taxClassType != self::TYPE_CUSTOMER && $taxClassType != self::TYPE_PRODUCT) {
-            return null;
-        }
-
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
-            [$this->filterBuilder->setField(ClassModel::KEY_TYPE)->setValue($taxClassType)->create()]
-        )->create();
-        $taxClasses = $this->classRepository->getList($searchCriteria)->getItems();
-        return $taxClasses;
-    }
 }
