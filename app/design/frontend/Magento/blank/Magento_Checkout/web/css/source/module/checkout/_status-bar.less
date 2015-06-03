@@ -24,8 +24,10 @@
 @checkout-status-bar-item-circle-inner__background-color: @page__background-color;
 @checkout-status-bar-item-circle-inner__color: @checkout-status-bar-item__color;
 @checkout-status-bar-item-circle-inner__height: @checkout-status-bar-item-circle-inner__width;
-@checkout-status-bar-item-circle-inner__width: @checkout-status-bar-item-circle__width - ( @checkout-status-bar-item-circle-outer-radius__width*2 );
+@checkout-status-bar-item-circle-inner__width: @checkout-status-bar-item-circle__width - (@checkout-status-bar-item-circle-outer-radius__width * 2);
 @checkout-status-bar-item-circle-inner__active__content: @icon-checkmark;
+@checkout-status-bar-item-circle-inner__active__font-size: 2.8rem;
+@checkout-status-bar-item-circle-inner__active__line-height: 2.8rem;
 
 @checkout-status-bar-item-circle-outer-radius__width: 6px;
 
@@ -86,8 +88,10 @@
                         .css(background, @checkout-status-bar-item__active__background-color);
                     }
                     &:after {
-                        .css(font-family, @icons__font-name);
                         .css(content, @checkout-status-bar-item-circle-inner__active__content);
+                        .css(font-family, @icons__font-name);
+                        .css(line-height, @checkout-status-bar-item-circle-inner__active__line-height);
+                        .font-size(@checkout-status-bar-item-circle-inner__active__font-size);
                     }
                 }
             }
