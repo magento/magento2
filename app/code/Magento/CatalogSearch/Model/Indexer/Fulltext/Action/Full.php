@@ -627,7 +627,7 @@ class Full
     {
         if (!isset($this->productEmulators[$typeId])) {
             $productEmulator = new \Magento\Framework\Object();
-            $productEmulator->setIdFieldName('entity_id')->setTypeId($typeId);
+            $productEmulator->setTypeId($typeId);
             $this->productEmulators[$typeId] = $productEmulator;
         }
         return $this->productEmulators[$typeId];

@@ -141,20 +141,6 @@ class Db extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Get collection item identifier
-     *
-     * @param \Magento\Framework\Object $item
-     * @return mixed
-     */
-    protected function _getItemId(\Magento\Framework\Object $item)
-    {
-        if ($field = $this->getIdFieldName()) {
-            return $item->getData($field);
-        }
-        return parent::_getItemId($item);
-    }
-
-    /**
      * Set database connection adapter
      *
      * @param \Zend_Db_Adapter_Abstract $conn

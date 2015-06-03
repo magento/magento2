@@ -26,8 +26,6 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $source = new \Magento\Framework\Object($data);
         $target = new \Magento\Framework\Object();
         $expectedTarget = new \Magento\Framework\Object($data);
-        $expectedTarget->setDataChanges(true);
-        // hack for assertion
 
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, 'invalid_source', []));
         $this->assertNull($this->_service->copyFieldsetToTarget($fieldset, $aspect, [], 'invalid_target'));

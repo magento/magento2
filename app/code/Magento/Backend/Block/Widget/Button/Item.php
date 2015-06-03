@@ -16,4 +16,25 @@ namespace Magento\Backend\Block\Widget\Button;
  */
 class Item extends \Magento\Framework\Object
 {
+    /**
+     * Object delete flag
+     *
+     * @var bool
+     */
+    protected $_isDeleted = false;
+
+    /**
+     * Set _isDeleted flag value (if $isDeleted parameter is defined) and return current flag value
+     *
+     * @param boolean $isDeleted
+     * @return bool
+     */
+    public function isDeleted($isDeleted = null)
+    {
+        $result = $this->_isDeleted;
+        if ($isDeleted !== null) {
+            $this->_isDeleted = $isDeleted;
+        }
+        return $result;
+    }
 }

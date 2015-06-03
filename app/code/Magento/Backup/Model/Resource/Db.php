@@ -124,7 +124,6 @@ class Db
 
         if ($row) {
             $statusObject = new \Magento\Framework\Object();
-            $statusObject->setIdFieldName('name');
             foreach ($row as $field => $value) {
                 $statusObject->setData(strtolower($field), $value);
             }
