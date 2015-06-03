@@ -17,9 +17,9 @@ define([
         qtyFieldSelector: 'input.qty',
         priceBoxSelector: '.price-box',
         optionHandlers: {},
-        optionTemplate: '<%- label %>' +
-        '<% if (finalPrice.value) { %>' +
-        ' +<%- finalPrice.formatted %>' +
+        optionTemplate: '<%- data.label %>' +
+        '<% if (data.finalPrice.value) { %>' +
+        ' +<%- data.finalPrice.formatted %>' +
         '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {},
@@ -163,7 +163,9 @@ define([
                     }
 
                     toTemplate = {
-                        label: optionConfig[optionValue] && optionConfig[optionValue].name
+                        data: {
+                            label: optionConfig[optionValue] && optionConfig[optionValue].name
+                        }
                     };
                     prices = optionConfig[optionValue].prices;
 
@@ -172,7 +174,7 @@ define([
                         value += _.reduce(price.adjustments, function (sum, x) {
                             return sum + x;
                         }, 0);
-                        toTemplate[type] = {
+                        toTemplate.data[type] = {
                             value: value,
                             formatted: utils.formatPrice(value, format)
                         };

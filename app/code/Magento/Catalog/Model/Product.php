@@ -127,6 +127,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_options = [];
 
     /**
+     * @var bool
+     */
+    protected $optionsInitialized = false;
+
+    /**
      * @var array
      */
     protected $_links = null;
@@ -1948,6 +1953,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptions()
     {
+        if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
+            foreach ($this->getProductOptionsCollection() as $option) {
+                $option->setProduct($this);
+                $this->addOption($option);
+            }
+            $this->optionsInitialized = true;
+        }
         return $this->_options;
     }
 
@@ -1961,6 +1973,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (is_array($options) && empty($options)) {
             $this->setData('is_delete_options', true);
         }
+        $this->optionsInitialized = true;
         return $this;
     }
 
