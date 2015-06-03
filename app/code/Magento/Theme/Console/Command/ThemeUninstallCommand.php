@@ -7,6 +7,9 @@
 namespace Magento\Theme\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\GeneralDependencyChecker;
+use Magento\Framework\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,26 +61,49 @@ class ThemeUninstallCommand extends Command
     private $file;
 
     /**
+     * @var GeneralDependencyChecker
+     */
+    private $dependencyChecker;
+
+    /**
+     * @var ComposerInformation
+     */
+    private $composer;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor
      *
+     * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerInterface $objectManager
      * @param DirectoryList $directoryList
      * @param File $file
+     * @param Filesystem $filesystem
+     * @param GeneralDependencyChecker $dependencyChecker
      */
     public function __construct(
+        ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         MaintenanceMode $maintenanceMode,
         ObjectManagerInterface $objectManager,
         DirectoryList $directoryList,
-        File $file
+        File $file,
+        Filesystem $filesystem,
+        GeneralDependencyChecker $dependencyChecker
     ) {
+        $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
         $this->objectManager = $objectManager;
         $this->directoryList = $directoryList;
         $this->file = $file;
+        $this->filesystem = $filesystem;
+        $this->dependencyChecker = $dependencyChecker;
         parent::__construct();
     }
 
@@ -114,6 +140,18 @@ class ThemeUninstallCommand extends Command
             return;
         }
 
+        $themePaths = $input->getArgument(self::INPUT_KEY_THEMES);
+        $validationMessages = $this->validate($themePaths);
+        if (!empty($validationMessages)) {
+            $output->writeln($validationMessages);
+            return;
+        }
+        $dependencyMessages = $this->checkDependencies($themePaths);
+        if (!empty($dependencyMessages)) {
+            $output->writeln($dependencyMessages);
+            return;
+        }
+
         $output->writeln('<info>Enabling maintenance mode</info>');
         $this->maintenanceMode->set(true);
 
@@ -133,5 +171,92 @@ class ThemeUninstallCommand extends Command
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+    }
+
+    /**
+     * Validate given full theme paths
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    private function validate($themePaths)
+    {
+        $messages = [];
+        $unknownPackages = [];
+        $unknownThemes = [];
+        $installedPackages = $this->composer->getRootRequiredPackages();
+        foreach ($themePaths as $themePath) {
+            if (array_search($this->getPackageName($themePath), $installedPackages) === false) {
+                $unknownPackages[] = $themePath;
+            }
+            if (!$this->isThemeExist($themePath)) {
+                $unknownThemes[] = $themePath;
+            }
+        }
+        $unknownPackages = array_diff($unknownPackages, $unknownThemes);
+        if (!empty($unknownPackages)) {
+            $text = count($unknownPackages) > 1 ?
+                ' are not installed composer packages' : ' is not an installed composer package';
+            $messages[] = '<error>' . implode(', ', $unknownPackages) . $text . '</error>';
+        }
+        if (!empty($unknownThemes)) {
+            $messages[] = '<error>Unknown theme(s): ' . implode(', ', $unknownThemes) . '</error>';
+        }
+        return $messages;
+    }
+
+    /**
+     * Check dependencies to given full theme paths
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    private function checkDependencies($themePaths)
+    {
+        $messages = [];
+        $packageToPath = [];
+        foreach ($themePaths as $themePath) {
+            $packageToPath[$this->getPackageName($themePath)] = $themePath;
+        }
+        $dependencies = $this->dependencyChecker->checkDependencies(array_keys($packageToPath), true);
+        foreach ($dependencies as $package => $dependingPackages) {
+            if (!empty($dependingPackages)) {
+                $messages[] =
+                    '<error>Cannot uninstall ' . $packageToPath[$package] .
+                    " because the following package(s) depend on it:</error>" .
+                    PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", $dependingPackages)
+                    . "</error>";
+            }
+        }
+        return $messages;
+    }
+
+    /**
+     * Get package name of a theme by its full theme path
+     *
+     * @param string $themePath
+     * @return string
+     * @throws \Zend_Json_Exception
+     */
+    private function getPackageName($themePath)
+    {
+        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
+        if ($themesDirRead->isExist($themePath . '/composer.json')) {
+            $rawData = \Zend_Json::decode($themesDirRead->readFile($themePath . '/composer.json'));
+            return $rawData['name'];
+        }
+        return '';
+    }
+
+    /**
+     * Checks if a theme exists by its full theme path
+     *
+     * @param string $themePath
+     * @return bool
+     */
+    private function isThemeExist($themePath)
+    {
+        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
+        return $themesDirRead->isExist($themePath);
     }
 }

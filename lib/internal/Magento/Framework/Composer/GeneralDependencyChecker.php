@@ -29,7 +29,7 @@ class GeneralDependencyChecker
      * Constructor
      *
      * @param Application $composerApp
-     * @parram DirectoryList $directoryList
+     * @param DirectoryList $directoryList
      */
     public function __construct(Application $composerApp, DirectoryList $directoryList)
     {
