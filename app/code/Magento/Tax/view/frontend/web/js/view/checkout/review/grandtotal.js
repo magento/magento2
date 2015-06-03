@@ -19,7 +19,7 @@ define(
                 isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
                 template: 'Magento_Tax/checkout/review/grandtotal'
             },
-            getColspan: 3,
+            colspan: 3,
             style: "",
             exclTaxLabel: 'Order Total Excl. Tax',
             inclTaxLabel: 'Order Total Incl. Tax',

@@ -1,0 +1,30 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-th="Product Name">
+    <!-- ko foreach: getRegion('before_details') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+    <strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
+    Qty: <span data-bind="text: $parent.qty"></span>
+
+    <!-- ko if: (JSON.parse($parent.options).length > 0)-->
+    <dl class="item-options">
+        <!--ko foreach: JSON.parse($parent.options)-->
+        <dt data-bind="text: $t(label)"></dt>
+            <!-- ko if: ($data.full_view)-->
+            <dd data-bind="html: full_view"></dd>
+            <!-- /ko -->
+            <!-- ko ifnot: ($data.full_view)-->
+            <dd data-bind="html: value"></dd>
+            <!-- /ko -->
+        <!-- /ko -->
+    </dl>
+    <!-- /ko -->
+    <!-- ko foreach: getRegion('after_details') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</div>

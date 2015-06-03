@@ -114,20 +114,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $port mixed
+     * @param $httpHost string
      * @param $url string
      * @dataProvider getCurrentUrlProvider
      */
-    public function testGetCurrentUrl($port, $url)
+    public function testGetCurrentUrl($httpHost, $url)
     {
         $requestMock = $this->getRequestMock();
-        $requestMock->expects($this->at(0))->method('getServer')->with('SERVER_PORT')
-            ->will($this->returnValue($port));
-        $requestMock->expects($this->at(1))->method('getServer')->with('REQUEST_URI')
-            ->will($this->returnValue('/fancy_uri'));
+        $requestMock->expects($this->once())->method('getServer')->with('REQUEST_URI')->willReturn('/fancy_uri');
         $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
-        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('example.com'));
-
+        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue($httpHost));
         $model = $this->getUrlModel(['request' => $requestMock]);
         $this->assertEquals($url, $model->getCurrentUrl());
     }
@@ -135,9 +131,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function getCurrentUrlProvider()
     {
         return [
-            'without_port' => ['', 'http://example.com/fancy_uri'],
-            'default_port' => [80, 'http://example.com/fancy_uri'],
-            'custom_port' => [8080, 'http://example.com:8080/fancy_uri']
+            'without_port' => ['example.com', 'http://example.com/fancy_uri'],
+            'default_port' => ['example.com:80', 'http://example.com/fancy_uri'],
+            'custom_port' => ['example.com:8080', 'http://example.com:8080/fancy_uri']
         ];
     }
 
