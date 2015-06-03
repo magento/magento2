@@ -230,7 +230,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
 
         $name = $this->getSender()->getName();
         if (empty($name)) {
-            $errors[] = __('The sender name cannot be empty.');
+            $errors[] = __('Please enter a sender name.');
         }
 
         $email = $this->getSender()->getEmail();
@@ -240,11 +240,11 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
 
         $message = $this->getSender()->getMessage();
         if (empty($message)) {
-            $errors[] = __('The message cannot be empty.');
+            $errors[] = __('Please enter a message.');
         }
 
         if (!$this->getRecipients()->getEmails()) {
-            $errors[] = __('At least one recipient must be specified.');
+            $errors[] = __('Please specify at least one recipient.');
         }
 
         // validate recipients email addresses
@@ -347,7 +347,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     {
         $product = $this->_getData('_product');
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct Product instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct product instance.'));
         }
         return $product;
     }
@@ -378,7 +378,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Framework\Object) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please define the correct Sender information.')
+                __('Please define the correct sender information.')
             );
         }
         return $sender;
