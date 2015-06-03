@@ -204,7 +204,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             'invalid' => true,
         ];
         $modelData = ['key1' => 'value1', 'key2' => 222];
-        $this->model->setData($modelData);
+        foreach ($modelData as $key => $value) {
+            $this->model->setData($key, $value);
+        }
         $this->addCustomAttributesToModel($attributesAsArray, $this->model);
         $this->assertEquals(
             $modelData,
