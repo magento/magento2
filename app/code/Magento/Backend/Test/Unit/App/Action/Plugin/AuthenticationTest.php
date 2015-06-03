@@ -84,4 +84,78 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
     }
+
+    /**
+     * Calls aroundDispatch to access protected method _processNotLoggedInUser
+     *
+     * Data provider supplies different possibilities of request parameters and properties
+     * @dataProvider processNotLoggedInUserDataProvider
+     */
+    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
+    {
+        $subject = $this->getMockBuilder('Magento\Backend\Controller\Adminhtml\Index')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storage = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Stubs to control the flow of execution in aroundDispatch
+        $this->auth->expects($this->any())->method('getAuthStorage')->will($this->returnValue($storage));
+        $request->expects($this->once())->method('getActionName')->will($this->returnValue('non/open/action/name'));
+        $this->auth->expects($this->any())->method('getUser')->willReturn(false);
+        $this->auth->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $request->expects($this->any())->method('getPost')->willReturn(false);
+
+        // Test cases and expectations based on provided data
+        $request->expects($this->once())->method('isForwarded')->willReturn($isForwardedFlag);
+        $getParamCalls = 0;
+        $actionName = '';
+
+        // If forwarded flag is set, getParam never gets called
+        if (!$isForwardedFlag) {
+            if ($isIFrameParam) {
+                $getParamCalls = 1;
+                $actionName = 'deniedIframe';
+            } else if ($isAjaxParam) {
+                $getParamCalls = 2;
+                $actionName = 'deniedJson';
+            } else {
+                $getParamCalls = 2;
+                $actionName = 'login';
+            }
+        }
+
+        $requestParams = [
+            ['isIframe', null, $isIFrameParam],
+            ['isAjax', null, $isAjaxParam]
+        ];
+
+        $setterCalls = $isForwardedFlag ? 0 : 1;
+        $request->expects($this->exactly($getParamCalls))->method('getParam')->willReturnMap($requestParams);
+        $request->expects($this->exactly($setterCalls))->method('setForwarded')->with(true)->willReturnSelf();
+        $request->expects($this->exactly($setterCalls))->method('setRouteName')->with('adminhtml')->willReturnSelf();
+        $request->expects($this->exactly($setterCalls))->method('setControllerName')->with('auth')->willReturnSelf();
+        $request->expects($this->exactly($setterCalls))->method('setActionName')->with($actionName)->willReturnSelf();
+        $request->expects($this->exactly($setterCalls))->method('setDispatched')->with(false)->willReturnSelf();
+
+        $expectedResult = 'expectedResult';
+        $proceed = function ($request) use ($expectedResult) {
+            return $expectedResult;
+        };
+        $this->assertEquals($expectedResult, $this->plugin->aroundDispatch($subject, $proceed, $request));
+    }
+
+    public function processNotLoggedInUserDataProvider()
+    {
+        return [
+            'iFrame' => [true, false, false],
+            'Ajax' => [false, true, false],
+            'Neither iFrame nor Ajax' => [false, false, false],
+            'Forwarded request' => [true, true, true]
+        ];
+    }
 }
