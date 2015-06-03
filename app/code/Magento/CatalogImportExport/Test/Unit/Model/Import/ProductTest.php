@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -153,6 +152,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\CatalogImportExport\Model\Import\Product */
     protected $importProduct;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         /* For parent object construct */
@@ -373,25 +375,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function _initAttributeSets()
     {
-        $attributeSet1 = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSetOne = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
                             ->disableOriginalConstructor()
                             ->getMock();
-        $attributeSet1->expects($this->any())
+        $attributeSetOne->expects($this->any())
                     ->method('getAttributeSetName')
                     ->willReturn('attributeSet1');
-        $attributeSet1->expects($this->any())
+        $attributeSetOne->expects($this->any())
                     ->method('getId')
                     ->willReturn('1');
-        $attributeSet2 = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSetTwo = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
                             ->disableOriginalConstructor()
                             ->getMock();
-        $attributeSet2->expects($this->any())
+        $attributeSetTwo->expects($this->any())
                     ->method('getAttributeSetName')
                     ->willReturn('attributeSet2');
-        $attributeSet2->expects($this->any())
+        $attributeSetTwo->expects($this->any())
                     ->method('getId')
                     ->willReturn('2');
-        $attributeSetCol = [$attributeSet1, $attributeSet2];
+        $attributeSetCol = [$attributeSetOne, $attributeSetTwo];
         $collection = $this->getMockBuilder('\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection')
                         ->disableOriginalConstructor()
                         ->getMock();
@@ -512,7 +514,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
         $this->_connection->expects($this->once())
                         ->method('insertOnDuplicate')
-                        ->with($testTable, $tableData,['value']);
+                        ->with($testTable, $tableData, ['value']);
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
         $this->assertEquals($this->importProduct, $object);
     }
@@ -676,7 +678,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBehavior', 'getRowScope'])
             ->getMock();
-        $importProduct->expects($this->once())->method('getBehavior')->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
+        $importProduct
+            ->expects($this->once())
+            ->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         $importProduct->expects($this->once())->method('getRowScope')->willReturn($rowScope);
         $skuKey = \Magento\CatalogImportExport\Model\Import\Product::COL_SKU;
         $rowData = [
@@ -752,7 +757,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_suppressValidateRowOptionValidatorInvalidRows($importProduct);
 
-        $importProduct->expects($this->once())->method('getRowScope')->willReturn(\Magento\CatalogImportExport\Model\Import\Product::SCOPE_STORE);
+        $importProduct
+            ->expects($this->once())
+            ->method('getRowScope')
+            ->willReturn(\Magento\CatalogImportExport\Model\Import\Product::SCOPE_STORE);
         $importProduct->expects($this->at(1))->method('addRowError')->with($expectedError, $rowNum)->willReturn(null);
 
         $importProduct->validateRow($rowData, $rowNum);

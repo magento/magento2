@@ -14,7 +14,7 @@ use \Magento\Bundle\Model\Product\Price as BundlePrice;
  * Class Bundle
  * @package Magento\BundleImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
-*/
+ */
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
 
@@ -392,7 +392,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Transform dynamic/fixed values to integer.
      *
-     * @param $rowData
+     * @param array $rowData
      * @return array
      */
     protected function transformBundleCustomAttributes($rowData)
@@ -450,6 +450,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function populateExistingSelections($existingOptions)
     {
+        //@codingStandardsIgnoreStart
         $existingSelections = $this->connection->fetchAll(
             $this->connection->select()->from(
                 $this->_resource->getTableName('catalog_product_bundle_selection')
@@ -460,12 +461,17 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         foreach ($existingSelections as $existingSelection) {
             $optionTitle = $existingOptions[$existingSelection['option_id']]['title'];
-            foreach ($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'] as $selectIndex => $selection) {
+            $cachedOptionsSelections = $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'];
+            foreach ($cachedOptionsSelections as $selectIndex => $selection) {
                 $productId = $this->_cachedSkuToProducts[$selection['sku']];
                 if ($productId == $existingSelection['product_id']) {
                     foreach (array_keys($existingSelection) as $origKey) {
-                        $key = isset($this->_bundleFieldMapping[$origKey]) ? $this->_bundleFieldMapping[$origKey] : $origKey;
-                        if (!isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])) {
+                        $key = isset($this->_bundleFieldMapping[$origKey])
+                            ? $this->_bundleFieldMapping[$origKey]
+                            : $origKey;
+                        if (
+                            !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
+                        ) {
                             $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] =
                                 $existingSelection[$origKey];
                         }
@@ -474,6 +480,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
