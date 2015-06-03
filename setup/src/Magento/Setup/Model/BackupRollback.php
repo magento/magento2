@@ -97,6 +97,7 @@ class BackupRollback
         $fsBackup->setBackupsDir($backupsDir);
         $fsBackup->setBackupExtension('tgz');
         $fsBackup->setTime(time());
+        $this->log->log($type . ' backup is started ...');
         $fsBackup->create();
         $this->log->log(
             $type. ' backup filename: ' . $fsBackup->getBackupFilename()
@@ -172,6 +173,7 @@ class BackupRollback
         $dbBackup->setBackupsDir($backupsDir);
         $dbBackup->setBackupExtension('gz');
         $dbBackup->setTime(time());
+        $this->log->log('DB backup is started ...');
         $dbBackup->create();
         $this->log->log('DB backup filename: ' . $dbBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)');
