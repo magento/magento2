@@ -22,6 +22,15 @@ class PhpInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrent()
     {
         $phpInformation = new PhpInformation();
-        $this->assertEquals(get_loaded_extensions(), $phpInformation->getCurrent());
+        $loadedExtensions = array_map('strtolower', get_loaded_extensions());
+
+        // Class variable 'current' should be empty the first time
+        $this->assertAttributeEmpty('current', $phpInformation);
+        $actualExtensions = $phpInformation->getCurrent();
+        $this->assertEquals($loadedExtensions, $actualExtensions);
+
+        // Calling second type should cause class variable to be used
+        $this->assertSame($actualExtensions, $phpInformation->getCurrent());
+        $this->assertAttributeNotEmpty('current', $phpInformation);
     }
 }
