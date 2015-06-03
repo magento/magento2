@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,6 +16,7 @@ class Website extends AbstractValidator implements RowValidatorInterface
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
     protected $storeResolver;
+    protected $webSiteModel;
 
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
