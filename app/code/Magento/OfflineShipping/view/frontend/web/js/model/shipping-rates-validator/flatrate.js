@@ -12,7 +12,8 @@ define(
         "use strict";
         return {
             validate: function(address) {
-                return address.countryId != undefined;
+                //TODO: provide validation
+                return false;
             }
         };
     }
