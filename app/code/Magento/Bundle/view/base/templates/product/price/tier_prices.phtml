@@ -22,7 +22,7 @@ $tierPrices = $tierPriceModel->getTierPriceList();
                 <?php echo __(
                     'Buy %1 with %2 discount each',
                     $price['price_qty'],
-                    '<strong class="benefit">' . $price['price']->getBaseAmount() . '%</strong>'
+                    '<strong class="benefit">' . $tierPriceModel->getSavePercent($price['price']) . '%</strong>'
                 ); ?>
             </li>
         <?php endforeach; ?>
