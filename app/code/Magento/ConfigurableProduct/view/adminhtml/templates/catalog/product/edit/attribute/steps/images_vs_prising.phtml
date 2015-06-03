@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
+?>
+TBD [images vs prising step]
+<div>
+    <!-- ko text: data -->
+    <!-- ko text: data1 -->
+    <!-- ko text: data2 -->
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/lib/steps/step2": {
+                "content": "<?= $block->getJsonData()?>"
+            }
+        }
+    }
+</script>
