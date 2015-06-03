@@ -7,11 +7,14 @@ namespace Magento\Ui\TemplateEngine\Xhtml;
 
 use Magento\Ui\Component\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Template;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Class Result
  */
-class Result
+class Result implements ResultInterface
 {
     /**
      * @var Template
@@ -19,7 +22,7 @@ class Result
     protected $template;
 
     /**
-     * @var Compiler
+     * @var CompilerInterface
      */
     protected $compiler;
 
@@ -37,13 +40,13 @@ class Result
      * Constructor
      *
      * @param Template $template
-     * @param Compiler $compiler
+     * @param CompilerInterface $compiler
      * @param UiComponentInterface $component
      * @param Structure $structure
      */
     public function __construct(
         Template $template,
-        Compiler $compiler,
+        CompilerInterface $compiler,
         UiComponentInterface $component,
         Structure $structure
     ) {
