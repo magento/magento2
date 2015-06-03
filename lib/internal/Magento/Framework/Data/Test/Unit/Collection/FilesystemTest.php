@@ -17,14 +17,67 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject('Magento\Framework\Data\Collection\Filesystem');
     }
 
-    public function testFilterCallbackLike()
+    /**
+     * @param $field
+     * @param $filterValue
+     * @param $row
+     * @param $expected
+     *
+     * @dataProvider testFilterCallbackLikeDataProvider
+     */
+    public function testFilterCallbackLike($field, $filterValue, $row, $expected)
     {
-        $field = 'field';
-        $row = [$field => 'beginning_filter_target_end',];
-        $filterValueSuccess = new \Zend_Db_Expr('%filter_target%');
-        $filterValueFailure = new \Zend_Db_Expr('%not_found_in_the_row%');
+        $filterValue = new \Zend_Db_Expr($filterValue);
 
-        $this->assertTrue($this->model->filterCallbackLike($field, $filterValueSuccess, $row));
-        $this->assertFalse($this->model->filterCallbackLike($field, $filterValueFailure, $row));
+        $this->assertEquals($expected, $this->model->filterCallbackLike($field, $filterValue, $row));
+    }
+
+    /**
+     * @return array
+     */
+    public function testFilterCallbackLikeDataProvider()
+    {
+        $field     = 'field';
+        $testValue = '\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'';
+        return [
+            [$field, '\'%test%\'', [$field => $testValue,], true],
+            [$field, '%\'test%', [$field => $testValue,], true],
+            [$field, '%\'test\'%', [$field => $testValue,], true],
+            [$field, '%\'\'test%', [$field => $testValue,], true],
+            [$field, '%\'\'test\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'test%', [$field => $testValue,], true],
+            [$field, '%\'\'\'test\'\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'\'test%', [$field => $testValue,], false],
+
+            [$field, '\'%Value%\'', [$field => $testValue,], true],
+            [$field, '%Value\'%', [$field => $testValue,], true],
+            [$field, '%\'Value\'%', [$field => $testValue,], true],
+            [$field, '%Value\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'Value\'\'%', [$field => $testValue,], true],
+            [$field, '%Value\'\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'Value\'\'\'%', [$field => $testValue,], true],
+            [$field, '%Value%\'\'\'\'%', [$field => $testValue,], false],
+
+            [$field, '\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'', [$field => $testValue,], true],
+            [$field, '\'\'\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'\'\'', [$field => $testValue,], true],
+            [$field, '%test\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
+            [$field, '%test\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'test\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
+            [$field, '%\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
+            [$field, '%Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
+            [$field, '%Filter\'\'\'Value%', [$field => $testValue,], true],
+            [$field, '%Filter\'\'\'\'Value%', [$field => $testValue,], false],
+
+            [$field, '\'%\'\'\'Filter\'\'\'%\'', [$field => $testValue,], true],
+            [$field, '%Filter\'\'\'%', [$field => $testValue,], true],
+            [$field, '%\'\'\'Filter%', [$field => $testValue,], true],
+            [$field, '%\'Filter%', [$field => $testValue,], true],
+            [$field, '%Filter\'%', [$field => $testValue,], true],
+            [$field, '%Filter%', [$field => $testValue,], true],
+            [$field, '%Filter\'\'\'\'%', [$field => $testValue,], false],
+
+            [$field, '\'%no_match_value%\'', [$field => $testValue,], false],
+        ];
     }
 }

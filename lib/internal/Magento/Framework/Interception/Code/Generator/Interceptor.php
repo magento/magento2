@@ -144,7 +144,10 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 
         $methods[] = [
             'name' => '__wakeup',
-            'body' => "\$this->___init();\n",
+            'body' => "if (method_exists(get_parent_class(\$this), '__wakeup')) {\n"
+                . "    parent::__wakeup();\n"
+                . "}\n"
+                . "\$this->___init();\n",
         ];
 
         $methods[] = [
@@ -203,7 +206,6 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
-
         return $methods;
     }
 

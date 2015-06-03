@@ -69,7 +69,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\Captcha\Model\Cron(
-            $this->getMock('Magento\Captcha\Model\Resource\LogFactory', [], [], '', false),
+            $this->getMock('Magento\Captcha\Model\Resource\LogFactory', ['create'], [], '', false),
             $this->_helper,
             $this->_adminHelper,
             $this->_filesystem,
