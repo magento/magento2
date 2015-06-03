@@ -36,7 +36,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
                 // save the data
                 $model->save();
                 // display success message
-                $this->messageManager->addSuccess(__('The block has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the block.'));
                 // clear previously saved data from session
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 

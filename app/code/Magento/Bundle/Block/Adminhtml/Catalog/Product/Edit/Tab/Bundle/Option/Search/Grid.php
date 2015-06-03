@@ -118,7 +118,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
-            $this->setEmptyText(__('Please enter search conditions to view products.'));
+            $this->setEmptyText(__('What are you looking for?'));
         }
 
         $this->setCollection($collection);

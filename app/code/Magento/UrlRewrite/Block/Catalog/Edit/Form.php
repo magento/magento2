@@ -193,7 +193,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
         } elseif ($category->getId()) {
             $entityStores = (array)$category->getStoreIds();
             $message = __(
-                'We can\'t set up a URL rewrite because the category you chose is not associated with a website.'
+                'Please assign a website to the selected category.'
             );
             if (!$entityStores) {
                 throw new \Magento\Framework\Exception\LocalizedException($message);

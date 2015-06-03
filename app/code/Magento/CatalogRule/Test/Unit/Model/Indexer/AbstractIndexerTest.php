@@ -99,7 +99,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not rebuild index for undefined product
+     * @expectedExceptionMessage We can't rebuild the index for an undefined product.
      *
      * @return void
      */

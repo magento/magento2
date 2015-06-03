@@ -62,7 +62,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     public function getTabLabel()
     {
-        return __('Frontend Properties');
+        return __('Storefront Properties');
     }
 
     /**
@@ -72,7 +72,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     public function getTabTitle()
     {
-        return __('Frontend Properties');
+        return __('Storefront Properties');
     }
 
     /**
@@ -120,7 +120,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Frontend Properties')]);
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Storefront Properties')]);
 
         if ($widgetInstance->getId()) {
             $fieldset->addField('instance_id', 'hidden', ['name' => 'instance_id']);

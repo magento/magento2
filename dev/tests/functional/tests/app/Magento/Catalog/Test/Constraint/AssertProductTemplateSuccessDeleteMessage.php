@@ -18,7 +18,7 @@ class AssertProductTemplateSuccessDeleteMessage extends AbstractConstraint
     /**
      * Text value to be checked
      */
-    const SUCCESS_DELETE_MESSAGE = 'The attribute set has been removed.';
+    const SUCCESS_DELETE_MESSAGE = 'The product template has been removed.';
 
     /**
      * Assert that after deleting product template success delete message appears

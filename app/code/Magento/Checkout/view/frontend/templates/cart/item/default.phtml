@@ -85,10 +85,10 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <?php $cols++; ?>
             </td>
         <?php endif; ?>
-        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
             <div class="field qty">
                 <label class="label" for="cart-<?php echo $_item->getId() ?>-qty">
-                    <span><?php echo __('Qty') ?></span>
+                    <span><?php echo __('Quantity') ?></span>
                 </label>
                 <div class="control qty">
                     <input id="cart-<?php echo $_item->getId() ?>-qty"
@@ -96,7 +96,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                            value="<?php echo $block->getQty() ?>"
                            type="number"
                            size="4"
-                           title="<?php echo $block->escapeHtml(__('Qty')); ?>"
+                           title="<?php echo $block->escapeHtml(__('Quantity')); ?>"
                            class="input-text qty"
                            maxlength="12"
                            data-validate="{required:true,'validate-greater-than-zero':true}"
@@ -124,7 +124,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                         <a href="#"
                            data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>'
                            class="use-ajax action towishlist">
-                            <span><?php echo __('Move to Wishlist'); ?></span>
+                            <span><?php echo __('Move to Wish List'); ?></span>
                         </a>
                     <?php endif ?>
                 <?php endif ?>

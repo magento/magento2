@@ -56,7 +56,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
                 null,
                 [],
-                'From Date'
+                'Start Date'
             )
             ->addColumn(
                 'to_date',

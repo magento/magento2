@@ -99,7 +99,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = $this->_getFormInstance($args);
         $this->assertEquals([], $form->getElement('store_id')->getValues());
         $this->assertEquals(
-            'Chosen cms page does not associated with any website.',
+            'Please assign a website to the selected CMS page.',
             $form->getElement('store_id')->getAfterElementHtml()
         );
     }

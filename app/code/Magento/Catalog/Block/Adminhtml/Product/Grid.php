@@ -262,7 +262,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'set_name',
             [
-                'header' => __('Attribute Set'),
+                'header' => __('Product Template'),
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,

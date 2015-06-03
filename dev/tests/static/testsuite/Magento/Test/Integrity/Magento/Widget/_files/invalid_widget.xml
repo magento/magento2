@@ -91,7 +91,7 @@
         </parameter>
         <parameter name="anchor_text" type="text" visible="true" translate="label description">
             <label>Anchor Custom Text</label>
-            <description>If empty, the Product Name will be used</description>
+            <description>If empty, we'll use the product name here.</description>
         </parameter>
         <parameter name="title" type="text" visible="true" translate="label">
             <label>Anchor Custom Title</label>
@@ -123,7 +123,7 @@
         </parameter>
         <parameter name="anchor_text" type="text" visible="true" translate="label description">
             <label>Anchor Custom Text</label>
-            <description>If empty, the Category Name will be used</description>
+            <description>If empty, we'll use the category name here.</description>
         </parameter>
         <parameter name="title" type="text" visible="true" translate="label">
             <label>Anchor Custom Title</label>

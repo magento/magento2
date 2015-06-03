@@ -59,7 +59,7 @@ $_item = $block->getItem();
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()): ?>
-            <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br />
+            <span class="nobr"><?php echo __('Total Incl. Tax'); ?>:<br />
                 <?php echo $block->formatPrice($block->getFinalRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount()); ?>
             </span>
         <?php endif; ?>

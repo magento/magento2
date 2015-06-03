@@ -371,33 +371,33 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initMessageTemplates()
     {
         // @codingStandardsIgnoreStart
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_STORE, __('Invalid custom option store.'));
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_TYPE, __('Invalid custom option type.'));
-        $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Empty custom option title.'));
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_PRICE, __('Invalid custom option price.'));
+        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_STORE, __('Please correct the value for store.'));
+        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_TYPE, __('Please correct the value for type.'));
+        $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
+        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_PRICE, __('Please correct the value for price.'));
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_MAX_CHARACTERS,
-            __('Invalid custom option maximum characters value.')
+            __('Please correct the value for maximum characters value.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_SORT_ORDER,
-            __('Invalid custom option sort order.')
+            __('Please correct the value for sort order.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_PRICE,
-            __('Invalid custom option value price.')
+            __('Please correct the value for value price.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_SORT,
-            __('Invalid custom option value sort order.')
+            __('Please correct the value for value sort order.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_NEW_NAMES,
-            __('Custom option with such title already declared in source file.')
+            __('A custom option with this title already exists in source file.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_OLD_NAMES,
-            __('There are several existing custom options with such name.')
+            __('Several custom options with this name already exist.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_TYPES,
@@ -473,7 +473,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_productEntity = $data['product_entity'];
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Option entity must have a parent product entity.')
+                __('Every option entity must have a parent product entity.')
             );
         }
         if (isset($data['collection_by_pages_iterator'])) {

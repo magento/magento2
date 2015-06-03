@@ -60,7 +60,7 @@
         <?php endif; ?>
             <div class="field admin__field qty">
                 <label class="label admin__field-label"
-                       for="bundle-option-<?php echo $_option->getId() ?>-qty-input"><span><?php echo __('Qty:') ?></span></label>
+                       for="bundle-option-<?php echo $_option->getId() ?>-qty-input"><span><?php echo __('Quantity:') ?></span></label>
                 <div class="control admin__field-control"><input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
                         id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
                         class="input-text admin__control-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"

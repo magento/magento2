@@ -31,7 +31,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $model = $this->_objectManager->create('Magento\Store\Model\Website');
                 $title = __("Web Site");
                 $notExists = __("The website does not exist.");
-                $codeBase = __('Before modifying the website code please make sure that it is not used in index.php.');
+                $codeBase = __('Before modifying the website code please make sure it is not used in index.php.');
                 break;
             case 'group':
                 $itemId = $this->getRequest()->getParam('group_id', null);
@@ -45,9 +45,7 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $model = $this->_objectManager->create('Magento\Store\Model\Store');
                 $title = __("Store View");
                 $notExists = __("Store view doesn't exist");
-                $codeBase = __(
-                    'Before modifying the store view code please make sure that it is not used in index.php.'
-                );
+                $codeBase = __('Before modifying the store view code please make sure it is not used in index.php.');
                 break;
             default:
                 break;
