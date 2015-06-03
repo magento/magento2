@@ -939,15 +939,19 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Accept order with payment method instance
      *
+     * @param bool $isOnline
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deny()
+    public function deny($isOnline = true)
     {
-        $transactionId = $this->getLastTransId();
+        $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
-        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
-        $method = $this->getMethodInstance()->setStore($this->getOrder()->getStoreId());
-        if ($method->denyPayment($this)) {
+        $result = $isOnline ?
+            $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())->denyPayment($this) :
+            (bool)$this->getNotificationResult();
+
+        if ($result) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
@@ -955,9 +959,11 @@ class Payment extends Info implements OrderPaymentInterface
             );
             $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
+            $txt = $isOnline ?
+                'There is no need to deny this payment.' : 'Registered notification about denied payment.';
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
-                $this->_prependMessage(__('There is no need to deny this payment.'))
+                $this->_prependMessage(__($txt))
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
@@ -967,16 +973,19 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Performs registered payment update.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param bool $isOnline
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function update()
+    public function update($isOnline = true)
     {
-        $transactionId = $this->getLastTransId();
+        $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
         $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())
-            ->fetchTransactionInfo($this, $transactionId);
+        if ($isOnline) {
+            $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())
+                ->fetchTransactionInfo($this, $transactionId);
+        }
 
         if ($this->getIsTransactionApproved()) {
             $message = $this->_appendTransactionToMessage(
@@ -1441,8 +1450,8 @@ class Payment extends Info implements OrderPaymentInterface
             if (is_string($preparedMessage)) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
-                $preparedMessage
-            ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
+                    $preparedMessage
+                ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
@@ -1666,8 +1675,8 @@ class Payment extends Info implements OrderPaymentInterface
         }
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
             if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                $invoice->getId()
-            )
+                    $invoice->getId()
+                )
             ) {
                 $invoice->setTransactionId($transactionId);
                 return $invoice;
