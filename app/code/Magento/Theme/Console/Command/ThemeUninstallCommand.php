@@ -21,9 +21,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
 
 /**
- * Class ThemeUninstallCommand
+ * Command for uninstalling theme and backup-code feature
  *
- * Uninstall theme and provide code backup feature
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ThemeUninstallCommand extends Command
 {
@@ -128,11 +128,9 @@ class ThemeUninstallCommand extends Command
                 );
                 $backupRollback->codeBackup();
             }
-        }
-        catch(\Exception $e) {
+        } catch(\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-        }
-        finally {
+        } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
