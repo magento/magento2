@@ -111,6 +111,6 @@ class CreateShipmentStep implements TestStepInterface
     public function getShipmentIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
-        return $this->salesOrderView->getOrderForm()->getTabElement('shipments')->getGridBlock()->getIds();
+        return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
     }
 }
