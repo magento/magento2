@@ -50,22 +50,29 @@
 //  ---------------------------------------------
 
 .menu-wrapper {
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
+    float: left;
+    position: relative;
     width: @menu__width;
     z-index: @menu__z-index;
-    &:after {
+    &:before {
         background-color: @menu__background-color;
         bottom: 0;
         content: '';
         left: 0;
-        position: absolute;
-        right: 0;
+        position: fixed;
         top: 0;
+        width: @menu__width;
         z-index: @menu-wrapper__z-index;
     }
+    &._fixed {
+        left: 0;
+        position: fixed;
+        top: 0;
+        ~ .page-wrapper {
+            margin-left: @menu__width;
+        }
+    }
+
     .logo {
         display: block;
         height: @menu-logo-img__height + @menu-logo__padding-top + @menu-logo__padding-bottom;
@@ -117,7 +124,6 @@
 //  ---------------------------------------------
 
 .admin__menu {
-    position: relative;
     li {
         display: block;
     }
@@ -197,10 +203,19 @@
             min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
-            top: -@menu-logo__outer-size;
-            transition: all .5s ease;
+            top: 0;
+            transition-duration: .5s;
+            transition-property: left, visibility;
+            transition-timing-function: ease;
             visibility: hidden;
             z-index: @submenu__z-index;
+            &._overlap {
+                overflow-y: auto;
+                height: 100%;
+                &::-webkit-scrollbar {
+                    width: 0;
+                }
+            }
         }
         &._show  {
             > .submenu {
@@ -395,7 +410,7 @@
 .admin__menu-overlay {
     bottom: 0;
     left: 0;
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     z-index: @menu-overlay__z-index;
