@@ -124,13 +124,6 @@ class InstallSchema implements InstallSchemaInterface
                 'Template Text'
             )
             ->addColumn(
-                'template_text_preprocessed',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '64k',
-                [],
-                'Template Text Preprocessed'
-            )
-            ->addColumn(
                 'template_styles',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 '64k',

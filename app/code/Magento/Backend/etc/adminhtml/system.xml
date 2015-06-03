@@ -138,7 +138,7 @@
                 </field>
             </group>
             <group id="email" translate="label" type="text" sortOrder="510" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Transactional Emails</label>
+                <label>Emails</label>
                 <field id="logo" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image</label>
                     <comment>Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 2x normal size and then specify 1x dimensions in width/height fields below.</comment>
