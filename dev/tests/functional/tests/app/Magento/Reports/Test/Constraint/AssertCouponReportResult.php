@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCouponReportResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert coupon info in report: code, rule name, subtotal, discount on coupons report page
      *
@@ -34,16 +30,16 @@ class AssertCouponReportResult extends AbstractConstraint
         $discount = $data['price']['discount'] != 0
             ? '-' . $currency . number_format($data['price']['discount'], 2)
             : $currency . '0.00';
-        $roleName = $data['coupon_code']->getName();
+        $couponCode = $data['coupon_code']->getCouponCode();
         $filter = [
-            'coupon_code' => $data['coupon_code']->getCouponCode(),
-            'rule_name' => $roleName,
+            'coupon_code' => $couponCode,
+            'rule_name' => $data['coupon_code']->getName(),
             'subtotal' => $currency . number_format($data['price']['subtotal'], 2),
             'discount' => $discount,
         ];
         \PHPUnit_Framework_Assert::assertTrue(
             $salesCouponReportView->getGridBlock()->isRowVisible($filter, false),
-            "Coupon '$roleName' is not visible."
+            "Coupon with code - '$couponCode' is not visible."
         );
     }
 
