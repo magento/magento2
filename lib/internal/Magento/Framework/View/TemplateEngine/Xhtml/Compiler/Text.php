@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\TemplateEngine\Xhtml\Compiler;
+namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler;
 
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface;
+use Magento\Framework\Object;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface;
 
 /**
  * Class Text
@@ -32,17 +32,17 @@ class Text implements TextInterface
      * Compiles the Element node
      *
      * @param \DOMText $node
-     * @param UiComponentInterface $component
+     * @param Object $processedObject
      * @return void
      */
-    public function compile(\DOMText $node, UiComponentInterface $component)
+    public function compile(\DOMText $node, Object $processedObject)
     {
         $result = '';
         foreach ($this->directivePool as $directive) {
             $result = preg_replace_callback(
                 $directive->getPattern(),
-                function ($match) use ($directive, $component) {
-                    return $directive->execute($match, $component);
+                function ($match) use ($directive, $processedObject) {
+                    return $directive->execute($match, $processedObject);
                 },
                 $node->textContent
             );
