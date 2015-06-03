@@ -9,7 +9,35 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="indexer" type="indexerType" minOccurs="1" maxOccurs="unbounded" />
+                <xs:element name="indexer" type="indexerType" minOccurs="1" maxOccurs="unbounded">
+                    <xs:unique name="uniqueField">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Field name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath=".//field"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                    <xs:unique name="uniqueSourceField">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Field source must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath=".//source"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                    <xs:unique name="uniqueHandler">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Field handler must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath=".//handler"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
         <xs:unique name="uniqueIndexertId">
@@ -33,26 +61,29 @@
         </xs:unique>
     </xs:element>
 
-    <xs:complexType name="indexerType">
+    <xs:complexType name="indexerType" mixed="true">
         <xs:annotation>
             <xs:documentation>
                 Indexer declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="title" type="translatableType" />
             <xs:element name="description" type="translatableType" />
-            <xs:element name="fields" type="fieldsType"  minOccurs="0" maxOccurs="1">
-                <xs:unique name="uniqueField">
-                    <xs:selector xpath="field"/>
-                    <xs:field xpath="@name"/>
-                </xs:unique>
-            </xs:element>
-        </xs:sequence>
+            <xs:group ref="fields"/>
+        </xs:choice>
         <xs:attribute name="id" type="xs:string" use="required" />
         <xs:attribute name="view_id" type="viewIdType" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
     </xs:complexType>
+
+    <xs:group name="fields">
+        <xs:choice>
+            <xs:element name="field" type="match"/>
+            <xs:element name="source" type="sourceType"/>
+            <xs:element name="handler" type="handlerType"/>
+        </xs:choice>
+    </xs:group>
 
     <xs:complexType name="translatableType">
         <xs:simpleContent>
@@ -84,39 +115,36 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="fieldsType">
-        <xs:annotation>
-            <xs:documentation>
-                Index fields declaration.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="field" type="fieldTypeAbstract" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="handler" type="classType" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="fieldTypeAbstract">
+    <xs:complexType name="fieldTypeAbstract" abstract="true">
         <xs:annotation>
             <xs:documentation>
                 Index field declaration.
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="origin" type="originType" use="required"/>
-        <xs:attribute name="handler" type="classType" use="required"/>
+        <xs:attribute name="source" type="xs:string" use="required"/>
+        <xs:attribute name="handler" type="xs:string" use="required"/>
     </xs:complexType>
 
-    <xs:simpleType name="originType">
+    <xs:complexType name="sourceType">
         <xs:annotation>
             <xs:documentation>
-                Origin can contain only [a-zA-Z0-9_.].
+                Source of field declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+" />
-        </xs:restriction>
-    </xs:simpleType>
+        <xs:attribute name="class" type="classType" use="required"/>
+        <xs:attribute name="name" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="handlerType">
+        <xs:annotation>
+            <xs:documentation>
+                Handler of field declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+        <xs:attribute name="name" type="classType" use="required"/>
+    </xs:complexType>
 
     <xs:complexType name="match">
         <xs:complexContent>
@@ -124,6 +152,7 @@
                 <xs:sequence>
                     <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
+                <xs:attribute type="dataType" name="dataType" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -137,20 +166,6 @@
         <xs:attribute name="class" type="classType" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="both">
-        <xs:complexContent>
-            <xs:extension base="match"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="filter">
-        <xs:complexContent>
-            <xs:extension base="fieldTypeAbstract">
-                <xs:attribute type="dataType" name="dataType" use="required" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
     <xs:simpleType name="dataType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="int" />
@@ -158,5 +173,23 @@
             <xs:enumeration value="varchar" />
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="searchable">
+        <xs:complexContent>
+            <xs:extension base="match"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="filterable">
+        <xs:complexContent>
+            <xs:extension base="match"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="both">
+        <xs:complexContent>
+            <xs:extension base="match"/>
+        </xs:complexContent>
+    </xs:complexType>
 
 </xs:schema>
