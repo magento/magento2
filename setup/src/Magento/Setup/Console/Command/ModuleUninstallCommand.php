@@ -119,7 +119,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param Loader $loader
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param Remove $removeCode
+     * @param Remove $remove
      * @param UninstallCollector $collector
      */
     public function __construct(
@@ -132,7 +132,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         Loader $loader,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
-        Remove $removeCode,
+        Remove $remove,
         UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
@@ -148,7 +148,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
         $this->file = $file;
         $this->loader = $loader;
-        $this->removeCode = $removeCode;
+        $this->remove = $remove;
     }
 
     /**
