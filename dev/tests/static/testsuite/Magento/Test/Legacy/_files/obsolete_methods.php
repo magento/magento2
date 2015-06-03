@@ -2232,4 +2232,5 @@ return [
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['getDataSetDefault', 'Magento\Framework\Object']
 ];

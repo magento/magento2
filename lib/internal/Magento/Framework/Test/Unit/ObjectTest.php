@@ -170,17 +170,6 @@ string',
     }
 
     /**
-     * Tests \Magento\Framework\Object->getDataSetDefault()
-     */
-    public function testGetDataSetDefault()
-    {
-        $this->_object->setData(['key1' => 'value1', 'key2' => null]);
-        $this->assertEquals('value1', $this->_object->getDataSetDefault('key1', 'default'));
-        $this->assertEquals(null, $this->_object->getDataSetDefault('key2', 'default'));
-        $this->assertEquals('default', $this->_object->getDataSetDefault('key3', 'default'));
-    }
-
-    /**
      * Tests \Magento\Framework\Object->hasData()
      */
     public function testHasData()
