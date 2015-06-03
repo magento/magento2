@@ -404,7 +404,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     continue;
                 }
                 if ($this->_productSuperData['used_attributes']) {
-                    $skuSuperValues = $this->_skuSuperAttributeValues[$this->_productSuperData['attr_set_code']][$assocId];
+                    $skuSuperValues = $this
+                        ->_skuSuperAttributeValues[$this->_productSuperData['attr_set_code']][$assocId];
                     $usedCombParts = [];
 
                     foreach ($this->_productSuperData['used_attributes'] as $usedAttrId => $usedValues) {
@@ -433,6 +434,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
             }
             // clean up unused values pricing
+            //@codingStandardsIgnoreStart
             foreach ($this->_productSuperData['used_attributes'] as $usedAttrId => $usedValues) {
                 foreach ($usedValues as $optionId => $isUsed) {
                     if (!$isUsed && isset($this->_superAttributesData['pricing'])) {
@@ -444,6 +446,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     }
                 }
             }
+            //@codingStandardsIgnoreEnd
         }
         return $this;
     }
@@ -489,7 +492,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
                     $additionalRow['_super_attribute_code'] = $attrCode;
                     $additionalRow['_super_attribute_option'] = $attrValue;
-                    $additionalRow['_super_attribute_price_corr'] = isset($prices[$attrCode][$attrValue]) ? $prices[$attrCode][$attrValue] : '';
+                    $additionalRow['_super_attribute_price_corr'] = isset($prices[$attrCode][$attrValue])
+                        ? $prices[$attrCode][$attrValue]
+                        : '';
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
                 }
@@ -513,7 +518,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (!isset($rowData['configurable_variation_labels'])) {
             return $labels;
         }
-        $pairFieldAndValue = explode($this->_entityModel->getMultipleValueSeparator(), $rowData['configurable_variation_labels']);
+        $pairFieldAndValue = explode(
+            $this->_entityModel->getMultipleValueSeparator(),
+            $rowData['configurable_variation_labels']
+        );
 
         foreach ($pairFieldAndValue as $nameAndValue) {
             $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
@@ -655,7 +663,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      *  Collect super data.
      *
-     * @param $rowData
+     * @param array $rowData
      * @return $this
      */
     protected function _collectSuperData($rowData)
@@ -674,7 +682,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $additionalRows = $this->_parseVariations($rowData);
         $variationLabels = $this->_parseVariationLabels($rowData);
-
+        //@codingStandardsIgnoreStart
         foreach ($additionalRows as $data) {
             $this->_collectAssocIds($data);
 
@@ -697,14 +705,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->_collectSuperDataPrice($data, $productSuperAttrId);
             }
         }
+        //@codingStandardsIgnoreEnd
+
         return $this;
     }
 
     /**
      *  Collect super data price.
      *
-     * @param $data
-     * @param $productSuperAttrId
+     * @param array $data
+     * @param integer|string $productSuperAttrId
      * @return $this
      */
     protected function _collectSuperDataPrice($data, $productSuperAttrId)
@@ -732,7 +742,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      *  Collect assoc ids and simpleIds to break links.
      *
-     * @param $data
+     * @param array $data
      * @return $this
      */
     protected function _collectAssocIds($data)
@@ -761,10 +771,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      *  Collect super data price.
      *
-     * @param $data
-     * @param $productSuperAttrId
-     * @param $productId
-     * @param $variationLabels
+     * @param array $data
+     * @param integer|string $productSuperAttrId
+     * @param integer|string $productId
+     * @param array $variationLabels
      * @return $this
      */
     protected function _collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels)

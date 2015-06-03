@@ -8,6 +8,8 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 class StoreResolver
 {
     /**
+     * Store manager instance.
+     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
