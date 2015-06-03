@@ -98,7 +98,7 @@ return [
         '</route></router></config>',
         [
             "Element 'route', attribute 'id': [facet 'pattern'] The value 'dc' is not accepted by the " .
-            "pattern '[A-Za-z_]{3,}'.",
+            "pattern '[A-Za-z0-9_]{3,}'.",
             "Element 'route', attribute 'id': 'dc' is not a valid value of the atomic type 'routeIdType'.",
             "Element 'route', attribute 'id': Warning: No precomputed value available, the value was either " .
             "invalid or something strange happend."
