@@ -210,7 +210,7 @@
 
         <dataset name="virtual_big_qty">
             <field name="entity_id" xsi:type="array">
-                <item name="products" xsi:type="string">catalogProductSimple::virtual_big_qty</item>
+                <item name="products" xsi:type="string">catalogProductVirtual::virtual_big_qty</item>
             </field>
             <field name="customer_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">johndoe_unique</item>
