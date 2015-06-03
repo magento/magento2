@@ -5,9 +5,11 @@
  */
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Export;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class Filter extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -122,8 +124,7 @@ class Filter extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->modelContext = $this->getMock('Magento\Framework\Model\Context', ['_construct'], [], '', false);
-        //$this->modelContext->expects($this->any())->method('_construct')->will($this->returnValue(true));
+        $this->modelContext = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->extensionFactory = $this->getMock(
             'Magento\Framework\Api\ExtensionAttributesFactory',
@@ -160,7 +161,6 @@ class Filter extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
         $this->localeDate->expects($this->any())->method('getDateFormat')->will($this->returnValue('12-12-2012'));
-
         $this->reservedAttributeList = $this->getMock(
             'Magento\Catalog\Model\Product\ReservedAttributeList',
             [],
@@ -171,10 +171,9 @@ class Filter extends \PHPUnit_Framework_TestCase
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
         $this->resource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
         $this->resourceCollection = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
-
         $this->context = $this->getMock(
             'Magento\Backend\Block\Template\Context',
-            ['getFileSystem', 'getEscaper', 'getLocaleDate'],
+            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'],
             [],
             '',
             false
@@ -187,6 +186,20 @@ class Filter extends \PHPUnit_Framework_TestCase
         $timeZone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimeZone', [], [], '', false);
         $timeZone->expects($this->any())->method('getDateFormat')->will($this->returnValue('M/d/yy'));
         $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timeZone));
+        $dateBlock = $this->getMock(
+            'Magento\Framework\View\Element\Html\Date',
+            ['setValue', 'getHtml', 'setId', 'getId'],
+            [],
+            '',
+            false
+        );
+        $dateBlock->expects($this->any())->method('setValue')->will($this->returnSelf());
+        $dateBlock->expects($this->any())->method('getHtml')->will($this->returnValue(''));
+        $dateBlock->expects($this->any())->method('setId')->will($this->returnSelf());
+        $dateBlock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $layout->expects($this->any())->method('createBlock')->will($this->returnValue($dateBlock));
+        $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $this->backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->importExportData = $this->getMock('Magento\ImportExport\Helper\Data', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -203,11 +216,12 @@ class Filter extends \PHPUnit_Framework_TestCase
     /**
      * Test decorateFilter()
      *
-     * @param string $attributeCode
-     * @param array  $columnValue
+     * @param array $attributeData
+     * @param string $backendType
+     * @param array $columnValue
      * @dataProvider decorateFilterDataProvider
      */
-    public function testDecorateFilter($attributeCode, $backendType, $columnValue)
+    public function testDecorateFilter($attributeData, $backendType, $columnValue)
     {
         $value = '';
         $attribute = new \Magento\Eav\Model\Entity\Attribute(
@@ -229,13 +243,14 @@ class Filter extends \PHPUnit_Framework_TestCase
             $this->resource,
             $this->resourceCollection
         );
-
-        $attribute->setAttributeCode($attributeCode);
+        $attribute->setAttributeCode($attributeData['code']);
+        $attribute->setFrontendInput($attributeData['input']);
+        $attribute->setOptions($attributeData['options']);
+        $attribute->setFilterOptions($attributeData['filter_options']);
         $attribute->setBackendType($backendType);
         $column = new \Magento\Framework\Object();
         $column->setData($columnValue, 'value');
         $isExport = true;
-
         $this->filter->decorateFilter($value, $attribute, $column, $isExport);
     }
 
@@ -248,23 +263,43 @@ class Filter extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'attributeCode' => 'custom_design_from',
+                'attributeCode' => [
+                    'code' =>'updated_at',
+                    'input' => '',
+                    'options' => [],
+                    'filter_options' => []
+                ],
                 'backendType' => 'datetime',
-                'columnValue' => ['values' => ['custom_design_from' => 'custom_design_from']]
+                'columnValue' => ['values' => ['updated_at' => '12/12/12']]
             ],
             [
-                'attributeCode' => 'category_ids',
+                'attributeCode' => [
+                    'code' => 'category_ids',
+                    'input' => '',
+                    'options' => [],
+                    'filter_options' => []
+                ],
                 'backendType' => 'varchar',
                 'columnValue' => ['values' => ['category_ids' => '1']]
             ],
             [
-                'attributeCode' => 'cost',
+                'attributeCode' => [
+                    'code' => 'cost',
+                    'input' => '',
+                    'options' => [],
+                    'filter_options' => []
+                ],
                 'backendType' => 'decimal',
                 'columnValue' => ['values' => ['cost' => 'cost']]
             ],
             [
-                'attributeCode' => 'color',
-                'backendType' => 'text',
+                'attributeCode' => [
+                    'code' => 'color',
+                    'input' => 'select',
+                    'options' => ['red' => 'red'],
+                    'filter_options' => ['opt' => 'val']
+                ],
+                'backendType' => 'select',
                 'columnValue' => ['values' => ['color' => 'red']]
             ]
         ];
