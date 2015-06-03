@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Model\Locale;
 
+use Magento\Framework\Locale\Resolver;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -28,7 +30,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLocaleWithDefaultLocale()
     {
-        $this->_checkSetLocale(\Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
+        $this->_checkSetLocale(Resolver::DEFAULT_LOCALE);
     }
 
     /**

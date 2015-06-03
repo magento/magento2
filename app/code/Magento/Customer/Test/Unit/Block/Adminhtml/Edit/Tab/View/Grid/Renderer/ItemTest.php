@@ -86,7 +86,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Catalog\Helper\Product\Configuration')
             ->will($this->returnValue($helper));
 
-        $this->itemBlock = new \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item($context, $productConfig, $productConfigPool);
+        $this->itemBlock = new \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item(
+            $context,
+            $productConfig,
+            $productConfigPool
+        );
     }
 
     public function testRenderWithoutOptions()
@@ -101,7 +105,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testRender($amountOption, $expectedHtml)
     {
         $this->configure($amountOption);
-        $realHtml = $this->itemBlock->render($this->item);
+        $realHtml = '<xhtml>' . $this->itemBlock->render($this->item) . '</xhtml>';
         $this->assertXmlStringEqualsXmlString($expectedHtml, $realHtml);
     }
 
@@ -111,27 +115,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             [
                 2,
                 <<<HTML
-                        <div class="bundle-product-options">
-                            <strong>testProductName</strong>
-                            <dl>
+                        <xhtml>
+                            <div class="product-title">testProductName</div>
+                            <dl class="item-options">
                                 <dt>testLabel1</dt>
                                 <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
                                 <dt>testLabel2</dt>
                                 <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
                             </dl>
-                        </div>
+                        </xhtml>
 HTML
             ],
             [
                 1,
                 <<<HTML
-                        <div class="bundle-product-options">
-                            <strong>testProductName</strong>
-                            <dl>
+                        <xhtml>
+                            <div class="product-title">testProductName</div>
+                            <dl class="item-options">
                                 <dt>testLabel1</dt>
                                 <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
                             </dl>
-                        </div>
+                        </xhtml>
 HTML
             ],
         ];

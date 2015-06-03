@@ -70,10 +70,10 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
+            $this->addressRenderer,
             $this->paymentHelper,
             $this->shipmentResourceMock,
             $this->globalConfig,
-            $this->addressRenderer,
             $this->eventManagerMock
         );
     }
@@ -204,6 +204,75 @@ class ShipmentSenderTest extends AbstractSenderTest
             [0, 1, 1, true],
             [0, 1, 0, true],
             [1, null, null, null]
+        ];
+    }
+
+    /**
+     * @param bool $isVirtualOrder
+     * @param int $formatCallCount
+     * @param string|null $expectedShippingAddress
+     * @dataProvider sendVirtualOrderDataProvider
+     */
+    public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
+    {
+        $address = 'address_test';
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+
+        $this->shipmentMock->expects($this->once())
+            ->method('setSendEmail')
+            ->with(true);
+
+        $this->globalConfig->expects($this->once())
+            ->method('getValue')
+            ->with('sales_email/general/async_sending')
+            ->willReturn(false);
+
+        $addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
+
+        $this->addressRenderer->expects($this->exactly($formatCallCount))
+            ->method('format')
+            ->with($addressMock, 'html')
+            ->willReturn($address);
+
+        $this->stepAddressFormat($addressMock, $isVirtualOrder);
+
+        $this->shipmentMock->expects($this->once())
+            ->method('getCustomerNoteNotify')
+            ->willReturn(false);
+
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                [
+                    'order' => $this->orderMock,
+                    'shipment' => $this->shipmentMock,
+                    'comment' => '',
+                    'billing' => $addressMock,
+                    'payment_html' => 'payment',
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => $expectedShippingAddress,
+                    'formattedBillingAddress' => $address
+                ]
+            );
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+        $this->shipmentResourceMock->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->shipmentMock, 'send_email');
+
+        $this->assertFalse($this->sender->send($this->shipmentMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function sendVirtualOrderDataProvider()
+    {
+        return [
+            [true, 1, null],
+            [false, 2, 'address_test']
         ];
     }
 }

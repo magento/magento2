@@ -40,6 +40,9 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dataObjectProcessorMock;
 
+    /** @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_methodsMapProcessorMock;
+
     /** @var array */
     protected $_arguments;
 
@@ -67,7 +70,13 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         );
         $this->_dataObjectProcessorMock = $this->getMock(
             'Magento\Framework\Reflection\DataObjectProcessor',
-            ['getMethodReturnType'],
+            [],
+            [],
+            '',
+            false);
+        $this->_methodsMapProcessorMock = $this->getMock(
+            'Magento\Framework\Reflection\MethodsMap',
+            [],
             [],
             '',
             false);
@@ -80,7 +89,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->_authorizationMock,
             $this->_dataObjectConverter,
             $this->_serviceInputProcessorMock,
-            $this->_dataObjectProcessorMock
+            $this->_dataObjectProcessorMock,
+            $this->_methodsMapProcessorMock
         );
         parent::setUp();
     }
@@ -127,10 +137,6 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('process')
             ->will($this->returnArgument(2));
-
-        $this->_dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
-            ->with($className, $methodName)
-            ->will($this->returnValue('string'));
 
         /** Execute SUT. */
         $this->assertEquals(

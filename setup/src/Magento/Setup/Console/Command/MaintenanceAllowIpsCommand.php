@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,18 +26,25 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     const INPUT_KEY_NONE = 'none';
 
     /**
-     * @var MaintenanceMode $maintenanceMode
+     * @var MaintenanceMode
      */
     private $maintenanceMode;
+
+    /**
+     * @var IpValidator
+     */
+    private $ipValidator;
 
     /**
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
+     * @param IpValidator $ipValidator
      */
-    public function __construct(MaintenanceMode $maintenanceMode)
+    public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
         $this->maintenanceMode = $maintenanceMode;
+        $this->ipValidator = $ipValidator;
         parent::__construct();
     }
 
@@ -75,6 +83,12 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     {
         if (!$input->getOption(self::INPUT_KEY_NONE)) {
             $addresses = $input->getArgument(self::INPUT_KEY_IP);
+            $messages = $this->validate($addresses);
+            if (!empty($messages)) {
+                $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
+                return;
+            }
+
             if (!empty($addresses)) {
                 $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(
@@ -86,5 +100,16 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             $this->maintenanceMode->setAddresses('');
             $output->writeln('<info>Set exempt IP-addresses: none</info>');
         }
+    }
+
+    /**
+     * Validates IP addresses and return error messages
+     *
+     * @param string[] $addresses
+     * @return string[]
+     */
+    protected function validate(array $addresses)
+    {
+        return $this->ipValidator->validateIps($addresses, false);
     }
 }

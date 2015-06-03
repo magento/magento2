@@ -6,11 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
-/**
- * Magento translate adapter interface
- */
 namespace Magento\Framework\Translate;
 
+/**
+ * Magento translate adapter interface
+ *
+ * @api
+ */
 interface AdapterInterface
 {
     /**

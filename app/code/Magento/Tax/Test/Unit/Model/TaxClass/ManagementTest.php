@@ -79,8 +79,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setField')
             ->with(
                 $this->logicalOr(
-                    \Magento\Tax\Api\Data\TaxClassInterface::KEY_TYPE,
-                    \Magento\Tax\Api\Data\TaxClassInterface::KEY_NAME
+                    \Magento\Tax\Model\ClassModel::KEY_TYPE,
+                    \Magento\Tax\Model\ClassModel::KEY_NAME
                 )
             )->willReturnSelf();
 

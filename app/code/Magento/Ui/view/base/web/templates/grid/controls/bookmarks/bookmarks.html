@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div
+    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks"
+    data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
+    <button
+        class="admin__action-dropdown"
+        type="button"
+        data-bind="click: toggleOpened"
+        data-toggle="dropdown"
+        aria-haspopup="true">
+        <span class="admin__action-dropdown-text"
+                data-bind="text: activeView() ? activeView().label() : $t('Default View') "></span>
+    </button>
+    <ul class="admin__action-dropdown-menu">
+        <!-- ko foreach: elems -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+        <li data-bind="visible: hasChanges" class="action-dropdown-menu-action action-dropdown-menu-item-last">
+            <a href="" data-bind="click: createNewView, text: $t('Save Current View')"></a>
+        </li>
+    </ul>
+</div>

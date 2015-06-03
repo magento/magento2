@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../Magento/Customer/etc/sections.xsd">
+    <action name="checkout/cart/add">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/delete">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/updatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/updateItemOptions">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/couponPost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/estimatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/estimateUpdatePost">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/onepage/saveOrder">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/sidebar/removeItem">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/sidebar/updateItemQty">
+        <section name="cart"/>
+    </action>
+</config>

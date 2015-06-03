@@ -13,6 +13,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    const PAYMENT_METHOD_FREE_CODE = 'free';
+
     /**
      * XML Paths for configuration constants
      */
@@ -34,7 +36,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var string
      */
-    protected $_code = 'free';
+    protected $_code = self::PAYMENT_METHOD_FREE_CODE;
 
     /**
      * @var PriceCurrencyInterface
@@ -93,6 +95,17 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         ) && !empty($quote) && $this->priceCurrency->round(
             $quote->getGrandTotal()
         ) == 0;
+    }
+
+    /**
+     * Check whether method is enabled in config
+     *
+     * @param \Magento\Quote\Model\Quote|null $quote
+     * @return bool
+     */
+    public function isAvailableInConfig($quote = null)
+    {
+        return parent::isAvailable($quote);
     }
 
     /**

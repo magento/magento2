@@ -45,13 +45,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_urlBuilder;
 
     /**
-     * Translator
-     *
-     * @var \Magento\Framework\TranslateInterface
-     */
-    protected $_translator;
-
-    /**
      * Cache
      *
      * @var \Magento\Framework\App\CacheInterface
@@ -163,7 +156,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Session\SessionManagerInterface $session,
@@ -182,7 +174,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_layout = $layout;
         $this->_eventManager = $eventManager;
         $this->_urlBuilder = $urlBuilder;
-        $this->_translator = $translator;
         $this->_cache = $cache;
         $this->_design = $design;
         $this->_session = $session;
@@ -276,16 +267,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getScopeConfig()
     {
         return $this->_scopeConfig;
-    }
-
-    /**
-     * Get translator
-     *
-     * @return \Magento\Framework\TranslateInterface
-     */
-    public function getTranslator()
-    {
-        return $this->_translator;
     }
 
     /**

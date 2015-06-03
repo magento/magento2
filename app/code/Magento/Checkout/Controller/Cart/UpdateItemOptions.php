@@ -66,7 +66,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                return $this->_goBack();
+                return $this->_goBack($this->_url->getUrl('checkout/cart'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
