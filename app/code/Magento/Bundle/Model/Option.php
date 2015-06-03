@@ -53,7 +53,10 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function addSelection(\Magento\Catalog\Model\Product $selection)
     {
-        $selections = $this->getDataSetDefault('selections', []);
+        if (!$this->hasData('selections')) {
+            $this->setData('selections', []);
+        }
+        $selections = $this->getData('selections');
         $selections[] = $selection;
         $this->setSelections($selections);
     }

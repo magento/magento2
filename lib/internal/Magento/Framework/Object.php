@@ -222,21 +222,6 @@ class Object implements \ArrayAccess
     }
 
     /**
-     * Fast get data or set default if value is not available
-     *
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getDataSetDefault($key, $default)
-    {
-        if (!array_key_exists($key, $this->_data)) {
-            $this->_data[$key] = $default;
-        }
-        return $this->_data[$key];
-    }
-
-    /**
      * If $key is empty, checks whether there's any data in the object
      * Otherwise checks if the specified attribute is set.
      *
