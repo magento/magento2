@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\TemplateEngine\Xhtml\Compiler;
+namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler;
 
-use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\Object;
 
 /**
  * Interface CdataInterface
@@ -16,8 +16,8 @@ interface CdataInterface
      * Compiles the CData Section node
      *
      * @param \DOMCdataSection $node
-     * @param UiComponentInterface $component
+     * @param Object $processedObject
      * @return void
      */
-    public function compile(\DOMCdataSection $node, UiComponentInterface $component);
+    public function compile(\DOMCdataSection $node, Object $processedObject);
 }
