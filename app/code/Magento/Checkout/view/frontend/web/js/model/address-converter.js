@@ -41,6 +41,27 @@ define(
                 return Address(addressData);
             },
 
+            formDataProviderToQuoteAddress: function(formProviderData, formIndex) {
+                var addressData = {};
+                $.each(formProviderData, function(path, value) {
+                    var pathComponents = path.split('.');
+                    pathComponents.splice(pathComponents.indexOf(formIndex), 1);
+                    pathComponents.reverse();
+                    var dataObject = {};
+                    $.each(pathComponents, function(index, pathPart) {
+                        if (index == 0) {
+                            dataObject[pathPart] = value;
+                        } else {
+                            var parent = {};
+                            parent[pathPart] = dataObject;
+                            dataObject = parent;
+                        }
+                    });
+                    $.extend(true, addressData, dataObject);
+                });
+                return this.formAddressDataToQuoteAddress(addressData);
+            },
+
             /**
              * Convert object to string with delimiter
              * @param object
