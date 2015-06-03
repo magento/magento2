@@ -9,6 +9,12 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
+/**
+ * Importing configurable products
+ * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
@@ -178,8 +184,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
      * @param array $params
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
@@ -187,8 +193,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
         array $params,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
@@ -299,6 +305,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $newSku - imported variations list
      * @param array $oldSku - present variations list
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
     {
@@ -311,7 +318,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!empty($dataWithExtraVirtualRows)) {
                     array_unshift($dataWithExtraVirtualRows, $rowData);
                 } else {
-                    $dataWithExtraVirtualRows = array($rowData);
+                    $dataWithExtraVirtualRows[] = $rowData;
                 }
 
                 foreach ($dataWithExtraVirtualRows as $data) {
@@ -385,6 +392,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Validate and prepare data about super attributes and associated products.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _processSuperData()
     {
@@ -405,7 +413,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                             continue;
                         }
                         $usedCombParts[] = $skuSuperValues[$usedAttrId];
-                        $superData['used_attributes'][$usedAttrId][$skuSuperValues[$usedAttrId]] = true;
+                        $this->_productSuperData['used_attributes'][$usedAttrId][$skuSuperValues[$usedAttrId]] = true;
                     }
                     $comb = implode('|', $usedCombParts);
 
@@ -446,20 +454,22 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseVariations($rowData)
     {
         $prices = $this->_parseVariationPrices($rowData);
-        $additionalRows = array();
+        $additionalRows = [];
         if (!isset($rowData['configurable_variations'])) {
             return $additionalRows;
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
         foreach ($variations as $variation) {
             $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
-            $additionalRow = array();
+            $additionalRow = [];
 
-            $fieldAndValuePairs = array();
+            $fieldAndValuePairs = [];
             foreach ($fieldAndValuePairsText as $nameAndValue) {
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
                 if (!empty($nameAndValue)) {
@@ -481,7 +491,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $additionalRow['_super_attribute_option'] = $attrValue;
                     $additionalRow['_super_attribute_price_corr'] = isset($prices[$attrCode][$attrValue]) ? $prices[$attrCode][$attrValue] : '';
                     $additionalRows[] = $additionalRow;
-                    $additionalRow = array();
+                    $additionalRow = [];
                 }
             }
         }
@@ -499,7 +509,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _parseVariationLabels($rowData)
     {
-        $labels = array();
+        $labels = [];
         if (!isset($rowData['configurable_variation_labels'])) {
             return $labels;
         }
@@ -526,10 +536,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _parseVariationPrices($rowData)
     {
-        $prices = array();
+        $prices = [];
         if (!isset($rowData['configurable_variation_prices'])) {
             return $prices;
         }
@@ -538,7 +549,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $pairFieldAndValue = explode($this->_entityModel->getMultipleValueSeparator(), $optionRow);
 
-            $oneOptionValuePrice = array();
+            $oneOptionValuePrice = [];
             foreach ($pairFieldAndValue as $nameAndValue) {
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
                 if (!empty($nameAndValue)) {
@@ -550,7 +561,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
             }
 
-            if (!empty($oneOptionValuePrice['name']) && !empty($oneOptionValuePrice['value']) && isset($oneOptionValuePrice['price'])) {
+            if (!empty($oneOptionValuePrice['name']) &&
+                !empty($oneOptionValuePrice['value']) &&
+                isset($oneOptionValuePrice['price'])
+            ) {
                 $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] = $oneOptionValuePrice['price'];
             }
         }
@@ -559,6 +573,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     /**
      * Delete unnecessary links.
+     *
+     * @return $this
      */
     protected function _deleteData()
     {
@@ -569,15 +585,19 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             && !empty($this->_productSuperData['product_id'])
             && !empty($this->_simpleIdsToDelete)
         ) {
-            $quoted = $this->_connection->quoteInto('IN (?)', array($this->_productSuperData['product_id']));
+            $quoted = $this->_connection->quoteInto('IN (?)', [$this->_productSuperData['product_id']]);
             $quotedChildren = $this->_connection->quoteInto('IN (?)', $this->_simpleIdsToDelete);
             $this->_connection->delete($linkTable, "parent_id {$quoted} AND product_id {$quotedChildren}");
             $this->_connection->delete($relationTable, "parent_id {$quoted} AND child_id {$quotedChildren}");
         }
+        return $this;
     }
 
     /**
-     * Collected link data insertion.
+     *  Collected link data insertion.
+     *
+     * @return $this
+     * @throws \Zend_Db_Exception
      */
     protected function _insertData()
     {
@@ -614,6 +634,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if ($this->_superAttributesData['relation']) {
             $this->_connection->insertOnDuplicate($relationTable, $this->_superAttributesData['relation']);
         }
+        return $this;
     }
 
     /**
@@ -632,12 +653,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Collect super data.
+     *  Collect super data.
      *
-     * @param array $rowData
-     * @param int $rowNum
+     * @param $rowData
+     * @return $this
      */
-    protected function _collectSuperData($rowData, $rowNum)
+    protected function _collectSuperData($rowData)
     {
         $productId = $this->_productData['entity_id'];
 
@@ -676,13 +697,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->_collectSuperDataPrice($data, $productSuperAttrId);
             }
         }
+        return $this;
     }
 
     /**
-     * Collect super data price.
+     *  Collect super data price.
      *
-     * @param array $data
-     * @param int $productSuperAttrId
+     * @param $data
+     * @param $productSuperAttrId
+     * @return $this
      */
     protected function _collectSuperDataPrice($data, $productSuperAttrId)
     {
@@ -703,12 +726,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
             }
         }
+        return $this;
     }
 
     /**
-     * Collect assoc ids and simpleIds to break links.
+     *  Collect assoc ids and simpleIds to break links.
      *
-     * @param array $data
+     * @param $data
+     * @return $this
      */
     protected function _collectAssocIds($data)
     {
@@ -730,15 +755,17 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
             }
         }
+        return $this;
     }
 
     /**
-     * Collect super data price.
+     *  Collect super data price.
      *
-     * @param array $data
-     * @param int $productSuperAttrId
-     * @param int $productId
-     * @param array $variationLabels
+     * @param $data
+     * @param $productSuperAttrId
+     * @param $productId
+     * @param $variationLabels
+     * @return $this
      */
     protected function _collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels)
     {
@@ -747,13 +774,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             'product_super_attribute_id' => $productSuperAttrId,
             'position' => 0,
         ];
-        $label = isset($variationLabels[$data['_super_attribute_code']]) ? $variationLabels[$data['_super_attribute_code']] : $attrParams['frontend_label'];
+        $label = isset($variationLabels[$data['_super_attribute_code']])
+                ? $variationLabels[$data['_super_attribute_code']]
+                : $attrParams['frontend_label'];
         $this->_superAttributesData['labels'][] = [
             'product_super_attribute_id' => $productSuperAttrId,
             'store_id' => 0,
             'use_default' => $label ? 0 : 1,
             'value' => $label,
         ];
+        return $this;
     }
 
     /**
@@ -782,7 +812,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 'relation' => [],
             ];
 
-            $this->_simpleIdsToDelete = array();
+            $this->_simpleIdsToDelete = [];
 
             $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
 
@@ -792,15 +822,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
                 // remember SCOPE_DEFAULT row data
                 $scope = $this->_entityModel->getRowScope($rowData);
-                if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
+                if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) &&
+                    !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
 
-                    $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]]) ? $newSku[$rowData[ImportProduct::COL_SKU]] : $oldSku[$rowData[ImportProduct::COL_SKU]];
+                    $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]])
+                                        ? $newSku[$rowData[ImportProduct::COL_SKU]]
+                                        : $oldSku[$rowData[ImportProduct::COL_SKU]];
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;
                         continue;
                     }
-                    $this->_collectSuperData($rowData, $rowNum);
+                    $this->_collectSuperData($rowData);
                 }
             }
 
@@ -830,7 +863,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {
-            $dataWithExtraVirtualRows = array($rowData);
+            $dataWithExtraVirtualRows[] = $rowData;
         }
         foreach ($dataWithExtraVirtualRows as $data) {
             $error |= !parent::isRowValid($data, $rowNum, $isNewProduct);

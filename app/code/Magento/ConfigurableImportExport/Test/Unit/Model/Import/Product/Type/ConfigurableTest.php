@@ -9,6 +9,11 @@ namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\ConfigurableImportExport;
 
+/**
+ * Class ConfigurableTest
+ * @package Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ConfigurableImportExport\Model\Import\Product\Type\Configurable */
@@ -68,6 +73,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
     protected $_connection;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->setCollectionFactory = $this->getMock(
@@ -89,7 +97,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->setCollection)
         );
 
-        $item = new \Magento\Framework\Object(['id' => 1, 'attribute_set_name' => 'Default', '_attribute_set' => 'Default']);
+        $item = new \Magento\Framework\Object([
+            'id' => 1,
+            'attribute_set_name' => 'Default',
+            '_attribute_set' => 'Default'
+        ]);
 
         $this->setCollection->expects($this->any())
             ->method('setEntityTypeFilter')
@@ -111,7 +123,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $superAttributes = array();
+        $superAttributes = [];
         foreach ($this->_getSuperAttributes() as $superAttribute) {
             $item = $this->getMock(
                 '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
@@ -136,7 +148,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->_entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getConnection', 'getAttrSetIdToName', 'getAttributeOptions'],
+            [
+                'getNewSku',
+                'getOldSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getConnection',
+                'getAttrSetIdToName',
+                'getAttributeOptions'
+            ],
             [],
             '',
             false
@@ -148,7 +168,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->_connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto'], [], '', false);
+        $this->_connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
+            [
+                'select',
+                'fetchAll',
+                'fetchPairs',
+                'joinLeft',
+                'insertOnDuplicate',
+                'delete',
+                'quoteInto'
+            ], [], '', false);
 
         $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->_connection->expects($this->any())->method('delete')->willReturnSelf();
@@ -175,7 +204,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $products = array();
+        $products = [];
         $testProducts = [
             ['id' => 1, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
             ['id' => 2, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
@@ -228,105 +257,155 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function _getBunch()
     {
         return [[
             'sku' => 'configurableskuI22',
-            'store_view_code' => NULL,
+            'store_view_code' => null,
             'attribute_set_code' => 'Default',
             'product_type' => 'configurable',
             'name' => 'Configurable Product 21',
             'product_websites' => 'website_1',
-            'configurable_variation_prices' => 'name=testattr2,value=attr2val1,price=13|name=testattr3,value=testattr3v1,price=17|name=testattr3,value=testattr3v2,price=19',
+            'configurable_variation_prices' =>
+                'name=testattr2,'
+                 . 'value=attr2val1,'
+                 . 'price=13|name=testattr3,'
+                 . 'value=testattr3v1,'
+                 . 'price=17|name=testattr3,'
+                 . 'value=testattr3v2,'
+                 . 'price=19',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,testattr2=attr2val1,testattr3=testattr3v1,display=1|sku=testconf2-attr2val1-testattr3v2,testattr2=attr2val1,testattr3=testattr3v2,display=0',
-            '_store' => NULL,
+            'configurable_variations' =>
+                'sku=testconf2-attr2val1-testattr3v1,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v1,'
+                 . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v2,'
+                 . 'display=0',
+            '_store' => null,
             '_attribute_set' => 'Default',
             '_type' => 'configurable',
             '_product_websites' => 'website_1',
         ],
             [
                 'sku' => 'testSimple',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'simple',
                 'name' => 'Test simple',
                 'product_websites' => 'website_1',
-                '_store' => NULL,
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
                 '_product_websites' => 'website_1',
             ],
             [
                 'sku' => 'testSimpleToSkip',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'simple',
                 'name' => 'Test simple to Skip',
                 'product_websites' => 'website_1',
-                '_store' => NULL,
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
                 '_product_websites' => 'website_1',
             ],
             [
                 'sku' => 'configurableskuI22withoutLabels',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'configurable',
                 'name' => 'Configurable Product 21 Without Labels',
                 'product_websites' => 'website_1',
-                'configurable_variation_prices' => 'name=testattr2,value=attr2val1,price=13|name=testattr3,value=testattr3v1,price=17|name=testattr3,value=testattr3v2,price=19',
+                'configurable_variation_prices' =>
+                    'name=testattr2,'
+                     . 'value=attr2val1,'
+                     . 'price=13|name=testattr3,'
+                     . 'value=testattr3v1,'
+                     . 'price=17|name=testattr3,'
+                     . 'value=testattr3v2,'
+                     . 'price=19',
                 'configurable_variations' => '
                 sku=testconf2-attr2val1-testattr3v1,testattr2=attr2val1,testattr3=testattr3v1,display=1|
                 sku=testconf2-attr2val1-testattr30v1,testattr2=attr2val1,testattr3=testattr3v1,display=1|
                 sku=testconf2-attr2val1-testattr3v2,testattr2=attr2val1,testattr3=testattr3v2,display=0|
                 sku=testconf2-attr2val2-testattr3v2,testattr2=attr2val1,testattr4=testattr3v2,display=1|
                 sku=testSimpleOld,testattr2=attr2val1,testattr4=testattr3v2,display=1',
-                '_store' => NULL,
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
                 '_product_websites' => 'website_1',
             ],
             [
                 'sku' => 'configurableskuI22withoutVariations',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'configurable',
                 'name' => 'Configurable Product 21 Without Labels',
                 'product_websites' => 'website_1',
-                'configurable_variation_prices' => 'name=testattr2,value=attr2val1,price=13|name=testattr3,value=testattr3v1,price=17|name=testattr3,value=testattr3v2,price=19',
-                '_store' => NULL,
+                'configurable_variation_prices' =>
+                    'name=testattr2,'
+                    . 'value=attr2val1,'
+                    . 'price=13|name=testattr3,'
+                    . 'value=testattr3v1,'
+                    . 'price=17|name=testattr3,'
+                    . 'value=testattr3v2,'
+                    . 'price=19',
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
                 '_product_websites' => 'website_1',
             ],
             [
                 'sku' => 'configurableskuI22Duplicated',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'configurable',
                 'name' => 'Configurable Product 21',
                 'product_websites' => 'website_1',
-                'configurable_variation_prices' => 'name=testattr2,value=attr2val1,price=13|name=testattr3,value=testattr3v1,price=17|name=testattr3,value=testattr3v2,price=19',
+                'configurable_variation_prices' =>
+                    'name=testattr2,'
+                     . 'value=attr2val1,'
+                     . 'price=13|name=testattr3,'
+                     . 'value=testattr3v1,'
+                     . 'price=17|name=testattr3,'
+                     . 'value=testattr3v2,price=19',
                 'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-                'configurable_variations' => '
-            sku=testconf2-attr2val1-testattr3v1,testattr2=attr2val1,testattr3=testattr3v1,testattr3=testattr3v2,display=1|
-            sku=testconf2-attr2val1-testattr3v2,testattr2=attr2val1,testattr3=testattr3v1,testattr3=testattr3v2,display=1|
-            sku=testconf2-attr2val1-testattr3v3,testattr2=attr2val1,testattr3=testattr3v1,testattr3=testattr3v2,display=1',
-                '_store' => NULL,
+                'configurable_variations' =>
+                    'sku=testconf2-attr2val1-testattr3v1,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1|'
+                     . 'sku=testconf2-attr2val1-testattr3v2,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1|'
+                     . 'sku=testconf2-attr2val1-testattr3v3,'
+                     . 'testattr2=attr2val1,'
+                     . 'testattr3=testattr3v1,'
+                     . 'testattr3=testattr3v2,'
+                     . 'display=1',
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
                 '_product_websites' => 'website_1',
             ],
             [
                 'sku' => 'testSimpleOld',
-                'store_view_code' => NULL,
+                'store_view_code' => null,
                 'attribute_set_code' => 'Default',
                 'product_type' => 'simple',
                 'name' => 'Test simple to Skip',
                 'product_websites' => 'website_1',
-                '_store' => NULL,
+                '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
                 '_product_websites' => 'website_1',
@@ -350,9 +429,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'is_static' => false,
                 'backend_type' => 'select',
                 'apply_to' =>
-                    array(),
+                    [],
                 'type' => 'select',
-                'default_value' => NULL,
+                'default_value' => null,
                 'options' => [
                     'attr2val1' => '6',
                     'attr2val2' => '7',
@@ -374,7 +453,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'backend_type' => 'select',
                 'apply_to' => [],
                 'type' => 'select',
-                'default_value' => NULL,
+                'default_value' => null,
                 'options' =>
                     [
                         'testattr3v1' => '9',
@@ -388,16 +467,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveData()
     {
         $this->_entityModel->expects($this->any())->method('getNewSku')->will($this->returnValue([
-            'configurableskuI22' => ['entity_id' => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v1' => ['entity_id' => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr30v1' => ['entity_id' => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v2' => ['entity_id' => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimple' => ['entity_id' => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimpleToSkip' => ['entity_id' => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutLabels' => ['entity_id' => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutVariations' => ['entity_id' => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22Duplicated' => ['entity_id' => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22BadPrice' => ['entity_id' => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22' =>
+                ['entity_id' => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v1' =>
+                ['entity_id' => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr30v1' =>
+                ['entity_id' => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v2' =>
+                ['entity_id' => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimple' =>
+                ['entity_id' => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimpleToSkip' =>
+                ['entity_id' => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutLabels' =>
+                ['entity_id' => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutVariations' =>
+                ['entity_id' => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22Duplicated' =>
+                ['entity_id' => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22BadPrice' =>
+                ['entity_id' => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
 
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
@@ -434,7 +523,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $bunch = $this->_getBunch();
         $this->_entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->_entityModel->expects($this->at(3))->method('getNextBunch')->will($this->returnValue([]));
-        $this->_entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnCallback(array($this, 'isRowAllowedToImport')));
+        $this->_entityModel->expects($this->any())
+                        ->method('isRowAllowedToImport')
+                        ->will($this->returnCallback([$this, 'isRowAllowedToImport']));
 
         $this->_entityModel->expects($this->any())->method('getOldSku')->will($this->returnValue([
             'testSimpleOld' => ['entity_id' => 10, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
@@ -445,6 +536,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->configurable->saveData();
     }
 
+    /**
+     * @param $rowData
+     * @param $rowNum
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function isRowAllowedToImport($rowData, $rowNum)
     {
         if ($rowNum == 2) {
@@ -458,15 +555,29 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $bunch = $this->_getBunch();
         $badProduct = [
             'sku' => 'configurableskuI22BadPrice',
-            'store_view_code' => NULL,
+            'store_view_code' => null,
             'attribute_set_code' => 'Default',
             'product_type' => 'configurable',
             'name' => 'Configurable Product 21 BadPrice',
             'product_websites' => 'website_1',
-            'configurable_variation_prices' => 'name=testattr2,value=attr2val1,price=aaa|name=testattr3,value=testattr3v1,price=17|name=testattr3,value=testattr3v2,price=19',
+            'configurable_variation_prices' =>
+                'name=testattr2,'
+                 . 'value=attr2val1,'
+                 . 'price=aaa|name=testattr3,'
+                 . 'value=testattr3v1,'
+                 . 'price=17|name=testattr3,'
+                 . 'value=testattr3v2,'
+                 . 'price=19',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,testattr2=attr2val1_DOESNT_EXIST,testattr3=testattr3v1,display=1|sku=testconf2-attr2val1-testattr3v2,testattr2=attr2val1,testattr3=testattr3v2,display=0',
-            '_store' => NULL,
+            'configurable_variations' =>
+                'sku=testconf2-attr2val1-testattr3v1,'
+                 . 'testattr2=attr2val1_DOESNT_EXIST,'
+                 . 'testattr3=testattr3v1,'
+                 . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
+                 . 'testattr2=attr2val1,'
+                 . 'testattr3=testattr3v2,'
+                 . 'display=0',
+            '_store' => null,
             '_attribute_set' => 'Default',
             '_type' => 'configurable',
             '_product_websites' => 'website_1',

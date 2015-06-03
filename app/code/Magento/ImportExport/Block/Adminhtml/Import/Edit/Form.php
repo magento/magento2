@@ -57,6 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fieldsets
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -161,7 +162,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Images File Directory'),
                 'required' => false,
                 'class' => 'input-text',
-                'note' => __('For Type "Local Server" use relative path to Magento installation, e.g. var/export, var/import, var/export/some/dir'),
+                'note' => __('For Type "Local Server" use relative path to Magento installation,
+                                e.g. var/export, var/import, var/export/some/dir'),
             ]
         );
 

@@ -292,6 +292,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $dataObjectHelper;
 
     /**
+     * @var int
+     */
+    protected $_productIdCached;
+
+    /**
      * List of attributes in ProductInterface
      * @var array
      */
@@ -705,9 +710,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryCollection()
     {
-        if ($this->categoryCollection === null) {
+        if ($this->categoryCollection === null || $this->getId() != $this->_productIdCached) {
             $categoryCollection = $this->_getResource()->getCategoryCollection($this);
             $this->setCategoryCollection($categoryCollection);
+            $this->_productIdCached = $this->getId();
         }
         return $this->categoryCollection;
     }

@@ -67,10 +67,18 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
         $taxClassFactory->method('create')->will($this->returnValue($anotherTaxClass));
 
         $this->taxClassProcessor =
-            new \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor($taxClassCollectionFactory, $taxClassFactory);
+            new \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor(
+                $taxClassCollectionFactory,
+                $taxClassFactory
+            );
 
         $this->product =
-            $this->getMockForAbstractClass('Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType', [], '', false);
+            $this->getMockForAbstractClass(
+                'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType',
+                [],
+                '',
+                false
+            );
     }
 
     public function testUpsertTaxClassExist()

@@ -670,7 +670,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
-                $valid = (string)(double)$val === $val;
+                $valid = is_numeric($val);
                 break;
             case 'select':
             case 'multiselect':
@@ -814,6 +814,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @throws \Exception
      * @return bool Result of operation.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _importData()
     {
@@ -1624,6 +1625,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $mediaGalleryData
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveMediaGallery(array $mediaGalleryData)
     {

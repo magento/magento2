@@ -7,6 +7,9 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 /**
  * Test class for import product options module
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -229,7 +232,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
-        $modelClassArgs = array(
+        $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
@@ -253,7 +256,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $scopeConfig,
             new \Magento\Framework\Stdlib\DateTime(),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
-        );
+        ];
 
         $class = new \ReflectionClass($modelClassName);
         $this->_model = $class->newInstanceArgs($modelClassArgs);
@@ -261,7 +264,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->_modelMock = $this->
             getMockBuilder($modelClassName)->
             setConstructorArgs($modelClassArgs)->
-            setMethods(array('_getMultiRowFormat'))->
+            setMethods(['_getMultiRowFormat'])->
             getMock();
     }
 
@@ -653,8 +656,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      *  old format data
      * @return void
      */
-    private function _bypassModelMethod_getMultiRowFormat($rowData) {
-        $this->_modelMock->expects($this->any())->method('_getMultiRowFormat')->will($this->returnValue(array($rowData)));
+    private function _bypassModelMethodGetMultiRowFormat($rowData)
+    {
+        $this->_modelMock->expects($this->any())
+                        ->method('_getMultiRowFormat')
+                        ->will($this->returnValue([$rowData]));
     }
 
     /**
@@ -665,7 +671,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     public function testValidateRowNoCustomOption()
     {
         $rowData = include __DIR__ . '/_files/row_data_no_custom_option.php';
-        $this->_bypassModelMethod_getMultiRowFormat($rowData);
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
         $this->assertFalse($this->_modelMock->validateRow($rowData, 0));
     }
 
@@ -688,7 +694,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateRow(array $rowData, array $errors)
     {
-        $this->_bypassModelMethod_getMultiRowFormat($rowData);
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
 
         if (empty($errors)) {
             $this->assertTrue($this->_modelMock->validateRow($rowData, 0));
@@ -725,7 +731,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->_modelMock->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
         }
 
-        $this->_bypassModelMethod_getMultiRowFormat($rowData);
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
 
         for ($i = 0; $i < $numberOfValidations; $i++) {
             $this->_modelMock->validateRow($rowData, $i);
