@@ -510,6 +510,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return  float
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTaxPrice(
         $product,
