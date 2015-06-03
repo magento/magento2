@@ -5,6 +5,9 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -238,7 +241,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
-       $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionNoId()
