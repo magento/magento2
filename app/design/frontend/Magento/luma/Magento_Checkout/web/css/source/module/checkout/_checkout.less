@@ -19,6 +19,9 @@
 @checkout-step-title-mobile__font-size: 18px;
 @checkout-step-title-mobile__margin-bottom: @indent__base;
 
+@checkout-step-content-mobile__background: @color-gray-light01;
+@checkout-step-content-mobile__border-bottom: @border-width__base solid @color-gray80;
+
 //
 //  Common
 //  _____________________________________________
@@ -63,6 +66,12 @@
                 border-bottom: 0;
                 padding-bottom: 0;
             }
+        }
+        .step-content {
+            .css(background, @checkout-step-content-mobile__background);
+            .css(border-bottom, @checkout-step-content-mobile__border-bottom);
+            margin: 0 -15px 15px;
+            padding: @indent__base @layout__width-xs-indent;
         }
     }
 }
