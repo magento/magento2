@@ -117,7 +117,6 @@ class DataGrid extends Grid
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink)->click();
-            $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
         }
