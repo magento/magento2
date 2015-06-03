@@ -102,9 +102,9 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $loader;
 
     /**
-     * @var \Composer\Console\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Composer\Remove|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $app;
+    private $remove;
 
     /**
      * @var ModuleUninstallCommand
@@ -121,7 +121,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->app = $this->getMock('Composer\Console\Application', [], [], '', false);
+        $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
@@ -157,7 +157,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Magento\Framework\Backup\Filesystem', [], $this->backupFS],
             ]));
-        $composer = $this->getMock('Magento\Setup\Model\ComposerInformation', [], [], '', false);
+        $composer = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/package-a', 'magento/package-b']);
@@ -172,7 +172,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->command = new ModuleUninstallCommand(
-            $this->app,
             $composer,
             $this->deploymentConfig,
             $this->writer,
@@ -182,6 +181,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->loader,
             $this->maintenanceMode,
             $objectManagerProvider,
+            $this->remove,
             $this->uninstallCollector
         );
         $this->tester = new CommandTester($this->command);
@@ -388,8 +388,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private function setUpExecute($input)
     {
         $this->setUpPassValidation();
-        $this->app->expects($this->once())->method('setAutoExit')->with(false);
-        $this->app->expects($this->once())->method('run');
+        $this->remove->expects($this->once())->method('remove')->with(['magento/package-a', 'magento/package-b']);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Composer;
 
 use Composer\Factory as ComposerFactory;
 use Composer\Package\PackageInterface;
