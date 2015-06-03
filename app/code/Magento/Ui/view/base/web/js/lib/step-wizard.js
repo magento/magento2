@@ -32,8 +32,9 @@ define([
             this.step = steps[++this.index];
             this.step.force(this);
         };
-        this.prev = function() {
-            this.step = steps[--this.index];
+        this.prev = function(newIndex) {
+            this.index = newIndex;
+            this.step = steps[this.index];
             this.step.back(this);
         };
         this.render = function(tab) {
@@ -97,20 +98,13 @@ define([
                 this.next.hide();
                 this.final.show();
             }
-            if (index === this.tabs.length - 2 && this._way(index) === 'back') {
+            if (this._way(index) === 'back') {
                 this.final.hide();
                 this.next.show();
             }
         },
         _disabledTabs: function(index) {
-            var disabled = [];
-            for(var i=0; this.tabs.length >= i; i++) {
-                if([index, index + 1, index - 1].indexOf(i) > -1) {
-                    continue;
-                }
-                disabled.push(i);
-            }
-            this._setupDisabled(disabled);
+            this._setupDisabled(_.range(index + 2, this.tabs.length));
         }
     });
 
