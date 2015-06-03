@@ -12,7 +12,7 @@
         <!-- /ko -->
     </label>
 
-    <div class="control">
+    <div class="control" data-bind="css: {'_with-tooltip': element.tooltip}">
         <!-- ko ifnot: element.hasAddons() -->
             <!-- ko template: element.elementTmpl --><!-- /ko -->
         <!-- /ko -->

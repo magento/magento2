@@ -40,6 +40,7 @@
         //  Shipping Information
         //  ---------------------------------------------
 
+        .form-login,
         .form-shipping-address {
             .css(max-width, @checkout-shipping-address__max-width);
             .fieldset {
@@ -49,9 +50,11 @@
                     }
                 }
             }
+        }
 
-            .field {
-                &.tooltip {
+        .field {
+            .control {
+                &._with-tooltip {
                     &:extend(.abs-field-tooltip all);
                 }
             }

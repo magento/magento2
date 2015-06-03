@@ -5,7 +5,7 @@
  */
 -->
 <!-- ko ifnot: isCustomerLoggedIn() -->
-<form class="form login" data-role="login"
+<form class="form form-login" data-role="login"
       data-bind="submit:login"
       method="post">
     <fieldset id="customer-email" class="fieldset">
@@ -13,7 +13,7 @@
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email')"></span>
             </label>
-            <div class="control">
+            <div class="control _with-tooltip">
                 <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
