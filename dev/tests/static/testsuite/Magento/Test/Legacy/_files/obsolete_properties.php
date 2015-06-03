@@ -411,4 +411,8 @@ return [
     ['_emulatedLocales', 'Magento\Framework\Locale\Resolver', 'emulatedLocales'],
     ['_collectionAttributes', 'Magento\Eav\Model\Config'],
     ['_attributeFactory', '\Magento\Customer\Model\Customer'],
+    ['_hasDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_origData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_idFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_isDeleted', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
 ];
