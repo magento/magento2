@@ -15,11 +15,15 @@ use Symfony\Component\Console\Input\ArrayInput;
 class Remove
 {
     /**
+     * Composer application
+     *
      * @var Application
      */
     private $composerApp;
 
     /**
+     * Directory List
+     *
      * @var DirectoryList
      */
     private $directoryList;
