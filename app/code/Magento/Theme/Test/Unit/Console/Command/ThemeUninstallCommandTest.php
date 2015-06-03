@@ -6,7 +6,9 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
@@ -40,6 +42,16 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
      */
     private $file;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesystem;
+
+    /**
+     * @var \Magento\Framework\Composer\GeneralDependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dependencyChecker;
 
     /**
      * @var ThemeUninstallCommand
@@ -76,12 +88,27 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->willReturn($path);
         $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
+        $composerInformation->expects($this->any())
+            ->method('getRootRequiredPackages')
+            ->willReturn(['magento/theme-a', 'magento/theme-b', 'magento/theme-c']);
+        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->dependencyChecker = $this->getMock(
+            'Magento\Framework\Composer\GeneralDependencyChecker',
+            [],
+            [],
+            '',
+            false
+        );
         $this->command = new ThemeUninstallCommand(
+            $composerInformation,
             $this->deploymentConfig,
             $this->maintenanceMode,
             $this->objectManager,
             $this->directoryList,
-            $this->file
+            $this->file,
+            $this->filesystem,
+            $this->dependencyChecker
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -89,15 +116,145 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithoutApplicationInstalled()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
-        $this->tester->execute(['theme' => 'test']);
+        $this->tester->execute(['theme' => ['test']]);
         $this->assertContains(
             'You cannot run this command because the Magento application is not installed.',
             $this->tester->getDisplay()
         );
     }
-    public function testExecuteWithBackupCode()
+
+    public function testExecuteFailedValidationNotPackage()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        // package name "dummy" is not in root composer.json file
+        $dirRead->expects($this->any())
+            ->method('readFile')
+            ->will($this->returnValueMap(
+                [
+                    ['test1/composer.json', null, null, '{"name": "dummy"}'],
+                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}']
+                ]
+            ));
+        $dirRead->expects($this->any())->method('isExist')->willReturn(true);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::THEMES)
+            ->willReturn($dirRead);
+        $this->tester->execute(['theme' => ['test1', 'test2']]);
+        $this->assertContains(
+            'test1 is not an installed composer package',
+            $this->tester->getDisplay()
+        );
+        $this->assertNotContains(
+            'test2 is not an installed composer package',
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function testExecuteFailedValidationNotTheme()
+    {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirRead->expects($this->any())->method('isExist')->willReturn(false);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::THEMES)
+            ->willReturn($dirRead);
+        $this->tester->execute(['theme' => ['test1', 'test2']]);
+        $this->assertContains(
+            'Unknown theme(s): test1, test2' . PHP_EOL,
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function testExecuteFailedValidationMixed()
+    {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        // package name "dummy" is not in root composer.json file
+        $dirRead->expects($this->any())
+            ->method('readFile')
+            ->will($this->returnValueMap(
+                [
+                    ['test1/composer.json', null, null, '{"name": "dummy1"}'],
+                    ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
+                    ['test4/composer.json', null, null, '{"name": "dummy2"}'],
+                ]
+            ));
+        $dirRead->expects($this->any())
+            ->method('isExist')
+            ->will($this->returnValueMap(
+                [
+                    ['test1/composer.json', true],
+                    ['test2/composer.json', true],
+                    ['test3/composer.json', false],
+                    ['test4/composer.json', true],
+                    ['test1', true],
+                    ['test2', true],
+                    ['test3', false],
+                    ['test4', true],
+                ]
+            ));
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::THEMES)
+            ->willReturn($dirRead);
+        $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4']]);
+        $this->assertContains(
+            'test1, test4 are not installed composer packages',
+            $this->tester->getDisplay()
+        );
+        $this->assertNotContains(
+            'test2 is not an installed composer package',
+            $this->tester->getDisplay()
+        );
+        $this->assertContains(
+            'Unknown theme(s): test3' . PHP_EOL,
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function setUpPassValidation()
+    {
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        // package name "dummy" is not in root composer.json file
+        $dirRead->expects($this->any())
+            ->method('readFile')
+            ->willReturn('{"name": "magento/theme-a"}');
+        $dirRead->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::THEMES)
+            ->willReturn($dirRead);
+    }
+
+    public function testExecuteFailedDependencyCheck()
+    {
+        $this->setUpPassValidation();
+        $this->dependencyChecker->expects($this->once())
+            ->method('checkDependencies')
+            ->willReturn(['magento/theme-a' => ['magento/theme-b', 'magento/theme-c']]);
+        $this->tester->execute(['theme' => ['frontend/Magento/a']]);
+        $this->assertContains(
+            'Cannot uninstall frontend/Magento/a because the following package(s) ' .
+            'depend on it:' . PHP_EOL . "\tmagento/theme-b" . PHP_EOL . "\tmagento/theme-c",
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function setUpPassValidationAndDependencyCheck()
+    {
+        $this->setUpPassValidation();
+        $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
+    }
+
+    public function testExecuteWithBackupCode()
+    {
+        $this->setUpPassValidationAndDependencyCheck();
         $this->backupFS->expects($this->once())
             ->method('addIgnorePaths');
         $this->backupFS->expects($this->once())
@@ -116,17 +273,15 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn('pathToFile/RollbackFile_A.tgz');
         $this->file->expects($this->once())->method('isExists')->willReturn(false);
         $this->file->expects($this->once())->method('createDirectory');
-        $this->tester->execute(['theme' => 'test', '--backup-code' => true]);
+        $this->tester->execute(['theme' => ['test'], '--backup-code' => true]);
         $this->tester->getDisplay();
     }
 
     public function testExecute()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
-        $this->tester->execute(['theme' => 'test']);
-        $this->assertContains(
-            'Enabling maintenance mode'.PHP_EOL.'Disabling maintenance mode'.PHP_EOL,
-            $this->tester->getDisplay()
-        );
+        $this->setUpPassValidationAndDependencyCheck();
+        $this->tester->execute(['theme' => ['test']]);
+        $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
+        $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
     }
 }
