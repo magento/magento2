@@ -14,6 +14,7 @@ use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 
 /**
  * Factory class for instantiation of extension attributes objects.
@@ -21,6 +22,8 @@ use Magento\Framework\App\Resource as AppResource;
 class ExtensionAttributesFactory
 {
     const EXTENSIBLE_INTERFACE_NAME = 'Magento\Framework\Api\ExtensibleDataInterface';
+
+    const CACHE_ID_EXTENSION_INTERFACE_MAP = 'extension-interface-map-';
 
     /**
      * Object Manager instance
@@ -50,6 +53,11 @@ class ExtensionAttributesFactory
     private $appResource;
 
     /**
+     * @var ConfigCache
+     */
+    private $cache;
+
+    /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -57,19 +65,22 @@ class ExtensionAttributesFactory
      * @param ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
      * @param AppResource $appResource
+     * @param ConfigCache $cache
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Reader $configReader,
         ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor,
-        AppResource $appResource
+        AppResource $appResource,
+        ConfigCache $cache
     ) {
         $this->objectManager = $objectManager;
         $this->configReader = $configReader;
         $this->extensionAttributeJoinDataFactory = $extensionAttributeJoinDataFactory;
         $this->typeProcessor = $typeProcessor;
         $this->appResource = $appResource;
+        $this->cache = $cache;
     }
 
     /**
@@ -265,17 +276,24 @@ class ExtensionAttributesFactory
      */
     private function getExtensibleInterfaceName($extensibleClassName)
     {
+        $cacheId = self::CACHE_ID_EXTENSION_INTERFACE_MAP . md5($extensibleClassName);
+        $cachedResult = $this->cache->load($cacheId);
+        if ($cachedResult) {
+            return $cachedResult;
+        }
         $modelReflection = new \ReflectionClass($extensibleClassName);
         if ($modelReflection->isInterface()
             && $modelReflection->isSubClassOf(self::EXTENSIBLE_INTERFACE_NAME)
             && $modelReflection->hasMethod('getExtensionAttributes')
         ) {
+            $this->cache->save($extensibleClassName, $cacheId);
             return $extensibleClassName;
         }
         foreach ($modelReflection->getInterfaces() as $interfaceReflection) {
             if ($interfaceReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
                 && $interfaceReflection->hasMethod('getExtensionAttributes')
             ) {
+                $this->cache->save($interfaceReflection->getName(), $cacheId);
                 return $interfaceReflection->getName();
             }
         }
