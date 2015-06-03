@@ -128,7 +128,7 @@ class ThemeUninstallCommand extends Command
                 );
                 $backupRollback->codeBackup();
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
