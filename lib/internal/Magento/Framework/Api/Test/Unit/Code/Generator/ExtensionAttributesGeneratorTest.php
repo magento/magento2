@@ -116,6 +116,8 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
         $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->model);
+        $expectedResult = preg_replace('/\s+/', ' ', $expectedResult);
+        $generatedCode = preg_replace('/\s+/', ' ', $generatedCode);
         $this->assertEquals($expectedResult, $generatedCode);
     }
 }

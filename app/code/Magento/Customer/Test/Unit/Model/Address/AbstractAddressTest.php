@@ -107,11 +107,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $countryId = 1;
         $this->prepareGetRegion($countryId);
 
-        $this->model->setData([
-                'region_id' => 1,
-                'region' => '',
-                'country_id' => $countryId,
-            ]);
+        $this->model->setData('region_id', 1);
+        $this->model->setData('region', '');
+        $this->model->setData('country_id', $countryId);
         $this->assertEquals('RegionName', $this->model->getRegion());
     }
 
@@ -120,11 +118,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $countryId = 2;
         $this->prepareGetRegion($countryId);
 
-        $this->model->setData([
-                'region_id' => '',
-                'region' => 2,
-                'country_id' => $countryId,
-            ]);
+        $this->model->setData('region_id', '');
+        $this->model->setData('region', 2);
+        $this->model->setData('country_id', $countryId);
         $this->assertEquals('RegionName', $this->model->getRegion());
     }
 
@@ -132,10 +128,8 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->regionFactoryMock->expects($this->never())->method('create');
 
-        $this->model->setData([
-                'region_id' => '',
-                'region' => 'RegionName',
-            ]);
+        $this->model->setData('region_id', '');
+        $this->model->setData('region', 'RegionName');
         $this->assertEquals('RegionName', $this->model->getRegion());
     }
 
@@ -151,11 +145,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $countryId = 1;
         $this->prepareGetRegionCode($countryId);
 
-        $this->model->setData([
-                'region_id' => 3,
-                'region' => '',
-                'country_id' => $countryId,
-            ]);
+        $this->model->setData('region_id', 3);
+        $this->model->setData('region', '');
+        $this->model->setData('country_id', $countryId);
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
@@ -164,11 +156,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $countryId = 2;
         $this->prepareGetRegionCode($countryId);
 
-        $this->model->setData([
-                'region_id' => '',
-                'region' => 4,
-                'country_id' => $countryId,
-            ]);
+        $this->model->setData('region_id', '');
+        $this->model->setData('region', 4);
+        $this->model->setData('country_id', $countryId);
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
@@ -176,10 +166,8 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->regionFactoryMock->expects($this->never())->method('create');
 
-        $this->model->setData([
-                'region_id' => '',
-                'region' => 'UK',
-            ]);
+        $this->model->setData('region_id', '');
+        $this->model->setData('region', 'UK');
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
@@ -251,7 +239,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $this->directoryDataMock->expects($this->never())
             ->method('isRegionRequired');
 
-        $this->model->setData($data);
+        foreach ($data as $key => $value) {
+            $this->model->setData($key, $value);
+        }
 
         $this->assertEquals($expected, $this->model->validate());
     }
