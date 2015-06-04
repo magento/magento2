@@ -31,17 +31,12 @@
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p align="center" style="font-size:12px;"><?php echo __('Comment') ?>:
-                    <br/><?php echo $block->getEscapedDescription($item) ?></p><?php endif; ?>
-                    <p align="center" style="font-size:12px;">
-                        <a href="<?php echo $block->getProductUrl($_product) ?>" style="color:#1E7EC8;">
-                            <?php echo __('View Product') ?>
-                        </a>
-                    <small>|</small>
-                    <?php if ($_product->getIsSalable()): ?>
-                    <a href="<?php echo $block->getAddToCartUrl($_product) ?>" style="color:#1E7EC8;">
-                        <strong><?php echo __('Add to Cart') ?></strong>
+                    <br/><?php echo $block->getEscapedDescription($item) ?></p>
+                <?php endif; ?>
+                <p align="center" style="font-size:12px;">
+                    <a href="<?php echo $block->getProductUrl($_product) ?>" style="color:#1E7EC8;">
+                        <?php echo __('View Product') ?>
                     </a>
-                    <?php endif; ?>
                 </p>
             </td>
             <?php if ($i % 3 != 0): ?>
