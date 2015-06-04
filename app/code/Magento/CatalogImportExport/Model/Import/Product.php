@@ -81,6 +81,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_STORE = '_store';
 
     /**
+     * Column product store view code.
+     */
+    const COL_STORE_VIEW_CODE = 'store_view_code';
+
+    /**
      * Column website.
      */
     const COL_WEBSITE = 'website_code';
