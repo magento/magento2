@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\Config\Reader;
+use Magento\Framework\Api\ExtensionAttributes\Config;
 use Magento\Framework\Api\Config\Converter;
 use Magento\Framework\Data\Collection\Db as DbCollection;
 use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
@@ -30,9 +30,9 @@ class ExtensionAttributesFactory
     protected $objectManager;
 
     /**
-     * @var Reader
+     * @var Config
      */
-    private $configReader;
+    private $config;
 
     /**
      * @var ExtensionAttributeJoinDataFactory
@@ -53,20 +53,20 @@ class ExtensionAttributesFactory
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Reader $configReader
+     * @param Config $config
      * @param ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
      * @param AppResource $appResource
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        Reader $configReader,
+        Config $config,
         ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor,
         AppResource $appResource
     ) {
         $this->objectManager = $objectManager;
-        $this->configReader = $configReader;
+        $this->config = $config;
         $this->extensionAttributeJoinDataFactory = $extensionAttributeJoinDataFactory;
         $this->typeProcessor = $typeProcessor;
         $this->appResource = $appResource;
@@ -240,7 +240,7 @@ class ExtensionAttributesFactory
     {
         $extensibleInterfaceName = $this->getExtensibleInterfaceName($extensibleEntityClass);
         $extensibleInterfaceName = ltrim($extensibleInterfaceName, '\\');
-        $config = $this->configReader->read();
+        $config = $this->config->get();
         if (!isset($config[$extensibleInterfaceName])) {
             return [];
         }
