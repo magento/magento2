@@ -117,7 +117,7 @@ class UninstallLanguageCommand extends Command
     {
         $installedPackages = $this->composerInfo->getRootRequiredPackagesAndTypes();
 
-        if ( isset($installedPackages[$package]) && $installedPackages[$package] === 'magento2-language') {
+        if (isset($installedPackages[$package]) && $installedPackages[$package] === 'magento2-language') {
             return true;
         }
 
