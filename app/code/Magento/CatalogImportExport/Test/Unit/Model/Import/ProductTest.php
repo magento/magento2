@@ -208,30 +208,48 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder('\Magento\ImportExport\Model\Import\Config')
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->_resourceFactory =
-            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_setColFactory =
-            $this->getMockBuilder('\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_productTypeFactory =
-            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\Factory')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_linkFactory =
-            $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\LinkFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_proxyProdFactory =
-            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->_uploaderFactory =
-            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\UploaderFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->_resourceFactory = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->_setColFactory = $this->getMock(
+            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->_productTypeFactory = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product\Type\Factory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->_linkFactory = $this->getMock(
+            '\Magento\Catalog\Model\Resource\Product\LinkFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->_proxyProdFactory = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->_uploaderFactory = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\UploaderFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->_filesystem =
             $this->getMockBuilder('\Magento\Framework\Filesystem')
                 ->disableOriginalConstructor()
@@ -239,10 +257,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_mediaDirectory =
             $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
                 ->getMock();
-        $this->_stockResItemFac =
-            $this->getMockBuilder('\Magento\CatalogInventory\Model\Resource\Stock\ItemFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->_stockResItemFac = $this->getMock(
+            '\Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->_localeDate =
             $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime\TimezoneInterface')
                 ->getMock();
@@ -341,8 +362,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function _objectConstructor()
     {
-        $this->optionFactory = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\OptionFactory')
-                                    ->disableOriginalConstructor()->getMock();
+        $this->optionFactory = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product\OptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->optionEntity = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Option')
                                     ->disableOriginalConstructor()->getMock();
         $this->optionFactory->expects($this->once())->method('create')->willReturn($this->optionEntity);
