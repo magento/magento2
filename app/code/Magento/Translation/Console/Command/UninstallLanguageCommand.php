@@ -10,9 +10,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Validator\Locale;
 use Magento\Framework\Composer\GeneralDependencyChecker;
 use Magento\Framework\Composer\Remove;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class UninstallLanguageCommand
@@ -22,12 +22,7 @@ class UninstallLanguageCommand extends Command
     /**
      * Language code argument name
      */
-    const CODE_ARGUMENT = 'code';
-
-    /**
-     * @var Locale
-     */
-    private $validator;
+    const PACKAGE_ARGUMENT = 'package';
 
     /**
      * @var GeneralDependencyChecker
@@ -40,20 +35,25 @@ class UninstallLanguageCommand extends Command
     private $remove;
 
     /**
+     * @var ComposerInformation
+     */
+    private $composerInfo;
+
+    /**
      * Inject dependencies
      *
-     * @param Locale $validator
      * @param GeneralDependencyChecker $dependencyChecker
      * @param Remove $remove
+     * @param ComposerInformation $composerInfo
      */
     public function __construct(
-        Locale $validator,
         GeneralDependencyChecker $dependencyChecker,
-        Remove $remove
+        Remove $remove,
+        ComposerInformation $composerInfo
     ) {
-        $this->validator = $validator;
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
+        $this->composerInfo = $composerInfo;
 
         parent::__construct();
     }
@@ -67,7 +67,7 @@ class UninstallLanguageCommand extends Command
             ->setDescription('Uninstalls language packages')
             ->setDefinition([
                 new InputArgument(
-                    self::CODE_ARGUMENT,
+                    self::PACKAGE_ARGUMENT,
                     InputArgument::IS_ARRAY | InputArgument::REQUIRED,
                     'Language code'
                 )
@@ -81,26 +81,46 @@ class UninstallLanguageCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $languages = $input->getArgument(self::CODE_ARGUMENT);
+        $languages = $input->getArgument(self::PACKAGE_ARGUMENT);
         $packagesToRemove = [];
 
         $dependencies = $this->dependencyChecker->checkDependencies($languages);
 
         foreach ($languages as $package) {
 
-            //TODO: validation
-
-            if (sizeof($dependencies[$package]) > 0) {
-                $output->writeln("<info>Package $package has dependencies and will be skipped.<info>");
+            if (!$this->validate($package)) {
+                $output->writeln("<info>Package $package is not magento language and will be skipped.<info>");
             } else {
-                $packagesToRemove[] = $package;
-            }
-
-            if ($packagesToRemove !== []) {
-                $this->remove->remove($packagesToRemove);
-            } else {
-                $output->writeln('Nothing is removed.');
+                if (sizeof($dependencies[$package]) > 0) {
+                    $output->writeln("<info>Package $package has dependencies and will be skipped.<info>");
+                } else {
+                    $packagesToRemove[] = $package;
+                }
             }
         }
+
+        if ($packagesToRemove !== []) {
+            $this->remove->remove($packagesToRemove);
+        } else {
+            $output->writeln('Nothing is removed.');
+        }
+    }
+
+    /**
+     * Validates user input
+     *
+     * @param string $package
+     *
+     * @return bool
+     */
+    private function validate($package)
+    {
+        $installedPackages = $this->composerInfo->getRootRequiredPackagesAndTypes();
+
+        if ( isset($installedPackages[$package]) && $installedPackages[$package] === 'magento2-language') {
+            return true;
+        }
+
+        return false;
     }
 }
