@@ -305,8 +305,8 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     protected function prepareActionInstance()
     {
-        $this->actionInstance = $this->actionFactory->get($this->getActionClass())
-            ->setIndexer($this);
+        $this->actionInstance = $this->actionFactory->get($this->getActionClass());
+        $this->actionInstance->setIndexer($this);
     }
 
     /**
