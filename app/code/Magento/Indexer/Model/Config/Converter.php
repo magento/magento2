@@ -34,6 +34,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
+                /** @var $childNode \DOMElement */
                 $data = $this->convertChild($childNode, $data);
             }
             $output[$indexerId] = $data;
@@ -58,11 +59,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert child from dom to array
      *
-     * @param \DOMNode $childNode
+     * @param \DOMElement $childNode
      * @param array $data
      * @return array
      */
-    protected function convertChild(\DOMNode $childNode, $data)
+    protected function convertChild(\DOMElement $childNode, $data)
     {
         $data['sources']  = isset($data['sources']) ? $data['sources'] : [];
         $data['handlers'] = isset($data['handlers']) ? $data['handlers'] : [];
@@ -91,11 +92,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert field
      *
-     * @param \DOMNode $node
+     * @param \DOMElement $node
      * @param array $data
      * @return array
      */
-    protected function convertField(\DOMNode $node, $data)
+    protected function convertField(\DOMElement $node, $data)
     {
         $data['fields'] = isset($data['fields']) ? $data['fields'] : [];
 
@@ -104,6 +105,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'source'   => $this->getAttributeValue($node, 'source'),
             'handler'  => $this->getAttributeValue($node, 'handler'),
             'dataType' => $this->getAttributeValue($node, 'dataType'),
+            'type'     => $node->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'type'),
         ];
 
         $data['fields'][$this->getAttributeValue($node, 'name')]['filters'] = [];
