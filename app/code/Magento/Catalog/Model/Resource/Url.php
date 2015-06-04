@@ -433,6 +433,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $category = new \Magento\Framework\Object($row);
             $category->setId($row['entity_id']);
+            $category->setEntityId($row['entity_id']);
             $category->setStoreId($storeId);
             $this->_prepareCategoryParentId($category);
 
@@ -536,6 +537,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         foreach ($rowSet as $row) {
             $product = new \Magento\Framework\Object($row);
             $product->setId($row['entity_id']);
+            $product->setEntityId($row['entity_id']);
             $product->setCategoryIds([]);
             $product->setStoreId($storeId);
             $products[$product->getId()] = $product;
