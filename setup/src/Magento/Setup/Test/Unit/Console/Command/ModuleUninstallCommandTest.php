@@ -561,6 +561,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn('RollbackFile_A.tgz');
         $this->backupFS->expects($this->once())
             ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');;
+            ->willReturn('pathToFile/RollbackFile_A.tgz');
     }
 }

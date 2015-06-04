@@ -175,8 +175,10 @@ class BackupRollback
         $dbBackup->setTime(time());
         $this->log->log('DB backup is started ...');
         $dbBackup->create();
-        $this->log->log('DB backup filename: ' . $dbBackup->getBackupFilename()
-            . ' (The archive can be uncompressed with 7-Zip on Windows systems)');
+        $this->log->log(
+            'DB backup filename: ' . $dbBackup->getBackupFilename()
+            . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
+        );
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
         $this->log->logSuccess('DB backup is completed successfully.');
 
