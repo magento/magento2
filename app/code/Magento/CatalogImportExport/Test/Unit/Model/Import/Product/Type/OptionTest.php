@@ -950,4 +950,47 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertTrue($model->importData());
     }
+
+    public function testClearProductsSkuToId()
+    {
+        $this->setPropertyValue($this->_modelMock, '_productsSkuToId', 'value');
+
+        $this->_modelMock->clearProductsSkuToId();
+
+        $productsSkuToId = $this->getPropertyValue($this->_modelMock, '_productsSkuToId');
+
+        $this->assertNull($productsSkuToId);
+    }
+
+    /**
+     * Set object property.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+
+        return $object;
+    }
+
+    /**
+     * Get object property.
+     *
+     * @param object $object
+     * @param string $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
+    }
 }
