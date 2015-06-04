@@ -56,31 +56,31 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->path = realpath(__DIR__);
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->directoryList->expects($this->any())
             ->method('getRoot')
             ->willReturn($this->path);
         $this->directoryList->expects($this->any())
             ->method('getPath')
             ->willReturn($this->path);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
-        $this->database = $this->getMock('Magento\Framework\Backup\Db', [], [], '', false);
-        $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
-        $helper->expects($this->any())
-            ->method('getInfo')
-            ->willReturn(['writable' => true]);
         $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
         $configLoader->expects($this->any())
             ->method('load')
             ->willReturn([]);
+        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->database = $this->getMock('Magento\Framework\Backup\Db', [], [], '', false);
+        $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $this->getMock('Magento\Framework\App\State', [], [], '', false)],
                 ['Magento\Framework\App\ObjectManager\ConfigLoader', $configLoader],
             ]));
+        $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
+        $helper->expects($this->any())
+            ->method('getInfo')
+            ->willReturn(['writable' => true]);
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
