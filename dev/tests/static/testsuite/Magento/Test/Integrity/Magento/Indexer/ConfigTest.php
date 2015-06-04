@@ -59,7 +59,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '';
+        return '/app/code/Magento/Indexer/etc/indexer.xsd';
     }
 
     /**
@@ -106,14 +106,16 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 Element 'indexer': Duplicate key-sequence ['catalogsearch_fulltext'] in unique identity-constraint 'uniqueViewId'.
 Element 'indexer': Duplicate key-sequence ['indexer_0', 'catalogsearch_fulltext'] in unique identity-constraint" .
     " 'uniqueIndexertId'.
-Element 'fields': Missing child element(s). Expected is ( field ).
-Element 'fields', attribute 'handler': [facet 'pattern'] The value 'field_handler' is not accepted" .
-    " by the pattern '[a-zA-Z\\\\]+'.
-Element 'fields', attribute 'handler': 'field_handler' is not a valid value of the atomic type 'classType'.
+Element 'field', attribute 'handler': [facet 'pattern'] " .
+    "The value 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not accepted by the pattern " .
+    "'[a-zA-Z0-9_]+'.
+Element 'field', attribute 'handler': 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not a valid " .
+    "value of the atomic type 'nameType'.
 Element 'field': Duplicate key-sequence ['visibility'] in unique identity-constraint 'uniqueField'.
-Element 'field', attribute 'origin': [facet 'pattern'] The value 'table_name_field_name' is not accepted" .
-    " by the pattern '[a-zA-Z0-9_]+\\.[a-zA-Z0-9_]+'.
-Element 'field', attribute 'origin': 'table_name_field_name' is not a valid value of the atomic type 'originType'.
+Element 'field', attribute 'source': [facet 'pattern'] The value 'Magento\\Framework\\Search\\Index\\Source' " .
+    "is not accepted by the pattern '[a-zA-Z0-9_]+'.
+Element 'field', attribute 'source': 'Magento\\Framework\\Search\\Index\\Source' is not a valid " .
+    "value of the atomic type 'nameType'.
 Element 'field': The attribute 'dataType' is required but missing.
 Element 'field', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'any'" .
     " of the xsi:type attribute does not resolve to a type definition.
