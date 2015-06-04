@@ -2232,4 +2232,9 @@ return [
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    [
+        'getConfigureUrl',
+        'Magento\Checkout\Block\Cart\Item\Renderer',
+        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+    ],
 ];
