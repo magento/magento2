@@ -76,7 +76,7 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="\Magento\Tax\Test\Constraint\AssertTaxRateInTaxRule">
+    <type name="Magento\Tax\Test\Constraint\AssertTaxRateInTaxRule">
         <arguments>
             <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
