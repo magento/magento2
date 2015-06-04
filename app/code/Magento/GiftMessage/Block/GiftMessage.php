@@ -9,7 +9,7 @@ use \Magento\Backend\Block\Template\Context;
 use \Magento\Framework\Json\Encoder;
 use \Magento\Checkout\Model\CompositeConfigProvider;
 
-class Options extends \Magento\Backend\Block\Template
+class GiftMessage extends \Magento\Backend\Block\Template
 {
     /**
      * @var bool
@@ -70,11 +70,11 @@ class Options extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve gift options configuration
+     * Retrieve gift message configuration
      *
      * @return array
      */
-    public function getOptionsConfigJson()
+    public function getGiftMessageConfigJson()
     {
         return $this->jsonEncoder->encode($this->configProvider->getConfig());
     }
