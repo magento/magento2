@@ -9,9 +9,9 @@ define(
         'ko',
         'underscore',
         'mage/storage',
-        './address-list-provider'
+        './address-list'
     ],
-    function($, ko, _, storage, addressListProvider) {
+    function($, ko, _, storage, addressList) {
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
             failedLoginAttempts = ko.observable(0),
@@ -40,10 +40,10 @@ define(
                 failedLoginAttempts(++oldAttempts);
             },
             getBillingAddressList: function () {
-                return addressListProvider.getItems();
+                return addressList();
             },
             getShippingAddressList: function () {
-                return addressListProvider.getItems();
+                return addressList();
             },
             setDetails: function (fieldName, value) {
                 if (fieldName) {
