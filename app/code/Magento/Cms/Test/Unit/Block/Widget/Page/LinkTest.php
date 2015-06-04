@@ -83,13 +83,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTitleByPageId()
     {
-        $page_id = 1;
+        $pageId = 1;
         $title = 'Title by page id';
         $this->mockResourcePage->expects($this->once())
             ->method('getCmsPageTitleById')
-            ->with($page_id)
+            ->with($pageId)
             ->willReturn($title);
-        $this->linkElement->setData('page_id', $page_id);
+        $this->linkElement->setData('page_id', $pageId);
         $this->assertEquals($title, $this->linkElement->getTitle());
     }
 
@@ -139,13 +139,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLabelByPageId()
     {
-        $page_id = 1;
+        $pageId = 1;
         $label = 'Label by page id';
         $this->mockResourcePage->expects($this->once())
             ->method('getCmsPageTitleById')
-            ->with($page_id)
+            ->with($pageId)
             ->willReturn($label);
-        $this->linkElement->setData('page_id', $page_id);
+        $this->linkElement->setData('page_id', $pageId);
         $this->assertEquals($label, $this->linkElement->getLabel());
     }
 
