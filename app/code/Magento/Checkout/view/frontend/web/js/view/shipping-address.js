@@ -9,7 +9,7 @@ define(
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
-        '../model/addresslist',
+        'Magento_Customer/js/model/address-list',
         '../model/address-converter',
         '../model/quote',
         '../action/select-shipping-address',
@@ -34,14 +34,13 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
-                visible: true,
-                formVisible: customer.getShippingAddressList().length === 0
+                visible: true
             },
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
             isCustomerLoggedIn: customer.isLoggedIn(),
             isFormPopUpVisible: ko.observable(false),
-            isFormInline: addressList.getAddresses()().length == 0,
+            isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
 
             initElement: function(element) {
@@ -63,9 +62,6 @@ define(
 
             /** Check if component is active */
             isActive: function() {
-                if (quote.isVirtual()) {
-                    navigator.setStepEnabled(stepName, false);
-                }
                 return !quote.isVirtual();
             },
 
@@ -88,7 +84,9 @@ define(
 
             /** Save new shipping address */
             saveNewAddress: function() {
-                this.validate();
+                this.source.set('params.invalid', false);
+                this.source.trigger('shippingAddress.data.validate');
+
                 if (!this.source.get('params.invalid')) {
                     var addressData = this.source.get('shippingAddress');
                     var saveInAddressBook = true;
@@ -99,17 +97,23 @@ define(
                     addressData.save_in_address_book = saveInAddressBook;
 
                     var newAddress = addressConverter.formAddressDataToQuoteAddress(addressData);
-                    addressList.add(newAddress);
+                    var isUpdated = addressList().some(function(address, index, addresses) {
+                        if (address.getKey() == newAddress.getKey()) {
+                            addresses[index] = newAddress;
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (!isUpdated) {
+                        addressList.push(newAddress);
+                    } else {
+                        addressList.valueHasMutated();
+                    }
                     // New address must be selected as a shipping address
-                    selectShippingAddress(ko.observable(newAddress));
+                    selectShippingAddress(newAddress);
                     this.isFormPopUpVisible(false);
                     this.isNewAddressAdded(true);
                 }
-            },
-
-            validate: function() {
-                this.source.set('params.invalid', false);
-                this.source.trigger('shippingAddress.data.validate');
             }
         });
     }

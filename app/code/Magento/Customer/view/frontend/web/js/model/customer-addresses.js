@@ -13,7 +13,7 @@ define(
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn);
         return {
-            getItems: function() {
+            getAddressItems: function() {
                 var items = [];
                 if (isLoggedIn) {
                     var customerData = window.customerData;

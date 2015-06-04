@@ -22,7 +22,7 @@ define(
             getClassName: function()
             {
                 className('opc-block-progress');
-                if(quote.getBillingAddress()() && (quote.getShippingAddress()()) || quote.isVirtual()) {
+                if(quote.getBillingAddress()() && (quote.getShippingAddress()) || quote.isVirtual()) {
                     className('opc-block-progress active')
                 }
                 if (quote.getPaymentMethod()()) {
