@@ -231,7 +231,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * Save advanced pricing
      *
-     * @return void
+     * @return $this
      */
     public function saveAdvancedPricing()
     {
@@ -269,12 +269,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
                 ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
         }
+        return $this;
     }
 
     /**
      * Deletes Advanced price data from raw data.
      *
-     * @return void
+     * @return $this
      */
     public function deleteAdvancedPricing()
     {
@@ -292,15 +293,59 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
                 ->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
         }
+        return $this;
     }
 
     /**
      * Replace advanced pricing
      *
-     * @return bool
+     * @return $this
      */
     public function replaceAdvancedPricing()
     {
+        $this->_cachedSkuToDelete = null;
+        $listSku = [];
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $tierPrices = [];
+            $groupPrices = [];
+            foreach ($bunch as $rowNum => $rowData) {
+                if (!$this->validateRow($rowData, $rowNum)) {
+                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
+                    continue;
+                }
+                $rowSku = $rowData[self::COL_SKU];
+                $listSku[] = $rowSku;
+                if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
+                    $tierPrices[$rowSku][] = [
+                        'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
+                        'customer_group_id' => $this->getCustomerGroupId(
+                            $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]
+                        ),
+                        'qty' => $rowData[self::COL_TIER_PRICE_QTY],
+                        'value' => $rowData[self::COL_TIER_PRICE],
+                        'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
+                    ];
+                }
+                if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
+                    $groupPrices[$rowSku][] = [
+                        'all_groups' => self::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
+                        'customer_group_id' => $this->getCustomerGroupId(
+                            $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]
+                        ),
+                        'value' => $rowData[self::COL_GROUP_PRICE],
+                        'website_id' => $this->getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
+                    ];
+                }
+            }
+            if ($listSku) {
+                if($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE) &&
+                    $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                    $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
+                        ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
+                }
+            }
+        }
+        return $this;
     }
 
     /**
@@ -335,8 +380,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes tier prices and group prices.
      *
      * @param array $listSku
-     * @param string $tableName
-     * @return $this
+     * @param $tableName
+     * @return bool
      */
     protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
     {
@@ -349,16 +394,22 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 );
             }
             if ($this->_cachedSkuToDelete) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
-                );
+                try {
+                    $this->_connection->delete(
+                        $tableName,
+                        $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
+                    );
+                    return true;
+                } catch (\Exception $e) {
+                    return false;
+                }
             } else {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
                 return false;
             }
+        } else {
+            return false;
         }
-        return $this;
     }
 
     /**
