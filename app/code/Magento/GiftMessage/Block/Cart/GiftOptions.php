@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Block;
+namespace Magento\GiftMessage\Block\Cart;
 
 use \Magento\Backend\Block\Template\Context;
 use \Magento\Framework\Json\Encoder;
 use \Magento\Checkout\Model\CompositeConfigProvider;
 
-class GiftMessage extends \Magento\Backend\Block\Template
+class GiftOptions extends \Magento\Backend\Block\Template
 {
     /**
      * @var bool
@@ -74,7 +74,7 @@ class GiftMessage extends \Magento\Backend\Block\Template
      *
      * @return array
      */
-    public function getGiftMessageConfigJson()
+    public function getGiftOptionsConfigJson()
     {
         return $this->jsonEncoder->encode($this->configProvider->getConfig());
     }

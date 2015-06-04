@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Test\Unit\Block;
+namespace Magento\GiftMessage\Test\Unit\Block\Cart;
 
-use Magento\GiftMessage\Block\GiftMessage;
+use Magento\GiftMessage\Block\Cart\GiftOptions;
 
-class GiftMessageTest extends \PHPUnit_Framework_TestCase
+class GiftOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -18,7 +18,7 @@ class GiftMessageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $layoutProcessor;
 
-    /** @var \Magento\GiftMessage\Block\GiftMessage */
+    /** @var \Magento\GiftMessage\Block\Cart\GiftOptions */
     protected $object;
 
     /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
@@ -41,7 +41,7 @@ class GiftMessageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->object =  new GiftMessage(
+        $this->object =  new GiftOptions(
             $this->context,
             $this->jsonEncoder,
             $this->compositeConfigProvider,
@@ -61,7 +61,7 @@ class GiftMessageTest extends \PHPUnit_Framework_TestCase
         $this->object->getJsLayout();
     }
 
-    public function testGetGiftMessageConfigJson()
+    public function testGetGiftOptionsConfigJson()
     {
         $this->compositeConfigProvider->expects($this->once())
             ->method('getConfig')
