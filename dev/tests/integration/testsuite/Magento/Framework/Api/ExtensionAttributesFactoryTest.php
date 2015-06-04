@@ -191,9 +191,12 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessSqlSelectVerification()
     {
-        $this->markTestIncomplete();
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\Api\ExtensionAttributes\Config $config */
+        $config = $objectManager->get('Magento\Framework\Api\ExtensionAttributes\Config');
+        $config->reset();
+
         $extensionConfigFileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -211,7 +214,6 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Api\ExtensionAttributes\Config',
             ['reader' => $configReader]
         );
-        $config->reset();
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */
         $extensionAttributesFactory = $objectManager->create(
             'Magento\Framework\Api\ExtensionAttributesFactory',
@@ -222,6 +224,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $collection = $objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
 
         $extensionAttributesFactory->process($collection, $productClassName);
+        $config->reset();
 
         $catalogProductEntity = $this->appResource->getTableName('catalog_product_entity');
         $catalogInventoryStockItem = $this->appResource->getTableName('cataloginventory_stock_item');
