@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Composer\GeneralDependencyChecker;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\App\Cache;
 
 /**
  * Class UninstallLanguageCommand
@@ -40,20 +41,28 @@ class UninstallLanguageCommand extends Command
     private $composerInfo;
 
     /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * Inject dependencies
      *
      * @param GeneralDependencyChecker $dependencyChecker
      * @param Remove $remove
      * @param ComposerInformation $composerInfo
+     * @param Cache $cache
      */
     public function __construct(
         GeneralDependencyChecker $dependencyChecker,
         Remove $remove,
-        ComposerInformation $composerInfo
+        ComposerInformation $composerInfo,
+        Cache $cache
     ) {
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
         $this->composerInfo = $composerInfo;
+        $this->cache = $cache;
 
         parent::__construct();
     }
@@ -101,6 +110,7 @@ class UninstallLanguageCommand extends Command
 
         if ($packagesToRemove !== []) {
             $this->remove->remove($packagesToRemove);
+            $this->cache->clean();
         } else {
             $output->writeln('Nothing is removed.');
         }
