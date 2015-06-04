@@ -6,9 +6,12 @@
 
 namespace Magento\Theme\Console\Command;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\GeneralDependencyChecker;
+use Magento\Framework\Composer\Remove;
 use Magento\Framework\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -69,10 +72,26 @@ class ThemeUninstallCommand extends Command
      * @var ComposerInformation
      */
     private $composer;
+
     /**
      * @var Filesystem
      */
     private $filesystem;
+
+    /**
+     * @var Remove
+     */
+    private $remove;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\Collection
+     */
+    private $themeCollection;
+
+    /**
+     * @var State
+     */
+    private $appState;
 
     /**
      * Constructor
@@ -85,6 +104,9 @@ class ThemeUninstallCommand extends Command
      * @param File $file
      * @param Filesystem $filesystem
      * @param GeneralDependencyChecker $dependencyChecker
+     * @param \Magento\Theme\Model\Theme\Collection $themeCollection
+     * @param Remove $remove
+     * @param State $appState
      */
     public function __construct(
         ComposerInformation $composer,
@@ -94,7 +116,10 @@ class ThemeUninstallCommand extends Command
         DirectoryList $directoryList,
         File $file,
         Filesystem $filesystem,
-        GeneralDependencyChecker $dependencyChecker
+        GeneralDependencyChecker $dependencyChecker,
+        \Magento\Theme\Model\Theme\Collection $themeCollection,
+        Remove $remove,
+        State $appState
     ) {
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
@@ -104,6 +129,10 @@ class ThemeUninstallCommand extends Command
         $this->file = $file;
         $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
+        $this->remove = $remove;
+        $this->themeCollection = $themeCollection;
+        $this->appState = $appState;
+        $this->appState->setAreaCode(Area::AREA_ADMIN);
         parent::__construct();
     }
 
@@ -165,6 +194,12 @@ class ThemeUninstallCommand extends Command
                 );
                 $backupRollback->codeBackup();
             }
+            $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from Magento codebase');
+            $themePackages = [];
+            foreach ($themePaths as $themePath) {
+                $themePackages[] = $this->getPackageName($themePath);
+            }
+            $this->remove->remove($themePackages);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
@@ -189,7 +224,7 @@ class ThemeUninstallCommand extends Command
             if (array_search($this->getPackageName($themePath), $installedPackages) === false) {
                 $unknownPackages[] = $themePath;
             }
-            if (!$this->isThemeExist($themePath)) {
+            if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
                 $unknownThemes[] = $themePath;
             }
         }
@@ -246,17 +281,5 @@ class ThemeUninstallCommand extends Command
             return $rawData['name'];
         }
         return '';
-    }
-
-    /**
-     * Checks if a theme exists by its full theme path
-     *
-     * @param string $themePath
-     * @return bool
-     */
-    private function isThemeExist($themePath)
-    {
-        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        return $themesDirRead->isExist($themePath);
     }
 }
