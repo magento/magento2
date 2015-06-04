@@ -26,7 +26,7 @@ interface BlockInterface
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
     public function getId();
 
@@ -40,35 +40,35 @@ interface BlockInterface
     /**
      * Get title
      *
-     * @return string
+     * @return string|null
      */
     public function getTitle();
 
     /**
      * Get content
      *
-     * @return string
+     * @return string|null
      */
     public function getContent();
 
     /**
      * Get creation time
      *
-     * @return string
+     * @return string|null
      */
     public function getCreationTime();
 
     /**
      * Get update time
      *
-     * @return string
+     * @return string|null
      */
     public function getUpdateTime();
 
     /**
      * Is active
      *
-     * @return bool
+     * @return bool|null
      */
     public function isActive();
 
