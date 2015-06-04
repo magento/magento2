@@ -54,6 +54,16 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $dependencyChecker;
 
     /**
+     * @var \Magento\Theme\Model\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collection;
+
+    /**
+     * @var \Magento\Framework\Composer\Remove|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $remove;
+
+    /**
      * @var ThemeUninstallCommand
      */
     private $command;
@@ -100,6 +110,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->collection = $this->getMock('Magento\Theme\Model\Theme\Collection', [], [], '', false);
+        $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
+        $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $composerInformation,
             $this->deploymentConfig,
@@ -108,7 +121,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->directoryList,
             $this->file,
             $this->filesystem,
-            $this->dependencyChecker
+            $this->dependencyChecker,
+            $this->collection,
+            $this->remove,
+            $state
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -141,6 +157,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
             ->willReturn($dirRead);
+        $this->collection->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
+        $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
         $this->tester->execute(['theme' => ['test1', 'test2']]);
         $this->assertContains(
             'test1 is not an installed composer package',
@@ -161,6 +181,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
             ->willReturn($dirRead);
+        $this->collection->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
+        $this->collection->expects($this->any())->method('hasTheme')->willReturn(false);
         $this->tester->execute(['theme' => ['test1', 'test2']]);
         $this->assertContains(
             'Unknown theme(s): test1, test2' . PHP_EOL,
@@ -190,12 +214,15 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test2/composer.json', true],
                     ['test3/composer.json', false],
                     ['test4/composer.json', true],
-                    ['test1', true],
-                    ['test2', true],
-                    ['test3', false],
-                    ['test4', true],
                 ]
             ));
+        $this->collection->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
+        $this->collection->expects($this->at(1))->method('hasTheme')->willReturn(true);
+        $this->collection->expects($this->at(3))->method('hasTheme')->willReturn(true);
+        $this->collection->expects($this->at(5))->method('hasTheme')->willReturn(false);
+        $this->collection->expects($this->at(7))->method('hasTheme')->willReturn(true);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
@@ -230,6 +257,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
             ->willReturn($dirRead);
+        $this->collection->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
+        $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
     }
 
     public function testExecuteFailedDependencyCheck()
@@ -250,6 +281,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpPassValidation();
         $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
+        $this->remove->expects($this->once())->method('remove');
     }
 
     public function testExecuteWithBackupCode()
