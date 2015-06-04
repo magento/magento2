@@ -8,9 +8,8 @@ namespace Magento\Theme\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Tester\CommandTester;
-// TODO: add cleanup, db removal
+
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
