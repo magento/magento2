@@ -57,14 +57,6 @@
             }
         }
 
-        .field {
-            .control {
-                &._with-tooltip {
-                    &:extend(.abs-field-tooltip all);
-                }
-            }
-        }
-
         .shipping-address-items {
             font-size: 0;
         }
@@ -144,6 +136,11 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .opc-wrapper {
+        .form-login {
+            .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
+            .css(margin, @checkout-shipping-item-mobile__padding);
+            .css(padding, @checkout-shipping-item-mobile__padding);
+        }
         .shipping-address-item {
             .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
             .css(margin, @checkout-shipping-item-mobile__margin);
