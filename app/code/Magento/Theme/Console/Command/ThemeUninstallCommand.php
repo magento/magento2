@@ -14,6 +14,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\GeneralDependencyChecker;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Filesystem;
+use Magento\Theme\Model\Theme\ThemeProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,9 +87,18 @@ class ThemeUninstallCommand extends Command
     private $remove;
 
     /**
+     * Theme collection in filesystem
+     *
      * @var \Magento\Theme\Model\Theme\Collection
      */
     private $themeCollection;
+
+    /**
+     * Provider for themes registered in db
+     *
+     * @var ThemeProvider
+     */
+    private $themeProvider;
 
     /**
      * @var State
@@ -119,6 +129,7 @@ class ThemeUninstallCommand extends Command
      * @param Filesystem $filesystem
      * @param GeneralDependencyChecker $dependencyChecker
      * @param \Magento\Theme\Model\Theme\Collection $themeCollection
+     * @param ThemeProvider $themeProvider
      * @param Remove $remove
      * @param State $appState
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -135,6 +146,7 @@ class ThemeUninstallCommand extends Command
         Filesystem $filesystem,
         GeneralDependencyChecker $dependencyChecker,
         \Magento\Theme\Model\Theme\Collection $themeCollection,
+        ThemeProvider $themeProvider,
         Remove $remove,
         State $appState
     ) {
@@ -150,6 +162,7 @@ class ThemeUninstallCommand extends Command
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
         $this->themeCollection = $themeCollection;
+        $this->themeProvider = $themeProvider;
         $this->appState = $appState;
         $this->appState->setAreaCode(Area::AREA_ADMIN);
         parent::__construct();
@@ -219,6 +232,8 @@ class ThemeUninstallCommand extends Command
                 );
                 $backupRollback->codeBackup();
             }
+            $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from database');
+            $this->removeFromDb($themePaths);
             $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from Magento codebase');
             $themePackages = [];
             foreach ($themePaths as $themePath) {
@@ -316,7 +331,7 @@ class ThemeUninstallCommand extends Command
      * @param OutputInterface $output
      * @return void
      */
-    protected function cleanup(InputInterface $input, OutputInterface $output)
+    private function cleanup(InputInterface $input, OutputInterface $output)
     {
         $this->cache->clean();
         $output->writeln('<info>Cache cleared successfully.</info>');
@@ -332,6 +347,19 @@ class ThemeUninstallCommand extends Command
                 . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
                 . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
             );
+        }
+    }
+
+    /**
+     * Remove all records related to the theme(s) in the database
+     *
+     * @param string[] $themePaths
+     * @return void
+     */
+    private function removeFromDb(array $themePaths)
+    {
+        foreach ($themePaths as $themePath) {
+            $this->themeProvider->getThemeByFullPath($themePath)->delete();
         }
     }
 }
