@@ -168,7 +168,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->_connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
+        $this->_connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
                 'select',
                 'fetchAll',
@@ -177,7 +178,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'insertOnDuplicate',
                 'delete',
                 'quoteInto'
-            ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
 
         $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->_connection->expects($this->any())->method('delete')->willReturnSelf();
