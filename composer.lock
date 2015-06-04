@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a8044123f71c15a262e59e7addfa52ed",
+    "hash": "725130907600b8ec38e9e1c4664f0ef2",
     "packages": [
         {
             "name": "composer/composer",
@@ -480,21 +480,20 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Console",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "2343f6d8026306bd330e0c987e4c102483c213e7"
+                "reference": "7f0bec04961c61c961df0cb8c2ae88dbfd83f399"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/2343f6d8026306bd330e0c987e4c102483c213e7",
-                "reference": "2343f6d8026306bd330e0c987e4c102483c213e7",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/7f0bec04961c61c961df0cb8c2ae88dbfd83f399",
+                "reference": "7f0bec04961c61c961df0cb8c2ae88dbfd83f399",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "psr/log": "~1.0",
@@ -510,11 +509,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Console\\": ""
                 }
             },
@@ -534,25 +533,24 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-22 14:53:08"
+            "time": "2015-05-29 16:22:24"
         },
         {
             "name": "symfony/finder",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Finder",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "ffedd3e0ff8155188155e9322fe21b9ee012ac14"
+                "reference": "ccb8ed8339cf24824f2ef35dacec30d92ff44368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/ffedd3e0ff8155188155e9322fe21b9ee012ac14",
-                "reference": "ffedd3e0ff8155188155e9322fe21b9ee012ac14",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/ccb8ed8339cf24824f2ef35dacec30d92ff44368",
+                "reference": "ccb8ed8339cf24824f2ef35dacec30d92ff44368",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -560,11 +558,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Finder\\": ""
                 }
             },
@@ -584,25 +582,24 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-15 13:32:45"
+            "time": "2015-05-15 14:02:48"
         },
         {
             "name": "symfony/process",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Process",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "7856d78ab6cce6e59d02d9e1a873441f6bd21306"
+                "reference": "e0a82b58e36afc60f8e79b8bc85a22bb064077c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/7856d78ab6cce6e59d02d9e1a873441f6bd21306",
-                "reference": "7856d78ab6cce6e59d02d9e1a873441f6bd21306",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/e0a82b58e36afc60f8e79b8bc85a22bb064077c1",
+                "reference": "e0a82b58e36afc60f8e79b8bc85a22bb064077c1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -610,11 +607,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Process\\": ""
                 }
             },
@@ -634,7 +631,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-15 13:32:45"
+            "time": "2015-05-15 13:33:16"
         },
         {
             "name": "tubalmartin/cssmin",
@@ -2445,16 +2442,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.17",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c4e8e7725e351184a76544634855b8a9c405a6e3"
+                "reference": "28a6b34e91d789b2608072ab3c82eaae7cdb973c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c4e8e7725e351184a76544634855b8a9c405a6e3",
-                "reference": "c4e8e7725e351184a76544634855b8a9c405a6e3",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/28a6b34e91d789b2608072ab3c82eaae7cdb973c",
+                "reference": "28a6b34e91d789b2608072ab3c82eaae7cdb973c",
                 "shasum": ""
             },
             "require": {
@@ -2477,7 +2474,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -2503,7 +2500,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-05-25 05:11:59"
+            "time": "2015-06-03 07:01:01"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3266,21 +3263,20 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Config",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "2696c5bc7c31485a482c10865d713de9fcc7aa31"
+                "reference": "537e9912063e66aa70cbcddd7d6e6e8db61d98e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/2696c5bc7c31485a482c10865d713de9fcc7aa31",
-                "reference": "2696c5bc7c31485a482c10865d713de9fcc7aa31",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/537e9912063e66aa70cbcddd7d6e6e8db61d98e4",
+                "reference": "537e9912063e66aa70cbcddd7d6e6e8db61d98e4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
+                "php": ">=5.3.9",
                 "symfony/filesystem": "~2.3"
             },
             "require-dev": {
@@ -3289,11 +3285,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Config\\": ""
                 }
             },
@@ -3313,25 +3309,24 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-15 13:32:45"
+            "time": "2015-05-15 13:33:16"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/DependencyInjection",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "d244c4e3ee9caf6d9aa34c77aaa6f0e0da8904be"
+                "reference": "137bf489c5151c7eb1e4b7dd34a123f9a74b966d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/d244c4e3ee9caf6d9aa34c77aaa6f0e0da8904be",
-                "reference": "d244c4e3ee9caf6d9aa34c77aaa6f0e0da8904be",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/137bf489c5151c7eb1e4b7dd34a123f9a74b966d",
+                "reference": "137bf489c5151c7eb1e4b7dd34a123f9a74b966d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "conflict": {
                 "symfony/expression-language": "<2.6"
@@ -3350,11 +3345,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\DependencyInjection\\": ""
                 }
             },
@@ -3374,25 +3369,24 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-12 14:25:36"
+            "time": "2015-05-29 14:44:44"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/EventDispatcher",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "672593bc4b0043a0acf91903bb75a1c82d8f2e02"
+                "reference": "687039686d0e923429ba6e958d0baa920cd5d458"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/672593bc4b0043a0acf91903bb75a1c82d8f2e02",
-                "reference": "672593bc4b0043a0acf91903bb75a1c82d8f2e02",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/687039686d0e923429ba6e958d0baa920cd5d458",
+                "reference": "687039686d0e923429ba6e958d0baa920cd5d458",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "psr/log": "~1.0",
@@ -3409,11 +3403,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\EventDispatcher\\": ""
                 }
             },
@@ -3433,25 +3427,24 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-05-02 15:21:08"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Filesystem",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "1f8429f72a5bfa58b33fd96824bea146fc4b3f49"
+                "reference": "ae4551fd6d4d4f51f2e7390fbc902fbd67f3b7ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/1f8429f72a5bfa58b33fd96824bea146fc4b3f49",
-                "reference": "1f8429f72a5bfa58b33fd96824bea146fc4b3f49",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/ae4551fd6d4d4f51f2e7390fbc902fbd67f3b7ba",
+                "reference": "ae4551fd6d4d4f51f2e7390fbc902fbd67f3b7ba",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -3459,11 +3452,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Filesystem\\": ""
                 }
             },
@@ -3483,25 +3476,24 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-15 13:32:45"
+            "time": "2015-05-15 13:33:16"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Stopwatch",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Stopwatch.git",
-                "reference": "b470f87c69837cb71115f1fa720388bb19b63635"
+                "reference": "7702945bceddc0e1f744519abb8a2baeb94bd5ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/b470f87c69837cb71115f1fa720388bb19b63635",
-                "reference": "b470f87c69837cb71115f1fa720388bb19b63635",
+                "url": "https://api.github.com/repos/symfony/Stopwatch/zipball/7702945bceddc0e1f744519abb8a2baeb94bd5ce",
+                "reference": "7702945bceddc0e1f744519abb8a2baeb94bd5ce",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -3509,11 +3501,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Stopwatch\\": ""
                 }
             },
@@ -3533,25 +3525,24 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-05-02 15:21:08"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.6.8",
-            "target-dir": "Symfony/Component/Yaml",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "f157ab074e453ecd4c0fa775f721f6e67a99d9e2"
+                "reference": "4a29a5248aed4fb45f626a7bbbd330291492f5c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/f157ab074e453ecd4c0fa775f721f6e67a99d9e2",
-                "reference": "f157ab074e453ecd4c0fa775f721f6e67a99d9e2",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4a29a5248aed4fb45f626a7bbbd330291492f5c3",
+                "reference": "4a29a5248aed4fb45f626a7bbbd330291492f5c3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -3559,11 +3550,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Yaml\\": ""
                 }
             },
@@ -3583,7 +3574,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-05-02 15:21:08"
         }
     ],
     "aliases": [],
@@ -3593,6 +3584,7 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
+    "prefer-lowest": false,
     "platform": {
         "php": "~5.5.0|~5.6.0"
     },

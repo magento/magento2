@@ -156,7 +156,7 @@
         </dataset>
 
         <dataset name="active_sales_rule_for_all_groups_no_coupon">
-            <field name="name" xsi:type="string">Shopping Cart Price Rule with Specific Coupon %isolation%</field>
+            <field name="name" xsi:type="string">Shopping Cart Price Rule without Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
             <field name="is_active" xsi:type="string">Active</field>
             <field name="website_ids" xsi:type="array">
