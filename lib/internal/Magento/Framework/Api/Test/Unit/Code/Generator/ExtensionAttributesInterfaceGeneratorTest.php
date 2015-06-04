@@ -13,11 +13,11 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
     public function testGenerate()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $configReaderMock = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+        $configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributes\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $configReaderMock->expects($this->any())
-            ->method('read')
+        $configMock->expects($this->any())
+            ->method('get')
             ->willReturn(
                 [
                     'Magento\Catalog\Api\Data\ProductInterface' => [
@@ -43,7 +43,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
         $model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
             [
-                'configReader' => $configReaderMock,
+                'config' => $configMock,
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
                 'resultClassName' => '\Magento\Catalog\Api\Data\ProductExtensionInterface',
                 'classGenerator' => null
