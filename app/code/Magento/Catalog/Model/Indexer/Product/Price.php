@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 class Price implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Action\Row
      */

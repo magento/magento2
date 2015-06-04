@@ -32,12 +32,4 @@ interface ActionInterface
      * @return void
      */
     public function executeRow($id);
-
-    /**
-     * Set indexer for access to configuration
-     *
-     * @param $indexer
-     * @return void
-     */
-    public function setIndexer(\Magento\Indexer\Model\IndexerInterface $indexer);
 }

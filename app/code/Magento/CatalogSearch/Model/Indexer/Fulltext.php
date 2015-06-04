@@ -7,8 +7,6 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * Indexer ID in configuration
      */

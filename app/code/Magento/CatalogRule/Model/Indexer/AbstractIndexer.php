@@ -10,8 +10,6 @@ use Magento\Indexer\Model\ActionInterface as IndexerActionInterface;
 
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * @var IndexBuilder
      */

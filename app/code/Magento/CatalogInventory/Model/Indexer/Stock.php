@@ -10,8 +10,6 @@ namespace Magento\CatalogInventory\Model\Indexer;
 
 class Stock implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Action\Row
      */
