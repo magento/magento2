@@ -50,13 +50,9 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
                 'Magento\Tax\Model\Resource\TaxClass\Collection',
                 [$taxClass]
             );
-        $taxClassCollectionFactory = $this->getMock(
-            'Magento\Tax\Model\Resource\TaxClass\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $taxClassCollectionFactory = $this->getMockBuilder('Magento\Tax\Model\Resource\TaxClass\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $taxClassCollectionFactory->method('create')->will($this->returnValue($taxClassCollection));
 
         $anotherTaxClass = $this->getMockBuilder('Magento\Tax\Model\ClassModel')
@@ -65,13 +61,9 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
         $anotherTaxClass->method('getClassName')->will($this->returnValue(self::TEST_TAX_CLASS_NAME));
         $anotherTaxClass->method('getId')->will($this->returnValue(self::TEST_JUST_CREATED_TAX_CLASS_ID));
 
-        $taxClassFactory = $this->getMock(
-            'Magento\Tax\Model\ClassModelFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $taxClassFactory = $this->getMockBuilder('Magento\Tax\Model\ClassModelFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $taxClassFactory->method('create')->will($this->returnValue($anotherTaxClass));
 
         $this->taxClassProcessor =

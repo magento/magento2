@@ -73,13 +73,9 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getItemById')
             ->will($this->returnValueMap($map));
 
-        $categoryColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $categoryColFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\Category\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $categoryColFactory->method('create')->will($this->returnValue($categoryCollection));
 
         $categoryFactory = $this->getMockBuilder('Magento\Catalog\Model\CategoryFactory')
