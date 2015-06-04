@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.order.actions">
-            <block class="Magento\GiftMessage\Block\Options" name="checkout.cart.additional.gift.options" template="cart/options.phtml" cacheable="false"/>
+            <block class="Magento\GiftMessage\Block\Options" name="checkout.cart.order.actions.gift_message" template="cart/options.phtml" cacheable="false"/>
         </referenceBlock>
     </body>
 </page>

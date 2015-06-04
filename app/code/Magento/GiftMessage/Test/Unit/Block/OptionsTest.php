@@ -12,9 +12,6 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Data\Form\FormKey|\PHPUnit_Framework_MockObject_MockObject */
-    protected $formKey;
-
     /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $compositeConfigProvider;
 
@@ -24,10 +21,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\GiftMessage\Block\Options */
     protected $object;
 
+    /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
+    protected $jsonEncoder;
+
     public function setUp()
     {
         $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->formKey = $this->getMock('Magento\Framework\Data\Form\FormKey', [], [], '', false);
+        $this->jsonEncoder = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);
         $this->compositeConfigProvider = $this->getMock(
             'Magento\Checkout\Model\CompositeConfigProvider',
             [],
@@ -43,7 +43,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         );
         $this->object =  new Options(
             $this->context,
-            $this->formKey,
+            $this->jsonEncoder,
             $this->compositeConfigProvider,
             [$this->layoutProcessor],
             ['jsLayout' => []]
@@ -55,14 +55,20 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->layoutProcessor->expects($this->once())
             ->method('process')
             ->willReturn([]);
-        $this->assertEquals('[]', $this->object->getJsLayout());
+        $this->jsonEncoder->expects($this->once())
+            ->method('encode')
+            ->willReturn('[]');
+        $this->object->getJsLayout();
     }
 
-    public function testGetCheckoutConfigJson()
+    public function testGetOptionsConfigJson()
     {
         $this->compositeConfigProvider->expects($this->once())
             ->method('getConfig')
             ->willReturn([]);
-        $this->assertEquals('[]', $this->object->getCheckoutConfigJson());
+        $this->jsonEncoder->expects($this->once())
+            ->method('encode')
+            ->willReturn('[]');
+        $this->object->getOptionsConfigJson();
     }
 }
