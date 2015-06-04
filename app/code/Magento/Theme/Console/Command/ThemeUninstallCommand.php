@@ -14,6 +14,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\GeneralDependencyChecker;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Filesystem;
+use Magento\Theme\Model\Theme\Collection;
 use Magento\Theme\Model\Theme\ThemeProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -128,7 +129,7 @@ class ThemeUninstallCommand extends Command
      * @param File $file
      * @param Filesystem $filesystem
      * @param GeneralDependencyChecker $dependencyChecker
-     * @param \Magento\Theme\Model\Theme\Collection $themeCollection
+     * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
      * @param Remove $remove
      * @param State $appState
@@ -145,7 +146,7 @@ class ThemeUninstallCommand extends Command
         File $file,
         Filesystem $filesystem,
         GeneralDependencyChecker $dependencyChecker,
-        \Magento\Theme\Model\Theme\Collection $themeCollection,
+        Collection $themeCollection,
         ThemeProvider $themeProvider,
         Remove $remove,
         State $appState
