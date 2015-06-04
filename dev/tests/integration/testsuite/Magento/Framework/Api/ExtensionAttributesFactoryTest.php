@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\Config\Converter;
-use Magento\Framework\Api\Config\Reader;
-use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
-use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
+use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\App\Resource;
 
@@ -23,7 +23,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var ExtensionAttributeJoinDataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinDataFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $extensionAttributeJoinDataFactory;
 
@@ -39,15 +39,15 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributes\Config')
+        $this->config = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributeJoinDataFactory = $this
-            ->getMockBuilder('Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory')
+            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributeJoinDataFactory = $this
-            ->getMockBuilder('Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory')
+            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessor = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
@@ -119,7 +119,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $extensionAttributeJoinData = new ExtensionAttributeJoinData();
+        $extensionAttributeJoinData = new JoinData();
         $this->extensionAttributeJoinDataFactory
             ->expects($this->once())
             ->method('create')
@@ -193,8 +193,8 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Api\ExtensionAttributes\Config $config */
-        $config = $objectManager->get('Magento\Framework\Api\ExtensionAttributes\Config');
+        /** @var \Magento\Framework\Api\ExtensionAttribute\Config $config */
+        $config = $objectManager->get('Magento\Framework\Api\ExtensionAttribute\Config');
         $config->reset();
 
         $extensionConfigFileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
@@ -206,12 +206,12 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([$extensionConfigFilePath => $extensionConfigFileContent]);
         $configReader = $objectManager->create(
-            'Magento\Framework\Api\Config\Reader',
+            'Magento\Framework\Api\ExtensionAttribute\Config\Reader',
             ['fileResolver' => $extensionConfigFileResolverMock]
         );
-        /** @var \Magento\Framework\Api\ExtensionAttributes\Config $config */
+        /** @var \Magento\Framework\Api\ExtensionAttribute\Config $config */
         $config = $objectManager->create(
-            'Magento\Framework\Api\ExtensionAttributes\Config',
+            'Magento\Framework\Api\ExtensionAttribute\Config',
             ['reader' => $configReader]
         );
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */

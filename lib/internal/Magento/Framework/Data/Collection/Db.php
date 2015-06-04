@@ -8,7 +8,7 @@ namespace Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinData;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -788,7 +788,7 @@ class Db extends \Magento\Framework\Data\Collection
     /**
      * Join extension attribute.
      *
-     * @param ExtensionAttributeJoinData $join
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
      * @return $this
      */
     public function joinExtensionAttribute($join)

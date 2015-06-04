@@ -2025,6 +2025,18 @@ return [
         'Magento\Core\Model\Layout\Argument\UpdaterInterface',
         'Magento\Framework\View\Layout\Argument\UpdaterInterface',
     ],
+    [
+        'Magento\Framework\Api\Config\Converter',
+        'Magento\Framework\Api\ExtensionAttribute\Config\Converter',
+    ],
+    [
+        'Magento\Framework\Api\Config\Reader',
+        'Magento\Framework\Api\ExtensionAttribute\Config\Reader',
+    ],
+    [
+        'Magento\Framework\Api\Config\SchemaLocator',
+        'Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator',
+    ],
     ['Magento\Core\Model\Layout\Filter\Acl', 'Magento\Backend\Model\Layout\Filter\Acl'],
     [
         'Magento\Framework\View\Layout\Argument\HandlerInterface',

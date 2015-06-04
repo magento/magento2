@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Test\Unit\Config;
+namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
 
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Api\Config\Converter
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config\Converter
      */
     protected $_converter;
 
@@ -19,7 +19,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_converter = new \Magento\Framework\Api\Config\Converter();
+        $this->_converter = new \Magento\Framework\Api\ExtensionAttribute\Config\Converter();
     }
 
     /**

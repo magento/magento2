@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Api\ExtensionAttributes\Config;
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\SimpleDataObjectConverter;

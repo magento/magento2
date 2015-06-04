@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
@@ -45,7 +45,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
     private $typeCasterMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributes\Config
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config
      */
     private $configMock;
 
@@ -72,7 +72,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
         $this->fieldNamerMock = $this->getMockBuilder('Magento\Framework\Reflection\FieldNamer')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributes\Config')
+        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')

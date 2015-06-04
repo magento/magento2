@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\ExtensionAttributes;
+namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\Api\Config\Reader;
+use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
 
 /**
  * Extension attributes config

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Api\JoinProcessor;
+namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Factory class for @see
- * \Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData
+ * \Magento\Framework\Api\ExtensionAttribute\JoinData
  */
-class ExtensionAttributeJoinDataFactory
+class JoinDataFactory
 {
     /**
      * Object Manager instance
@@ -34,7 +34,7 @@ class ExtensionAttributeJoinDataFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\Api\\JoinProcessor\\ExtensionAttributeJoinData'
+        $instanceName = '\\Magento\\Framework\\Api\\ExtensionAttribute\\JoinData'
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -44,7 +44,7 @@ class ExtensionAttributeJoinDataFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData
+     * @return \Magento\Framework\Api\ExtensionAttribute\JoinData
      */
     public function create(array $data = [])
     {

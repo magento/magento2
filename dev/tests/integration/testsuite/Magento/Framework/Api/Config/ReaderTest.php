@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Config;
+namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
 /**
- * Tests for \Magento\Framework\Api\Config\Reader
+ * Tests for \Magento\Framework\Api\ExtensionAttribute\Config\Reader
  */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Api\Config\Reader
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config\Reader
      */
     protected $_model;
 
@@ -31,12 +31,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_validationState;
 
     /**
-     * @var \Magento\Framework\Api\Config\SchemaLocator
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator
      */
     protected $_schemaLocator;
 
     /**
-     * @var \Magento\Framework\Api\Config\Converter
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config\Converter
      */
     protected $_converter;
 
@@ -56,17 +56,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($this->_fileList));
 
-        $this->_converter = new \Magento\Framework\Api\Config\Converter();
+        $this->_converter = new \Magento\Framework\Api\ExtensionAttribute\Config\Converter();
 
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT
         );
-        $this->_schemaLocator = new \Magento\Framework\Api\Config\SchemaLocator();
+        $this->_schemaLocator = new \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator();
     }
 
     public function testMerge()
     {
-        $model = new \Magento\Framework\Api\Config\Reader(
+        $model = new \Magento\Framework\Api\ExtensionAttribute\Config\Reader(
             $this->_fileResolverMock,
             $this->_converter,
             $this->_schemaLocator,
