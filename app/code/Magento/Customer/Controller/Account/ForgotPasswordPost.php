@@ -71,9 +71,8 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
                 $resultRedirect->setPath('*/*/forgotpassword');
                 return $resultRedirect;
             }
-            $email = $this->escaper->escapeHtml($email);
             // @codingStandardsIgnoreStart
-            $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.', $email));
+            $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
             // @codingStandardsIgnoreEnd
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
