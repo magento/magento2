@@ -9,17 +9,5 @@
     <indexer id="catalogsearch_fulltext" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Catalog Search</title>
         <description translate="true">Rebuild Catalog product fulltext search index</description>
-        <field name="name" source="name" xsi:type="searchable|filterable|both">
-            <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
-        </field>
-        <field name="description" source="s#2" handler="h#2" xsi:type="searchable">
-            <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
-        </field>
-        <field name="customer_name" source="s#1" handler="h#1" xsi:type="filterable" dataType="int|varchar|float" />
-
-        <source name="s#1" class="HandlerClass"/>
-        <handler name="h#1" class="CompositeHandler" />
-        <source name="s#2" class="HandlerClass2" />
-        <handler name="h#2" class="CompositeHandler3" />
     </indexer>
 </config>

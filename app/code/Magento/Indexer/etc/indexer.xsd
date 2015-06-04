@@ -79,7 +79,7 @@
 
     <xs:group name="fields">
         <xs:choice>
-            <xs:element name="field" type="match"/>
+            <xs:element name="field" type="fieldType"/>
             <xs:element name="source" type="sourceType"/>
             <xs:element name="handler" type="handlerType"/>
         </xs:choice>
@@ -115,15 +115,26 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="nameType">
+        <xs:annotation>
+            <xs:documentation>
+                Class name can contain only [a-zA-Z\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="fieldTypeAbstract" abstract="true">
         <xs:annotation>
             <xs:documentation>
                 Index field declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="source" type="xs:string" use="required"/>
-        <xs:attribute name="handler" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="source" type="nameType" use="required"/>
+        <xs:attribute name="handler" type="nameType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="sourceType">
@@ -133,7 +144,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="class" type="classType" use="required"/>
-        <xs:attribute name="name" type="classType" use="required"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="handlerType">
@@ -143,16 +154,15 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="class" type="classType" use="required"/>
-        <xs:attribute name="name" type="classType" use="required"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="match">
+    <xs:complexType name="fieldType">
         <xs:complexContent>
             <xs:extension base="fieldTypeAbstract">
                 <xs:sequence>
                     <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
-                <xs:attribute type="dataType" name="dataType" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -176,19 +186,21 @@
 
     <xs:complexType name="searchable">
         <xs:complexContent>
-            <xs:extension base="match"/>
+            <xs:extension base="fieldType"/>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="filterable">
         <xs:complexContent>
-            <xs:extension base="match"/>
+            <xs:extension base="fieldType">
+                <xs:attribute type="dataType" name="dataType" use="required" />
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="both">
         <xs:complexContent>
-            <xs:extension base="match"/>
+            <xs:extension base="fieldType"/>
         </xs:complexContent>
     </xs:complexType>
 
