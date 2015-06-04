@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Config;
+namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -16,7 +16,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return realpath(__DIR__ . '/../etc/extension_attributes.xsd');
+        return realpath(__DIR__ . '/../../etc/extension_attributes.xsd');
     }
 
     /**

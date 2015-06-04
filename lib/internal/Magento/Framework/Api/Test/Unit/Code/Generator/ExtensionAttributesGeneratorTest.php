@@ -6,12 +6,12 @@
 // @codingStandardsIgnoreFile
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
 class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributes\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -22,7 +22,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributes\Config')
+        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
             ->disableOriginalConstructor()
             ->getMock();
 

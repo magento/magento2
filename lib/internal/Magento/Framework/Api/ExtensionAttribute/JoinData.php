@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Api\JoinProcessor;
+namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Data holder for extension attribute joins.
  *
  * @codeCoverageIgnore
  */
-class ExtensionAttributeJoinData
+class JoinData
 {
     /**
      * @var string

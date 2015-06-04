@@ -21,7 +21,7 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributes\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -31,7 +31,7 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->typeProcessor = $this->getMock('Magento\Framework\Reflection\TypeProcessor', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\Framework\Api\ExtensionAttributes\Config', [], [], '', false);
+        $this->configMock = $this->getMock('Magento\Framework\Api\ExtensionAttribute\Config', [], [], '', false);
         $this->model = new AttributeTypeResolver($this->typeProcessor, $this->configMock);
     }
 

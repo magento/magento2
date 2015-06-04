@@ -7,7 +7,7 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\AttributeTypeResolverInterface;
-use Magento\Framework\Api\ExtensionAttributes\Config;
+use Magento\Framework\Api\ExtensionAttribute\Config;
 
 class AttributeTypeResolver implements AttributeTypeResolverInterface
 {

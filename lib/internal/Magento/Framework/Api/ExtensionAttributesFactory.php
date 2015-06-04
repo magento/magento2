@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\ExtensionAttributes\Config;
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Data\Collection\Db as DbCollection;
-use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
-use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\App\Resource as AppResource;
@@ -35,7 +35,7 @@ class ExtensionAttributesFactory
     private $config;
 
     /**
-     * @var ExtensionAttributeJoinDataFactory
+     * @var JoinDataFactory
      */
     private $extensionAttributeJoinDataFactory;
 
@@ -54,14 +54,14 @@ class ExtensionAttributesFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Config $config
-     * @param ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory
+     * @param JoinDataFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
      * @param AppResource $appResource
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Config $config,
-        ExtensionAttributeJoinDataFactory $extensionAttributeJoinDataFactory,
+        JoinDataFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor,
         AppResource $appResource
     ) {
@@ -123,7 +123,7 @@ class ExtensionAttributesFactory
     {
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         foreach ($joinDirectives as $attributeCode => $directive) {
-            /** @var ExtensionAttributeJoinData $joinData */
+            /** @var \Magento\Framework\Api\ExtensionAttribute\JoinData $joinData */
             $joinData = $this->extensionAttributeJoinDataFactory->create();
             $joinData->setReferenceTable($this->appResource->getTableName($directive[Converter::JOIN_REFERENCE_TABLE]))
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
@@ -231,7 +231,7 @@ class ExtensionAttributesFactory
     /**
      * Returns the internal join directive config for a given type.
      *
-     * Array returned has all of the \Magento\Framework\Api\Config\Converter JOIN* fields set.
+     * Array returned has all of the \Magento\Framework\Api\ExtensionAttribute\Config\Converter JOIN* fields set.
      *
      * @param string $extensibleEntityClass
      * @return array

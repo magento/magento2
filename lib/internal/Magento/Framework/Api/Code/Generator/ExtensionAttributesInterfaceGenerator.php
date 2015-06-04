@@ -20,7 +20,7 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Api\ExtensionAttributes\Config $config
+     * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -28,7 +28,7 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
-        \Magento\Framework\Api\ExtensionAttributes\Config $config,
+        \Magento\Framework\Api\ExtensionAttribute\Config $config,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,

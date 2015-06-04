@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Config;
+namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
