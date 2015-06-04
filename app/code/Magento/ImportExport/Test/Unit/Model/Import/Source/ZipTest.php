@@ -96,7 +96,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 [],
                 ]
             );
-        }catch (\PHPUnit_Framework_Error $e){
+        } catch (\PHPUnit_Framework_Error $e) {
             // Suppress any errors due to no control of Zip object dependency instantiation.
         }
     }
