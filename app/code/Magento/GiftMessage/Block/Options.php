@@ -6,16 +6,11 @@
 namespace Magento\GiftMessage\Block;
 
 use \Magento\Backend\Block\Template\Context;
-use \Magento\Framework\Data\Form\FormKey;
+use \Magento\Framework\Json\Encoder;
 use \Magento\Checkout\Model\CompositeConfigProvider;
 
 class Options extends \Magento\Backend\Block\Template
 {
-    /**
-     * @var \Magento\Framework\Data\Form\FormKey
-     */
-    protected $formKey;
-
     /**
      * @var bool
      */
@@ -37,21 +32,26 @@ class Options extends \Magento\Backend\Block\Template
     protected $layoutProcessors;
 
     /**
+     * @var Encoder
+     */
+    protected $jsonEncoder;
+
+    /**
      * @param Context $context
-     * @param FormKey $formKey
+     * @param Encoder $jsonEncoder
      * @param CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
         Context $context,
-        FormKey $formKey,
+        Encoder $jsonEncoder,
         CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->formKey = $formKey;
+        $this->jsonEncoder = $jsonEncoder;
         $this->_isScopePrivate = true;
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->configProvider = $configProvider;
@@ -66,26 +66,16 @@ class Options extends \Magento\Backend\Block\Template
         foreach ($this->layoutProcessors as $processor) {
             $this->jsLayout = $processor->process($this->jsLayout);
         }
-        return \Zend_Json::encode($this->jsLayout);
+        return $this->jsonEncoder->encode($this->jsLayout);
     }
 
     /**
-     * Retrieve form key
-     *
-     * @return string
-     */
-    public function getFormKey()
-    {
-        return $this->formKey->getFormKey();
-    }
-
-    /**
-     * Retrieve checkout configuration
+     * Retrieve gift options configuration
      *
      * @return array
      */
-    public function getCheckoutConfigJson()
+    public function getOptionsConfigJson()
     {
-        return \Zend_Json::encode($this->configProvider->getConfig());
+        return $this->jsonEncoder->encode($this->configProvider->getConfig());
     }
 }
