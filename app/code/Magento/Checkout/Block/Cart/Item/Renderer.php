@@ -8,7 +8,9 @@
 
 namespace Magento\Checkout\Block\Cart\Item;
 
+use Magento\Checkout\Block\Cart\Item\Renderer\Context;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
@@ -85,6 +87,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     public $moduleManager;
 
     /**
+     * @var Context
+     */
+    public $itemContext;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -93,6 +100,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Context $itemContext
      * @param array $data
      */
     public function __construct(
@@ -104,6 +112,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
+        Context $itemContext,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -115,6 +124,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
+        $this->itemContext = $itemContext;
     }
 
     /**
@@ -317,19 +327,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get item configure url
-     *
-     * @return string
-     */
-    public function getConfigureUrl()
-    {
-        return $this->getUrl(
-            'checkout/cart/configure',
-            ['id' => $this->getItem()->getId(), 'product_id' => $this->getItem()->getProduct()->getId()]
-        );
-    }
-
-    /**
      * Get quote item qty
      *
      * @return float|int
@@ -432,7 +429,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return product additional information block
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -622,5 +619,24 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');
         $block->setItem($item);
         return $block->toHtml();
+    }
+
+    /**
+     * Get row total including tax html
+     *
+     * @param Item\AbstractItem $item
+     * @return string
+     */
+    public function getActions(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    {
+        /** @var \Magento\Checkout\Block\Cart\Item\Renderer\Actions $block */
+        $block = $this->getChildBlock('actions');
+        if ($block instanceof AbstractBlock) {
+            $this->itemContext->setQuoteItem($item);
+            $block->setItemContext($this->itemContext);
+            return $block->toHtml();
+        } else {
+            return '';
+        }
     }
 }
