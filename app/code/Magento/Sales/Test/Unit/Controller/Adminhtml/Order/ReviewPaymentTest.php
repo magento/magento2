@@ -77,7 +77,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentMock = $this->getMock(
             'Magento\Sales\Model\Order\Payment',
-            ['registerPaymentReviewAction', 'update'],
+            ['update'],
             [],
             '',
             false
