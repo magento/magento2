@@ -3,16 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\TemplateEngine;
+namespace Magento\Framework\View\TemplateEngine;
 
-use Magento\Ui\TemplateEngine\Xhtml\Result;
-use Magento\Ui\TemplateEngine\Xhtml\Template;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler;
-use Magento\Ui\TemplateEngine\Xhtml\ResultFactory;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\TemplateEngineInterface;
-use Magento\Ui\TemplateEngine\Xhtml\CompilerFactory;
-use Magento\Ui\TemplateEngine\Xhtml\TemplateFactory;
+use Magento\Framework\View\TemplateEngine\Xhtml\Template;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultFactory;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\CompilerFactory;
+use Magento\Framework\View\TemplateEngine\Xhtml\TemplateFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Template as TemplateProvider;
 
 /**
@@ -20,8 +19,6 @@ use Magento\Framework\View\Element\UiComponent\Config\Provider\Template as Templ
  */
 class Xhtml implements TemplateEngineInterface
 {
-    const INSTANCE_NAME = 'Magento\Ui\Content\Template\Type\Xhtml\Template';
-
     /**
      * @var TemplateProvider
      */
@@ -68,10 +65,11 @@ class Xhtml implements TemplateEngineInterface
      * Render the named template in the context of a particular block and with
      * the data provided in $vars.
      *
-     * @param \Magento\Framework\View\Element\BlockInterface $block
+     * @param BlockInterface $block
      * @param string $templateFile
      * @param array $dictionary
-     * @return Result
+     * @return ResultInterface
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(BlockInterface $block, $templateFile, array $dictionary = [])
@@ -79,7 +77,6 @@ class Xhtml implements TemplateEngineInterface
         /** @var Template $template */
         $template = $this->templateFactory->create(['content' => $this->templateProvider->getTemplate($templateFile)]);
 
-        /** @var Result $result */
         $result = $this->resultFactory->create(
             [
                 'template' => $template,
