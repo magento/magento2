@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
-        <section id="shipping" translate="label" type="text" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="0">
+        <section id="shipping" translate="label" type="text" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Shipping Settings</label>
             <tab>sales</tab>
             <resource>Magento_Shipping::config_shipping</resource>
@@ -32,6 +32,19 @@
                 </field>
                 <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Street Address Line 2</label>
+                </field>
+            </group>
+            <group id="shipping_policy" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Shipping Policy Parameters</label>
+                <field id="enable_shipping_policy" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Apply custom Shipping Policy</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="shipping_policy_content" translate="label" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping Policy</label>
+                    <depends>
+                        <field id="enable_shipping_policy">1</field>
+                    </depends>
                 </field>
             </group>
         </section>
