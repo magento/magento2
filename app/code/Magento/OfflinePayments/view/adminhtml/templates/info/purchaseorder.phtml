@@ -4,5 +4,10 @@
  * See COPYING.txt for license details.
  */
 ?>
-<p><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
-<p><?php echo __('Purchase Order Number: %1', $block->escapeHtml($block->getInfo()->getPoNumber())) ?></p>
+<div class="order-payment-method-name"><?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?></div>
+<table class="data-table admin__table-secondary">
+    <tr>
+        <th><?php echo $block->escapeHtml(__('Purchase Order Number')); ?>:</th>
+        <td><?php echo $block->escapeHtml($block->getInfo()->getPoNumber()); ?></td>
+    </tr>
+</table>

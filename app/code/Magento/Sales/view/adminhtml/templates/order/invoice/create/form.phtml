@@ -22,7 +22,7 @@
                     <span class="title"><?php echo __('Payment Information') ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
-                    <div><?php echo $block->getChildHtml('order_payment') ?></div>
+                    <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
                     <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
                     <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
                 </div>
