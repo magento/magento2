@@ -7,7 +7,7 @@
 //  Variables
 //  _____________________________________________
 
-@checkout-shipping-address__max-width: 500px;
+@checkout-shipping-address__max-width: 600px;
 
 @checkout-shipping-item-icon__background-color: @checkout-shipping-item__active__border-color;
 @checkout-shipping-item-icon__color: @color-white;
@@ -42,12 +42,17 @@
 
         .form-login,
         .form-shipping-address {
+            .css(margin-bottom, @indent__base);
             .css(max-width, @checkout-shipping-address__max-width);
             .fieldset {
                 .field {
                     .label {
                         .css(font-weight, @font-weight__regular);
                     }
+                }
+                .note {
+                    .css(font-size, @font-size__base);
+                    .css(margin-top, @indent__s);
                 }
             }
         }

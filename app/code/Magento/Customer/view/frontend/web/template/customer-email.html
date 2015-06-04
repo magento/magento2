@@ -22,13 +22,13 @@
         <!--Hidden fields -->
         <fieldset class="fieldset hidden-fields" data-bind="fadeVisible: isPasswordVisible">
             <div class="field">
-                <span data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
                 <label class="label" for="customer-password">
                     <span data-bind="text: $t('Password')"></span>
                 </label>
                 <div class="control">
                     <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
                 </div>
+                <span class="note" data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
             </div>
             <!-- ko foreach: getRegion('additional-login-form-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -49,5 +49,4 @@
 
     </fieldset>
 </form>
-<hr>
 <!-- /ko -->
