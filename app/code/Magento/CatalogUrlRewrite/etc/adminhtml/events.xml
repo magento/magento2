@@ -27,4 +27,7 @@
     <event name="catalog_category_move_after">
         <observer name="process_url_rewrite_moving" instance="Magento\CatalogUrlRewrite\Model\Category\Observer" method="processUrlRewriteMoving"/>
     </event>
+    <event name="url_rewrite_save_handle">
+        <observer name="catalog_url_rewrite_save_handle" instance="Magento\CatalogUrlRewrite\Model\UrlRewrite\Observer" method="handleUrlRewriteSave"/>
+    </event>
 </config>

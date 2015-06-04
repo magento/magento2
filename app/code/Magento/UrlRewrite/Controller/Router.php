@@ -98,7 +98,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected function processRedirect($request, $rewrite)
     {
         $target = $rewrite->getTargetPath();
-        if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
+        if ($rewrite->getEntityType() !== \Magento\UrlRewrite\Model\Mode\Custom::ENTITY_TYPE
             || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
             $target = $this->url->getUrl('', ['_direct' => $target]);

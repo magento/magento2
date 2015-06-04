@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
+namespace Magento\CmsUrlRewrite\Block\Page\Edit;
 
 /**
  * Edit form for CMS page URL rewrites

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Catalog\Category;
+namespace Magento\CatalogUrlRewrite\Block\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
@@ -41,6 +41,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_categoryFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     */
+    protected $_categoryCollectionFactory;
+
+    /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
@@ -59,9 +64,10 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
@@ -71,6 +77,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
@@ -81,6 +88,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_adminhtmlData = $adminhtmlData;
+        $this->_categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
         $this->categoryRepository = $categoryRepository;
     }
@@ -137,7 +145,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     {
         $collection = $this->_getData('category_collection');
         if ($collection === null) {
-            $collection = $this->_categoryFactory->create()->getCollection()->addAttributeToSelect(
+            $collection = $this->_categoryCollectionFactory->create()->addAttributeToSelect(
                 ['name', 'is_active']
             )->setLoadProductCount(
                 true
@@ -189,6 +197,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getLoadTreeUrl()
     {
-        return $this->_adminhtmlData->getUrl('adminhtml/*/categoriesJson');
+        return $this->_adminhtmlData->getUrl('catalog_url_rewrite/url_rewrite/categoriesJson');
     }
 }

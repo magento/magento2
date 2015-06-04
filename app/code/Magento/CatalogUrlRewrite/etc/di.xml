@@ -20,4 +20,12 @@
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
     </type>
+    <type name="Magento\UrlRewrite\Model\Modes">
+        <arguments>
+            <argument name="modes" xsi:type="array">
+                <item name="category" xsi:type="object">Magento\CatalogUrlRewrite\Model\Mode\Category</item>
+                <item name="product" xsi:type="object">Magento\CatalogUrlRewrite\Model\Mode\Product</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

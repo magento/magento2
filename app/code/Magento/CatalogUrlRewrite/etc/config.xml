@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <url_rewrite>
+            <entity_types>
+                <product>
+                    <generator>Magento\Framework\Object</generator>
+                </product>
+                <category>
+                    <generator>Magento\Framework\Object</generator>
+                </category>
+            </entity_types>
+        </url_rewrite>
+    </default>
+</config>

@@ -3,33 +3,43 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Cms\Page;
+namespace Magento\CmsUrlRewrite\Block\Page;
+
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\CmsUrlRewrite\Model\Mode\CmsPage as CmsPageMode;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
 
 /**
  * Block for CMS pages URL rewrites
  */
+/**
+ * @method \Magento\UrlRewrite\Model\UrlRewrite getUrlRewrite()
+ * @method \Magento\Cms\Model\Page getCmsPage()
+ * @method Edit setCmsPage(\Magento\Cms\Model\Page $page)
+ */
 class Edit extends \Magento\UrlRewrite\Block\Edit
 {
     /**
-     * @var \Magento\Cms\Model\PageFactory
+     * @var \Magento\CmsUrlRewrite\Model\Mode\CmsPage
      */
-    protected $_pageFactory;
+    protected $cmsPageMode;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param Context $context
+     * @param UrlRewriteFactory $rewriteFactory
+     * @param BackendHelper $adminhtmlData
+     * @param CmsPageMode $cmsPageMode
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Cms\Model\PageFactory $pageFactory,
+        Context $context,
+        UrlRewriteFactory $rewriteFactory,
+        BackendHelper $adminhtmlData,
+        CmsPageMode $cmsPageMode,
         array $data = []
     ) {
-        $this->_pageFactory = $pageFactory;
+        $this->cmsPageMode = $cmsPageMode;
         parent::__construct($context, $rewriteFactory, $adminhtmlData, $data);
     }
 
@@ -66,7 +76,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     private function _getCmsPage()
     {
         if (!$this->hasData('cms_page')) {
-            $this->setCmsPage($this->_pageFactory->create());
+            $this->setCmsPage($this->cmsPageMode->getCmsPage($this->getUrlRewrite()));
         }
         return $this->getCmsPage();
     }
@@ -96,7 +106,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCmsPageGridBlock()
     {
-        $this->addChild('cms_pages_grid', 'Magento\UrlRewrite\Block\Cms\Page\Grid');
+        $this->addChild('cms_pages_grid', 'Magento\CmsUrlRewrite\Block\Page\Grid');
     }
 
     /**
@@ -107,9 +117,14 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Edit\Form',
+            'Magento\CmsUrlRewrite\Block\Page\Edit\Form',
             '',
-            ['data' => ['cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite()]]
+            [
+                'data' => [
+                    'cms_page' => $this->_getCmsPage(),
+                    'url_rewrite' => $this->_getUrlRewrite()
+                ]
+            ]
         );
     }
 }

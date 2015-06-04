@@ -5,7 +5,11 @@
  */
 namespace Magento\UrlRewrite\Block;
 
-class Selector extends \Magento\Backend\Block\Template
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Template;
+use Magento\UrlRewrite\Model\Modes;
+
+class Selector extends Template
 {
     /**
      * List of available modes from source model
@@ -15,24 +19,22 @@ class Selector extends \Magento\Backend\Block\Template
      */
     protected $_modes;
 
+    protected $modesInstance;
+
     /**
      * @var string
      */
     protected $_template = 'selector.phtml';
 
-    /**
-     * Set block template and get available modes
-     *
-     * @return void
-     */
-    protected function _construct()
+    public function __construct(
+        Modes $modes,
+        Context $context,
+        array $data = []
+    )
     {
-        $this->_modes = [
-            'id' => __('Custom'),
-            'category' => __('For category'),
-            'product' => __('For product'),
-            'cms_page' => __('For CMS page'),
-        ];
+        $this->modesInstance = $modes;
+        parent::__construct($context, $data);
+        $this->_modes = $this->modesInstance->toOptionsArray();
     }
 
     /**

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Cms\Page;
+namespace Magento\CmsUrlRewrite\Block\Page;
 
 /**
  * CMS pages grid for URL rewrites
@@ -80,7 +80,7 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('adminhtml/*/cmsPageGrid', ['_current' => true]);
+        return $this->getUrl('cms_url_rewrite/url_rewrite/cmsPageGrid', ['_current' => true]);
     }
 
     /**
@@ -91,6 +91,11 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('adminhtml/*/edit', ['cms_page' => $row->getId()]);
+        return $this->getUrl(
+            'adminhtml/*/edit',
+            [
+                \Magento\CmsUrlRewrite\Model\Mode\CmsPage::ENTITY_TYPE => $row->getId()
+            ]
+        );
     }
 }

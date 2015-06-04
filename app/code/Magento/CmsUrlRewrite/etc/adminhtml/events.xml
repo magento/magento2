@@ -9,4 +9,7 @@
     <event name="cms_page_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CmsUrlRewrite\Model\Observer" method="processUrlRewriteSaving" />
     </event>
+    <event name="url_rewrite_save_handle">
+        <observer name="cms_page_url_rewrite_save_handle" instance="Magento\CmsUrlRewrite\Model\UrlRewrite\Observer" method="handleUrlRewriteSave"/>
+    </event>
 </config>
