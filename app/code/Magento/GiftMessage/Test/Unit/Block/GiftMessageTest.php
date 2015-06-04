@@ -5,9 +5,9 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Block;
 
-use Magento\GiftMessage\Block\Options;
+use Magento\GiftMessage\Block\GiftMessage;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class GiftMessageTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -18,7 +18,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $layoutProcessor;
 
-    /** @var \Magento\GiftMessage\Block\Options */
+    /** @var \Magento\GiftMessage\Block\GiftMessage */
     protected $object;
 
     /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
@@ -41,7 +41,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->object =  new Options(
+        $this->object =  new GiftMessage(
             $this->context,
             $this->jsonEncoder,
             $this->compositeConfigProvider,
@@ -61,7 +61,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->object->getJsLayout();
     }
 
-    public function testGetOptionsConfigJson()
+    public function testGetGiftMessageConfigJson()
     {
         $this->compositeConfigProvider->expects($this->once())
             ->method('getConfig')
@@ -69,6 +69,6 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
             ->willReturn('[]');
-        $this->object->getOptionsConfigJson();
+        $this->object->getGiftMessageConfigJson();
     }
 }

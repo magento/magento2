@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div id="checkout-cart-options" data-bind="scope:'checkoutCartOptions'">
+<div id="gift-message" data-bind="scope:'giftMessage'">
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {
-            "#checkout-cart-options": {
+            "#gift-message": {
                 "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
             }
         }
     </script>
     <script>
-        window.cartOptionsConfig = <?php echo $block->getOptionsConfigJson(); ?>;
+        window.giftMessageConfig = <?php echo $block->getGiftMessageConfigJson(); ?>;
     </script>
 </div>
