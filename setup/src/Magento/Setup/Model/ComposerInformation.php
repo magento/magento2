@@ -39,7 +39,7 @@ class ComposerInformation
         Filesystem $filesystem,
         BufferIO $io
     ) {
-        // composer.json will be in same directory as vendor
+        // composer.json is in same directory as vendor
         $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
         $vendorDir = require "{$vendorPath}";
         $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
@@ -113,10 +113,6 @@ class ComposerInformation
             if (substr($reqIndex, 0, 4) === 'ext-') {
                 $requiredExtensions[] = substr($reqIndex, 4);
             }
-        }
-
-        if (!isset($requiredExtensions)) {
-            throw new \Exception('Cannot find extensions in \'composer.lock\' file');
         }
         return array_unique($requiredExtensions);
     }
