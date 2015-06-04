@@ -96,7 +96,8 @@ class InfoBackupsListCommand extends Command
      * @param string $needle
      * @return bool
      */
-    private function startsWith($haystack, $needle) {
-        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+    private function startsWith($haystack, $needle)
+    {
+        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
     }
 }
