@@ -48,6 +48,7 @@ class Remove
      */
     public function remove(array $packages)
     {
+        $this->composerApp->resetComposer();
         $this->composerApp->setAutoExit(false);
         $vendor = include $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
         $this->composerApp->run(
