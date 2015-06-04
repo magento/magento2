@@ -103,7 +103,6 @@ class DateTime
      *
      * @param  int|string $input date in current timezone
      * @return int
-     * @api
      */
     public function gmtTimestamp($input = null)
     {
@@ -130,7 +129,6 @@ class DateTime
      *
      * @param  int|string $input date in GMT timezone
      * @return int
-     * @api
      */
     public function timestamp($input = null)
     {

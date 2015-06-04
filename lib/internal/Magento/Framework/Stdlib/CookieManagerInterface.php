@@ -20,6 +20,7 @@ use Magento\Framework\Exception\InputException;
  * The cookie manager will make it possible for an application to indicate if a cookie contains sensitive data,
  * this will allow extra protection to be added to the contents of the cookie as well sending directives to the browser
  * about how the cookie should be stored and whether JavaScript can access the cookie.
+ * @api
  */
 interface CookieManagerInterface extends CookieReaderInterface
 {
@@ -36,7 +37,6 @@ interface CookieManagerInterface extends CookieReaderInterface
      * there is still no guarantee that the browser received and accepted the cookie.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @api
      */
     public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null);
 
@@ -53,7 +53,6 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws FailureToSendException If cookie couldn't be sent to the browser.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @api
      */
     public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null);
 
@@ -67,7 +66,6 @@ interface CookieManagerInterface extends CookieReaderInterface
      *     If this exception isn't thrown, there is still no guarantee that the browser
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
-     * @api
      */
     public function deleteCookie($name, CookieMetadata $metadata = null);
 }

@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 interface ValidatorInterface extends \Zend_Validate_Interface
 {
     /**
@@ -14,7 +17,6 @@ interface ValidatorInterface extends \Zend_Validate_Interface
      *
      * @param \Magento\Framework\Translate\AdapterInterface|null $translator
      * @return \Magento\Framework\Validator\ValidatorInterface
-     * @api
      */
     public function setTranslator($translator = null);
 
@@ -22,7 +24,6 @@ interface ValidatorInterface extends \Zend_Validate_Interface
      * Get translator.
      *
      * @return \Magento\Framework\Translate\AdapterInterface|null
-     * @api
      */
     public function getTranslator();
 
@@ -30,7 +31,6 @@ interface ValidatorInterface extends \Zend_Validate_Interface
      * Check that translator is set.
      *
      * @return boolean
-     * @api
      */
     public function hasTranslator();
 }
