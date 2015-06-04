@@ -118,6 +118,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_permanentAttributes = [self::COL_SKU];
 
     /**
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -338,8 +339,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
             if ($listSku) {
-                if($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE) &&
-                    $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                if ($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
+                    && $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
                     $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
                         ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
                 }
@@ -361,7 +362,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $tableName = $this->_resourceFactory->create()->getTable($table);
             $priceIn = [];
             foreach ($priceData as $sku => $priceRows) {
-                if(isset($this->_oldSkus[$sku])) {
+                if (isset($this->_oldSkus[$sku])) {
                     $productId = $this->_oldSkus[$sku];
                     foreach ($priceRows as $row) {
                         $row['entity_id'] = $productId;
