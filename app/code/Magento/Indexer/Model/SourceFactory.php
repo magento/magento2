@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Fields;
+namespace Magento\Indexer\Model;
 
-class HandlerFactory
+class SourceFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -21,22 +21,22 @@ class HandlerFactory
     }
 
     /**
-     * Create handler class instance
+     * Get source class instance by class name
      *
-     * @param string $handlerClass
+     * @param string $className
      * @param array $arguments
      * @throws \InvalidArgumentException
-     * @return HandlerInterface
+     * @return SourceInterface
      */
-    public function create($handlerClass, array $arguments = [])
+    public function create($className, array $arguments = [])
     {
-        $handler = $this->objectManager->create($handlerClass, $arguments);
-        if (!$handler instanceof HandlerInterface) {
+        $source = $this->objectManager->create($className, $arguments);
+        if (!$source instanceof SourceInterface) {
             throw new \InvalidArgumentException(
-                $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\Fields\HandlerInterface'
+                $className . ' doesn\'t implement \Magento\Indexer\Model\SourceInterface'
             );
         }
 
-        return $handler;
+        return $source;
     }
 }
