@@ -31,7 +31,6 @@ use Magento\Framework\Exception\CronException;
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @api
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {

@@ -14,7 +14,6 @@ interface ConfigInterface
      * Return list of cron jobs
      *
      * @return array
-     * @api
      */
     public function getJobs();
 }

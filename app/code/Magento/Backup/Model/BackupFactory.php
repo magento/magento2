@@ -32,7 +32,6 @@ class BackupFactory
      * @param int $timestamp
      * @param string $type
      * @return \Magento\Backup\Model\Backup
-     * @api
      */
     public function create($timestamp, $type)
     {

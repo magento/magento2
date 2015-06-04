@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem;
 
 /**
  * Backup data helper
- * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
