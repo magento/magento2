@@ -11,8 +11,6 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 /**
  * @method Attribute _getResource()
  * @method Attribute getResource()
- * @method int getProductId()
- * @method Attribute setProductId(int $value)
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
@@ -27,6 +25,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_POSITION = 'position';
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
+    const KEY_PRODUCT_ID = 'product_id';
     /**#@-*/
 
     /**
@@ -53,6 +52,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         }
         $data[] = $priceData;
         $this->setPrices($data);
+
         return $this;
     }
 
@@ -62,9 +62,13 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function getLabel()
     {
         if ($this->getData('use_default') && $this->getProductAttribute()) {
-            return $this->getProductAttribute()->getStoreLabel();
+            return $this->getProductAttribute()
+                ->getStoreLabel();
         } elseif ($this->getData(self::KEY_LABEL) === null && $this->getProductAttribute()) {
-            $this->setData(self::KEY_LABEL, $this->getProductAttribute()->getStoreLabel());
+            $this->setData(self::KEY_LABEL,
+                $this->getProductAttribute()
+                    ->getStoreLabel()
+            );
         }
 
         return $this->getData(self::KEY_LABEL);
@@ -78,8 +82,11 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function afterSave()
     {
         parent::afterSave();
-        $this->_getResource()->saveLabel($this);
-        $this->_getResource()->savePrices($this);
+        $this->_getResource()
+            ->saveLabel($this);
+        $this->_getResource()
+            ->savePrices($this);
+
         return $this;
     }
 
@@ -87,12 +94,13 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Load counfigurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
+     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
-        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        $id = $this->_getResource()
+            ->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
         if ($id) {
             $this->load($id);
         }
@@ -106,7 +114,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function deleteByProduct($product)
     {
-        $this->_getResource()->deleteAttributesByProductId($product->getId());
+        $this->_getResource()
+            ->deleteAttributesByProductId($product->getId());
     }
 
     /**
@@ -211,6 +220,22 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductId()
+    {
+        return $this->getData(self::KEY_PRODUCT_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($value)
+    {
+        return $this->setData(self::KEY_PRODUCT_ID, $value);
     }
     //@codeCoverageIgnoreEnd
 }
