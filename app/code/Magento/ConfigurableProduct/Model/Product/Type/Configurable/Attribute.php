@@ -52,7 +52,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         }
         $data[] = $priceData;
         $this->setPrices($data);
-
         return $this;
     }
 
@@ -62,13 +61,9 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function getLabel()
     {
         if ($this->getData('use_default') && $this->getProductAttribute()) {
-            return $this->getProductAttribute()
-                ->getStoreLabel();
+            return $this->getProductAttribute()->getStoreLabel();
         } elseif ($this->getData(self::KEY_LABEL) === null && $this->getProductAttribute()) {
-            $this->setData(self::KEY_LABEL,
-                $this->getProductAttribute()
-                    ->getStoreLabel()
-            );
+            $this->setData(self::KEY_LABEL, $this->getProductAttribute()->getStoreLabel());
         }
 
         return $this->getData(self::KEY_LABEL);
@@ -82,11 +77,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function afterSave()
     {
         parent::afterSave();
-        $this->_getResource()
-            ->saveLabel($this);
-        $this->_getResource()
-            ->savePrices($this);
-
+        $this->_getResource()->saveLabel($this);
+        $this->_getResource()->savePrices($this);
         return $this;
     }
 
@@ -94,13 +86,12 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      * Load counfigurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
      * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
-        $id = $this->_getResource()
-            ->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
         if ($id) {
             $this->load($id);
         }
@@ -114,8 +105,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function deleteByProduct($product)
     {
-        $this->_getResource()
-            ->deleteAttributesByProductId($product->getId());
+        $this->_getResource()->deleteAttributesByProductId($product->getId());
     }
 
     /**
