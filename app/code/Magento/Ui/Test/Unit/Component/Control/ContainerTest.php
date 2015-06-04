@@ -36,7 +36,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($blockButtonMock);
         $contextMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
 
-        $itemMock = $this->getMock('Magento\Ui\Component\Control\Item', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Ui\Component\Control\Item', ['getId', 'getData'], [], '', false);
         $itemMock->expects($this->any())->method('getData')->willReturn($data);
         $itemMock->expects($this->any())->method('getId')->willReturn($id);
 
