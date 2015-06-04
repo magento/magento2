@@ -7,6 +7,7 @@
 namespace Magento\Theme\Console\Command;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerInformation;
@@ -37,6 +38,7 @@ class ThemeUninstallCommand extends Command
      */
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_THEMES = 'theme';
+    const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
      * @var DeploymentConfig
@@ -94,8 +96,20 @@ class ThemeUninstallCommand extends Command
     private $appState;
 
     /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var State\CleanupFiles
+     */
+    private $cleanupFiles;
+
+    /**
      * Constructor
      *
+     * @param Cache $cache
+     * @param State\CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param MaintenanceMode $maintenanceMode
@@ -107,8 +121,11 @@ class ThemeUninstallCommand extends Command
      * @param \Magento\Theme\Model\Theme\Collection $themeCollection
      * @param Remove $remove
      * @param State $appState
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
+        Cache $cache,
+        State\CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         MaintenanceMode $maintenanceMode,
@@ -121,6 +138,8 @@ class ThemeUninstallCommand extends Command
         Remove $remove,
         State $appState
     ) {
+        $this->cache = $cache;
+        $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
@@ -153,6 +172,12 @@ class ThemeUninstallCommand extends Command
             self::INPUT_KEY_THEMES,
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
             'Path of the theme'
+        );
+        $this->addOption(
+            self::INPUT_KEY_CLEAR_STATIC_CONTENT,
+            'c',
+            InputOption::VALUE_NONE,
+            'Clear generated static view files. Necessary, if the module(s) have static view files'
         );
         parent::configure();
     }
@@ -200,6 +225,7 @@ class ThemeUninstallCommand extends Command
                 $themePackages[] = $this->getPackageName($themePath);
             }
             $this->remove->remove($themePackages);
+            $this->cleanup($input, $output);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
@@ -281,5 +307,31 @@ class ThemeUninstallCommand extends Command
             return $rawData['name'];
         }
         return '';
+    }
+
+    /**
+     * Cleanup after updated modules status
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
+    protected function cleanup(InputInterface $input, OutputInterface $output)
+    {
+        $this->cache->clean();
+        $output->writeln('<info>Cache cleared successfully.</info>');
+
+        $this->cleanupFiles->clearCodeGeneratedClasses();
+        $output->writeln('<info>Generated classes cleared successfully.</info>');
+        if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
+            $this->cleanupFiles->clearMaterializedViewFiles();
+            $output->writeln('<info>Generated static view files cleared successfully.</info>');
+        } else {
+            $output->writeln(
+                '<error>Alert: Generated static view files were not cleared.'
+                . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
+                . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
+            );
+        }
     }
 }
