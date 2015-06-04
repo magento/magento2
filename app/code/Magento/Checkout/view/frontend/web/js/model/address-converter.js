@@ -6,7 +6,7 @@
 define(
     [
         'jquery',
-        'Magento_Customer/js/model/customer/address'
+        'Magento_Checkout/js/model/new-customer-address'
     ],
     function($, Address) {
         'use strict';
