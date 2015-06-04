@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php /* Temp MAGETWO-36023 markup */?>
+<?php /* Gift Message */ ?>
+<div class="gift-message">
+    <div class="gift-options-title">
+        <span><?php echo __('Gift Message (optional)'); ?></span>
+    </div>
+
+    <div class="gift-options-content">
+        <fieldset class="fieldset">
+
+            <div class="field field-to">
+                <label for="gift-message-whole-to"
+                       class="label">
+                    <span><?php echo __('To'); ?>:</span>
+                </label>
+                <div class="control">
+                    <input type="text"
+                           id="gift-message-whole-to"
+                           class="input-text"
+                           name="">
+                </div>
+            </div>
+
+            <div class="field field-from">
+                <label for="gift-message-whole-from"
+                       class="label">
+                    <span><?php echo __('From'); ?>:</span>
+                </label>
+                <div class="control">
+                    <input type="text"
+                           id="gift-message-whole-from"
+                           class="input-text"
+                           name="">
+                </div>
+            </div>
+
+            <div class="field text">
+                <label for="gift-message-whole-message"
+                       class="label">
+                    <span><?php echo __('Message'); ?>:</span>
+                </label>
+                <div class="control">
+                            <textarea
+                                id="gift-message-whole-message"
+                                class="input-text"
+                                rows="5"
+                                cols="10"
+                                name=""></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="secondary">
+                <button type="submit"
+                        class="action secondary action-update"
+                        title="<?php echo $block->escapeHtml(__('Update')); ?>">
+                    <span><?php echo __('Update'); ?></span>
+                </button>
+                <button class="action action-cancel"
+                        title="<?php echo $block->escapeHtml(__('Cancel')); ?>">
+                    <span><?php echo __('Cancel'); ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php /* End Gift Message */ ?>
+<?php /* End Temp MAGETWO-36023 markup */?>
