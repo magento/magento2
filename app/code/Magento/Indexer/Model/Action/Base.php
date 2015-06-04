@@ -10,12 +10,9 @@ use Magento\Indexer\Model\SourceFactory;
 use Magento\Indexer\Model\HandlerFactory;
 use Magento\Indexer\Model\SourceInterface;
 use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\IndexerTrait;
 
 class Base implements ActionInterface
 {
-    use IndexerTrait;
-
     /**
      * @var SourceFactory
      */

@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Category;
 
 class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory
      */

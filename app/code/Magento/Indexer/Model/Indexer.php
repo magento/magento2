@@ -38,11 +38,6 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     protected $state;
 
     /**
-     * @var ActionInterface
-     */
-    protected $actionInstance;
-
-    /**
      * @var Indexer\CollectionFactory
      */
     protected $indexersFactory;
@@ -303,10 +298,9 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      *
      * @return ActionInterface
      */
-    protected function prepareActionInstance()
+    protected function getActionInstance()
     {
-        $this->actionInstance = $this->actionFactory->get($this->getActionClass());
-        $this->actionInstance->setIndexer($this);
+        return $this->actionFactory->create($this->getActionClass(), ['indexerId' => $this->getId()]);
     }
 
     /**
@@ -325,8 +319,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
                 $this->getView()->suspend();
             }
             try {
-                $this->prepareActionInstance();
-                $this->actionInstance->executeFull();
+                $this->getActionInstance()->executeFull();
                 $state->setStatus(Indexer\State::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
@@ -347,8 +340,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function reindexRow($id)
     {
-        $this->prepareActionInstance();
-        $this->actionInstance->executeRow($id);
+        $this->getActionInstance()->executeRow($id);
         $this->getState()->save();
     }
 
@@ -360,8 +352,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function reindexList($ids)
     {
-        $this->prepareActionInstance();
-        $this->actionInstance->executeList($ids);
+        $this->getActionInstance()->executeList($ids);
         $this->getState()->save();
     }
 }

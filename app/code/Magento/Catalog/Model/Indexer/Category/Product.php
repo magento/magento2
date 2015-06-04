@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Category;
 
 class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
-    use \Magento\Indexer\Model\IndexerTrait;
-
     /**
      * Indexer ID in configuration
      */
