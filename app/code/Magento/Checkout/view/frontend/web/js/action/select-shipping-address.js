@@ -9,11 +9,11 @@ define(
     ],
     function(quote, shippingRateService) {
         "use strict";
-        quote.getShippingAddress().subscribe(function () {
-            shippingRateService.getRates(quote.getShippingAddress()()())
+        quote.shippingAddress.subscribe(function () {
+            shippingRateService.getRates(quote.shippingAddress())
         });
         return function(shippingAddress) {
-            quote.setShippingAddress(shippingAddress);
+            quote.shippingAddress(shippingAddress);
         };
     }
 );

@@ -6,14 +6,28 @@
 define([
     'ko',
     'uiComponent',
-    'Magento_Checkout/js/action/select-shipping-address'
-], function(ko, Component, selectShippingAddressAction) {
+    'Magento_Checkout/js/action/select-shipping-address',
+    'Magento_Checkout/js/model/quote'
+], function(ko, Component, selectShippingAddressAction, quote) {
     'use strict';
     var countryData = window.checkoutConfig.countryData;
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/shipping-address/address-renderer/default',
-            isSelected: ko.observable(false)
+            template: 'Magento_Checkout/shipping-address/address-renderer/default'
+        },
+
+        initProperties: function () {
+            this._super();
+            this.isSelected = ko.computed(function() {
+                var isSelected = false;
+                var shippingAddress = quote.shippingAddress();
+                if (shippingAddress) {
+                    isSelected = shippingAddress.getKey() == this.address().getKey();
+                }
+                return isSelected;
+            }, this);
+
+            return this;
         },
 
         getCountryName: function(countryId) {
@@ -22,9 +36,7 @@ define([
 
         /** Set selected customer shipping address  */
         selectAddress: function() {
-            selectShippingAddressAction(this.address);
-            // Notify parent that this tile is selected
-            this.containers[0].selectAddressTile(this.index);
+            selectShippingAddressAction(this.address());
         }
     });
 });

@@ -24,6 +24,8 @@ define(
         var collectedTotals = ko.observable({});
         var isCustomerLoggedIn = ko.observable(window.checkoutConfig.isCustomerLoggedIn);
         return {
+            shippingAddress: shippingAddress,
+
             getQuoteId: function() {
                 return quoteData.entity_id;
             },
@@ -74,12 +76,6 @@ define(
             },
             getBillingAddress: function() {
                 return billingAddress;
-            },
-            setShippingAddress: function (address) {
-                shippingAddress(address);
-            },
-            getShippingAddress: function() {
-                return shippingAddress;
             },
             setFormattedBillingAddress: function (address) {
                 formattedBillingAddress(address);

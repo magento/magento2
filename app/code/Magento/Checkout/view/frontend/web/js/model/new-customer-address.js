@@ -11,7 +11,6 @@ define([], function() {
      */
     return function (addressData) {
         return {
-            customerAddressId: addressData.id,
             email: addressData.email,
             countryId: addressData.country_id,
             regionId: addressData.region.region_id,
@@ -34,14 +33,11 @@ define([], function() {
             isDefaultBilling: addressData.default_billing,
             sameAsBilling: addressData.same_as_billing,
             saveInAddressBook: addressData.save_in_address_book,
-            getAddressInline: function() {
-                return addressData.inline;
-            },
             getType: function() {
-                return 'customer-address'
+                return 'new-customer-address'
             },
             getKey: function() {
-                return this.getType() + this.customerAddressId;
+                return this.getType();
             }
         }
     }
