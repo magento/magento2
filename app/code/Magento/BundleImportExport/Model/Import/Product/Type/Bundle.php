@@ -166,8 +166,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $this->_entityModel->getMultipleValueSeparator(),
             $rowData['bundle_values']
         );
-        $selections = explode(\Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
-                                $rowData['bundle_values']);
+        $selections = explode(
+            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            $rowData['bundle_values']
+        );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
             $option = $this->parseOption($values);
@@ -568,8 +570,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($tmpArray = $this->populateSelectionTemplate(
                         $selection,
                         $option['option_id'],
-                        $productId, $index)
-                    ) {
+                        $productId,
+                        $index
+                    )) {
                         $selections[] = $tmpArray;
                         $index++;
                     }
@@ -616,12 +619,19 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             'parent_id IN (?)',
             $productIds
         ));
-        $this->connection->delete($optionTable, $this->connection
-                                                    ->quoteInto('value_id IN (?)', array_keys($valuesIds)));
+        $this->connection->delete(
+            $optionTable,
+            $this->connection->quoteInto('value_id IN (?)', array_keys($valuesIds))
+        );
         $productIdsInWhere = $this->connection->quoteInto('parent_id IN (?)', $productIds);
-        $this->connection->delete($optionTable, $this->connection->quoteInto('parent_id IN (?)', $productIdsInWhere));
-        $this->connection->delete($optionTable, $this->connection
-                                                    ->quoteInto('parent_product_id IN (?)', $productIdsInWhere));
+        $this->connection->delete(
+            $optionTable,
+            $this->connection->quoteInto('parent_id IN (?)', $productIdsInWhere)
+        );
+        $this->connection->delete(
+            $optionTable,
+            $this->connection->quoteInto('parent_product_id IN (?)', $productIdsInWhere)
+        );
         return $this;
     }
 

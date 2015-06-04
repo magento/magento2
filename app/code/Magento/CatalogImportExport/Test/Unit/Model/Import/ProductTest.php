@@ -498,12 +498,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_connection->expects($this->any())
                         ->method('quoteInto')
                         ->willReturnCallback([$this, 'returnQuoteCallback']);
-        $this->_connection->expects($this->once())->method('delete')
-            ->with($this->equalTo($testTable),
-                $this->equalTo('(store_id NOT IN ('
-                     . $storeId . ') AND attribute_id = '
-                     . $attributeId . ' AND entity_id = '
-                     . self::ENTITY_ID . ')')
+        $this->_connection
+            ->expects($this->once())
+            ->method('delete')
+            ->with(
+                $this->equalTo($testTable),
+                $this->equalTo(
+                    '(store_id NOT IN ('
+                    . $storeId . ') AND attribute_id = '
+                    . $attributeId . ' AND entity_id = '
+                    . self::ENTITY_ID . ')'
+                )
             );
 
         $tableData[] = [
@@ -983,8 +988,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateRowValidateNewProductTypeResetSku()
     {
-        $this->markTestSkipped('No chance to assert sku resetting due to mutually exclusive condition:
-        !isset($this->_invalidRows[$rowNum]) and isset($this->_invalidRows[$rowNum]) should be true simultaneously');
+        $this->markTestSkipped(
+            'No chance to assert sku resetting due to mutually exclusive condition:
+            !isset($this->_invalidRows[$rowNum]) and isset($this->_invalidRows[$rowNum]) should be true simultaneously'
+        );
     }
 
     public function testValidateDefaultScopeNotValidAttributesResetSku()
@@ -1161,8 +1168,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'type' => 'varchar',
                 ],
                 '$rowData' => [
-                    'code' => str_repeat('a',
-                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH - 1),
+                    'code' => str_repeat(
+                        'a',
+                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH - 1
+                    ),
                 ],
             ],
             [
@@ -1212,8 +1221,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'type' => 'text',
                 ],
                 '$rowData' => [
-                    'code' => str_repeat('a',
-                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH - 1),
+                    'code' => str_repeat(
+                        'a',
+                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH - 1
+                    ),
                 ],
             ],
         ];
@@ -1230,8 +1241,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'type' => 'varchar',
                 ],
                 '$rowData' => [
-                    'code' => str_repeat('a',
-                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH + 1),
+                    'code' => str_repeat(
+                        'a',
+                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH + 1
+                    ),
                 ],
             ],
             [
@@ -1281,8 +1294,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'type' => 'text',
                 ],
                 '$rowData' => [
-                    'code' => str_repeat('a',
-                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH + 1),
+                    'code' => str_repeat(
+                        'a',
+                        \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH + 1
+                    ),
                 ],
             ],
         ];
