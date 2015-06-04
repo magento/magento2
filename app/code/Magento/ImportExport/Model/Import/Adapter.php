@@ -5,7 +5,6 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
-use Magento\Eav\Exception;
 use Magento\Framework\Filesystem\Directory\Write;
 
 /**
