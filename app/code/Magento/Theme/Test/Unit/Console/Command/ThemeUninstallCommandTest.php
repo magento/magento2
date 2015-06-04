@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Tester\CommandTester;
-
+// TODO: add cleanup, db removal
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -64,6 +64,21 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $remove;
 
     /**
+     * @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cache;
+
+    /**
+     * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cleanupFiles;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themeProvider;
+
+    /**
      * @var ThemeUninstallCommand
      */
     private $command;
@@ -112,8 +127,13 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->collection = $this->getMock('Magento\Theme\Model\Theme\Collection', [], [], '', false);
         $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
+        $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $this->themeProvider = $this->getMock('Magento\Theme\Model\Theme\ThemeProvider', [], [], '', false);
         $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
+            $this->cache,
+            $this->cleanupFiles,
             $composerInformation,
             $this->deploymentConfig,
             $this->maintenanceMode,
@@ -123,6 +143,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->dependencyChecker,
             $this->collection,
+            $this->themeProvider,
             $this->remove,
             $state
         );
@@ -277,16 +298,23 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function setUpPassValidationAndDependencyCheck()
+    public function setUpExecute()
     {
         $this->setUpPassValidation();
         $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
         $this->remove->expects($this->once())->method('remove');
+        $this->cache->expects($this->once())->method('clean');
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
+        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme->expects($this->atLeastOnce())->method('delete');
+        $this->themeProvider->expects($this->any())
+            ->method('getThemeByFullPath')
+            ->willReturn($theme);
     }
 
     public function testExecuteWithBackupCode()
     {
-        $this->setUpPassValidationAndDependencyCheck();
+        $this->setUpExecute();
         $this->backupFS->expects($this->once())
             ->method('addIgnorePaths');
         $this->backupFS->expects($this->once())
@@ -311,9 +339,22 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->setUpPassValidationAndDependencyCheck();
+        $this->setUpExecute();
         $this->tester->execute(['theme' => ['test']]);
         $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
+        $this->assertContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
+        $this->assertNotContains('Generated static view files cleared successfully', $this->tester->getDisplay());
+    }
+
+    public function testExecuteCleanStaticFiles()
+    {
+        $this->setUpExecute();
+        $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
+        $this->tester->execute(['theme' => ['test'], '-c' => true]);
+        $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
+        $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
+        $this->assertNotContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
+        $this->assertContains('Generated static view files cleared successfully', $this->tester->getDisplay());
     }
 }
