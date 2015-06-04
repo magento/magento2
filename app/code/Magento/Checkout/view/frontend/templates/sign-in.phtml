@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div class="block-sign-in-wrapper" data-block="sign-in">
+    <a href="#" class="action action-sign-in" data-trigger="sign-in"><?php echo __('Sign in or Sign up'); ?></a>
+    <div class="block block-sign-in"
+        data-role="dropdownDialog"
+        style="display: none"
+        data-mage-init='{
+            "dropdownDialog":{
+                "appendTo":"[data-block=sign-in]",
+                "triggerTarget":"[data-trigger=sign-in]",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "bodyClass": "_has-dropdown",
+                "triggerClass":"_active",
+                "parentClass":"_active"},
+            "tabs":{
+                "openedState":"_active",
+                "collapsibleElement": ".fieldset",
+                "header": ".legend span"
+            }}'>
+        <fieldset class="fieldset" data-label="<?php echo __('or') ?>">
+            <legend class="legend"><span><?php echo __('Sign in') ?></span></legend><br/>
+            <div class="field required">
+                <label class="label" for="sign-in-email">
+                    <span><?php echo __('Email Address') ?></span>
+                </label>
+                <div class="control">
+                    <input class="input-text" id="sign-in-email" type="email">
+                </div>
+            </div>
+            <div class="field required">
+                <label class="label" for="sign-in-password">
+                    <span><?php echo __('Password') ?></span>
+                </label>
+                <div class="control">
+                    <input class="input-text" id="sign-in-password" type="password">
+                </div>
+            </div>
+            <div class="actions-toolbar">
+                <div class="primary"><button type="button" class="action login secondary" name="send" id="send2"><span><?php echo __('Sign in') ?></span></button></div>
+                <div class="secondary"><a class="action remind" href="http://magento2.loc/customer/account/forgotpassword/"><span><?php echo __('Forgot Your Password?') ?></span></a></div>
+            </div>
+        </fieldset>
+        <fieldset class="fieldset" data-label="<?php echo __('or') ?>">
+            <legend class="legend"><span><?php echo __('Sign up') ?></span></legend><br/>
+            <div class="field required">
+                <label class="label" for="signup-email">
+                    <span><?php echo __('Email Address') ?></span>
+                </label>
+                <div class="control">
+                    <input class="input-text" id="sign-in-email" type="email">
+                </div>
+            </div>
+            <div class="field required">
+                <label class="label" for="signup-password">
+                    <span><?php echo __('Password') ?></span>
+                </label>
+                <div class="control">
+                    <input class="input-text" id="sign-in-password" type="password">
+                </div>
+            </div>
+            <div class="actions-toolbar">
+                <div class="primary"><button type="button" class="action register primary" name="send" id="send2"><span><?php echo __('Create Account') ?></span></button></div>
+            </div>
+        </fieldset>
+    </div>
+</div>
