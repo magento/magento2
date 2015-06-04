@@ -109,7 +109,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 );
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please specify the product\'s required option(s).')
+                    __('Please specify product\'s required option(s).')
                 );
             }
         } else {

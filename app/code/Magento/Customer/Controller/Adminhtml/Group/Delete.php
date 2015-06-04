@@ -23,7 +23,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Group
         if ($id) {
             try {
                 $this->groupRepository->deleteById($id);
-                $this->messageManager->addSuccess(__('The customer group has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the customer group.'));
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(__('The customer group no longer exists.'));
                 return $resultRedirect->setPath('customer/*/');

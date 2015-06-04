@@ -82,7 +82,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new ValidatorException(__('Customer email is required'));
+            throw new ValidatorException(__('Please enter a customer email.'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -106,7 +106,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
-                __('Customer with the same email already exists in associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         }
 
@@ -254,7 +254,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Customer website ID must be specified when using the website scope')
+                    __('A customer website ID must be specified when using the website scope.')
                 );
             }
             $bind['website_id'] = (int)$customer->getWebsiteId();

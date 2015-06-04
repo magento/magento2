@@ -33,7 +33,7 @@ class SaveImageSizing extends \Magento\DesignEditor\Controller\Adminhtml\System\
             );
             $imageSizing = $imageSizingValidator->validate($configuration->getAllControlsData(), $imageSizing);
             $configuration->saveData($imageSizing);
-            $result = ['success' => true, 'message' => __('We saved the image sizes.')];
+            $result = ['success' => true, 'message' => __('You saved the image sizes.')];
         } catch (CoreException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);

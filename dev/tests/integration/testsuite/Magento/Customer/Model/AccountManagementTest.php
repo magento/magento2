@@ -178,7 +178,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Password doesn't match for this account
+     * @expectedExceptionMessage The password doesn't match this account.
      */
     public function testChangePasswordWrongPassword()
     {

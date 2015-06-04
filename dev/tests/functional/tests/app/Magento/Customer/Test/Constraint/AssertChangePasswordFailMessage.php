@@ -18,7 +18,7 @@ class AssertChangePasswordFailMessage extends AbstractConstraint
     /**
      * Fail message
      */
-    const FAIL_MESSAGE = "Password doesn't match for this account.";
+    const FAIL_MESSAGE = 'The password doesn\'t match this account.';
 
     /**
      * Assert that fail message is present

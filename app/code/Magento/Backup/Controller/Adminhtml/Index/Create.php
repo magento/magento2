@@ -92,7 +92,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
             $errorMessage = __('You need more permissions to create a backup.');
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
-            $errorMessage = __('Something went wrong creating the backup.');
+            $errorMessage = __('We can\'t create the backup right now.');
         }
 
         if (!empty($errorMessage)) {

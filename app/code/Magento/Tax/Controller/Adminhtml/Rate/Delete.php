@@ -28,7 +28,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
                 return $resultRedirect->setPath("*/*/");
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(
-                    __('Something went wrong deleting this rate because of an incorrect rate ID.')
+                    __('We can\'t delete this rate because of an incorrect rate ID.')
                 );
                 return $resultRedirect->setPath("tax/*/");
             }

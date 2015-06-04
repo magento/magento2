@@ -157,7 +157,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * test _beforeSaveMethod via save() with failed validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save address:
+     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {

@@ -27,11 +27,11 @@ require(['prototype'], function(){
         new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
             parameters: params,
             onSuccess: function(response) {
-                result = '<?php echo __('VAT Number is Invalid') ?>';
+                result = '<?php echo __('Please enter a valid VAT number.') ?>';
                 try {
                     response = response.responseText;
                     if (response == 1) {
-                        result = '<?php echo __('VAT Number is Valid') ?>';
+                        result = '<?php echo __('VAT Number is valid.') ?>';
                         validationMessage.removeClassName('hidden').addClassName('success')
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('error')

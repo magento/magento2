@@ -44,7 +44,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                 // @codingStandardsIgnoreStart
                 $this->messageManager->addSuccess(
                     __(
-                        'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+                        'We\'ll email you a link to reset your password.',
                         $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($email)
                     )
                 );

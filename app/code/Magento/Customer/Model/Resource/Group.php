@@ -74,7 +74,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if ($group->usesAsDefault()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('The group "%1" cannot be deleted', $group->getCode())
+                __('You can\'t delete group "%1".', $group->getCode())
             );
         }
         return parent::_beforeDelete($group);

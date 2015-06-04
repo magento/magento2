@@ -9,7 +9,7 @@
 ?>
 <form action="" method="post" id="form-validate" class="form send confirmation" data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset" data-hasrequired="<?php echo __('* Required Fields') ?>">
-        <p class="field note"><?php echo __('Please enter your email below and we will send you the confirmation link for it.') ?></p>
+        <p class="field note"><?php echo __('Please enter your email below and we will send you the confirmation link.') ?></p>
         <div class="field email required">
             <label for="email_address" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
@@ -22,7 +22,7 @@
             <button type="submit" class="action send primary"><span><?php echo __('Send confirmation link') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php echo $block->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
+            <a href="<?php echo $block->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Sign In') ?></span></a>
         </div>
     </div>
 </form>
