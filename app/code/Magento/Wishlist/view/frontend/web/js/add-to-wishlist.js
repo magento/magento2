@@ -83,6 +83,9 @@ define([
                 elementName = $(element).attr('name'),
                 elementValue = $(element).val();
             if ($(element).is('select[multiple]') && elementValue !== null) {
+                if (elementName.substr(elementName.length - 2) == '[]') {
+                    elementName = elementName.substring(0, elementName.length - 2);
+                }
                 $.each(elementValue, function (key, option) {
                     data[elementName + '[' + option + ']'] = option;
                 });

@@ -34,7 +34,7 @@
                             class="change-container-classname admin__control-checkbox checkbox bundle-option-<?php echo $_option->getId() ?> <?php if ($_option->getRequired()) echo 'validate-one-required-by-name' ?>"
                             id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
                             type="checkbox"
-                            name="bundle_option[<?php echo $_option->getId() ?>]"
+                            name="bundle_option[<?php echo $_option->getId() ?>][<?php echo $_selection->getId() ?>]"
                             <?php if ($block->isSelected($_selection)):?>
                                 <?php echo ' checked="checked"'; ?>
                             <?php endif;?>

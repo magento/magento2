@@ -21,7 +21,7 @@
                    price="<?php echo $block->getSelectionPrice($_selections[0]) ?>" />
         <?php else: ?>
             <select multiple="multiple" size="5" id="bundle-option-<?php echo $_option->getId() ?>"
-                    name="bundle_option[<?php echo $_option->getId() ?>]"
+                    name="bundle_option[<?php echo $_option->getId() ?>][]"
                     class="admin__control-multiselect bundle-option-<?php echo $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> multiselect change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
             <?php if(!$_option->getRequired()): ?>
