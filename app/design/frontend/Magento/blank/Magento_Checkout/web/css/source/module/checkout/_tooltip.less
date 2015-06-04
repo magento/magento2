@@ -33,11 +33,18 @@
 
 & when (@media-common = true) {
 
+    .field {
+        .control {
+            &._with-tooltip {
+                &:extend(.abs-field-tooltip all);
+            }
+        }
+    }
+
     .field-tooltip {
-        display: inline-block;
-        font-size: 0;
-        position: relative;
-        vertical-align: middle;
+        position: absolute;
+        right: 0;
+        top: 1px;
 
         &:hover {
             .css(z-index, @checkout-tooltip__hover__z-index);
