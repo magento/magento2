@@ -64,19 +64,16 @@ abstract class EntityAbstract extends AbstractDb
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param string|null $resourcePrefix
-     * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
-        $this->gridAggregator = $gridAggregator;
         $this->entitySnapshot = $entitySnapshot;
         if ($resourcePrefix === null) {
             $resourcePrefix = 'sales';
