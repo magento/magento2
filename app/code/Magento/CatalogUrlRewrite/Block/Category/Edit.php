@@ -3,33 +3,42 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Catalog\Category;
+namespace Magento\CatalogUrlRewrite\Block\Category;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\CatalogUrlRewrite\Model\Mode\Category as CategoryMode;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
 /**
  * Block for Catalog Category URL rewrites
+ */
+/**
+ * @method \Magento\UrlRewrite\Model\UrlRewrite getUrlRewrite()
+ * @method \Magento\Catalog\Model\Category getCategory()
+ * @method Edit setCategory(\Magento\Catalog\Model\Category $category)
  */
 class Edit extends \Magento\UrlRewrite\Block\Edit
 {
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var \Magento\CatalogUrlRewrite\Model\Mode\Category
      */
-    protected $_categoryFactory;
+    protected $categoryMode;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param Context $context
+     * @param UrlRewriteFactory $rewriteFactory
+     * @param BackendHelper $adminhtmlData
+     * @param CategoryMode $categoryMode
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        Context $context,
+        UrlRewriteFactory $rewriteFactory,
+        BackendHelper $adminhtmlData,
+        CategoryMode $categoryMode,
         array $data = []
     ) {
-        $this->_categoryFactory = $categoryFactory;
+        $this->categoryMode = $categoryMode;
         parent::__construct($context, $rewriteFactory, $adminhtmlData, $data);
     }
 
@@ -61,12 +70,12 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     /**
      * Get or create new instance of category
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return \Magento\Catalog\Model\Category
      */
     private function _getCategory()
     {
         if (!$this->hasData('category')) {
-            $this->setCategory($this->_categoryFactory->create());
+            $this->setCategory($this->categoryMode->getCategory($this->getUrlRewrite()));
         }
         return $this->getCategory();
     }
@@ -82,7 +91,10 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
             'category_link',
             'Magento\UrlRewrite\Block\Link',
             [
-                'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'category',
+                'item_url' => $this->_adminhtmlData->getUrl(
+                    'catalog/category/edit',
+                    ['id' => $this->_getCategory()->getId()]
+                ),
                 'item_name' => $this->_getCategory()->getName(),
                 'label' => __('Category:')
             ]
@@ -96,20 +108,25 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCategoryTreeBlock()
     {
-        $this->addChild('categories_tree', 'Magento\UrlRewrite\Block\Catalog\Category\Tree');
+        $this->addChild('categories_tree', 'Magento\CatalogUrlRewrite\Block\Category\Tree');
     }
 
     /**
      * Creates edit form block
      *
-     * @return \Magento\UrlRewrite\Block\Catalog\Edit\Form
+     * @return \Magento\CatalogUrlRewrite\Block\Edit\Form
      */
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Edit\Form',
+            'Magento\CatalogUrlRewrite\Block\Edit\Form',
             '',
-            ['data' => ['category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()]]
+            [
+                'data' => [
+                    'category' => $this->_getCategory(),
+                    'url_rewrite' => $this->_getUrlRewrite()
+                ]
+            ]
         );
     }
 }

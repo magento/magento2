@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+namespace Magento\CatalogUrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
@@ -18,7 +18,7 @@ class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrit
         $categoryId = $this->getRequest()->getParam('id', null);
         $this->getResponse()->setBody(
             $this->_objectManager->get(
-                'Magento\UrlRewrite\Block\Catalog\Category\Tree'
+                'Magento\CatalogUrlRewrite\Block\Category\Tree'
             )->getTreeArray(
                 $categoryId,
                 true,

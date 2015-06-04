@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+namespace Magento\CatalogUrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
@@ -16,7 +16,7 @@ class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
     public function execute()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock('Magento\UrlRewrite\Block\Catalog\Product\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock('Magento\CatalogUrlRewrite\Block\Product\Grid')->toHtml()
         );
     }
 }

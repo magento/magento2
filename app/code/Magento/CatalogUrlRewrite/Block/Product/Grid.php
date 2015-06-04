@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Block\Catalog\Product;
+namespace Magento\CatalogUrlRewrite\Block\Product;
 
 /**
  * Products grid for URL rewrites editing
@@ -63,7 +63,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('adminhtml/*/productGrid', ['_current' => true]);
+        return $this->getUrl('catalog_url_rewrite/url_rewrite/productGrid', ['_current' => true]);
     }
 
     /**
@@ -74,6 +74,10 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('adminhtml/*/edit', ['product' => $row->getId()]) . 'category';
+        return $this->getUrl(
+            'adminhtml/*/edit',
+            [
+                \Magento\CatalogUrlRewrite\Model\Mode\Product::ENTITY_TYPE => $row->getId()]
+        ) . \Magento\CatalogUrlRewrite\Model\Mode\Category::ENTITY_TYPE;
     }
 }

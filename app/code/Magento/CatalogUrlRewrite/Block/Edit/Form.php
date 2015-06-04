@@ -7,7 +7,7 @@
 /**
  * Edit form for Catalog product and category URL rewrites
  */
-namespace Magento\UrlRewrite\Block\Catalog\Edit;
+namespace Magento\CatalogUrlRewrite\Block\Edit;
 
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
@@ -21,7 +21,6 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
-
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
      */
@@ -126,14 +125,16 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
         } else {
             $disablePaths = in_array(
                 $model->getEntityType(),
-                [Rewrite::ENTITY_TYPE_PRODUCT, Rewrite::ENTITY_TYPE_CATEGORY, Rewrite::ENTITY_TYPE_CMS_PAGE]
+                [
+                    \Magento\CatalogUrlRewrite\Model\Mode\Product::ENTITY_TYPE,
+                    \Magento\CatalogUrlRewrite\Model\Mode\Category::ENTITY_TYPE,
+                ]
             );
         }
 
         if ($disablePaths) {
             $targetPath->setData('disabled', true);
         }
-
         return $this;
     }
 

@@ -6,13 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\UrlRewrite\Model\StorageInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
-    <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
-    <preference for="Magento\UrlRewrite\Model\UrlPersistInterface" type="Magento\UrlRewrite\Model\Storage\DbStorage"/>
     <type name="Magento\UrlRewrite\Model\Modes">
         <arguments>
             <argument name="modes" xsi:type="array">
-                <item name="custom" xsi:type="object">Magento\UrlRewrite\Model\Mode\Custom</item>
+                <item name="cms_page" xsi:type="object">Magento\CmsUrlRewrite\Model\Mode\CmsPage</item>
             </argument>
         </arguments>
     </type>

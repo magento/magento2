@@ -9,15 +9,9 @@
     <default>
         <url_rewrite>
             <entity_types>
-                <product>
+                <cms_page>
                     <generator>Magento\Framework\Object</generator>
-                </product>
-                <category>
-                    <generator>Magento\Framework\Object</generator>
-                </category>
-                <cms-page>
-                    <generator>Magento\Framework\Object</generator>
-                </cms-page>
+                </cms_page>
             </entity_types>
         </url_rewrite>
     </default>

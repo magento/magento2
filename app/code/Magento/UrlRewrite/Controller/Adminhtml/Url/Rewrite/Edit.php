@@ -6,17 +6,39 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Backend\App\Action\Context;
+use Magento\UrlRewrite\Model\Modes;
+use Magento\UrlRewrite\Block\Selector;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
+
 class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
-    /**#@+
-     * Modes
+    /**
+     * @var \Magento\UrlRewrite\Model\Modes
      */
-    const ID_MODE = 'id';
-    const PRODUCT_MODE = 'product';
-    const CATEGORY_MODE = 'category';
-    const CMS_PAGE_MODE = 'cms_page';
-    /**#@-*/
+    protected $modesInstance;
+    /**
+     * @var \Magento\UrlRewrite\Block\Selector
+     */
+    protected $selector;
 
+    /**
+     * @param Selector $selector
+     * @param Modes $modesInstance
+     * @param UrlRewriteFactory $urlRewriteFactory
+     * @param Context $context
+     */
+    public function __construct(
+        Selector $selector,
+        Modes $modesInstance,
+        UrlRewriteFactory $urlRewriteFactory,
+        Context $context
+    )
+    {
+        $this->selector = $selector;
+        $this->modesInstance = $modesInstance;
+        parent::__construct($context, $urlRewriteFactory);
+    }
     /**
      * Get current mode
      *
@@ -24,16 +46,10 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      */
     protected function _getMode()
     {
-        if ($this->_getProduct()->getId() || $this->getRequest()->has('product')) {
-            $mode = self::PRODUCT_MODE;
-        } elseif ($this->_getCategory()->getId() || $this->getRequest()->has('category')) {
-            $mode = self::CATEGORY_MODE;
-        } elseif ($this->_getCmsPage()->getId() || $this->getRequest()->has('cms_page')) {
-            $mode = self::CMS_PAGE_MODE;
-        } elseif ($this->getRequest()->has('id')) {
-            $mode = self::ID_MODE;
-        } else {
-            $mode = $this->_objectManager->get('Magento\UrlRewrite\Block\Selector')->getDefaultMode();
+        $mode = null;
+        $mode = $this->modesInstance->getModeByUrlRewrite($this->_getUrlRewrite());
+        if (is_null($mode)) {
+            $mode = $this->selector->getDefaultMode();
         }
         return $mode;
     }
@@ -49,48 +65,14 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
         $this->_setActiveMenu('Magento_UrlRewrite::urlrewrite');
 
         $mode = $this->_getMode();
-        switch ($mode) {
-            case self::PRODUCT_MODE:
-                $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Catalog\Product\Edit',
-                    '',
-                    [
-                        'data' => [
-                            'category' => $this->_getCategory(),
-                            'product' => $this->_getProduct(),
-                            'is_category_mode' => $this->getRequest()->has('category'),
-                            'url_rewrite' => $this->_getUrlRewrite(),
-                        ]
-                    ]
-                );
-                break;
-            case self::CATEGORY_MODE:
-                $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Catalog\Category\Edit',
-                    '',
-                    [
-                        'data' => ['category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()]
-                    ]
-                );
-                break;
-            case self::CMS_PAGE_MODE:
-                $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Cms\Page\Edit',
-                    '',
-                    [
-                        'data' => ['cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite()]
-                    ]
-                );
-                break;
-            case self::ID_MODE:
-            default:
-                $editBlock = $this->_view->getLayout()->createBlock(
-                    'Magento\UrlRewrite\Block\Edit',
-                    '',
-                    ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
-                );
-                break;
-        }
+        $editBlock = $this->modesInstance->getBlockInstance(
+            $mode,
+            [
+                'data' => [
+                    'url_rewrite' => $this->_getUrlRewrite()
+                ]
+            ]
+        );
         $this->_view->getPage()->getConfig()->getTitle()->prepend($editBlock->getHeaderText());
         $this->_addContent($editBlock);
         $this->_view->renderLayout();
