@@ -49,7 +49,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
                 throw new LocalizedException(
-                    __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                    __('Please enter a password with at least %1 characters.', self::MIN_PASSWORD_LENGTH)
                 );
             }
 
@@ -63,7 +63,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 1
             ) == ' '
             ) {
-                throw new LocalizedException(__('The password can not begin or end with a space.'));
+                throw new LocalizedException(__('The password can\'t begin or end with a space.'));
             }
 
             $object->setPasswordHash($object->hashPassword($password));

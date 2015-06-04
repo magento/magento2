@@ -36,7 +36,7 @@ class Wishlist extends \Magento\Backend\App\Action
     {
         $wishlistItemId = (int)$this->getRequest()->getParam('id');
         if (!$wishlistItemId) {
-            throw new CoreException(__('No wishlist item ID is defined.'));
+            throw new CoreException(__('No wish list item ID is defined.'));
         }
 
         /* @var $wishlistItem \Magento\Wishlist\Model\Item */

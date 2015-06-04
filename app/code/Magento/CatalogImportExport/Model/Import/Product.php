@@ -113,7 +113,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Product Template column (set does not exists?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
         ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exists',
-        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => "Required attribute '%s' has an empty value",
+        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
         ValidatorInterface::ERROR_TYPE_CHANGED => 'Trying to change type of existing products',
         ValidatorInterface::ERROR_SKU_IS_EMPTY => 'SKU is empty',
         ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exists',

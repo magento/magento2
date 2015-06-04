@@ -103,7 +103,7 @@
                 <label for="region_id" class="label"><span><?php echo __('State/Province') ?></span></label>
                 <div class="control">
                     <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" class="validate-select" style="display:none;">
-                        <option value=""><?php echo __('Please select region, state or province') ?></option>
+                        <option value=""><?php echo __('Please select a region, state or province.') ?></option>
                     </select>
                     <input type="text" id="region" name="region" value="<?php echo $block->escapeHtml($block->getRegion()) ?>" title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>" style="display:none;">
                 </div>
@@ -135,7 +135,7 @@
 
     <?php endif; ?>
     <fieldset class="fieldset create account" data-hasrequired="<?php echo __('* Required Fields') ?>">
-        <legend class="legend"><span><?php echo __('Login Information') ?></span></legend><br>
+        <legend class="legend"><span><?php echo __('Sign-in Information') ?></span></legend><br>
 
         <div class="field password required">
             <label for="password" class="label"><span><?php echo __('Password') ?></span></label>

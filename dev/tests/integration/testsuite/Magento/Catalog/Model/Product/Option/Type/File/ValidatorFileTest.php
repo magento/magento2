@@ -109,7 +109,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify the product's required option(s).
+     * @expectedExceptionMessage Please specify product's required option(s).
      * @return void
      */
     public function testException()

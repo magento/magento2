@@ -89,7 +89,7 @@ class FormPost extends \Magento\Customer\Controller\Address
         try {
             $address = $this->_extractAddress();
             $this->_addressRepository->save($address);
-            $this->messageManager->addSuccess(__('The address has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
@@ -98,7 +98,7 @@ class FormPost extends \Magento\Customer\Controller\Address
                 $this->messageManager->addError($error->getMessage());
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot save address.'));
+            $this->messageManager->addException($e, __('We can\'t save the address.'));
         }
 
         $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());

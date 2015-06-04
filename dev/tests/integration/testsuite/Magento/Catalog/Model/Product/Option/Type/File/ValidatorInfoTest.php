@@ -88,7 +88,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\Magento\Framework\Exception\LocalizedException',
-            "Please specify the product's required option(s)."
+            "Please specify product's required option(s)."
         );
 
         $validateMock = $this->getMock('Zend_Validate', ['isValid', 'getErrors']);

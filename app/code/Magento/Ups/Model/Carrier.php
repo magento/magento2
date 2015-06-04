@@ -991,7 +991,7 @@ XMLAuth;
      */
     protected function _parseXmlTrackingResponse($trackingValue, $xmlResponse)
     {
-        $errorTitle = 'Unable to retrieve tracking';
+        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
         $resultArr = [];
         $packageProgress = [];
 

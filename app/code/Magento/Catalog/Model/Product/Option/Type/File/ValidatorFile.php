@@ -194,7 +194,7 @@ class ValidatorFile extends Validator
                 throw new LocalizedException(__(implode("\n", $errors)));
             }
         } else {
-            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         }
         return $userValue;
     }

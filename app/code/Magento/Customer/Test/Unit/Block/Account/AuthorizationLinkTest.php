@@ -59,7 +59,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue(true));
 
-        $this->assertEquals('Log Out', $this->_block->getLabel());
+        $this->assertEquals('Sign Out', $this->_block->getLabel());
     }
 
     public function testGetLabelLoggedOut()
@@ -68,7 +68,7 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue(false));
 
-        $this->assertEquals('Log In', $this->_block->getLabel());
+        $this->assertEquals('Sign In', $this->_block->getLabel());
     }
 
     public function testGetHrefLoggedIn()
