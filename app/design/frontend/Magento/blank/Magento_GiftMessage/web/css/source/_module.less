@@ -62,6 +62,13 @@
         }
     }
 
+    .cart.table-wrapper {
+        .gift-content {
+            display: none;
+            text-align: left;
+        }
+    }
+
     //
     //  Collapsible block
     //  ---------------------------------------------
@@ -229,4 +236,18 @@
             &:extend(.abs-reset-left-margin-desktop all);
         }
     }
+
+    .cart.table-wrapper {
+        .action-gift {
+            float: left;
+        }
+        .gift-content {
+            display: none;
+            clear: left;
+            float: left;
+            margin-right: -100%;
+            width: 100%;
+        }
+    }
+
 }
