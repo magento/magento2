@@ -17,7 +17,7 @@ use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 class AssertTaxRateInTaxRule extends AbstractConstraint
 {
     /**
-     * Assert that required tax rate is present in "Tax Rule Information" on tax rule creation page..
+     * Assert that required tax rate is present in "Tax Rule Information" on tax rule creation page.
      *
      * @param TaxRuleIndex $taxRuleIndex
      * @param TaxRuleNew $taxRuleNew
