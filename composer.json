@@ -126,7 +126,7 @@
         "magento/module-sales-rule": "self.version",
         "magento/module-sales-sequence": "self.version",
         "magento/module-search": "self.version",
-        "magento/module-sendfriend": "self.version",
+        "magento/module-send-friend": "self.version",
         "magento/module-shipping": "self.version",
         "magento/module-sitemap": "self.version",
         "magento/module-store": "self.version",
