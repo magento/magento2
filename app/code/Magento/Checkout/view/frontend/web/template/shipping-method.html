@@ -14,6 +14,9 @@
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <h2 data-bind="text: $t('Shipping Method')"></h2>
     </div>
+        <!-- ko foreach: getRegion('beforeSelect') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
     <div id="checkout-step-shipping_method"
          class="step-content"
          data-role="content"

@@ -133,6 +133,13 @@
                                                             <!-- merge your shipping methods here -->
                                                         </item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="beforeSelect" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="displayArea" xsi:type="string">beforeSelect</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge additional data after shipping methods here -->
+                                                                </item>
+                                                            </item>
                                                             <item name="afterSelect" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">afterSelect</item>
