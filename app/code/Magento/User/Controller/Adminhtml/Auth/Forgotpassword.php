@@ -42,12 +42,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                     }
                 }
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(
-                    __(
-                        'We\'ll email you a link to reset your password.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($email)
-                    )
-                );
+                $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
