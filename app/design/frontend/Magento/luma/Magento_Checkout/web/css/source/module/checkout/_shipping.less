@@ -42,12 +42,17 @@
 
         .form-login,
         .form-shipping-address {
+            .css(margin-bottom, @indent__base);
             .css(max-width, @checkout-shipping-address__max-width);
             .fieldset {
                 .field {
                     .label {
                         .css(font-weight, @font-weight__regular);
                     }
+                }
+                .note {
+                    .css(font-size, @font-size__base);
+                    .css(margin-top, @indent__s);
                 }
             }
         }
