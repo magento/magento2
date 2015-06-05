@@ -155,7 +155,7 @@ class Send extends Action\Action implements IndexInterface
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
                         if (!\Zend_Validate::is($email, 'EmailAddress')) {
-                            $error = __('Please input a valid email address.');
+                            $error = __('Please enter a valid email address.');
                             break;
                         }
                         $emails[$index] = $email;
