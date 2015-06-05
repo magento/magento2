@@ -9,66 +9,72 @@ use Magento\GiftMessage\Block\Cart\GiftOptions;
 
 class GiftOptionsTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\GiftMessage\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $compositeConfigProvider;
 
     /** @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
-    protected $layoutProcessor;
+    protected $layoutProcessorMock;
 
     /** @var \Magento\GiftMessage\Block\Cart\GiftOptions */
-    protected $object;
+    protected $model;
 
     /** @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $jsonEncoder;
+    protected $jsonEncoderMock;
+
+    /** @var array  */
+    protected $jsLayout = ['root' => 'node'];
 
     public function setUp()
     {
         $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->jsonEncoder = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);
+        $this->jsonEncoderMock = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);
         $this->compositeConfigProvider = $this->getMock(
-            'Magento\Checkout\Model\CompositeConfigProvider',
+            'Magento\GiftMessage\Model\CompositeConfigProvider',
             [],
             [],
             '',
             false
         );
-        $this->layoutProcessor = $this->getMockForAbstractClass(
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(
             'Magento\Checkout\Block\Checkout\LayoutProcessorInterface',
             [],
             '',
             false
         );
-        $this->object = new GiftOptions(
+        $this->model = new GiftOptions(
             $this->context,
-            $this->jsonEncoder,
+            $this->jsonEncoderMock,
             $this->compositeConfigProvider,
-            [$this->layoutProcessor],
-            ['jsLayout' => []]
+            [$this->layoutProcessorMock],
+            ['jsLayout' => $this->jsLayout]
         );
     }
 
     public function testGetJsLayout()
     {
-        $this->layoutProcessor->expects($this->once())
+        $this->layoutProcessorMock->expects($this->once())
             ->method('process')
-            ->willReturn([]);
-        $this->jsonEncoder->expects($this->once())
+            ->with($this->jsLayout)
+            ->willReturnArgument(0);
+        $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
-            ->willReturn('[]');
-        $this->object->getJsLayout();
+            ->with($this->jsLayout)
+            ->willReturnArgument(0);
+        $this->assertEquals($this->jsLayout, $this->model->getJsLayout());
     }
 
     public function testGetGiftOptionsConfigJson()
     {
         $this->compositeConfigProvider->expects($this->once())
             ->method('getConfig')
-            ->willReturn([]);
-        $this->jsonEncoder->expects($this->once())
+            ->willReturn($this->jsLayout);
+        $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
-            ->willReturn('[]');
-        $this->object->getGiftMessageConfigJson();
+            ->with($this->jsLayout)
+            ->willReturnArgument(0);
+        $this->assertEquals($this->jsLayout, $this->model->getGiftOptionsConfigJson());
     }
 }
