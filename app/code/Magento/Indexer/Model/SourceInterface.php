@@ -7,5 +7,9 @@ namespace Magento\Indexer\Model;
 
 interface SourceInterface
 {
-    public function prepareData($data);
+    /**
+     * @param array $data
+     * @return []
+     */
+    public function prepare($data);
 }

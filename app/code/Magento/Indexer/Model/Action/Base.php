@@ -7,9 +7,10 @@ namespace Magento\Indexer\Model\Action;
 
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetFactory;
+use Magento\Indexer\Model\FieldsetInterface;
 use Magento\Indexer\Model\SourceFactory;
-use Magento\Indexer\Model\HandlerFactory;
 use Magento\Indexer\Model\SourceInterface;
+use Magento\Indexer\Model\HandlerFactory;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -98,14 +99,40 @@ class Base implements ActionInterface
     {
         $this->collectSources();
         $this->collectHandlers();
-        foreach ($this->data['fieldsets'] as $fieldset) {
+        $this->prepareFields();
+        $this->prepareResults();
+
+    }
+
+    protected function prepareResults()
+    {
+        foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
+            foreach ($this->data['fields'] as $fieldName => $field) {
+                $source = $field['source'];
+                $handler = $field['source'];
+                /** @var SourceInterface $source */
+                /** @var HandlerInterface $handler */
+                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['result'] = $source->prepare($field);
+            }
+            $fieldsetInstance = $this->data['fieldset'][$fieldsetName]['instance'];
+            if ($fieldsetInstance instanceof FieldsetInterface) {
+                $this->data['fieldsets'][$fieldsetName]['result'] = $fieldsetInstance->update($this->data['fields']);
+            }
+        }
+    }
+
+    protected function prepareFields()
+    {
+        foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($this->data['fields'] as $fieldName => $field) {
                 $this->data['fields'][$fieldName]['source'] = $this->sources[$field['source']];
                 $this->data['fields'][$fieldName]['handler'] = $this->handlers[$field['handler']];
             }
+            $this->data['fieldsets'][$fieldsetName]['instance'] = null;
             if (isset($fieldset['class'])) {
-                $fieldsetInstance = $this->fieldsetFactory->create($fieldset['class']);
-                $this->data['fields'] = $fieldsetInstance->update($this->data['fields']);
+                $this->data['fieldsets'][$fieldsetName]['instance'] = $this->fieldsetFactory->create(
+                    $fieldset['class']
+                );
             }
         }
     }
