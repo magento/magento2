@@ -89,13 +89,13 @@ define([
                 async: false,
                 success: $.proxy(function(data) {
                     if (data.error) {
-                        throw Error($.mage.__('Some problem with revert action'));
+                        throw Error($.mage.__('We can\'t revert right now.'));
                         return;
                     }
                     document.location.reload();
                 }, this),
                 error: function() {
-                    throw Error($.mage.__('Some problem with revert action'));
+                    throw Error($.mage.__('We can\'t revert right now.'));
                 }
             });
         },

@@ -363,13 +363,13 @@ define([
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[A-Za-z]+[A-Za-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9) or underscore(_) in this field, first character should be a letter.')
+            $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')
         ],
         "validate-street": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[ \w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}/.test(value);
             },
-            $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) or spaces and # only in this field.')
+            $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9), spaces and "#" in this field.')
         ],
         "validate-phoneStrict": [
             function(value) {
@@ -387,19 +387,19 @@ define([
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/.test(value);
             },
-            $.mage.__('Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.')
+            $.mage.__('Please enter a valid fax number (Ex: 123-456-7890).')
         ],
         "validate-email": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(value);
             },
-            $.mage.__('Please enter a valid email address. For example johndoe@domain.com.')
+            $.mage.__('Please enter a valid email address (Ex: johndoe@domain.com).')
         ],
         "validate-emailSender": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[\S ]+$/.test(value);
             },
-            $.mage.__('Please enter a valid email address. For example johndoe@domain.com.')
+            $.mage.__('Please enter a valid email address (Ex: johndoe@domain.com).')
         ],
         "validate-password": [
             function(value) {
@@ -433,7 +433,7 @@ define([
                 }
                 return true;
             },
-            $.mage.__('Please enter 7 or more characters. Password should contain both numeric and alphabetic characters.')
+            $.mage.__('Please enter 7 or more characters, using both numeric and alphabetic.')
         ],
         "validate-url": [
             function(value) {
@@ -458,21 +458,21 @@ define([
                 return utils.isEmptyNoTrim(value) || /^[A-Z][A-Z0-9_\/-]*$/i.test(value);
 
             },
-            $.mage.__('Please enter a valid XML-identifier. For example something_1, block5, id-4.')
+            $.mage.__('Please enter a valid XML-identifier (Ex: something_1, block5, id-4).')
         ],
         "validate-ssn": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^\d{3}-?\d{2}-?\d{4}$/.test(value);
 
             },
-            $.mage.__('Please enter a valid social security number. For example 123-45-6789.')
+            $.mage.__('Please enter a valid social security number (Ex: 123-45-6789).')
         ],
         "validate-zip-us": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
 
             },
-            $.mage.__('Please enter a valid zip code. For example 90602 or 90602-1234.')
+            $.mage.__('Please enter a valid zip code (Ex: 90602 or 90602-1234).')
         ],
         "validate-date-au": [
             function(value) {
@@ -538,7 +538,7 @@ define([
                 }
                 return true;
             },
-            $.mage.__('Please input a valid CSS-length. For example 100px or 77pt or 20em or .5ex or 50%.')
+            $.mage.__('Please input a valid CSS-length (Ex: 100px, 77pt, 20em, .5ex or 50%).')
         ],
         /** @description Additional methods */
         "validate-number": [
@@ -639,13 +639,13 @@ define([
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z]+[a-z0-9_]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore(_) in this field, first character should be a letter.')
+            $.mage.__('Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.')
         ],
         "validate-alphanum": [
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[a-zA-Z0-9]+$/.test(value);
             },
-            $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) only in this field. No spaces or other characters are allowed.')
+            $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')
         ],
         "validate-date": [
             function(value) {
@@ -658,7 +658,7 @@ define([
             function(value) {
                 return utils.isEmptyNoTrim(value) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(value);
             },
-            $.mage.__('Please enter a valid URL Key. For example "example-page", "example-page.html" or "anotherlevel/example-page".')
+            $.mage.__('Please enter a valid URL Key (Ex: "example-page", "example-page.html" or "anotherlevel/example-page").')
         ],
         "validate-zip-international": [
             /*function(v) {
