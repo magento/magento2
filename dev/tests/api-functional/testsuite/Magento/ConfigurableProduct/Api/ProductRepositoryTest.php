@@ -192,6 +192,7 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     public function testUpdateConfigurableProductOption()
     {
+        $configurableProductId = 1;
         $productId1 = 10;
         $newLabel = 'size';
 
@@ -211,7 +212,7 @@ class ProductRepositoryTest extends WebapiAbstract
                     'value_index' => $option['values'][0]['value_index'],
                 ],
             ],
-            'product_id' => $productId1,
+            'product_id' => $configurableProductId,
         ];
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'][0] =
             $updatedOption;
