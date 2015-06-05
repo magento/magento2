@@ -24,15 +24,9 @@ define(
             },
 
             validateAddress: function(address) {
-                var valid = false;
-                $.each(this.validators, function(index, validator) {
-                    var result = validator.validate(address);
-                    if (result) {
-                        valid = true;
-                        return false;
-                    }
+                return this.validators.some(function(validator) {
+                    return validator.validate(address);
                 });
-                return valid;
             },
 
             bindChangeHandlers: function(elements) {

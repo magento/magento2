@@ -12,8 +12,8 @@ define(
         'Magento_Customer/js/model/address-list',
         '../model/address-converter',
         '../model/quote',
+        '../action/create-shipping-address',
         '../action/select-shipping-address',
-        'Magento_Checkout/js/model/step-navigator',
         '../model/shipping-rates-validator',
         'mage/translate'
     ],
@@ -25,32 +25,27 @@ define(
         addressList,
         addressConverter,
         quote,
+        createShippingAddress,
         selectShippingAddress,
-        navigator,
         shippingRatesValidator
     ) {
         'use strict';
-        var stepName = 'shippingAddress';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
                 visible: true
             },
-            stepNumber: navigator.getStepNumber(stepName),
-            isVisible: navigator.isStepVisible(stepName),
+            isVisible: ko.observable(true),
             isCustomerLoggedIn: customer.isLoggedIn(),
             isFormPopUpVisible: ko.observable(false),
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
+            saveInAddressBook: true,
 
             initElement: function(element) {
                 if (element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
-            },
-
-            stepClassAttributes: function() {
-                return navigator.getStepClassAttributes(stepName);
             },
 
             /** Initialize observable properties */
@@ -63,13 +58,6 @@ define(
             /** Check if component is active */
             isActive: function() {
                 return !quote.isVirtual();
-            },
-
-            /** Navigate to current step */
-            navigateToCurrentStep: function() {
-                if (!navigator.isStepVisible(stepName)()) {
-                    navigator.goToStep(stepName);
-                }
             },
 
             /** Show address form popup */
@@ -89,28 +77,10 @@ define(
 
                 if (!this.source.get('params.invalid')) {
                     var addressData = this.source.get('shippingAddress');
-                    var saveInAddressBook = true;
-                    if (this.isCustomerLoggedIn()) {
-                        var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
-                        saveInAddressBook = !!addressBookCheckBox.val();
-                    }
-                    addressData.save_in_address_book = saveInAddressBook;
+                    addressData.save_in_address_book = this.saveInAddressBook;
 
-                    var newAddress = addressConverter.formAddressDataToQuoteAddress(addressData);
-                    var isUpdated = addressList().some(function(address, index, addresses) {
-                        if (address.getKey() == newAddress.getKey()) {
-                            addresses[index] = newAddress;
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (!isUpdated) {
-                        addressList.push(newAddress);
-                    } else {
-                        addressList.valueHasMutated();
-                    }
                     // New address must be selected as a shipping address
-                    selectShippingAddress(newAddress);
+                    selectShippingAddress(createShippingAddress(addressData));
                     this.isFormPopUpVisible(false);
                     this.isNewAddressAdded(true);
                 }
