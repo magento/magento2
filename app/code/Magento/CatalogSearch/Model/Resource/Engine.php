@@ -31,6 +31,11 @@ class Engine extends AbstractDb implements EngineInterface
     protected $productFactoryNames;
 
     /**
+     * @var \Magento\Eav\Model\Attribute\FrontendType
+     */
+    protected $frontendType;
+
+    /**
      * Catalog search data
      *
      * @var \Magento\CatalogSearch\Helper\Data
@@ -51,11 +56,13 @@ class Engine extends AbstractDb implements EngineInterface
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
+        \Magento\Eav\Model\Attribute\FrontendType $frontendType,
         $resourcePrefix = null
     ) {
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
+        $this->frontendType = $frontendType;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -148,10 +155,15 @@ class Engine extends AbstractDb implements EngineInterface
      */
     private function isTermFilterableAttribute($attribute)
     {
+        $inputTypes = array_merge(
+            $this->frontendType->getInputs('select'),
+            $this->frontendType->getInputs('multiselect')
+        );
+
         return ($attribute->getIsVisibleInAdvancedSearch()
             || $attribute->getIsFilterable()
             || $attribute->getIsFilterableInSearch())
-        && in_array($attribute->getFrontendInput(), ['select', 'multiselect']);
+        && in_array($attribute->getFrontendInput(), $inputTypes);
     }
 
     /**
