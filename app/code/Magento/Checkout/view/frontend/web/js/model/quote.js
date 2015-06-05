@@ -24,6 +24,7 @@ define(
         var collectedTotals = ko.observable({});
         var isCustomerLoggedIn = ko.observable(window.checkoutConfig.isCustomerLoggedIn);
         return {
+            totals: totals,
             shippingAddress: shippingAddress,
 
             getQuoteId: function() {
@@ -49,18 +50,6 @@ define(
             },
             setIsCustomerLoggedIn: function(status) {
                 isCustomerLoggedIn(status);
-            },
-            getTotalByCode: function(code) {
-                if (!totals()) {
-                    return null;
-                }
-                for(var i in totals().calculated_totals) {
-                    var total = totals().calculated_totals[i];
-                    if (total.code == code) {
-                        return total;
-                    }
-                }
-                return null;
             },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {
