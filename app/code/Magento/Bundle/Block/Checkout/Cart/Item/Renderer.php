@@ -30,8 +30,8 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param Configuration $bundleProductConfiguration
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Configuration $bundleProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

@@ -5,7 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
-use \Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Quote\Model\Quote\Item;
 
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +43,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             'Magento\Checkout\Block\Cart\Item\Renderer',
             [
                 'imageHelper' => $this->_imageHelper,
-                'context' => $context
+                'context' => $context,
             ]
         );
     }
@@ -89,7 +90,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        /** @var Item|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
@@ -146,5 +147,60 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnValue($priceHtml));
 
         $this->assertEquals($priceHtml, $this->_renderer->getProductPriceHtml($product));
+    }
+
+    public function testGetActions()
+    {
+        $blockNameInLayout = 'block.name';
+        $blockHtml = 'block html';
+
+        /**
+         * @var \Magento\Checkout\Block\Cart\Item\Renderer\Actions|\PHPUnit_Framework_MockObject_MockObject $blockMock
+         */
+        $blockMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Actions')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->layout->expects($this->once())
+            ->method('getChildName')
+            ->with($this->_renderer->getNameInLayout(), 'actions')
+            ->willReturn($blockNameInLayout);
+        $this->layout->expects($this->once())
+            ->method('getBlock')
+            ->with($blockNameInLayout)
+            ->willReturn($blockMock);
+
+        /**
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         */
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $blockMock->expects($this->once())
+            ->method('setItem')
+            ->with($itemMock);
+        $blockMock->expects($this->once())
+            ->method('toHtml')
+            ->willReturn($blockHtml);
+
+        $this->assertEquals($blockHtml, $this->_renderer->getActions($itemMock));
+    }
+
+    public function testGetActionsWithNoBlock()
+    {
+        $this->layout->expects($this->once())
+            ->method('getChildName')
+            ->with($this->_renderer->getNameInLayout(), 'actions')
+            ->willReturn(false);
+
+        /**
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         */
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertEquals('', $this->_renderer->getActions($itemMock));
     }
 }
