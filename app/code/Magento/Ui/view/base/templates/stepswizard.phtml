@@ -9,10 +9,8 @@
 <button data-action="open-steps-wizard" title="Create Product Configurations" class="action-default primary">
     <span><?= __('Create Configurations') ?></span>
 </button>
-<div data-role="step-wizard-dialog" class="hidden">
-    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
-        "steps":["Magento_Ui/js/lib/steps/step1", "Magento_Ui/js/lib/steps/step2", "Magento_Ui/js/lib/steps/step3",
-        "Magento_Ui/js/lib/steps/step4"]}}'>
+<div data-role="step-wizard-dialog" style="display: none">
+    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{"componentName": "<?= $block->getComponentName()?>"}}'>
         <ul class="nav-bar">
             <?php foreach ($block->getSteps() as $step) { ?>
             <li data-role="collapsible">
@@ -45,3 +43,17 @@
         <?php } ?>
     </div>
 </div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "<?= $block->getComponentName()?>": {
+                            "component": "Magento_Ui/js/lib/step-repository"
+                        }
+                    }
+                }
+            }
+    }
+</script>

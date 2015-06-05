@@ -4,15 +4,45 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
-TBD [select attributes step]
+<?php
+/** @var \Magento\Backend\Block\Widget\Button $attributeCreate */
+$attributeCreate = $this->getLayout()->createBlock(
+    'Magento\Backend\Block\Widget\Button'
+);
+$attributeCreate->setDataAttribute(
+    [
+        'mage-init' => [
+            'productAttributes' => [
+                'url' => $this->getUrl('catalog/product_attribute/new', ['popup' => 1]),
+            ],
+        ],
+    ]
+)->setType(
+    'button'
+)->setLabel(
+    __('Add New Attribute')
+);
+echo $attributeCreate->toHtml();
+
+echo $block->getChildHtml();
+?>
+
 <script type="text/x-magento-init">
+
     {
         "*": {
-            "Magento_Ui/js/lib/steps/step3": {
-                "content": "<?= $block->getJsonData()?>"
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "select-attributes-step": {
+                            "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
+                            "multiselectName": "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
+                            "appendTo": "<?= $block->getComponentName()?>"
+
+                        }
+                    }
+                }
             }
-        }
     }
 </script>
