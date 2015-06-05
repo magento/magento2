@@ -406,12 +406,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $config
-     * @param float $expected
+     * @param mixed $expected
      * @dataProvider getQtyIncrementsDataProvider(
      */
     public function testGetQtyIncrements($config, $expected)
     {
-       // $qtyIncrements = 5;
         $this->setDataArrayValue('qty_increments', $config['qty_increments']);
         $this->setDataArrayValue('enable_qty_increments', $config['enable_qty_increments']);
         $this->setDataArrayValue('use_config_qty_increments', $config['use_config_qty_increments']);

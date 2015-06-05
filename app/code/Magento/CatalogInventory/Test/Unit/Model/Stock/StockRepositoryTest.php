@@ -47,7 +47,6 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $mapperMock;
 
-
     protected function setUp()
     {
 
@@ -75,7 +74,6 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mapperMock = $this->getMockBuilder('Magento\Framework\DB\MapperFactory')
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $this->model = new StockRepository(
             $this->stockResourceMock,
@@ -182,5 +180,4 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->model->deleteById($id));
     }
-
 }

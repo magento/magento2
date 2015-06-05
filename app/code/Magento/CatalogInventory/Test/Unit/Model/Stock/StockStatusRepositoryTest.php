@@ -49,11 +49,9 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
         $this->stockStatusMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Stock\Status')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->stockStatusResourceMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Resource\Stock\Status')
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,7 +65,6 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->queryBuilderFactoryMock = $this->getMockBuilder('Magento\Framework\DB\QueryBuilderFactory')
             ->disableOriginalConstructor()
             ->getMock();
