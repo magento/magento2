@@ -72,7 +72,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Data\Collection\Db'
         )->disableOriginalConstructor()->setMethods(
             []
-        )->getMock();
+        )->getMockForAbstractClass();
         $coreRegistry = $this->getMockBuilder(
             'Magento\Framework\Registry'
         )->disableOriginalConstructor()->setMethods(
