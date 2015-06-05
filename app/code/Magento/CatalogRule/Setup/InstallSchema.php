@@ -359,22 +359,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()->createTable($table);
 
         /**
-         * Create table 'catalogrule_affected_product'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable('catalogrule_affected_product'))
-            ->addColumn(
-                'product_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Product Id'
-            )
-            ->setComment('CatalogRule Affected Product');
-
-        $installer->getConnection()->createTable($table);
-
-        /**
          * Create table 'catalogrule_group_website'
          */
         $table = $installer->getConnection()
