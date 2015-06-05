@@ -103,14 +103,17 @@
         }
     }
     .custom-price-block {
-        font-size: @order-create-sidebar__font-size__xs;
-        margin: 0 0 @order-create-sidebar__margin__s;
         + .admin__control-text {
             &:extend(.abs-control-price);
         }
     }
+    .custom-price-block,
     .discount-price-block {
         font-size: @order-create-sidebar__font-size__xs;
+        margin: 0 0 @order-create-sidebar__margin__s;
+        .admin__field-label {
+            line-height: 1.6rem;
+        }
     }
     .product-configure-block {
         margin: @indent__s 0 0;
