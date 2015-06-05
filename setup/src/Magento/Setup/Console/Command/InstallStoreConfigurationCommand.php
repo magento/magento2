@@ -22,6 +22,9 @@ use Magento\Framework\Validator\Timezone;
 use Magento\Framework\Validator\Currency;
 use Magento\Framework\Url\Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
     /**

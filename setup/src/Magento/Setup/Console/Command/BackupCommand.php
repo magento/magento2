@@ -17,10 +17,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
-
 /**
  * Command to backup code base and user data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackupCommand extends AbstractSetupCommand
 {

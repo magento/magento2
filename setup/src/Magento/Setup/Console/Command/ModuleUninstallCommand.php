@@ -206,6 +206,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -244,7 +245,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->maintenanceMode->set(true);
         $dbBackupOption = $this->takeBackup($input, $output);
         try {
-
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                 $this->removeData($modules, $output, $dbBackupOption);
             } else {
