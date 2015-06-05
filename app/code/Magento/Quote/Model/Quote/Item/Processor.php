@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Object;
+use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Class Processor
@@ -74,7 +75,7 @@ class Processor
         $item->setProduct($product);
 
         if ($request->getResetCount() && !$product->getStickWithinParent() && $item->getId() === $request->getId()) {
-            $item->setData('qty', 0);
+            $item->setData(CartItemInterface::KEY_QTY, 0);
         }
 
         return $item;
@@ -84,7 +85,7 @@ class Processor
      * Set qty and custom price for quote item
      *
      * @param Item $item
-     * @param Object $request
+     * @param \Magento\Framework\Object $request
      * @param Product $candidate
      * @return void
      */
@@ -93,6 +94,9 @@ class Processor
         /**
          * We specify qty after we know about parent (for stock)
          */
+        if ($request->getResetCount()) {
+            $item->setData(CartItemInterface::KEY_QTY, 0);
+        }
         $item->addQty($candidate->getCartQty());
 
         $customPrice = $request->getCustomPrice();
