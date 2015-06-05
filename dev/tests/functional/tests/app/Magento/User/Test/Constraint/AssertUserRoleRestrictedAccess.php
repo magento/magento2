@@ -16,7 +16,7 @@ use Magento\User\Test\Fixture\User;
  */
 class AssertUserRoleRestrictedAccess extends AbstractConstraint
 {
-    const DENIED_ACCESS = 'You need more permissions to access this.';
+    const DENIED_ACCESS = 'Access denied';
 
     /**
      * Asserts that user has only related permissions.
