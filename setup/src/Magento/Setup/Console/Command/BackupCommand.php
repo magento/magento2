@@ -6,10 +6,8 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Backup\Factory;
-use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -45,16 +43,6 @@ class BackupCommand extends AbstractSetupCommand
     private $maintenanceMode;
 
     /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
-     * @var File
-     */
-    private $file;
-
-    /**
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;
@@ -64,19 +52,13 @@ class BackupCommand extends AbstractSetupCommand
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
-     * @param DirectoryList $directoryList
-     * @param File $file
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
-        MaintenanceMode $maintenanceMode,
-        DirectoryList $directoryList,
-        File $file
+        MaintenanceMode $maintenanceMode
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->directoryList = $directoryList;
-        $this->file = $file;
         $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
         parent::__construct();
     }

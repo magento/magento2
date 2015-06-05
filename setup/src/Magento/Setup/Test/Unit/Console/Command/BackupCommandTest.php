@@ -16,11 +16,6 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directoryList;
-
-    /**
      * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
      */
     private $backupRollback;
@@ -29,11 +24,6 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
      * @var CommandTester
      */
     private $tester;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $file;
 
     /**
      * @var \Magento\Framework\Setup\BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -51,7 +41,6 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->backupRollback = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
         $this->backupRollbackFactory = $this->getMock(
             'Magento\Framework\Setup\BackupRollbackFactory',
@@ -60,7 +49,6 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->backupRollbackFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->backupRollback);
@@ -71,9 +59,7 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ]));
         $command = new BackupCommand(
             $objectManagerProvider,
-            $maintenanceMode,
-            $this->directoryList,
-            $this->file
+            $maintenanceMode
         );
         $this->tester = new CommandTester($command);
     }
