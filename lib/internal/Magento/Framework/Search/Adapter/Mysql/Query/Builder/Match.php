@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\Bool;
@@ -62,18 +63,28 @@ class Match implements QueryInterface
         }
         $resolvedFieldList = $this->resolver->resolve($fieldList);
 
-        $queryBoost = $query->getBoost();
-        $scoreBuilder->addCondition(
-            $this->fulltextHelper->getMatchQuery($resolvedFieldList, $queryValue, Fulltext::FULLTEXT_MODE_BOOLEAN),
-            $queryBoost !== null ? $queryBoost : 1
-        );
-        $select = $this->fulltextHelper->match(
-            $select,
-            $resolvedFieldList,
+        $fieldIds = [];
+        $columns = [];
+        foreach ($resolvedFieldList as $field) {
+            if ($field->getType() === FieldInterface::TYPE_FULLTEXT && $field->getAttributeId()) {
+                $fieldIds[] = $field->getAttributeId();
+            }
+            $column = $field->getColumn();
+            $columns[$column] = $column;
+        }
+
+        $matchQuery = $this->fulltextHelper->getMatchQuery(
+            $columns,
             $queryValue,
-            true,
             Fulltext::FULLTEXT_MODE_BOOLEAN
         );
+        $scoreBuilder->addCondition($matchQuery);
+
+        if ($fieldIds) {
+            $matchQuery = sprintf('(%s AND search_index.attribute_id IN (%s))', $matchQuery, implode(',', $fieldIds));
+        }
+
+        $select->where($matchQuery);
 
         return $select;
     }
