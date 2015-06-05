@@ -205,6 +205,8 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'tabindex',
             'placeholder',
             'data-form-part',
+            'data-role',
+            'data-action'
         ];
         $this->assertEquals($htmlAttributes, $this->_model->getHtmlAttributes());
     }
