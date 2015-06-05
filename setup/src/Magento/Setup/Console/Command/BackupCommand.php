@@ -5,22 +5,22 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Filesystem\Driver\File;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\ConsoleLogger;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Model\BackupRollback;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\Backup\Factory;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+
 
 /**
  * Command to backup code base and user data
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackupCommand extends AbstractSetupCommand
 {
@@ -29,7 +29,8 @@ class BackupCommand extends AbstractSetupCommand
      */
 
     const INPUT_KEY_CODE = 'code';
-    const INPUT_KEY_DATA = 'data';
+    const INPUT_KEY_MEDIA = 'media';
+    const INPUT_KEY_DB = 'db';
 
     /**
      * Object Manager
@@ -54,6 +55,11 @@ class BackupCommand extends AbstractSetupCommand
     private $file;
 
     /**
+     * @var BackupRollbackFactory
+     */
+    private $backupRollbackFactory;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
@@ -71,6 +77,7 @@ class BackupCommand extends AbstractSetupCommand
         $this->maintenanceMode = $maintenanceMode;
         $this->directoryList = $directoryList;
         $this->file = $file;
+        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
         parent::__construct();
     }
 
@@ -79,20 +86,29 @@ class BackupCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setDescription('Takes backup of Magento Application code base and user data');
-        $this->setName('setup:backup');
-        $this->addOption(
-            self::INPUT_KEY_CODE,
-            null,
-            InputOption::VALUE_NONE,
-            'Take code backup (excluding temporary files)'
-        );
-        $this->addOption(
-            self::INPUT_KEY_DATA,
-            null,
-            InputOption::VALUE_NONE,
-            'Take complete database and media backup'
-        );
+        $options = [
+            new InputOption(
+                self::INPUT_KEY_CODE,
+                null,
+                InputOption::VALUE_NONE,
+                'Take code and configuration files backup (excluding temporary files)'
+            ),
+            new InputOption(
+                self::INPUT_KEY_MEDIA,
+                null,
+                InputOption::VALUE_NONE,
+                'Take media backup'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DB,
+                null,
+                InputOption::VALUE_NONE,
+                'Take complete database backup'
+            ),
+        ];
+        $this->setName('setup:backup')
+            ->setDescription('Takes backup of Magento Application code base, media and database')
+            ->setDefinition($options);
         parent::configure();
     }
 
@@ -102,19 +118,29 @@ class BackupCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
-            $backupRollback = new BackupRollback(
-                $this->objectManager,
-                new ConsoleLogger($output),
-                $this->directoryList,
-                $this->file
-            );
+            $time = time();
             if ($input->getOption(self::INPUT_KEY_CODE)) {
-                $backupRollback->codeBackup();
+                $codeBackup = $this->backupRollbackFactory->create($output);
+                $codeBackup->codeBackup($time);
+                $inputOptionProvided = true;
             }
-            if ($input->getOption(self::INPUT_KEY_DATA)) {
-                $backupRollback->dataBackup();
+            if ($input->getOption(self::INPUT_KEY_MEDIA)) {
+                $mediaBackup = $this->backupRollbackFactory->create($output);
+                $mediaBackup->codeBackup($time, Factory::TYPE_MEDIA);
+                $inputOptionProvided = true;
+            }
+            if ($input->getOption(self::INPUT_KEY_DB)) {
+                $dbBackup = $this->backupRollbackFactory->create($output);
+                $dbBackup->dbBackup($time);
+                $inputOptionProvided = true;
+            }
+            if (!$inputOptionProvided) {
+                throw new \InvalidArgumentException(
+                    'No option is provided for the command to take backup.'
+                );
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');

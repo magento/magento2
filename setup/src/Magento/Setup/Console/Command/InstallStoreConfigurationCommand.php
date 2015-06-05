@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputOption;

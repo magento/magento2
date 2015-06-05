@@ -8,6 +8,8 @@ namespace Magento\Setup\Console\Command;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\Backup\Factory;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -17,7 +19,7 @@ use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
-use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
@@ -25,8 +27,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Magento\Setup\Model\BackupRollback;
-use Magento\Setup\Model\ConsoleLogger;
 
 /**
  * Command for uninstalling modules
@@ -41,7 +41,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
-    const INPUT_KEY_BACKUP_DATA = 'backup-data';
+    const INPUT_KEY_BACKUP_MEDIA = 'backup-media';
+    const INPUT_KEY_BACKUP_DB = 'backup-db';
 
     /**
      * @var MaintenanceMode
@@ -109,6 +110,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $remove;
 
     /**
+     * @var BackupRollbackFactory
+     */
+    private $backupRollbackFactory;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -150,6 +156,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->file = $file;
         $this->loader = $loader;
         $this->remove = $remove;
+        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
     }
 
     /**
@@ -157,26 +164,35 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      */
     protected function configure()
     {
-        $this->setDescription('Uninstalls modules installed by composer');
-        $this->setName('module:uninstall');
-        $this->addOption(
-            self::INPUT_KEY_REMOVE_DATA,
-            'r',
-            InputOption::VALUE_NONE,
-            'Remove data installed by module(s)'
-        );
-        $this->addOption(
-            self::INPUT_KEY_BACKUP_CODE,
-            null,
-            InputOption::VALUE_NONE,
-            'Take code backup (excluding temporary files)'
-        );
-        $this->addOption(
-            self::INPUT_KEY_BACKUP_DATA,
-            null,
-            InputOption::VALUE_NONE,
-            'Take complete database and media backup'
-        );
+        $options = [
+            new InputOption(
+                self::INPUT_KEY_REMOVE_DATA,
+                'r',
+                InputOption::VALUE_NONE,
+                'Remove data installed by module(s)'
+            ),
+            new InputOption(
+                self::INPUT_KEY_BACKUP_CODE,
+                null,
+                InputOption::VALUE_NONE,
+                'Take code and configuration files backup (excluding temporary files)'
+            ),
+            new InputOption(
+                self::INPUT_KEY_BACKUP_MEDIA,
+                null,
+                InputOption::VALUE_NONE,
+                'Take media backup'
+            ),
+            new InputOption(
+                self::INPUT_KEY_BACKUP_DB,
+                null,
+                InputOption::VALUE_NONE,
+                'Take complete database backup'
+            ),
+        ];
+        $this->setName('module:uninstall')
+            ->setDescription('Uninstalls modules installed by composer')
+            ->setDefinition($options);
         parent::configure();
     }
 
@@ -190,8 +206,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -228,30 +242,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         $output->writeln('<info>Enabling maintenance mode</info>');
         $this->maintenanceMode->set(true);
-
+        $dbBackupOption = $this->takeBackup($input, $output);
         try {
-            if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
-                $codeBackup = new BackupRollback(
-                    $this->objectManager,
-                    new ConsoleLogger($output),
-                    $this->directoryList,
-                    $this->file
-                );
-                $codeBackup->codeBackup();
-            }
-            $dataBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DATA);
-            if ($dataBackupOption) {
-                $dataBackup = new BackupRollback(
-                    $this->objectManager,
-                    new ConsoleLogger($output),
-                    $this->directoryList,
-                    $this->file
-                );
-                $dataBackup->dataBackup();
-            }
 
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
-                $this->removeData($modules, $output, $dataBackupOption);
+                $this->removeData($modules, $output, $dbBackupOption);
             } else {
                 if (!empty($this->collector->collectUninstall())) {
                     $question = new ConfirmationQuestion(
@@ -260,7 +255,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                         false
                     );
                     if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
-                        $this->removeData($modules, $output, $dataBackupOption);
+                        $this->removeData($modules, $output, $dbBackupOption);
                     }
                 } else {
                     $output->writeln(
@@ -287,17 +282,43 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
+     * Check backup options and take backup appropriately
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return bool
+     */
+    private function takeBackup(InputInterface $input, OutputInterface $output)
+    {
+        $time = time();
+        if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
+            $codeBackup = $this->backupRollbackFactory->create($output);
+            $codeBackup->codeBackup($time);
+        }
+        if ($input->getOption(self::INPUT_KEY_BACKUP_MEDIA)) {
+            $mediaBackup = $this->backupRollbackFactory->create($output);
+            $mediaBackup->codeBackup($time, Factory::TYPE_MEDIA);
+        }
+        $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
+        if ($dbBackupOption) {
+            $dbBackup = $this->backupRollbackFactory->create($output);
+            $dbBackup->dbBackup($time);
+        }
+        return $dbBackupOption;
+    }
+
+    /**
      * Invoke remove data routine in each specified module
      *
      * @param string[] $modules
      * @param OutputInterface $output
-     * @param bool $dataBackupOption
+     * @param bool $dbBackupOption
      * @return void
      */
-    private function removeData(array $modules, OutputInterface $output, $dataBackupOption)
+    private function removeData(array $modules, OutputInterface $output, $dbBackupOption)
     {
-        if (!$dataBackupOption) {
-            $output->writeln('<error>You are removing data without a backup.</error>');
+        if (!$dbBackupOption) {
+            $output->writeln('<error>You are removing data without a database backup.</error>');
         } else {
             $output->writeln('<info>Removing data</info>');
         }

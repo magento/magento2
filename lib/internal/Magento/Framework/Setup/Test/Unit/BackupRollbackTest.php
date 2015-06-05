@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Setup\Test\Unit;
 
-use Magento\Setup\Model\BackupRollback;
-use Magento\Setup\Model\LoggerInterface;
+use Magento\Framework\Setup\BackupRollback;
+use Magento\Framework\Setup\LoggerInterface;
 
 class BackupRollbackTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $this->log = $this->getMock('Magento\Setup\Model\LoggerInterface', [], [], '', false);
+        $this->log = $this->getMock('Magento\Framework\Setup\LoggerInterface', [], [], '', false);
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())
@@ -101,7 +101,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->method('create');
         $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
         $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0777);
-        $this->model->codeBackup();
+        $this->model->codeBackup(time());
     }
 
     public function testCodeRollback()
@@ -119,9 +119,9 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDataBackupRollback();
         $this->database->expects($this->once())->method('create');
-        $this->file->expects($this->exactly(2))->method('isExists')->willReturn(false);
-        $this->file->expects($this->exactly(2))->method('createDirectory');
-        $this->model->dataBackup();
+        $this->file->expects($this->once())->method('isExists')->willReturn(false);
+        $this->file->expects($this->once())->method('createDirectory');
+        $this->model->dbBackup(time());
     }
 
     private function setupCodeBackupRollback()
@@ -158,7 +158,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->database->expects($this->once())
             ->method('getBackupPath')
             ->willReturn('pathToFile/RollbackFile_A.tgz');
-        $this->log->expects($this->exactly(2))
+        $this->log->expects($this->once())
             ->method('logSuccess');
     }
 }
