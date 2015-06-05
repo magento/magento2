@@ -7,32 +7,27 @@
 define(
     [
         'jquery',
+        'ko',
         'underscore',
         'uiComponent',
         '../model/quote',
         '../model/shipping-service',
         '../action/select-shipping-method',
-        'Magento_Catalog/js/price-utils',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Catalog/js/price-utils'
     ],
-    function ($, _, Component, quote, shippingService, selectShippingMethod, priceUtils, navigator) {
-        var stepName = 'shippingMethod';
+    function ($, ko, _, Component, quote, shippingService, selectShippingMethod, priceUtils) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method'
             },
-            stepClassAttributes: function() {
-                return navigator.getStepClassAttributes(stepName);
-            },
-            stepNumber: navigator.getStepNumber(stepName),
             rates: shippingService.getSippingRates(),
-            // Checkout step navigation
-            isVisible: navigator.isStepVisible(stepName),
+            isVisible: ko.observable(true),
+            selectedMethod: quote.getSelectedShippingMethod(),
+
             quoteHasShippingAddress: function() {
                 return quote.isVirtual() || quote.getShippingAddress();
             },
 
-            selectedMethod: quote.getSelectedShippingMethod(),
             verifySelectedMethodCode: function (data) {
                 if (this.selectedMethod() == data) {
                     return data;
@@ -52,6 +47,7 @@ define(
                 var code = form.find("input[name='shipping_method']:checked").val();
                 selectShippingMethod(code, customOptions, this.getAfterSelectCallbacks());
             },
+
             getAfterSelectCallbacks: function() {
                 var callbacks = [];
                 _.each(this.getAdditionalMethods(), function(view) {
@@ -61,6 +57,7 @@ define(
                 });
                 return callbacks;
             },
+
             getAdditionalMethods: function() {
                 var methods = [];
                 _.each(this.getRegion('afterSelect')(), function(elem) {
@@ -68,19 +65,9 @@ define(
                 });
                 return methods;
             },
+
             isActive: function() {
-                if (quote.isVirtual()) {
-                    navigator.setStepEnabled(stepName, false);
-                }
                 return !quote.isVirtual();
-            },
-            backToShippingAddress: function () {
-                navigator.setCurrent(stepName).goBack();
-            },
-            navigateToCurrentStep: function() {
-                if (!navigator.isStepVisible(stepName)()) {
-                    navigator.goToStep(stepName);
-                }
             }
         });
     }
