@@ -16,7 +16,7 @@ define(
             defaults: {
                 ownClass: 'name',
                 columnTitle: 'Product Name',
-                template: 'Magento_Checkout/review/item/details'
+                template: 'Magento_Checkout/summary/item/details'
             },
             getValue: function(quoteItem) {
                 return quoteItem.name;

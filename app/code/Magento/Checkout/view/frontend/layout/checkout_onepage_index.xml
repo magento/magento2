@@ -159,17 +159,17 @@
                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                 <item name="displayArea" xsi:type="string">totals</item>
                                                 <item name="config" xsi:type="array">
-                                                    <item name="template" xsi:type="string">Magento_Checkout/review/totals</item>
+                                                    <item name="template" xsi:type="string">Magento_Checkout/summary/totals</item>
                                                 </item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="subtotal" xsi:type="array">
-                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/subtotal</item>
+                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
                                                     </item>
                                                     <item name="discount" xsi:type="array">
-                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/discount</item>
+                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/discount</item>
                                                     </item>
                                                     <item name="shipping" xsi:type="array">
-                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/shipping</item>
+                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                     </item>
                                                     <item name="before_grandtotal" xsi:type="array">
                                                         <item name="component"  xsi:type="string">uiComponent</item>
@@ -178,7 +178,7 @@
                                                         </item>
                                                     </item>
                                                     <item name="grandtotal" xsi:type="array">
-                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/grandtotal</item>
+                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/grandtotal</item>
                                                     </item>
                                                 </item>
                                             </item>
@@ -189,17 +189,17 @@
                                                 </item>
                                             </item>
                                             <item name="cart_items" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/cart_items</item>
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/cart-items</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="details" xsi:type="array">
-                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details</item>
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details</item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="thumbnail" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details/thumbnail</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/thumbnail</item>
                                                                 <item name="displayArea" xsi:type="string">before_details</item>
                                                             </item>
                                                             <item name="subtotal" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/details/subtotal</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/item/details/subtotal</item>
                                                                 <item name="displayArea" xsi:type="string">after_details</item>
                                                             </item>
                                                         </item>

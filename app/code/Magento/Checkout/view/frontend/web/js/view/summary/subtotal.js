@@ -13,22 +13,21 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/subtotal'
+                template: 'Magento_Checkout/summary/subtotal'
             },
-            title: 'Order Total',
-            colspan: 3,
+            title: 'Subtotal',
             getValue: function() {
                 var totals = quote.getTotals()();
                 if (totals) {
-                    return totals.grand_total;
+                    return totals.subtotal;
                 }
-                return quote.grand_total;
+                return quote.subtotal;
             },
             getFormattedValue: function (price) {
                 var totals = quote.getTotals()();
                 var subtotal = 0;
                 if (totals) {
-                    subtotal = totals.grand_total;
+                    subtotal = totals.subtotal;
                 }
                 return priceUtils.formatPrice(subtotal, quote.getPriceFormat());
             }

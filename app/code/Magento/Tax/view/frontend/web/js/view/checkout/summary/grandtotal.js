@@ -17,7 +17,7 @@ define(
         return Component.extend({
             defaults: {
                 isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
-                template: 'Magento_Tax/checkout/review/grandtotal'
+                template: 'Magento_Tax/checkout/summary/grandtotal'
             },
             colspan: 3,
             style: "",

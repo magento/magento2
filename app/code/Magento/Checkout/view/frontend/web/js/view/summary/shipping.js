@@ -15,7 +15,7 @@ define(
     function ($, Component, quote, priceUtils, shippingService) {
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/shipping'
+                template: 'Magento_Checkout/summary/shipping'
             },
             colspan: 3,
             style: "",
