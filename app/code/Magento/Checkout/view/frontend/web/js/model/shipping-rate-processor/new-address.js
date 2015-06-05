@@ -5,27 +5,25 @@
 /*global define*/
 define(
     [
-        'Magento_Checkout/js/model/url-builder',
+        'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/quote',
         'mage/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Ui/js/model/errorlist'
     ],
-    function (urlBuilder, quote, storage, shippingService, rateRegistry, errorList) {
+    function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorList) {
         "use strict";
-        var serviceUrl;
-        if (quote.getCheckoutMethod()() === 'guest') {
-            serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/estimate-shipping-methods', {quoteId: quote.getQuoteId()});
-        } else {
-            serviceUrl =  urlBuilder.createUrl('/carts/mine/estimate-shipping-methods', {});
-        }
         return {
             getRates: function(address) {
                 var cache = rateRegistry.get(address.getCacheKey());
                 if (cache) {
                     shippingService.setShippingRates(cache);
                 } else {
+                    var serviceUrl = resourceUrlManager.getUrl(
+                        'estimateShippingMethodsForNewAddress',
+                        {'guest': {quoteId: quote.getQuoteId()}}
+                    );
                     storage.post(
                         serviceUrl,
                         JSON.stringify({

@@ -5,14 +5,14 @@
 /*global define*/
 define(
     [
-        'Magento_Checkout/js/model/url-builder',
+        'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/quote',
         'mage/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Ui/js/model/errorlist'
     ],
-    function (urlBuilder, quote, storage, shippingService, rateRegistry, errorList) {
+    function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorList) {
         "use strict";
         return {
             getRates: function(address) {
@@ -21,7 +21,7 @@ define(
                     shippingService.setShippingRates(cache);
                 } else {
                     storage.post(
-                        urlBuilder.createUrl('/carts/mine/estimate-shipping-methods-by-address-id', {}),
+                        resourceUrlManager.getUrl('estimateShippingMethodsByAddressId'),
                         JSON.stringify({
                             addressId:  address.customerAddressId
                         })
