@@ -6,8 +6,7 @@
 namespace Magento\Wishlist\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Wishlist\Helper\Data;
 
 class MoveToWishlistTest extends \PHPUnit_Framework_TestCase
@@ -51,23 +50,11 @@ class MoveToWishlistTest extends \PHPUnit_Framework_TestCase
         $json = '{json;}';
 
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('\Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-
-        /**
-         * @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
-         */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
-
-        $contextMock->expects($this->once())
-            ->method('getQuoteItem')
-            ->willReturn($itemMock);
 
         $itemMock->expects($this->once())
             ->method('getId')
@@ -78,7 +65,7 @@ class MoveToWishlistTest extends \PHPUnit_Framework_TestCase
             ->with($itemId)
             ->willReturn($json);
 
-        $this->model->setItemContext($contextMock);
+        $this->model->setItem($itemMock);
         $this->assertEquals($json, $this->model->getMoveFromCartParams());
     }
 }

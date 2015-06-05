@@ -36,6 +36,6 @@ class Remove extends Generic
      */
     public function getDeletePostJson()
     {
-        return $this->cartHelper->getDeletePostJson($this->getItemContext()->getQuoteItem());
+        return $this->cartHelper->getDeletePostJson($this->getItem());
     }
 }

@@ -17,8 +17,8 @@ class Edit extends Generic
         return $this->getUrl(
             'checkout/cart/configure',
             [
-                'id' => $this->getItemContext()->getQuoteItem()->getId(),
-                'product_id' => $this->getItemContext()->getQuoteItem()->getProduct()->getId()
+                'id' => $this->getItem()->getId(),
+                'product_id' => $this->getItem()->getProduct()->getId()
             ]
         );
     }

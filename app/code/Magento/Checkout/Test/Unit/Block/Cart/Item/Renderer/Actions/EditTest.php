@@ -7,8 +7,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit;
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item;
 
 class EditTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,19 +42,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $configureUrl = 'configure url';
 
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('\Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-
-        /**
-         * @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
-         */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getId'])
-            ->getMockForAbstractClass();
 
         /**
          * @var Product|\PHPUnit_Framework_MockObject_MockObject $itemMock
@@ -63,10 +54,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $contextMock->expects($this->exactly(2))
-            ->method('getQuoteItem')
-            ->willReturn($itemMock);
 
         $itemMock->expects($this->once())
             ->method('getProduct')
@@ -84,7 +71,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with('checkout/cart/configure', ['id' => $itemId, 'product_id' => $productId])
             ->willReturn($configureUrl);
 
-        $this->model->setItemContext($contextMock);
+        $this->model->setItem($itemMock);
         $this->assertEquals($configureUrl, $this->model->getConfigureUrl());
     }
 }

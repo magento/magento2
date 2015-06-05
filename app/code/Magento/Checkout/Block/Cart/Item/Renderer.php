@@ -8,7 +8,7 @@
 
 namespace Magento\Checkout\Block\Cart\Item;
 
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
+use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Quote\Model\Quote\Item;
@@ -87,11 +87,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     public $moduleManager;
 
     /**
-     * @var Context
-     */
-    public $itemContext;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -100,7 +95,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param Context $itemContext
      * @param array $data
      */
     public function __construct(
@@ -112,7 +106,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
-        Context $itemContext,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -124,16 +117,15 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
-        $this->itemContext = $itemContext;
     }
 
     /**
      * Set item for render
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Item $item
      * @return $this
      */
-    public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    public function setItem(Item $item)
     {
         $this->_item = $item;
         return $this;
@@ -526,10 +518,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return the unit price html
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getUnitPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.unit');
@@ -540,10 +532,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return row total html
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
+     * @param Item  $item
      * @return string
      */
-    public function getRowTotalHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.row');
@@ -554,10 +546,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return item price html for sidebar
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
+     * @param Item  $item
      * @return string
      */
-    public function getSidebarItemPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getSidebarItemPriceHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.cart.item.price.sidebar');
@@ -568,10 +560,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price excluding tax html
      *
-     * @param Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getUnitPriceExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceExclTaxHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.excl');
@@ -582,10 +574,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price including tax html
      *
-     * @param Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getUnitPriceInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceInclTaxHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.incl');
@@ -596,10 +588,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total excluding tax html
      *
-     * @param Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getRowTotalExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalExclTaxHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.excl');
@@ -610,10 +602,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total including tax html
      *
-     * @param Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getRowTotalInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalInclTaxHtml(Item  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');
@@ -624,16 +616,15 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total including tax html
      *
-     * @param Item\AbstractItem $item
+     * @param Item $item
      * @return string
      */
-    public function getActions(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    public function getActions(Item $item)
     {
-        /** @var \Magento\Checkout\Block\Cart\Item\Renderer\Actions $block */
+        /** @var Actions $block */
         $block = $this->getChildBlock('actions');
-        if ($block instanceof AbstractBlock) {
-            $this->itemContext->setQuoteItem($item);
-            $block->setItemContext($this->itemContext);
+        if ($block instanceof Actions) {
+            $block->setItem($item);
             return $block->toHtml();
         } else {
             return '';

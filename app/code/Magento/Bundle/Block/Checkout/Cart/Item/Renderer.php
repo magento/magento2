@@ -31,7 +31,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Checkout\Block\Cart\Item\Renderer\Context $itemContext
      * @param Configuration $bundleProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -45,7 +44,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Checkout\Block\Cart\Item\Renderer\Context $itemContext,
         Configuration $bundleProductConfiguration,
         array $data = []
     ) {
@@ -59,7 +57,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
             $messageManager,
             $priceCurrency,
             $moduleManager,
-            $itemContext,
             $data
         );
         $this->_isScopePrivate = true;
