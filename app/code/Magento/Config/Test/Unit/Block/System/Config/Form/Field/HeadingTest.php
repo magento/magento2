@@ -18,7 +18,7 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
 
         $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
             ->disableOriginalConstructor()
-                ->setMethods(['getHtmlId', 'getLabel'])
+            ->setMethods(['getHtmlId', 'getLabel'])
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);

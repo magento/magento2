@@ -48,8 +48,7 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
                     'getHtmlId', 'getExpanded', 'getElements','getLegend',
                     'getComment', 'addField', 'setRenderer', 'toHtml'
                 ]
-            )
-            ->getMock();
+            )->getMock();
 
         $elementMock->expects($this->any())
             ->method('getHtmlId')
@@ -66,7 +65,7 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $moduleListMock->expects($this->any())->method('getNames')->willReturn(
-                array_merge(['Magento_Backend'], $testModuleList)
+            array_merge(['Magento_Backend'], $testModuleList)
         );
 
         $factory = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
