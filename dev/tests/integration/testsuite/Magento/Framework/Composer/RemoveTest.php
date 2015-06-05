@@ -13,8 +13,8 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock('Composer\Console\Application', [], [], '', false);
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $directoryList->expects($this->any())->method('getRoot');
-        $directoryList->expects($this->any())
+        $directoryList->expects($this->once())->method('getRoot');
+        $directoryList->expects($this->once())
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(BP . '/app/etc');
