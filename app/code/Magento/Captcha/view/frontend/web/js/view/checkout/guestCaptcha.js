@@ -2,36 +2,43 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true jquery:true*/
-/*global define*/
 define(
     [
         'Magento_Captcha/js/view/checkout/defaultCaptcha',
-        'Magento_Checkout/js/model/quote',
+        'Magento_Customer/js/model/customer',
         'Magento_Captcha/js/model/captchaList',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function (defaultCaptcha, quote, captchaList, selectShippingAddress, selectBillingAddress, navigator) {
-        "use strict";
+    function (defaultCaptcha, customer, captchaList, selectShippingAddress, selectBillingAddress, navigator) {
+        'use strict';
+
         return defaultCaptcha.extend({
-            initialize: function() {
+            /**
+             * Initialize captcha for guest
+             */
+            initialize: function () {
+                var self = this,
+                    currentCaptcha = captchaList.getCaptchaByFormId(this.formId),
+                    /**
+                     * Callback for successful login
+                     * @param {Boolean} isSuccessful
+                     */
+                    callback = function (isSuccessful) {
+                        if (!isSuccessful) {
+                            currentCaptcha.setCaptchaValue(null);
+                            currentCaptcha.refresh();
+                            navigator.goToStep('billingAddress');
+                        }
+                    };
                 this._super();
-                var self = this;
-                var currentCaptcha = captchaList.getCaptchaByFormId(this.formId);
+
                 if (currentCaptcha != null) {
                     this.setCurrentCaptcha(currentCaptcha);
-                    quote.getCheckoutMethod().subscribe(function(method) {
-                        if (method == 'guest') {
+                    customer.isLoggedIn().subscribe(function (isLoggedIn) {
+                        if (!isLoggedIn) {
                             self.setIsVisible(true);
-                            var callback = function(isSuccessful) {
-                                if (!isSuccessful) {
-                                    currentCaptcha.setCaptchaValue(null);
-                                    currentCaptcha.refresh();
-                                    navigator.goToStep('billingAddress');
-                                }
-                            };
                             selectShippingAddress.setActionCallback(callback);
                             selectBillingAddress.setActionCallback(callback);
                         } else {
