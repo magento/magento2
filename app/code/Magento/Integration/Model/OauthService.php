@@ -101,7 +101,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
         try {
             $consumerData['key'] = $this->_oauthHelper->generateConsumerKey();
             $consumerData['secret'] = $this->_oauthHelper->generateConsumerSecret();
-            $consumer = $this->_consumerFactory->create($consumerData);
+            $consumer = $this->_consumerFactory->create()->setData($consumerData);
             $consumer->save();
             return $consumer;
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
