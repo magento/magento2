@@ -506,7 +506,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
         foreach ($totals->getItems() as $item) {
             $items[] = $item->__toArray();
         }
+        $calculatedTotalsData = [];
+        /** @var \Magento\Quote\Model\Cart\CalculatedTotals $calculatedTotals */
+        foreach ($totals->getCalculatedTotals() as $calculatedTotals) {
+            $calculatedTotalsData[] = $calculatedTotals->toArray();
+        }
         $totals->setItems($items);
+        $totals->setCalculatedTotals($calculatedTotalsData);
         return $totals->toArray();
     }
 }
