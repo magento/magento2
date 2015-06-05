@@ -16,11 +16,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Framework\Api\ExtensibleDataObjectConverter')
             ->toFlatArray($entity);
     }
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      */
-    public function testCollectTotalsWithVirtual()
+    public function qqtestCollectTotalsWithVirtual()
     {
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
@@ -36,7 +37,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, $quote->getBaseGrandTotal());
     }
 
-    public function testSetCustomerData()
+    public function qqtestSetCustomerData()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -61,7 +62,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('qa@example.com', $quote->getCustomerEmail());
     }
 
-    public function testUpdateCustomerData()
+    public function qqtestUpdateCustomerData()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -106,7 +107,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * Customer data is set to quote (which contains valid group ID).
      */
-    public function testGetCustomerGroupFromCustomer()
+    public function qqtestGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
@@ -125,7 +126,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
-    public function testGetCustomerTaxClassId()
+    public function qqtestGetCustomerTaxClassId()
     {
         /**
          * Preconditions: create quote and assign ID of customer group created in fixture to it.
@@ -150,7 +151,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testAssignCustomerWithAddressChangeAddressesNotSpecified()
+    public function qqtestAssignCustomerWithAddressChangeAddressesNotSpecified()
     {
         /** Preconditions:
          * Customer with two addresses created
@@ -215,7 +216,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testAssignCustomerWithAddressChange()
+    public function qqtestAssignCustomerWithAddressChange()
     {
         /** Preconditions:
          * Customer with two addresses created
@@ -275,6 +276,44 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 "'{$field}' value in quote shipping address is invalid."
             );
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     */
+    public function testAddProductUpdateItem()
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+        $quote->load('test01', 'reserved_order_id');
+
+        $productStockQty = 100;
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+        $product->load(2);
+        $quote->addProduct($product, 50);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(50, $quote->getItemsQty());
+        $quote->addProduct($product, 50);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(100, $quote->getItemsQty());
+        $params = [
+            'related_product' => '',
+            'product' => $product->getId(),
+            'qty' => 1,
+            'id' => 0
+        ];
+        $updateParams = new \Magento\Framework\Object($params);
+        $quote->updateItem($updateParams['id'], $updateParams);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(1, $quote->getItemsQty());
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\LocalizedException',
+            'We don\'t have as many "Simple Product" as you requested.'
+            );
+        $updateParams['qty'] = $productStockQty + 1;
+        $quote->updateItem($updateParams['id'], $updateParams);
     }
 
     /**
