@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api\Data\CalculatedTotalsInterface;
+use Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory;
 
 /**
  * Cart totals data objects converter.
@@ -13,15 +14,15 @@ use Magento\Quote\Api\Data\CalculatedTotalsInterface;
 class TotalsConverter
 {
     /**
-     * @var \Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory
+     * @var CalculatedTotalsInterfaceFactory
      */
     protected $factory;
 
     /**
-     * @param \Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory $factory
+     * @param CalculatedTotalsInterfaceFactory $factory
      */
     public function __construct(
-        \Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory $factory
+        CalculatedTotalsInterfaceFactory $factory
     ) {
         $this->factory = $factory;
     }
