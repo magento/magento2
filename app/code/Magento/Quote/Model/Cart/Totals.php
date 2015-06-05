@@ -518,17 +518,17 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     /**
      * {@inheritdoc}
      */
-    public function getCalculatedTotals()
+    public function getTotalSegments()
     {
-        return $this->getData(self::KEY_CALCULATED_TOTALS);
+        return $this->getData(self::KEY_TOTAL_SEGMENTS);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setCalculatedTotals($totals = [])
+    public function setTotalSegments($totals = [])
     {
-        return $this->setData(self::KEY_CALCULATED_TOTALS, $totals);
+        return $this->setData(self::KEY_TOTAL_SEGMENTS, $totals);
     }
 
     /**

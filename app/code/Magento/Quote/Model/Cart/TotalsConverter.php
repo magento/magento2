@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Quote\Api\Data\CalculatedTotalsInterface;
-use Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory;
+use Magento\Quote\Api\Data\TotalSegmentInterface;
+use Magento\Quote\Api\Data\TotalSegmentInterfaceFactory;
 
 /**
  * Cart totals data objects converter.
@@ -14,15 +14,15 @@ use Magento\Quote\Api\Data\CalculatedTotalsInterfaceFactory;
 class TotalsConverter
 {
     /**
-     * @var CalculatedTotalsInterfaceFactory
+     * @var TotalSegmentInterfaceFactory
      */
     protected $factory;
 
     /**
-     * @param CalculatedTotalsInterfaceFactory $factory
+     * @param TotalSegmentInterfaceFactory $factory
      */
     public function __construct(
-        CalculatedTotalsInterfaceFactory $factory
+        TotalSegmentInterfaceFactory $factory
     ) {
         $this->factory = $factory;
     }
@@ -30,7 +30,7 @@ class TotalsConverter
 
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
-     * @return \Magento\Quote\Api\Data\CalculatedTotalsInterface[]
+     * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      */
     public function process($addressTotals)
     {
@@ -38,15 +38,15 @@ class TotalsConverter
         /** @var \Magento\Quote\Model\Quote\Address\Total $addressTotal */
         foreach ($addressTotals as $addressTotal) {
             $pureData = [
-                CalculatedTotalsInterface::CODE => $addressTotal->getCode(),
-                CalculatedTotalsInterface::TITLE => '',
-                CalculatedTotalsInterface::VALUE => $addressTotal->getValue(),
-                CalculatedTotalsInterface::AREA => $addressTotal->getArea(),
+                TotalSegmentInterface::CODE => $addressTotal->getCode(),
+                TotalSegmentInterface::TITLE => '',
+                TotalSegmentInterface::VALUE => $addressTotal->getValue(),
+                TotalSegmentInterface::AREA => $addressTotal->getArea(),
             ];
             if (is_object($addressTotal->getTitle())) {
-                $pureData[CalculatedTotalsInterface::TITLE] = $addressTotal->getTitle()->getText();
+                $pureData[TotalSegmentInterface::TITLE] = $addressTotal->getTitle()->getText();
             }
-            /** @var \Magento\Quote\Model\Cart\CalculatedTotals $total */
+            /** @var \Magento\Quote\Model\Cart\TotalSegment $total */
             $total = $this->factory->create();
             $total->setData($pureData);
             $data[] = $total;
