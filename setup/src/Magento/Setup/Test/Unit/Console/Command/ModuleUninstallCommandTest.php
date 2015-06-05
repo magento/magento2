@@ -77,11 +77,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $setup;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directoryList;
-
-    /**
      * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
      */
     private $backupRollback;
@@ -90,11 +85,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Setup\BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $backupRollbackFactory;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $file;
 
     /**
      * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
@@ -177,15 +167,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/package-a', 'magento/package-b']);
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->command = new ModuleUninstallCommand(
             $composer,
             $this->deploymentConfig,
             $this->writer,
-            $this->directoryList,
-            $this->file,
             $this->fullModuleList,
             $this->loader,
             $this->maintenanceMode,
