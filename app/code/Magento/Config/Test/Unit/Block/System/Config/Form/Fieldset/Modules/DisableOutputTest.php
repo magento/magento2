@@ -45,7 +45,7 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'getHtmlId', 'getExpanded', 'getElements','getLegend',
+                    'getHtmlId', 'getExpanded', 'getElements', 'getLegend',
                     'getComment', 'addField', 'setRenderer', 'toHtml'
                 ]
             )->getMock();
