@@ -18,6 +18,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search;
 
 /**
  * Product form on backend product page.
@@ -86,6 +87,13 @@ class ProductForm extends FormTabs
      * @var string
      */
     protected $newAttributeForm = '#create_new_attribute';
+
+    /**
+     * General errors on product page.
+     *
+     * @var string
+     */
+    protected $generalErrors = '[data-ui-id="messages-message-error"]';
 
     /**
      * Fill the product form.
@@ -248,11 +256,21 @@ class ProductForm extends FormTabs
      */
     public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
     {
+        return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
+    }
+
+    /**
+     * Get attributes search form.
+     *
+     * @return Search
+     */
+    protected function getAttributesSearchForm()
+    {
         return $this->_rootElement->find(
             $this->attributeSearch,
             Locator::SELECTOR_CSS,
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
-        )->isExistAttributeInSearchResult($productAttribute);
+        );
     }
 
     /**
@@ -303,7 +321,24 @@ class ProductForm extends FormTabs
             }
         }
 
-        return $data;
+        return array_merge($data, $this->getGeneralErrors());
+    }
+
+    /**
+     * Get general errors from product page.
+     *
+     * @return array
+     */
+    protected function getGeneralErrors()
+    {
+        $errors = [];
+        $this->openTab('product-details');
+        $generalErrors = $this->_rootElement->getElements($this->generalErrors);
+        foreach ($generalErrors as $error) {
+            $errors[] = $error->getText();
+        }
+
+        return !empty($errors) ? ['generalErrors' => $errors] : [];
     }
 
     /**

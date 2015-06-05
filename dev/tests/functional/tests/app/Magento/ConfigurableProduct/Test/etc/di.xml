@@ -6,24 +6,24 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-  <type name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductDuplicateForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductDuplicateForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
 </config>

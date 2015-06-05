@@ -11,13 +11,12 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCategoryAbsenceOnBackend
- * Assert that not displayed category in backend catalog category tree
+ * Assert that not displayed category in backend catalog category tree.
  */
 class AssertCategoryAbsenceOnBackend extends AbstractConstraint
 {
     /**
-     * Assert that not displayed category in backend catalog category tree
+     * Assert that not displayed category in backend catalog category tree.
      *
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param Category $category
@@ -33,7 +32,7 @@ class AssertCategoryAbsenceOnBackend extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

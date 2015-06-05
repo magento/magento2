@@ -7,38 +7,61 @@
 namespace Magento\Mtf\Client\Element;
 
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
- * Class Tree
  * General class for tree elements. Holds general implementation of methods, which overrides in child classes.
  */
 abstract class Tree extends SimpleElement
 {
     /**
-     * Css class for finding tree nodes
+     * All selected checkboxes.
      *
      * @var string
      */
-    protected $nodeCssClass;
+    protected $selectedCheckboxes = '//input[@checked=""]';
 
     /**
-     * Css class for detecting tree nodes
+     * Selected checkboxes.
      *
      * @var string
      */
-    protected $nodeSelector;
+    protected $selectedLabels = '//input[@checked=""]/../a/span';
 
     /**
-     * Css class for fetching node's name
+     * Pattern for child category node.
      *
      * @var string
      */
-    protected $nodeName;
+    protected $pattern = '//li[@class="x-tree-node" and div/a/span[contains(text(),"%s")]]';
 
     /**
-     * @return mixed
+     * Selector for plus image.
+     *
+     * @var string
      */
-    abstract public function getStructure();
+    protected $imagePlus = './div/img[contains(@class, "-plus")]';
+
+    /**
+     * Selector for child loader.
+     *
+     * @var string
+     */
+    protected $childLoader = 'ul';
+
+    /**
+     * Selector for input.
+     *
+     * @var string
+     */
+    protected $input = '/div/a/span';
+
+    /**
+     * Selector for parent element.
+     *
+     * @var string
+     */
+    protected $parentElement = './../../../../../div/a/span';
 
     /**
      * Drag and drop element to(between) another element(s)
@@ -48,17 +71,6 @@ abstract class Tree extends SimpleElement
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dragAndDrop(ElementInterface $target)
-    {
-        throw new \Exception('Not applicable for this class of elements (TreeElement)');
-    }
-
-    /**
-     * getValue method is not accessible in this class.
-     * Throws exception if used.
-     *
-     * @throws \Exception
-     */
-    public function getValue()
     {
         throw new \Exception('Not applicable for this class of elements (TreeElement)');
     }
@@ -77,87 +89,141 @@ abstract class Tree extends SimpleElement
     }
 
     /**
-     * Click a tree element by its path (Node names) in tree
+     * Click a tree element by its path (Node names) in tree.
      *
      * @param string $path
-     * @throws \InvalidArgumentException
      */
     public function setValue($path)
     {
-        $pathChunkCounter = 0;
-        $pathArray = explode('/', $path);
-        $pathArrayLength = count($pathArray);
-        $structureChunk = $this->getStructure(); //Set the root of a structure as a first structure chunk
-        foreach ($pathArray as $pathChunk) {
-            $structureChunk = $this->deep($pathChunk, $structureChunk);
-            $structureChunk = ($pathChunkCounter == $pathArrayLength - 1) ?
-                $structureChunk['element'] : $structureChunk['subnodes'];
-            ++$pathChunkCounter;
-        }
-        if ($structureChunk) {
-            /** @var ElementInterface $needleElement */
-            $needleElement = $structureChunk->find($this->nodeName);
-            $needleElement->click();
-        } else {
-            throw new \InvalidArgumentException('The path specified for tree is invalid');
+        $this->eventManager->dispatchEvent(['set_value'], [(string)$this->getAbsoluteSelector()]);
+        $elementSelector = $this->prepareElementSelector($path);
+        $elements = $this->getElements($elementSelector . $this->input, Locator::SELECTOR_XPATH);
+        foreach ($elements as $element) {
+            $element->click();
         }
     }
 
     /**
-     * Internal function for deeping in hierarchy of the tree structure
-     * Return the nested array if it exists or object of class Element if this is the final part of structure
+     * Get the value.
      *
-     * @param string $pathChunk
-     * @param array $structureChunk
-     * @return array|ElementInterface|false
-     */
-    protected function deep($pathChunk, $structureChunk)
-    {
-        if (is_array($structureChunk)) {
-            foreach ($structureChunk as $structureNode) {
-                $pattern = '/' . $pathChunk . '\s\([\d]+\)|' . $pathChunk . '/';
-                if (isset($structureNode) && preg_match($pattern, $structureNode['name'])) {
-                    return $structureNode;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     *  Recursive walks tree
-     *
-     * @param ElementInterface $node
-     * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
+    public function getValue()
     {
-        $nodeArray = [];
-        $nodeList = [];
-        $counter = 1;
-        $newNode = $node->find($parentCssClass . ' > ' . $this->nodeSelector . ':nth-of-type(' . $counter . ')');
-        //Get list of all children nodes to work with
-        while ($newNode->isVisible()) {
-            $nodeList[] = $newNode;
-            ++$counter;
-            $newNode = $node->find($parentCssClass . ' > ' . $this->nodeSelector . ':nth-of-type(' . $counter . ')');
-        }
-        //Write to array values of current node
-        foreach ($nodeList as $currentNode) {
-            /** @var ElementInterface $currentNode */
-            $nodesNames = $currentNode->find($this->nodeName);
-            $nodesContents = $currentNode->find($this->nodeCssClass);
-            $text = ltrim($nodesNames->getText());
-            $nodeArray[] = [
-                'name' => $text,
-                'element' => $currentNode,
-                'subnodes' => $nodesContents->isVisible() ?
-                    $this->_getNodeContent($nodesContents, $this->nodeCssClass) : null,
-            ];
+        $this->eventManager->dispatchEvent(['get_value'], [(string)$this->getAbsoluteSelector()]);
+        $checkboxes = $this->getElements($this->selectedLabels, Locator::SELECTOR_XPATH);
+        $values = [];
+        foreach ($checkboxes as $checkbox) {
+            $fullPath = $this->getFullPath($checkbox);
+            $values[] = implode('/', array_reverse($fullPath));
         }
 
-        return $nodeArray;
+        return $values;
+    }
+
+    /**
+     * Prepare element selector.
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function prepareElementSelector($path)
+    {
+        $pathArray = explode('/', $path);
+        $elementSelector = '';
+        foreach ($pathArray as $itemElement) {
+            $this->displayChildren($itemElement);
+            $elementSelector .= sprintf($this->pattern, $itemElement);
+        }
+
+        return $elementSelector;
+    }
+
+    /**
+     * Check visible element.
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isElementVisible($path)
+    {
+        $elementSelector = $this->prepareElementSelector($path);
+        return $this->find($elementSelector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Display children.
+     *
+     * @param $element
+     * @return void
+     */
+    protected function displayChildren($element)
+    {
+        $element = $this->find(sprintf($this->pattern, $element), Locator::SELECTOR_XPATH);
+        $plusButton = $element->find($this->imagePlus, Locator::SELECTOR_XPATH);
+        if ($plusButton->isVisible()) {
+            $plusButton->click();
+            $this->waitLoadChildren($element);
+        }
+    }
+
+    /**
+     * Waiter for load children.
+     *
+     * @param ElementInterface $element
+     * @return void
+     */
+    protected function waitLoadChildren(ElementInterface $element)
+    {
+        $selector = $this->childLoader;
+        $this->waitUntil(
+            function () use ($element, $selector) {
+                return $element->find($selector)->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Clear data for element.
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        $checkboxes = $this->getElements($this->selectedCheckboxes, Locator::SELECTOR_XPATH, 'checkbox');
+        foreach ($checkboxes as $checkbox) {
+            $checkbox->setValue('No');
+        }
+    }
+
+    /**
+     * Get full path for element.
+     *
+     * @param ElementInterface $element
+     * @return string[]
+     */
+    protected function getFullPath(ElementInterface $element)
+    {
+        $fullPath[] = $this->getElementLabel($element);
+        $parentElement = $element->find($this->parentElement, Locator::SELECTOR_XPATH);
+        if ($parentElement->isVisible()) {
+            $fullPath = array_merge($fullPath, $this->getFullPath($parentElement));
+        }
+
+        return $fullPath;
+    }
+
+    /**
+     * Get element label.
+     *
+     * @param ElementInterface $element
+     * @return string
+     */
+    protected function getElementLabel(ElementInterface $element)
+    {
+        $value = $element->getText();
+        preg_match('`(.+) \(.*`', $value, $matches);
+
+        return $matches[1];
     }
 }
