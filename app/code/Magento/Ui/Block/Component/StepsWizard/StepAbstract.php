@@ -50,4 +50,12 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     {
         return '';
     }
+
+    /**
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return $this->getParentBlock()->getComponentName();
+    }
 }

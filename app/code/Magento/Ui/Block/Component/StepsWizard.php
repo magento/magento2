@@ -28,4 +28,12 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
         }
         return $this->steps;
     }
+
+    /**
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return $this->getNameInLayout();
+    }
 }

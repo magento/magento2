@@ -3,43 +3,35 @@
  * See COPYING.txt for license details.
  */
 define([
+    "uiRegistry",
     "jquery",
     "underscore",
-    "jquery/ui"
-], function ($, _) {
+    "Magento_Ui/js/modal/modal"
+], function (uiRegistry, $, _) {
     "use strict";
-
-    var getWizardBySteps = function (steps, element) {
-        var deferred = new $.Deferred();
-        require(steps, function () {
-            deferred.resolve(new Wizard(arguments, element));
-        });
-        return deferred.promise();
-    };
-
-    var Wizard = function(steps, element) {
-        this.steps = _.map(steps, function (step) {
-            return _.isFunction(step) ? step.prototype : step;
-        });
+    var Wizard = function (steps) {
+        this.steps = steps;
         this.index = 0;
-        this.step = this.steps[this.index];
-        this.element = element;
+        this.step = undefined;
         this.data = {};
         this.tab = {};
-        this.move = function(newIndex, tab) {
+        this.move = function (newIndex, tab) {
+            if (this.step == undefined) {
+                this.step = this.steps[this.index];
+            }
             this.tab = tab;
             if (newIndex > this.index) {
-                this.next(newIndex);
+                this._next(newIndex);
             } else if (newIndex < this.index) {
-                this.prev(newIndex);
+                this._prev(newIndex);
             }
             this.render();
         };
-        this.next = function() {
+        this._next = function () {
             this.data = this.step.force(this);
             this.step = this.steps[++this.index];
         };
-        this.prev = function(newIndex) {
+        this._prev = function (newIndex) {
             this.step.back(this);
             this.index = newIndex;
             this.step = this.steps[this.index];
@@ -50,35 +42,35 @@ define([
     };
 
     $.widget('mage.step-wizard', $.ui.tabs, {
-        wizard: {},
+        wizard: undefined,
         options: {
             collapsible: false,
             disabled: [],
             event: "click",
             buttonNextElement: '[data-role="step-wizard-next"]',
             buttonPrevElement: '[data-role="step-wizard-prev"]',
-            buttonFinalElement: '[data-role="step-wizard-final"]'
+            buttonFinalElement: '[data-role="step-wizard-final"]',
+            componentName: null
         },
-        _create: function() {
+        _create: function () {
             this._control();
-            this.wizard = getWizardBySteps(this.options.steps, this.element);
             this._super();
         },
-        _control: function() {
+        _control: function () {
             var self = this;
             this.prev = this.element.find(this.options.buttonPrevElement);
             this.next = this.element.find(this.options.buttonNextElement);
             this.final = this.element.find(this.options.buttonFinalElement);
 
-            this.next.on('click.' + this.eventNamespace, function(event){
+            this.next.on('click.' + this.eventNamespace, function (event) {
                 self._activate(self.options.active + 1);
             });
-            this.prev.on('click.' + this.eventNamespace, function(event){
+            this.prev.on('click.' + this.eventNamespace, function (event) {
                 self._activate(self.options.active - 1);
             });
             this.final.hide();
         },
-        load: function(index, event) {
+        load: function (index, event) {
             this._disabledTabs(index);
             this._super(index, event);
             this._handlerStep(index);
@@ -86,11 +78,20 @@ define([
         },
         _handlerStep: function (index) {
             var tab = this.panels.eq(index);
-            this.wizard.done(function (wizard) {
-                wizard.move(index, tab);
-            });
+            var steps =  uiRegistry.async(this.options.componentName);
+
+            steps(function(component) {
+                console.log(component.steps)
+                if (this.wizard === undefined) {
+                    this.wizard = new Wizard(component.steps)
+                }
+                if (this.wizard.steps.length) {
+                    this.wizard.move(index, tab);
+                }
+
+            }.bind(this));
         },
-        _way: function(index) {
+        _way: function (index) {
             return this.options.selected > index ? 'back' : 'force';
         },
         _actionControl: function (index) {
@@ -110,44 +111,15 @@ define([
                 this.next.show();
             }
         },
-        _disabledTabs: function(index) {
+        _disabledTabs: function (index) {
             this._setupDisabled(_.range(index + 2, this.tabs.length));
         }
     });
-
     $(document).ready(function () {
-       var dialog = $('[data-role="step-wizard-dialog"]').dialog({
-            title: $.mage.__('Create Product Configurations'),
-            autoOpen: false,
-            minWidth: 980,
-            modal: true,
-            resizable: false,
-            draggable: false,
-            position: {
-                my: 'left top',
-                at: 'center top',
-                of: 'body'
-            },
-            open: function () {
-                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
-                $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
-                $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-            },
-            close: function () {
-                $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-            }
-        });
-        $('[data-action="open-steps-wizard"]').on('click', function () {
-            dialog.dialog('open');
-            dialog.removeClass('hidden');
-        });
-        $('[data-action="close-steps-wizard"]').on('click', function () {
-            dialog.dialog('close');
-        });
+        $('[data-role=step-wizard-dialog]').modal({type: 'slide'});
+        $('[data-action=open-steps-wizard]').on('click', function() { $('[data-role=step-wizard-dialog]').trigger('openModal')});
     });
 
     return $.mage["step-wizard"];
+
 });

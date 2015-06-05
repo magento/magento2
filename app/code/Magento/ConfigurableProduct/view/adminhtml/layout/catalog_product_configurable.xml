@@ -26,7 +26,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Ui\Block\Component\StepsWizard" name="steps_wizard">
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
                     <uiComponent name="product_attributes_listing"/>
                 </block>

@@ -4,16 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 TBD [attributes values step]
 <input type="text">
+?>
 <script type="text/x-magento-init">
+
     {
         "*": {
-            "Magento_Ui/js/lib/steps/step1": {
-                "content": "<?= $block->getJsonData()?>"
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "attributes-values-step": {
+                            "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
+                            "appendTo": "<?= $block->getComponentName()?>",
+                            "options_url": "<?= $block->getUrl('catalog/product_attribute/getOptions')?>"
+
+                        }
+                    }
+                }
             }
-        }
     }
 </script>

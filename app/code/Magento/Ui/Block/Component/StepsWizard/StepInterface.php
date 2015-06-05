@@ -20,4 +20,11 @@ interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
      * @return string
      */
     public function getContent();
+
+    /**
+     * Get Component Name
+     *
+     * @return string
+     */
+    public function getComponentName();
 }
