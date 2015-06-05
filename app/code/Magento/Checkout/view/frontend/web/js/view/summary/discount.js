@@ -14,7 +14,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/discount'
+                template: 'Magento_Checkout/summary/discount'
             },
         colspan: 3,
         style: '',

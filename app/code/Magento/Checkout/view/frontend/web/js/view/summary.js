@@ -15,7 +15,7 @@ define(
         return Component.extend({
             defaults: {
                 displayArea: 'summary',
-                template: 'Magento_Checkout/review/summary'
+                template: 'Magento_Checkout/summary'
             },
             title: 'Order Summary',
             getTotals: function() {
