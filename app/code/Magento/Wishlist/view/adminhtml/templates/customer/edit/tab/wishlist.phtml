@@ -48,7 +48,7 @@ wishlistControl = {
     },
 
     removeItem: function (itemId) {
-        if(!confirm('<?php echo __('Are you sure that you want to remove this item?') ?>')) {
+        if(!confirm('<?php echo __('Are you sure you want to remove this item?') ?>')) {
             return false;
         }
         this.reload('&delete=' + itemId);

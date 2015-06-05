@@ -51,10 +51,10 @@ class Remove extends Action\Action implements IndexInterface
             $wishlist->save();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
-                __('An error occurred while deleting the item from wish list: %1', $e->getMessage())
+                __('We can\'t delete the item from Wish List right now because of an error: %1.', $e->getMessage())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while deleting the item from wish list.'));
+            $this->messageManager->addError(__('We can\'t delete the item from the Wish List right now.'));
         }
 
         $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
