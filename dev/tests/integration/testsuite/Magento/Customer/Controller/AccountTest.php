@@ -318,8 +318,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo([
-                "If there is an account associated with {$email} you will receive an email " .
-                'with a link to reset your password.',
+                'We\'ll email you a link to reset your password.',
             ]),
             MessageInterface::TYPE_SUCCESS
         );
