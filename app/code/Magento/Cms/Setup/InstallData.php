@@ -253,6 +253,10 @@ class InstallData implements InstallDataInterface
                 <td>A flag, which indicates whether caching is disabled or not.</td>
             </tr>
             <tr>
+                <th>FORM_KEY</th>
+                <td>Stores form key used by page cache functionality.</td>
+            </tr>
+            <tr>
                 <th>FRONTEND</th>
                 <td>You sesssion ID on the server.</td>
             </tr>
