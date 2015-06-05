@@ -28,7 +28,7 @@ for FOLDER in $FOLDERS
 do
 	FILE[j]+="\n<directory suffix=\"Test.php\">testsuite\/Magento\/${FOLDER}<\/directory>"
 	i=$((i+1))
-	if [ "$i" -eq "$FOLDERSIZE" ] && [ "$j" -ne "$NUMBER_OF_SUITES" ]; then
+	if [ "$i" -eq "$FOLDERSIZE" ] && [ "$j" -lt "$NUMBER_OF_SUITES" ]; then
 		j=$((j+1))
 		i=0
 	fi
