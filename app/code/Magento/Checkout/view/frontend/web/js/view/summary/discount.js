@@ -8,19 +8,18 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/totals',
         'mage/translate'
     ],
-    function (Component, quote, priceUtils, $t) {
+    function (Component, quote, priceUtils, totals, $t) {
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/discount'
+                template: 'Magento_Checkout/summary/discount'
             },
-        colspan: 3,
-        style: '',
         totals: quote.getTotals(),
         getTitle: function() {
-            var discountTotal = quote.getTotalByCode('discount');
+            var discountTotal = totals.getTotalByCode('discount');
             if (discountTotal) {
                 var title = $t(discountTotal.title);
                 return title.replace("%1", this.totals().coupon_code);

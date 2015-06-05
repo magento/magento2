@@ -12,11 +12,9 @@ define(
         "use strict";
         return details.extend({
             defaults: {
-                ownClass: 'subtotal',
-                columnTitle: 'Subtotal',
-                template: 'Magento_Checkout/review/item/details/subtotal'
+                displayArea: 'after_details',
+                template: 'Magento_Checkout/summary/item/details/subtotal'
             },
-            displayArea: 'after_details',
             getValue: function(quoteItem) {
                 return this.getFormattedPrice(quoteItem.row_total);
             }

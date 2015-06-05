@@ -17,12 +17,20 @@ class ConfigProvider implements ConfigProviderInterface
     protected $scopeConfig;
 
     /**
-     * @param ScopeConfigInterface
+     * @var \Magento\Shipping\Model\Config
+     */
+    protected $shippingMethodConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Config $shippingMethodConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        \Magento\Shipping\Model\Config $shippingMethodConfig
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->shippingMethodConfig = $shippingMethodConfig;
     }
 
     /**
@@ -40,7 +48,21 @@ class ConfigProvider implements ConfigProviderInterface
                     'shipping/shipping_policy/shipping_policy_content',
                     ScopeInterface::SCOPE_STORE
                 )
-            ]
+            ],
+            'activeCarriers' => $this->getActiveCarriers()
         ];
+    }
+
+    /**
+     * Returns active carriers codes
+     * @return array
+     */
+    private function getActiveCarriers()
+    {
+        $activeCarriers = [];
+        foreach ($this->shippingMethodConfig->getActiveCarriers() as $code => $carrier) {
+            $activeCarriers[] = $carrier->getCarrierCode();
+        }
+        return $activeCarriers;
     }
 }

@@ -10,7 +10,7 @@ define(
         return {
             getRules: function() {
                 return {
-                    'countryId': {
+                    'country_id': {
                         'required': true
                     }
                 };

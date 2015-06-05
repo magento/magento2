@@ -20,7 +20,7 @@ define(
         tablerateShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(tablerateShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('tablerate', tablerateShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('tablerate', tablerateShippingRatesValidationRules);
         return Component;
     }

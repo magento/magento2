@@ -30,45 +30,15 @@
             <span data-bind="click: showFormPopUp, text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('+ New Address')"></span>
         </button>
         <div data-bind="fadeVisible: isFormPopUpVisible">
-            <form class="form form-shipping-address" id="co-shipping-form" data-hasrequired="* Required Fields">
-                <!-- ko foreach: getRegion('before-fields') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-                <!--/ko-->
-                <fieldset id="shipping-new-address-form" class="fieldset address">
-                <!-- ko foreach: getRegion('additional-fieldsets') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-                <!--/ko-->
-                <!-- ko if: (isCustomerLoggedIn) -->
-                    <div class="field choice">
-                        <input type="checkbox" class="checkbox" id="shipping-save-in-address-book" data-bind="checked: saveInAddressBook" />
-                        <label class="label" for="shipping-save-in-address-book">
-                            <span data-bind="text: $t('Save in address book')"></span>
-                        </label>
-                    </div>
-                <!-- /ko -->
-                </fieldset>
-            </form>
-            <button type="button" class="action action-save-address">
-                <span data-bind="click: saveNewAddress, text: $t('Save Address')"></span>
-            </button>
-            <button type="button" class="action action-hide-popup">
-                <span data-bind="click: hideFormPopUp, text: $t('Cancel')"></span>
-            </button>
+            <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
+            <input type="button" data-bind="click: saveNewAddress, value: $t('Save Address')" />
+            <input type="button" data-bind="click: hideFormPopUp, value: $t('Cancel')" />
         </div>
         <!-- /ko -->
 
         <!-- Inline address form -->
         <!-- ko if: (isFormInline) -->
-        <form class="form form-shipping-address" id="co-shipping-form" data-hasrequired="* Required Fields">
-            <!-- ko foreach: getRegion('before-fields') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-            <fieldset id="shipping-new-address-form" class="fieldset address">
-            <!-- ko foreach: getRegion('additional-fieldsets') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-            </fieldset>
-        </form>
+        <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
         <!-- /ko -->
     </div>
 </li>

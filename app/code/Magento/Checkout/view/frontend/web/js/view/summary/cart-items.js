@@ -13,7 +13,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/cart_items'
+                template: 'Magento_Checkout/summary/cart-items'
             },
             getItemsCount: function() {
                 var totals = quote.getTotals()();
@@ -25,6 +25,14 @@ define(
                     return [];
                 }
                 return totals.items;
+            },
+            getItemsQty: function() {
+                var qty = 0;
+                var items = this.getItems();
+                for(var i in items) {
+                    qty += items[i].qty;
+                }
+                return qty;
             }
         });
     }
