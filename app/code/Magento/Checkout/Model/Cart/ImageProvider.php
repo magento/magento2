@@ -5,8 +5,9 @@
  */
 namespace Magento\Checkout\Model\Cart;
 
-use Magento\Quote\Api\CartItemManagementInterface;
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImageProvider
 {
     /**
@@ -156,7 +157,7 @@ class ImageProvider
 
         /** @see code/Magento/Catalog/Helper/Product.php */
         $items = $this->itemRepository->getList($cartId);
-        foreach($items as $cartItem) {
+        foreach ($items as $cartItem) {
             $gallery = $this->productGallery->getList($cartItem->getSku());
             /** @var \Magento\Catalog\Model\Product\Gallery\Entry $galleryEntry */
             foreach ($gallery as $galleryEntry) {
@@ -176,5 +177,4 @@ class ImageProvider
         }
         return $imageUrls;
     }
-
 }

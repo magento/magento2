@@ -16,7 +16,6 @@ define(
                 template: 'Magento_Checkout/review/subtotal'
             },
             title: 'Subtotal',
-            colspan: 2,
             getValue: function() {
                 var totals = quote.getTotals()();
                 if (totals) {
