@@ -50,6 +50,13 @@ class ExtensionAttributesFactory
     private $appResource;
 
     /**
+     * Map is used for performance optimization.
+     *
+     * @var array
+     */
+    private $classInterfaceMap = [];
+
+    /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -265,39 +272,49 @@ class ExtensionAttributesFactory
      */
     private function getExtensibleInterfaceName($extensibleClassName)
     {
+        $exceptionMessage = "Class '{$extensibleClassName}' must implement an interface, "
+            . "which extends from '" . self::EXTENSIBLE_INTERFACE_NAME . "'";
+        $notExtensibleClassFlag = '';
+        if (isset($this->classInterfaceMap[$extensibleClassName])) {
+            if ($notExtensibleClassFlag === $this->classInterfaceMap[$extensibleClassName]) {
+                throw new \LogicException($exceptionMessage);
+            } else {
+                return $this->classInterfaceMap[$extensibleClassName];
+            }
+        }
         $modelReflection = new \ReflectionClass($extensibleClassName);
         if ($modelReflection->isInterface()
             && $modelReflection->isSubClassOf(self::EXTENSIBLE_INTERFACE_NAME)
             && $modelReflection->hasMethod('getExtensionAttributes')
         ) {
-            return $extensibleClassName;
+            $this->classInterfaceMap[$extensibleClassName] = $extensibleClassName;
+            return $this->classInterfaceMap[$extensibleClassName];
         }
         foreach ($modelReflection->getInterfaces() as $interfaceReflection) {
             if ($interfaceReflection->isSubclassOf(self::EXTENSIBLE_INTERFACE_NAME)
                 && $interfaceReflection->hasMethod('getExtensionAttributes')
             ) {
-                return $interfaceReflection->getName();
+                $this->classInterfaceMap[$extensibleClassName] = $interfaceReflection->getName();
+                return $this->classInterfaceMap[$extensibleClassName];
             }
         }
-        throw new \LogicException(
-            "Class '{$extensibleClassName}' must implement an interface, "
-            . "which extends from '" . self::EXTENSIBLE_INTERFACE_NAME . "'"
-        );
+        $this->classInterfaceMap[$extensibleClassName] = $notExtensibleClassFlag;
+        throw new \LogicException($exceptionMessage);
     }
 
     /**
      * Determine if the type is an actual extensible data interface.
      *
      * @param string $typeName
-     * @return string
+     * @return bool
      */
     private function isExtensibleAttributesImplemented($typeName)
     {
         try {
-            return $this->getExtensibleInterfaceName($typeName) != null;
+            $this->getExtensibleInterfaceName($typeName);
+            return true;
         } catch (\LogicException $e) {
-            /* do nothing */
+            return false;
         }
-        return false;
     }
 }
