@@ -36,4 +36,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="itemIdProcessor" xsi:type="object">Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
