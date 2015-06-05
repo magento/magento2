@@ -500,6 +500,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function getTotalsData()
     {
-        return $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId())->toArray();
+        $totals = $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId());
+        $items = [];
+        /** @var  \Magento\Quote\Model\Cart\Totals\Item $item */
+        foreach ($totals->getItems() as $item) {
+            $items[] = $item->__toArray();
+        }
+        $totals->setItems($items);
+        return $totals->toArray();
     }
 }

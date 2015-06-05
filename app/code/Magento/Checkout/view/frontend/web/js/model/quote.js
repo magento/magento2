@@ -16,7 +16,7 @@ define(
         var priceFormat = window.checkoutConfig.priceFormat;
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
-        var totals = ko.observable({});
+        var totals = ko.observable(window.checkoutConfig.totalsData);
         var checkoutMethod = ko.observable(null);
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
