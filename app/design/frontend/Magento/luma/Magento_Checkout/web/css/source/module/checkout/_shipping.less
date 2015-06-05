@@ -124,8 +124,44 @@
         }
     }
 
+    .methods-shipping {
+        .actions-toolbar {
+            .action {
+                &.primary {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
     .table-checkout-shipping-method {
-        .css(margin, 0 0 @indent__base);
+        thead {
+            th {
+                display: none;
+            }
+        }
+        tbody {
+            td {
+                .css(border-top, @checkout-step-title__border);
+                .css(padding-bottom, @indent__base);
+                .css(padding-top, @indent__base);
+                &:first-child {
+                    padding-left: 0;
+                    padding-right: 0;
+                    width: 20px;
+                }
+            }
+            tr {
+                &:first-child {
+                    td {
+                        border-top: none;
+                    }
+                }
+            }
+            .col-price {
+                .css(font-weight, @font-weight__semibold);
+            }
+        }
     }
 }
 
@@ -136,7 +172,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .opc-wrapper {
         .form-login,
-        .form-shipping-address {
+        .form-shipping-address,
+        .methods-shipping {
             .css(background, @checkout-step-content-mobile__background);
             .css(margin, @checkout-step-content-mobile__margin);
             .css(padding, @indent__base @checkout-step-content-mobile__margin-s);
@@ -160,6 +197,11 @@
         .action-select-shipping-item {
             .css(margin-top, @indent__s);
         }
+
+        .methods-shipping {
+            .css(border-bottom, @checkout-step-title__border);
+        }
+
     }
 }
 
