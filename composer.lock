@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f641acd54ebe87222e3e0db1142fb39",
+    "hash": "fd98054e20f79a501ae6a65f774f39d7",
     "packages": [
         {
             "name": "composer/composer",
@@ -218,16 +218,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.10",
+            "version": "1.12.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884"
+                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
-                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/07ce4e9fba448f4aa48acbb1605c68897dac595f",
+                "reference": "07ce4e9fba448f4aa48acbb1605c68897dac595f",
                 "shasum": ""
             },
             "require": {
@@ -261,7 +261,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-02-06 17:25:45"
+            "time": "2015-06-02 08:04:41"
         },
         {
             "name": "monolog/monolog",
