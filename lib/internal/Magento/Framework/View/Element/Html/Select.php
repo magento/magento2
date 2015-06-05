@@ -193,7 +193,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
     {
         $selectedHtml = $selected ? ' selected="selected"' : '';
         if ($this->getIsRenderToJsTemplate() === true) {
-            $selectedHtml .= ' #{option_extra_attr_' . self::calcOptionHash($option['value']) . '}';
+            $selectedHtml .= ' <%= option_extra_attrs.option_' . self::calcOptionHash($option['value']) . ' %>';
         }
 
         $params = '';
