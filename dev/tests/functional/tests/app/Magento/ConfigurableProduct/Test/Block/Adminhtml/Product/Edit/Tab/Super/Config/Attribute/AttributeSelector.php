@@ -10,13 +10,12 @@ use Magento\Mtf\Client\Element\SuggestElement;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
- * Class AttributeSelector
- * Form Attribute Search on Product page
+ * Form Attribute Search on Product page.
  */
 class AttributeSelector extends SuggestElement
 {
     /**
-     * Checking exist configurable attribute in search result
+     * Checking exist configurable attribute in search result.
      *
      * @param CatalogProductAttribute $productAttribute
      * @return bool

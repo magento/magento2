@@ -9,7 +9,6 @@
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteProductAttributeEntityTest">
         <variation name="DeleteProductAttributeEntityTestVariation1">
             <data name="attribute/dataSet" xsi:type="string">attribute_type_text_field</data>
-            <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm" />
@@ -17,7 +16,6 @@
         </variation>
         <variation name="DeleteProductAttributeEntityTestVariation2">
             <data name="attribute/dataSet" xsi:type="string">attribute_type_dropdown</data>
-            <data name="isRequired" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm" />

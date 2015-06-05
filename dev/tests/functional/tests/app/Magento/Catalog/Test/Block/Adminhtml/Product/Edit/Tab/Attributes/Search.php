@@ -16,6 +16,13 @@ use Magento\Mtf\Client\Locator;
 class Search extends SuggestElement
 {
     /**
+     * Selector for top page.
+     *
+     * @var string
+     */
+    protected $topPage = './ancestor::body//header[contains(@class, "page-header")]/div[1]';
+
+    /**
      * Attributes locator.
      *
      * @var string
@@ -73,8 +80,11 @@ class Search extends SuggestElement
      */
     public function isExistAttributeInSearchResult($productAttribute)
     {
+        $this->find($this->topPage, Locator::SELECTOR_XPATH)->click();
         $this->find($this->actionToggle)->click();
-        $this->find($this->suggest)->setValue($productAttribute->getFrontendLabel());
+        $suggestField = $this->find($this->suggest);
+        $suggestField->click();
+        $suggestField->setValue($productAttribute->getFrontendLabel());
         $this->waitResult();
         $attributeSelector = sprintf($this->searchArrtibute, $productAttribute->getFrontendLabel());
         return $this->find($this->searchResult)->find($attributeSelector, Locator::SELECTOR_XPATH)->isVisible();
