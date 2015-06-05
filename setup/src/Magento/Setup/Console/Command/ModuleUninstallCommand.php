@@ -37,7 +37,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class ModuleUninstallCommand extends AbstractModuleCommand
 {
     /**
-     * Names of input arguments or options
+     * Names of input options
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
@@ -45,71 +45,99 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     const INPUT_KEY_BACKUP_DB = 'backup-db';
 
     /**
+     * Maintenance mode
+     *
      * @var MaintenanceMode
      */
     private $maintenanceMode;
 
     /**
+     * Deployment Configuration
+     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * Full module list
+     *
      * @var FullModuleList
      */
     private $fullModuleList;
 
     /**
+     * Deployment Configuration writer
+     *
      * @var DeploymentConfig\Writer
      */
     private $writer;
 
     /**
+     * Module package info
+     *
      * @var PackageInfo
      */
     private $packageInfo;
 
     /**
+     * Uninstall classes collector
+     *
      * @var UninstallCollector
      */
     private $collector;
 
     /**
+     * Module Resource
+     *
      * @var Resource
      */
     private $moduleResource;
 
     /**
+     * Composer general dependency checker
+     *
      * @var DependencyChecker
      */
     private $dependencyChecker;
 
     /**
+     * Directory list
+     *
      * @var DirectoryList
      */
     private $directoryList;
 
     /**
+     * Root composer.json information
+     *
      * @var ComposerInformation
      */
     private $composer;
 
     /**
+     * File information
+     *
      * @var File
      */
     private $file;
 
     /**
+     * Module list loader
+     *
      * @var Loader
      */
     private $loader;
 
     /**
+     * Code remover
+     *
      * @var Remove
      */
     private $remove;
 
     /**
+     * BackupRollback factory
+     *
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;
