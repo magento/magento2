@@ -10,13 +10,14 @@ use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Processes extension attributes and produces an array for the data.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExtensionAttributesProcessor
 {

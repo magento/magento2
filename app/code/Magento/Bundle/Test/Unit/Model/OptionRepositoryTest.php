@@ -367,49 +367,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
         $productMock->expects($this->any())->method('getSku')->willReturn($productSku);
 
-        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $extensionAttributesFactory = $this->getMock(
-            'Magento\Framework\Api\ExtensionAttributesFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $attributeValueFactoryMock = $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
-        $resourceMock = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
-            [
-                '_construct',
-                'getIdFieldName'
-            ],
-            [],
-            '',
-            false
-        );
-        $resourceCollectionMock = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
-        $optionMock = $this->getMock(
-            'Magento\Bundle\Model\Option',
-            [
-                'setStoreId',
-                'setParentId',
-                'getProductLinks',
-                'getOptionId',
-                'setOptionId',
-                'setDefaultTitle',
-                'getTitle'
-            ],
-            [
-                $contextMock,
-                $registryMock,
-                $extensionAttributesFactory,
-                $attributeValueFactoryMock,
-                $resourceMock,
-                $resourceCollectionMock
-            ],
-            '',
-            true
-        );
+        $optionMock = $this->createOptionMock();
         $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
         $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
@@ -643,5 +601,56 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($productMock);
         $this->assertEquals(['object'], $this->model->getList($productSku));
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createOptionMock()
+    {
+        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
+        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $extensionAttributesFactory = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttributesFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $attributeValueFactoryMock = $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
+        $resourceMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [
+                '_construct',
+                'getIdFieldName'
+            ],
+            [],
+            '',
+            false
+        );
+        $resourceCollectionMock = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
+        $optionMock = $this->getMock(
+            'Magento\Bundle\Model\Option',
+            [
+                'setStoreId',
+                'setParentId',
+                'getProductLinks',
+                'getOptionId',
+                'setOptionId',
+                'setDefaultTitle',
+                'getTitle'
+            ],
+            [
+                $contextMock,
+                $registryMock,
+                $extensionAttributesFactory,
+                $attributeValueFactoryMock,
+                $resourceMock,
+                $resourceCollectionMock
+            ],
+            '',
+            true
+        );
+        return $optionMock;
     }
 }

@@ -17,6 +17,8 @@ use Magento\Framework\App\Resource as AppResource;
 
 /**
  * Factory class for instantiation of extension attributes objects.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExtensionAttributesFactory
 {
@@ -130,7 +132,7 @@ class ExtensionAttributesFactory
     {
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         foreach ($joinDirectives as $attributeCode => $directive) {
-            /** @var \Magento\Framework\Api\ExtensionAttribute\JoinData $joinData */
+            /** @var JoinData $joinData */
             $joinData = $this->extensionAttributeJoinDataFactory->create();
             $joinData->setReferenceTable($this->appResource->getTableName($directive[Converter::JOIN_REFERENCE_TABLE]))
                 ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
