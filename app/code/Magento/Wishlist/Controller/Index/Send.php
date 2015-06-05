@@ -150,7 +150,7 @@ class Send extends Action\Action implements IndexInterface
                 $error = __('Please enter an email address.');
             } else {
                 if (count($emails) > $emailsLeft) {
-                    $error = __('This Wish List can be shared %1 more times.', $emailsLeft);
+                    $error = __('This wish list can be shared %1 more times.', $emailsLeft);
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
