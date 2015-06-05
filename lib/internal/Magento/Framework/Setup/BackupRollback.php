@@ -17,6 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class to deal with backup and rollback functionality for database and Code base
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackupRollback
 {
@@ -79,6 +81,7 @@ class BackupRollback
      * @param int $time
      * @param string $type
      * @return void
+     * @throws LocalizedException
      */
     public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
     {
@@ -88,10 +91,12 @@ class BackupRollback
         if ($type === Factory::TYPE_FILESYSTEM) {
             $fsBackup->addIgnorePaths($this->getCodeBackupIgnorePaths());
             $granularType = 'Code';
-        } else {
+        } elseif ($type === Factory::TYPE_MEDIA) {
             $fsBackup->addIgnorePaths($this->getMediaBackupIgnorePaths());
             $granularType = 'Media';
             $fsBackup->setName('media');
+        } else {
+            throw new LocalizedException(new \Magento\Framework\Phrase("This backup type \'$type\' is not supported."));
         }
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir)) {
@@ -132,7 +137,7 @@ class BackupRollback
         );
         if (!$filesInfo['writable']) {
             throw new NotEnoughPermissions(
-                __('Unable to make rollback because not all files are writable')
+                new \Magento\Framework\Phrase('Unable to make rollback because not all files are writable')
             );
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
