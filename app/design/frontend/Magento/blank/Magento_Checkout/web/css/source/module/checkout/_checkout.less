@@ -10,7 +10,7 @@
 @checkout-wrapper__margin: @indent__base;
 @checkout-wrapper__width: 66%;
 
-@checkout-step-title__border: 1px solid @color-gray-light5;
+@checkout-step-title__border: @border-width__base solid @color-gray80;
 @checkout-step-title__font-size: 26px;
 @checkout-step-title__font-weight: @font-weight__light;
 @checkout-step-title__margin-bottom: 28px;
@@ -82,7 +82,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-wrapper {
-        float: left;
         .css(width, @checkout-wrapper__width);
+        float: left;
     }
 }

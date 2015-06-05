@@ -17,8 +17,8 @@
         &:extend(.abs-no-display-desktop all);
         &:extend(.abs-add-clearfix all);
         .css(background, @checkout-step-content-mobile__background);
-        .css(border-bottom, @checkout-step-content-mobile__border-bottom);
-        .css(border-top, @checkout-step-content-mobile__border-bottom);
+        .css(border-bottom, @checkout-step-title__border);
+        .css(border-top, @checkout-step-title__border);
         .css(margin, -21px -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s);
         .css(padding, 18px 15px);
 
@@ -49,7 +49,7 @@
 //  Desktop
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
     .opc-estimated-wrapper {
         display: none;
     }

@@ -43,7 +43,7 @@
         .form-login,
         .form-shipping-address {
             .css(margin-bottom, @indent__base);
-            .css(max-width, @checkout-shipping-address__max-width);
+
             .fieldset {
                 .field {
                     .label {
@@ -173,6 +173,11 @@
     }
 
     .opc-wrapper {
+        .form-login,
+        .form-shipping-address {
+            .css(max-width, @checkout-shipping-address__max-width);
+        }
+
         .shipping-address-item {
             &.selected-item {
                 &:before {
