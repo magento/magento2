@@ -27,7 +27,7 @@ class CredentialsValidator
         if (!is_string($username) || strlen($username) == 0) {
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'username']));
         }
-        if (!is_string($username) || strlen($password) == 0) {
+        if (!is_string($password) || strlen($password) == 0) {
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'password']));
         }
         if ($exception->wasErrorAdded()) {
