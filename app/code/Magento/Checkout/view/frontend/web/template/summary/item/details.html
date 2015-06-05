@@ -9,7 +9,8 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
     <strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
-    Qty: <span data-bind="text: $parent.qty"></span>
+    <!-- ko text: $t('Qty:') --><!-- /ko -->
+    <span data-bind="text: $parent.qty"></span>
 
     <!-- ko if: (JSON.parse($parent.options).length > 0)-->
     <dl class="item-options">
