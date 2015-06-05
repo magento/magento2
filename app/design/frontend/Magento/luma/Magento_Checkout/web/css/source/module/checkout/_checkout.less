@@ -10,7 +10,7 @@
 @checkout-wrapper__margin: @indent__base;
 @checkout-wrapper__width: 66%;
 
-@checkout-step-title__border: 1px solid @color-gray-light5;
+@checkout-step-title__border: @border-width__base solid @color-gray80;
 @checkout-step-title__font-size: 26px;
 @checkout-step-title__font-weight: @font-weight__light;
 @checkout-step-title__margin-bottom: 28px;
@@ -20,7 +20,6 @@
 @checkout-step-title-mobile__margin-bottom: @indent__base;
 
 @checkout-step-content-mobile__background: @color-gray-light01;
-@checkout-step-content-mobile__border-bottom: @border-width__base solid @color-gray80;
 @checkout-step-content-mobile__margin-s: 15px;
 @checkout-step-content-mobile__margin: 0 -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s;
 
@@ -79,10 +78,7 @@
             }
         }
         .step-content {
-            .css(background, @checkout-step-content-mobile__background);
-            .css(border-bottom, @checkout-step-content-mobile__border-bottom);
-            .css(margin, @checkout-step-content-mobile__margin);
-            padding: @indent__base @layout__width-xs-indent;
+            .css(margin, 0 0 @checkout-step-content-mobile__margin-s);
         }
     }
 }
@@ -93,7 +89,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-wrapper {
-        float: left;
         .css(width, @checkout-wrapper__width);
+        float: left;
     }
 }

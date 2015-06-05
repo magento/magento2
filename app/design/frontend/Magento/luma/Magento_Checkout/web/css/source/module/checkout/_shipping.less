@@ -42,8 +42,7 @@
 
         .form-login,
         .form-shipping-address {
-            .css(margin-bottom, @indent__base);
-            .css(max-width, @checkout-shipping-address__max-width);
+            .css(margin-bottom, @checkout-step-title__margin-bottom);
             .fieldset {
                 .field {
                     .label {
@@ -136,11 +135,17 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .opc-wrapper {
-        .form-login {
-            .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
-            .css(margin, @checkout-shipping-item-mobile__padding);
-            .css(padding, @checkout-shipping-item-mobile__padding);
+        .form-login,
+        .form-shipping-address {
+            .css(background, @checkout-step-content-mobile__background);
+            .css(margin, @checkout-step-content-mobile__margin);
+            .css(padding, @indent__base @checkout-step-content-mobile__margin-s);
         }
+
+        .form-login {
+            margin-bottom: 0;
+        }
+
         .shipping-address-item {
             .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
             .css(margin, @checkout-shipping-item-mobile__margin);
@@ -151,6 +156,7 @@
                 border-bottom-width: 2px;
             }
         }
+
         .action-select-shipping-item {
             .css(margin-top, @indent__s);
         }
@@ -171,6 +177,16 @@
     }
 
     .opc-wrapper {
+        .form-login,
+        .form-shipping-address {
+            .css(max-width, @checkout-shipping-address__max-width);
+        }
+
+        .form-login {
+            .css(border-bottom, @checkout-step-title__border);
+            .css(padding-bottom, @checkout-step-title__margin-bottom);
+        }
+
         .shipping-address-item {
             &.selected-item {
                 &:before {
