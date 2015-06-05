@@ -11,7 +11,7 @@ use Magento\Framework\App\Cache;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Composer\GeneralDependencyChecker;
+use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Filesystem;
 use Magento\Theme\Model\Theme\Collection;
@@ -68,7 +68,7 @@ class ThemeUninstallCommand extends Command
     private $file;
 
     /**
-     * @var GeneralDependencyChecker
+     * @var DependencyChecker
      */
     private $dependencyChecker;
 
@@ -128,7 +128,7 @@ class ThemeUninstallCommand extends Command
      * @param DirectoryList $directoryList
      * @param File $file
      * @param Filesystem $filesystem
-     * @param GeneralDependencyChecker $dependencyChecker
+     * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
      * @param Remove $remove
@@ -145,7 +145,7 @@ class ThemeUninstallCommand extends Command
         DirectoryList $directoryList,
         File $file,
         Filesystem $filesystem,
-        GeneralDependencyChecker $dependencyChecker,
+        DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         ThemeProvider $themeProvider,
         Remove $remove,
