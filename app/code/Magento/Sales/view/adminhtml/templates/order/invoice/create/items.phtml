@@ -132,7 +132,7 @@
 </section>
 
 <script>
-require(['jquery', 'prototype'], function($){
+require(['jquery', 'prototype'], function(jQuery){
 
 //<![CDATA[
 var submitButtons = $$('.submit-button');
@@ -143,7 +143,7 @@ var fields = $$('.qty-input');
 updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
 
 for(var i=0;i<fields.length;i++){
-    $(fields[i]).on('keyup', checkButtonsRelation);
+    jQuery(fields[i]).on('keyup', checkButtonsRelation);
     fields[i].baseValue = fields[i].value;
 }
 
