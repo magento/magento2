@@ -6,6 +6,6 @@
 -->
 <td
     data-bind="visible: visible,
-           click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
-           text: getLabel(row[field.index])"
+       click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
+       html: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>
