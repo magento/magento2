@@ -311,7 +311,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(
             '\Magento\Framework\Exception\LocalizedException',
             'We don\'t have as many "Simple Product" as you requested.'
-            );
+        );
         $updateParams['qty'] = $productStockQty + 1;
         $quote->updateItem($updateParams['id'], $updateParams);
     }
