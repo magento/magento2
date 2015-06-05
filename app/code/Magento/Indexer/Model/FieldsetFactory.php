@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class HandlerFactory
+class FieldsetFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -21,19 +21,19 @@ class HandlerFactory
     }
 
     /**
-     * Create handler class instance
+     * Create fieldset class instance
      *
      * @param string $handlerClass
      * @param array $arguments
      * @throws \InvalidArgumentException
-     * @return HandlerInterface
+     * @return FieldsetInterface
      */
     public function create($handlerClass, array $arguments = [])
     {
         $handler = $this->objectManager->create($handlerClass, $arguments);
         if (!$handler instanceof HandlerInterface) {
             throw new \InvalidArgumentException(
-                $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\HandlerInterface'
+                $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
             );
         }
 

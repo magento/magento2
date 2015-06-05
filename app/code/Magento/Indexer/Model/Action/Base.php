@@ -6,6 +6,7 @@
 namespace Magento\Indexer\Model\Action;
 
 use Magento\Indexer\Model\ActionInterface;
+use Magento\Indexer\Model\FieldsetFactory;
 use Magento\Indexer\Model\SourceFactory;
 use Magento\Indexer\Model\HandlerFactory;
 use Magento\Indexer\Model\SourceInterface;
@@ -24,6 +25,11 @@ class Base implements ActionInterface
     protected $handlerFactory;
 
     /**
+     * @var FieldsetFactory
+     */
+    protected $fieldsetFactory;
+
+    /**
      * @var SourceInterface[]
      */
     protected $sources;
@@ -33,13 +39,27 @@ class Base implements ActionInterface
      */
     protected $handler;
 
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @param SourceFactory $sourceFactory
+     * @param HandlerFactory $handlerFactory
+     * @param FieldsetFactory $fieldsetFactory
+     * @param array $data
+     */
     public function __construct(
         SourceFactory $sourceFactory,
-        HandlerFactory $handlerFactory
-    )
-    {
+        HandlerFactory $handlerFactory,
+        FieldsetFactory $fieldsetFactory,
+        $data = []
+    ) {
         $this->sourceFactory = $sourceFactory;
         $this->handlerFactory = $handlerFactory;
+        $this->fieldsetFactory = $fieldsetFactory;
+        $this->data = $data;
     }
 
     /**
@@ -78,22 +98,28 @@ class Base implements ActionInterface
     {
         $this->collectSources();
         $this->collectHandlers();
-        foreach ($this->indexer->getFields() as $field) {
-            $this->sources[$field['source']]->prepareData($field);
-            $this->handler[$field['handler']]->handle($field);
+        foreach ($this->data['fieldsets'] as $fieldset) {
+            foreach ($this->data['fields'] as $field) {
+                $this->sources[$field['source']]->prepareData($field);
+                $this->handler[$field['handler']]->handle($field);
+            }
+            if (isset($fieldset['class'])) {
+                $fieldsetInstance = $this->fieldsetFactory->create($fieldset['class']);
+                $fieldsetInstance->proccess($this->data['fields']);
+            }
         }
     }
 
     protected function collectSources()
     {
-        foreach ($this->indexer->getSources() as $sourceName => $source) {
+        foreach ($this->data['sources'] as $sourceName => $source) {
             $this->sources[$sourceName] = $this->sourceFactory->create($source);
         }
     }
 
     protected function collectHandlers()
     {
-        foreach ($this->indexer->getHandlers() as $handlerName => $handler) {
+        foreach ($this->data['handlers'] as $handlerName => $handler) {
             $this->sources[$handlerName] = $this->handlerFactory->create($handler);
         }
     }

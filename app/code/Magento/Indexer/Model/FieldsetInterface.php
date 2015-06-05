@@ -5,7 +5,11 @@
  */
 namespace Magento\Indexer\Model;
 
-interface SourceInterface
+interface FieldsetInterface
 {
-    public function prepareData($data);
+    /**
+     * @param [] $data
+     * @return void
+     */
+    public function proccess($data);
 }
