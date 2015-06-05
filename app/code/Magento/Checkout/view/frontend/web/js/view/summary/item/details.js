@@ -14,8 +14,6 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                ownClass: 'name',
-                columnTitle: 'Product Name',
                 template: 'Magento_Checkout/summary/item/details'
             },
             getValue: function(quoteItem) {
