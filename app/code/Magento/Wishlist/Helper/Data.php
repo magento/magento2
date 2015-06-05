@@ -406,6 +406,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve URL for adding All items to shopping cart from shared wishlist
+     *
+     * @return string
+     */
+    public function getSharedAddAllToCartUrl()
+    {
+        return $this->_postDataHelper->getPostData(
+            $this->_storeManager->getStore()->getUrl('*/*/allcart', ['_current' => true])
+        );
+    }
+
+    /**
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return array
      */
