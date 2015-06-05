@@ -16,8 +16,6 @@ define(
             defaults: {
                 template: 'Magento_Checkout/summary/discount'
             },
-        colspan: 3,
-        style: '',
         totals: quote.getTotals(),
         getTitle: function() {
             var discountTotal = quote.getTotalByCode('discount');
