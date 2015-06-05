@@ -33,7 +33,7 @@ before_script:
   - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   # Install MySQL 5.6, create DB for integration tests
   - >
-      sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then
+      sh -c "if [ '$TEST_SUITE' = 'integrationPart1' ] || [ '$TEST_SUITE' = 'integrationPart2' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then
       sudo apt-get remove --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
       sudo apt-get autoremove;
       sudo apt-get autoclean;
