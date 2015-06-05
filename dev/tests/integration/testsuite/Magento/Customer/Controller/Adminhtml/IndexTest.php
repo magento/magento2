@@ -981,7 +981,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/customer/index/validate');
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('{"error":1,"html_message":', $body);
+        $this->assertContains('{"error":true,"messages":', $body);
         $this->assertContains('Please correct this email address: \"*\".', $body);
         $this->assertContains('\"First Name\" is a required value.', $body);
         $this->assertContains('\"Last Name\" is a required value.', $body);
