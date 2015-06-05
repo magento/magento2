@@ -41,7 +41,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->object =  new GiftOptions(
+        $this->object = new GiftOptions(
             $this->context,
             $this->jsonEncoder,
             $this->compositeConfigProvider,
