@@ -105,7 +105,6 @@ return [
     'cataloginventory/stock_status' => 'cataloginventory_stock_status',
     'cataloginventory/stock_status_indexer_idx' => 'cataloginventory_stock_status_idx',
     'cataloginventory/stock_status_indexer_tmp' => 'cataloginventory_stock_status_tmp',
-    'catalogrule/affected_product' => 'catalogrule_affected_product',
     'catalogrule/customer_group' => 'catalogrule_customer_group',
     'catalogrule/rule' => 'catalogrule',
     'catalogrule/rule_group_website' => 'catalogrule_group_website',
