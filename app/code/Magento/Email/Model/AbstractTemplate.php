@@ -79,6 +79,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
         $this->_design = $design;
@@ -86,7 +88,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->_store = isset($data['store']) ? $data['store'] : null;
         $this->_appEmulation = $appEmulation;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, null, null, $data);
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**

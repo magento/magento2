@@ -134,9 +134,20 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory,
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct(
+            $context,
+            $design,
+            $registry,
+            $appEmulation,
+            $storeManager,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_templateFilter = $templateFilter;
         $this->_date = $date;
         $this->_templateFactory = $templateFactory;
