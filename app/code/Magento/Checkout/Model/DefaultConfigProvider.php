@@ -23,6 +23,7 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\UrlInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -136,6 +137,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $imageProvider;
 
     /**
+     * @var CartTotalRepositoryInterface
+     */
+    protected $cartTotalRepository;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -157,6 +163,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
      * @param Cart\ImageProvider $imageProvider
      * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param CartTotalRepositoryInterface $cartTotalRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -180,7 +187,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Framework\View\ConfigInterface $viewConfig,
         \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig,
         Cart\ImageProvider $imageProvider,
-        \Magento\Directory\Helper\Data $directoryHelper
+        \Magento\Directory\Helper\Data $directoryHelper,
+        CartTotalRepositoryInterface $cartTotalRepository
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -203,6 +211,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->postCodesConfig = $postCodesConfig;
         $this->imageProvider = $imageProvider;
         $this->directoryHelper = $directoryHelper;
+        $this->cartTotalRepository = $cartTotalRepository;
     }
 
     /**
@@ -235,7 +244,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ),
             'postCodes' => $this->postCodesConfig->getPostCodes(),
             'imageData' => $this->imageProvider->getImages($quoteId),
-            'countryData' => $this->getCountryData()
+            'countryData' => $this->getCountryData(),
+            'totalsData' => $this->getTotalsData()
         ];
     }
 
@@ -482,5 +492,14 @@ class DefaultConfigProvider implements ConfigProviderInterface
 
         }
         return $country;
+    }
+
+    /**
+     * Return quote totals data
+     * @return array
+     */
+    private function getTotalsData()
+    {
+        return $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId())->toArray();
     }
 }

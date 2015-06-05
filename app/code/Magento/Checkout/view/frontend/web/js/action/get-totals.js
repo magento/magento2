@@ -8,21 +8,18 @@ define(
     [
         'ko',
         '../model/quote',
-        '../model/url-builder',
+        'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Ui/js/model/errorlist',
         'mage/storage',
         'underscore'
     ],
-    function (ko, quote, urlBuilder, errorList, storage, _) {
+    function (ko, quote, resourceUrlManager, errorList, storage, _) {
         "use strict";
         return function (callbacks) {
-            var serviceUrl = '';
-            if (quote.getIsCustomerLoggedIn()()) {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/totals', {});
-            } else {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/totals', {quoteId: quote.getQuoteId()});
-            }
-
+            var serviceUrl = resourceUrlManager.getUrl(
+                'getCartTotals',
+                {'guest': {quoteId: quote.getQuoteId()}}
+            );
             return storage.get(
                 serviceUrl
             ).done(

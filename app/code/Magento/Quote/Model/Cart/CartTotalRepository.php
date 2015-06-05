@@ -12,7 +12,6 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
 use Magento\Quote\Api\CouponManagementInterface;
-use Magento\Quote\Api\Data\TotalsInterface;
 
 /**
  * Cart totals data object.
