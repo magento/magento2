@@ -9,6 +9,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Framework\Json\Encoder;
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions;
+use Magento\Quote\Model\Quote\Item;
 
 class GiftOptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,14 +56,24 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetJsLayout()
     {
+        /**
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         */
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->layoutProcessorMock->expects($this->once())
             ->method('process')
-            ->with($this->jsLayout)
+            ->with($this->jsLayout, $itemMock)
             ->willReturnArgument(0);
+
         $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
             ->with($this->jsLayout)
             ->willReturnArgument(0);
+
+        $this->model->setItem($itemMock);
         $this->assertEquals($this->jsLayout, $this->model->getJsLayout());
     }
 }

@@ -22,7 +22,7 @@ class GiftOptions extends Generic
     protected $jsLayout;
 
     /**
-     * @var array|\Magento\Checkout\Block\Checkout\LayoutProcessorInterface[]
+     * @var array|LayoutProcessorInterface[]
      */
     protected $layoutProcessors;
 
@@ -58,7 +58,7 @@ class GiftOptions extends Generic
     public function getJsLayout()
     {
         foreach ($this->layoutProcessors as $processor) {
-            $this->jsLayout = $processor->process($this->jsLayout);
+            $this->jsLayout = $processor->process($this->jsLayout, $this->getItem());
         }
         return $this->jsonEncoder->encode($this->jsLayout);
     }
