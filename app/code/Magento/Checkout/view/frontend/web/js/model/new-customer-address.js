@@ -10,6 +10,7 @@ define([], function() {
      * Returns new address object
      */
     return function (addressData) {
+        var identifier = Date.now();
         return {
             email: addressData.email,
             countryId: addressData.country_id,
@@ -38,6 +39,9 @@ define([], function() {
             },
             getKey: function() {
                 return this.getType();
+            },
+            getCacheKey: function() {
+                return this.getType() + identifier;
             }
         }
     }

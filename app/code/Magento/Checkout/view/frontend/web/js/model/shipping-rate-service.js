@@ -11,24 +11,21 @@ define(
     ],
     function(defaultProcessor, customerAddressProcessor) {
         "use strict";
-        var processors = {};
-        processors.default =  defaultProcessor;
-        processors.customerAddress = customerAddressProcessor;
+        var processors = [];
+        processors['default'] =  defaultProcessor;
+        processors['customer-address'] = customerAddressProcessor;
 
         return {
             registerProcessor: function(type, processor) {
                 processors[type] = processor;
             },
             getRates: function (address) {
-                var type = 'default';
-                if (address.type) {
-                    type = address.type;
-                } else if (address.customerAddressId) {
-                    type = 'customerAddress';
-                }
+                var type = address.getType();
                 var rates = [];
                 if (processors[type]) {
                     rates = processors[type].getRates(address);
+                } else {
+                    rates = processors['default'].getRates(address);
                 }
                 return rates;
             }

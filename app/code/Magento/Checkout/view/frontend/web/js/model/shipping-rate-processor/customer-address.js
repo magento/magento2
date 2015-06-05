@@ -9,30 +9,37 @@ define(
         'Magento_Checkout/js/model/quote',
         'mage/storage',
         'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Ui/js/model/errorlist'
     ],
-    function (urlBuilder, quote, storage, shippingService, errorList) {
+    function (urlBuilder, quote, storage, shippingService, rateRegistry, errorList) {
         "use strict";
         return {
             getRates: function(address) {
-                storage.post(
-                    urlBuilder.createUrl('/carts/mine/estimate-shipping-methods-by-address-id', {}),
-                    JSON.stringify({
-                        addressId:  address.customerAddressId
-                    })
-                ).done(
-                    function(result) {
-                        shippingService.setShippingRates(result);
-                    }
+                var cache = rateRegistry.get(address.getKey());
+                if (cache) {
+                    shippingService.setShippingRates(cache);
+                } else {
+                    storage.post(
+                        urlBuilder.createUrl('/carts/mine/estimate-shipping-methods-by-address-id', {}),
+                        JSON.stringify({
+                            addressId:  address.customerAddressId
+                        })
+                    ).done(
+                        function(result) {
+                            rateRegistry.set(address.getKey(), result);
+                            shippingService.setShippingRates(result);
+                        }
 
-                ).fail(
-                    function(response) {
-                        var error = JSON.parse(response.responseText);
-                        errorList.add(error);
-                        shippingService.setShippingRates([])
-                    }
+                    ).fail(
+                        function(response) {
+                            var error = JSON.parse(response.responseText);
+                            errorList.add(error);
+                            shippingService.setShippingRates([])
+                        }
 
-                );
+                    );
+                }
             }
         };
     }

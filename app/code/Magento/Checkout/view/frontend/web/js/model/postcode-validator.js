@@ -19,8 +19,7 @@ define(['mageUtils'], function (utils) {
                 }
             }
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 });

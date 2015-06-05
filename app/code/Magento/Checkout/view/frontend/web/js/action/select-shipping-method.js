@@ -7,12 +7,10 @@ define(
     [
         '../model/quote',
         '../model/url-builder',
-        '../model/step-navigator',
         'Magento_Checkout/js/model/shipping-service',
-        'mage/translate',
-        'ko'
+        'mage/translate'
     ],
-    function (quote, urlBuilder, navigator, shippingService, $t, ko) {
+    function (quote, urlBuilder, shippingService, $t) {
         "use strict";
         return function (code, customOptions, callbacks) {
             if (!code) {
@@ -33,7 +31,6 @@ define(
                 quote.setSelectedShippingMethod(code);
                 quote.setShippingCustomOptions(customOptions);
                 quote.setCollectedTotals('shipping', shippingRate.amount);
-                navigator.setCurrent('shippingMethod').goNext();
             }
         };
     }
