@@ -385,11 +385,10 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
-        $optionCollection = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            ['reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'],
-            [$entityFactory, $logger, $fetchStrategy]
-        );
+        $optionCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
+            ->setMethods(['reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'])
+            ->getMockForAbstractClass();
 
         $select = $this->getMock('Zend_Db_Select', ['join', 'where'], [], '', false);
         $select->expects($this->any())->method('join')->will($this->returnSelf());

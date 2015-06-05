@@ -78,13 +78,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($countryMock));
 
         $this->resourceMock = $this->getMock('Magento\Customer\Model\Resource\Customer', [], [], '', false);
-        $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Customer\Model\Address\AbstractAddress',

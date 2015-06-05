@@ -87,13 +87,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')->getMock();
         $this->metadataServiceMock
             ->expects($this->any())

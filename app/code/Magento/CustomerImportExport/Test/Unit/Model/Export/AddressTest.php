@@ -159,13 +159,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'iterate'])
         );
 
-        $customerCollection = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            ['addAttributeToSelect'],
-            [],
-            '',
-            false
-        );
+        $customerCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->setMethods(['addAttributeToSelect'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $customerEntity = $this->getMock('stdClass', ['filterEntityCollection', 'setParameters']);
         $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));

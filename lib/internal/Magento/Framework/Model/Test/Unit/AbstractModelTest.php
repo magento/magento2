@@ -77,13 +77,9 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->model = $this->getMockForAbstractClass(
             'Magento\Framework\Model\AbstractModel',
             [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
