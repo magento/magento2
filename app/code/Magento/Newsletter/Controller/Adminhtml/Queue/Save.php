@@ -80,7 +80,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
             $queue->save();
 
-            $this->messageManager->addSuccess(__('The newsletter queue has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the newsletter queue.'));
             $this->_getSession()->setFormData(false);
 
             $this->_redirect('*/*');

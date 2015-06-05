@@ -24,7 +24,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
         if ($row->isValidForSend()) {
             $actions[] = [
                 'url' => $this->getUrl('*/queue/edit', ['template_id' => $row->getId()]),
-                'caption' => __('Queue Newsletter...'),
+                'caption' => __('Queue Newsletter'),
             ];
         }
 

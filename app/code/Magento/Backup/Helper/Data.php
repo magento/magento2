@@ -210,7 +210,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $messagesMap = [
             \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('You created the system backup.'),
             \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __(
-                'You created the system back (excluding media).'
+                'You created the system backup (excluding media).'
             ),
             \Magento\Framework\Backup\Factory::TYPE_MEDIA => __('You created the database and media backup.'),
             \Magento\Framework\Backup\Factory::TYPE_DB => __('You created the database backup.'),

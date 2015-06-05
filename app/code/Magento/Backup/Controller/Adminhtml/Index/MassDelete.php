@@ -49,7 +49,7 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
 
             $resultData->setIsSuccess(true);
             if ($allBackupsDeleted) {
-                $this->messageManager->addSuccess(__('You deleted the selected backups.'));
+                $this->messageManager->addSuccess(__('You deleted the selected backup(s).'));
             } else {
                 throw new \Exception($deleteFailMessage);
             }

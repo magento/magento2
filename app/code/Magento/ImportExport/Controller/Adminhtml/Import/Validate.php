@@ -97,7 +97,10 @@ class Validate extends ImportController
                                 true
                             );
                         } else {
-                            $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'), false);
+                            $resultBlock->addError(
+                                __('The file is valid, but we can\'t import it for some reason.'),
+                                false
+                            );
                         }
                     }
                     $resultBlock->addNotice($import->getNotices());
