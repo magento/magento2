@@ -94,8 +94,10 @@ interface EstimateAddressInterface extends \Magento\Framework\Api\CustomAttribut
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface
+     * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes
+    );
 }

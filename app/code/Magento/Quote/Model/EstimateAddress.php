@@ -108,7 +108,7 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface
+     * @param \Magento\Quote\Api\Data\EstimateAddressExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
@@ -116,5 +116,4 @@ class EstimateAddress extends AbstractExtensibleModel implements EstimateAddress
     ) {
         $this->_setExtensionAttributes($extensionAttributes);
     }
-
 }
