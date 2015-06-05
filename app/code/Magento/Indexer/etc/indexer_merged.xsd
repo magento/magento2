@@ -35,23 +35,41 @@
     </xs:complexType>
 
     <xs:element name="indexer" type="indexerType">
-        <xs:unique name="uniqueSourceField">
+        <xs:unique name="handlerKey">
             <xs:annotation>
                 <xs:documentation>
-                    Field source must be unique.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath=".//source"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="uniqueHandler">
-            <xs:annotation>
-                <xs:documentation>
-                    Field handler must be unique.
+                    Handler name must be unique.
                 </xs:documentation>
             </xs:annotation>
             <xs:selector xpath=".//handler"/>
             <xs:field xpath="@name"/>
         </xs:unique>
+        <xs:keyref name="handlerReference" refer="handlerKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Field handler key must exists.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset/field"/>
+            <xs:field xpath="@handler"/>
+        </xs:keyref>
+        <xs:unique name="sourceKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Source name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//source"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:keyref name="sourceReference" refer="sourceKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Field source key must exists.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset/field"/>
+            <xs:field xpath="@source"/>
+        </xs:keyref>
     </xs:element>
 </xs:schema>
