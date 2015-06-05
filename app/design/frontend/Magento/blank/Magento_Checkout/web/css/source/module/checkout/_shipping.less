@@ -126,7 +126,30 @@
     }
 
     .table-checkout-shipping-method {
-        .css(margin, 0 0 @indent__base);
+        thead {
+            th {
+                display: none;
+            }
+        }
+        tbody {
+            td {
+                .css(border-top, @checkout-step-title__border);
+                .css(padding-bottom, @indent__base);
+                .css(padding-top, @indent__base);
+                &:first-child {
+                    padding-left: 0;
+                    padding-right: 0;
+                    width: 20px;
+                }
+            }
+            tr {
+                &:first-child {
+                    td {
+                        border-top: none;
+                    }
+                }
+            }
+        }
     }
 }
 
