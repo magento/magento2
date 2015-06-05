@@ -182,9 +182,7 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultConfigurableProductLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_links"];
-        $this->assertEquals(2, count($resultConfigurableProductLinks));
-
-        $this->assertEquals([$productId1, $productId2], $resultConfigurableProductLinks);
+        $this->assertEquals(0, count($resultConfigurableProductLinks));
     }
 
     /**
