@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Indexer/etc/indexer.xsd">
+    <indexer id="indexer_1" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration 1</title>
+        <description translate="true">Test Indexer Declaration 1</description>
+        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="title" source="tableSource" handler="default" xsi:type="both">
+                <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
+            </field>
+            <field name="description" source="tableSource" handler="default" xsi:type="searchable">
+                <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
+            </field>
+            <field name="visibility" source="tableSource" handler="default" xsi:type="filterable" dataType="int" />
+        </fieldset>
+        <source class="Magento\Framework\Search\Index\Source\Class" name="tableSource"/>
+        <handler class="Magento\Framework\Search\Index\Field\Handler\Class" name="default"/>
+    </indexer>
+    <indexer id="indexer_2" view_id="catalogsearch_fulltext_2" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
+        <title translate="true">Test Indexer Declaration 1</title>
+        <description translate="true">Test Indexer Declaration 1</description>
+        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="title" source="tableSource" handler="default" xsi:type="both">
+                <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
+            </field>
+            <field name="description" source="tableSource" handler="default" xsi:type="searchable">
+                <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
+            </field>
+            <field name="visibility" source="tableSource" handler="default" xsi:type="filterable" dataType="int" />
+        </fieldset>
+        <source class="Magento\Framework\Search\Index\Source\Class" name="tableSource"/>
+        <handler class="Magento\Framework\Search\Index\Field\Handler\Class" name="default"/>
+    </indexer>
+</config>

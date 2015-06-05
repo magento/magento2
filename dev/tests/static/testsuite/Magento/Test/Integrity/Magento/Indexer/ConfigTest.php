@@ -19,7 +19,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Indexer/etc/indexer.xsd';
+        return '/app/code/Magento/Indexer/etc/indexer_merged.xsd';
     }
 
     /**
@@ -29,7 +29,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidXml()
     {
-        return __DIR__ . '/_files/valid_indexer.xml';
+        return __DIR__ . '/_files/valid.xml';
     }
 
     /**
@@ -39,7 +39,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownInvalidXml()
     {
-        return __DIR__ . '/_files/invalid_indexer.xml';
+        return __DIR__ . '/_files/invalid.xml';
     }
 
     /**
@@ -49,7 +49,17 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidPartialXml()
     {
-        return '';
+        return __DIR__ . '/_files/valid_partial.xml';
+    }
+
+    /**
+     * The location of a single known invalid partial xml file
+     *
+     * @return string
+     */
+    protected function _getKnownInvalidPartialXml()
+    {
+        return __DIR__ . '/_files/invalid_partial.xml';
     }
 
     /**
@@ -60,16 +70,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     protected function _getFileXsd()
     {
         return '/app/code/Magento/Indexer/etc/indexer.xsd';
-    }
-
-    /**
-     * The location of a single known invalid partial xml file
-     *
-     * @return string
-     */
-    protected function _getKnownInvalidPartialXml()
-    {
-        return '';
     }
 
     /**
@@ -84,17 +84,21 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 
     public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
-        $this->markTestSkipped('indexer.xml does not have a partial schema');
+        $expectedErrors = [
+            "Element 'field', attribute 'handler': [facet 'pattern'] The value 'Magento\\Handler\\Class' "
+                . "is not accepted by the pattern '[a-zA-Z0-9_]+'.",
+            "Element 'field', attribute 'handler': 'Magento\\Handler\\Class' "
+                ."is not a valid value of the atomic type 'nameType'.",
+            "Element 'field', attribute 'source': [facet 'pattern'] The value 'Magento\\Source\\Class' "
+                ."is not accepted by the pattern '[a-zA-Z0-9_]+'.",
+            "Element 'field', attribute 'source': 'Magento\\Source\\Class' is not a valid "
+                ."value of the atomic type 'nameType'.",
+        ];
+        parent::testFileSchemaUsingInvalidXml($expectedErrors);
     }
 
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
-        $this->markTestSkipped('indexer.xml does not have a partial schema');
-    }
-
-    public function testFileSchemaUsingPartialXml()
-    {
-        $this->markTestSkipped('indexer.xml does not have a partial schema');
     }
 
     public function testSchemaUsingInvalidXml($expectedErrors = null)
@@ -106,22 +110,24 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 Element 'indexer': Duplicate key-sequence ['catalogsearch_fulltext'] in unique identity-constraint 'uniqueViewId'.
 Element 'indexer': Duplicate key-sequence ['indexer_0', 'catalogsearch_fulltext'] in unique identity-constraint" .
     " 'uniqueIndexertId'.
+Element 'fieldset': Missing child element(s). Expected is ( field ).
 Element 'field', attribute 'handler': [facet 'pattern'] " .
     "The value 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not accepted by the pattern " .
     "'[a-zA-Z0-9_]+'.
 Element 'field', attribute 'handler': 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not a valid " .
     "value of the atomic type 'nameType'.
+Element 'field', attribute 'handler': Warning: No precomputed value available, the value was either invalid or " .
+    "something strange happend.
 Element 'field': Duplicate key-sequence ['visibility'] in unique identity-constraint 'uniqueField'.
-Element 'field', attribute 'source': [facet 'pattern'] The value 'Magento\\Framework\\Search\\Index\\Source' " .
-    "is not accepted by the pattern '[a-zA-Z0-9_]+'.
-Element 'field', attribute 'source': 'Magento\\Framework\\Search\\Index\\Source' is not a valid " .
-    "value of the atomic type 'nameType'.
+Element 'field': No match found for key-sequence ['tableSource'] of keyref 'sourceReference'.
+Element 'field': No match found for key-sequence ['handler'] of keyref 'handlerReference'.
 Element 'field': The attribute 'dataType' is required but missing.
 Element 'field', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'any'" .
     " of the xsi:type attribute does not resolve to a type definition.
 Element 'field', attribute 'dataType': [facet 'enumeration'] The value 'string' is not an element" .
     " of the set {'int', 'float', 'varchar'}.
-Element 'field', attribute 'dataType': 'string' is not a valid value of the atomic type 'dataType'."
+Element 'field', attribute 'dataType': 'string' is not a valid value of the atomic type 'dataType'.
+Element 'field': The attribute 'dataType' is required but missing."
             )
         );
         parent::testSchemaUsingInvalidXml($expectedErrors);
