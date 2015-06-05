@@ -21,6 +21,9 @@ define(
             },
             getItems: function() {
                 var totals = quote.getTotals()();
+                if (!totals || !totals.items) {
+                    return [];
+                }
                 return totals.items;
             }
         });
