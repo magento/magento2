@@ -337,8 +337,6 @@ class ThemeUninstallCommand extends Command
         $this->cache->clean();
         $output->writeln('<info>Cache cleared successfully.</info>');
 
-        $this->cleanupFiles->clearCodeGeneratedClasses();
-        $output->writeln('<info>Generated classes cleared successfully.</info>');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $this->cleanupFiles->clearMaterializedViewFiles();
             $output->writeln('<info>Generated static view files cleared successfully.</info>');
