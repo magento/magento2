@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface as Logger;
  * Base items collection class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Db extends \Magento\Framework\Data\Collection
+abstract class Db extends \Magento\Framework\Data\Collection
 {
     /**
      * DB connection
@@ -105,6 +105,13 @@ class Db extends \Magento\Framework\Data\Collection
         }
         $this->_logger = $logger;
     }
+
+    /**
+     * Get resource instance.
+     *
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     */
+    abstract public function getResource();
 
     /**
      * Add variable to bind list
@@ -797,8 +804,8 @@ class Db extends \Magento\Framework\Data\Collection
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
             $this->getSelect()->joinLeft(
-                [$join->getReferenceTableAlias() => $join->getReferenceTable()],
-                $this->getMainTableName() . '.' . $join->getJoinField()
+                [$join->getReferenceTableAlias() => $this->getResource()->getTable($join->getReferenceTable())],
+                $this->getMainTableAlias() . '.' . $join->getJoinField()
                 . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField(),
                 []
             );
@@ -813,12 +820,12 @@ class Db extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Identify main table name/alias.
+     * Identify main table alias or its name if alias is not defined.
      *
      * @return string
      * @throws \LogicException
      */
-    protected function getMainTableName()
+    private function getMainTableAlias()
     {
         foreach ($this->getSelect()->getPart(\Zend_Db_Select::FROM) as $tableAlias => $tableMetadata) {
             if ($tableMetadata['joinType'] == 'from') {

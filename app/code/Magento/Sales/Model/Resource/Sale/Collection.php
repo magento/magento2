@@ -15,7 +15,7 @@ use Magento\Sales\Model\Resource\Order;
 /**
  * Sales Collection
  */
-class Collection extends \Magento\Framework\Data\Collection\Db
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Totals data
@@ -44,13 +44,6 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      * @var string
      */
     protected $_orderStateCondition = null;
-
-    /**
-     * Core event manager proxy
-     *
-     * @var ManagerInterface
-     */
-    protected $_eventManager = null;
 
     /**
      * @var Order
@@ -85,11 +78,16 @@ class Collection extends \Magento\Framework\Data\Collection\Db
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
-        $this->_eventManager = $eventManager;
         $this->_orderResource = $resource;
         $this->_storeCollectionFactory = $storeCollectionFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $this->_orderResource->getReadConnection());
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $this->_orderResource->getReadConnection()
+        );
     }
 
     /**

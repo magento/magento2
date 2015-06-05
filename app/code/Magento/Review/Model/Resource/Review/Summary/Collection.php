@@ -10,7 +10,7 @@ namespace Magento\Review\Model\Resource\Review\Summary;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Data\Collection\Db
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Summary table name
@@ -23,17 +23,25 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Resource $resource
     ) {
         $this->_setIdFieldName('primary_id');
 
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $resource->getConnection('review_read'));
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $resource->getConnection('review_read')
+        );
         $this->_summaryTable = $resource->getTableName('review_entity_summary');
 
         $this->_select->from($this->_summaryTable);
