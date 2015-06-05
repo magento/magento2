@@ -26,6 +26,10 @@ class UninstallLanguageCommand extends Command
      * Language code argument name
      */
     const PACKAGE_ARGUMENT = 'package';
+
+    /**
+     * Backup-code option name
+     */
     const BACKUP_CODE_OPTION = 'backup-code';
 
     /**
