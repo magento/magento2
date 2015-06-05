@@ -7,32 +7,33 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\View\Element\Text;
+use Magento\Quote\Model\Quote\Item;
 
 class Actions extends Text
 {
     /**
-     * @var Context
+     * @var Item
      */
-    protected $itemContext;
+    protected $item;
 
     /**
      * Returns current quote item
      *
-     * @return Context
+     * @return Item
      */
-    public function getItemContext()
+    public function getItem()
     {
-        return $this->itemContext;
+        return $this->item;
     }
 
     /**
      * Set current quote item
      *
-     * @param Context $itemContext
+     * @param Item $item
      */
-    public function setItemContext(Context $itemContext)
+    public function setItem(Item $item)
     {
-        $this->itemContext = $itemContext;
+        $this->item = $item;
     }
 
     /**
@@ -49,7 +50,7 @@ class Actions extends Text
             /** @var Generic $childBlock */
             $childBlock = $layout->getBlock($child);
             if ($childBlock instanceof Generic) {
-                $childBlock->setItemContext($this->getItemContext());
+                $childBlock->setItem($this->getItem());
                 $this->addText($layout->renderElement($child, false));
             }
         }

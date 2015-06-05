@@ -6,9 +6,8 @@
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove;
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
 use Magento\Checkout\Helper\Cart;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item;
 
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,29 +40,18 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $json = '{json;}';
 
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('\Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-
-        /**
-         * @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
-         */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $contextMock->expects($this->once())
-            ->method('getQuoteItem')
-            ->willReturn($itemMock);
 
         $this->cartHelperMock->expects($this->once())
             ->method('getDeletePostJson')
             ->with($itemMock)
             ->willReturn($json);
 
-        $this->model->setItemContext($contextMock);
+        $this->model->setItem($itemMock);
         $this->assertEquals($json, $this->model->getDeletePostJson());
     }
 }

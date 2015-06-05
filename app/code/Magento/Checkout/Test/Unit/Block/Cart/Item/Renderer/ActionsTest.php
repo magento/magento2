@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
+use Magento\Quote\Model\Quote\Item;
 
 class ActionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,17 +45,17 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetItemContext()
+    public function testGetItem()
     {
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model->setItemContext($contextMock);
-        $this->assertEquals($contextMock, $this->model->getItemContext());
+        $this->model->setItem($itemMock);
+        $this->assertEquals($itemMock, $this->model->getItem());
     }
 
     public function testToHtml()
@@ -70,12 +70,12 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model->setItemContext($contextMock);
+        $this->model->setItem($itemMock);
 
         $this->layoutMock->expects($this->once())
             ->method('getChildNames')
@@ -87,8 +87,8 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $childMockOne->expects($this->once())
-            ->method('setItemContext')
-            ->with($contextMock);
+            ->method('setItem')
+            ->with($itemMock);
 
         $childMockTwo = false;
 

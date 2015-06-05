@@ -5,34 +5,34 @@
  */
 namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
 use Magento\Framework\View\Element\Template;
+use Magento\Quote\Model\Quote\Item;
 
 class Generic extends Template
 {
     /**
-     * @var Context
+     * @var Item
      */
-    protected $itemContext;
+    protected $item;
 
     /**
      * Returns current quote item
      *
-     * @return Context
+     * @return Item
      */
-    public function getItemContext()
+    public function getItem()
     {
-        return $this->itemContext;
+        return $this->item;
     }
 
     /**
      * Set current quote item
      *
-     * @param Context $itemContext
+     * @param Item $item
      */
-    public function setItemContext(Context $itemContext)
+    public function setItem(Item $item)
     {
-        $this->itemContext = $itemContext;
+        $this->item = $item;
     }
 
     /**
@@ -42,6 +42,16 @@ class Generic extends Template
      */
     public function isProductVisibleInSiteVisibility()
     {
-        return $this->getItemContext()->getQuoteItem()->getProduct()->isVisibleInSiteVisibility();
+        return $this->getItem()->getProduct()->isVisibleInSiteVisibility();
+    }
+
+    /**
+     * Check if cart item is virtual
+     *
+     * @return bool
+     */
+    public function isVirtual()
+    {
+        return (bool)$this->getItem()->getIsVirtual();
     }
 }

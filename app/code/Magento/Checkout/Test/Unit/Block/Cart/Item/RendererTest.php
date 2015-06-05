@@ -5,7 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
-use \Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Quote\Model\Quote\Item;
 
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,11 +25,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
-    /**
-     * @var \Magento\Checkout\Block\Cart\Item\Renderer\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $itemContextMock;
-
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -43,16 +39,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
 
-        $this->itemContextMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_renderer = $objectManagerHelper->getObject(
             'Magento\Checkout\Block\Cart\Item\Renderer',
             [
                 'imageHelper' => $this->_imageHelper,
                 'context' => $context,
-                'itemContext' => $this->itemContextMock,
             ]
         );
     }
@@ -99,7 +90,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        /** @var Item|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
@@ -180,19 +171,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn($blockMock);
 
         /**
-         * @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->itemContextMock->expects($this->once())
-            ->method('setQuoteItem')
-            ->with($itemMock);
+            ->getMock();
 
         $blockMock->expects($this->once())
-            ->method('setItemContext')
-            ->with($this->itemContextMock);
+            ->method('setItem')
+            ->with($itemMock);
         $blockMock->expects($this->once())
             ->method('toHtml')
             ->willReturn($blockHtml);
@@ -208,14 +195,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         /**
-         * @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->itemContextMock->expects($this->never())
-            ->method('setQuoteItem');
+            ->getMock();
 
         $this->assertEquals('', $this->_renderer->getActions($itemMock));
     }

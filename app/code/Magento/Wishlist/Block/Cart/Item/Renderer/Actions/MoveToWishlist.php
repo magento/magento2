@@ -47,6 +47,6 @@ class MoveToWishlist extends Generic
      */
     public function getMoveFromCartParams()
     {
-        return $this->wishlistHelper->getMoveFromCartParams($this->getItemContext()->getQuoteItem()->getId());
+        return $this->wishlistHelper->getMoveFromCartParams($this->getItem()->getId());
     }
 }

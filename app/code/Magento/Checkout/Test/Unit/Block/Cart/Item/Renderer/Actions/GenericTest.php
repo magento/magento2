@@ -7,8 +7,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
-use Magento\Checkout\Block\Cart\Item\Renderer\Context;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item;
 
 class GenericTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,35 +26,27 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetItemContext()
+    public function testGetItem()
     {
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model->setItemContext($contextMock);
-        $this->assertEquals($contextMock, $this->model->getItemContext());
+        $this->model->setItem($itemMock);
+        $this->assertEquals($itemMock, $this->model->getItem());
     }
 
     public function testIsProductVisibleInSiteVisibility()
     {
         /**
-         * @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $contextMock = $this->getMockBuilder('Magento\Checkout\Block\Cart\Item\Renderer\Context')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-
-        /**
-         * @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $itemMock
-         */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
-            ->getMockForAbstractClass();
 
         /**
          * @var Product|\PHPUnit_Framework_MockObject_MockObject $itemMock
@@ -63,10 +54,6 @@ class GenericTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $contextMock->expects($this->once())
-            ->method('getQuoteItem')
-            ->willReturn($itemMock);
 
         $itemMock->expects($this->once())
             ->method('getProduct')
@@ -76,7 +63,25 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
-        $this->model->setItemContext($contextMock);
+        $this->model->setItem($itemMock);
         $this->assertTrue($this->model->isProductVisibleInSiteVisibility());
+    }
+
+    public function testIsVirtual()
+    {
+        /**
+         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         */
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['getIsVirtual'])
+            ->getMock();
+
+        $itemMock->expects($this->once())
+            ->method('getIsVirtual')
+            ->willReturn(true);
+
+        $this->model->setItem($itemMock);
+        $this->assertTrue($this->model->isVirtual());
     }
 }
