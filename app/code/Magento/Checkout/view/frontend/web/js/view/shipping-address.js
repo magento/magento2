@@ -12,6 +12,7 @@ define(
         'Magento_Customer/js/model/address-list',
         '../model/address-converter',
         '../model/quote',
+        '../action/create-shipping-address',
         '../action/select-shipping-address',
         '../model/shipping-rates-validator',
         'mage/translate'
@@ -24,6 +25,7 @@ define(
         addressList,
         addressConverter,
         quote,
+        createShippingAddress,
         selectShippingAddress,
         shippingRatesValidator
     ) {
@@ -77,21 +79,8 @@ define(
                     var addressData = this.source.get('shippingAddress');
                     addressData.save_in_address_book = this.saveInAddressBook;
 
-                    var newAddress = addressConverter.formAddressDataToQuoteAddress(addressData);
-                    var isUpdated = addressList().some(function(address, index, addresses) {
-                        if (address.getKey() == newAddress.getKey()) {
-                            addresses[index] = newAddress;
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (!isUpdated) {
-                        addressList.push(newAddress);
-                    } else {
-                        addressList.valueHasMutated();
-                    }
                     // New address must be selected as a shipping address
-                    selectShippingAddress(newAddress);
+                    selectShippingAddress(createShippingAddress(addressData));
                     this.isFormPopUpVisible(false);
                     this.isNewAddressAdded(true);
                 }
