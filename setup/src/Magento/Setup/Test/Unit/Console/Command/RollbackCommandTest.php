@@ -94,7 +94,7 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
         $expectedMsg = 'Enabling maintenance mode' . PHP_EOL
             . 'Code rollback filename: RollbackFile_A.tgz' . PHP_EOL
             . 'Code rollback file path: pathToFile/RollbackFile_A.tgz' . PHP_EOL
-            . '[SUCCESS]: Code rollback is completed successfully.' . PHP_EOL
+            . '[SUCCESS]: Code rollback has completed successfully.' . PHP_EOL
             . "Please set file permission of 'bin/magento' to executable" . PHP_EOL
             . 'Disabling maintenance mode' . PHP_EOL;
         $this->assertEquals($expectedMsg, $this->tester->getDisplay());

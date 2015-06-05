@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
+use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class to deal with backup and rollback functionality for DB and Code
+ * Class to deal with backup and rollback functionality for database and Code base
  */
 class BackupRollback
 {
@@ -26,7 +28,7 @@ class BackupRollback
     /**
      * Object Manager
      *
-     * @var ObjectManagerInterface
+     * @var Filesystem
      */
     private $objectManager;
 
@@ -74,20 +76,21 @@ class BackupRollback
     /**
      * Take backup for code base
      *
-     * @param array $mediaIgnorePaths
+     * @param int $time
+     * @param string $type
      * @return void
      */
-    public function codeBackup($mediaIgnorePaths = [])
+    public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
     {
         /** @var \Magento\Framework\Backup\Filesystem $fsBackup */
         $fsBackup = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
         $fsBackup->setRootDir($this->directoryList->getRoot());
-        $type = 'Code';
-        if (empty($mediaIgnorePaths)) {
+        if ($type === Factory::TYPE_FILESYSTEM) {
             $fsBackup->addIgnorePaths($this->getCodeBackupIgnorePaths());
+            $granularType = 'Code';
         } else {
-            $fsBackup->addIgnorePaths($mediaIgnorePaths);
-            $type = 'Media';
+            $fsBackup->addIgnorePaths($this->getMediaBackupIgnorePaths());
+            $granularType = 'Media';
             $fsBackup->setName('media');
         }
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
@@ -96,15 +99,15 @@ class BackupRollback
         }
         $fsBackup->setBackupsDir($backupsDir);
         $fsBackup->setBackupExtension('tgz');
-        $fsBackup->setTime(time());
-        $this->log->log($type . ' backup is started ...');
+        $fsBackup->setTime($time);
+        $this->log->log($granularType . ' backup is starting ...');
         $fsBackup->create();
         $this->log->log(
-            $type. ' backup filename: ' . $fsBackup->getBackupFilename()
+            $granularType. ' backup filename: ' . $fsBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
-        $this->log->log($type . ' backup path: ' . $fsBackup->getBackupPath());
-        $this->log->logSuccess($type . ' backup is completed successfully.');
+        $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
+        $this->log->logSuccess($granularType . ' backup has completed successfully.');
     }
 
     /**
@@ -118,7 +121,7 @@ class BackupRollback
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(__("The rollback file does not exist."));
+            throw new LocalizedException(__('The rollback file does not exist.'));
         }
         /** @var Helper $checkWritable */
         $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
@@ -144,17 +147,17 @@ class BackupRollback
         $fsRollback->rollback();
         $this->log->log('Code rollback filename: ' . $fsRollback->getBackupFilename());
         $this->log->log('Code rollback file path: ' . $fsRollback->getBackupPath());
-        $this->log->logSuccess('Code rollback is completed successfully.');
+        $this->log->logSuccess('Code rollback has completed successfully.');
     }
 
     /**
-     * Take backup for user data
+     * Take backup for database
      *
+     * @param int $time
      * @return void
      */
-    public function dataBackup()
+    public function dbBackup($time)
     {
-        // DB Backup
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManager->get('Magento\Framework\App\State');
@@ -172,18 +175,15 @@ class BackupRollback
         }
         $dbBackup->setBackupsDir($backupsDir);
         $dbBackup->setBackupExtension('gz');
-        $dbBackup->setTime(time());
-        $this->log->log('DB backup is started ...');
+        $dbBackup->setTime($time);
+        $this->log->log('DB backup is starting ...');
         $dbBackup->create();
         $this->log->log(
             'DB backup filename: ' . $dbBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
-        $this->log->logSuccess('DB backup is completed successfully.');
-
-        // Media Backup
-        $this->codeBackup($this->getMediaBackupIgnorePaths());
+        $this->log->logSuccess('DB backup has completed successfully.');
     }
 
     /**

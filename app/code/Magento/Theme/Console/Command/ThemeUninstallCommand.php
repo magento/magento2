@@ -22,9 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\BackupRollback;
+use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
 
