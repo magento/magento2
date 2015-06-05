@@ -15,7 +15,7 @@ define(
         return Component.extend({
             defaults: {
                 displaySubtotalMode: displaySubtotalMode,
-                template: 'Magento_Tax/checkout/review/subtotal'
+                template: 'Magento_Tax/checkout/summary/subtotal'
             },
             colspan: 3,
             style: "",

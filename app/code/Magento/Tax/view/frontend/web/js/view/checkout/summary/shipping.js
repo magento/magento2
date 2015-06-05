@@ -7,7 +7,7 @@
 define(
     [
         'jquery',
-        'Magento_Checkout/js/view/shipping',
+        'Magento_Checkout/js/view/summary/shipping',
         'Magento_Checkout/js/model/quote',
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/shipping-service'
@@ -17,7 +17,7 @@ define(
         return Component.extend({
             defaults: {
                 displayMode: displayMode,
-                template: 'Magento_Tax/checkout/review/shipping'
+                template: 'Magento_Tax/checkout/summary/shipping'
             },
             getExcludingLabel: function() {
                 return "Shipping Excl. Tax";

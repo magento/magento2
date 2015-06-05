@@ -20,7 +20,7 @@ define(
         freeshippingShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(freeshippingShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('freeshipping', freeshippingShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('freeshipping', freeshippingShippingRatesValidationRules);
         return Component;
     }

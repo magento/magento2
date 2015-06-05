@@ -16,7 +16,7 @@ define(
         var priceFormat = window.checkoutConfig.priceFormat;
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
-        var totals = ko.observable({});
+        var totals = ko.observable(window.checkoutConfig.totalsData);
         var checkoutMethod = ko.observable(null);
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
@@ -24,6 +24,7 @@ define(
         var collectedTotals = ko.observable({});
         var isCustomerLoggedIn = ko.observable(window.checkoutConfig.isCustomerLoggedIn);
         return {
+            totals: totals,
             shippingAddress: shippingAddress,
 
             getQuoteId: function() {
@@ -49,18 +50,6 @@ define(
             },
             setIsCustomerLoggedIn: function(status) {
                 isCustomerLoggedIn(status);
-            },
-            getTotalByCode: function(code) {
-                if (!totals()) {
-                    return null;
-                }
-                for(var i in totals().calculated_totals) {
-                    var total = totals().calculated_totals[i];
-                    if (total.code == code) {
-                        return total;
-                    }
-                }
-                return null;
             },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {

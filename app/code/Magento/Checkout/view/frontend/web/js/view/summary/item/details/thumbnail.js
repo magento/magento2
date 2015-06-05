@@ -13,7 +13,7 @@ define(
         var imageData = window.checkoutConfig.imageData;
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/item/details/thumbnail'
+                template: 'Magento_Checkout/summary/item/details/thumbnail'
             },
             displayArea: 'before_details',
             imageData: imageData,
@@ -22,7 +22,6 @@ define(
                     return this.imageData[item.item_id];
                 }
                 return null;
-                //return "/pub/static/frontend/Magento/blank/en_US/Magento_Catalog/images/product/placeholder/thumbnail.jpg";
             }
         });
     }

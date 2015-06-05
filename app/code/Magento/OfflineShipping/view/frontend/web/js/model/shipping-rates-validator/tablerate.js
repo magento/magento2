@@ -6,14 +6,22 @@
 define(
     [
         'jquery',
+        'mageUtils',
         '../shipping-rates-validation-rules/tablerate'
     ],
-    function ($, validationRules) {
+    function ($, utils, validationRules) {
         "use strict";
         return {
+            validationErrors: [],
             validate: function(address) {
-                //TODO: provide validation
-                return false;
+                var self = this;
+                this.validationErrors = [];
+                $.each(validationRules.getRules(), function(field, rule) {
+                    if (rule.required && utils.isEmpty(address[field])) {
+                        self.validationErrors.push('Field ' + field + ' is required.');
+                    }
+                });
+                return !Boolean(this.validationErrors.length);
             }
         };
     }

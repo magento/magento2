@@ -9,16 +9,17 @@ define(
         'ko',
         'uiComponent',
         'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/totals',
         'Magento_Catalog/js/price-utils'
     ],
-    function (ko, Component, quote, priceUtils) {
+    function (ko, Component, quote, totals, priceUtils) {
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal;
         var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed;
         return Component.extend({
             defaults: {
                 isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
-                template: 'Magento_Tax/checkout/review/tax_total'
+                template: 'Magento_Tax/checkout/summary/tax_total'
             },
             colspan: 3,
             totals: quote.getTotals(),
@@ -33,7 +34,7 @@ define(
             getValue: function() {
                 var amount = 0;
                 if (this.totals()) {
-                    var taxTotal = quote.getTotalByCode('tax');
+                    var taxTotal = totals.getTotalByCode('tax');
                     if (taxTotal) {
                         amount = taxTotal.value;
                     } else {

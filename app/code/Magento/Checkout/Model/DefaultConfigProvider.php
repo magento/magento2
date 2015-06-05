@@ -6,7 +6,6 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Checkout\Helper\Data as CheckoutHelper;
-use Magento\Checkout\Model\Type\Onepage as OnepageCheckout;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Model\Context as CustomerContext;
@@ -500,6 +499,19 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function getTotalsData()
     {
-        return $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId())->toArray();
+        $totals = $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId());
+        $items = [];
+        /** @var  \Magento\Quote\Model\Cart\Totals\Item $item */
+        foreach ($totals->getItems() as $item) {
+            $items[] = $item->__toArray();
+        }
+        $calculatedTotalsData = [];
+        /** @var \Magento\Quote\Model\Cart\CalculatedTotals $calculatedTotals */
+        foreach ($totals->getCalculatedTotals() as $calculatedTotals) {
+            $calculatedTotalsData[] = $calculatedTotals->toArray();
+        }
+        $totals->setItems($items);
+        $totals->setCalculatedTotals($calculatedTotalsData);
+        return $totals->toArray();
     }
 }

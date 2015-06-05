@@ -41,7 +41,7 @@ define(
                 return Address(addressData);
             },
 
-            formDataProviderToQuoteAddress: function(formProviderData, formIndex) {
+            formDataProviderToFlatData: function(formProviderData, formIndex) {
                 var addressData = {};
                 $.each(formProviderData, function(path, value) {
                     var pathComponents = path.split('.');
@@ -59,7 +59,7 @@ define(
                     });
                     $.extend(true, addressData, dataObject);
                 });
-                return this.formAddressDataToQuoteAddress(addressData);
+                return addressData;
             },
 
             /**
