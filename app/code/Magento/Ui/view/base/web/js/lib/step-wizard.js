@@ -4,8 +4,9 @@
  */
 define([
     "jquery",
+    "underscore",
     "jquery/ui"
-], function ($) {
+], function ($, _) {
     "use strict";
 
     var getWizardBySteps = function (steps, element) {
@@ -17,28 +18,34 @@ define([
     };
 
     var Wizard = function(steps, element) {
+        this.steps = _.map(steps, function (step) {
+            return _.isFunction(step) ? step.prototype : step;
+        });
         this.index = 0;
-        this.step = steps[this.index];
+        this.step = this.steps[this.index];
         this.element = element;
+        this.data = {};
+        this.tab = {};
         this.move = function(newIndex, tab) {
+            this.tab = tab;
             if (newIndex > this.index) {
                 this.next(newIndex);
             } else if (newIndex < this.index) {
                 this.prev(newIndex);
             }
-            this.render(tab);
+            this.render();
         };
         this.next = function() {
-            this.step = steps[++this.index];
-            this.step.force(this);
+            this.data = this.step.force(this);
+            this.step = this.steps[++this.index];
         };
         this.prev = function(newIndex) {
-            this.index = newIndex;
-            this.step = steps[this.index];
             this.step.back(this);
+            this.index = newIndex;
+            this.step = this.steps[this.index];
         };
-        this.render = function(tab) {
-            this.step.render(tab);
+        this.render = function() {
+            this.step.render(this);
         };
     };
 
