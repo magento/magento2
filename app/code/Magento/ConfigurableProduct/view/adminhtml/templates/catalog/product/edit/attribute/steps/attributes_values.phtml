@@ -6,9 +6,48 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-TBD [attributes values step]
-<input type="text">
-?>
+<div data-bind="scope: 'step2'">
+    <div data-bind="foreach: attributes">
+        <div class="attribute" style="padding-bottom: 30px;">
+            <strong style="float: left;" data-bind="text: name"></strong>
+            <div style="float: right; font-size: smaller;">
+                <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute" >Remove Attribute</a>
+                <span style="font-size: smaller;" data-bind="click: $parent.close"> -- </span>
+            </div>
+            <fieldset style="clear: both;">
+                <legend style="
+                    padding-top: 14px;
+                    text-decoration: overline;
+                    padding-left: 0px;
+                    padding-right: 0px;
+                    height: 15px;
+                ">
+                    <span data-bind="text: $data.options().length"></span> <span>Options</span>
+                </legend>
+                <a href="#" data-bind="click: $parent.selectAllAttributes" style="
+                    float: right;
+                    margin-top: -30px;
+                    font-size: smaller;
+                ">Select All</a>
+                <ul data-bind="foreach: options, afterRender: showCreateOption" style="
+                    list-style-type: none;
+                    text-indent: -10px;
+                    text-transform: capitalize;
+                ">
+                    <li>
+                        <input type="checkbox" data-bind="checkedValue: id, checked: !id || $parent.chosenOptions" />
+                        <span data-bind="text: label, visible: id"></span>
+                        <input data-bind="value: label, visible: !id" type="value">
+                        <a href="#" data-bind="visible: !id, click: $parents[1].saveOption.bind($parent)">-></a>
+                        <a href="#" data-bind="visible: !id, click: $parents[1].removeOption.bind($parent)
+                        ">X</a>
+                    </li>
+                </ul>
+                <a data-action="addOption" href="#" data-bind="click: $parent.createOption">Create New Value</a>
+            </fieldset>
+        </div>
+    </div>
+</div>
 <script type="text/x-magento-init">
 
     {
