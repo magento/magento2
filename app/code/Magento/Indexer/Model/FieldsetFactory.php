@@ -23,17 +23,17 @@ class FieldsetFactory
     /**
      * Create fieldset class instance
      *
-     * @param string $handlerClass
+     * @param string $fieldsetClass
      * @param array $arguments
      * @throws \InvalidArgumentException
      * @return FieldsetInterface
      */
-    public function create($handlerClass, array $arguments = [])
+    public function create($fieldsetClass, array $arguments = [])
     {
-        $handler = $this->objectManager->create($handlerClass, $arguments);
-        if (!$handler instanceof HandlerInterface) {
+        $handler = $this->objectManager->create($fieldsetClass, $arguments);
+        if (!$handler instanceof FieldsetInterface) {
             throw new \InvalidArgumentException(
-                $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
+                $fieldsetClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
             );
         }
 

@@ -37,7 +37,7 @@ class Base implements ActionInterface
     /**
      * @var HandlerInterface[]
      */
-    protected $handler;
+    protected $handlers;
 
     /**
      * @var array
@@ -99,13 +99,13 @@ class Base implements ActionInterface
         $this->collectSources();
         $this->collectHandlers();
         foreach ($this->data['fieldsets'] as $fieldset) {
-            foreach ($this->data['fields'] as $field) {
-                $this->sources[$field['source']]->prepareData($field);
-                $this->handler[$field['handler']]->handle($field);
+            foreach ($this->data['fields'] as $fieldName => $field) {
+                $this->data['fields'][$fieldName]['source'] = $this->sources[$field['source']];
+                $this->data['fields'][$fieldName]['handler'] = $this->handlers[$field['handler']];
             }
             if (isset($fieldset['class'])) {
                 $fieldsetInstance = $this->fieldsetFactory->create($fieldset['class']);
-                $fieldsetInstance->proccess($this->data['fields']);
+                $this->data['fields'] = $fieldsetInstance->update($this->data['fields']);
             }
         }
     }
