@@ -121,11 +121,11 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 
                 <?php /* Temp MAGETWO-36023 markup */?>
                 <a href="#"
-                   class="action action-gift">
+                   class="action action-gift active"> <!-- add class "active" when it is clicked to show active state -->
                     <span><?php echo __('Gift wrap'); ?></span>
                 </a>
 
-                <div class="gift-content">
+                <div class="gift-content active"> <!-- add class "active" to display the content -->
                     <div class="gift-options">
                         <?php /* Gift Wrapping */ ?>
                         <?php include ($block->getTemplateFile('Magento_GiftWrapping::checkout\new-options.phtml')); ?>
@@ -204,7 +204,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 
             var giftWrappingCustom = {
                 options: {
-                    activeClass: '_active',
+                    activeClass: 'active',
                     giftOptions: '.gift-options',
                     giftContainer: "[data-container='item-gift-container']",
                     giftWrappingItem: '.gift-wrapping-item',
