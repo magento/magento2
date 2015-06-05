@@ -529,7 +529,10 @@ class IndexBuilder
         )->where(
             "{$timestamp} >= from_time AND (({$timestamp} <= to_time AND to_time > 0) OR to_time = 0)"
         );
-        $query = $select->insertFromSelect($this->getTable('catalogrule_group_website'));
+        $query = $select->insertFromSelect(
+            $this->getTable('catalogrule_group_website'),
+            $this->_catalogRuleGroupWebsiteColumnsList
+        );
 
         $write->query($query);
 
