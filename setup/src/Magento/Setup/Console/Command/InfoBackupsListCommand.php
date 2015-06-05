@@ -69,13 +69,13 @@ class InfoBackupsListCommand extends Command
                 '<info>Showing backup files in ' . $backupsDir
                 . ' (first part of the filename is the time it was taken) ...</info>'
             );
-            $table = $this->getHelperSet()->get('table');
-            $table->setHeaders(['Backup Filename', 'Backup Type']);
             $contents = $this->file->readDirectoryRecursively($backupsDir);
             if (empty($contents)) {
                 $output->writeln('<info>No backup files found.</info>');
                 return;
             }
+            $table = $this->getHelperSet()->get('table');
+            $table->setHeaders(['Backup Filename', 'Backup Type']);
             foreach ($contents as $path) {
                 $partsOfPath = explode('/', str_replace('\\', '/', $path));
                 $fileName = $partsOfPath[count($partsOfPath) - 1];

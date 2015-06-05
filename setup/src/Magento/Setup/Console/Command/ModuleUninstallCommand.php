@@ -236,6 +236,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
+        $output->writeln('<info>Enabling maintenance mode</info>');
+        $this->maintenanceMode->set(true);
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
             'You are about to remove code and database tables. Are you sure?[y/N]',
@@ -244,11 +246,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
             return;
         }
-
-        $output->writeln('<info>Enabling maintenance mode</info>');
-        $this->maintenanceMode->set(true);
-        $dbBackupOption = $this->takeBackup($input, $output);
         try {
+            $dbBackupOption = $this->takeBackup($input, $output);
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                 $this->removeData($modules, $output, $dbBackupOption);
             } else {
