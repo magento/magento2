@@ -1,3 +1,42 @@
+0.74.0-beta12
+=============
+* MTF Improvements:
+    * Functional tests maintenance
+* Framework improvements:
+    * Customer entity table was transformed from EAV into a flat model to minimize DB operations
+    * Improved admin authentication and removed bypass
+    * Exposed CMS api's as web API
+* Fixed bugs:
+    * Fixed an issue where "Add Item To Return" button became disabled after required item fields were filled on Frontend
+    * Fixed an issue with fatal error during place order with non default time zone
+    * Fixed an issue where it was not possible to filter backups on name
+    * Fixed an issue where routeIdType did not allow numbers
+    * Fixed an issue with discounted prices for fixed bundle product
+    * Fixed an issue with catalog prices not including custom option prices
+    * Fixed an issue with tier prices being displayed 4 characters
+    * Fixed an issue with extra FPT labels in mini shopping cart
+    * Fixed an issue where it was not possible to place orders for products with FPT and catalog prices including tax
+    * Fixed an issue with FPT attribute being required when creating product
+    * Fixed an issue where final price was not recalculated after selecting product options
+    * Fixed an issue where tax labels were not displayed for Bundle options on 'multi-select' and 'dropdown' controls
+    * Fixed an issue where filters were not shown on product reviews report grid
+    * Fixed an issue where second customer address was not deleted from customer account
+    * Fixed an issue where custom options pop-up was still displayed after submit
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where customer invalid email message was not displayed
+    * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
+    * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
+    * Magento_Sendfriend module should have upper case 'F'
+    * Fixed set of issues with Ui module
+    * Fixed JavaScript error on Invoice creation page
+* Various improvements:
+    * Hide payment credentials in debug log
+    * Simplification of Payment Configuration
+    * Introduced new Dialog widget
+* Github issues:
+    * [#1330](https://github.com/magento/magento2/pull/1330) -- Removing unused memory limit in htaccess
+    * [#1307](https://github.com/magento/magento2/pull/1307) -- Corrected a sentence by removing a word
+
 0.74.0-beta11
 =============
 * Framework improvements:
