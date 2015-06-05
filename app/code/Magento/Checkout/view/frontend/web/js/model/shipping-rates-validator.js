@@ -13,18 +13,22 @@ define(
     ],
     function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress) {
         "use strict";
-        return {
-            validators: [],
-            validateAddressTimeout: 0,
-            validateDelay: 3000,
-            observedElements: [],
+        var checkoutConfig = window.checkoutConfig;
+        var validators = [];
+        var observedElements = [];
 
-            registerValidator: function(validator) {
-                this.validators.push(validator);
+        return {
+            validateAddressTimeout: 0,
+            validateDelay: 2000,
+
+            registerValidator: function(carrier, validator) {
+                if ($.inArray(carrier, checkoutConfig.activeCarriers) != -1) {
+                    validators.push(validator);
+                }
             },
 
-            validateAddress: function(address) {
-                return this.validators.some(function(validator) {
+            validateAddressData: function(address) {
+                return validators.some(function(validator) {
                     return validator.validate(address);
                 });
             },
@@ -55,23 +59,24 @@ define(
                             self.validateFields();
                         }, self.validateDelay);
                     });
-                    self.observedElements.push(element);
+                    observedElements.push(element);
                 }
             },
 
             validateFields: function() {
-                var address = addressConverter.formDataProviderToQuoteAddress(
+                var addressFlat = addressConverter.formDataProviderToFlatData(
                     this.collectObservedData(),
                     'shippingAddress'
                 );
-                if (this.validateAddress(address)) {
+                if (this.validateAddressData(addressFlat)) {
+                    var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(ko.observable(address));
                 }
             },
 
             collectObservedData: function() {
                 var observedValues = {};
-                $.each(this.observedElements, function(index, field) {
+                $.each(observedElements, function(index, field) {
                     var fieldSelector = '#' + field.uid;
                     observedValues[field.dataScope] = $(fieldSelector).val();
                 });

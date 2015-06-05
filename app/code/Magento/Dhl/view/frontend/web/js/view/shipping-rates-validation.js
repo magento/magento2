@@ -20,7 +20,7 @@ define(
         dhlShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(dhlShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('dhl', dhlShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('dhl', dhlShippingRatesValidationRules);
         return Component;
     }

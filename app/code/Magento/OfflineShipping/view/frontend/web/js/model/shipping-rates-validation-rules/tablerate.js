@@ -9,13 +9,14 @@ define(
         "use strict";
         return {
             getRules: function() {
-                //TODO: example rules
                 return {
                     'postcode': {
-                        'required': true,
-                        'min-length': 3
+                        'required': true
                     },
-                    'countryId': {
+                    'country_id': {
+                        'required': true
+                    },
+                    'region_id': {
                         'required': true
                     }
                 };
