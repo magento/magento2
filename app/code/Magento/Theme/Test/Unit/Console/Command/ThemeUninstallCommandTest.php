@@ -48,7 +48,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Composer\GeneralDependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Composer\DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dependencyChecker;
 
@@ -118,7 +118,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['magento/theme-a', 'magento/theme-b', 'magento/theme-c']);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->dependencyChecker = $this->getMock(
-            'Magento\Framework\Composer\GeneralDependencyChecker',
+            'Magento\Framework\Composer\DependencyChecker',
             [],
             [],
             '',
@@ -303,7 +303,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
         $this->remove->expects($this->once())->method('remove');
         $this->cache->expects($this->once())->method('clean');
-        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->atLeastOnce())->method('delete');
         $this->themeProvider->expects($this->any())

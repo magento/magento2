@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
- * A class to check if there are any dependency to package(s) that exists in the codebase
+ * A class to check if there are any dependency to package(s) that exists in the codebase, regardless of package type
  */
-class GeneralDependencyChecker
+class DependencyChecker
 {
     /**
      * @var Application
