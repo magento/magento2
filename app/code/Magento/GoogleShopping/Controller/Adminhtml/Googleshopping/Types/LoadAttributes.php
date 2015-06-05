@@ -48,7 +48,7 @@ class LoadAttributes extends \Magento\GoogleShopping\Controller\Adminhtml\Google
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             // just need to output text with error
-            $this->messageManager->addError(__("We can't load attributes."));
+            $this->messageManager->addError(__('We can\'t load attributes right now.'));
         }
         return $resultRaw;
     }

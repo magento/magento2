@@ -396,7 +396,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getMassactionBlock()->addItem(
             'status',
             [
-                'label' => __('Change status'),
+                'label' => __('Change Status'),
                 'url' => $this->getUrl('catalog/*/massStatus', ['_current' => true]),
                 'additional' => [
                     'visibility' => [

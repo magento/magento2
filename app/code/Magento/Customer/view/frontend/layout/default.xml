@@ -15,7 +15,7 @@
             </block>
             <block class="Magento\Customer\Block\Account\RegisterLink" name="register-link">
                 <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Register</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create an Account</argument>
                 </arguments>
             </block>
             <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link"

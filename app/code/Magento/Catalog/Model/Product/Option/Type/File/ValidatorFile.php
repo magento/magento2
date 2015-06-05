@@ -107,7 +107,7 @@ class ValidatorFile extends Validator
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
                 throw new \Magento\Framework\Validator\Exception(
-                    __('Validation failed. Required options were not filled or file was not uploaded.')
+                    __('Validation failed. Required options were not filled or the file was not uploaded.')
                 );
             }
 
