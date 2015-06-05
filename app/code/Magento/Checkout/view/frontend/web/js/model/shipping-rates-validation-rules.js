@@ -7,13 +7,13 @@ define(
     ['jquery'],
     function ($) {
         "use strict";
+        var ratesRules = {};
         return {
-            ratesRules: {},
             registerRules: function(carrier, rules) {
-                this.ratesRules[carrier] = rules.getRules();
+                ratesRules[carrier] = rules.getRules();
             },
             getRules: function() {
-                return this.ratesRules;
+                return ratesRules;
             },
             getObservableFields: function() {
                 var self = this;

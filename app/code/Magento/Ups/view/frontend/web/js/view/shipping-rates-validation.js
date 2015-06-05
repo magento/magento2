@@ -20,7 +20,7 @@ define(
         upsShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(upsShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('ups', upsShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('ups', upsShippingRatesValidationRules);
         return Component;
     }

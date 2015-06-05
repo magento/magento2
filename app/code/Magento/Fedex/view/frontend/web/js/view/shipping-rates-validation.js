@@ -20,7 +20,7 @@ define(
         fedexShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(fedexShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('fedex', fedexShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('fedex', fedexShippingRatesValidationRules);
         return Component;
     }

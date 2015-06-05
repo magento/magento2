@@ -20,7 +20,7 @@ define(
         flatrateShippingRatesValidationRules
     ) {
         "use strict";
-        defaultShippingRatesValidator.registerValidator(flatrateShippingRatesValidator);
+        defaultShippingRatesValidator.registerValidator('flatrate', flatrateShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('flatrate', flatrateShippingRatesValidationRules);
         return Component;
     }
