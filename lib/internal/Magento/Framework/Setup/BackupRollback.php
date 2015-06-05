@@ -121,7 +121,7 @@ class BackupRollback
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(__('The rollback file does not exist.'));
+            throw new LocalizedException(new \Magento\Framework\Phrase('The rollback file does not exist.'));
         }
         /** @var Helper $checkWritable */
         $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
