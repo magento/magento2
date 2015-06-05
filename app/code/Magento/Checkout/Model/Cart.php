@@ -503,7 +503,7 @@ class Cart extends Object implements CartInterface
 
                 $itemInQuote = $this->getQuote()->getItemById($item->getId());
 
-                if (!$itemInQuote && $item->getHasError()) {
+                if (!$itemInQuote || $item->getHasError()) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
@@ -527,6 +527,7 @@ class Cart extends Object implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
+
         return $this;
     }
 
