@@ -9,7 +9,7 @@ namespace Magento\Quote\Api\Data;
  * Interface TotalsInterface
  * @api
  */
-interface CalculatedTotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface TotalSegmentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -83,17 +83,17 @@ interface CalculatedTotalsInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Quote\Api\Data\CalculatedTotalsExtensionInterface|null
+     * @return \Magento\Quote\Api\Data\TotalSegmentExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Quote\Api\Data\CalculatedTotalsExtensionInterface $extensionAttributes
+     * @param \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Quote\Api\Data\CalculatedTotalsExtensionInterface $extensionAttributes
+        \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes
     );
 }

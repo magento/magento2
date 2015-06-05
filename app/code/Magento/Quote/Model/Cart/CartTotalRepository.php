@@ -104,7 +104,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         }
         $totals->setCouponCode($this->couponService->get($cartId));
         $calculatedTotals = $this->totalsConverter->process($quote->getTotals());
-        $totals->setCalculatedTotals($calculatedTotals);
+        $totals->setTotalSegments($calculatedTotals);
         $totals->setItems($items);
 
         return $totals;
