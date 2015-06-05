@@ -9,7 +9,7 @@ interface FieldsetInterface
 {
     /**
      * @param [] $data
-     * @return void
+     * @return []
      */
-    public function proccess($data);
+    public function update($data);
 }
