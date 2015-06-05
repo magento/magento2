@@ -27,30 +27,13 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
         $localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'date',
-                    'getDefaultTimezonePath',
-                    'getDefaultTimezone',
-                    'getDateFormat',
-                    'getDateFormatWithLongYear',
-                    'getTimeFormat',
-                    'getDateTimeFormat',
-                    'scopeDate',
-                    'formatDate',
-                    'scopeTimeStamp',
-                    'getConfigTimezone',
-                    'isScopeDateInInterval',
-                    'formatDateTime',
-                ]
-            )
             ->getMock();
         $localeDateMock->expects($this->any())->method('date')->willReturn($testDatetime);
         $localeDateMock->expects($this->any())->method('getDateTimeFormat')->willReturn(null);
 
         $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
             ->disableOriginalConstructor()
-                ->setMethods(['getHtmlId', 'getLabel'])
+            ->setMethods(['getHtmlId', 'getLabel'])
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
@@ -68,9 +51,9 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $html = $notification->render($elementMock);
 
         $this->assertEquals(
-            '<tr id="row_test_HTML_id">' .
+            '<tr id="row_' . $htmlId . '">' .
                 '<td class="label">' .
-                    '<label for="test_HTML_id">test_label</label>' .
+                    '<label for="' . $htmlId . '">' . $label . '</label>' .
                 '</td>' .
                 '<td class="value">' .
                     $formattedDate .
