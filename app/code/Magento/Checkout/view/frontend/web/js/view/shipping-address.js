@@ -58,18 +58,22 @@ define(
                 return !quote.isVirtual();
             },
             selectShippingAddress: function() {
-                var additionalData = {};
-                var billingAddress = quote.getBillingAddress()();
+                var additionalFields,
+                    addressData,
+                    additionalData = {},
+                    billingAddress = quote.getBillingAddress()();
+
                 if (!billingAddress.customerAddressId || !this.visible()) {
                     /**
                      * All the the input fields that are not a part of the address but need to be submitted
                      * in the same request must have data-scope attribute set
                      */
-                    var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
+                    additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
                     additionalFields.forEach(function (field) {
                         additionalData[field.name] = field.value;
                     });
                 }
+
                 if (!newAddressSelected()) {
                     selectShippingAddress(
                         addressList.getAddressById(this.selectedAddressId()),
@@ -80,23 +84,32 @@ define(
                     if (this.visible()) {
                         this.validate();
                     }
+
                     if (!this.source.get('params.invalid')) {
-                        var addressData = this.source.get('shippingAddress');
+                        addressData = this.source.get('shippingAddress');
                         selectShippingAddress(addressData, this.sameAsBilling(), additionalData);
                     }
                 }
             },
             sameAsBillingClick: function() {
+                var billingAddress,
+                    shippingAddress,
+                    property;
+
                 addressList.isBillingSameAsShipping = !addressList.isBillingSameAsShipping;
+
                 if (this.sameAsBilling()) {
-                    var billingAddress = quote.getBillingAddress()();
+                    billingAddress = quote.getBillingAddress()();
+
                     if (billingAddress.customerAddressId) {
                         this.selectedAddressId(billingAddress.customerAddressId);
                         newAddressSelected(false);
+
                     } else {
                         // copy billing address data to shipping address form if customer uses new address for billing
-                        var shippingAddress = this.source.get('shippingAddress');
-                        for (var property in billingAddress) {
+                        shippingAddress = this.source.get('shippingAddress');
+
+                        for (property in billingAddress) {
                             if (billingAddress.hasOwnProperty(property) && shippingAddress.hasOwnProperty(property)) {
                                 if (typeof billingAddress[property] === 'string') {
                                     this.source.set('shippingAddress.' + property, billingAddress[property]);
@@ -105,6 +118,7 @@ define(
                                 }
                             }
                         }
+
                         this.selectedAddressId(null);
                         newAddressSelected(true);
                     }
@@ -113,9 +127,11 @@ define(
             },
             onAddressChange: function() {
                 var billingAddress = quote.getBillingAddress();
+
                 if (this.selectedAddressId() !== billingAddress().customerAddressId) {
                     this.sameAsBilling(false);
                 }
+
                 if (this.selectedAddressId() === null) {
                     newAddressSelected(true);
                 } else {
