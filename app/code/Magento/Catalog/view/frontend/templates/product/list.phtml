@@ -96,12 +96,12 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
                                         <a href="#" 
                                            class="action towishlist"
-                                           title="<?php echo $block->escapeHtml(__('Add to Wishlist')); ?>"
-                                           aria-label="<?php echo $block->escapeHtml(__('Add to Wishlist')); ?>"
+                                           title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
+                                           aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
                                            data-post='<?php echo $block->getAddToWishlistParams($_product); ?>'
                                            data-action="add-to-wishlist"
                                            role="button">
-                                            <span><?php echo __('Add to Wishlist') ?></span>
+                                            <span><?php echo __('Add to Wish List') ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php
