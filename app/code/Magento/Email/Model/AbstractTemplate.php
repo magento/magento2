@@ -416,6 +416,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
+                // Don't try to compile CSS that has LESS compilation errors
+                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                    !== false
+                ) {
+                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
+                }
+
                 $emogrifier = new \Pelago\Emogrifier();
                 $emogrifier->setHtml($html);
                 $emogrifier->setCss($cssToInline);
@@ -424,9 +431,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 $emogrifier->disableStyleBlocksParsing();
 
                 $processedHtml = $emogrifier->emogrify();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    $processedHtml = sprintf(__('{CSS inlining error: %s}'), $e->getMessage())
+                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
                         . PHP_EOL
                         . $html;
                 } else {
