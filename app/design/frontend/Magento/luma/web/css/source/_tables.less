@@ -20,11 +20,13 @@ table {
 .table {
     tfoot {
         .css(background, @sidebar__background-color);
-        > tr:first-child {
-            th,
-            td {
-                border-top: @table__border-width @table__border-style @table__border-color;
-                padding-top: @indent__base;
+        > tr {
+            &:first-child {
+                th,
+                td {
+                    border-top: @table__border-width @table__border-style @table__border-color;
+                    padding-top: @indent__base;
+                }
             }
         }
         th,
@@ -92,6 +94,19 @@ table {
                     .font-size(16);
                     .amount {
                         padding-bottom: @indent__s;
+                    }
+                }
+            }
+            &.additional-attributes {
+                tbody {
+                    th {
+                        &:extend(.abs-no-display-s all);
+                    }
+                    td {
+                        &:last-child {
+                            border: none;
+                            padding: 0 0 @indent__xs;
+                        }
                     }
                 }
             }
