@@ -1,3 +1,39 @@
+0.74.0-beta11
+=============
+* Framework improvements:
+    * Improved component Bookmarks component in scope of Enhanced Data Grids on CMS
+    * Improved component Advanced Filtering component in scope of Enhanced Data Grids on CMS
+* Fixed bugs:
+    * Fixed an issue where incorrect keys in REST request body allowed the request to go through successfully
+    * Fixed an issue where interceptors were Generated with Invalid __wakeup() 
+    * Fixed an issue where redirect on the current page was not working in certain conditions
+    * Fixed an issue where first store could not be selected on frontend
+    * Fixed an issue with performance toolkit category creation
+    * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
+    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
+    * Fixed an issue where email was not required during Guest Checkout 
+    * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
+    * Fixed an issue where `bin/magento indexer:reindex` command failed after `bin/magento setup:di:compile` was run
+    * Fixed bug with broken JS i18n
+    * Fixed an issue with wrong value at created_at updated_at fields after quote* save
+    * Fixed an issue where customer could not be created in backend after adding Image type attribute
+    * Fixed Sales InvoiceItem and Order data interfaces implementation
+    * Fixed an issue with performance toolkit medium profile
+    * Fixed an issue where Excel Formula Injection via CSV/XML export
+    * Fixed an issue where it was not possible to open the Customers page in backend
+    * Fixed an issue with internal server error after clicking Continue on Billing information
+    * Fixed an issue where it was not possible to place order with Fedex shipping method
+* Various changes:
+    * Magento Centinel Removal
+    * Removed ability to have multi-statement queries
+* Test coverage:
+    * Unit tests coverage
+    * Covered php code by unit tests after new checkout implementation
+* Github issues:
+    * [#424](https://github.com/magento/magento2/issues/424) -- Combine tier pricing messages into block sentences
+    * [#1300](https://github.com/magento/magento2/issues/1300), [#1311](https://github.com/magento/magento2/issues/1311), [#1313](https://github.com/magento/magento2/issues/1313) -- Creating product error with startdate
+
 0.74.0-beta10
 =============
 * Framework improvements:

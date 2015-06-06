@@ -73,7 +73,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['', 'Attribute set name is empty.'],
-            ['existing_name', 'An attribute set with the "existing_name" name already exists.']
+            ['existing_name', 'An attribute set named "existing_name" already exists.']
         ];
     }
 }
