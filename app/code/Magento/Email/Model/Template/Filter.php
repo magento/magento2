@@ -677,7 +677,12 @@ class Filter extends \Magento\Framework\Filter\Template
             $css = $this->getTemplateModel()
                 ->getCssFilesContent($params['file']);
 
-            if (!empty($css)) {
+            if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                !== false
+            ) {
+                // Return LESS compilation error wrapped in CSS comment
+                return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
+            } elseif (!empty($css)) {
                 return $css;
             } else {
                 // Return CSS comment for debugging purposes

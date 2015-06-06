@@ -242,6 +242,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 '<html>{{css file="css/non-existent-file.css"}}</html>',
                 '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
             ],
+            'File with compilation error results in error message' => [
+                \Magento\Framework\App\Area::AREA_FRONTEND,
+                '<html>{{inlinecss file="css/file-with-error.css"}}</html>',
+                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+            ],
         ];
     }
 
@@ -255,15 +260,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @dataProvider inlinecssDirectiveDataProvider
      *
-     * @param $area
-     * @param $templateText
-     * @param $expectedOutput
+     * @param string $area
+     * @param string $templateText
+     * @param string $expectedOutput
+     * @param bool $productionMode
      */
-    public function testInlinecssDirective($area, $templateText, $expectedOutput)
+    public function testInlinecssDirective($area, $templateText, $expectedOutput, $productionMode = false)
     {
         $this->mockModel();
         $this->setUpThemeFallback($area);
         $this->model->setTemplateText($templateText);
+
+        if ($productionMode) {
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+                ->setMode(\Magento\Framework\App\State::MODE_PRODUCTION);
+        }
 
         $this->assertContains($expectedOutput, $this->model->getProcessedTemplate());
     }
@@ -308,6 +319,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\App\Area::AREA_FRONTEND,
                 '<html><p></p> {{inlinecss file="css/non-existent-file.css"}}</html>',
                 '<html><p></p> </html>',
+            ],
+            'Production mode - File with compilation error results in unmodified markup' => [
+                \Magento\Framework\App\Area::AREA_FRONTEND,
+                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
+                '<html><p></p> </html>',
+                true,
+            ],
+            'Developer mode - File with compilation error results in error message' => [
+                \Magento\Framework\App\Area::AREA_FRONTEND,
+                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
+                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                false,
             ],
         ];
     }
