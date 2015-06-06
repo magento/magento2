@@ -56,25 +56,20 @@
     <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
         <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
         <?php if ($_giftMessage): ?>
-            <br />
-            <table cellspacing="0" cellpadding="0" border="0">
-                <thead>
-                    <tr>
-                        <th><strong><?php echo __('Gift Message for this Order') ?></strong></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr>
-                        <td colspan="4">
-                            <strong><?php echo __('From:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?php echo __('To:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?php echo __('Message:'); ?></strong><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <tr>
+                <td>
+                    <table class="message-gift" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                            <td>
+                                <h3><?php echo __('Gift Message for this Order') ?></h3>
+                                <strong><?php echo __('From:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
+                                <br /><strong><?php echo __('To:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                                <br /><strong><?php echo __('Message:'); ?></strong><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
