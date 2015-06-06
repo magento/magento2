@@ -41,7 +41,7 @@ class ApplySalesRuleOnBackendStep implements TestStepInterface
     }
 
     /**
-     * Apply gift card before one page checkout.
+     * Apply gift card on place order in admin.
      *
      * @return void
      */

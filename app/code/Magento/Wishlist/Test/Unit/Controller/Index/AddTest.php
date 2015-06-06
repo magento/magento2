@@ -439,7 +439,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $wishlist
             ->expects($this->once())
             ->method('addNewItem')
-            ->will($this->returnValue('Can\'t add product to wishlist'));
+            ->will($this->returnValue('Can\'t add product to Wish List'));
 
         $wishlist
             ->expects($this->once())
@@ -473,7 +473,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('An error occurred while adding item to wish list: Can\'t add product to wishlist')
+            ->with('We can\'t add the item to Wish List right now: Can\'t add product to Wish List.')
             ->will($this->returnValue(null));
 
         $this->context
@@ -694,7 +694,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('An error occurred while adding item to wish list.')
+            ->with('We can\'t add the item to Wish List right now.')
             ->will($this->returnValue(null));
         $messageManager
             ->expects($this->once())

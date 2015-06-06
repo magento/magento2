@@ -61,6 +61,11 @@ class Emulation extends \Magento\Framework\Object
     private $initialEnvironmentInfo;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $viewDesign
      * @param \Magento\Framework\App\DesignInterface $design
@@ -69,6 +74,7 @@ class Emulation extends \Magento\Framework\Object
      * @param ConfigInterface $inlineConfig
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
@@ -80,6 +86,7 @@ class Emulation extends \Magento\Framework\Object
         ConfigInterface $inlineConfig,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
         $this->_localeResolver = $localeResolver;
@@ -91,6 +98,7 @@ class Emulation extends \Magento\Framework\Object
         $this->_scopeConfig = $scopeConfig;
         $this->inlineConfig = $inlineConfig;
         $this->inlineTranslation = $inlineTranslation;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,14 +116,13 @@ class Emulation extends \Magento\Framework\Object
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $force = false
     ) {
-        if (
-            (
-                $storeId == $this->_storeManager->getStore()->getStoreId()
-                && !$force
-            )
-            // Only allow a single level of emulation. Emulation nesting not allowed.
-            || $this->initialEnvironmentInfo !== null
-        ) {
+        // Only allow a single level of emulation
+        if ($this->initialEnvironmentInfo !== null) {
+            $this->logger->error(__('Environment emulation nesting is not allowed.'));
+            return;
+        }
+
+        if ($storeId == $this->_storeManager->getStore()->getStoreId() && !$force) {
             return;
         }
         $this->storeCurrentEnvironmentInfo();

@@ -41,6 +41,20 @@ class Editor extends Textarea
     }
 
     /**
+     * @return array
+     */
+    protected function getButtonTranslations()
+    {
+        $buttonTranslations = [
+            'Insert Image...' => $this->translate('Insert Image...'),
+            'Insert Media...' => $this->translate('Insert Media...'),
+            'Insert File...' => $this->translate('Insert File...'),
+        ];
+
+        return $buttonTranslations;
+    }
+
+    /**
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -71,12 +85,6 @@ class Editor extends Textarea
             </script>';
 
         if ($this->isEnabled()) {
-            $translatedString = [
-                'Insert Image...' => $this->translate('Insert Image...'),
-                'Insert Media...' => $this->translate('Insert Media...'),
-                'Insert File...' => $this->translate('Insert File...'),
-            ];
-
             $jsSetupObject = 'wysiwyg' . $this->getHtmlId();
 
             $forceLoad = '';
@@ -119,7 +127,7 @@ class Editor extends Textarea
                 "\n" .
                 '(function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
-                    $translatedString
+                    $this->getButtonTranslations()
                 ) .
                 ')})(jQuery);' .
                 "\n" .
@@ -161,6 +169,17 @@ class Editor extends Textarea
             // Display only buttons to additional features
             if ($this->getConfig('widget_window_url')) {
                 $html = $this->_getButtonsHtml() . $js . parent::getElementHtml();
+                if ($this->getConfig('add_widgets')) {
+                    $html .= '<script type="text/javascript">
+                    //<![CDATA[
+                    require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
+                        (function($) {
+                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
+                        })(jQuery);
+                    });
+                    //]]>
+                    </script>';
+                }
                 $html = $this->_wrapIntoContainer($html);
                 return $html;
             }
