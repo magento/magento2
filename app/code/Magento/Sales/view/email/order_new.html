@@ -29,43 +29,33 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
 
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
-        <td>
-            <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                    <td class="email-heading">
-                        <h1>Thank you for your order from {{var store.getFrontendName()}}.</h1>
-                        <p>Once your package ships we will send an email with a link to track your order. Your order summary is below. You can also check the status of your order by <a href="{{store url="customer/account/"}}">logging into your account</a>.</p>
-                        <p>Thank you again for your business.</p>
-                    </td>
-                    <td class="store-info">
-                        <h4>Order Questions?</h4>
-                        <p>
-                            {{depend store_phone}}
-                            <strong>Call Us:</strong>
-                            <a href="tel:{{var phone}}">{{var store_phone}}</a><br>
-                            {{/depend}}
-                            {{depend store_hours}}
-                            <span class="no-link">{{var store_hours}}</span><br>
-                            {{/depend}}
-                            {{depend store_email}}
-                            <strong>Email:</strong> <a href="mailto:{{var store_email}}">{{var store_email}}</a>
-                            {{/depend}}
-                        </p>
-                    </td>
-                </tr>
-            </table>
+        <td class="intro">
+            <p>{{escapehtml var=$order.getCustomerName()}},</p>
+            <p>
+                Thank you for your order from {{var store.getfrontendName()}}.
+                Once your package ships we will send an email with a link to track your order.
+                You can also check the status of your order by
+                <a href="{{store url="customer/account/"}}">logging into your account</a>.
+            </p>
+            <p>
+                If you have questions about your order, you can
+                {{depend store_email}}email us at <a href="mailto:{{var store_email}}">{{var store_email}}</a>{{/depend}}{{depend store_phone}}or call us at <a href="tel:{{var store_phone}}">{{var store_phone}}</a>{{/depend}}.
+                {{depend store_hours}}
+                    Our store hours are: <span class="no-link">{{var store_hours}}</span>.
+                {{/depend}}
+            </p>
         </td>
     </tr>
-    <tr>
-        <td class="order-details">
-            <h3>Your Order <span class="no-link">#{{var order.increment_id}}</span></h3>
+    <tr class="order-details">
+        <td>
+            <h1>Your Order <span class="no-link">#{{var order.increment_id}}</span></h1>
             <p>Placed on {{var order.getCreatedAtFormated(1)}}</p>
         </td>
     </tr>
     <tr class="order-information">
         <td>
             {{depend order.getEmailCustomerNote()}}
-            <table cellspacing="0" cellpadding="0" border="0" class="message-container">
+            <table cellspacing="0" cellpadding="0" border="0" class="message-info">
                 <tr>
                     <td>
                         {{var order.getEmailCustomerNote()}}
@@ -73,8 +63,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 </tr>
             </table>
             {{/depend}}
-            {{layout handle="sales_email_order_items" order=$order area="frontend"}}
-            <table cellspacing="0" cellpadding="0" border="0">
+            <table class="order-information" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                     <td class="address-details">
                         <h6>Bill To:</h6>
@@ -100,6 +89,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     {{/depend}}
                 </tr>
             </table>
+            {{layout handle="sales_email_order_items" order=$order area="frontend"}}
         </td>
     </tr>
 </table>
