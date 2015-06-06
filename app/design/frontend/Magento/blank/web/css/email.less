@@ -3,7 +3,61 @@
  * See COPYING.txt for license details.
  */
 
-// Temporary placeholder style
-td {
-    font-size: 24px !important;
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/_variables.less'; // Local theme variables
+
+//
+//  Resets
+//  ---------------------------------------------
+
+// TODO: Populate with email-specific resets
+
+//
+//  Typography
+//  ---------------------------------------------
+
+a {
+    .link(
+        @_link-color: @link__color__email,
+        @_link-text-decoration: @link__text-decoration__email,
+        @_link-color-visited: @link__visited__color__email,
+        @_link-text-decoration-visited: @link__visited__text-decoration__email,
+        @_link-color-hover: @link__hover__color__email,
+        @_link-text-decoration-hover: @link__hover__text-decoration__email,
+        @_link-color-active: @link__active__color__email,
+        @_link-text-decoration-active: @link__active__text-decoration__email
+    );
+}
+
+//
+//  Layout (Mobile)
+//  ---------------------------------------------
+
+// TODO: Get this mixin to work
+//.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+@media screen and (max-width: @screen__s) {
+    html,
+    body {
+        width: 100% !important;
+        // Change background/foreground to same color
+        background-color: @email-content__background-color;
+    }
+
+    .main {
+        width: auto !important;
+        max-width: 100% !important;
+        min-width: 240px;
+    }
+
+    .content {
+        padding: 15px !important;
+    }
+}
+
+//
+//  Sales Module Styles (Mobile)
+//  ---------------------------------------------
+
+table.items {
+    .table-overflow();
 }

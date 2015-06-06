@@ -12,40 +12,34 @@
 </head>
 <body>
 {{inlinecss file="css/email-inline.css"}}
+
 <!-- Begin wrapper table -->
-<table width="100%" cellpadding="0" cellspacing="0" border="0" id="background-table">
+<table class="wrapper" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
-        <td valign="top" class="container-td" align="center">
-            <table cellpadding="0" cellspacing="0" border="0" align="center" class="container-table">
+        <td class="wrapper-inner" valign="top" align="center">
+            <table class="main" cellpadding="0" cellspacing="0" border="0" align="center">
                 <tr>
-                    <td>
-                        <table cellpadding="0" cellspacing="0" border="0" class="logo-container">
-                            <tr>
-                                <td class="logo">
-                                    <a href="{{store url=""}}">
-                                    <img
-                                        {{if logo_width}}
-                                        width="{{var logo_width}}"
-                                        {{else}}
-                                        width="167"
-                                        {{/if}}
+                    <td class="header">
+                        <a class="logo" href="{{store url=""}}">
+                            <img
+                                {{if logo_width}}
+                                width="{{var logo_width}}"
+                                {{else}}
+                                width="167"
+                                {{/if}}
 
-                                        {{if logo_height}}
-                                        height="{{var logo_height}}"
-                                        {{else}}
-                                        height="47"
-                                        {{/if}}
+                                {{if logo_height}}
+                                height="{{var logo_height}}"
+                                {{else}}
+                                height="47"
+                                {{/if}}
 
-                                        src="{{var logo_url}}"
-                                        alt="{{var logo_alt}}"
-                                        border="0"
-                                    />
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
+                                src="{{var logo_url}}"
+                                alt="{{var logo_alt}}"
+                                border="0"
+                            />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" class="top-content">
-                        <!-- Begin Content -->
+                    <td class="content" valign="top">
+                    <!-- Begin Content -->
