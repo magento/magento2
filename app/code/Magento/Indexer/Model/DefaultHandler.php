@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model;
 
-interface HandlerInterface
+class DefaultHandler implements HandlerInterface
 {
     /**
      * @param \Zend_Db_Select $select
@@ -13,7 +13,10 @@ interface HandlerInterface
      * @param array $fieldName
      * @return void
      */
-    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldName);
+    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldName)
+    {
+        $select->columns(new \Zend_Db_Expr($source->getRealField($fieldName)), $fieldName);
+    }
 
     /**
      * @param \Zend_Db_Select $select
@@ -21,5 +24,8 @@ interface HandlerInterface
      * @param array $fieldName
      * @return void
      */
-    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $fieldName);
+    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $fieldName)
+    {
+        // TODO: Implement prepareData() method.
+    }
 }

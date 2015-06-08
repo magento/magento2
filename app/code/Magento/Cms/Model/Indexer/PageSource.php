@@ -32,12 +32,19 @@ class PageSource implements SourceInterface
     }
 
     /**
-     * @param array $field
-     * @return array
+     * @param array $fieldName
+     * @return string
      */
-    public function prepare($field)
+    public function getRealField($fieldName)
     {
-        $this->fields = $field;
-        return [];
+        return $this->resourcePage->getMainTable() . '.' . $fieldName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->resourcePage->getMainTable();
     }
 }
