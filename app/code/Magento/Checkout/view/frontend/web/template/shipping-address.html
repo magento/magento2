@@ -26,16 +26,16 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <button type="button" class="action action-show-popup">
-            <span data-bind="click: showFormPopUp, text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('+ New Address')"></span>
+        <button type="button" data-bind="click: showFormPopUp" class="action action-show-popup">
+            <span data-bind="text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('+ New Address')"></span>
         </button>
         <div data-bind="fadeVisible: isFormPopUpVisible">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
-            <button type="button" class="action action-save-address">
-                <span data-bind="click: saveNewAddress, text: $t('Save Address')"></span>
+            <button type="button" data-bind="click: saveNewAddress" class="action action-save-address">
+                <span data-bind="text: $t('Save Address')"></span>
             </button>
-            <button type="button" class="action action-hide-popup">
-                <span data-bind="click: hideFormPopUp, text: $t('Cancel')"></span>
+            <button type="button" data-bind="click: hideFormPopUp" class="action action-hide-popup">
+                <span data-bind="text: $t('Cancel')"></span>
             </button>
         </div>
         <!-- /ko -->
