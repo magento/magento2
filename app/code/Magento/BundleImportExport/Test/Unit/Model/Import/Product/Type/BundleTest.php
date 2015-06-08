@@ -348,6 +348,19 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for isRowValid()
+     */
+    public function testIsRowValid()
+    {
+        $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
+        $rowData = [
+            'price_type' => 'fixed',
+            'price_view' => 'bundle_price_view'
+        ];
+        $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);
+    }
+
+    /**
      * @param $object
      * @param $property
      * @param $value
