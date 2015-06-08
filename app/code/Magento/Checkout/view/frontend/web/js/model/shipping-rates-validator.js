@@ -70,7 +70,7 @@ define(
                 );
                 if (this.validateAddressData(addressFlat)) {
                     var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
-                    selectShippingAddress(ko.observable(address));
+                    //selectShippingAddress(address);
                 }
             },
 
