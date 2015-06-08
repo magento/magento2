@@ -94,8 +94,8 @@ class Relation implements EntityRelationInterface
         }
         if (null !== $object->getRelatedObjects()) {
             foreach ($object->getRelatedObjects() as $relatedObject) {
-                $relatedObject->save();
                 $relatedObject->setOrder($object);
+                $relatedObject->save();
             }
         }
     }
