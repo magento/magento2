@@ -31,7 +31,8 @@
                     <uiComponent name="product_attributes_listing"/>
                 </block>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/images_vs_prising.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3"
+                       template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
             </block>
         </referenceContainer>

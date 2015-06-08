@@ -28,7 +28,7 @@ define([
             this.render();
         };
         this._next = function () {
-            this.data = this.step.force(this);
+            this.step.force(this);
             this.step = this.steps[++this.index];
         };
         this._prev = function (newIndex) {
@@ -81,7 +81,6 @@ define([
             var steps =  uiRegistry.async(this.options.componentName);
 
             steps(function(component) {
-                console.log(component.steps)
                 if (this.wizard === undefined) {
                     this.wizard = new Wizard(component.steps)
                 }

@@ -11,46 +11,56 @@ define([
 ], function (Component, $, ko, _, Collapsible) {
     'use strict';
 
-    var viewModel = Collapsible.extend({
+    var viewModel = Component.extend({
         attributes: ko.observableArray([]),
         createOption: function (attribute) {
-            attribute.options.push({id:0, label:''});
+            attribute.options.push({value:0, label:''});
         },
         saveOption: function (option) {
             this.options.remove(option);
             //TODO: ajax request to save attribute
-            var id = _.uniqueId()+this.id;
-            this.options.push({id:id, label:option.label});
-            this.chosenOptions.push(id);
-        },
-        removeAttribute: function (attribute) {
-            viewModel.prototype.attributes.remove(attribute);
+            var value = _.uniqueId()+this.id;
+            this.options.push({value:value, label:option.label});
+            this.chosenOptions.push(value);
         },
         removeOption: function (option) {
             this.options.remove(option);
         },
-        selectAllAttributes: function (attribute) {
-            this.chosenOptions(_.pluck(attribute.options(), 'id'));
+        removeAttribute: function (attribute) {
+            viewModel.prototype.attributes.remove(attribute);
         },
-        showCreateOption: function (element) {
-            $(element).append($('[data-action="addOption"]'));
+        createAttribute: function (attribute) {
+            attribute.chosenOptions = ko.observableArray([]);
+            attribute.options = ko.observableArray(attribute.options);
+            return attribute;
+        },
+        saveAttribute: function (attribute) {
+            attribute.chosenOptions = ko.observableArray([]);
+            attribute.options = ko.observableArray(attribute.options);
+            return attribute;
+        },
+        selectAllAttributes: function (attribute) {
+            this.chosenOptions(_.pluck(attribute.options(), 'value'));
         },
         render: function(wizard) {
             $.ajax({
                 type: "POST",
                 url: this.options_url,
-                data: {attributes: wizard.data},
+                data: {attributes: wizard.data.attributes},
                 showLoader: true
-            }).done(function(data){
-                this.attributes(_.map(data.attributes, function (attribute) {
-                    attribute.options = ko.observableArray(attribute.options);
-                    attribute.chosenOptions = ko.observableArray(_.pluck(attribute.options, 'id'));
-                    return attribute;
-                }, this));
+            }).done(function(attributes){
+                viewModel.prototype.attributes(_.map(attributes, this.createAttribute, this));
             });
         },
         force: function(wizard) {
-            return wizard.data.attributes;
+            this.attributes.map(function(attribute) {
+                attribute.chosen = [];
+                attribute.chosenOptions.each(function(key) {
+                    attribute.chosen.push(_.where(attribute.options(), {value:key}));
+                });
+            });
+
+            wizard.data.attributesValues = ko.toJS(this.attributes);
         },
         back: function(wizard) {
         }

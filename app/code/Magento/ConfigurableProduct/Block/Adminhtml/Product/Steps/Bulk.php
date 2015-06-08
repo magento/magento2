@@ -16,13 +16,4 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     {
         return __('Bulk Images &amp; Prising');
     }
-
-    /**
-     * Get json data
-     * @return string json
-     */
-    public function getJsonData()
-    {
-        return 'test';
-    }
 }
