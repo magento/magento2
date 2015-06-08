@@ -203,6 +203,7 @@
             <argument name="indexProviders" xsi:type="array">
                 <item name="catalogsearch_fulltext" xsi:type="object">Magento\CatalogSearch\Model\Search\IndexBuilder</item>
             </argument>
+            <argument name="entityMetadata" xsi:type="object">Magento\Framework\Search\ProductEntityMetadata</argument>
         </arguments>
     </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor">
