@@ -127,8 +127,10 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(
-                __('Something went wrong while deleting roles and permissions.'
-                    . ' You can find out more in the exceptions log.')
+                __(
+                    'Something went wrong while deleting roles and permissions.'
+                    . ' You can find out more in the exceptions log.'
+                )
             );
         }
     }
