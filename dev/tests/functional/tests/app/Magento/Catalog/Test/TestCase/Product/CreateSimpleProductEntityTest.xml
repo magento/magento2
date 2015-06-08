@@ -456,7 +456,7 @@
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/qty" xsi:type="string">1</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
