@@ -73,7 +73,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage Please correct the user name or password.
+     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testCreateAdminAccessTokenInvalidCustomer()
     {
