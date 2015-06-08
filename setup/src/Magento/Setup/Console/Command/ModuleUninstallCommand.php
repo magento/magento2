@@ -290,6 +290,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return void
      */
     private function takeBackup(InputInterface $input, OutputInterface $output)
     {
