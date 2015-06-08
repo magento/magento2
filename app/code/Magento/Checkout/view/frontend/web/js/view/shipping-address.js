@@ -15,6 +15,7 @@ define(
         '../action/create-shipping-address',
         '../action/select-shipping-address',
         '../model/shipping-rates-validator',
+        '../model/shipping-address/form-popup-state',
         'mage/translate'
     ],
     function(
@@ -27,7 +28,8 @@ define(
         quote,
         createShippingAddress,
         selectShippingAddress,
-        shippingRatesValidator
+        shippingRatesValidator,
+        formPopUpState
     ) {
         'use strict';
         return Component.extend({
@@ -37,7 +39,7 @@ define(
             },
             isVisible: ko.observable(true),
             isCustomerLoggedIn: customer.isLoggedIn,
-            isFormPopUpVisible: ko.observable(false),
+            isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
             saveInAddressBook: true,
