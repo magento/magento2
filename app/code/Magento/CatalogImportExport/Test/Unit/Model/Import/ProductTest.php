@@ -301,10 +301,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->transactionManager =
             $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\TransactionManagerInterface')
                 ->getMock();
-        $this->catalogProductFactory =
-            $this->getMockBuilder('\Magento\Catalog\Model\ProductFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->catalogProductFactory = $this->getMock(
+            '\Magento\Catalog\Model\ProductFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
         $this->taxClassProcessor =
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor')
                 ->disableOriginalConstructor()
