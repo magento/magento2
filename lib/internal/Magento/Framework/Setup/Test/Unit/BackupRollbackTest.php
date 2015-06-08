@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Test\Unit;
 
+use Magento\Framework\Backup\Factory;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\LoggerInterface;
 
@@ -115,13 +116,45 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->model->codeRollback('RollbackFile_A.tgz');
     }
 
-    public function testDataBackup()
+    public function testMeidaBackup()
     {
-        $this->setupDataBackupRollback();
+        $this->setupCodeBackupRollback();
+        $this->filesystem->expects($this->once())
+            ->method('create');
+        $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0777);
+        $this->model->codeBackup(time(), Factory::TYPE_MEDIA);
+    }
+
+    public function testMediaRollback()
+    {
+        $this->filesystem->expects($this->once())->method('rollback');
+        $this->setupCodeBackupRollback();
+        $this->file->expects($this->once())
+            ->method('isExists')
+            ->with($this->path . '/backups/RollbackFile_A.tgz')
+            ->willReturn(true);
+        $this->model->codeRollback('RollbackFile_A.tgz', Factory::TYPE_MEDIA);
+    }
+
+    public function testDbBackup()
+    {
+        $this->setupDbBackupRollback();
         $this->database->expects($this->once())->method('create');
         $this->file->expects($this->once())->method('isExists')->willReturn(false);
         $this->file->expects($this->once())->method('createDirectory');
         $this->model->dbBackup(time());
+    }
+
+    public function testDbRollback()
+    {
+        $this->setupDbBackupRollback();
+        $this->database->expects($this->once())->method('rollback');
+        $this->file->expects($this->once())
+            ->method('isExists')
+            ->with($this->path . '/backups/RollbackFile_A.tgz')
+            ->willReturn(true);
+        $this->model->dbRollback('RollbackFile_A.tgz');
     }
 
     private function setupCodeBackupRollback()
@@ -144,7 +177,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->method('logSuccess');
     }
 
-    private function setupDataBackupRollback()
+    private function setupDbBackupRollback()
     {
         $this->database->expects($this->once())
             ->method('setBackupsDir');
