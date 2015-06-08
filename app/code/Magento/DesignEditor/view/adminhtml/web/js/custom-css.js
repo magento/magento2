@@ -70,7 +70,7 @@ define([
                     this._prepareUpdateButton();
                 }, this),
                 error: function() {
-                    alert($.mage.__('Sorry, there was an unknown error.'));
+                    alert($.mage.__('Sorry, something went wrong.'));
                 }
             });
             $('.vde-tools-content').trigger('resize.vdeToolsResize');
