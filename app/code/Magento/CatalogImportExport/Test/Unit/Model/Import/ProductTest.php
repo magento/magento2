@@ -301,10 +301,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->transactionManager =
             $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\TransactionManagerInterface')
                 ->getMock();
-        $this->catalogProductFactory =
-            $this->getMockBuilder('\Magento\Catalog\Model\ProductFactory')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->catalogProductFactory = $this->getMock(
+            '\Magento\Catalog\Model\ProductFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
         $this->taxClassProcessor =
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor')
                 ->disableOriginalConstructor()
@@ -1146,6 +1150,95 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
 
         $importProduct->validateRow($rowData, $rowNum);
+    }
+
+    /**
+     * @dataProvider populateToUrlGenerationReturnNullDataProvider
+     */
+    public function testPopulateToUrlGenerationReturnNull($rowData, $newSku)
+    {
+        $productMock = $this->getMock(
+            '\Magento\Catalog\Model\Product',
+            ['addData'],
+            [],
+            '',
+            false
+        );
+
+        $this->catalogProductFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($productMock);
+
+        $this->skuProcessor
+            ->expects($this->once())
+            ->method('getNewSku')
+            ->willReturn($newSku);
+
+        $result = $this->importProduct->_populateToUrlGeneration($rowData);
+
+        $this->assertNull($result);
+
+    }
+
+    public function testPopulateToUrlGenerationReturnProduct()
+    {
+        $rowData = [
+            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'value'
+        ];
+        $newSku = [
+            'entity_id' => 'new sku value',
+        ];
+        $expectedRowData = [
+            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'value',
+            'entity_id' => $newSku['entity_id'],
+        ];
+        $productMock = $this->getMock(
+            '\Magento\Catalog\Model\Product',
+            ['addData'],
+            [],
+            '',
+            false
+        );
+
+        $productMock
+            ->expects($this->once())
+            ->method('addData')
+            ->with($expectedRowData);
+
+        $this->catalogProductFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($productMock);
+
+        $this->skuProcessor
+            ->expects($this->once())
+            ->method('getNewSku')
+            ->willReturn($newSku);
+
+        $result = $this->importProduct->_populateToUrlGeneration($rowData);
+
+        $this->assertEquals($productMock, $result);
+    }
+
+    public function populateToUrlGenerationReturnNullDataProvider()
+    {
+        return [
+            [
+                '$rowData' => [
+                    \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'value'
+                ],
+                '$newSku' => [
+                    'entity_id' => null,
+                ],
+            ],
+            [
+                '$rowData' => [
+                    \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => 'value'
+                ],
+                '$newSku' => [],
+            ],
+        ];
     }
 
     public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider()
