@@ -21,14 +21,7 @@ define(
              */
             getRates: function (address) {
                 var cache = rateRegistry.get(address.getCacheKey()),
-                    serviceUrl = resourceUrlManager.getUrl(
-                        'estimateShippingMethodsForNewAddress',
-                        {
-                            'guest': {
-                                quoteId: quote.getQuoteId()
-                            }
-                        }
-                    ),
+                    serviceUrl = resourceUrlManager.getUrlForEstimationShippingMethodsForNewAddress(quote),
                     payload = JSON.stringify({
                             address: {
                                 country_id: address.countryId,

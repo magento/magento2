@@ -8,33 +8,55 @@ define(
     [
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/url-builder',
-        'Magento_Checkout/js/model/resource-urls',
         'mageUtils'
     ],
-    function(customer, urlBuilder, resourceUrls, utils) {
+    function(customer, urlBuilder, utils) {
         "use strict";
         return {
-            /** Get url for service */
-            getUrl: function(serviceCallName, urlParams) {
-                var checkoutMethod = customer.isLoggedIn() ? 'customer' : 'guest',
-                    serviceUrls = resourceUrls.getServiceUrls(),
-                    url,
-                    params = {};
+            getUrlForEstimationShippingMethodsForNewAddress: function(quote) {
+                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var urls = {
+                    'guest': '/guest-carts/:quoteId/estimate-shipping-methods',
+                    'customer': '/carts/mine/estimate-shipping-methods'
+                };
+                return this.getUrl(urls, params);
+            },
 
-                if (utils.isEmpty(serviceUrls[serviceCallName])) {
+            getUrlForEstimationShippingMethodsByAddressId: function(quote) {
+                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var urls = {
+                    'default': '/carts/mine/estimate-shipping-methods-by-address-id'
+                };
+                return this.getUrl(urls, params);
+            },
+
+            getUrlForCartTotals: function(quote) {
+                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var urls = {
+                    'guest': '/guest-carts/:quoteId/totals',
+                    'customer': '/carts/mine/totals'
+                };
+                return this.getUrl(urls, params);
+            },
+
+            /** Get url for service */
+            getUrl: function(urls, urlParams) {
+                var url;
+
+                if (utils.isEmpty(urls)) {
                     return 'Provided service call does not exist.';
                 }
 
-                if (!utils.isEmpty(serviceUrls[serviceCallName]['default'])) {
-                    url = serviceUrls[serviceCallName]['default'];
+                if (!utils.isEmpty(urls['default'])) {
+                    url = urls['default'];
                 } else {
-                    url = serviceUrls[serviceCallName][checkoutMethod];
+                    url = urls[this.getCheckoutMethod()];
                 }
+                return urlBuilder.createUrl(url, urlParams);
+            },
 
-                if (urlParams && typeof(urlParams[checkoutMethod]) != "undefined") {
-                    params = urlParams[checkoutMethod];
-                }
-                return urlBuilder.createUrl(url, params);
+            getCheckoutMethod: function() {
+                return customer.isLoggedIn() ? 'customer' : 'guest';
             }
         };
     }
