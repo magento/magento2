@@ -11,6 +11,8 @@ use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as Abstra
 
 /**
  * Test class for import product AbstractType class
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -131,10 +133,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->abstractType = $this->getMockBuilder(
-                '\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            '\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+        )
+        ->disableOriginalConstructor()
+        ->getMockForAbstractClass();
     }
 
     /**
