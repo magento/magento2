@@ -11,5 +11,10 @@ namespace Magento\Sales\Model\Resource;
  */
 interface EntityRelationInterface
 {
+    /**
+     * Process object relations
+     *
+     * @param \Magento\Sales\Model\AbstractModel $object
+     */
     public function processRelation(\Magento\Sales\Model\AbstractModel $object);
 }
