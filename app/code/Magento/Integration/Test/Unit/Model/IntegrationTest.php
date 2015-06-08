@@ -36,7 +36,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollectionMock;
 
@@ -85,7 +85,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             ['getIdFieldName', 'load', 'selectActiveIntegrationByConsumerId']
         );
         $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
+            'Magento\Framework\Data\Collection\AbstractDb',
             [],
             [],
             '',

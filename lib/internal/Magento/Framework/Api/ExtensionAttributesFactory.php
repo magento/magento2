@@ -8,7 +8,7 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
-use Magento\Framework\Data\Collection\Db as DbCollection;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinData;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;

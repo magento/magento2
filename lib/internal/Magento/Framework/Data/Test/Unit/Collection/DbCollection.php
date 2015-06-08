@@ -8,7 +8,7 @@ namespace Magento\Framework\Data\Test\Unit\Collection;
 /**
  * Concrete implementation of abstract collection, created for abstract collection testing purposes.
  */
-class DbCollection extends \Magento\Framework\Data\Collection\Db
+class DbCollection extends \Magento\Framework\Data\Collection\AbstractDb
 {
     /**
      * @var \Magento\Framework\Model\Resource\Db\AbstractDb

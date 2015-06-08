@@ -653,7 +653,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             true,
             ['setOrder']
         );
-        $dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->setMethods(['setOrder'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

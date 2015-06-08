@@ -159,7 +159,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'iterate'])
         );
 
-        $customerCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $customerCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->setMethods(['addAttributeToSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -210,11 +210,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param \Magento\Framework\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @param int $pageSize
      * @param array $callbacks
      */
-    public function iterate(\Magento\Framework\Data\Collection\Db $collection, $pageSize, array $callbacks)
+    public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {
         $resource = $this->getMock(
             'Magento\Customer\Model\Resource\Customer',

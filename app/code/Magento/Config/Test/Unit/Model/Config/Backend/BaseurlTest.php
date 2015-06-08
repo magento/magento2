@@ -34,7 +34,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMock('Magento\Config\Model\Resource\Config\Data', [], [], '', false);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
-        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', [], [], '', false);

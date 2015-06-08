@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface as Logger;
  * Base items collection class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class Db extends \Magento\Framework\Data\Collection
+abstract class AbstractDb extends \Magento\Framework\Data\Collection
 {
     /**
      * DB connection
