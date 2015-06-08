@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mageUtils',
     'underscore',
     'uiComponent',
-    'Magento_Ui/js/lib/spinner'
-], function (utils, _, Component, loader) {
+    'Magento_Ui/js/lib/spinner',
+    'Magento_Ui/js/core/renderer/layout'
+], function (_, Component, loader, layout) {
     'use strict';
 
     return Component.extend({
@@ -17,6 +17,12 @@ define([
             storageConfig: {
                 positions: '${ $.storageConfig.path }.positions'
             },
+            dndConfig: {
+                name: '${ $.name }_dnd',
+                component: 'Magento_Ui/js/grid/dnd',
+                containerTmpl: 'ui/grid/dnd/listing',
+                enabled: true
+            },
             imports: {
                 rows: '${ $.provider }:data.items'
             },
@@ -24,7 +30,25 @@ define([
                 elems: 'setPositions',
                 '${ $.provider }:reload': 'showLoader',
                 '${ $.provider }:reloaded': 'hideLoader'
+            },
+            modules: {
+                dnd: '${ $.dndConfig.name }'
             }
+        },
+
+        /**
+         * Initializes Listing component.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initialize: function () {
+            this._super();
+
+            if (this.dndConfig.enabled) {
+                this.initDnd();
+            }
+
+            return this;
         },
 
         /**
@@ -35,6 +59,17 @@ define([
         initObservable: function () {
             this._super()
                 .observe('rows');
+
+            return this;
+        },
+
+        /**
+         * Creates drag&drop widget instance.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initDnd: function () {
+            layout([this.dndConfig]);
 
             return this;
         },

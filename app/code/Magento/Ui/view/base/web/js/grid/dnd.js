@@ -14,7 +14,9 @@ define([
         transformProp;
 
     /**
-     * Defines vendor prefix for the css 'transform' property.
+     * Defines supported css 'transform' property.
+     *
+     * @returns {String|Undefined}
      */
     transformProp = (function () {
         var style = document.body.style,
@@ -23,14 +25,14 @@ define([
             vi = vendors.length,
             property;
 
-        if (typeof style.transform !== 'undefined') {
+        if (typeof style.transform != 'undefined') {
             return 'transform';
         }
 
         while (vi--) {
             property = vendors[vi] + base;
 
-            if (typeof style[property] !== 'undefined') {
+            if (typeof style[property] != 'undefined') {
                 return property;
             }
         }
@@ -39,6 +41,7 @@ define([
     /**
      * Returns first touch data if it's available.
      *
+     * @param {(MouseEvent|TouchEvent)} e - Event object.
      * @returns {Object}
      */
     function getTouch(e) {
@@ -58,6 +61,7 @@ define([
         elem.style[transformProp] = value;
     }
 
+    /*eslint-disable no-extra-parens*/
     /**
      * Checks if specified coordinate is inside of the provided area.
      *
@@ -73,6 +77,7 @@ define([
             y >= area.top && y <= area.bottom
         );
     }
+    /*eslint-enable no-extra-parens*/
 
     /**
      * Calculates distance between two points.
@@ -105,13 +110,12 @@ define([
 
     return Class.extend({
         defaults: {
-            columnsSelector: '',
-            dragGridSelector: '',
             noSelectClass: '_no-select',
             hiddenClass: '_hidden',
             fixedX: false,
             fixedY: true,
-            minDistance: 2
+            minDistance: 2,
+            columns: []
         },
 
         /**
@@ -122,25 +126,10 @@ define([
         initialize: function () {
             _.bindAll(this, 'onMouseMove', 'onMouseUp', 'onMouseDown');
 
-            this._super()
-                .initColumns()
-                .initListeners();
-
-            return this;
-        },
-
-        /**
-         * Searches document for the columns elements.
-         *
-         * @returns {Dnd} Chainable.
-         */
-        initColumns: function () {
-            var columns = this.grid.querySelectorAll(this.columnsSelector);
-
             this.$body = $('body');
 
-            this.dragGrid = document.querySelector(this.dragGridSelector);
-            this.columns = _.toArray(columns);
+            this._super()
+                .initListeners();
 
             return this;
         },
@@ -151,20 +140,52 @@ define([
          * @returns {Dnd} Chainbale.
          */
         initListeners: function () {
+            var addListener = document.addEventListener;
+
             if (isTouchDevice) {
-                document.addEventListener('touchmove', this.onMouseMove, false);
-                document.addEventListener('touchend', this.onMouseUp, false);
-                document.addEventListener('touchleave', this.onMouseUp, false);
+                addListener('touchmove', this.onMouseMove, false);
+                addListener('touchend', this.onMouseUp, false);
+                addListener('touchleave', this.onMouseUp, false);
             } else {
-                document.addEventListener('mousemove', this.onMouseMove, false);
-                document.addEventListener('mouseup', this.onMouseUp, false);
+                addListener('mousemove', this.onMouseMove, false);
+                addListener('mouseup', this.onMouseUp, false);
             }
 
-            this.columns.forEach(function (column) {
-                isTouchDevice ?
-                    column.addEventListener('touchstart', this.onMouseDown, false) :
-                    column.addEventListener('mousedown', this.onMouseDown, false);
-            }, this);
+            return this;
+        },
+
+        /**
+         * Makes specified column draggable.
+         *
+         * @param {HTMLTableHeaderCellElement} column - Columns header element.
+         * @returns {Dnd} Chainable.
+         */
+        addColumn: function (column) {
+            this.columns.push(column);
+
+            isTouchDevice ?
+                column.addEventListener('touchstart', this.onMouseDown, false) :
+                column.addEventListener('mousedown', this.onMouseDown, false);
+
+            return this;
+        },
+
+        /**
+         * @param {HTMLTableElement} table
+         * @returns {Dnd} Chainable.
+         */
+        addTable: function (table) {
+            this.table = table;
+
+            return this;
+        },
+
+        /**
+         * @param {HTMLTableElement} dragTable
+         * @returns {Dnd} Chainable.
+         */
+        addDragTable: function (dragTable) {
+            this.dragTable = dragTable;
 
             return this;
         },
@@ -175,7 +196,7 @@ define([
          * @returns {Dnd} Chainbale.
          */
         _cacheCoords: function () {
-            var container   = this.grid.getBoundingClientRect(),
+            var container   = this.table.getBoundingClientRect(),
                 bodyRect    = document.body.getBoundingClientRect(),
                 grabbed     = this.grabbed,
                 dragElem    = grabbed.elem,
@@ -218,20 +239,23 @@ define([
          * @returns {Dnd} Chainable.
          */
         _copyDimensions: function (elem) {
-            var dragGrid    = this.dragGrid,
-                dragTrs     = dragGrid.tBodies[0].children,
-                origTrs     = _.toArray(this.grid.tBodies[0].children),
+            var dragTable   = this.dragTable,
+                dragBody    = dragTable.tBodies[0],
+                dragTrs     = dragBody ? dragBody.children : [],
+                origTrs     = _.toArray(this.table.tBodies[0].children),
                 columnIndex = _.toArray(elem.parentNode.cells).indexOf(elem),
-                origTd;
+                origTd,
+                dragTr;
 
-            dragGrid.style.width = elem.offsetWidth + 'px';
-            dragGrid.tHead.firstElementChild.cells[0].style.height = elem.offsetHeight + 'px';
+            dragTable.style.width = elem.offsetWidth + 'px';
+            dragTable.tHead.firstElementChild.cells[0].style.height = elem.offsetHeight + 'px';
 
             origTrs.forEach(function (origTr, rowIndex) {
                 origTd = origTr.cells[columnIndex];
+                dragTr = dragTrs[rowIndex];
 
-                if (origTd) {
-                    dragTrs[rowIndex].cells[0].style.height = origTd.offsetHeight + 'px';
+                if (origTd && dragTr) {
+                    dragTr.cells[0].style.height = origTd.offsetHeight + 'px';
                 }
             });
 
@@ -285,7 +309,7 @@ define([
             this._cacheCoords()
                 ._copyDimensions(elem);
 
-            $(this.dragGrid).removeClass(this.hiddenClass);
+            $(this.dragTable).removeClass(this.hiddenClass);
         },
 
         /**
@@ -306,7 +330,7 @@ define([
 
             this.dragging = false;
 
-            $(this.dragGrid).addClass(this.hiddenClass);
+            $(this.dragTable).addClass(this.hiddenClass);
 
             getModel(elem).dragging(false);
 
@@ -347,7 +371,7 @@ define([
             target = getModel(target);
             elem = getModel(elem);
 
-            getModel(this.grid).insertChild(elem, target);
+            getModel(this.table).insertChild(elem, target);
             target.dragover(false);
         },
 
@@ -374,7 +398,7 @@ define([
                 posY = dragArea.orig.top;
             }
 
-            locate(this.dragGrid, posX, posY);
+            locate(this.dragTable, posX, posY);
 
             if (!isInside(x, y, this.dropArea)) {
                 this._updateAreas(x, y);

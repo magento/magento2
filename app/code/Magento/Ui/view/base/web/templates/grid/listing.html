@@ -5,7 +5,15 @@
  */
 -->
 <div class="admin__data-grid-wrap">
-    <table class="data-grid data-grid-draggable" data-bind="gridDnd">
+    <table
+        class="data-grid"
+        data-bind="
+            afterRender: dndConfig.enabled ?
+                function (elem) { dnd('addTable', elem); } :
+                false,
+            css: {
+                'data-grid-draggable': dndConfig.enabled
+            }">
         <thead data-part="head">
             <tr data-part="head.row">
                 <!-- ko foreach: elems -->
@@ -32,5 +40,7 @@
             <!-- /ko -->
         </tbody>
     </table>
-    <!-- ko template: 'ui/grid/dnd/listing' --><!-- /ko -->
+    <!-- ko if: dndConfig.enabled -->
+        <!-- ko template: dndConfig.containerTmpl --><!-- /ko -->
+    <!-- /ko -->
 </div>

@@ -16,6 +16,7 @@ define([
             sortable: true,
             sorting: false,
             visible: true,
+            draggable: true,
             dragging: false,
             dragover: false,
             links: {
@@ -64,22 +65,40 @@ define([
             }
         },
 
-        sort: function (enabled) {
+        /**
+         * Sets columns' sorting. If column is currently sorted,
+         * than its' direction will be toggled.
+         *
+         * @param {*} [enable=true] - If false, than sorting will
+         *      be removed from a column.
+         * @returns {Column} Chainable.
+         */
+        sort: function (enable) {
             var direction;
 
             if (!this.sortable) {
-                return;
+                return this;
             }
 
-            direction = enabled !== false ?
+            enable = enable !== false ? true : false;
+
+            direction = enable ?
                 this.sorting() ?
                     this.toggleDirection() :
                     'asc' :
                 false;
 
             this.sorting(direction);
+
+            return this;
         },
 
+        /**
+         * Exports sorting data to the dataProvider if
+         * sorting of a column is enabled.
+         *
+         * @param {(String|Boolean)} sorting - Columns' sorting state.
+         */
         exportSorting: function (sorting) {
             if (!sorting) {
                 return;
@@ -91,6 +110,11 @@ define([
             });
         },
 
+        /**
+         * Toggles sorting direcction.
+         *
+         * @returns {String}
+         */
         toggleDirection: function () {
             return this.sorting() === 'asc' ?
                 'desc' :
