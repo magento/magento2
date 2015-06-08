@@ -20,13 +20,20 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultFactoryMock;
 
+    /**
+     * @var \Magento\Payment\Gateway\Validator\Result|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultMock;
+
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder('Magento\Payment\Gateway\ConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resultFactoryMock = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ResultInterfaceFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultMock = $this->getMockBuilder('Magento\Payment\Gateway\Validator\Result')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,9 +62,10 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnArgument(0));
+            ->with(['isValid' => $isValid])
+            ->willReturn($this->resultMock);
 
-        $this->assertEquals(['isValid' => $isValid], $this->model->validate($validationSubject));
+        $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
     public function validateAllowspecificTrueDataProvider()
@@ -82,9 +90,10 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnArgument(0));
+            ->with(['isValid' => $isValid])
+            ->willReturn($this->resultMock);
 
-        $this->assertEquals(['isValid' => $isValid], $this->model->validate($validationSubject));
+        $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
     public function validateAllowspecificFalseDataProvider()
