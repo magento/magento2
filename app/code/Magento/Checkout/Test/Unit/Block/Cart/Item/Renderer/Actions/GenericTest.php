@@ -35,7 +35,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model->setItem($itemMock);
+        $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertEquals($itemMock, $this->model->getItem());
     }
 
@@ -49,7 +49,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         /**
-         * @var Product|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock
          */
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
@@ -63,7 +63,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             ->method('isVisibleInSiteVisibility')
             ->willReturn(true);
 
-        $this->model->setItem($itemMock);
+        $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isProductVisibleInSiteVisibility());
     }
 
@@ -81,7 +81,7 @@ class GenericTest extends \PHPUnit_Framework_TestCase
             ->method('getIsVirtual')
             ->willReturn(true);
 
-        $this->model->setItem($itemMock);
+        $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertTrue($this->model->isVirtual());
     }
 }
