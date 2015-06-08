@@ -62,12 +62,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailSidebarUrl());
     }
 
-    public function testGetConfigureUrl()
-    {
-        $testString = 'checkout/cart/configure/id/' . $this->_block->getItem()->getId() . '/product_id/1/';
-        $this->assertStringEndsWith($testString, $this->_block->getConfigureUrl());
-    }
-
     /**
      * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
