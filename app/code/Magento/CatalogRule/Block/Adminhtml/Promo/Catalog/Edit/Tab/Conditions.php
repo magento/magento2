@@ -101,7 +101,7 @@ class Conditions extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset(
             'conditions_fieldset',
-            ['legend' => __('Conditions (do not add conditions if rule applies to all products))')]
+            ['legend' => __('Conditions (don\'t add conditions if rule applies to all products))')]
         )->setRenderer(
             $renderer
         );

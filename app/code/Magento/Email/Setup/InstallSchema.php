@@ -33,7 +33,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'Template Id'
+            'Template ID'
         )->addColumn(
             'template_code',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
