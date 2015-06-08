@@ -129,7 +129,7 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     {
         $this->catalogProductEdit->getProductForm()->openTab('variations');
         /** @var Config $variationsTab */
-        $variationsTab = $this->catalogProductEdit->getProductForm()->getTabElement('variations');
+        $variationsTab = $this->catalogProductEdit->getProductForm()->getTab('variations');
         $variationsTab->deleteAttributes();
     }
 
@@ -142,7 +142,7 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
     {
         $this->catalogProductEdit->getProductForm()->openTab('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
-        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTabElement('downloadable_information');
+        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTab('downloadable_information');
         $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
     }
 }

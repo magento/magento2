@@ -184,7 +184,7 @@ class Cart extends Action\Action implements IndexInterface
             $this->messageManager->addNotice($e->getMessage());
             $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
+            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
         }
 
         $this->helper->calculate();

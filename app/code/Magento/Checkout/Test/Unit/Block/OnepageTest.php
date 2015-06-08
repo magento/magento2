@@ -51,15 +51,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $countryCollectionFactoryMock = $this->getMock(
-            '\Magento\Directory\Model\Resource\Country\CollectionFactory',
-            [],
+            'Magento\Directory\Model\Resource\Country\CollectionFactory',
+            ['create'],
             [],
             '',
             false
         );
         $regionCollectionFactoryMock = $this->getMock(
-            '\Magento\Directory\Model\Resource\Region\CollectionFactory',
-            [],
+            'Magento\Directory\Model\Resource\Region\CollectionFactory',
+            ['create'],
             [],
             '',
             false

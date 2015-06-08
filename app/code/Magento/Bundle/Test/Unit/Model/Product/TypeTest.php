@@ -105,9 +105,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->bundleModelSelection = $this->getMockBuilder('Magento\Bundle\Model\SelectionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\Resource\BundleFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -693,7 +695,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('We cannot add this item to your shopping cart.', $result);
+        $this->assertEquals('We can\'t add this item to your cart right now.', $result);
     }
 
     /**
