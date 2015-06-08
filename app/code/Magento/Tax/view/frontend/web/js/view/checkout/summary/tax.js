@@ -19,7 +19,7 @@ define(
         return Component.extend({
             defaults: {
                 isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
-                template: 'Magento_Tax/checkout/summary/tax_total'
+                template: 'Magento_Tax/checkout/summary/tax'
             },
             colspan: 3,
             totals: quote.getTotals(),
