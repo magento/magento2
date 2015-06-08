@@ -3,9 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Builder\Query;
+namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 
-use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Query\Bool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -58,37 +57,44 @@ class MatchTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildQuery()
     {
-        $boost = 3.14;
-
         /** @var Select|\PHPUnit_Framework_MockObject_MockObject $select */
         $select = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->setMethods(['getMatchQuery', 'match'])
+            ->setMethods(['getMatchQuery', 'match', 'where'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
-            ->with($this->equalTo(['some_field']), $this->equalTo('-some_value*'))
+            ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
             ->will($this->returnValue('matchedQuery'));
-        $this->fulltextHelper->expects($this->once())
-            ->method('match')
-            ->withConsecutive([$select, ['some_field'], '-some_value*', true, Fulltext::FULLTEXT_MODE_BOOLEAN])
-            ->willReturn($select);
+        $select->expects($this->once())
+            ->method('where')
+            ->with('matchedQuery')
+            ->willReturnSelf();
 
         $this->resolver->expects($this->once())
             ->method('resolve')
-            ->willReturnArgument(0);
+            ->willReturnCallback(function ($fieldList) {
+                $resolvedFields = [];
+                foreach ($fieldList as $column) {
+                    $field = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface')
+                        ->disableOriginalConstructor()
+                        ->getMockForAbstractClass();
+                    $field->expects($this->any())
+                        ->method('getColumn')
+                        ->willReturn($column);
+                    $resolvedFields[] = $field;
+                }
+                return $resolvedFields;
+            });
 
         /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Match')
-            ->setMethods(['getMatches', 'getValue', 'getBoost'])
+            ->setMethods(['getMatches', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $query->expects($this->once())
             ->method('getValue')
             ->willReturn('some_value ');
-        $query->expects($this->once())
-            ->method('getBoost')
-            ->willReturn($boost);
         $query->expects($this->once())
             ->method('getMatches')
             ->willReturn([['field' => 'some_field']]);
