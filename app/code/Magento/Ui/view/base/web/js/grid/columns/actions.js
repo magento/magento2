@@ -10,7 +10,6 @@ define([
 
     return Column.extend({
         defaults: {
-            headerTmpl: 'ui/grid/columns/actions',
             bodyTmpl: 'ui/grid/cells/actions'
         },
 

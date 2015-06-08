@@ -5,7 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<table class="data-grid _dragging-copy _hidden">
+<table 
+    class="data-grid _dragging-copy _hidden"
+    data-bind="
+        afterRender: function (elem) { dnd('addDragTable', elem); }
+    ">
     <thead data-part="head">
         <tr data-part="head.row">
             <!-- ko foreach: elems -->
