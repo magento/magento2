@@ -33,17 +33,13 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestBuilderMock = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->transferBuilderMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferBuilderInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->gatewayMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\ClientInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseHandlerMock = $this->getMockBuilder('Magento\Payment\Gateway\Response\HandlerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new \Magento\Payment\Gateway\Command\GatewayCommand(
             $this->requestBuilderMock,
@@ -60,8 +56,7 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
         $response = ['response_field1' => 'response_value1'];
 
         $transferO = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestBuilderMock->expects($this->once())
             ->method('build')
