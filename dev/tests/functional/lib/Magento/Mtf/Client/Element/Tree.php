@@ -15,32 +15,18 @@ use Magento\Mtf\Client\Locator;
 abstract class Tree extends SimpleElement
 {
     /**
-     * All selected checkboxes.
-     *
-     * @var string
-     */
-    protected $selectedCheckboxes = '//input[@checked=""]';
-
-    /**
      * Selected checkboxes.
      *
      * @var string
      */
-    protected $selectedLabels = '//input[@checked=""]/../a/span';
+    protected $selectedLabels;
 
     /**
-     * Pattern for child category node.
+     * Pattern for child element node.
      *
      * @var string
      */
-    protected $pattern = '//li[@class="x-tree-node" and div/a/span[contains(text(),"%s")]]';
-
-    /**
-     * Selector for plus image.
-     *
-     * @var string
-     */
-    protected $imagePlus = './div/img[contains(@class, "-plus")]';
+    protected $pattern;
 
     /**
      * Selector for child loader.
@@ -54,17 +40,33 @@ abstract class Tree extends SimpleElement
      *
      * @var string
      */
-    protected $input = '/div/a/span';
+    protected $input;
 
     /**
      * Selector for parent element.
      *
      * @var string
      */
-    protected $parentElement = './../../../../../div/a/span';
+    protected $parentElement;
 
     /**
-     * Drag and drop element to(between) another element(s)
+     * Display children.
+     *
+     * @param string $element
+     * @return void
+     */
+    abstract protected function displayChildren($element);
+
+    /**
+     * Get element label.
+     *
+     * @param ElementInterface $element
+     * @return string
+     */
+    abstract protected function getElementLabel(ElementInterface $element);
+
+    /**
+     * Drag and drop element to(between) another element(s).
      *
      * @param ElementInterface $target
      * @throws \Exception
@@ -152,22 +154,6 @@ abstract class Tree extends SimpleElement
     }
 
     /**
-     * Display children.
-     *
-     * @param $element
-     * @return void
-     */
-    protected function displayChildren($element)
-    {
-        $element = $this->find(sprintf($this->pattern, $element), Locator::SELECTOR_XPATH);
-        $plusButton = $element->find($this->imagePlus, Locator::SELECTOR_XPATH);
-        if ($plusButton->isVisible()) {
-            $plusButton->click();
-            $this->waitLoadChildren($element);
-        }
-    }
-
-    /**
      * Waiter for load children.
      *
      * @param ElementInterface $element
@@ -181,19 +167,6 @@ abstract class Tree extends SimpleElement
                 return $element->find($selector)->isVisible() ? true : null;
             }
         );
-    }
-
-    /**
-     * Clear data for element.
-     *
-     * @return void
-     */
-    public function clear()
-    {
-        $checkboxes = $this->getElements($this->selectedCheckboxes, Locator::SELECTOR_XPATH, 'checkbox');
-        foreach ($checkboxes as $checkbox) {
-            $checkbox->setValue('No');
-        }
     }
 
     /**
@@ -211,19 +184,5 @@ abstract class Tree extends SimpleElement
         }
 
         return $fullPath;
-    }
-
-    /**
-     * Get element label.
-     *
-     * @param ElementInterface $element
-     * @return string
-     */
-    protected function getElementLabel(ElementInterface $element)
-    {
-        $value = $element->getText();
-        preg_match('`(.+) \(.*`', $value, $matches);
-
-        return $matches[1];
     }
 }

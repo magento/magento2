@@ -89,13 +89,6 @@ class ProductForm extends FormTabs
     protected $newAttributeForm = '#create_new_attribute';
 
     /**
-     * General errors on product page.
-     *
-     * @var string
-     */
-    protected $generalErrors = '[data-ui-id="messages-message-error"]';
-
-    /**
      * Fill the product form.
      *
      * @param FixtureInterface $product
@@ -321,24 +314,7 @@ class ProductForm extends FormTabs
             }
         }
 
-        return array_merge($data, $this->getGeneralErrors());
-    }
-
-    /**
-     * Get general errors from product page.
-     *
-     * @return array
-     */
-    protected function getGeneralErrors()
-    {
-        $errors = [];
-        $this->openTab('product-details');
-        $generalErrors = $this->_rootElement->getElements($this->generalErrors);
-        foreach ($generalErrors as $error) {
-            $errors[] = $error->getText();
-        }
-
-        return !empty($errors) ? ['generalErrors' => $errors] : [];
+        return $data;
     }
 
     /**
