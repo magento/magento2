@@ -96,7 +96,7 @@ class Base implements ActionInterface
         throw new \Exception('Not implemented yet');
     }
 
-    protected function executed()
+    protected function execute()
     {
         $this->collectSources();
         $this->collectHandlers();
