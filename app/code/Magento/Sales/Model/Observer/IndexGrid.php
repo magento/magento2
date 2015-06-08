@@ -59,7 +59,7 @@ class IndexGrid
     public function syncInsert(\Magento\Framework\Event\Observer $observer)
     {
         if (!$this->globalConfig->getValue('dev/grid/async_indexing')) {
-            $this->entityGrid->refresh($observer->getDataObject()->getId());
+            $this->entityGrid->refresh($observer->getObject()->getId());
         }
     }
 
