@@ -25,23 +25,31 @@
 
 //
 
+html {
+    height: 100%;
+}
+
 body {
+    &:extend(.abs-clearer all);
     background-color: @body__background-color;
+    min-height: 100%;
+    min-width: 102.4rem;
 }
 
 .page-wrapper {
     background-color: @page-wrapper__background-color;
-    min-width: @window__min-width;
-    padding-left: @page-wrapper__indent-left;
+    float: left;
+    width: ~'calc(100% - @{menu__width})';
 }
 
 .page-content {
-    .extend__clearfix();
+    &:extend(.abs-clearfix all);
     padding-bottom: @page-content__padding-vertical;
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
 }
 
+//  ToDo UI: should be moved to messages
 .notices-wrapper {
     margin: 0 3rem;
     .messages {
