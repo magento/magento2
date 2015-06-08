@@ -11,11 +11,11 @@ use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertUserWrongCredentialsMessage
+ * Class AssertUserFailedLoginMessage
  */
-class AssertUserWrongCredentialsMessage extends AbstractConstraint
+class AssertUserFailedLoginMessage extends AbstractConstraint
 {
-    const INVALID_CREDENTIALS_MESSAGE = 'Please correct the user name or password.';
+    const FAILED_LOGIN_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Verify incorrect credentials message while login to admin
@@ -33,9 +33,9 @@ class AssertUserWrongCredentialsMessage extends AbstractConstraint
         $adminAuth->getLoginBlock()->submit();
 
         \PHPUnit_Framework_Assert::assertEquals(
-            self::INVALID_CREDENTIALS_MESSAGE,
+            self::FAILED_LOGIN_MESSAGE,
             $adminAuth->getMessagesBlock()->getErrorMessages(),
-            'Message "' . self::INVALID_CREDENTIALS_MESSAGE . '" is not visible.'
+            'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'
         );
     }
 
