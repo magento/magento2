@@ -44,10 +44,18 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
+        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
+        parent::__construct(
+            $context,
+            $attribute,
+            $sequenceManager,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $resourcePrefix
+        );
     }
 
     /**
