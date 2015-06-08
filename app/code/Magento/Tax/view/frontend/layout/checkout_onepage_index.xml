@@ -34,20 +34,19 @@
                                     <item name="children" xsi:type="array">
                                         <item name="totals" xsi:type="array">
                                             <item name="children" xsi:type="array">
+                                                <!-- sort order for this totals is configured on admin panel-->
+                                                <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
                                                 <item name="subtotal" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
-                                                    <item name="sortOrder" xsi:type="string">10</item>
                                                 </item>
                                                 <item name="shipping" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
-                                                    <item name="sortOrder" xsi:type="string">20</item>
                                                 </item>
-                                                <item name="grandtotal" xsi:type="array">
-                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grandtotal</item>
-                                                    <item name="sortOrder" xsi:type="string">40</item>
+                                                <item name="grand_total" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand_total</item>
                                                     <item name="children" xsi:type="array">
                                                         <item name="grandtotal_tax" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax_total</item>
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
                                                         </item>
                                                     </item>
                                                 </item>
