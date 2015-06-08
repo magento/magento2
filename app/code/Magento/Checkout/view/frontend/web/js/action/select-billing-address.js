@@ -14,9 +14,21 @@ define(
         '../model/url-builder',
         'mage/storage',
         '../model/payment-service',
-        'underscore'
+        'underscore',
+        'Magento_Customer/js/model/customer'
     ],
-    function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService, _) {
+    function (
+        quote,
+        addressList,
+        navigator,
+        selectShippingAddress,
+        registry,
+        urlBuilder,
+        storage,
+        paymentService,
+        _,
+        customer
+    ) {
         "use strict";
         var actionCallback;
         var result = function (billingAddress, useForShipping, additionalData) {
@@ -42,7 +54,7 @@ define(
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
                 var serviceUrl;
-                if (quote.getCheckoutMethod()() === 'guest') {
+                if (!customer.isLoggedIn()) {
                     serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
                 } else {
                     serviceUrl = urlBuilder.createUrl('/carts/mine/addresses', {});
@@ -51,8 +63,7 @@ define(
                     serviceUrl,
                     JSON.stringify({
                         billingAddress: quote.getBillingAddress()(),
-                        additionalData: {extensionAttributes : additionalData},
-                        checkoutMethod: quote.getCheckoutMethod()()
+                        additionalData: {extensionAttributes : additionalData}
                     })
                 ).done(
                     function (result) {

@@ -2,7 +2,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
 define(
     [
         'Magento_Checkout/js/model/resource-url-manager',
@@ -13,29 +12,38 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function (resourceUrlManager, quote, storage, shippingService, rateRegistry, errorList) {
-        "use strict";
+        'use strict';
+
         return {
-            getRates: function(address) {
-                var cache = rateRegistry.get(address.getCacheKey());
+            /**
+             * Get shipping rates for specified address.
+             * @param {Object} address
+             */
+            getRates: function (address) {
+                var cache = rateRegistry.get(address.getCacheKey()),
+                    serviceUrl = resourceUrlManager.getUrl(
+                        'estimateShippingMethodsForNewAddress',
+                        {
+                            'guest': {
+                                quoteId: quote.getQuoteId()
+                            }
+                        }
+                    ),
+                    payload = JSON.stringify({
+                            address: {
+                                country_id: address.countryId,
+                                region_id: address.regionId,
+                                region: address.region,
+                                postcode: address.postcode
+                            }
+                        }
+                    );
+
                 if (cache) {
                     shippingService.setShippingRates(cache);
                 } else {
-                    var serviceUrl = resourceUrlManager.getUrl(
-                        'estimateShippingMethodsForNewAddress',
-                        {'guest': {quoteId: quote.getQuoteId()}}
-                    );
                     storage.post(
-                        serviceUrl,
-                        JSON.stringify({
-                                address: {
-                                    country_id: address.countryId,
-                                    region_id: address.regionId,
-                                    region: address.region,
-                                    postcode: address.postcode
-
-                                }
-                            }
-                        )
+                        serviceUrl, payload
                     ).done(
                         function (result) {
                             rateRegistry.set(address.getCacheKey(), result);
@@ -45,12 +53,11 @@ define(
                         function (response) {
                             var error = JSON.parse(response.responseText);
                             errorList.add(error);
-                            shippingService.setShippingRates([])
+                            shippingService.setShippingRates([]);
                         }
                     );
                 }
             }
-
         };
     }
 );

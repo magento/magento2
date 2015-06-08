@@ -26,9 +26,7 @@ define(
         return {
             customerData: customerData,
             customerDetails: {},
-            isLoggedIn: function() {
-                return isLoggedIn;
-            },
+            isLoggedIn: isLoggedIn,
             setIsLoggedIn: function (flag) {
                 isLoggedIn(flag);
             },

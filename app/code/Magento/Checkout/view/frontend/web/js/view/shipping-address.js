@@ -36,7 +36,7 @@ define(
                 visible: true
             },
             isVisible: ko.observable(true),
-            isCustomerLoggedIn: customer.isLoggedIn(),
+            isCustomerLoggedIn: customer.isLoggedIn,
             isFormPopUpVisible: ko.observable(false),
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
