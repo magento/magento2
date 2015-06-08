@@ -9,6 +9,7 @@ namespace Magento\Theme\Test\Unit\Console\Command;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Setup\BackupRollbackFactory;
 
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,21 +27,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directoryList;
-
-    /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $backupFS;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $file;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -83,6 +69,16 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
+     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupRollback;
+
+    /**
+     * @var BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupRollbackFactory;
+
+    /**
      * @var CommandTester
      */
     private $tester;
@@ -97,21 +93,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->backupFS = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
-        $this->objectManager->expects($this->any())
-            ->method('create')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\Backup\Filesystem', [], $this->backupFS],
-            ]));
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $path = realpath(__DIR__ . '/../../_files/');
-        $this->directoryList->expects($this->any())
-            ->method('getRoot')
-            ->willReturn($path);
-        $this->directoryList->expects($this->any())
-            ->method('getPath')
-            ->willReturn($path);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $composerInformation->expects($this->any())
             ->method('getRootRequiredPackages')
@@ -130,6 +111,17 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->themeProvider = $this->getMock('Magento\Theme\Model\Theme\ThemeProvider', [], [], '', false);
         $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->backupRollback = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
+        $this->backupRollbackFactory = $this->getMock(
+            'Magento\Framework\Setup\BackupRollbackFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->backupRollbackFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->backupRollback);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -137,14 +129,13 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->deploymentConfig,
             $this->maintenanceMode,
             $this->objectManager,
-            $this->directoryList,
-            $this->file,
             $this->filesystem,
             $this->dependencyChecker,
             $this->collection,
             $this->themeProvider,
             $this->remove,
-            $state
+            $state,
+            $this->backupRollbackFactory
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -313,24 +304,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithBackupCode()
     {
         $this->setUpExecute();
-        $this->backupFS->expects($this->once())
-            ->method('addIgnorePaths');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupsDir');
-        $this->backupFS->expects($this->once())
-            ->method('setBackupExtension');
-        $this->backupFS->expects($this->once())
-            ->method('setTime');
-        $this->backupFS->expects($this->once())
-            ->method('create');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupFilename')
-            ->willReturn('RollbackFile_A.tgz');
-        $this->backupFS->expects($this->once())
-            ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');
-        $this->file->expects($this->once())->method('isExists')->willReturn(false);
-        $this->file->expects($this->once())->method('createDirectory');
+        $this->backupRollbackFactory->expects($this->exactly(1))
+            ->method('create')
+            ->willReturn($this->backupRollback);
         $this->tester->execute(['theme' => ['test'], '--backup-code' => true]);
         $this->tester->getDisplay();
     }

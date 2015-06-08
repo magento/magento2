@@ -22,11 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Command for uninstalling theme and backup-code feature
@@ -56,16 +54,6 @@ class ThemeUninstallCommand extends Command
      * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
-     * @var File
-     */
-    private $file;
 
     /**
      * @var DependencyChecker
@@ -117,6 +105,11 @@ class ThemeUninstallCommand extends Command
     private $cleanupFiles;
 
     /**
+     * @var BackupRollbackFactory
+     */
+    private $backupRollbackFactory;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
@@ -125,14 +118,13 @@ class ThemeUninstallCommand extends Command
      * @param DeploymentConfig $deploymentConfig
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerInterface $objectManager
-     * @param DirectoryList $directoryList
-     * @param File $file
      * @param Filesystem $filesystem
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
      * @param Remove $remove
      * @param State $appState
+     * @param BackupRollbackFactory $backupRollbackFactory
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -142,14 +134,13 @@ class ThemeUninstallCommand extends Command
         DeploymentConfig $deploymentConfig,
         MaintenanceMode $maintenanceMode,
         ObjectManagerInterface $objectManager,
-        DirectoryList $directoryList,
-        File $file,
         Filesystem $filesystem,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         ThemeProvider $themeProvider,
         Remove $remove,
-        State $appState
+        State $appState,
+        BackupRollbackFactory $backupRollbackFactory
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
@@ -157,8 +148,6 @@ class ThemeUninstallCommand extends Command
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
         $this->objectManager = $objectManager;
-        $this->directoryList = $directoryList;
-        $this->file = $file;
         $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
@@ -166,6 +155,7 @@ class ThemeUninstallCommand extends Command
         $this->themeProvider = $themeProvider;
         $this->appState = $appState;
         $this->appState->setAreaCode(Area::AREA_ADMIN);
+        $this->backupRollbackFactory = $backupRollbackFactory;
         parent::__construct();
     }
 
@@ -175,7 +165,7 @@ class ThemeUninstallCommand extends Command
     protected function configure()
     {
         $this->setName('theme:uninstall');
-        $this->setDescription('Uninstall theme');
+        $this->setDescription('Uninstalls theme');
         $this->addOption(
             self::INPUT_KEY_BACKUP_CODE,
             null,
@@ -185,7 +175,8 @@ class ThemeUninstallCommand extends Command
         $this->addArgument(
             self::INPUT_KEY_THEMES,
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-            'Path of the theme'
+            'Path of the theme. Theme path should be specified as full path which is area/vendor/name.'
+                . ' For example, frontend/Magento/Blank '
         );
         $this->addOption(
             self::INPUT_KEY_CLEAR_STATIC_CONTENT,
@@ -225,13 +216,9 @@ class ThemeUninstallCommand extends Command
 
         try {
             if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
-                $backupRollback = new BackupRollback(
-                    $this->objectManager,
-                    new ConsoleLogger($output),
-                    $this->directoryList,
-                    $this->file
-                );
-                $backupRollback->codeBackup();
+                $time = time();
+                $codeBackup = $this->backupRollbackFactory->create($output);
+                $codeBackup->codeBackup($time);
             }
             $output->writeln('<info>Removing ' . implode(', ', $themePaths) . ' from database');
             $this->removeFromDb($themePaths);
