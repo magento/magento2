@@ -29,10 +29,12 @@ class Generic extends Template
      * Set current quote item
      *
      * @param Item $item
+     * @return $this
      */
     public function setItem(Item $item)
     {
         $this->item = $item;
+        return $this;
     }
 
     /**

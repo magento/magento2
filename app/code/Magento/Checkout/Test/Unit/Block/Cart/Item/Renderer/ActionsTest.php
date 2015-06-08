@@ -54,7 +54,7 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model->setItem($itemMock);
+        $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertEquals($itemMock, $this->model->getItem());
     }
 
