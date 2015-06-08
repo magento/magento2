@@ -21,7 +21,7 @@ define(
                     shippingService.setShippingRates(cache);
                 } else {
                     storage.post(
-                        resourceUrlManager.getUrl('estimateShippingMethodsByAddressId'),
+                        resourceUrlManager.getUrlForEstimationShippingMethodsByAddressId(),
                         JSON.stringify({
                             addressId:  address.customerAddressId
                         })

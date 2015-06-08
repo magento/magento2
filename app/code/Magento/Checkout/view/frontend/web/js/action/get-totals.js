@@ -16,12 +16,8 @@ define(
     function (ko, quote, resourceUrlManager, errorList, storage, _) {
         "use strict";
         return function (callbacks) {
-            var serviceUrl = resourceUrlManager.getUrl(
-                'getCartTotals',
-                {'guest': {quoteId: quote.getQuoteId()}}
-            );
             return storage.get(
-                serviceUrl
+                resourceUrlManager.getUrlForCartTotals(quote)
             ).done(
                 function (response) {
                     var proceed = true;
