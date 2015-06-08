@@ -109,7 +109,7 @@ class RateTest extends \Magento\Backend\Utility\Controller
     {
         $expectedData = [
             'success' => false,
-            'error_message' => 'Please fill all required fields with valid information.',
+            'error_message' => 'Make sure all required information is valid.',
         ];
         return [
             [

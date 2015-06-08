@@ -68,24 +68,23 @@ module.exports = function (grunt) {
             'less:luma',
             'less:backend'
         ],
+
         /**
          * Documentation
          */
         documentation: [
+            'replace:documentation',
             'less:documentation',
             'styledocco:documentation',
+            'usebanner:documentationCss',
+            'usebanner:documentationLess',
+            'usebanner:documentationHtml',
             'clean:var',
             'clean:pub'
         ],
 
         'legacy-build': [
             'mage-minify:legacy'
-        ],
-
-        'documentation-banners': [
-            'usebanner:documentationCss',
-            'usebanner:documentationLess',
-            'usebanner:documentationHtml'
         ],
 
         spec: function (theme) {
