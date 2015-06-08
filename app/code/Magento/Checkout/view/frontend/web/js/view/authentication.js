@@ -45,10 +45,10 @@ define(
                 return navigator.getStepClassAttributes(stepName);
             },
             isActive: function() {
-                if (customer.isLoggedIn()()) {
+                if (customer.isLoggedIn()) {
                     navigator.setStepEnabled(stepName, false);
                 }
-                return !customer.isLoggedIn()();
+                return !customer.isLoggedIn();
             },
             isChecked: function() {
                 if (!isGuestCheckoutAllowed) {

@@ -25,7 +25,7 @@ define(
             checkRequest: null,
             isEmailCheckComplete: null,
             isPasswordVisible: ko.observable(false),
-            isCustomerLoggedIn: customer.isLoggedIn(),
+            isCustomerLoggedIn: customer.isLoggedIn,
             forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
             emailCheckTimeout: 0,
             initialize: function() {

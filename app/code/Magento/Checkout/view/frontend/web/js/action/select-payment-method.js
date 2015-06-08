@@ -11,9 +11,10 @@ define(
         '../model/payment-service',
         'Magento_Ui/js/model/errorlist',
         'mage/storage',
-        'underscore'
+        'underscore',
+        'Magento_Customer/js/model/customer'
     ],
-    function(quote, urlBuilder, navigator, service, errorList, storage, _) {
+    function(quote, urlBuilder, navigator, service, errorList, storage, _, customer) {
         "use strict";
         return function (methodData, methodInfo, callbacks) {
             var paymentMethodData = {
@@ -27,7 +28,7 @@ define(
                     "shippingMethodCode" : shippingMethodCode.join('_')
                 },
                 serviceUrl;
-            if (quote.getCheckoutMethod()() === 'guest') {
+            if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/collect-totals', {});
