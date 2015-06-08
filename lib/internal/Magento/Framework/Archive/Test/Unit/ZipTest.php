@@ -29,7 +29,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNoExceptions()
     {
-        try{
+        try {
             $reflectedClass = new \ReflectionClass('\Magento\Framework\Archive\Zip');
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke($this->zip, []);
