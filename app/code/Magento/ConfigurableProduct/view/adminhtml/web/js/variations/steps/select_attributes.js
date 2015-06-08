@@ -9,10 +9,17 @@ define([
 ], function (Component, $, registry) {
     "use strict";
 
+    var initNewAttributeListener = function (provider) {
+        var $form = $('[data-form=edit-product]');
+        $form.on('changeAttributeSet', function() {
+            provider().reload();
+        });
+    };
     return Component.extend({
         initialize: function () {
             this._super();
             this.multiselect = registry.async(this.multiselectName);
+            initNewAttributeListener(registry.async(this.providerName));
         },
         title: 'step1',
         render: function (wizard) {
