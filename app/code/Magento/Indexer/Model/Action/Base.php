@@ -118,16 +118,12 @@ class Base implements ActionInterface
         $select = new \Magento\Framework\DB\Select($this->adapter);
         $select->from($this->sources[$this->data['primary']]->getTableName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            foreach ($this->data['fields'] as $fieldName => $field) {
+            foreach ($fieldset['fields'] as $fieldName => $field) {
                 $handler = $field['handler'];
                 $source = $field['source'];
                 /** @var HandlerInterface $handler */
                 /** @var SourceInterface $source */
                 $handler->prepareSql($select, $source, $field);
-            }
-            $fieldsetInstance = $this->data['fieldset'][$fieldsetName]['instance'];
-            if ($fieldsetInstance instanceof FieldsetInterface) {
-                $this->data['fieldsets'][$fieldsetName]['result'] = $fieldsetInstance->update($this->data['fields']);
             }
         }
 
