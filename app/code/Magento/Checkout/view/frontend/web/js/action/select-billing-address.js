@@ -7,7 +7,7 @@
 define(
     [
         '../model/quote',
-        '../model/addresslist',
+        'Magento_Customer/js/model/address-list',
         '../model/step-navigator',
         './select-shipping-address',
         'uiRegistry',

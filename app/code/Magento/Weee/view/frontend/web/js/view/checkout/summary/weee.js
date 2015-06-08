@@ -14,7 +14,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Weee/checkout/summary/weee_total'
+                template: 'Magento_Weee/checkout/summary/weee'
             },
             isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
             totals: quote.getTotals(),

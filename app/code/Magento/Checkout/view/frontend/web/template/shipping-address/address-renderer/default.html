@@ -13,4 +13,9 @@
     <button type="button" data-bind="click: selectAddress" class="action action-select-shipping-item">
         <span data-bind="text: $t('Ship Here')"></span>
     </button>
+    <button type="button"
+            class="action edit-address-link"
+            data-bind="click: editAddress, visible:  address().getType() == 'new-customer-address'">
+        <span data-bind="text: $t('Edit')"></span>
+    </button>
 </div>

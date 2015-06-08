@@ -15,6 +15,7 @@ define(
         '../action/create-shipping-address',
         '../action/select-shipping-address',
         '../model/shipping-rates-validator',
+        '../model/shipping-address/form-popup-state',
         'mage/translate'
     ],
     function(
@@ -27,7 +28,8 @@ define(
         quote,
         createShippingAddress,
         selectShippingAddress,
-        shippingRatesValidator
+        shippingRatesValidator,
+        formPopUpState
     ) {
         'use strict';
         return Component.extend({
@@ -37,13 +39,42 @@ define(
             },
             isVisible: ko.observable(true),
             isCustomerLoggedIn: customer.isLoggedIn,
-            isFormPopUpVisible: ko.observable(false),
+            isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
             saveInAddressBook: true,
 
+            initialize: function () {
+                this._super();
+
+                this._initializeDefaultAddress();
+
+                return this;
+            },
+
+            /**
+             * Initialize default shipping address
+             *
+             * @private
+             */
+            _initializeDefaultAddress: function() {
+                var shippingAddress = quote.shippingAddress();
+                if (!shippingAddress) {
+                    var isShippingAddressInitialized = addressList.some(function (address) {
+                        if (address.isDefaultShipping) {
+                            selectShippingAddress(address);
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (!isShippingAddressInitialized && addressList().length == 1) {
+                        selectShippingAddress(addressList()[0]);
+                    }
+                }
+            },
+
             initElement: function(element) {
-                if (element.index == 'shipping-address-fieldset') {
+                if (this.isFormInline && element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
             },
