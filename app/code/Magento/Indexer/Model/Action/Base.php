@@ -5,10 +5,10 @@
  */
 namespace Magento\Indexer\Model\Action;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetFactory;
-use Magento\Indexer\Model\FieldsetInterface;
 use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
 use Magento\Indexer\Model\HandlerPool;
@@ -27,14 +27,9 @@ class Base implements ActionInterface
     protected $handlerPool;
 
     /**
-     * @var FieldsetFactory
-     */
-    protected $fieldsetFactory;
-
-    /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    protected $connection;
 
     /**
      * @var SourceInterface[]
@@ -52,23 +47,20 @@ class Base implements ActionInterface
     protected $data;
 
     /**
-     * @param AdapterInterface $adapter
+     * @param Resource $resource
      * @param SourcePool $sourceFactory
      * @param HandlerPool $handlerFactory
-     * @param FieldsetFactory $fieldsetFactory
      * @param array $data
      */
     public function __construct(
-        AdapterInterface $adapter,
+        Resource $resource,
         SourcePool $sourceFactory,
         HandlerPool $handlerFactory,
-        FieldsetFactory $fieldsetFactory,
         $data = []
     ) {
-        $this->adapter = $adapter;
+        $this->connection = $resource->getConnection('write');
         $this->sourcePool = $sourceFactory;
         $this->handlerPool = $handlerFactory;
-        $this->fieldsetFactory = $fieldsetFactory;
         $this->data = $data;
     }
 
@@ -110,12 +102,15 @@ class Base implements ActionInterface
         $this->collectHandlers();
         $this->prepareFields();
         $select = $this->createResultSelect();
-        $this->adapter->insertFromSelect($select, 'index_table_name');
+        $this->connection->insertFromSelect(
+            $select,
+            'index_' . $this->sources[$this->data['primary']]->getTableName()
+        );
     }
 
     protected function createResultSelect()
     {
-        $select = new \Magento\Framework\DB\Select($this->adapter);
+        $select = $this->connection->select();
         $select->from($this->sources[$this->data['primary']]->getTableName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($fieldset['fields'] as $fieldName => $field) {
