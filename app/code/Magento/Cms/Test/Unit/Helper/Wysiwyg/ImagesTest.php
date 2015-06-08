@@ -290,7 +290,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $allowedValue
-     * SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function generalSettingsIsUsingStaticUrlsAllowed($allowedValue)
     {
