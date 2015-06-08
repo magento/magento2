@@ -69,21 +69,21 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the additional data for the shipment item.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
     /**
      * Gets the description for the shipment item.
      *
-     * @return string Description.
+     * @return string|null Description.
      */
     public function getDescription();
 
     /**
      * Gets the ID for the shipment item.
      *
-     * @return int Shipment item ID.
+     * @return int|null Shipment item ID.
      */
     public function getEntityId();
 
@@ -98,7 +98,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the name for the shipment item.
      *
-     * @return string Name.
+     * @return string|null Name.
      */
     public function getName();
 
@@ -112,21 +112,21 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the parent ID for the shipment item.
      *
-     * @return int Parent ID.
+     * @return int|null Parent ID.
      */
     public function getParentId();
 
     /**
      * Gets the price for the shipment item.
      *
-     * @return float Price.
+     * @return float|null Price.
      */
     public function getPrice();
 
     /**
      * Gets the product ID for the shipment item.
      *
-     * @return int Product ID.
+     * @return int|null Product ID.
      */
     public function getProductId();
 
@@ -140,21 +140,21 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the row total for the shipment item.
      *
-     * @return float Row total.
+     * @return float|null Row total.
      */
     public function getRowTotal();
 
     /**
      * Gets the SKU for the shipment item.
      *
-     * @return string SKU.
+     * @return string|null SKU.
      */
     public function getSku();
 
     /**
      * Gets the weight for the shipment item.
      *
-     * @return float Weight.
+     * @return float|null Weight.
      */
     public function getWeight();
 
