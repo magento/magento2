@@ -109,7 +109,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->attrCollectionFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
