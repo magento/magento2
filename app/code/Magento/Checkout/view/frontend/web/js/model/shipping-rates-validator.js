@@ -22,7 +22,7 @@ define(
             validateDelay: 2000,
 
             registerValidator: function(carrier, validator) {
-                if ($.inArray(carrier, checkoutConfig.activeCarriers) != -1) {
+                if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
                     validators.push(validator);
                 }
             },
@@ -37,7 +37,7 @@ define(
                 var self = this;
                 var observableFields = shippingRatesValidationRules.getObservableFields();
                 $.each(elements, function(index, elem) {
-                    if (elem && $.inArray(elem.index, observableFields) != -1) {
+                    if (elem && observableFields.indexOf(elem.index) != -1) {
                         self.bindHandler(elem);
                     }
                 });
@@ -70,7 +70,7 @@ define(
                 );
                 if (this.validateAddressData(addressFlat)) {
                     var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
-                    //selectShippingAddress(address);
+                    selectShippingAddress(address);
                 }
             },
 

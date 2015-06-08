@@ -22,15 +22,23 @@ class ConfigProvider implements ConfigProviderInterface
     protected $shippingMethodConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param Config $shippingMethodConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        \Magento\Shipping\Model\Config $shippingMethodConfig
+        \Magento\Shipping\Model\Config $shippingMethodConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->shippingMethodConfig = $shippingMethodConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -49,7 +57,8 @@ class ConfigProvider implements ConfigProviderInterface
                     ScopeInterface::SCOPE_STORE
                 )
             ],
-            'activeCarriers' => $this->getActiveCarriers()
+            'activeCarriers' => $this->getActiveCarriers(),
+            'originCountryCode' => $this->getOriginCountryCode(),
         ];
     }
 
@@ -64,5 +73,18 @@ class ConfigProvider implements ConfigProviderInterface
             $activeCarriers[] = $carrier->getCarrierCode();
         }
         return $activeCarriers;
+    }
+
+    /**
+     * Returns origin country code
+     * @return string
+     */
+    private function getOriginCountryCode()
+    {
+        return $this->scopeConfig->getValue(
+            \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()
+        );
     }
 }
