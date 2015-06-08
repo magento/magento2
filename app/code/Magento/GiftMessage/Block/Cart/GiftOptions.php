@@ -5,9 +5,9 @@
  */
 namespace Magento\GiftMessage\Block\Cart;
 
-use \Magento\Backend\Block\Template\Context;
-use \Magento\Framework\Json\Encoder;
-use \Magento\Checkout\Model\CompositeConfigProvider;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Json\Encoder;
+use Magento\GiftMessage\Model\CompositeConfigProvider;
 
 class GiftOptions extends \Magento\Backend\Block\Template
 {
