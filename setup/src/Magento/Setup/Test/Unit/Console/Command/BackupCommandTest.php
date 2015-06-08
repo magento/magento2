@@ -30,6 +30,11 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $backupRollbackFactory;
 
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
     public function setUp()
     {
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
@@ -52,6 +57,7 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
         $this->backupRollbackFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->backupRollback);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
@@ -59,13 +65,17 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ]));
         $command = new BackupCommand(
             $objectManagerProvider,
-            $maintenanceMode
+            $maintenanceMode,
+            $this->deploymentConfig
         );
         $this->tester = new CommandTester($command);
     }
 
     public function testExecuteCodeBackup()
     {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
         $this->backupRollback->expects($this->once())
             ->method('codeBackup')
             ->willReturn($this->backupRollback);
@@ -74,6 +84,9 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteMediaBackup()
     {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
         $this->backupRollback->expects($this->once())
             ->method('codeBackup')
             ->willReturn($this->backupRollback);
@@ -82,9 +95,36 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteDBBackup()
     {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
         $this->backupRollback->expects($this->once())
             ->method('dbBackup')
             ->willReturn($this->backupRollback);
         $this->tester->execute(['--db' => true]);
+    }
+
+    public function testExecuteNotInstalled()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(false));
+        $this->tester->execute(['--db' => true]);
+        $this->assertStringMatchesFormat(
+            'No information is available: the application is not installed.%w',
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function testExecuteNoOptions()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(false));
+        $this->tester->execute([]);
+        $expected = 'Enabling maintenance mode' . PHP_EOL
+            . 'No option is provided for the command to take backup.'  . PHP_EOL
+            . 'Disabling maintenance mode';
+        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
     }
 }

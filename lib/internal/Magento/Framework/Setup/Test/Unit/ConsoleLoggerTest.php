@@ -16,7 +16,7 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
     private $console;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Setup\ConsoleLogger
+     * @var \PHPUnit_Framework_MockObject_MockObject|ConsoleLogger
      */
     private $consoleLoggerModel;
 
