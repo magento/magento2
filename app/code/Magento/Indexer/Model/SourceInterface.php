@@ -9,7 +9,7 @@ interface SourceInterface
 {
     /**
      * @param array $data
-     * @return []
+     * @return array
      */
     public function prepare($data);
 }

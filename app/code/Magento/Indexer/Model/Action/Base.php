@@ -109,9 +109,7 @@ class Base implements ActionInterface
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($this->data['fields'] as $fieldName => $field) {
                 $source = $field['source'];
-                $handler = $field['source'];
                 /** @var SourceInterface $source */
-                /** @var HandlerInterface $handler */
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['result'] = $source->prepare($field);
             }
             $fieldsetInstance = $this->data['fieldset'][$fieldsetName]['instance'];
