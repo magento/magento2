@@ -85,7 +85,7 @@ define([
             } else if (methods.filter('input:radio:checked').length) {
                 isValid = true;
             } else {
-                alert($.mage.__('Please specify payment method.'));
+                alert($.mage.__('Please choose a payment method.'));
             }
 
             return isValid;

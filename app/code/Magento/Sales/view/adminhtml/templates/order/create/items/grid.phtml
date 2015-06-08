@@ -104,8 +104,7 @@
                                     <label
                                         class="normal admin__field-label"
                                         for="item_use_custom_price_<?php echo $_item->getId() ?>">
-                                        <?php echo __('Custom Price') ?>*
-                                    </label>
+                                        <span><?php echo __('Custom Price') ?>*</span></label>
                                 </div>
                             <?php endif; ?>
                             <input id="item_custom_price_<?php echo $_item->getId() ?>"
@@ -137,7 +136,8 @@
                                        type="checkbox" />
                                 <label
                                     for="item_use_discount_<?php echo $_item->getId() ?>"
-                                    class="normal admin__field-label"><?php echo __('Apply') ?></label>
+                                    class="normal admin__field-label">
+                                    <span><?php echo __('Apply') ?></span></label>
                             </div>
 
                         </td>

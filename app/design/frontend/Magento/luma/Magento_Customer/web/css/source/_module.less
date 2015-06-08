@@ -8,8 +8,8 @@
 @account-table-action-delete: @color-red12;
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  ---------------------------------------------
 
 & when (@media-common = true) {
 
@@ -77,7 +77,7 @@
     }
 }
 
-// My account
+//  My account
 .account {
     .page-title-wrapper {
         .page-title {
@@ -107,8 +107,24 @@
             margin-bottom: 0;
         }
     }
+    .legend {
+        &:extend(.abs-account-title all);
+    }
+}
+
+.account,
+[class^="sales-guest-"],
+.sales-guest-view {
+    .column.main {
+        .order-details-items {
+            .table-wrapper {
+                .data.table {
+                    &:extend(.abs-table-striped all);
+                }
+            }
+        }
+    }
     .data.table {
-        &:extend(.abs-table-striped all);
         .col.actions {
             .action {
                 &:extend(.abs-account-actions all);
@@ -118,12 +134,9 @@
             }
         }
     }
-    .legend {
-        &:extend(.abs-account-title all);
-    }
 }
 
-// Checkout address (create shipping address)
+//  Checkout address (create shipping address)
 .field.street {
     .field.additional {
         .label {
@@ -133,8 +146,9 @@
 }
 
 //
-//    Blocks & Widgets
-//--------------------------------------
+//  Blocks & Widgets
+//  ---------------------------------------------
+
 .block {
     &:extend(.abs-margin-for-blocks-and-widgets all);
     .column.main & {
@@ -181,8 +195,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .login-container {
         &:extend(.abs-add-clearfix-desktop all);
@@ -217,7 +232,7 @@
         min-width: 600px;
     }
 
-    // My account
+    //  My account
     .account.page-layout-2columns-left {
         .sidebar-main,
         .sidebar-additional {
@@ -299,8 +314,9 @@
 }
 
 //
-//    Mobile @screen__s
-//--------------------------------------
+//  Mobile @screen__s
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .account {
         .column.main,
@@ -314,8 +330,9 @@
 }
 
 //
-//    Mobile @screen__m
-//--------------------------------------
+//  Mobile @screen__m
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .login-container {
         .fieldset {
