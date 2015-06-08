@@ -12,13 +12,12 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Class AssertIntegrationForm
- * Assert that integration form filled correctly
+ * Assert that integration form filled correctly.
  */
 class AssertIntegrationForm extends AbstractAssertForm
 {
     /**
-     * Skipped fields while verifying
+     * Skipped fields while verifying.
      *
      * @var array
      */
@@ -27,20 +26,37 @@ class AssertIntegrationForm extends AbstractAssertForm
     ];
 
     /**
-     * Assert that integration form filled correctly
+     * Pattern for error message.
+     *
+     * @var string
+     */
+    protected $errorMessagePattern = "Data in '%s' field not equal.\nExpected: %s\nActual: %s";
+
+    /**
+     * Flag for strict verify resources data.
+     *
+     * @var bool
+     */
+    protected $strictResourcesVerify;
+
+    /**
+     * Assert that integration form filled correctly.
      *
      * @param IntegrationIndex $integrationIndexPage
      * @param IntegrationNew $integrationNewPage
      * @param Integration $integration
      * @param Integration|null $initialIntegration
+     * @param bool $strictResourcesVerify [optional]
      * @return void
      */
     public function processAssert(
         IntegrationIndex $integrationIndexPage,
         IntegrationNew $integrationNewPage,
         Integration $integration,
-        Integration $initialIntegration = null
+        Integration $initialIntegration = null,
+        $strictResourcesVerify = false
     ) {
+        $this->strictResourcesVerify = $strictResourcesVerify;
         $data = ($initialIntegration === null)
             ? $integration->getData()
             : array_merge($initialIntegration->getData(), $integration->getData());
@@ -60,7 +76,7 @@ class AssertIntegrationForm extends AbstractAssertForm
     }
 
     /**
-     * Verifying that form is filled correctly
+     * Verifying that form is filled correctly.
      *
      * @param array $formData
      * @param array $fixtureData
@@ -70,34 +86,17 @@ class AssertIntegrationForm extends AbstractAssertForm
      */
     protected function verifyForm(array $formData, array $fixtureData)
     {
-        $issetResources = [];
         $errorMessages = [];
-        $errorMessage = "Data in '%s' field not equal.\nExpected: %s\nActual: %s";
-
         foreach ($fixtureData as $key => $value) {
             if (in_array($key, $this->skippedFields)) {
                 continue;
-            }
-            if ($key === 'resources') {
-                $fixtureData[$key] = is_array($fixtureData[$key]) ? $fixtureData[$key] : [$fixtureData[$key]];
-                foreach ($fixtureData[$key] as $fixtureResource) {
-                    foreach ($formData[$key] as $formResource) {
-                        if (preg_match('|^' . preg_quote($fixtureResource) . '|', $formResource)) {
-                            $issetResources[] = $formResource;
-                        }
-                    }
-                }
-                $diff = array_diff($formData[$key], $issetResources);
-                if (!empty($diff)) {
-                    $errorMessages[] = sprintf(
-                        $errorMessage,
-                        $key,
-                        implode(",\n", $fixtureData[$key]),
-                        implode(",\n", $formData[$key])
-                    );
-                }
+            } elseif ($key === 'resources') {
+                $errorMessages = array_merge(
+                    $errorMessages,
+                    $this->checkResources($formData[$key], $fixtureData[$key])
+                );
             } elseif ($value !== $formData[$key]) {
-                $errorMessages[] = sprintf($errorMessage, $key, $value, $formData[$key]);
+                $errorMessages[] = $this->getErrorMessage($value, $formData[$key], $key);
             }
         }
 
@@ -105,7 +104,48 @@ class AssertIntegrationForm extends AbstractAssertForm
     }
 
     /**
-     * Returns a string representation of successful assertion
+     * Check resources errors.
+     *
+     * @param array $formData
+     * @param array|string $fixtureData
+     * @return array
+     */
+    protected function checkResources(array $formData, $fixtureData)
+    {
+        $errorMessages = [];
+        $diff = [];
+        $fixtureData = is_array($fixtureData) ? $fixtureData : [$fixtureData];
+        if ($this->strictResourcesVerify) {
+            $diff = array_diff($formData, $fixtureData);
+        } else {
+            foreach ($fixtureData as $itemData) {
+                $diff[] = in_array($itemData, $formData) ? null : true;
+            }
+        }
+        if (array_filter($diff)) {
+            $errorMessages[] = $this->getErrorMessage($fixtureData, $formData, 'resources');
+        }
+
+        return $errorMessages;
+    }
+
+    /**
+     * Get error message.
+     *
+     * @param mixed $fixtureData
+     * @param mixed $formData
+     * @param mixed $field
+     * @return string
+     */
+    protected function getErrorMessage($fixtureData, $formData, $field)
+    {
+        $fixtureData = is_array($fixtureData) ? $this->arrayToString($fixtureData) : $fixtureData;
+        $formData = is_array($formData) ? $this->arrayToString($formData) : $formData;
+        return sprintf($this->errorMessagePattern, $field, $fixtureData, $formData);
+    }
+
+    /**
+     * Returns a string representation of successful assertion.
      *
      * @return string
      */

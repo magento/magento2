@@ -78,17 +78,9 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
      */
     protected function getActualMessage(array $errors, $attributeLabel)
     {
-        $needleError = sprintf(self::UNIQUE_MESSAGE, $attributeLabel);
-        if (isset($errors['product-details'][$attributeLabel])) {
-            $message = $errors['product-details'][$attributeLabel];
-        } elseif (isset($errors['generalErrors']) && in_array($needleError, $errors['generalErrors']) !== false) {
-            $index = array_search($needleError, $errors['generalErrors']);
-            $message = $errors['generalErrors'][$index];
-        } else {
-            $message = null;
-        }
-
-        return $message;
+        return isset($errors['product-details'][$attributeLabel])
+            ? $errors['product-details'][$attributeLabel]
+            : null;
     }
 
     /**
