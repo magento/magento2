@@ -40,5 +40,7 @@ class InfoBackupsListCommandTest extends \PHPUnit_Framework_TestCase
         $command->setHelperSet($helperSet);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
+        $expected = 'Showing backup files in ';
+        $this->assertStringStartsWith($expected, $commandTester->getDisplay());
     }
 }
