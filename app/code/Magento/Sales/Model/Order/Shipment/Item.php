@@ -89,6 +89,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
     /**
      * Declare Shipment instance
      *
+     * @codeCoverageIgnore
+     *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
      */
@@ -100,6 +102,8 @@ class Item extends AbstractModel implements ShipmentItemInterface
 
     /**
      * Retrieve Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
      */
@@ -177,6 +181,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -287,7 +292,6 @@ class Item extends AbstractModel implements ShipmentItemInterface
         return $this->getData(ShipmentItemInterface::WEIGHT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
