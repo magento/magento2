@@ -28,10 +28,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeMock;
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Handler\Address|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressHandlerMock;
-    /**
      * @var \Magento\Sales\Model\Resource\Order\Handler\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stateHandlerMock;
@@ -89,19 +85,17 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $entitySnapshotMock;
 
     /**
+     * @var \Magento\Sales\Model\Resource\EntityRelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationCompositeMock;
+
+    /**
      * Mock class dependencies
      */
     public function setUp()
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->attributeMock = $this->getMock('Magento\Sales\Model\Resource\Attribute', [], [], '', false);
-        $this->addressHandlerMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Handler\Address',
-            ['removeEmptyAddresses'],
-            [],
-            '',
-            false
-        );
         $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
         $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
         $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
@@ -168,6 +162,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->relationCompositeMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntityRelationComposite',
+            [],
+            [],
+            '',
+            false
+        );
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
@@ -176,7 +177,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $this->attributeMock,
             $this->salesSequenceManagerMock,
             $this->entitySnapshotMock,
-            $this->addressHandlerMock,
+            $this->relationCompositeMock,
             $this->stateHandlerMock
         );
     }
