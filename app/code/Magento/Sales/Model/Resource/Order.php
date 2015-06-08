@@ -40,11 +40,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $stateHandler;
 
     /**
-     * @var AddressHandler
-     */
-    protected $addressHandler;
-
-    /**
      * Model Initialization
      *
      * @return void
@@ -152,7 +147,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getGroup()->getName(),
                 $store->getName(),
             ];
-            $object->setStoreName(implode("\n", $name));
+            $object->setStoreName(implode(PHP_EOL, $name));
             $object->setTotalItemCount($this->calculateItems($object));
         }
         $object->setData(
