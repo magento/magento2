@@ -54,7 +54,7 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Gets the credit memo created-at timestamp.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -69,7 +69,7 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Gets the credit memo ID.
      *
-     * @return int Credit memo ID.
+     * @return int|null Credit memo ID.
      */
     public function getEntityId();
 
