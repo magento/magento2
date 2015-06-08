@@ -89,9 +89,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Flag which determines if extension attributes were joined before the collection was loaded.
      *
-     * @var bool
+     * @var callable|null
      */
-    private $extensionAttributesJoined = false;
+    protected $extensionAttributesExtractorCallback;
 
     /**
      * @param EntityFactoryInterface $entityFactory
@@ -743,6 +743,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_setIsLoaded(false);
         $this->_items = [];
         $this->_data = null;
+        $this->extensionAttributesExtractorCallback = null;
         return $this;
     }
 
@@ -755,15 +756,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     protected function _fetchAll(\Zend_Db_Select $select)
     {
         $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
-        if ($this->extensionAttributesJoined) {
-            // TODO: Temporary implementation to evaluate performance improvement
-            /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */
-            $extensionAttributesFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Api\ExtensionAttributesFactory');
+        if ($this->extensionAttributesExtractorCallback && is_callable($this->extensionAttributesExtractorCallback)) {
             foreach ($data as $key => $dataItem) {
-                $data[$key] = $extensionAttributesFactory->extractExtensionAttributes(
-                    $this->_itemObjectClass,
-                    $dataItem
+                $data[$key] = call_user_func_array(
+                    $this->extensionAttributesExtractorCallback,
+                    [$this->_itemObjectClass, $dataItem]
                 );
             }
         }
@@ -816,9 +813,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Join extension attribute.
      *
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
+     * @param callable $extensionAttributesExtractorCallback
      * @return $this
      */
-    public function joinExtensionAttribute($join)
+    public function joinExtensionAttribute($join, $extensionAttributesExtractorCallback)
     {
         $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
@@ -836,7 +834,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
         }
         $this->getSelect()->columns($columns);
-        $this->extensionAttributesJoined = !empty($columns) ?: false;
+        $this->extensionAttributesExtractorCallback = $extensionAttributesExtractorCallback;
         return $this;
     }
 
