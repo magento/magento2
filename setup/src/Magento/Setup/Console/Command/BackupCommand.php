@@ -49,6 +49,8 @@ class BackupCommand extends AbstractSetupCommand
 
     /**
      * Existing deployment config
+     *
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 
