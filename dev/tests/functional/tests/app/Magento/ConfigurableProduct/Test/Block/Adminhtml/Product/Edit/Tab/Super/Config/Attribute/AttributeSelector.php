@@ -15,6 +15,23 @@ use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 class AttributeSelector extends SuggestElement
 {
     /**
+     * Wait for search result is visible.
+     *
+     * @return void
+     */
+    public function waitResult()
+    {
+        $browser = $this;
+        $selector = $this->searchResult;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector);
+                return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
      * Checking exist configurable attribute in search result.
      *
      * @param CatalogProductAttribute $productAttribute

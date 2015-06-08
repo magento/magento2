@@ -80,9 +80,7 @@ class AssertIntegrationForm extends AbstractAssertForm
      *
      * @param array $formData
      * @param array $fixtureData
-     * @return array $errorMessages
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return array
      */
     protected function verifyForm(array $formData, array $fixtureData)
     {
@@ -113,20 +111,44 @@ class AssertIntegrationForm extends AbstractAssertForm
     protected function checkResources(array $formData, $fixtureData)
     {
         $errorMessages = [];
-        $diff = [];
-        $fixtureData = is_array($fixtureData) ? $fixtureData : [$fixtureData];
-        if ($this->strictResourcesVerify) {
-            $diff = array_diff($formData, $fixtureData);
-        } else {
-            foreach ($fixtureData as $itemData) {
-                $diff[] = in_array($itemData, $formData) ? null : true;
-            }
-        }
+        $diff = $this->getResourcesDifferentData($formData, $fixtureData);
         if (array_filter($diff)) {
             $errorMessages[] = $this->getErrorMessage($fixtureData, $formData, 'resources');
         }
 
         return $errorMessages;
+    }
+
+    /**
+     * Get different data between form and fixture data.
+     *
+     * @param array $formData
+     * @param array|string $fixtureData
+     * @return array
+     */
+    protected function getResourcesDifferentData(array $formData, $fixtureData)
+    {
+        $fixtureData = is_array($fixtureData) ? $fixtureData : [$fixtureData];
+        return $this->strictResourcesVerify
+            ? array_diff($formData, $fixtureData)
+            : $this->notStrictVerify($formData, $fixtureData);
+    }
+
+    /**
+     * Not strict verify resources data.
+     *
+     * @param array $formData
+     * @param array $fixtureData
+     * @return array
+     */
+    protected function notStrictVerify (array $formData, array $fixtureData)
+    {
+        $diff = [];
+        foreach ($fixtureData as $itemData) {
+            $diff[] = in_array($itemData, $formData) ? null : true;
+        }
+
+        return $diff;
     }
 
     /**
