@@ -8,9 +8,12 @@ define(
     function ($) {
         "use strict";
         var ratesRules = {};
+        var checkoutConfig = window.checkoutConfig;
         return {
             registerRules: function(carrier, rules) {
-                ratesRules[carrier] = rules.getRules();
+                if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
+                    ratesRules[carrier] = rules.getRules();
+                }
             },
             getRules: function() {
                 return ratesRules;
@@ -20,7 +23,7 @@ define(
                 var observableFields = [];
                 $.each(self.getRules(), function(carrier, fields) {
                     $.each(fields, function(field, rules) {
-                        if (rules.required && $.inArray(field, observableFields) == -1) {
+                        if (observableFields.indexOf(field) == -1) {
                             observableFields.push(field);
                         }
                     });
