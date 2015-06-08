@@ -80,7 +80,7 @@ class InfoBackupsListCommand extends Command
                 $partsOfPath = explode('/', str_replace('\\', '/', $path));
                 $fileName = $partsOfPath[count($partsOfPath) - 1];
                 // if filename starts with '.' skip, e.g. '.git'
-                if (!$this->startsWith($fileName, '.')) {
+                if (!(strpos($fileName, '.') === 0)) {
                     $filenameWithoutExtension = explode('.', $fileName);
                     // actually first part of $filenameWithoutExtension contains only the filename without extension
                     // and filename contains the type of backup separated by '_'
@@ -98,17 +98,5 @@ class InfoBackupsListCommand extends Command
         } else {
             $output->writeln('<info>No backup files found.</info>');
         }
-    }
-
-    /**
-     * Search backwards starting from haystack length characters from the end
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @return bool
-     */
-    private function startsWith($haystack, $needle)
-    {
-        return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
     }
 }

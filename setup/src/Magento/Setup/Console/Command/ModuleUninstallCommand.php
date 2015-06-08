@@ -247,7 +247,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
         try {
-            $dbBackupOption = $this->takeBackup($input, $output);
+            $this->takeBackup($input, $output);
+            $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                 $this->removeData($modules, $output, $dbBackupOption);
             } else {
@@ -289,7 +290,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return bool
      */
     private function takeBackup(InputInterface $input, OutputInterface $output)
     {
@@ -302,12 +302,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $mediaBackup = $this->backupRollbackFactory->create($output);
             $mediaBackup->codeBackup($time, Factory::TYPE_MEDIA);
         }
-        $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
-        if ($dbBackupOption) {
+        if ($input->getOption(self::INPUT_KEY_BACKUP_DB)) {
             $dbBackup = $this->backupRollbackFactory->create($output);
             $dbBackup->dbBackup($time);
         }
-        return $dbBackupOption;
     }
 
     /**

@@ -115,4 +115,16 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             $this->tester->getDisplay()
         );
     }
+
+    public function testExecuteNoOptions()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(false));
+        $this->tester->execute([]);
+        $expected = 'Enabling maintenance mode' . PHP_EOL
+            . 'No option is provided for the command to take backup.'  . PHP_EOL
+            . 'Disabling maintenance mode';
+        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
+    }
 }

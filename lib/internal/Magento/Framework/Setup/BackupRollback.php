@@ -14,6 +14,7 @@ use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Class to deal with backup and rollback functionality for database and Code base
@@ -30,7 +31,7 @@ class BackupRollback
     /**
      * Object Manager
      *
-     * @var Filesystem
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -96,7 +97,7 @@ class BackupRollback
             $granularType = 'Media';
             $fsBackup->setName('media');
         } else {
-            throw new LocalizedException(new \Magento\Framework\Phrase("This backup type \'$type\' is not supported."));
+            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir)) {
@@ -127,7 +128,7 @@ class BackupRollback
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('The rollback file does not exist.'));
+            throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         if ($type === Factory::TYPE_FILESYSTEM) {
             $ignorePaths = $this->getCodeBackupIgnorePaths();
@@ -136,7 +137,7 @@ class BackupRollback
             $ignorePaths = $this->getMediaBackupIgnorePaths();
             $granularType = 'Media';
         } else {
-            throw new LocalizedException(new \Magento\Framework\Phrase("This backup type \'$type\' is not supported."));
+            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
         /** @var Helper $checkWritable */
         $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
@@ -147,7 +148,7 @@ class BackupRollback
         );
         if (!$filesInfo['writable']) {
             throw new NotEnoughPermissions(
-                new \Magento\Framework\Phrase('Unable to make rollback because not all files are writable')
+                new Phrase('Unable to make rollback because not all files are writable')
             );
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
@@ -205,7 +206,7 @@ class BackupRollback
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
         if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('The rollback file does not exist.'));
+            throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbRollback */
