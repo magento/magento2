@@ -26,7 +26,7 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <input type="button" data-bind="click: showFormPopUp, value: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('New Address')" />
+        <input type="button" data-bind="click: showFormPopUp, value: $t('New Address'), visible: !isNewAddressAdded()" />
         <div data-bind="fadeVisible: isFormPopUpVisible">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
             <input type="button" data-bind="click: saveNewAddress, value: $t('Save Address')" />

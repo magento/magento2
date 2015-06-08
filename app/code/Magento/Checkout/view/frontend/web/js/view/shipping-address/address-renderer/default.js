@@ -7,8 +7,9 @@ define([
     'ko',
     'uiComponent',
     'Magento_Checkout/js/action/select-shipping-address',
-    'Magento_Checkout/js/model/quote'
-], function(ko, Component, selectShippingAddressAction, quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/shipping-address/form-popup-state'
+], function(ko, Component, selectShippingAddressAction, quote, formPopUpState) {
     'use strict';
     var countryData = window.checkoutConfig.countryData;
     return Component.extend({
@@ -37,6 +38,10 @@ define([
         /** Set selected customer shipping address  */
         selectAddress: function() {
             selectShippingAddressAction(this.address());
+        },
+
+        editAddress: function() {
+            formPopUpState.isVisible(true);
         }
     });
 });
