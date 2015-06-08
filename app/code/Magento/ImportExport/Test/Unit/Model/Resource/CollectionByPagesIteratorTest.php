@@ -44,8 +44,8 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        /** @var $collectionMock \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject */
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        /** @var $collectionMock \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
+        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
             ->getMockForAbstractClass();

@@ -64,7 +64,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Config $config
      * @param Resource\Item $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\GoogleShopping\Model\Resource\Item $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

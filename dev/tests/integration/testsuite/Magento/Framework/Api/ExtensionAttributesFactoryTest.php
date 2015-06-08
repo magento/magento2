@@ -113,7 +113,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($this->getConfig()));
 
-        $collection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $collection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->setMethods(['joinExtensionAttribute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

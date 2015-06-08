@@ -628,7 +628,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $optionMock = $this->getMock(

@@ -30,7 +30,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollectionMock;
 
@@ -77,7 +77,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = $this->getMockForAbstractClass(
