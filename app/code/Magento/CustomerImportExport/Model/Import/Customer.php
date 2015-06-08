@@ -190,7 +190,7 @@ class Customer extends AbstractCustomer
         );
         $this->addMessageTemplate(
             self::ERROR_EMAIL_SITE_NOT_FOUND,
-            __('We can\'t find that mail and website combination.')
+            __('We can\'t find that email and website combination.')
         );
         $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Please enter a password with a valid length.'));
 

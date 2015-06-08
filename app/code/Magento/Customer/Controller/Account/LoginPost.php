@@ -99,7 +99,9 @@ class LoginPost extends \Magento\Customer\Controller\Account
                     $this->messageManager->addError($message);
                     $this->_getSession()->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Something went wrong validating the login and password.'));
+                    $this->messageManager->addError(
+                        __('Something went wrong while validating the login and password.')
+                    );
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));

@@ -196,7 +196,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo([
                 'You must confirm your account. Please check your e-mail for the confirmation link or '
                 . '<a href="http://localhost/index.php/customer/account/confirmation/email/'
-                . $email . '/">click here</a> for a new link.',
+                . $email . '/">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
         );
@@ -319,7 +319,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo([
-                'We\'ll email you a link to reset your password.',
+                'We\'ll email you a link to reset your password.'
             ]),
             MessageInterface::TYPE_SUCCESS
         );
@@ -356,7 +356,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/resetPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong saving the new password.']),
+            $this->equalTo(['Something went wrong while saving the new password.']),
             MessageInterface::TYPE_ERROR
         );
     }

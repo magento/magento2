@@ -86,7 +86,7 @@ class AclRetriever
             $this->logger->critical($e);
             throw new LocalizedException(
                 __(
-                    'Something went wrong compiling a list of allowed resources. '
+                    'Something went wrong while compiling a list of allowed resources. '
                     . 'You can find out more in the exceptions log.'
                 )
             );

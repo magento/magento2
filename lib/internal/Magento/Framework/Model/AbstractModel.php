@@ -243,7 +243,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     {
         if (empty($this->_resourceName) && empty($this->_resource)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('the resource is not set.')
+                new \Magento\Framework\Phrase('Rhe resource isn\'t set.')
             );
         }
 

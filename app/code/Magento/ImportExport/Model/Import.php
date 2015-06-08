@@ -231,15 +231,15 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         if ($this->getProcessedRowsCount()) {
             if (!$validationResult) {
                 if ($this->getProcessedRowsCount() == $this->getInvalidRowsCount()) {
-                    $messages[] = __('This file is invalid. Please fix any errors and re-upload the file.');
+                    $messages[] = __('This file is invalid. Please fix errors and re-upload the file.');
                 } elseif ($this->getErrorsCount() >= $this->getErrorsLimit()) {
                     $messages[] = __(
-                        'You\'ve reached an error limit (%1). Please fix any errors and re-upload the file.',
+                        'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
                         $this->getErrorsLimit()
                     );
                 } else {
                     if ($this->isImportAllowed()) {
-                        $messages[] = __('Please fix any errors and re-upload the file.');
+                        $messages[] = __('Please fix errors and re-upload the file.');
                     } else {
                         $messages[] = __('The file is partially valid, but we can\'t import it for some reason.');
                     }
