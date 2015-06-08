@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class HandlerFactory
+class HandlerPool
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -21,16 +21,15 @@ class HandlerFactory
     }
 
     /**
-     * Create handler class instance
+     * Get handler class instance
      *
      * @param string $handlerClass
-     * @param array $arguments
      * @throws \InvalidArgumentException
      * @return HandlerInterface
      */
-    public function create($handlerClass, array $arguments = [])
+    public function get($handlerClass)
     {
-        $handler = $this->objectManager->create($handlerClass, $arguments);
+        $handler = $this->objectManager->get($handlerClass);
         if (!$handler instanceof HandlerInterface) {
             throw new \InvalidArgumentException(
                 $handlerClass . ' doesn\'t implement \Magento\Indexer\Model\HandlerInterface'
