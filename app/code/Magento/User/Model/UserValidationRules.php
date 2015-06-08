@@ -29,11 +29,11 @@ class UserValidationRules
     public function addUserInfoRules(\Magento\Framework\Validator\Object $validator)
     {
         $userNameNotEmpty = new NotEmpty();
-        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $userNameNotEmpty->setMessage(__('Please enter a user name.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $firstNameNotEmpty = new NotEmpty();
-        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $firstNameNotEmpty->setMessage(__('Please enter a first name.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $lastNameNotEmpty = new NotEmpty();
-        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $lastNameNotEmpty->setMessage(__('Please enter a last name.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $emailValidity = new EmailAddress();
         $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
 
