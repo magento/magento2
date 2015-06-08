@@ -69,6 +69,9 @@ class DataObjectHelper
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
+        if ($dataObject instanceof ExtensibleDataInterface) {
+            $data = $this->extensionFactory->extractExtensionAttributes(get_class($dataObject), $data);
+        }
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
     }
@@ -84,9 +87,6 @@ class DataObjectHelper
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
-        if ($dataObject instanceof ExtensibleDataInterface) {
-            $data = $this->extensionFactory->extractExtensionAttributes($dataObject, $data);
-        }
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {
             /* First, verify is there any setter for the key on the Service Data Object */

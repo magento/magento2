@@ -747,7 +747,15 @@ abstract class Db extends \Magento\Framework\Data\Collection
      */
     protected function _fetchAll(\Zend_Db_Select $select)
     {
-        return $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
+        $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
+        // TODO: Temporary implementation to evaluate performance improvement
+        /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */
+        $extensionAttributesFactory = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get('Magento\Framework\Api\ExtensionAttributesFactory');
+        foreach ($data as $key => $dataItem) {
+            $data[$key] = $extensionAttributesFactory->extractExtensionAttributes($this->_itemObjectClass, $dataItem);
+        }
+        return $data;
     }
 
     /**
