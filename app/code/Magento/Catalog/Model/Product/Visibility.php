@@ -51,10 +51,6 @@ class Visibility extends \Magento\Framework\Object
         parent::__construct($data);
     }
 
-    public function getId() {
-
-    }
-
     /**
      * Retrieve visible in catalog ids array
      *
