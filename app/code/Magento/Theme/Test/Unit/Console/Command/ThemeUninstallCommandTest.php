@@ -11,6 +11,9 @@ use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackupRollbackFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
