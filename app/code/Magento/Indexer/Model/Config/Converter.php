@@ -103,7 +103,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
-            'class' => $this->getAttributeValue($node, 'class'),
+            'source' => $this->getAttributeValue($node, 'source'),
             'fields' => [],
         ];
         foreach ($node->childNodes as $childNode) {

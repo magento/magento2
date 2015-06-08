@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class SourceFactory
+class SourcePool
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -24,13 +24,12 @@ class SourceFactory
      * Get source class instance by class name
      *
      * @param string $className
-     * @param array $arguments
      * @throws \InvalidArgumentException
      * @return SourceInterface
      */
-    public function create($className, array $arguments = [])
+    public function get($className)
     {
-        $source = $this->objectManager->create($className, $arguments);
+        $source = $this->objectManager->get($className);
         if (!$source instanceof SourceInterface) {
             throw new \InvalidArgumentException(
                 $className . ' doesn\'t implement \Magento\Indexer\Model\SourceInterface'

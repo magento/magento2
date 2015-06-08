@@ -9,22 +9,22 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetFactory;
 use Magento\Indexer\Model\FieldsetInterface;
-use Magento\Indexer\Model\SourceFactory;
+use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
-use Magento\Indexer\Model\HandlerFactory;
+use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
 {
     /**
-     * @var SourceFactory
+     * @var SourcePool
      */
-    protected $sourceFactory;
+    protected $sourcePool;
 
     /**
-     * @var SourceFactory
+     * @var SourcePool
      */
-    protected $handlerFactory;
+    protected $handlerPool;
 
     /**
      * @var FieldsetFactory
@@ -53,21 +53,21 @@ class Base implements ActionInterface
 
     /**
      * @param AdapterInterface $adapter
-     * @param SourceFactory $sourceFactory
-     * @param HandlerFactory $handlerFactory
+     * @param SourcePool $sourceFactory
+     * @param HandlerPool $handlerFactory
      * @param FieldsetFactory $fieldsetFactory
      * @param array $data
      */
     public function __construct(
         AdapterInterface $adapter,
-        SourceFactory $sourceFactory,
-        HandlerFactory $handlerFactory,
+        SourcePool $sourceFactory,
+        HandlerPool $handlerFactory,
         FieldsetFactory $fieldsetFactory,
         $data = []
     ) {
         $this->adapter = $adapter;
-        $this->sourceFactory = $sourceFactory;
-        $this->handlerFactory = $handlerFactory;
+        $this->sourcePool = $sourceFactory;
+        $this->handlerPool = $handlerFactory;
         $this->fieldsetFactory = $fieldsetFactory;
         $this->data = $data;
     }
@@ -137,15 +137,15 @@ class Base implements ActionInterface
     protected function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            foreach ($this->data['fields'] as $fieldName => $field) {
-                $this->data['fields'][$fieldName]['source'] = $this->sources[$field['source']];
-                $this->data['fields'][$fieldName]['handler'] = $this->handlers[$field['handler']];
-            }
-            $this->data['fieldsets'][$fieldsetName]['instance'] = null;
-            if (isset($fieldset['class'])) {
-                $this->data['fieldsets'][$fieldsetName]['instance'] = $this->fieldsetFactory->create(
-                    $fieldset['class']
-                );
+            $this->data['fieldsets'][$fieldsetName]['source'] = $this->sources[$fieldset['source']];
+            foreach ($fieldset['fields'] as $fieldName => $field) {
+                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
+                    isset($this->sources[$field['source']])
+                        ? $this->sources[$field['source']]
+                        : $this->sources[$this->data['fieldsets'][$fieldsetName]['source']];
+
+                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler']
+                    = $this->handlers[$field['handler']];
             }
         }
     }
@@ -153,14 +153,14 @@ class Base implements ActionInterface
     protected function collectSources()
     {
         foreach ($this->data['sources'] as $sourceName => $source) {
-            $this->sources[$sourceName] = $this->sourceFactory->create($source);
+            $this->sources[$sourceName] = $this->sourcePool->get($source);
         }
     }
 
     protected function collectHandlers()
     {
         foreach ($this->data['handlers'] as $handlerName => $handler) {
-            $this->sources[$handlerName] = $this->handlerFactory->create($handler);
+            $this->sources[$handlerName] = $this->handlerPool->get($handler);
         }
     }
 }
