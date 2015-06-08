@@ -81,7 +81,7 @@ define(
                         additionalFields.forEach(function (field) {
                             additionalData[field.name] = field.value;
                         });
-                        if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
+                        if (!customer.isLoggedIn()) {
                             addressData.email = this.source.get('customerDetails.email');
                         }
                         if($(billingFormSelector).validation() && $(billingFormSelector).validation('isValid')) {
@@ -110,7 +110,7 @@ define(
                 this.source.set('params.invalid', false);
                 fields.trigger('change');
                 this.source.trigger('billingAddress.data.validate');
-                if (!customer.isLoggedIn()()) {
+                if (!customer.isLoggedIn()) {
                     this.source.trigger('customerDetails.data.validate');
                 }
                 this.validateAdditionalAddressFields();
@@ -121,10 +121,10 @@ define(
                     $(item).valid();
                 });
             },
-            isCustomerLoggedIn: customer.isLoggedIn(),
+            isCustomerLoggedIn: customer.isLoggedIn,
             customerAddressCount: window.checkoutConfig.customerAddressCount,
             hideExtraFields: function() {
-                if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
+                if (customer.isLoggedIn()) {
                     $('[name="customerDetails.email"]').hide();
                 }
             }

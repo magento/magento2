@@ -36,7 +36,7 @@ define(
 
                 if (currentCaptcha != null) {
                     this.setCurrentCaptcha(currentCaptcha);
-                    customer.isLoggedIn().subscribe(function (isLoggedIn) {
+                    customer.isLoggedIn.subscribe(function (isLoggedIn) {
                         if (!isLoggedIn) {
                             self.setIsVisible(true);
                             selectShippingAddress.setActionCallback(callback);
