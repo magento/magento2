@@ -14,7 +14,7 @@ define(
         "use strict";
         return {
             getUrlForEstimationShippingMethodsForNewAddress: function(quote) {
-                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {
                     'guest': '/guest-carts/:quoteId/estimate-shipping-methods',
                     'customer': '/carts/mine/estimate-shipping-methods'
@@ -23,7 +23,7 @@ define(
             },
 
             getUrlForEstimationShippingMethodsByAddressId: function(quote) {
-                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {
                     'default': '/carts/mine/estimate-shipping-methods-by-address-id'
                 };
@@ -31,7 +31,7 @@ define(
             },
 
             getUrlForCartTotals: function(quote) {
-                var params = (this.getCheckoutMethod() == 'guest') ? quote.getQuoteId() : {};
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {
                     'guest': '/guest-carts/:quoteId/totals',
                     'customer': '/carts/mine/totals'
