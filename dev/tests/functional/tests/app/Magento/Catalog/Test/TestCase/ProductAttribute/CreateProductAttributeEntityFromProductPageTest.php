@@ -10,8 +10,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Scenario;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create Product.
  *
