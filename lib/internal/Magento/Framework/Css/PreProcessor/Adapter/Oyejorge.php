@@ -12,6 +12,8 @@ use Magento\Framework\App\State;
  */
 class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
 {
+    const ERROR_MESSAGE_PREFIX = 'CSS compilation from LESS ';
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -46,9 +48,9 @@ class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
             $parser->parseFile($sourceFilePath, '');
             return $parser->getCss();
         } catch (\Exception $e) {
-            $messagePrefix = 'CSS compilation from LESS ';
-            $this->logger->critical($messagePrefix . $e->getMessage());
-            return $messagePrefix . $e->getMessage();
+            $errorMessage = self::ERROR_MESSAGE_PREFIX . $e->getMessage();
+            $this->logger->critical($errorMessage);
+            return $errorMessage;
         }
     }
 }
