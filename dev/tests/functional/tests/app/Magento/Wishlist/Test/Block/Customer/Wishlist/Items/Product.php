@@ -30,7 +30,7 @@ class Product extends Form
     protected $remove = '[data-role="remove"]';
 
     /**
-     * Locator value for "See Details" tool tip.
+     * Locator value for "See Details" tooltip.
      *
      * @var string
      */

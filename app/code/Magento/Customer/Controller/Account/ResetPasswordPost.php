@@ -61,7 +61,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
-            $this->messageManager->addError(__('Please enter new password.'));
+            $this->messageManager->addError(__('Please enter a new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }

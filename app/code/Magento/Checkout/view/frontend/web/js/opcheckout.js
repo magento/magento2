@@ -427,7 +427,7 @@ define([
             var methods = this.element.find('[name="shipping_method"]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t ship to this address. Please choose another address or edit the current address.'));
+                alert($.mage.__('We can\'t ship to this address. Please choose another address or edit the current one.'));
 
                 return false;
             }

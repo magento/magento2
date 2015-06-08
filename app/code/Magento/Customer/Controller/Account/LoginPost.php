@@ -102,7 +102,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
                     $this->messageManager->addError(__('Something went wrong validating the login and password.'));
                 }
             } else {
-                $this->messageManager->addError(__('A login and password are required.'));
+                $this->messageManager->addError(__('A login and a password are required.'));
             }
         }
 

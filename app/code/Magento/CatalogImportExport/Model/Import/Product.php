@@ -109,8 +109,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_messageTemplates = [
         ValidatorInterface::ERROR_INVALID_SCOPE => 'Invalid value in Scope column',
         ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exists?)',
-        ValidatorInterface::ERROR_INVALID_STORE => 'Invalid value in Store column (store does not exists?)',
-        ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Product Template column (set does not exists?)',
+        ValidatorInterface::ERROR_INVALID_STORE => 'Invalid value in Store column (store doesn\'t exist?)',
+        ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Product Template column (set doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
         ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exists',
         ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
