@@ -57,9 +57,10 @@ class GiftOptions extends Generic
      */
     public function getJsLayout()
     {
+        $jsLayout = $this->jsLayout;
         foreach ($this->layoutProcessors as $processor) {
-            $this->jsLayout = $processor->process($this->jsLayout, $this->getItem());
+            $jsLayout = $processor->process($jsLayout, $this->getItem());
         }
-        return $this->jsonEncoder->encode($this->jsLayout);
+        return $this->jsonEncoder->encode($jsLayout);
     }
 }
