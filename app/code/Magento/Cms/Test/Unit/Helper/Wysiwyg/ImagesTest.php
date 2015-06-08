@@ -288,6 +288,10 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($allowedValue, $this->imagesHelper->isUsingStaticUrlsAllowed());
     }
 
+    /**
+     * @param bool $allowedValue
+     * SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function generalSettingsIsUsingStaticUrlsAllowed($allowedValue)
     {
         $storeId = 1;
@@ -297,7 +301,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with('cms_wysiwyg_images_static_urls_allowed', ['result' => $checkResult, 'store_id' => $storeId])
-            ->willReturnCallback(function($str, $arr) use ($allowedValue) {
+            ->willReturnCallback(function ($str, $arr) use ($allowedValue) {
                 $arr['result']->isAllowed = $allowedValue;
             });
     }
@@ -461,6 +465,10 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param string $baseUrl
+     * @param bool $isUsingStaticUrls
+     */
     protected function generalSettingsGetImageHtmlDeclaration($baseUrl, $isUsingStaticUrls)
     {
         $storeId = 1;
