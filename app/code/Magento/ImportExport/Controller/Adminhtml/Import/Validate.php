@@ -26,11 +26,11 @@ class Validate extends ImportController
         ImportResultBlock $resultBlock
     ) {
         if ($import->getProcessedRowsCount() == $import->getInvalidRowsCount()) {
-            $resultBlock->addNotice(__('This file is invalid. Please fix any errors and re-upload the file.'));
+            $resultBlock->addNotice(__('This file is invalid. Please fix errors and re-upload the file.'));
         } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
             $resultBlock->addNotice(
                 __(
-                    'You\'ve reached an error limit (%1). Please fix any errors and re-upload the file.',
+                    'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
                     $import->getErrorsLimit()
                 )
             );
@@ -38,7 +38,7 @@ class Validate extends ImportController
             if ($import->isImportAllowed()) {
                 $resultBlock->addNotice(
                     __(
-                        'Please fix any errors and re-upload the file. Or press "Import" to skip rows with errors.'
+                        'Please fix errors and re-upload the file. Or press "Import" to skip rows with errors.'
                     ),
                     true
                 );
@@ -86,7 +86,7 @@ class Validate extends ImportController
                 $validationResult = $import->validateSource($source);
 
                 if (!$import->getProcessedRowsCount()) {
-                    $resultBlock->addError(__('This file is empty. Please try another.'));
+                    $resultBlock->addError(__('This file is empty. Please try another one.'));
                 } else {
                     if (!$validationResult) {
                         $this->processValidationError($import, $resultBlock);
@@ -115,7 +115,7 @@ class Validate extends ImportController
                     );
                 }
             } catch (\Exception $e) {
-                $resultBlock->addNotice(__('Please fix any errors and re-upload the file.'))
+                $resultBlock->addNotice(__('Please fix errors and re-upload the file.'))
                     ->addError($e->getMessage());
             }
             return $resultLayout;

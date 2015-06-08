@@ -97,7 +97,7 @@ class EditPost extends \Magento\Customer\Controller\Account
                         } catch (\Exception $e) {
                             $this->messageManager->addException(
                                 $e,
-                                __('Something went wrong changing the password.')
+                                __('Something went wrong while changing the password.')
                             );
                         }
                     } else {

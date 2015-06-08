@@ -85,7 +85,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
                         'Based on the VAT ID, the customer belongs to the Customer Group %s.'
                     ) . "\n" . $groupMessage,
                     'vatValidationFailedMessage' => __(
-                        'Something went wrong validating the VAT ID.'
+                        'Something went wrong while validating the VAT ID.'
                     ),
                     'vatCustomerGroupMessage' => __(
                         'The customer would belong to Customer Group %s.'

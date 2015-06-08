@@ -112,7 +112,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong saving the attribute.'));
+                    $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
                 }
             }
 

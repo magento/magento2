@@ -73,7 +73,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('Something went wrong saving the new password.'));
+            $this->messageManager->addError(__('Something went wrong while saving the new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
