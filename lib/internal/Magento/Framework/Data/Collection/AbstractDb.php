@@ -87,6 +87,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     private $_fetchStrategy;
 
     /**
+     * Flag which determines if extension attributes were joined before the collection was loaded.
+     *
+     * @var bool
+     */
+    private $extensionAttributesJoined = false;
+
+    /**
      * @param EntityFactoryInterface $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -748,12 +755,17 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     protected function _fetchAll(\Zend_Db_Select $select)
     {
         $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
-        // TODO: Temporary implementation to evaluate performance improvement
-        /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */
-        $extensionAttributesFactory = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get('Magento\Framework\Api\ExtensionAttributesFactory');
-        foreach ($data as $key => $dataItem) {
-            $data[$key] = $extensionAttributesFactory->extractExtensionAttributes($this->_itemObjectClass, $dataItem);
+        if ($this->extensionAttributesJoined) {
+            // TODO: Temporary implementation to evaluate performance improvement
+            /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory */
+            $extensionAttributesFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\ExtensionAttributesFactory');
+            foreach ($data as $key => $dataItem) {
+                $data[$key] = $extensionAttributesFactory->extractExtensionAttributes(
+                    $this->_itemObjectClass,
+                    $dataItem
+                );
+            }
         }
         return $data;
     }
@@ -824,6 +836,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
         }
         $this->getSelect()->columns($columns);
+        $this->extensionAttributesJoined = !empty($columns) ?: false;
         return $this;
     }
 
