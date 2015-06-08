@@ -1,0 +1,70 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkout-modal-popup__width: 840px;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .checkout-onepage-index {
+        .modal-popup {
+            .field-tooltip {
+                .field-tooltip-content {
+                    .css(right, @checkout-tooltip-content-mobile__right);
+                    .css(top, @checkout-tooltip-content-mobile__top);
+                    left: auto;
+
+                    &:before,
+                    &:after {
+                        .arrow(
+                        @_position: top,
+                        @_size: @checkout-tooltip-icon-arrow__font-size,
+                        @_color: @checkout-tooltip-content__background-color
+                        );
+                        .css(margin-top, @checkout-tooltip-icon-arrow__left);
+                        .css(right, @indent__s);
+                        left: auto;
+                        top: 0%;
+                    }
+                    &:before {
+                        .css(border-bottom-color, @checkout-tooltip-content__border-color);
+                    }
+                    &:after {
+                        .css(border-bottom-color, @checkout-tooltip-content__background-color);
+                        top: 1px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .form-shipping-address {
+        .css(max-width, @checkout-shipping-address__max-width);
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .checkout-onepage-index {
+        .modal-popup {
+            .modal-inner-wrap {
+                .css(margin-left, -(@checkout-modal-popup__width/2));
+                .css(width, @checkout-modal-popup__width);
+                left: 50%;
+            }
+        }
+    }
+}
