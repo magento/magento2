@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Class BlockRepository
@@ -45,7 +46,12 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataObjectHelper;
 
     /**
-     * @var Data\BlockInterfaceFactory
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Cms\Api\Data\BlockInterfaceFactory
      */
     protected $dataBlockFactory;
 
@@ -56,14 +62,16 @@ class BlockRepository implements BlockRepositoryInterface
      * @param Resource\Block\CollectionFactory $blockCollectionFactory
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
+     * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
         Resource\Block $resource,
         BlockFactory $blockFactory,
-        Data\BlockInterfaceFactory $dataBlockFactory,
+        \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
         Resource\Block\CollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        DataObjectProcessor $dataObjectProcessor
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -71,12 +79,13 @@ class BlockRepository implements BlockRepositoryInterface
         $this->searchResultsFactory = $searchResultsFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataBlockFactory = $dataBlockFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
      * Save Block data
      *
-     * @param Data\BlockInterface $block
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return Block
      * @throws CouldNotSaveException
      */
@@ -112,28 +121,23 @@ class BlockRepository implements BlockRepositoryInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param SearchCriteriaInterface $criteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return Resource\Block\Collection
      */
-    public function getList(SearchCriteriaInterface $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
 
         $collection = $this->blockCollectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $fields = [];
-            $conditions = [];
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'store_id') {
                     $collection->addStoreFilter($filter->getValue(), false);
                     continue;
                 }
                 $condition = $filter->getConditionType() ?: 'eq';
-                $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
-            }
-            if ($fields) {
-                $collection->addFieldToFilter($fields, $conditions);
+                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
         $searchResults->setTotalCount($collection->getSize());
@@ -151,9 +155,14 @@ class BlockRepository implements BlockRepositoryInterface
         $blocks = [];
         /** @var Block $blockModel */
         foreach ($collection as $blockModel) {
-            $blocks[] = $this->dataObjectHelper->populateWithArray(
-                $this->dataBlockFactory->create(),
+            $blockData = $this->dataBlockFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $blockData,
                 $blockModel->getData(),
+                'Magento\Cms\Api\Data\BlockInterface'
+            );
+            $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
+                $blockData,
                 'Magento\Cms\Api\Data\BlockInterface'
             );
         }
@@ -164,7 +173,7 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Delete Block
      *
-     * @param Data\BlockInterface $block
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return bool
      * @throws CouldNotDeleteException
      */

@@ -22,10 +22,10 @@ class Delete extends \Magento\Customer\Controller\Address
                     $this->_addressRepository->deleteById($addressId);
                     $this->messageManager->addSuccess(__('The address has been deleted.'));
                 } else {
-                    $this->messageManager->addError(__('An error occurred while deleting the address.'));
+                    $this->messageManager->addError(__('We can\'t delete the address right now.'));
                 }
             } catch (\Exception $other) {
-                $this->messageManager->addException($other, __('An error occurred while deleting the address.'));
+                $this->messageManager->addException($other, __('We can\'t delete the address right now.'));
             }
         }
         return $this->resultRedirectFactory->create()->setPath('*/*/index');
