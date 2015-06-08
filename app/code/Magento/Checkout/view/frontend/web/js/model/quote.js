@@ -2,11 +2,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
 define(
     ['ko'],
-    function(ko) {
+    function (ko) {
+        'use strict';
         var billingAddress = ko.observable(null);
         var shippingAddress = ko.observable(null);
         var shippingMethod = ko.observable(null);
@@ -17,12 +16,10 @@ define(
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable(window.checkoutConfig.totalsData);
-        var checkoutMethod = ko.observable(null);
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
         var formattedBillingAddress = ko.observable(null);
         var collectedTotals = ko.observable({});
-        var isCustomerLoggedIn = ko.observable(window.checkoutConfig.isCustomerLoggedIn);
         return {
             totals: totals,
             shippingAddress: shippingAddress,
@@ -44,12 +41,6 @@ define(
             },
             getTotals: function() {
                 return totals
-            },
-            getIsCustomerLoggedIn: function() {
-                return isCustomerLoggedIn;
-            },
-            setIsCustomerLoggedIn: function(status) {
-                isCustomerLoggedIn(status);
             },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {
@@ -98,12 +89,6 @@ define(
             },
             getStoreCode: function() {
                 return storeCode;
-            },
-            getCheckoutMethod: function() {
-                return checkoutMethod;
-            },
-            setCheckoutMethod: function(method) {
-                checkoutMethod(method);
             },
             setShippingCustomOptions: function(customOptions) {
                 shippingCustomOptions(customOptions);

@@ -62,7 +62,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_ITEMS = 'items';
 
-    const KEY_CALCULATED_TOTALS = 'calculated_totals';
+    const KEY_TOTAL_SEGMENTS = 'total_segments';
 
     /**#@-*/
 
@@ -429,17 +429,17 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get dynamically calculated totals
      *
-     * @return \Magento\Quote\Api\Data\CalculatedTotalsInterface[]
+     * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      */
-    public function getCalculatedTotals();
+    public function getTotalSegments();
 
     /**
      * Set dynamically calculated totals
      *
-     * @param \Magento\Quote\Api\Data\CalculatedTotalsInterface[] $totals
+     * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totals
      * @return $this
      */
-    public function setCalculatedTotals($totals = []);
+    public function setTotalSegments($totals = []);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

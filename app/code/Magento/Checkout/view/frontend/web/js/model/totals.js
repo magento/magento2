@@ -17,8 +17,8 @@ define(
                 if (!this.totals()) {
                     return null;
                 }
-                for(var i in this.totals().calculated_totals) {
-                    var total = this.totals().calculated_totals[i];
+                for (var i in this.totals().total_segments) {
+                    var total = this.totals().total_segments[i];
                     if (total.code == code) {
                         return total;
                     }

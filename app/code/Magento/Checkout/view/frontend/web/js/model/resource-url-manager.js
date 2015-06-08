@@ -16,7 +16,7 @@ define(
         return {
             /** Get url for service */
             getUrl: function(serviceCallName, urlParams) {
-                var checkoutMethod = customer.isLoggedIn()() ? 'customer' : 'guest',
+                var checkoutMethod = customer.isLoggedIn() ? 'customer' : 'guest',
                     serviceUrls = resourceUrls.getServiceUrls(),
                     url,
                     params = {};

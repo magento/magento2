@@ -12,7 +12,7 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function($, ko, customer, errorList) {
-        var customerIsLoggedIn = customer.isLoggedIn()();
+        var customerIsLoggedIn = customer.isLoggedIn();
         var defaultStepClass = 'section';
         var allowedStepClass = 'allow';
         var activeStepClass = 'active';

@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Quote\Api\Data\CalculatedTotalsInterface;
+use Magento\Quote\Api\Data\TotalSegmentInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -13,7 +13,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @codeCoverageIgnore
  */
-class CalculatedTotals extends AbstractExtensibleModel implements CalculatedTotalsInterface
+class TotalSegment extends AbstractExtensibleModel implements TotalSegmentInterface
 {
     /**
      * {@inheritdoc}
@@ -91,7 +91,7 @@ class CalculatedTotals extends AbstractExtensibleModel implements CalculatedTota
      * {@inheritdoc}
      */
     public function setExtensionAttributes(
-        \Magento\Quote\Api\Data\CalculatedTotalsExtensionInterface $extensionAttributes
+        \Magento\Quote\Api\Data\TotalSegmentExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
