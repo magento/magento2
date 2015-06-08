@@ -7,8 +7,10 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
+    'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'mage/adminhtml/grid'
+    'mage/adminhtml/grid',
+    ''
 ], function ($, mageTemplate) {
     'use strict';
 
@@ -94,7 +96,7 @@ define([
         },
 
         /**
-         * Create dialog for show product
+         * Create modal for show product
          *
          * @private
          */
@@ -103,48 +105,25 @@ define([
                 selectedProductList = {},
                 popup = $('[data-role=add-product-dialog]');
 
-            popup.dialog({
+            popup.modal({
+                type: 'slide',
+                innerScroll: true,
                 title: $.mage.__('Add Products to Group'),
-                autoOpen: false,
-                minWidth: 980,
-                width: '75%',
-                modal: true,
-                resizable: true,
-                dialogClass: 'grouped',
-                position: {
-                    my: 'left top',
-                    at: 'center top',
-                    of: 'body'
-                },
+                modalClass: 'grouped',
                 open: function () {
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 55;
-                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
                     $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                },
-                close: function () {
-                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
                     id: 'grouped-product-dialog-apply-button',
                     text: $.mage.__('Add Selected Products'),
-                    'class': 'action-primary action-add',
+                    class: 'action-primary action-add',
                     click: function () {
                         $.each(selectedProductList, function (index, product) {
                             widget._add(null, product);
                         });
                         widget._resort();
                         widget._updateGridVisibility();
-                        $(this).dialog('close');
-                    }
-                }, {
-                    id: 'grouped-product-dialog-cancel-button',
-                    text: $.mage.__('Cancel'),
-                    'class': 'action-close',
-                    click: function () {
-                        $(this).dialog('close');
+                        popup.modal('closeModal');
                     }
                 }]
             });
@@ -186,7 +165,7 @@ define([
 
             $('[data-role=add-product]').on('click', function (event) {
                 event.preventDefault();
-                popup.dialog('open');
+                popup.modal('openModal');
                 gridPopup.reload();
                 selectedProductList = {};
             });
