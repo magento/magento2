@@ -42,6 +42,35 @@ define(
             isNewAddressAdded: ko.observable(false),
             saveInAddressBook: true,
 
+            initialize: function () {
+                this._super();
+
+                this._initializeDefaultAddress();
+
+                return this;
+            },
+
+            /**
+             * Initialize default shipping address
+             *
+             * @private
+             */
+            _initializeDefaultAddress: function() {
+                var shippingAddress = quote.shippingAddress();
+                if (!shippingAddress) {
+                    var isShippingAddressInitialized = addressList.some(function (address) {
+                        if (address.isDefaultShipping) {
+                            selectShippingAddress(address);
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (!isShippingAddressInitialized && addressList().length == 1) {
+                        selectShippingAddress(addressList()[0]);
+                    }
+                }
+            },
+
             initElement: function(element) {
                 if (element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
