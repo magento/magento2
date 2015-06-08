@@ -2094,6 +2094,7 @@ return [
     ['Magento\Core\Model\Context', 'Magento\Framework\Model\Context'],
     ['Magento\Core\Model\Registry', 'Magento\Framework\Registry'],
     ['Magento\Framework\Code\Plugin\InvocationChain'],
+    ['Magento\Framework\Data\Collection\Db', 'Magento\Framework\Data\Collection\AbstractDb'],
     ['Magento\Catalog\Helper\Product\Flat'],
     ['Magento\Catalog\Helper\Flat\AbstractFlat'],
     ['Magento\Core\App\Action\Plugin\Install', 'Magento\Framework\App\Bootstrap'],
