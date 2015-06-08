@@ -688,6 +688,7 @@ class Item extends AbstractModel implements OrderItemInterface
         return $this->_storeManager->getStore();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -1606,7 +1607,6 @@ class Item extends AbstractModel implements OrderItemInterface
         return $this->getData(OrderItemInterface::WEIGHT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
