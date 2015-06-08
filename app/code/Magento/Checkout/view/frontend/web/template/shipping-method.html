@@ -60,7 +60,11 @@
                                         <!--/ko-->
                                     <!-- /ko -->
                                 </td>
-                                <td data-bind="text: $t(item.amount)"></td>
+                                <td>
+                                        <!-- ko foreach: $parents[1].getRegion('price') -->
+                                            <!-- ko template: getTemplate() --><!-- /ko -->
+                                    <!-- /ko -->
+                                </td>
                                 <td data-bind="text: $t(item.method_title)"></td>
                                 <td data-bind="text: $t(method.carrier_title)"></td>
                             </tr>
