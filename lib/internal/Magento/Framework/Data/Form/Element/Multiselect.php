@@ -105,7 +105,9 @@ class Multiselect extends AbstractElement
             'disabled',
             'size',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 
