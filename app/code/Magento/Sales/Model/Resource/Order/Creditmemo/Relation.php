@@ -47,7 +47,7 @@ class Relation implements EntityRelationInterface
         if (null !== $object->getItems()) {
             foreach ($object->getItems() as $item) {
                 $item->setParentId($object->getId());
-                $this->$creditmemoItemResource->save($item);
+                $this->creditmemoItemResource->save($item);
             }
         }
         if (null !== $object->getComments()) {
