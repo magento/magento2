@@ -92,12 +92,12 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     );
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getProductId();
 
     /**
-     * @param int $value
+     * @param int|null $value
      * @return $this
      */
     public function setProductId($value);
