@@ -8,8 +8,18 @@ namespace Magento\Indexer\Model;
 interface HandlerInterface
 {
     /**
-     * @param array $data
-     * @return []
+     * @param \Zend_Db_Select $select
+     * @param SourceInterface $source
+     * @param array $field
+     * @return void
      */
-    public function handle($data = []);
+    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $field);
+
+    /**
+     * @param \Zend_Db_Select $select
+     * @param SourceInterface $source
+     * @param array $field
+     * @return void
+     */
+    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $field);
 }

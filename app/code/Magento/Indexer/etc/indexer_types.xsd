@@ -18,6 +18,7 @@
             <xs:group ref="fieldset"/>
         </xs:choice>
         <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="primary" type="fieldsetType" use="optional" />
         <xs:attribute name="view_id" type="viewIdType" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
     </xs:complexType>
@@ -88,8 +89,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="name" type="nameType" use="required"/>
-        <xs:attribute name="source" type="nameType" use="required"/>
-        <xs:attribute name="handler" type="nameType" use="required"/>
+        <xs:attribute name="source" type="nameType" use="optional"/>
+        <xs:attribute name="handler" type="nameType" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="sourceType">
@@ -121,7 +122,7 @@
         <xs:sequence>
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="class" type="classType" use="optional"/>
+        <xs:attribute name="source" type="sourceType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
