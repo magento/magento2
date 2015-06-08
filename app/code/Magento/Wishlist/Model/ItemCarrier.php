@@ -213,7 +213,7 @@ class ItemCarrier
             try {
                 $wishlist->save();
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We can\'t update wish list.'));
+                $this->messageManager->addError(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }
 

@@ -63,7 +63,7 @@ define([
         _validateShippingMethod: function() {
             var methods = this.element.find('[name="shipping_method"]');
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t ship to this address. Please choose another address or edit the current one.'));
+                alert($.mage.__('We can\'t ship to this address. Please enter another address or edit this one.'));
                 return false;
             }
             if (methods.filter(':checked').length) {

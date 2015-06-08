@@ -15,9 +15,9 @@
 <h1 class="page-heading"><?php echo __('Access denied') ?></h1>
 <?php if (!$block->hasAvailableResources()): ?>
 <p>
-<?php echo __('Please try to log out and sign in again.') ?><br/>
+<?php echo __('Please try to sign out and sign in again.') ?><br/>
 <?php echo __('If you continue to receive this message, please contact the store owner.') ?>
 </p>
 <?php else: ?>
-<p><?php echo __('Access denied.') ?></p>
+<p><?php echo __('You need more permissions to access this.') ?></p>
 <?php endif?>

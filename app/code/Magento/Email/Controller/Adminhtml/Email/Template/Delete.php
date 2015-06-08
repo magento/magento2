@@ -37,7 +37,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('Something went wrong while deleting email template data. Please review the log and try again.')
+                    __('We can\'t delete email template data right now. Please review log and try again.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 // save data in session
