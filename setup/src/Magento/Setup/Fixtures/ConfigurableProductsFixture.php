@@ -145,7 +145,6 @@ class ConfigurableProductsFixture extends Fixture
      * Get CSV template rows
      *
      * @param Closure|mixed $productCategory
-     * @param Closure|mixed $productRootCategory
      * @param Closure|mixed $productWebsite
      *
      * @SuppressWarnings(PHPMD)
@@ -217,7 +216,7 @@ class ConfigurableProductsFixture extends Fixture
                 'variations_1382710717' => '',
                 'variations_1382710773' => '',
                 'variations_1382710861' => '',
-                'visibility' => 'Catalog, Search',
+                'visibility' => 'Not Visible Individually',
                 'weight' => '1',
                 'qty' => '111.0000',
                 'min_qty' => '0.0000',
@@ -327,7 +326,7 @@ class ConfigurableProductsFixture extends Fixture
                 'variations_1382710717' => '',
                 'variations_1382710773' => '',
                 'variations_1382710861' => '',
-                'visibility' => 'Catalog, Search',
+                'visibility' => 'Not Visible Individually',
                 'weight' => '1',
                 'qty' => '111.0000',
                 'min_qty' => '0.0000',
@@ -433,7 +432,7 @@ class ConfigurableProductsFixture extends Fixture
                 'variations_1382710717' => '',
                 'variations_1382710773' => '',
                 'variations_1382710861' => '',
-                'visibility' => 'Catalog, Search',
+                'visibility' => 'Not Visible Individually',
                 'weight' => '1',
                 'qty' => '111.0000',
                 'min_qty' => '0.0000',
