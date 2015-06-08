@@ -116,7 +116,7 @@ class Cart extends \Magento\Framework\App\Action\Action
                 $redirectUrl = $item->getProductUrl();
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
+            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
