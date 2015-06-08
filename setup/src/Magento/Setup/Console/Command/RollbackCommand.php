@@ -48,18 +48,28 @@ class RollbackCommand extends AbstractSetupCommand
     private $backupRollbackFactory;
 
     /**
+     * Existing deployment config
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
-        MaintenanceMode $maintenanceMode
+        MaintenanceMode $maintenanceMode,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
         $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -99,6 +109,11 @@ class RollbackCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->isAvailable() && ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)
+                || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))) {
+            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            return;
+        }
         try {
             $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');

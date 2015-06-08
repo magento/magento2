@@ -16,87 +16,161 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directoryList;
-
-    /**
      * @var CommandTester
      */
     private $tester;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $file;
+    private $deploymentConfig;
+
+    /**
+     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupRollback;
+
+    /**
+     * @var \Magento\Framework\Setup\BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupRollbackFactory;
+
+    /**
+     * @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $helperSet;
+
+    /**
+     * @var \Symfony\Component\Console\Helper\QuestionHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $question;
+
+    /**
+     * @var RollbackCommand
+     */
+    private $command;
 
     public function setUp()
     {
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(
             'Magento\Framework\ObjectManagerInterface',
             [],
             '',
             false
         );
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $path = realpath(__DIR__ . '/../../_files/');
-        $this->directoryList->expects($this->any())
-            ->method('getRoot')
-            ->willReturn($path);
-        $this->directoryList->expects($this->any())
-            ->method('getPath')
-            ->willReturn($path);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
-
-        $command = new RollbackCommand(
+        $this->backupRollback = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
+        $this->backupRollbackFactory = $this->getMock(
+            'Magento\Framework\Setup\BackupRollbackFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->backupRollbackFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->backupRollback);
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\Setup\BackupRollbackFactory', $this->backupRollbackFactory],
+            ]));
+        $this->helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $this->question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
+        $this->question
+            ->expects($this->any())
+            ->method('ask')
+            ->will($this->returnValue(true));
+        $this->helperSet
+            ->expects($this->any())
+            ->method('get')
+            ->with('question')
+            ->will($this->returnValue($this->question));
+        $this->command = new RollbackCommand(
             $objectManagerProvider,
             $maintenanceMode,
-            $this->directoryList,
-            $this->file
+            $this->deploymentConfig
         );
-        $this->tester = new CommandTester($command);
+        $this->command->setHelperSet($this->helperSet);
+        $this->tester = new CommandTester($this->command);
     }
 
-    public function testExecute()
+    public function testExecuteCodeRollback()
     {
-        $helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
-        $helper->expects($this->once())
-            ->method('getInfo')
-            ->willReturn(['writable' => true]);
-        $filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('addIgnorePaths');
-        $filesystem->expects($this->once())
-            ->method('setBackupsDir');
-        $filesystem->expects($this->once())
-            ->method('setBackupExtension');
-        $filesystem->expects($this->once())
-            ->method('setTime');
-        $filesystem->expects($this->once())
-            ->method('rollback');
-        $filesystem->expects($this->once())
-            ->method('getBackupFilename')
-            ->willReturn('RollbackFile_A.tgz');
-        $filesystem->expects($this->once())
-            ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');
-        $this->objectManager->expects($this->any())
-            ->method('create')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\Backup\Filesystem\Helper', [], $helper],
-                ['Magento\Framework\Backup\Filesystem', [], $filesystem],
-            ]));
-        $this->file->expects($this->once())->method('isExists')->willReturn(true);
-        $this->tester->execute(['file' => 'RollbackFile_A.tgz']);
-        $expectedMsg = 'Enabling maintenance mode' . PHP_EOL
-            . 'Code rollback filename: RollbackFile_A.tgz' . PHP_EOL
-            . 'Code rollback file path: pathToFile/RollbackFile_A.tgz' . PHP_EOL
-            . '[SUCCESS]: Code rollback has completed successfully.' . PHP_EOL
-            . "Please set file permission of 'bin/magento' to executable" . PHP_EOL
-            . 'Disabling maintenance mode' . PHP_EOL;
-        $this->assertEquals($expectedMsg, $this->tester->getDisplay());
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $this->backupRollback->expects($this->once())
+            ->method('codeRollback')
+            ->willReturn($this->backupRollback);
+        $this->tester->execute(['--code-file' => 'A.tgz']);
+    }
+
+    public function testExecuteMediaRollback()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $this->backupRollback->expects($this->once())
+            ->method('codeRollback')
+            ->willReturn($this->backupRollback);
+        $this->tester->execute(['--media-file' => 'A.tgz']);
+    }
+
+    public function testExecuteDBRollback()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $this->backupRollback->expects($this->once())
+            ->method('dbRollback')
+            ->willReturn($this->backupRollback);
+        $this->tester->execute(['--db-file' => 'C.gz']);
+    }
+
+    public function testExecuteNotInstalled()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(false));
+        $this->tester->execute(['--db-file' => 'C.gz']);
+        $this->assertStringMatchesFormat(
+            'No information is available: the application is not installed.%w',
+            $this->tester->getDisplay()
+        );
+    }
+
+    public function testExecuteNoOptions()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $this->tester->execute([]);
+        $expected = 'Enabling maintenance mode' . PHP_EOL
+            . 'No option is provided for the command to rollback.'  . PHP_EOL
+            . 'Disabling maintenance mode';
+        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
+    }
+
+    public function testInteraction()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $this->question
+            ->expects($this->once())
+            ->method('ask')
+            ->will($this->returnValue(false));
+        $this->helperSet
+            ->expects($this->once())
+            ->method('get')
+            ->with('question')
+            ->will($this->returnValue($this->question));
+        $this->command->setHelperSet($this->helperSet);
+        $this->tester = new CommandTester($this->command);
+        $this->tester->execute(['--db-file' => 'C.gz']);
     }
 }
