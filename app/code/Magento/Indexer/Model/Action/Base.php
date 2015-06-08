@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Model\Action;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetFactory;
 use Magento\Indexer\Model\FieldsetInterface;
@@ -31,6 +32,11 @@ class Base implements ActionInterface
     protected $fieldsetFactory;
 
     /**
+     * @var AdapterInterface
+     */
+    protected $adapter;
+
+    /**
      * @var SourceInterface[]
      */
     protected $sources;
@@ -46,17 +52,20 @@ class Base implements ActionInterface
     protected $data;
 
     /**
+     * @param AdapterInterface $adapter
      * @param SourceFactory $sourceFactory
      * @param HandlerFactory $handlerFactory
      * @param FieldsetFactory $fieldsetFactory
      * @param array $data
      */
     public function __construct(
+        AdapterInterface $adapter,
         SourceFactory $sourceFactory,
         HandlerFactory $handlerFactory,
         FieldsetFactory $fieldsetFactory,
         $data = []
     ) {
+        $this->adapter = $adapter;
         $this->sourceFactory = $sourceFactory;
         $this->handlerFactory = $handlerFactory;
         $this->fieldsetFactory = $fieldsetFactory;
@@ -100,23 +109,29 @@ class Base implements ActionInterface
         $this->collectSources();
         $this->collectHandlers();
         $this->prepareFields();
-        $this->prepareResults();
-
+        $select = $this->createResultSelect();
+        $this->adapter->insertFromSelect($select, 'index_table_name');
     }
 
-    protected function prepareResults()
+    protected function createResultSelect()
     {
+        $select = new \Magento\Framework\DB\Select($this->adapter);
+        $select->from($this->sources[$this->data['primary']]->getTableName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($this->data['fields'] as $fieldName => $field) {
+                $handler = $field['handler'];
                 $source = $field['source'];
+                /** @var HandlerInterface $handler */
                 /** @var SourceInterface $source */
-                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['result'] = $source->prepare($field);
+                $handler->prepareSql($select, $source, $field);
             }
             $fieldsetInstance = $this->data['fieldset'][$fieldsetName]['instance'];
             if ($fieldsetInstance instanceof FieldsetInterface) {
                 $this->data['fieldsets'][$fieldsetName]['result'] = $fieldsetInstance->update($this->data['fields']);
             }
         }
+
+        return $select;
     }
 
     protected function prepareFields()
