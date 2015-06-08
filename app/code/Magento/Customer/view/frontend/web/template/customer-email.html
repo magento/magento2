@@ -5,6 +5,9 @@
  */
 -->
 <!-- ko ifnot: isCustomerLoggedIn() -->
+<!-- ko foreach: getRegion('before-login-form') -->
+<!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->
 <form class="form login" data-role="login"
       data-bind="submit:login"
       method="post">
