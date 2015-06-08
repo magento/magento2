@@ -16,6 +16,9 @@ define(
         'Magento_Catalog/js/price-utils'
     ],
     function ($, ko, _, Component, quote, shippingService, selectShippingMethod, priceUtils) {
+        var rates = window.checkoutConfig.shippingRates;
+        shippingService.setShippingRates(rates);
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method'
