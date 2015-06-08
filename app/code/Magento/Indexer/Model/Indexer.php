@@ -69,6 +69,8 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Return ID
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getId()
@@ -78,6 +80,8 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
 
     /**
      * Set ID
+     *
+     * @codeCoverageIgnore
      *
      * @param string $id
      * @return $this
@@ -91,6 +95,8 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Id field name setter
      *
+     * @codeCoverageIgnore
+     *
      * @param  string $name
      * @return $this
      */
@@ -102,6 +108,8 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
 
     /**
      * Id field name getter
+     *
+     * @codeCoverageIgnore
      *
      * @return string
      */
