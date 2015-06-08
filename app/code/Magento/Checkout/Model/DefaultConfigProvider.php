@@ -141,6 +141,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $cartTotalRepository;
 
     /**
+     * Shipping method data factory.
+     *
+     * @var \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory
+     */
+    protected $estimatedAddressFactory;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -163,6 +170,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param Cart\ImageProvider $imageProvider
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param CartTotalRepositoryInterface $cartTotalRepository
+     * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,7 +195,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig,
         Cart\ImageProvider $imageProvider,
         \Magento\Directory\Helper\Data $directoryHelper,
-        CartTotalRepositoryInterface $cartTotalRepository
+        CartTotalRepositoryInterface $cartTotalRepository,
+        \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -211,6 +220,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->imageProvider = $imageProvider;
         $this->directoryHelper = $directoryHelper;
         $this->cartTotalRepository = $cartTotalRepository;
+        $this->estimatedAddressFactory = $estimatedAddressFactory;
     }
 
     /**
@@ -244,8 +254,32 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'postCodes' => $this->postCodesConfig->getPostCodes(),
             'imageData' => $this->imageProvider->getImages($quoteId),
             'countryData' => $this->getCountryData(),
-            'totalsData' => $this->getTotalsData()
+            'totalsData' => $this->getTotalsData(),
+            'shippingRates' => $this->getDefaultShippingRates()
         ];
+    }
+
+    /**
+     * Get default shipping rates
+     *
+     * @return array
+     */
+    private function getDefaultShippingRates()
+    {
+        $output = [];
+        if ($this->checkoutSession->getQuote()->getId()) {
+            $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
+            /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
+            $estimatedAddress = $this->estimatedAddressFactory->create();
+            $estimatedAddress->setCountryId($this->directoryHelper->getDefaultCountry());
+
+            $rates = $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
+            foreach ($rates as $rate) {
+                $output[] = $rate->__toArray();
+            }
+        };
+        return $output;
+
     }
 
     /**
