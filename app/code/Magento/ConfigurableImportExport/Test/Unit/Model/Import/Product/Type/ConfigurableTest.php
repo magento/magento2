@@ -122,9 +122,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->attrCollectionFactory->method('create')->will(
-            $this->returnValue($this->attrCollection)
-        );
+
         $superAttributes = [];
         foreach ($this->_getSuperAttributes() as $superAttribute) {
             $item = $this->getMock(

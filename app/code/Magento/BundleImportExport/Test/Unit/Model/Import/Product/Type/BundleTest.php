@@ -319,4 +319,58 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         ]));
         $this->bundle->saveData();
     }
+
+    public function testPrepareAttributesWithDefaultValueForSaveInsideCall()
+    {
+        $bundleMock = $this->getMock(
+            'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
+            ['transformBundleCustomAttributes'],
+            [],
+            '',
+            false
+        );
+        // Set some attributes to bypass errors due to static call inside method.
+        $attrVal = 'value';
+        $rowData = [
+            \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET => $attrVal,
+        ];
+        $this->setPropertyValue($bundleMock, '_attributes', [
+            $attrVal => [],
+        ]);
+
+        $bundleMock
+            ->expects($this->once())
+            ->method('transformBundleCustomAttributes')
+            ->with($rowData)
+            ->willReturn([]);
+
+        $bundleMock->prepareAttributesWithDefaultValueForSave($rowData);
+    }
+
+    /**
+     * Test for isRowValid()
+     */
+    public function testIsRowValid()
+    {
+        $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
+        $rowData = [
+            'price_type' => 'fixed',
+            'price_view' => 'bundle_price_view'
+        ];
+        $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
+    }
 }
