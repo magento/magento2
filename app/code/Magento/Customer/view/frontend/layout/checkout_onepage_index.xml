@@ -27,6 +27,13 @@
                                                                         <item name="description" xsi:type="string">Here we’ll send your order confirmation.</item>
                                                                     </item>
                                                                     <item name="children" xsi:type="array">
+                                                                        <item name="before-login-form" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">before-login-form</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <!-- before login form fields -->
+                                                                            </item>
+                                                                        </item>
                                                                         <item name="additional-login-form-fields" xsi:type="array">
                                                                             <item name="component" xsi:type="string">uiComponent</item>
                                                                             <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
