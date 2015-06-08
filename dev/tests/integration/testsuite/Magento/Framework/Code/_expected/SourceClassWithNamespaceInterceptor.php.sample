@@ -68,6 +68,9 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
 
     public function __wakeup()
     {
+        if (method_exists(get_parent_class($this), '__wakeup')) {
+            parent::__wakeup();
+        }
         $this->___init();
     }
 

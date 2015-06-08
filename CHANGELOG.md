@@ -1,3 +1,136 @@
+0.74.0-beta11
+=============
+* Framework improvements:
+    * Improved component Bookmarks component in scope of Enhanced Data Grids on CMS
+    * Improved component Advanced Filtering component in scope of Enhanced Data Grids on CMS
+* Fixed bugs:
+    * Fixed an issue where incorrect keys in REST request body allowed the request to go through successfully
+    * Fixed an issue where interceptors were Generated with Invalid __wakeup() 
+    * Fixed an issue where redirect on the current page was not working in certain conditions
+    * Fixed an issue where first store could not be selected on frontend
+    * Fixed an issue with performance toolkit category creation
+    * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
+    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
+    * Fixed an issue where email was not required during Guest Checkout 
+    * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
+    * Fixed an issue where `bin/magento indexer:reindex` command failed after `bin/magento setup:di:compile` was run
+    * Fixed bug with broken JS i18n
+    * Fixed an issue with wrong value at created_at updated_at fields after quote* save
+    * Fixed an issue where customer could not be created in backend after adding Image type attribute
+    * Fixed Sales InvoiceItem and Order data interfaces implementation
+    * Fixed an issue with performance toolkit medium profile
+    * Fixed an issue where Excel Formula Injection via CSV/XML export
+    * Fixed an issue where it was not possible to open the Customers page in backend
+    * Fixed an issue with internal server error after clicking Continue on Billing information
+    * Fixed an issue where it was not possible to place order with Fedex shipping method
+* Various changes:
+    * Magento Centinel Removal
+    * Removed ability to have multi-statement queries
+* Test coverage:
+    * Unit tests coverage
+    * Covered php code by unit tests after new checkout implementation
+* Github issues:
+    * [#424](https://github.com/magento/magento2/issues/424) -- Combine tier pricing messages into block sentences
+    * [#1300](https://github.com/magento/magento2/issues/1300), [#1311](https://github.com/magento/magento2/issues/1311), [#1313](https://github.com/magento/magento2/issues/1313) -- Creating product error with startdate
+
+0.74.0-beta10
+=============
+* Framework improvements:
+    * Created Admin Login support into the Upgrade Setup Tool
+    * Added support for image types as custom attributes
+    * Added @api annotations to all classes that are considered as stable public APIs; marked public data interfaces with '@api'
+    * Defined Public API for modules: Catalog, CatalogRule, Msrp, UrlRewrite, CatalogUrlRewrite, CmsUrlRewrite, Sales, Quote, SalesRule, Captcha, Cms, Widget
+    * Created documentation and code samples for Sales & Checkout Module Integration APIs
+    * Increased code coverage of Integration module
+    * Fixed performance issues in unit tests
+    * Moved Sample Data install.php, dev/shell/cron.sh, performance-toolkit/generate.php, dependencies tools, and xmlUpdater to new bin/magento CLI
+    * Separated Config File (config.php) into Environmental and App configs
+    * Better validation of install and setup CLI commands
+    * Changed option names to use dashes in order to conform to naming convention
+* Code quality improvements:
+    * Removed unused classes in Magento\Reports module
+    * Overall unit test coverage was improved
+    * Replaced all functional tests which were not end-to-end with injectable test
+    * Replaced end-to-end test for automatic tax applying with injectable test
+    * Functional tests maintained
+    * Updated getElements method for Selenium Driver class in MTF
+    * Implemented mechanism of cleaning up all data after scenario execution
+    * Fixed integration testLayoutFilesTest
+* Design improvements:
+    * New look&feel for Collapsible Panels in backend
+    * New look&feel for System Warnings Pop-Ups in backend
+    * New look&feel for Grid Tables in backend
+* Various improvements:
+    * Implemented checkout UI rendering in browser
+    * Added exact image sizes provision in templates
+    * Added width and height attributes to Frontend logo
+    * Integrated JIT(Just In Time) plugin loader for Grunt.js
+    * Handling Invalid Less During PHP Compilation
+    * Enhanced PageCache invalidation
+    * Private data rendering in browser based on JSON data obtained from server side and kept in Local Storage instead of HTML obtained using AJAX PageCache action
+    * Refactor blocks on most frequently used pages (Catalog, CMS) to use new private data rendering mechanism
+    * Refactor blocks which can be added on any page (like widgets, banners) to use new private data rendering mechanism
+    * Default PageCache entries TTL value increased from 2 minutes to 24 hours
+    * Cache entries invalidation logging was introduced in order to simplify running of invalidation process
+* Fixed bugs:
+    * Fixed an issue where orders total report was not showing results grouped by day
+    * Fixed an issue with non-displaying Abandoned Carts report grid
+    * Fixed integration test failure in Reports GridTest
+    * Fixed an issue where fixed bundle product could not be created
+    * Fixed an issue where grouped product with quantity 0 was added to cart with quantity of 1
+    * Fixed an issue where versions tab was absent after publish CMS page
+    * Fixed an issue where shopping cart was empty after attempt to update it
+    * Fixed an issue where there was no redirect to shopping cart after EDIT/UPDATE cart product if custom options
+    * Fixed an issue where New Accounts report did not work
+    * Fixed bug when Admin user wasn't locked after exceeding maximum login failures attempts
+    * Fixed an issue where downloadable Product detailed info wasn't displayed in Cart & on Checkout
+    * Fixed an issue with wrong copyright year for store front
+    * Fixed: JSMinException when deploying static files in production mode with minification enabled
+    * Fixed: Overlapped FPT Attribute in Mini Shopping Cart
+    * Fixed: View of current item for Customer menu tabs
+    * Fixed an issue where status label was not refreshed when disabling/enabling cache
+    * Fixed an issue where Success Page of Web Setup did not show https
+    * Fixed an issue with irrelevant/unused template
+    * Fixed an issue where static content running setup:static-content:deploy with language code {a-Z}{a-Z}{a-Z} couldn't be generated
+    * [Usability] Output from language, and timezone help commands is alphabetized
+    * Fixed an issue with two identical IdentityInterface definitions in code base.
+    * Fixed an issue where default value of timezone in installer was not correct
+    * Fixed an issue where bank Transfer payment instructions were not displayed
+    * Fixed an issue when New Accounts report did not work
+    * Fixed an issue when New Accounts report showed invalid data
+    * Fixed an issue with Exception in setup wizard after Magento is installed
+    * Fixed visual misfits for Custom Options on "edit Bundle Product" Frontend page
+    * Fixed broken layout for configurable variations when changing from pricing measure from $ to %
+    * Fixed widget UI issues on Frontend
+    * Fixed an issue with Float button bar on Backend
+    * Fixed UI issue shown in ACL Resource Tree
+    * Fixed an issue where it was not possible to place order on frontend using secure urls
+    * Fixed an issue with wrong behaviour for save new shipping address during checkout
+    * Fixed an issue with customers information leak via Checkout
+    * Fixed an issue where users could not login to Magento admin & front on HipHop Virtual Machine
+    * Fixed an issue where product Options details were not shown in Mini Cart
+    * Fixed an issue where Create Permanent Redirect check-box was inactive on Edit Category page
+    * Fixed an issue where it was impossible to perform product mass update
+    * Fixed an issue where category redirect was absent after update category url
+* Github issues:
+    * [#566](https://github.com/magento/magento2/issues/566) -- Fulltext search index: slow query in resetSearchResults()
+    * [#1269](https://github.com/magento/magento2/issues/1269) -- Magento dashboard revenue ,shipping ,qty,tax all are 0.
+    * [#1200](https://github.com/magento/magento2/issues/1200) -- I'm not getting default values (name & email) in contact form when i logged in
+    * [#1087](https://github.com/magento/magento2/pull/1087) -- Check for select and multiselect to ignore corrupted attributes
+    * [#1268](https://github.com/magento/magento2/issues/1268) -- Dist front: search is broken
+    * [#1195](https://github.com/magento/magento2/pull/1195) -- Use table alias for qty field
+    * [#1274](https://github.com/magento/magento2/pull/1274) -- CatalogImportExport validation
+    * [#1233](https://github.com/magento/magento2/issues/1233) -- Wrong message when moving a category
+    * [#1040](https://github.com/magento/magento2/issues/1040) -- Required date validation on Magento2 Backend
+    * [#1246](https://github.com/magento/magento2/issues/1246) -- How to load product store wise?
+    * [#1222](https://github.com/magento/magento2/issues/1222) -- Sku attribute save error
+    * [#1237](https://github.com/magento/magento2/issues/1237) -- Category admin reset button does nothing
+    * [#1046](https://github.com/magento/magento2/issues/1046) -- Two equal files
+    * [#1282](https://github.com/magento/magento2/pull/1282), [#1285](https://github.com/magento/magento2/pull/1285) -- Fix broken link in CHANGELOG.md
+    * [#1223](https://github.com/magento/magento2/issues/1223) -- Store config re-encrypt encrypted values on save
+    * [#1242](https://github.com/magento/magento2/issues/1242) -- Eclipse pdt validator error
+
 0.74.0-beta9
 =============
 * Framework improvements

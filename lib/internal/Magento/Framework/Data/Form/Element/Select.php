@@ -152,7 +152,9 @@ class Select extends AbstractElement
             'disabled',
             'readonly',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 }
