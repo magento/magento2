@@ -14,6 +14,16 @@ namespace Magento\Email\Model\Template;
 class Filter extends \Magento\Framework\Filter\Template
 {
     /**
+     * The name used in the {{trans}} directive
+     */
+    const TRANS_DIRECTIVE_NAME = 'trans';
+
+    /**
+     * The regex to match interior portion of a {{trans "foo"}} translation directive
+     */
+    const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
+
+    /**
      * Use absolute links flag
      *
      * @var bool
@@ -536,7 +546,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @return array
      */
     protected function getTransParameters($value) {
-        if (preg_match('/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/s', $value, $matches) !== 1) {
+        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
 
