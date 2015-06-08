@@ -136,18 +136,15 @@ class ExtensionAttributesFactory
     }
 
     /**
-     * Populate extension attributes object of the provided extensible entity based on the provided data.
+     * Extract extension attributes into separate extension object.
      *
-     * @param ExtensibleDataInterface $extensibleEntity
+     * @param string $extensibleEntityClass
      * @param array $data
      * @return array
      * @throws \LogicException
      */
-    public function extractExtensionAttributes(
-        ExtensibleDataInterface $extensibleEntity,
-        array $data
-    ) {
-        $extensibleEntityClass = get_class($extensibleEntity);
+    public function extractExtensionAttributes($extensibleEntityClass, array $data)
+    {
         if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
             /* do nothing as there are no extension attributes */
             return $data;
