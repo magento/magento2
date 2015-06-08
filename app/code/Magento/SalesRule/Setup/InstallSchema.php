@@ -52,13 +52,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
             null,
             ['nullable' => true, 'default' => null],
-            'From Date'
+            'From'
         )->addColumn(
             'to_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
             null,
             ['nullable' => true, 'default' => null],
-            'To Date'
+            'To'
         )->addColumn(
             'uses_per_customer',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
