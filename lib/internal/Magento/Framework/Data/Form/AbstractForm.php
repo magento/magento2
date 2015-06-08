@@ -208,6 +208,7 @@ class AbstractForm extends \Magento\Framework\Object
      *
      * @param array $arrAttributes
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function convertToArray(array $arrAttributes = [])
     {
