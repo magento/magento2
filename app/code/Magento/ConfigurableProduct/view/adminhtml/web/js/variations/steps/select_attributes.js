@@ -19,7 +19,7 @@ define([
         },
         force: function (wizard) {
             //TODO: add validation
-            return this.multiselect().selected();
+            wizard.data.attributes = this.multiselect().selected();
         },
         back: function (wizard) {
             console.log(this.title + ':back');

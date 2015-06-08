@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
+?>
+<div data-bind="scope: 'bulk-step'">
+    <ul data-bind="foreach: { data: attributesValues, as: 'attribute' }">
+        <li>
+            <span data-bind="text: attribute.label"></span>
+            <ul data-bind="foreach: { data: attribute.options, as: 'option' }">
+                <li>
+                    <span data-bind="text: option.label"></span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<script type="text/x-magento-init">
+
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "bulk-step": {
+                            "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
+                            "appendTo": "<?= $block->getComponentName()?>"
+                        }
+                    }
+                }
+            }
+    }
+</script>
