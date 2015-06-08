@@ -656,6 +656,49 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSkuVal, $_uniqueAttributes[$attrCode][$rowData[$attrCode]]);
     }
 
+    public function testGetMultipleValueSeparatorDefault()
+    {
+        $this->setPropertyValue($this->importProduct, '_parameters', null);
+        $this->assertEquals(
+            \Magento\CatalogImportExport\Model\Import\Product::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+            $this->importProduct->getMultipleValueSeparator()
+        );
+    }
+
+    public function testGetMultipleValueSeparatorFromParameters()
+    {
+        $expectedSeparator = 'value';
+        $this->setPropertyValue($this->importProduct, '_parameters', [
+            \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
+        ]);
+
+        $this->assertEquals(
+            $expectedSeparator,
+            $this->importProduct->getMultipleValueSeparator()
+        );
+    }
+
+    public function testDeleteProductsForReplacement()
+    {
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setParameters', '_deleteProducts'
+            ])
+            ->getMock();
+
+        $importProduct->expects($this->once())->method('setParameters')->with(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+            ]
+        );
+        $importProduct->expects($this->once())->method('_deleteProducts');
+
+        $result = $importProduct->deleteProductsForReplacement();
+
+        $this->assertEquals($importProduct, $result);
+    }
+
     public function testGetMediaGalleryAttributeIdIfNotSetYet()
     {
         // reset possible existing id
