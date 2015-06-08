@@ -67,8 +67,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $objectManager,
                 'config' => $this->config,
                 'extensionAttributeJoinDataFactory' => $this->extensionAttributeJoinDataFactory,
-                'typeProcessor' => $this->typeProcessor,
-                'appResource' => $this->appResource
+                'typeProcessor' => $this->typeProcessor
             ]
         );
     }
@@ -128,7 +127,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('joinExtensionAttribute')->with($extensionAttributeJoinData);
 
         $this->factory->process($collection, 'Magento\Catalog\Api\Data\ProductInterface');
-        $expectedTableName = $this->appResource->getTableName('reviews');
+        $expectedTableName = 'reviews';
         $this->assertEquals($expectedTableName, $extensionAttributeJoinData->getReferenceTable());
         $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
         $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
