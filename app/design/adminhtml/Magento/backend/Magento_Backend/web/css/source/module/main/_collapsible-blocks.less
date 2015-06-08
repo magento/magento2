@@ -287,6 +287,15 @@
         td[colspan] {
             padding: 0;
         }
+        .admin__control-table {
+            margin: 0 0 @indent__xs;
+            td {
+                padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
+                &:first-child {
+                    padding-left: 1.5rem;
+                }
+            }
+        }
         input[type='text'],
         input[type='password'],
         select,
