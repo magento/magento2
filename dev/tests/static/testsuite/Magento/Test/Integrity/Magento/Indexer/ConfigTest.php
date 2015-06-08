@@ -109,23 +109,23 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
                 "
 Element 'indexer': Duplicate key-sequence ['catalogsearch_fulltext'] in unique identity-constraint 'uniqueViewId'.
 Element 'indexer': Duplicate key-sequence ['indexer_0', 'catalogsearch_fulltext'] in unique identity-constraint" .
-    " 'uniqueIndexertId'.
+                " 'uniqueIndexertId'.
 Element 'fieldset': Missing child element(s). Expected is ( field ).
 Element 'field', attribute 'handler': [facet 'pattern'] " .
-    "The value 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not accepted by the pattern " .
-    "'[a-zA-Z0-9_]+'.
+                "The value 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not accepted by the pattern " .
+                "'[a-zA-Z0-9_]+'.
 Element 'field', attribute 'handler': 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not a valid " .
-    "value of the atomic type 'nameType'.
+                "value of the atomic type 'nameType'.
 Element 'field', attribute 'handler': Warning: No precomputed value available, the value was either invalid or " .
-    "something strange happend.
+                "something strange happend.
 Element 'field': Duplicate key-sequence ['visibility'] in unique identity-constraint 'uniqueField'.
 Element 'field': No match found for key-sequence ['tableSource'] of keyref 'sourceReference'.
 Element 'field': No match found for key-sequence ['handler'] of keyref 'handlerReference'.
 Element 'field': The attribute 'dataType' is required but missing.
 Element 'field', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'any'" .
-    " of the xsi:type attribute does not resolve to a type definition.
+                " of the xsi:type attribute does not resolve to a type definition.
 Element 'field', attribute 'dataType': [facet 'enumeration'] The value 'string' is not an element" .
-    " of the set {'int', 'float', 'varchar'}.
+                " of the set {'int', 'float', 'varchar'}.
 Element 'field', attribute 'dataType': 'string' is not a valid value of the atomic type 'dataType'.
 Element 'field': The attribute 'dataType' is required but missing."
             )
