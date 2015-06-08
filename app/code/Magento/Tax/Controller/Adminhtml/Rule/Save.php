@@ -24,7 +24,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
             try {
                 $taxRule = $this->ruleService->save($taxRule);
 
-                $this->messageManager->addSuccess(__('The tax rule has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the tax rule.'));
 
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('tax/*/edit', ['rule' => $taxRule->getId()]);
@@ -33,7 +33,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong saving this tax rule.'));
+                $this->messageManager->addError(__('We can\'t save this tax rule right now.'));
             }
 
             $this->_objectManager->get('Magento\Backend\Model\Session')->setRuleData($postData);

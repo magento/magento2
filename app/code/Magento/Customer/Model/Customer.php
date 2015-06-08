@@ -1010,11 +1010,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $errors = [];
         if (!\Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
-            $errors[] = __('The first name cannot be empty.');
+            $errors[] = __('Please enter a first name.');
         }
 
         if (!\Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
-            $errors[] = __('The last name cannot be empty.');
+            $errors[] = __('Please enter a last name.');
         }
 
         if (!\Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
