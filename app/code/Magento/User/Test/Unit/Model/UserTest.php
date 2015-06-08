@@ -379,7 +379,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->_model->setIsActive(true);
         $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(false));
-        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'Access denied.');
+        $this->setExpectedException(
+            'Magento\\Framework\\Exception\\AuthenticationException',
+            'You need more permissions to access this.'
+        );
         $this->_model->verifyIdentity($password);
     }
 }

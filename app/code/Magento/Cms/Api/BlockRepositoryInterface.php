@@ -16,8 +16,8 @@ interface BlockRepositoryInterface
     /**
      * Save block.
      *
-     * @param Data\BlockInterface $block
-     * @return Data\BlockInterface
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
+     * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(Data\BlockInterface $block);
@@ -26,7 +26,7 @@ interface BlockRepositoryInterface
      * Retrieve block.
      *
      * @param int $blockId
-     * @return Data\BlockInterface
+     * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($blockId);
@@ -34,16 +34,16 @@ interface BlockRepositoryInterface
     /**
      * Retrieve blocks matching the specified criteria.
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete block.
      *
-     * @param Data\BlockInterface $block
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
