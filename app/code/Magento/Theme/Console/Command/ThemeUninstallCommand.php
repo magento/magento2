@@ -30,6 +30,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Command for uninstalling theme and backup-code feature
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ThemeUninstallCommand extends Command
 {
@@ -176,7 +177,7 @@ class ThemeUninstallCommand extends Command
             self::INPUT_KEY_THEMES,
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
             'Path of the theme. Theme path should be specified as full path which is area/vendor/name.'
-                . ' For example, frontend/Magento/Blank '
+            . ' For example, frontend/Magento/Blank'
         );
         $this->addOption(
             self::INPUT_KEY_CLEAR_STATIC_CONTENT,
