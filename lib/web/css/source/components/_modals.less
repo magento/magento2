@@ -1,0 +1,201 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Lib -> Components -> Modals
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@import '../../source/_variables.less';
+
+@modal__background-color: @color-white;
+@modal__box-shadow: 0 0 12px 2px rgba(0, 0, 0, .35);
+
+@modal-popup__indent-vertical: 5rem;
+@modal-popup__padding: 3rem;
+@modal-popup__width: 75%;
+@modal-popup__z-index: @modal__z-index;
+
+@modal-slide__first__indent-left: 14.8rem;
+@modal-slide__indent-left: 4.5rem;
+@modal-slide__padding: 2.6rem;
+@modal-slide__z-index: @modal__z-index;
+
+@modal-slide-header__padding-vertical: 2.1rem;
+
+//
+//  Utilities
+//  ---------------------------------------------
+
+.abs-modal() {
+    bottom: 0;
+    left: 0;
+    min-width: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    pointer-events: none;
+    &._show {
+        visibility: visible;
+        .modal-inner-wrap {
+            transform: translate(0, 0);
+        }
+    }
+    .modal-inner-wrap {
+        background-color: @modal__background-color;
+        box-shadow: @modal__box-shadow;
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+.abs-modal-slide() {
+    left: @modal-slide__first__indent-left;
+    z-index: @modal-slide__z-index;
+    &._show {
+        .modal-inner-wrap {
+            transform: translateX(0);
+        }
+    }
+    .modal-inner-wrap {
+        height: 100%;
+        overflow-y: auto;
+        position: static;
+        transform: translateX(100%);
+        transition-duration: .3s;
+        transition-timing-function: ease-in-out;
+        transition-property: transform, visibility;
+        width: auto;
+    }
+}
+
+.abs-modal-popup() {
+    left: 0;
+    overflow-y: auto;
+    z-index: @modal-popup__z-index;
+    &._show {
+        .modal-inner-wrap {
+            transform: translateY(0);
+        }
+    }
+    .modal-inner-wrap {
+        .vendor-prefix-display(flex);
+        .vendor-prefix-flex-direction(column);
+        height: auto;
+        margin: @modal-popup__indent-vertical (100% - @modal-popup__width) / 2;
+        position: absolute;
+        transform: translateY(-200%);
+        transition-duration: .2s;
+        transition-timing-function: ease;
+        transition-property: transform, visibility;
+        width: @modal-popup__width;
+    }
+}
+
+//
+
+._has-modal {
+    height: 100vh;
+    overflow: hidden;
+    width: 100vw;
+}
+
+// Modals overlay
+
+.modals-overlay {
+    &:extend(.ui-widget-overlay all);
+    z-index: @overlay__z-index;
+}
+
+.modal-slide,
+.modal-popup {
+    .abs-modal();
+}
+
+.modal-slide {
+    .abs-modal-slide();
+    &._inner-scroll {
+        .modal-inner-wrap {
+            .vendor-prefix-display(flex);
+            .vendor-prefix-flex-direction(column);
+            overflow-y: visible;
+        }
+        .modal-header,
+        .modal-footer {
+            .vendor-prefix-flex-grow(0);
+            .vendor-prefix-flex-shrink(0);
+        }
+        .modal-content {
+            overflow-y: auto;
+        }
+        .modal-footer {
+            margin-top: auto;
+        }
+    }
+    .modal-header,
+    .modal-content,
+    .modal-footer {
+        padding: 0 @modal-slide__padding @modal-slide__padding;
+    }
+    .modal-header {
+        padding-top: @modal-slide-header__padding-vertical;
+        padding-bottom: @modal-slide-header__padding-vertical;
+    }
+}
+
+.modal-popup {
+    .abs-modal-popup();
+    //  If applied, switching outer popup scroll to inner
+    &._inner-scroll {
+        overflow-y: visible;
+        .modal-inner-wrap {
+            max-height: 90%;
+        }
+        .modal-content {
+            overflow-y: auto;
+        }
+    }
+    .modal-header,
+    .modal-content,
+    .modal-footer {
+        padding-left: @modal-popup__padding;
+        padding-right: @modal-popup__padding;
+    }
+    .modal-header,
+    .modal-footer {
+        .vendor-prefix-flex-grow(0);
+        .vendor-prefix-flex-shrink(0);
+    }
+    .modal-header {
+        padding-top: @modal-popup__padding;
+        padding-bottom: @modal-popup__padding;
+    }
+    .modal-footer {
+        margin-top: auto;
+        padding-top: @modal-popup__padding;
+        padding-bottom: @modal-popup__padding;
+    }
+}
+
+//
+//  Mobile
+//  ---------------------------------------------
+
+//  Mobile transform to modal-slide
+@media (max-width: @screen__m) {
+    .modal-popup {
+        &.modal-slide {
+            .abs-modal-slide();
+            .modal-inner-wrap {
+                margin: 0;
+                max-height: none;
+            }
+        }
+    }
+}
