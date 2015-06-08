@@ -79,7 +79,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'bought_from_wishlists',
             [
-                'header' => __('Wishlist Purchase'),
+                'header' => __('Wish List Purchase'),
                 'width' => '50px',
                 'align' => 'right',
                 'sortable' => false,
