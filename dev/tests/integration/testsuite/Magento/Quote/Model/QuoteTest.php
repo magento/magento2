@@ -21,7 +21,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      */
-    public function qqtestCollectTotalsWithVirtual()
+    public function testCollectTotalsWithVirtual()
     {
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
@@ -37,7 +37,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, $quote->getBaseGrandTotal());
     }
 
-    public function qqtestSetCustomerData()
+    public function testSetCustomerData()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -62,7 +62,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('qa@example.com', $quote->getCustomerEmail());
     }
 
-    public function qqtestUpdateCustomerData()
+    public function testUpdateCustomerData()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
@@ -107,7 +107,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * Customer data is set to quote (which contains valid group ID).
      */
-    public function qqtestGetCustomerGroupFromCustomer()
+    public function testGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
@@ -126,7 +126,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
-    public function qqtestGetCustomerTaxClassId()
+    public function testGetCustomerTaxClassId()
     {
         /**
          * Preconditions: create quote and assign ID of customer group created in fixture to it.
@@ -151,7 +151,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function qqtestAssignCustomerWithAddressChangeAddressesNotSpecified()
+    public function testAssignCustomerWithAddressChangeAddressesNotSpecified()
     {
         /** Preconditions:
          * Customer with two addresses created
@@ -216,7 +216,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function qqtestAssignCustomerWithAddressChange()
+    public function testAssignCustomerWithAddressChange()
     {
         /** Preconditions:
          * Customer with two addresses created
