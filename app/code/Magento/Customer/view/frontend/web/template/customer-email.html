@@ -11,7 +11,7 @@
 <form class="form login" data-role="login"
       data-bind="submit:login"
       method="post">
-    <fieldset id="customer-email" class="fieldset">
+    <fieldset id="customer-email" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field">
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email')"></span>
