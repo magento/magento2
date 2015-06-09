@@ -17,8 +17,6 @@ define([
             sorting: false,
             visible: true,
             draggable: true,
-            dragging: false,
-            dragover: false,
             links: {
                 visible: '${ $.storageConfig.path }.visible',
                 sorting: '${ $.storageConfig.path }.sorting'
@@ -46,23 +44,24 @@ define([
             return this;
         },
 
-        applyState: function (property, state) {
-            var storage = this.storage(),
-                namespace = this.storageConfig.root + '.' + property,
-                data,
-                value;
+        /**
+         * Applies specified stored state of a column or one of its' properties.
+         *
+         * @param {String} state - Defines what state should be used: saved or default.
+         * @param {String} [property] - Defines what columns' property should be applied.
+         *      If not specfied, than all collumns stored properties will be used.
+         * @returns {Column} Chainable.
+         */
+        applyState: function (state, property) {
+            var namespace = this.storageConfig.root;
 
-            if (state === 'default') {
-                data = storage.getDefault();
-            } else if (state === 'last') {
-                data = storage.getSaved();
+            if (property) {
+                namespace += '.' + property;
             }
 
-            value = utils.nested(data, namespace);
+            this.storage('applyState', state, namespace);
 
-            if (!_.isUndefined(value)) {
-                this.set(property, value);
-            }
+            return this;
         },
 
         /**
@@ -113,7 +112,7 @@ define([
         /**
          * Toggles sorting direcction.
          *
-         * @returns {String}
+         * @returns {String} New direction.
          */
         toggleDirection: function () {
             return this.sorting() === 'asc' ?

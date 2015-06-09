@@ -57,19 +57,20 @@ define([
          */
         insertChild: function (elems, position) {
             var container = this._elems,
+                update = false,
                 newItems = [],
                 newItem;
 
             if (Array.isArray(elems)) {
                 newItems = elems.map(function (item) {
                     newItem = item.elem ?
-                        utils.insert(item.elem, item.position, container) :
-                        utils.insert(item, position, container);
+                        utils.insert(item.elem, container, item.position) :
+                        utils.insert(item, container, position);
 
                     return newItem;
                 });
             } else {
-                newItems.push(utils.insert(elems, position, container));
+                newItems.push(utils.insert(elems, container, position));
             }
 
             newItems.forEach(function (item) {
@@ -77,12 +78,18 @@ define([
                     return;
                 }
 
-                _.isString(item) ?
-                    registry.get(item, this._insert) :
-                    this._insert(item);
+                if (item === true) {
+                    update = true;
+                } else {
+                    _.isString(item) ?
+                        registry.get(item, this._insert) :
+                        this._insert(item);
+                }
             }, this);
 
-            this._update();
+            if (update) {
+                this._update();
+            }
 
             return this;
         },

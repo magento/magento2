@@ -9,7 +9,7 @@
         class="data-grid"
         data-bind="
             afterRender: dndConfig.enabled ?
-                function (elem) { dnd('addTable', elem); } :
+                function (elem) { dnd('setTable', elem); } :
                 false,
             css: {
                 'data-grid-draggable': dndConfig.enabled

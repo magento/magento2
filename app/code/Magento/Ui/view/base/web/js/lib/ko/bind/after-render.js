@@ -8,6 +8,9 @@ define([
     'use strict';
 
     ko.bindingHandlers.afterRender = {
+        /**
+         * Binding init callback.
+         */
         init: function (element, valueAccessor, allBindings, viewModel) {
             var callback = valueAccessor();
 
