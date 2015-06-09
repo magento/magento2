@@ -35,6 +35,17 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testExecute()
+    {
         foreach ($this->mockObjectNames as $mockObjectName) {
             $mockObject = $this->getMockBuilder($mockObjectName)->disableOriginalConstructor()->getMock();
             $path = explode('\\', $mockObjectName);
@@ -52,17 +63,6 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             $this->mockObjects[] = $map;
         }
 
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    /**
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testExecute()
-    {
         $adapterInterfaceMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -154,10 +154,19 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->mockObjects[] = ['Magento\Catalog\Model\Category', $categoryMock];
 
-        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getSku', 'getName'])
+            ->getMock();
         $productMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
+        $productMock->expects($this->any())
+            ->method('getSku')
+            ->willReturn('product_sku');
+        $productMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('product_name');
         $this->mockObjects[] = ['Magento\Catalog\Model\Product', $productMock];
         $this->mockObjects[] = ['Magento\Framework\App\Resource', $resourceMock];
 
