@@ -68,7 +68,8 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
                 || $this->hasEmptyColumns($value)) {
                 $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
                 return false;
-            }  elseif ($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
+            } elseif (
+                $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
                 || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
             ) {
                 $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);

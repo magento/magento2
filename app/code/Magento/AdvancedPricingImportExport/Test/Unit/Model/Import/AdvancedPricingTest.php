@@ -331,14 +331,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteAdvancedPricingFormListSkuToDelete()
     {
-        $sku_1 = 'sku value';
-        $sku_2 = 'sku value';
+        $skuOne = 'sku value';
+        $skuTwo = 'sku value';
         $data = [
             0 => [
-                AdvancedPricing::COL_SKU => $sku_1
+                AdvancedPricing::COL_SKU => $skuOne
             ],
             1 => [
-                AdvancedPricing::COL_SKU => $sku_2
+                AdvancedPricing::COL_SKU => $skuTwo
             ],
         ];
 
@@ -650,7 +650,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getAdvancedPricingMock($methods = array())
+    private function getAdvancedPricingMock($methods = [])
     {
         return $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',

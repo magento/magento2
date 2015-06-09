@@ -135,11 +135,12 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Proceed moving a file from TMP to destination folder
      *
      * @param string $fileName
+     * @param bool $renameFileOff
      * @return array
      */
-    public function move($fileName, $renameFileOff=false)
+    public function move($fileName, $renameFileOff = false)
     {
-        if($renameFileOff) {
+        if ($renameFileOff) {
             $this->setAllowRenameFiles(false);
         }
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {

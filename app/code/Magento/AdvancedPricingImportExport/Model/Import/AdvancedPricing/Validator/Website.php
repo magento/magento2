@@ -16,16 +16,20 @@ class Website extends AbstractValidator implements RowValidatorInterface
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
     protected $storeResolver;
+
+    /**
+     * @var \Magento\Store\Model\WebSite
+     */
     protected $webSiteModel;
 
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
+     * @param \Magento\Store\Model\WebSite $webSiteModel
      */
     public function __construct(
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\Store\Model\WebSite $webSiteModel
-    )
-    {
+    ) {
         $this->storeResolver = $storeResolver;
         $this->webSiteModel = $webSiteModel;
     }
