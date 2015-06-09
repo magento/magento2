@@ -37,7 +37,6 @@ class ShareWishlistEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
