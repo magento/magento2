@@ -496,6 +496,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
+     * @todo: @davidalger: get rid of this after {{var}} auto-escapes
      */
     public function escapehtmlDirective($construction)
     {
