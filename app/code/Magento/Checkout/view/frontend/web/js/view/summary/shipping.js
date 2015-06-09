@@ -21,11 +21,10 @@ define(
             style: "",
             notCalculatedMessage: 'Not yet calculated',
             quoteIsVirtual: quote.isVirtual(),
-            selectedShippingMethod: quote.getSelectedShippingMethod(),
             totals: quote.getTotals(),
             title: 'Shipping',
             getShippingMethodTitle: function() {
-                return shippingService.getTitleByCode(this.selectedShippingMethod())
+                return shippingService.getTitleByCode(quote.shippingMethod())
             },
             getValue: function() {
                 var price = 0;

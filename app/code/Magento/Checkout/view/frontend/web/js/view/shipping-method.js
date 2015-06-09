@@ -15,7 +15,7 @@ define(
         '../action/select-shipping-method',
         'Magento_Catalog/js/price-utils'
     ],
-    function ($, ko, _, Component, quote, shippingService, selectShippingMethod, priceUtils) {
+    function ($, ko, _, Component, quote, shippingService, selectShippingMethodAction, priceUtils) {
         var rates = window.checkoutConfig.shippingRates;
         shippingService.setShippingRates(rates);
 
@@ -25,31 +25,43 @@ define(
             },
             rates: shippingService.getSippingRates(),
             isVisible: ko.observable(true),
-            selectedMethod: quote.getSelectedShippingMethod(),
+
+            isSelected: ko.computed(function () {
+                    return quote.shippingMethod()
+                        ? quote.shippingMethod().carrier_code + '_' + quote.shippingMethod().method_code
+                        : null;
+                }
+            ),
+
+            selectShippingMethod: function(shippingMethod) {
+                selectShippingMethodAction(shippingMethod);
+                return true;
+            },
+
+
+
+
+
+
 
             quoteHasShippingAddress: function() {
                 return quote.isVirtual() || quote.getShippingAddress();
             },
 
-            verifySelectedMethodCode: function (data) {
-                if (this.selectedMethod() == data) {
-                    return data;
-                }
-                return false;
+            setShippingInformation: function (form) {
+                //var item,
+                //    customOptions = {};
+                //for (item in this.elems()) {
+                //    if ('submit' in this.elems()[item]) {
+                //        customOptions = _.extend(customOptions, this.elems()[item].submit());
+                //    }
+                //}
+                //form = $(form);
+                //var code = form.find("input[name='shipping_method']:checked").val();
+                //selectShippingMethodAction(code, customOptions, this.getAfterSelectCallbacks());
             },
 
-            setShippingMethod: function (form) {
-                var item,
-                    customOptions = {};
-                for (item in this.elems()) {
-                    if ('submit' in this.elems()[item]) {
-                        customOptions = _.extend(customOptions, this.elems()[item].submit());
-                    }
-                }
-                form = $(form);
-                var code = form.find("input[name='shipping_method']:checked").val();
-                selectShippingMethod(code, customOptions, this.getAfterSelectCallbacks());
-            },
+
 
             getAfterSelectCallbacks: function() {
                 var callbacks = [];
