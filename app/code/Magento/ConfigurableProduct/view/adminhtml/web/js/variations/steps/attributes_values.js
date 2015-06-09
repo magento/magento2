@@ -33,9 +33,11 @@ define([
         removeAttribute: function (attribute) {
             viewModel.prototype.attributes.remove(attribute);
         },
-        createAttribute: function (attribute) {
+        createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
             attribute.options = ko.observableArray(attribute.options);
+            attribute.opened = ko.observable(index < 3);
+            attribute.collapsible = ko.observable(true);
             return attribute;
         },
         saveAttribute: function (attribute) {
@@ -48,6 +50,9 @@ define([
         },
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'value'));
+        },
+        getCollapsibleSymbol: function (attribute) {
+            return attribute.opened() ? '-' : '+';
         },
         render: function(wizard) {
             $.ajax({
