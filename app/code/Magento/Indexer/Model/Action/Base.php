@@ -112,14 +112,14 @@ class Base implements ActionInterface
         $select = $this->createResultSelect();
         $this->connection->insertFromSelect(
             $select,
-            'index_' . $this->sources[$this->data['primary']]->getTableName()
+            'index_' . $this->sources[$this->data['primary']]->getEntityName()
         );
     }
 
     protected function createResultSelect()
     {
         $select = $this->connection->select();
-        $select->from($this->sources[$this->data['primary']]->getTableName());
+        $select->from($this->sources[$this->data['primary']]->getEntityName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             if (isset($fieldset['class'])) {
                 $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
@@ -141,6 +141,10 @@ class Base implements ActionInterface
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sources[$fieldset['source']];
+            if (isset($fieldset['class'])) {
+                $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
+                    ->update($fieldset);
+            }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
                     isset($this->sources[$field['source']])

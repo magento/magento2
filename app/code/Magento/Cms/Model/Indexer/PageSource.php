@@ -32,18 +32,9 @@ class PageSource implements SourceInterface
     }
 
     /**
-     * @param array $fieldName
      * @return string
      */
-    public function getRealField($fieldName)
-    {
-        return $this->resourcePage->getMainTable() . '.' . $fieldName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
+    public function getEntityName()
     {
         return $this->resourcePage->getMainTable();
     }
