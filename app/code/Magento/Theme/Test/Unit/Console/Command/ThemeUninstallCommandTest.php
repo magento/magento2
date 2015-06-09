@@ -159,6 +159,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
+        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
+        $this->themeProvider->expects($this->any())->method('hasChildThemes')->willReturn(false);
         $this->tester->execute(['theme' => ['test1', 'test2']]);
         $this->assertContains(
             'test1 is not an installed composer package',
@@ -202,6 +205,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test1/composer.json', null, null, '{"name": "dummy1"}'],
                     ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
                     ['test4/composer.json', null, null, '{"name": "dummy2"}'],
+                    ['test5/composer.json', null, null, '{"name": "magento/theme-b"}']
                 ]
             ));
         $dirRead->expects($this->any())
@@ -212,6 +216,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test2/composer.json', true],
                     ['test3/composer.json', false],
                     ['test4/composer.json', true],
+                    ['test5/composer.json', true]
                 ]
             ));
         $this->collection->expects($this->any())
@@ -221,11 +226,17 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->collection->expects($this->at(3))->method('hasTheme')->willReturn(true);
         $this->collection->expects($this->at(5))->method('hasTheme')->willReturn(false);
         $this->collection->expects($this->at(7))->method('hasTheme')->willReturn(true);
+        $this->collection->expects($this->at(9))->method('hasTheme')->willReturn(true);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::THEMES)
             ->willReturn($dirRead);
-        $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4']]);
+        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme->expects($this->at(1))->method('hasChildThemes')->willReturn(false);
+        $theme->expects($this->at(2))->method('hasChildThemes')->willReturn(false);
+        $theme->expects($this->at(3))->method('hasChildThemes')->willReturn(true);
+        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
+        $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4', 'test5']]);
         $this->assertContains(
             'test1, test4 are not installed composer packages',
             $this->tester->getDisplay()
@@ -236,6 +247,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains(
             'Unknown theme(s): test3' . PHP_EOL,
+            $this->tester->getDisplay()
+        );
+        $this->assertContains(
+            'test5 is a base of virtual theme',
             $this->tester->getDisplay()
         );
     }
@@ -259,6 +274,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
+        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
+        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
     }
 
     public function testExecuteFailedDependencyCheck()

@@ -240,6 +240,7 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $unknownPackages = [];
         $unknownThemes = [];
+        $themeHasChildren = [];
         $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($themePaths as $themePath) {
             if (array_search($this->getPackageName($themePath), $installedPackages) === false) {
@@ -248,6 +249,17 @@ class ThemeUninstallCommand extends Command
             if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
                 $unknownThemes[] = $themePath;
             }
+            else {
+                $theme = $this->themeProvider->getThemeByFullPath($themePath);
+                if($theme->hasChildThemes())
+                    $themeHasChildren[] = $themePath;
+            }
+        }
+        if(!empty($themeHasChildren)) {
+            $text = count($themeHasChildren) > 1 ?
+                ' are bases of' : ' is a base of';
+            $messages[] = '<error>Unable to delete. '
+                . implode(', ', $themeHasChildren) . $text . ' virtual theme</error>';
         }
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
