@@ -144,7 +144,7 @@ class AttributeMerger
 
         $defaultValue = $this->getDefaultValue($attributeCode);
         if (null !== $defaultValue) {
-            $element['default'] = $defaultValue;
+            $element['value'] = $defaultValue;
         }
         return $element;
     }
