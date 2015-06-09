@@ -99,7 +99,7 @@ class RollbackCommand extends AbstractSetupCommand
             ),
         ];
         $this->setName('setup:rollback')
-            ->setDescription('Rolls back Magento Application code base, media and database')
+            ->setDescription('Rolls back Magento Application codebase, media and database')
             ->setDefinition($options);
         parent::configure();
     }
@@ -111,7 +111,7 @@ class RollbackCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable() && ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)
                 || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))) {
-            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
             return;
         }
         try {
@@ -161,7 +161,7 @@ class RollbackCommand extends AbstractSetupCommand
         }
         if (!$inputOptionProvided) {
             throw new \InvalidArgumentException(
-                'No option is provided for the command to rollback.'
+                'Not enough information provided to roll back.'
             );
         }
     }
