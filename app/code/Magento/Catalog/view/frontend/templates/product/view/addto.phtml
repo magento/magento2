@@ -18,9 +18,9 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
         <a href="#"
             class="action towishlist"
-            title="<?php echo __('Add to Wishlist') ?>"
+            title="<?php echo __('Add to Wish List') ?>"
             data-post='<?php echo $_wishlistSubmitParams; ?>'
-            data-action="add-to-wishlist"><span><?php echo __('Add to Wishlist') ?></span></a>
+            data-action="add-to-wishlist"><span><?php echo __('Add to Wish List') ?></span></a>
     <?php endif; ?>
     <a href="#" data-post='<?php echo $compareHelper->getPostDataParams($_product);?>'
         data-role="add-to-links"

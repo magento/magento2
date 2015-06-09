@@ -30,7 +30,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('An error occurred while deleting the rule. Please review the log and try again.')
+                    __('We can\'t delete this rule right now. Please review the log and try again.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->_redirect('catalog_rule/*/edit', ['id' => $this->getRequest()->getParam('id')]);

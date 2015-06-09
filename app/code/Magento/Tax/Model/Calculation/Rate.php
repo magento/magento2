@@ -132,13 +132,13 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
         if ($isEmptyValues || $isWrongRange) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please fill all required fields with valid information.')
+                __('Make sure all required information is valid.')
             );
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Rate Percent should be a positive number.')
+                __('The Rate Percent should be a positive number.')
             );
         }
 
@@ -152,7 +152,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Zip code should not contain characters other than digits.')
+                    __('Use digits only for the zip code.')
                 );
             }
 
