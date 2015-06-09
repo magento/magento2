@@ -24,7 +24,7 @@
          aria-hidden="false"
          data-bind="fadeVisible: isVisible()">
         <!-- ko if: rates().length  -->
-        <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
+        <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation" novalidate="novalidate">
             <div id="checkout-shipping-method-load">
                 <table border="1" width="100%">
                     <tr>
@@ -34,41 +34,45 @@
                         <td>Carrier Title</td>
                     </tr>
                     <!--ko foreach: { data: rates(), as: 'method'}-->
-                        <!--ko foreach: { data: items, as: 'item'}-->
-                            <tr>
-                                <td>
-                                    <!-- ko if:  item.error_message -->
-                                    <div class="message error">
-                                        <div data-bind="text: $t(item.error_message)"></div>
-                                    </div>
-                                    <span class="no-display">
-                                        <input name="shipping_method" type="radio" data-bind="attr: {'value' : item.method_code, 'id': 's_method_' + item.method_code}"/>
-                                    </span>
+                        <tr>
+                            <td>
+                                <!-- ko if:  method.error_message -->
+                                <div class="message error">
+                                    <div data-bind="text: $t(method.error_message)"></div>
+                                </div>
+                                <span class="no-display">
+                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
+                                </span>
+                                <!-- /ko -->
+                                <!-- ko ifnot: method.error_message -->
+                                    <!-- ko if: $parent.rates().length == 1 -->
+                                    <input name="shipping_method"
+                                           class="radio"
+                                           type="radio"
+                                           data-bind="attr: {checked: $parent.rates().length == 1, 'value' : method.carrier_code + '_' + method.method_code, 'id': 's_method_' + method.method_code}" />
                                     <!-- /ko -->
-                                    <!-- ko ifnot: item.error_message -->
-                                        <!-- ko if: $parent.items.length && $parents[1].rates().length == 1 -->
-                                        <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
-                                               name="shipping_method"
-                                               class="radio"
-                                               type="radio"
-                                               checked="checked"/>
-                                        <!-- /ko -->
-                                        <!--ko ifnot: ($parent.items.length && $parents[1].rates().length == 1)-->
-                                        <input name="shipping_method" type="radio"
-                                               data-bind="checked:$parents[1].verifySelectedMethodCode(item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
-                                               class="radio"/>
-                                        <!--/ko-->
-                                    <!-- /ko -->
-                                </td>
-                                <td>
-                                        <!-- ko foreach: $parents[1].getRegion('price') -->
-                                            <!-- ko template: getTemplate() --><!-- /ko -->
-                                    <!-- /ko -->
-                                </td>
-                                <td data-bind="text: $t(item.method_title)"></td>
-                                <td data-bind="text: $t(method.carrier_title)"></td>
-                            </tr>
-                        <!-- /ko -->
+                                    <!--ko ifnot: ($parent.rates().length == 1)-->
+                                    <input name="shipping_method" type="radio"
+                                           data-bind="
+                                                value: method.carrier_code + '_' + method.method_code,
+                                                checked: $parent.isSelected,
+                                                attr: {'id': 's_method_' + method.carrier_code + '_' + method.method_code},
+                                                click: $parent.selectShippingMethod"
+                                           class="radio"/>
+                                    <!--/ko-->
+                                <!-- /ko -->
+                            </td>
+                            <td>
+                                <!-- ko foreach: $parent.getRegion('price') -->
+                                        <!-- ko template: getTemplate() --><!-- /ko -->
+                                <!-- /ko -->
+                            </td>
+                            <td data-bind="text: $t(method.method_title)"></td>
+                            <td data-bind="text: $t(method.carrier_title)"></td>
+                        </tr>
+                    <!-- /ko -->
+
+                    </tr>
                     <!-- /ko -->
                 </table>
             </div>

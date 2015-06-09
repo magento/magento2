@@ -7,43 +7,37 @@ define(
     ['ko', 'jquery'],
     function (ko, $) {
         "use strict";
-        var rates = ko.observable([]);
+        var shippingRates = ko.observableArray([]);
         return {
-            shippingRates: ko.observableArray([]),
+            /**
+             * Set shipping rates
+             *
+             * @param ratesData
+             */
             setShippingRates: function(ratesData) {
-                var self = this;
-                rates(ratesData);
-                self.shippingRates([]);
-                $.each(ratesData, function (key, entity) {
-                    var rateEntity = {};
-                    rateEntity.items = [];
-                    if (!ratesData.hasOwnProperty(entity.carrier_code)) {
-                        rateEntity['carrier_code'] = entity.carrier_code;
-                        rateEntity['carrier_title'] = entity.carrier_title;
-                    }
-                    rateEntity.items.push(entity);
-                    self.shippingRates.push(rateEntity);
-                });
+                shippingRates(ratesData);
+                shippingRates.valueHasMutated();
+            },
 
-            },
+            /**
+             * Get shipping rates
+             *
+             * @returns {*}
+             */
             getSippingRates: function() {
-                return this.shippingRates;
+                return shippingRates;
             },
-            getTitleByCode: function(methodCodeParts) {
-                var shippingMethodTitle = '', shippingMethodCode, carrierCode, methodCode;
-                if (!methodCodeParts) {
-                    return shippingMethodTitle;
-                }
-                shippingMethodCode = methodCodeParts.slice(0);
-                carrierCode = shippingMethodCode.shift();
-                methodCode = shippingMethodCode.join('_');
-                $.each(rates(), function (key, entity) {
-                    if (entity['carrier_code'] === carrierCode && entity['method_code'] === methodCode) {
-                        shippingMethodTitle = entity['carrier_title'] + " - " + entity['method_title'];
-                    }
-                });
-                return shippingMethodTitle;
+
+            /**
+             * Get shipping method title
+             *
+             * @param shippingMethod
+             * @returns {string}
+             */
+            getTitleByCode: function(shippingMethod) {
+                return shippingMethod ? shippingMethod.carrier_title + " - " + shippingMethod.method_title : '';
             },
+
             getRateByCode : function(methodCodeParts) {
                 var shippingRates = [],
                     shippingMethodCode = methodCodeParts.slice(0),
