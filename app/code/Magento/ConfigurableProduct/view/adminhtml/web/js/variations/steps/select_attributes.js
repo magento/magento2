@@ -21,7 +21,6 @@ define([
             this.multiselect = registry.async(this.multiselectName);
             initNewAttributeListener(registry.async(this.providerName));
         },
-        title: 'step1',
         render: function (wizard) {
         },
         force: function (wizard) {

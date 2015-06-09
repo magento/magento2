@@ -20,17 +20,16 @@
 </div>
 
 <script type="text/x-magento-init">
-
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "bulk-step": {
-                            "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
-                            "appendTo": "<?= $block->getComponentName()?>"
-                        }
+                    "bulk-step": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
+                        "appendTo": "<?= $block->getParentComponentName()?>"
                     }
                 }
             }
+        }
     }
 </script>
