@@ -149,6 +149,16 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
+     * Retrieve URL for adding All items to shopping cart from shared wishlist
+     *
+     * @return string
+     */
+    public function getSharedAddAllToCartUrl()
+    {
+        return $this->_getHelper()->getSharedAddAllToCartUrl();
+    }
+
+    /**
      * Retrieve params for adding Product to wishlist
      *
      * @param \Magento\Catalog\Model\Product $product
