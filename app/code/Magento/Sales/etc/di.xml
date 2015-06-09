@@ -220,24 +220,6 @@
             <argument name="resourcePrefix" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <virtualType name="OrderComplexEntity" type="Magento\Sales\Model\Resource\EntityRelationComposite">
-        <arguments>
-            <argument name="relationProcessors" xsi:type="array">
-                <item name="sales_order" xsi:type="array">
-                    <item name="default" xsi:type="object">Magento\Sales\Model\Resource\Order\Relation</item>
-                </item>
-                <item name="sales_order_invoice" xsi:type="array">
-                    <item name="default" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Relation</item>
-                </item>
-                <item name="sales_order_shipment" xsi:type="array">
-                    <item name="sales_order_shipment" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Relation</item>
-                </item>
-                <item name="sales_order_creditmemo" xsi:type="array">
-                    <item name="sales_order_creditmemo" xsi:type="object">Magento\Sales\Model\Resource\Order\Creditmemo\Relation</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="OrderRelationsComposite" type="Magento\Sales\Model\Resource\EntityRelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
