@@ -47,24 +47,32 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     private $searchResultsFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     */
+    protected $joinProcessor;
+
+    /**
      * @param AttributeSetResource $attributeSetResource
      * @param AttributeSetFactory $attributeSetFactory
      * @param CollectionFactory $collectionFactory
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
         AttributeSetFactory $attributeSetFactory,
         CollectionFactory $collectionFactory,
         EavConfig $eavConfig,
-        \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
+        \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;
         $this->collectionFactory = $collectionFactory;
         $this->eavConfig = $eavConfig;
         $this->searchResultsFactory = $searchResultFactory;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -97,6 +105,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
+
+        $this->joinProcessor->process($collection, 'Magento\Eav\Api\Data\AttributeSetInterface');
 
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
