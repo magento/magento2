@@ -197,6 +197,11 @@ class ThemeUninstallCommand extends Command
             $output->writeln($validationMessages);
             return;
         }
+        $childVirtualThemeCheckMessages = $this->checkChildVirtualTheme($themePaths);
+        if (!empty($childVirtualThemeCheckMessages)) {
+            $output->writeln($childVirtualThemeCheckMessages);
+            return;
+        }
         $dependencyMessages = $this->checkDependencies($themePaths);
         if (!empty($dependencyMessages)) {
             $output->writeln($dependencyMessages);
@@ -240,7 +245,6 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $unknownPackages = [];
         $unknownThemes = [];
-        $themeHasChildren = [];
         $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($themePaths as $themePath) {
             if (array_search($this->getPackageName($themePath), $installedPackages) === false) {
@@ -249,17 +253,6 @@ class ThemeUninstallCommand extends Command
             if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
                 $unknownThemes[] = $themePath;
             }
-            else {
-                $theme = $this->themeProvider->getThemeByFullPath($themePath);
-                if($theme->hasChildThemes())
-                    $themeHasChildren[] = $themePath;
-            }
-        }
-        if(!empty($themeHasChildren)) {
-            $text = count($themeHasChildren) > 1 ?
-                ' are bases of' : ' is a base of';
-            $messages[] = '<error>Unable to delete. '
-                . implode(', ', $themeHasChildren) . $text . ' virtual theme</error>';
         }
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
@@ -295,6 +288,31 @@ class ThemeUninstallCommand extends Command
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", $dependingPackages)
                     . "</error>";
             }
+        }
+        return $messages;
+    }
+
+    /**
+     * Check theme if has child virtual theme
+     *
+     * @param string[] $themePaths
+     * @return string[] $messages
+     */
+    private function checkChildVirtualTheme($themePaths)
+    {
+        $messages = [];
+        $themeHasChildren = [];
+        foreach ($themePaths as $themePath) {
+            $theme = $this->themeProvider->getThemeByFullPath($themePath);
+            if ($theme->hasChildThemes()) {
+                $themeHasChildren[] = $themePath;
+            }
+        }
+        if (!empty($themeHasChildren)) {
+            $text = count($themeHasChildren) > 1 ?
+                ' are bases of' : ' is a base of';
+            $messages[] = '<error>Unable to delete. '
+                . implode(', ', $themeHasChildren) . $text . ' virtual theme</error>';
         }
         return $messages;
     }
