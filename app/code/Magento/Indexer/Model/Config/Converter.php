@@ -132,7 +132,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'name'     => $this->getAttributeValue($node, 'name'),
             'source'   => $this->getAttributeValue($node, 'source'),
             'handler'  => $this->getAttributeValue($node, 'handler'),
-            'origin'   => $this->getAttributeValue($node, 'origin'),
+            'origin'   => $this->getAttributeValue($node, 'origin') ?: $this->getAttributeValue($node, 'name'),
             'dataType' => $this->getAttributeValue($node, 'dataType'),
             'type'     => $node->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'type'),
         ];
