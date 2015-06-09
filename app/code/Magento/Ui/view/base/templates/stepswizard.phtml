@@ -11,6 +11,7 @@
 </button>
 <div data-role="step-wizard-dialog" style="display: none">
     <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{"componentName": "<?= $block->getComponentName()?>"}}'>
+        <div data-role="messages"></div>
         <ul class="nav-bar">
             <?php foreach ($block->getSteps() as $step) { ?>
             <li data-role="collapsible">
