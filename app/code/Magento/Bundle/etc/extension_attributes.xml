@@ -9,8 +9,8 @@
 <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
     <attribute code="bundle_product_options" type="Magento\Bundle\Api\Data\OptionInterface[]">
         <join reference_table="catalog_product_bundle_option"
-              reference_field="option_id"
-              join_on_field="parent_id">
+              reference_field="parent_id"
+              join_on_field="entity_id">
             <select_field>option_id</select_field>
         </join>
     </attribute>
