@@ -7,8 +7,8 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: 'attributes-values-step'">
-    <div data-bind="foreach: attributes" class="draggable-handle">
-        <div class="attribute" style="padding-bottom: 30px;">
+    <div data-bind="foreach: attributes, sortableList: attributes">
+        <div style="padding-bottom: 30px;">
             <input style="float: left; border: 0px" data-bind="value: label" />
             <div style="float: right; font-size: smaller;">
                 <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute" >
@@ -20,8 +20,14 @@
                 </span>
             </div>
             <div data-bind="style: {'border-bottom': !opened() && '1px solid gray'}" style="clear: both;"></div>
-            <fieldset data-bind="visible: opened" style="clear: both;">
-                <span data-bind="text: $data.options().length"></span> <span><?= __('Options') ?></span>
+            <fieldset data-bind="visible: opened">
+                <div style="
+                    float: left;
+                    background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
+                    width: 8px;
+                    height: 14px;
+                    cursor: ns-resize;" data-role="draggable" title="Sort Variations">#</div>
+                <span style="clear: both;" data-bind="text: $data.options().length"></span> <span><?= __('Options') ?></span>
                 <a href="#" data-bind="click: $parent.selectAllAttributes" style="
                     float: right;
                     font-size: smaller;
