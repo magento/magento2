@@ -21,15 +21,15 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
      *
      * @param IntegrationIndex $integrationIndex
      * @param Integration $integration
-     * @param int|null $level
+     * @param int|null $resourceDepth
      * @return void
      */
-    public function processAssert(IntegrationIndex $integrationIndex, Integration $integration, $level = null)
+    public function processAssert(IntegrationIndex $integrationIndex, Integration $integration, $resourceDepth = null)
     {
         $fixtureResources = is_array($integration->getResources())
             ? $integration->getResources()
             : [$integration->getResources()];
-        $formResources = $integrationIndex->getIntegrationGrid()->getResourcesPopup()->getStructure($level);
+        $formResources = $integrationIndex->getIntegrationGrid()->getResourcesPopup()->getStructure($resourceDepth);
         $result = $this->verifyResources($formResources, $fixtureResources);
         \PHPUnit_Framework_Assert::assertEmpty(
             $result,

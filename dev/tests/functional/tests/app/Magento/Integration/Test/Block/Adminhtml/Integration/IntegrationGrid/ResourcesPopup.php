@@ -100,7 +100,7 @@ class ResourcesPopup extends Form
     }
 
     /**
-     * Get structure from tree.
+     * Get tree structure for selected nodes.
      *
      * @param int|null $level
      * @return array
