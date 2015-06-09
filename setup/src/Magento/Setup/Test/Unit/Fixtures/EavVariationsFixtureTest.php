@@ -18,13 +18,15 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
     {
         $attributeMock = $this->getMockBuilder('Magenot\Catalog\Model\Resource\Eav\Attribute')
-            ->setMethods(array('setAttributeGroupId', 'addData', 'setAttributeSetId', 'save'))
+            ->setMethods(['setAttributeGroupId', 'addData', 'setAttributeSetId', 'save'])
             ->getMock();
         $attributeMock->expects($this->exactly(2))
             ->method('setAttributeSetId')
@@ -35,19 +37,27 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
 
         $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')->disableOriginalConstructor()->getMock();
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeManagerMock->expects($this->once())
             ->method('getStores')
             ->will($this->returnValue([$storeMock]));
 
-        $setMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')->disableOriginalConstructor()->getMock();
+        $setMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
+            ->disableOriginalConstructor()
+            ->getMock();
         $setMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->will($this->returnValue(2));
 
-        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')->disableOriginalConstructor()->getMock();
+        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($attributeMock, $storeManagerMock));

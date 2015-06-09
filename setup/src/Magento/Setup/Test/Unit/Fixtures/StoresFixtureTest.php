@@ -18,9 +18,15 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
+    /**
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecute()
     {
         $websiteMock = $this->getMockBuilder('\Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
@@ -47,7 +53,9 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())
             ->method('save');
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')->disableOriginalConstructor()->getMock();
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeManagerMock->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
@@ -61,20 +69,23 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')->disableOriginalConstructor()->setMethods(array(
-            'setId',
-            'setUrlKey',
-            'setUrlPath',
-            'setName',
-            'setParentId',
-            'setPath',
-            'setLevel',
-            'setAvailableSortBy',
-            'setDefaultSortBy',
-            'setIsActive',
-            'getId',
-            'save'
-        ))->getMock();
+        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setId',
+                'setUrlKey',
+                'setUrlPath',
+                'setName',
+                'setParentId',
+                'setPath',
+                'setLevel',
+                'setAvailableSortBy',
+                'setDefaultSortBy',
+                'setIsActive',
+                'getId',
+                'save'
+            ])
+            ->getMock();
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();
@@ -109,7 +120,9 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('category_id');
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($storeManagerMock, $categoryMock));

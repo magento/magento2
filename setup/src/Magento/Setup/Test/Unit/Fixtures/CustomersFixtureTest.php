@@ -8,7 +8,8 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\CustomersFixture;
 
-class CustomersFixtureTest extends \PHPUnit_Framework_TestCase {
+class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
@@ -16,12 +17,16 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
     {
-        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')->disableOriginalConstructor()->getMock();
+        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $storeMock->expects($this->once())
@@ -33,7 +38,9 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase {
             ->method('getCode')
             ->will($this->returnValue('website_code'));
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')->disableOriginalConstructor()->getMock();
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->will($this->returnValue($storeMock));
@@ -41,7 +48,9 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase {
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
 
-        $objectManagerMode = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMode = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMode->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($storeManagerMock, $importMock));

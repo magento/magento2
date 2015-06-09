@@ -10,7 +10,8 @@ use \Magento\Setup\Fixtures\TaxRatesFixture;
 use Magento\Weee\Model\Attribute\Backend\Weee\Tax;
 use Test\AAaa\test;
 
-class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase {
+class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
@@ -19,24 +20,35 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
     {
-        $rateMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rate')->disableOriginalConstructor()->setMethods(array(
-            'setId',
-            'delete'
-        ))->getMock();
+        $rateMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rate')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setId',
+                'delete'
+            ])
+            ->getMock();
 
-        $collectionMock = $this->getMockBuilder('Magento\Tax\Model\Resource\Calculation\Rate\Collection')->disableOriginalConstructor()->getMock();
+        $collectionMock = $this->getMockBuilder('Magento\Tax\Model\Resource\Calculation\Rate\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
         $collectionMock->expects($this->once())
             ->method('getAllIds')
             ->willReturn([1]);
 
-        $csvImportHandlerMock = $this->getMockBuilder('Magento\TaxImportExport\Model\Rate\CsvImportHandler')->disableOriginalConstructor()->getMock();
+        $csvImportHandlerMock = $this->getMockBuilder('Magento\TaxImportExport\Model\Rate\CsvImportHandler')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->exactly(2))
             ->method('get')
             ->will($this->onConsecutiveCalls($collectionMock, $rateMock));
@@ -68,5 +80,4 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase {
         $taxRatesFixture = new TaxRatesFixture($this->fixtureModelMock);
         $this->assertSame([], $taxRatesFixture->introduceParamLabels());
     }
-
 }

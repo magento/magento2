@@ -17,14 +17,20 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
     {
-        $cacheInterfaceMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')->disableOriginalConstructor()->getMock();
+        $cacheInterfaceMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($cacheInterfaceMock);
@@ -32,9 +38,9 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
-            ->willReturn(array(
+            ->willReturn([
                 'indexer' => ['id' => 1]
-            ));
+            ]);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getObjectManager')

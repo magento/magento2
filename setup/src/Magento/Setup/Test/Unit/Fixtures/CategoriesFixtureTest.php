@@ -17,24 +17,27 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
     public function testExecute()
     {
-        $categoryMock = $this->getMockBuilder('\Magento\Catalog\Model\Category')->disableOriginalConstructor()->setMethods(array(
-            'getName',
-            'setId',
-            'setUrlKey',
-            'setUrlPath',
-            'setName',
-            'setParentId',
-            'setPath',
-            'setLevel',
-            'setAvailableSortBy',
-            'setDefaultSortBy',
-            'setIsActive',
-            'save'
-        ))->getMock();
+        $categoryMock = $this->getMockBuilder('\Magento\Catalog\Model\Category')->disableOriginalConstructor()
+            ->setMethods([
+                'getName',
+                'setId',
+                'setUrlKey',
+                'setUrlPath',
+                'setName',
+                'setParentId',
+                'setPath',
+                'setLevel',
+                'setAvailableSortBy',
+                'setDefaultSortBy',
+                'setIsActive',
+                'save'
+            ])->getMock();
         $categoryMock
             ->expects($this->once())
             ->method('getName')
