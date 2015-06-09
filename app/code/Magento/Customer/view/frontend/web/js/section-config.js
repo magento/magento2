@@ -21,7 +21,12 @@ define(['underscore'], function (_) {
     return {
         getAffectedSections: function (url) {
             var route = canonize(url);
-            var actions = _.find(sections, function(val, section){
+            var actions = _.find(sections, function(val, section) {
+                if (section.indexOf('*') >= 0) {
+                    section = section.replace(/\*/g, '[^/]+') + '$';
+                    var matched = route.match(section);
+                    return matched && matched[0] == route;
+                }
                 return (route.indexOf(section) === 0);
             });
 
