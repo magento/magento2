@@ -60,7 +60,7 @@ class ConfigSetCommand extends AbstractSetupCommand
         $options = $this->configModel->getAvailableOptions();
 
         $this->setName('setup:config:set')
-            ->setDescription('Sets deployment configuration')
+            ->setDescription('Creates or modifies the deployment configuration')
             ->setDefinition($options);
 
         parent::configure();

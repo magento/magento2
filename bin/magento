@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\AppInterface;
+
 try {
     require __DIR__ . '/../app/bootstrap.php';
     if (PHP_SAPI == 'cli') {
@@ -12,7 +14,7 @@ try {
         $handler = new \Magento\Framework\App\ErrorHandler();
         set_error_handler([$handler, 'handler']);
 
-        $application = new Magento\Framework\Console\Cli('Magento CLI');
+        $application = new Magento\Framework\Console\Cli('Magento CLI', AppInterface::VERSION);
         $application->run();
     }
 

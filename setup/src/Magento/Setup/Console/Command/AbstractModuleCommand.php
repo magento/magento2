@@ -121,7 +121,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
                 $output->writeln('');
                 $output->writeln(
-                    '<info>To make sure that the enabled modules are properly registered,'
+                    '<info>To make sure the modules are properly enabled,'
                     . " run 'setup:upgrade'.</info>"
                 );
             } else {
