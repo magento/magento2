@@ -7,17 +7,21 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: 'attributes-values-step'">
-    <div data-bind="foreach: attributes">
+    <div data-bind="foreach: attributes" class="draggable-handle">
         <div class="attribute" style="padding-bottom: 30px;">
             <input style="float: left;" data-bind="value: label" />
             <div style="float: right; font-size: smaller;">
                 <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute" >
                     <?= __('Remove Attribute') ?>
                 </a>
-                <span style="font-size: smaller;" data-bind="click: $parent.close"> -- </span>
+                <span
+                    style="font-size: smaller;"
+                    data-bind="click: $parent.toggleOpened.bind($parent), html: '-'"
+                >--</span>
             </div>
-            <fieldset style="clear: both;">
-                <span data-bind="text: $data.options().length"></span> <span>Options</span>
+            <div class="field"></div>
+            <fieldset data-bind="visible: $parent.opened" style="clear: both;">
+                <span data-bind="text: $data.options().length"></span> <span><?= __('Options') ?></span>
                 <a href="#" data-bind="click: $parent.selectAllAttributes" style="
                     float: right;
                     font-size: smaller;
@@ -32,7 +36,7 @@
                             data-bind="checkedValue: value, checked: !value || $parent.chosenOptions"
                         />
                         <span data-bind="text: label, visible: value"></span>
-                        <input data-bind="value: label, visible: !value" type="value">
+                        <input data-bind="value: label, visible: !value" type="text">
                         <a href="#" data-bind="visible: !value, click: $parents[1].saveOption.bind($parent)">-></a>
                         <a href="#" data-bind="visible: !value, click: $parents[1].removeOption.bind($parent)
                         ">X</a>
