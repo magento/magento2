@@ -17,7 +17,7 @@ interface TransparentInterface extends MethodInterface
     /**
      * Returns payment method configured config
      *
-     * @return ConfigInterface
+     * @return \Magento\Payment\Gateway\ConfigInterface
      */
     public function getConfigInterface();
 }
