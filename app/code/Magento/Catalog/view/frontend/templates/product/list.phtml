@@ -69,7 +69,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                         </strong>
                         <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
                         <?php echo $block->getProductPrice($_product) ?>
-                        <?php echo $block->getDetailsHtml($_product); ?>
+                        <?php echo $block->getProductDetailsHtml($_product); ?>
 
                         <div class="product-item-inner">
                             <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>

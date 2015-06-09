@@ -605,7 +605,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @return mixed
      */
-    public function getDetailsHtml(\Magento\Catalog\Model\Product $product)
+    public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
     {
         $renderer = $this
             ->getDetailsRenderer($product->getTypeId())
