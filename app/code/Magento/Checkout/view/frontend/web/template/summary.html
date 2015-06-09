@@ -5,9 +5,7 @@
  */
 -->
 
-<div class="opc-block-summary">
-    <span data-bind="text: $t('Order Summary')" class="opc-block-summary-title"></span>
-    <!-- ko foreach: elems() -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
-</div>
+<span data-bind="text: $t('Order Summary')" class="title"></span>
+<!-- ko foreach: elems() -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->

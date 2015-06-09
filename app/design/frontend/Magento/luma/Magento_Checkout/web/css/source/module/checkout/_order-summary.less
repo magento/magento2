@@ -28,17 +28,79 @@
     .opc-block-summary {
         .css(background, @checkout-summary__background-color);
         .css(padding, @checkout-summary__padding);
-    }
+        &:extend(.abs-add-box-sizing all);
+        > .title {
+            &:extend(.abs-checkout-title all);
+            .css(margin, 0 0 @checkout-summary-title__margin);
+            display: block;
+        }
 
-    .opc-block-summary-title {
-        &:extend(.abs-checkout-title all);
-        .css(margin, 0 0 @checkout-summary-title__margin);
-        display: block;
-    }
+        //  Totals table
+        .totals {
+            &:extend(.abs-sidebar-totals all);
+            //  ToDo UI: totals table styles
+            .css(margin, 0 0 @checkout-summary__margin);
+            width: 100%;
+        }
 
-    .table-opc-block-summary {
-        .css(margin, 0 0 @checkout-summary__margin);
-        width: 100%;
+        //
+        //  Items list
+        //  ---------------------------------------------
+        
+        //  Block title
+        .items-in-cart {
+            > .title {
+                .css(padding, @indent__s @indent__xl @indent__s 0);
+                cursor: pointer;
+                .icon-font(
+                @icon-down,
+                @_icon-font-size: 12px,
+                @_icon-font-line-height: 12px,
+                @_icon-font-text-hide: true,
+                @_icon-font-margin: 3px 0 0,
+                @_icon-font-position: after,
+                @_icon-font-display: block
+                );
+                margin-bottom: 0;
+                position: relative;
+                &:after {
+                    position: absolute;
+                    right: @indent__base;
+                    top: @indent__s;
+                }
+                strong {
+                    .font-size(18);
+                    font-weight: @font-weight__light;
+                    margin: 0;
+                }
+            }
+            &.active {
+                > .title {
+                    &:after {
+                        .icon-font-symbol(
+                        @_icon-font-content: @icon-up,
+                        @_icon-font-position: after
+                        );
+                    }
+                }
+            }
+        }
+        
+        //  Cart items
+        .minicart-items-wrapper {
+            border-bottom: 0;
+            margin: 0;
+            padding: 15px 0 0;
+        }
+        .column.main & {
+            .product-item {
+                margin: 0;
+                padding-left: 0;
+            }
+        }
+        .product-item-name {
+            font-weight: @font-weight__semibold;
+        }
     }
 }
 
@@ -47,11 +109,16 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .opc-block-summary-title {
-        .css(font-size, @checkout-step-title-mobile__font-size);
-        .css(margin-bottom, @checkout-step-title-mobile__margin-bottom);
-        border-bottom: 0;
-        padding-bottom: 0;
+    .opc-block-summary {
+        > .title {
+            border-bottom: 0;
+            .css(font-size, @checkout-step-title-mobile__font-size);
+            .css(margin-bottom, @checkout-step-title-mobile__margin-bottom);
+            padding-bottom: 0;
+        }
+        .totals {
+            &:extend(.abs-sidebar-totals-mobile all);
+        }
     }
 }
 
@@ -60,7 +127,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .opc-block-summary-wrapper {
+    .opc-block-summary {
         .css(margin, @checkout-summary__margin__xl 0 @checkout-summary__margin);
         .css(width, @checkout-summary__width);
         float: right;
