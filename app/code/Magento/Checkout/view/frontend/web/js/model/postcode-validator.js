@@ -5,21 +5,26 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(['mageUtils'], function (utils) {
-    return function(postCode, countryId) {
-        "use strict";
-        var patterns = window.checkoutConfig.postCodes[countryId];
+    'use strict';
+    return {
+        validatedPostCodeExample: [],
+        validate: function(postCode, countryId) {
+            var patterns = window.checkoutConfig.postCodes[countryId];
+            this.validatedPostCodeExample = [];
 
-        if (!utils.isEmpty(postCode) && !utils.isEmpty(patterns)) {
-            for (var pattern in patterns) {
-                if (patterns.hasOwnProperty(pattern)) {
-                    var regex = new RegExp(patterns[pattern]);
-                    if (regex.test(postCode)) {
-                        return true;
+            if (!utils.isEmpty(postCode) && !utils.isEmpty(patterns)) {
+                for (var pattern in patterns) {
+                    if (patterns.hasOwnProperty(pattern)) {
+                        this.validatedPostCodeExample.push(patterns[pattern]['example']);
+                        var regex = new RegExp(patterns[pattern]['pattern']);
+                        if (regex.test(postCode)) {
+                            return true;
+                        }
                     }
                 }
+                return false;
             }
-            return false;
+            return true;
         }
-        return true;
     }
 });
