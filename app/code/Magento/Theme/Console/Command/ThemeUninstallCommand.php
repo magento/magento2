@@ -174,7 +174,7 @@ class ThemeUninstallCommand extends Command
             self::INPUT_KEY_CLEAR_STATIC_CONTENT,
             'c',
             InputOption::VALUE_NONE,
-            'Clear generated static view files. Necessary, if the module(s) have static view files'
+            'Clear generated static view files.'
         );
         parent::configure();
     }
