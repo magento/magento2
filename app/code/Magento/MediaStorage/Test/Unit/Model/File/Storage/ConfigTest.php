@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            DirectoryList::PUB
+            DirectoryList::ROOT
         )->will(
             $this->returnValue($directory)
         );

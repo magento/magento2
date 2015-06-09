@@ -3643,4 +3643,5 @@ return [
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsInvalidCcTest'],
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsValidCcTest'],
     ['Magento\Centinel\CreateOrderTest'],
+    ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
 ];
