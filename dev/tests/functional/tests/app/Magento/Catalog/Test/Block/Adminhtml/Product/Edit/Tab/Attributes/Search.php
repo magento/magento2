@@ -82,12 +82,8 @@ class Search extends SuggestElement
     {
         $this->find($this->topPage, Locator::SELECTOR_XPATH)->click();
         $this->find($this->actionToggle)->click();
-        $suggestField = $this->find($this->suggest);
-        $suggestField->click();
-        $suggestField->setValue($productAttribute->getFrontendLabel());
-        $this->waitResult();
-        $attributeSelector = sprintf($this->searchArrtibute, $productAttribute->getFrontendLabel());
-        return $this->find($this->searchResult)->find($attributeSelector, Locator::SELECTOR_XPATH)->isVisible();
+
+        return $this->isExistValueInSearchResult($productAttribute->getFrontendLabel());
     }
 
     /**
