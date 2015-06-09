@@ -33,7 +33,7 @@ define([
          * @returns {Columns} Chainable.
          */
         reset: function () {
-            this.elems.each('applyState', 'visible', 'default');
+            this.elems.each('applyState', 'default', 'visible');
 
             return this;
         },
@@ -44,13 +44,13 @@ define([
          * @returns {Columns} Chainable.
          */
         cancel: function () {
-            this.elems.each('applyState', 'visible', 'last');
+            this.elems.each('applyState', 'saved', 'visible');
 
             return this;
         },
 
         /**
-         * Extends child elements array with provided one.
+         * Adds columns whose visibility can be controlled to the component.
          *
          * @param {Array} columns - Elements array that will be added to component.
          * @returns {Columns} Chainable.

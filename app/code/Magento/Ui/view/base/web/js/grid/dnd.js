@@ -52,8 +52,8 @@ define([
      * Moves specified DOM element to the x and y coordinates.
      *
      * @param {HTMLElement} elem - Element to be relocated.
-     * @param {Number} x - Value on the 'x' axis.
-     * @param {Number} y - Value on the 'y' axis.
+     * @param {Number} x - X coordinate.
+     * @param {Number} y - Y coordinate.
      */
     function locate(elem, x, y) {
         var value = 'translate(' + x + 'px,' + y + 'px)';
@@ -65,8 +65,8 @@ define([
     /**
      * Checks if specified coordinate is inside of the provided area.
      *
-     * @param {Number} x - Value on the 'x' axis.
-     * @param {Number} y - Value on the 'y' axis.
+     * @param {Number} x - X coordinate.
+     * @param {Number} y - Y coordinate.
      * @param {Object} area - Object which represents area.
      * @returns {Boolean}
      */
@@ -155,7 +155,7 @@ define([
         },
 
         /**
-         * Makes specified column draggable.
+         * Sets specified column as a draggable element.
          *
          * @param {HTMLTableHeaderCellElement} column - Columns header element.
          * @returns {Dnd} Chainable.
@@ -171,20 +171,25 @@ define([
         },
 
         /**
+         * Defines specified table element as a main container.
+         *
          * @param {HTMLTableElement} table
          * @returns {Dnd} Chainable.
          */
-        addTable: function (table) {
+        setTable: function (table) {
             this.table = table;
 
             return this;
         },
 
         /**
+         * Defines specified table element as a draggable table.
+         * Only this element will be moved across the screen.
+         *
          * @param {HTMLTableElement} dragTable
          * @returns {Dnd} Chainable.
          */
-        addDragTable: function (dragTable) {
+        setDragTable: function (dragTable) {
             this.dragTable = dragTable;
 
             return this;
@@ -265,8 +270,8 @@ define([
         /**
          * Matches provided coordinates to available areas.
          *
-         * @param {Number} x - X coordinate.
-         * @param {Number} y - Y coordinate.
+         * @param {Number} x - X coordinate of a mouse pointer.
+         * @param {Number} y - Y coordinate of a mouse pointer.
          * @returns {Object|Undefined} Matched area.
          */
         _getDropArea: function (x, y) {
@@ -278,8 +283,8 @@ define([
         /**
          * Updates state of hovered areas.
          *
-         * @param {Number} x
-         * @param {Number} y
+         * @param {Number} x - X coordinate of a mouse pointer.
+         * @param {Number} y - Y coordinate of a mouse pointer.
          */
         _updateAreas: function (x, y) {
             var leavedArea = this.dropArea,
@@ -295,9 +300,27 @@ define([
         },
 
         /**
+         * Grab action handler.
+         *
+         * @param {Number} x - X coordinate of a grabbed point.
+         * @param {Number} y - Y coordinate of a grabbed point.
+         * @param {HTMLElement} elem - Grabbed elemenet.
+         */
+        grab: function (x, y, elem) {
+            this.initDrag = true;
+            this.grabbed = {
+                x: x,
+                y: y,
+                elem: elem
+            };
+
+            this.$body.addClass(this.noSelectClass);
+        },
+
+        /**
          * Dragstart action handler.
          *
-         * @param {HTMLElement} elem - Element which is dragging.
+         * @param {HTMLTableHeaderCellElement} elem - Element which is dragging.
          */
         dragstart: function (elem) {
             this.initDrag = false;
@@ -310,69 +333,6 @@ define([
                 ._copyDimensions(elem);
 
             $(this.dragTable).removeClass(this.hiddenClass);
-        },
-
-        /**
-         * Dragend action handler.
-         *
-         * @param {HTMLElement} elem - Element that was dragged.
-         */
-        dragend: function (elem) {
-            var area = this.dropArea;
-
-            this.$body.removeClass(this.noSelectClass);
-
-            this.initDrag = false;
-
-            if (!this.dragging) {
-                return;
-            }
-
-            this.dragging = false;
-
-            $(this.dragTable).addClass(this.hiddenClass);
-
-            getModel(elem).dragging(false);
-
-            if (area && area.target !== elem) {
-                this.drop(area.target, elem);
-            }
-        },
-
-        /**
-         * Dragenter action handler.
-         *
-         * @param {Object} area
-         */
-        dragenter: function (area) {
-            var elem        = area.target,
-                drag        = this.dragArea,
-                direction   = drag.index < area.index ? 'left' : 'right';
-
-            getModel(elem).dragover(direction);
-        },
-
-        /**
-         * Dragleave action handler.
-         *
-         * @param {Object} area
-         */
-        dragleave: function (area) {
-            getModel(area.target).dragover(false);
-        },
-
-        /**
-         * Drop action handler.
-         *
-         * @param {HTMLElement} target
-         * @param {HTMLElement} elem
-         */
-        drop: function (target, elem) {
-            target = getModel(target);
-            elem = getModel(elem);
-
-            getModel(this.table).insertChild(elem, target);
-            target.dragover(false);
         },
 
         /**
@@ -406,21 +366,59 @@ define([
         },
 
         /**
-         * Grab action handler.
+         * Dragenter action handler.
          *
-         * @param {Number} x - Coordinate of a grabbed point on 'x' axis.
-         * @param {Number} y - Coordinate of a grabbed point on 'y' axis.
-         * @param {HTMLElement} target - Grabbed elemenet.
+         * @param {Object} dropArea
          */
-        grab: function (x, y, target) {
-            this.initDrag = true;
-            this.grabbed = {
-                x: x,
-                y: y,
-                elem: target
-            };
+        dragenter: function (dropArea) {
+            var direction = this.dragArea.index < dropArea.index ?
+                'left' :
+                'right';
 
-            this.$body.addClass(this.noSelectClass);
+            getModel(dropArea.target).dragover(direction);
+        },
+
+        /**
+         * Dragleave action handler.
+         *
+         * @param {Object} dropArea
+         */
+        dragleave: function (dropArea) {
+            getModel(dropArea.target).dragover(false);
+        },
+
+        /**
+         * Dragend action handler.
+         *
+         * @param {Object} dragArea
+         */
+        dragend: function (dragArea) {
+            var dropArea = this.dropArea,
+                dragElem = dragArea.target;
+
+            this.dragging = false;
+
+            $(this.dragTable).addClass(this.hiddenClass);
+
+            getModel(dragElem).dragging(false);
+
+            if (dropArea && dropArea.target !== dragElem) {
+                this.drop(dropArea, dragArea);
+            }
+        },
+
+        /**
+         * Drop action handler.
+         *
+         * @param {Object} dropArea
+         * @param {Object} dragArea
+         */
+        drop: function (dropArea, dragArea) {
+            var dropModel = getModel(dropArea.target),
+                dragModel = getModel(dragArea.target);
+
+            getModel(this.table).insertChild(dragModel, dropModel);
+            dropModel.dragover(false);
         },
 
         /**
@@ -452,7 +450,12 @@ define([
          */
         onMouseUp: function () {
             if (this.initDrag || this.dragging) {
-                this.dragend(this.grabbed.elem);
+                this.initDrag = false;
+                this.$body.removeClass(this.noSelectClass);
+            }
+
+            if (this.dragging) {
+                this.dragend(this.dragArea);
             }
         },
 
