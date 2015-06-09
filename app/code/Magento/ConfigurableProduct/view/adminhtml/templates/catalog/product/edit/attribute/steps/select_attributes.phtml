@@ -15,7 +15,17 @@ $attributeCreate->setDataAttribute(
     [
         'mage-init' => [
             'productAttributes' => [
-                'url' => $this->getUrl('catalog/product_attribute/new', ['popup' => 1]),
+                'url' => $this->getUrl('catalog/product_attribute/new', [
+                    'store' => $block->getProduct()->getStoreId(),
+                    'product_tab' => 'variations',
+                    'popup' => 1,
+                    '_query' => [
+                        'attribute' => [
+                            'is_global' => 1,
+                            'frontend_input' => 'select',
+                        ],
+                    ],
+                ]),
             ],
         ],
     ]
@@ -30,20 +40,18 @@ echo $block->getChildHtml();
 ?>
 
 <script type="text/x-magento-init">
-
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "select-attributes-step": {
-                            "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
-                            "multiselectName": "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
-                            "providerName": "product_attributes_listing.product_attributes_listing_data_source",
-                            "appendTo": "<?= $block->getComponentName()?>"
-
-                        }
+                    "select-attributes-step": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
+                        "multiselectName": "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
+                        "providerName": "product_attributes_listing.product_attributes_listing_data_source",
+                        "appendTo": "<?= $block->getParentComponentName()?>"
                     }
                 }
             }
+        }
     }
 </script>

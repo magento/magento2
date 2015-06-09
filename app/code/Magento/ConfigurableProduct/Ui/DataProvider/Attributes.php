@@ -6,8 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Ui\DataProvider;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
-
 class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
@@ -16,7 +14,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $collection;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -24,7 +22,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
+        \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler $configurableAttributeHandler,
         $name,
         $primaryFieldName,
         $requestFieldName,
@@ -32,8 +30,8 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->collection = $collectionFactory->create();
-        $this->collection->addVisibleFilter(true);
+        $this->configurableAttributeHandler = $configurableAttributeHandler;
+        $this->collection = $configurableAttributeHandler->getApplicableAttributes();
     }
 
     /**
@@ -42,5 +40,22 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getCollection()
     {
         return $this->collection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData()
+    {
+        $items = [];
+        foreach ($this->getCollection()->getItems() as $attribute) {
+            if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
+                $items[] = $attribute->toArray();
+            }
+        }
+        return [
+            'totalRecords' => count($items),
+            'items' => $items
+        ];
     }
 }
