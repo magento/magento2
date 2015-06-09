@@ -21,7 +21,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
  * 5. Click "Save Customer" button.
  * 6. Perform all assertions.
  *
- * @ticketId MAGETWO-23424
+ * @ZephyrId MAGETWO-23424
  */
 class CreateCustomerBackendEntityTest extends Injectable
 {

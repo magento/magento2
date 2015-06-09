@@ -6,7 +6,6 @@
 
 namespace Magento\Payment\Test\Unit\Model\Method;
 
-use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
 
