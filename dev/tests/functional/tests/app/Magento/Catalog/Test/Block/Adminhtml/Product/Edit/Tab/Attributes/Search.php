@@ -87,6 +87,23 @@ class Search extends SuggestElement
     }
 
     /**
+     * Send keys.
+     *
+     * @param array $keys
+     * @return void
+     */
+    public function keys(array $keys)
+    {
+        $input = $this->find($this->suggest);
+        if (!$input->isVisible()) {
+            $this->find($this->actionToggle)->click();
+        }
+        $input->click();
+        $input->keys($keys);
+        $this->waitResult();
+    }
+
+    /**
      * Wait for search result is visible.
      *
      * @return void
