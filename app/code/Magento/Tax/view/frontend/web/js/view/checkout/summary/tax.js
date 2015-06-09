@@ -16,20 +16,39 @@ define(
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal;
         var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed;
+        var isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
         return Component.extend({
             defaults: {
                 isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
+                notCalculatedMessage: 'Not yet calculated',
                 template: 'Magento_Tax/checkout/summary/tax'
             },
-            colspan: 3,
             totals: quote.getTotals(),
-            style: "",
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
-            lastTaxGroupId: null,
-            isDetailsVisible: ko.observable(),
-            notCalculatedMessage: 'Not yet calculated',
             getTitle: function() {
                 return "Tax";
+            },
+            ifShowValue: function() {
+                if (!isTaxDisplayedInGrandTotal) {
+                    return false;
+                }
+                if (this.getPureValue() == 0) {
+                    return isZeroTaxDisplayed;
+                }
+                return true;
+            },
+            ifShowDetails: function() {
+                return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
+            },
+            getPureValue: function() {
+                var amount = 0;
+                if (this.totals()) {
+                    var taxTotal = totals.getTotalByCode('tax');
+                    if (taxTotal) {
+                        amount = taxTotal.value;
+                    }
+                }
+                return amount;
             },
             getValue: function() {
                 var amount = 0;
@@ -52,9 +71,6 @@ define(
                     return totals.extension_attributes.tax_grandtotal_details;
                 }
                 return [];
-            },
-            toggleDetails: function() {
-                this.isDetailsVisible(!this.isDetailsVisible());
             }
         });
     }
