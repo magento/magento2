@@ -111,7 +111,7 @@ class BackupCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {
-            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
             return;
         }
         try {
@@ -134,7 +134,7 @@ class BackupCommand extends AbstractSetupCommand
             }
             if (!$inputOptionProvided) {
                 throw new \InvalidArgumentException(
-                    'No option is provided for the command to take backup.'
+                    'Not enough information provided to take backup.'
                 );
             }
         } catch (\Exception $e) {
