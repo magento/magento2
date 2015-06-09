@@ -32,7 +32,6 @@ define(
                         : null;
                 }
             ),
-
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
                 return true;

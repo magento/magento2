@@ -4,8 +4,13 @@
  */
 /*global define*/
 define(
-    ['ko', 'jquery'],
-    function (ko, $) {
+    [
+        'ko',
+        'Magento_Checkout/js/action/select-shipping-method',
+        'Magento_Checkout/js/model/quote',
+        'jquery'
+    ],
+    function (ko, selectShippingMethodAction, quote, $) {
         "use strict";
         var shippingRates = ko.observableArray([]);
         return {
@@ -17,6 +22,20 @@ define(
             setShippingRates: function(ratesData) {
                 shippingRates(ratesData);
                 shippingRates.valueHasMutated();
+
+                if(quote.shippingMethod()) {
+                    var rateIsAvailable = ratesData.some(function (rate) {
+                        if (rate.carrier_code == quote.shippingMethod().carrier_code
+                            && rate.method_code == quote.shippingMethod().method_code) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    //Unset selected shipping shipping method if not available
+                    if (!rateIsAvailable) {
+                        selectShippingMethodAction(null);
+                    }
+                }
             },
 
             /**
