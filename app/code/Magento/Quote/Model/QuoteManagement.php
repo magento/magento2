@@ -281,17 +281,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $customer = $this->customerRepository->getById($customerId);
 
         try {
-            $this->quoteRepository->getActiveForCustomer($customerId);
-            throw new CouldNotSaveException(__('Cannot create quote'));
+            $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $quote = $this->quoteRepository->create();
+            $quote->setStoreId($storeId);
+            $quote->setCustomer($customer);
+            $quote->setCustomerIsGuest(0);
         }
-
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->create();
-        $quote->setStoreId($storeId);
-        $quote->setCustomer($customer);
-        $quote->setCustomerIsGuest(0);
         return $quote;
     }
 
