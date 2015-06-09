@@ -11,5 +11,5 @@
     <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
     <!-- ko text: address().telephone --><!-- /ko --><br/>
     <input type="button" class="select-item-button" data-bind="click: selectAddress, value: $t('Ship Here')" />
-    <a class="edit-address-link" data-bind="click: editAddress, text: $t('Edit'), visible:  address().getType() == 'new-customer-address'"></a>
+    <a class="edit-address-link" data-bind="click: editAddress, text: $t('Edit'), visible:  address().isEditable()"></a>
 </div>
