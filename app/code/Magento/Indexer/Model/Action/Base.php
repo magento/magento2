@@ -121,10 +121,6 @@ class Base implements ActionInterface
         $select = $this->connection->select();
         $select->from($this->sources[$this->data['primary']]->getEntityName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            if (isset($fieldset['class'])) {
-                $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
-                    ->update($fieldset);
-            }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $handler = $field['handler'];
                 $source = $field['source'];
