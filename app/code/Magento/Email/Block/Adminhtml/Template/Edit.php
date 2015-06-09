@@ -250,14 +250,10 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      */
     protected function _getDefaultTemplatesAsOptionsArray()
     {
-        $options = [['value' => '', 'label' => '', 'group' => '']];
-        foreach ($this->_emailConfig->getAvailableTemplates() as $templateId) {
-            $options[] = [
-                'value' => $templateId,
-                'label' => $this->_emailConfig->getTemplateLabel($templateId),
-                'group' => $this->_emailConfig->getTemplateModule($templateId),
-            ];
-        }
+        $options = array_merge(
+            [['value' => '', 'label' => '', 'group' => '']],
+            $this->_emailConfig->getAvailableTemplates()
+        );
         uasort(
             $options,
             function (array $firstElement, array $secondElement) {
@@ -408,6 +404,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
 
     /**
      * Convert xml config paths to decorated names
+     * TODO: Add support to show appropriate "scope" value for theme-specific template files
      *
      * @param array $paths
      * @return array
