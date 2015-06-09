@@ -116,7 +116,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->model->codeRollback('RollbackFile_A.tgz');
     }
 
-    public function testMeidaBackup()
+    public function testMediaBackup()
     {
         $this->setupCodeBackupRollback();
         $this->filesystem->expects($this->once())
