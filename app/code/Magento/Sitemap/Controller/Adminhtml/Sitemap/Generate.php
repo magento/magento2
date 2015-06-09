@@ -32,7 +32,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong generating the sitemap.'));
+                $this->messageManager->addException($e, __('We can\'t generate the sitemap right now.'));
             }
         } else {
             $this->messageManager->addError(__('We can\'t find a sitemap to generate.'));

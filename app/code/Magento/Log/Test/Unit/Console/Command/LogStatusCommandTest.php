@@ -14,7 +14,10 @@ class LogStatusCommandTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $resourceFactory = $this->getMock('Magento\Log\Model\Resource\ShellFactory', [], [], '', false);
+        $resourceFactory = $this->getMockBuilder('Magento\Log\Model\Resource\ShellFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $objectManager->expects($this->once())->method('create')->willReturn($resourceFactory);
         $resource = $this->getMock('Magento\Log\Model\Resource\Shell', [], [], '', false);
         $resourceFactory->expects($this->once())->method('create')->willReturn($resource);
