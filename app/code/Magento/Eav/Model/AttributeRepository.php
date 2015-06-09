@@ -43,24 +43,32 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     protected $attributeFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     */
+    protected $joinProcessor;
+
+    /**
      * @param Config $eavConfig
      * @param Resource\Entity\Attribute $eavResource
      * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Resource\Entity\Attribute $eavResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
+        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavResource = $eavResource;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->attributeFactory = $attributeFactory;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -121,6 +129,8 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attributeCollection->addAttributeGrouping();
         $attributeCollection->setCurPage($searchCriteria->getCurrentPage());
         $attributeCollection->setPageSize($searchCriteria->getPageSize());
+
+        $this->joinProcessor->process($attributeCollection, 'Magento\Eav\Api\Data\AttributeInterface');
 
         $attributes = [];
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */

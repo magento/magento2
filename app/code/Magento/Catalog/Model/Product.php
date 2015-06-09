@@ -306,6 +306,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     ];
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     */
+    protected $joinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -339,6 +344,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -377,6 +383,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -405,6 +412,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->joinProcessor = $joinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -1932,7 +1940,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getOptions()
     {
         if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
-            foreach ($this->getProductOptionsCollection() as $option) {
+            $collection = $this->getProductOptionsCollection();
+            $this->joinProcessor->process($collection, 'Magento\Catalog\Api\Data\ProductInterface');
+            foreach ($collection as $option) {
                 $option->setProduct($this);
                 $this->addOption($option);
             }
