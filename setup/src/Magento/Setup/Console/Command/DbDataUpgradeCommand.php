@@ -61,7 +61,7 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
             return;
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));

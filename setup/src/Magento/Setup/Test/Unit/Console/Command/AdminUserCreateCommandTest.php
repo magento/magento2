@@ -51,7 +51,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
         $installerMock->expects($this->once())->method('installAdminUser')->with($data);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
         $commandTester->execute($options);
-        $this->assertEquals('Created admin user user' . PHP_EOL, $commandTester->getDisplay());
+        $this->assertEquals('Created Magento administrator user named user' . PHP_EOL, $commandTester->getDisplay());
     }
 
     public function testGetOptionsList()
@@ -82,18 +82,18 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     public function validateDataProvider()
     {
         return [
-            [[null, 'Doe', 'admin', 'test@test.com', '123123q'], ['Please enter a first name.']],
+            [[null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], ['First Name is a required field.']],
             [
-                ['John', null, null, 'test@test.com', '123123q'],
-                ['Please enter a user name.', 'Please enter a last name.'],
+                ['John', null, null, 'test@test.com', '123123q', '123123q'],
+                ['User Name is a required field.', 'Last Name is a required field.'],
             ],
-            [['John', 'Doe', 'admin', null, '123123q'], ['Please enter a valid email.']],
+            [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
             [
-                ['John', 'Doe', 'admin', 'test', '123123q'],
+                ['John', 'Doe', 'admin', 'test', '123123q', '123123q'],
                 ["'test' is not a valid email address in the basic format local-part@hostname"]
             ],
             [
-                ['John', 'Doe', 'admin', 'test@test.com', ''],
+                ['John', 'Doe', 'admin', 'test@test.com', '', ''],
                 [
                     'Password is required field.',
                     'Your password must be at least 7 characters.',
@@ -101,17 +101,17 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                ['John', 'Doe', 'admin', 'test@test.com', '123123'],
+                ['John', 'Doe', 'admin', 'test@test.com', '123123', '123123'],
                 [
                     'Your password must be at least 7 characters.',
                     'Your password must include both numeric and alphabetic characters.'
                 ]
             ],
             [
-                ['John', 'Doe', 'admin', 'test@test.com', '1231231'],
+                ['John', 'Doe', 'admin', 'test@test.com', '1231231', '1231231'],
                 ['Your password must include both numeric and alphabetic characters.']
             ],
-            [['John', 'Doe', 'admin', 'test@test.com', '123123q'], []],
+            [['John', 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], []],
         ];
     }
 }

@@ -22,6 +22,9 @@ use Magento\Framework\Validator\Timezone;
 use Magento\Framework\Validator\Currency;
 use Magento\Framework\Url\Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
     /**
@@ -67,7 +70,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('setup:store-config:set')
-            ->setDescription('Installs store configuration')
+            ->setDescription('Installs the store configuration')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
