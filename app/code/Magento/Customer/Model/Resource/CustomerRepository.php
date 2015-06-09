@@ -13,7 +13,6 @@ use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Customer repository.
@@ -82,9 +81,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $imageProcessor;
 
     /**
-     * @var ExtensionAttributesFactory
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
      */
-    protected $extensionAttributesFactory;
+    protected $extensionAttributesJoinProcessor;
 
     /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -99,7 +98,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param DataObjectHelper $dataObjectHelper
      * @param ImageProcessorInterface $imageProcessor
-     * @param ExtensionAttributesFactory $extensionAttributesFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,7 +114,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         DataObjectHelper $dataObjectHelper,
         ImageProcessorInterface $imageProcessor,
-        ExtensionAttributesFactory $extensionAttributesFactory
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -129,7 +128,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->imageProcessor = $imageProcessor;
-        $this->extensionAttributesFactory = $extensionAttributesFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -279,7 +278,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $this->extensionAttributesFactory->process($collection, 'Magento\Customer\Model\Data\Customer');
+        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Model\Data\Customer');
         $customers = [];
         /** @var \Magento\Customer\Model\Customer $customerModel */
         foreach ($collection as $customerModel) {
