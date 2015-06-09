@@ -115,7 +115,6 @@ class RollbackCommand extends AbstractSetupCommand
             return;
         }
         try {
-            $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
             $helper = $this->getHelper('question');
@@ -126,31 +125,46 @@ class RollbackCommand extends AbstractSetupCommand
             if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
                 return;
             }
-            if ($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE)) {
-                $codeRollback = $this->backupRollbackFactory->create($output);
-                $codeRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE));
-                $inputOptionProvided = true;
-            }
-            if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
-                $mediaRollback = $this->backupRollbackFactory->create($output);
-                $mediaRollback->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA);
-                $inputOptionProvided = true;
-            }
-            if ($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE)) {
-                $dbRollback = $this->backupRollbackFactory->create($output);
-                $dbRollback->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE));
-                $inputOptionProvided = true;
-            }
-            if (!$inputOptionProvided) {
-                throw new \InvalidArgumentException(
-                    'No option is provided for the command to rollback.'
-                );
-            }
+            $this->doRollback($input, $output);
+
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
+        }
+    }
+
+    /**
+     * Check rollback options and rolls back appropriately
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function doRollback(InputInterface $input, OutputInterface $output)
+    {
+        $inputOptionProvided = false;
+        if ($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE)) {
+            $codeRollback = $this->backupRollbackFactory->create($output);
+            $codeRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE));
+            $inputOptionProvided = true;
+        }
+        if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
+            $mediaRollback = $this->backupRollbackFactory->create($output);
+            $mediaRollback->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA);
+            $inputOptionProvided = true;
+        }
+        if ($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE)) {
+            $dbRollback = $this->backupRollbackFactory->create($output);
+            $dbRollback->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE));
+            $inputOptionProvided = true;
+        }
+        if (!$inputOptionProvided) {
+            throw new \InvalidArgumentException(
+                'No option is provided for the command to rollback.'
+            );
         }
     }
 }
