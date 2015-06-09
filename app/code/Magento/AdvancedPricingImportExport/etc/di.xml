@@ -18,4 +18,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\ImportExport\Controller\Adminhtml\Export\GetFilter" type="Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export\GetFilter" />
 </config>
