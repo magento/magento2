@@ -113,7 +113,7 @@ class BackupRollback
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
-        $this->log->logSuccess($granularType . ' backup has completed successfully.');
+        $this->log->logSuccess($granularType . ' backup completed successfully.');
     }
 
     /**
@@ -163,7 +163,7 @@ class BackupRollback
         $fsRollback->rollback();
         $this->log->log($granularType . ' rollback filename: ' . $fsRollback->getBackupFilename());
         $this->log->log($granularType . ' rollback file path: ' . $fsRollback->getBackupPath());
-        $this->log->logSuccess($granularType . ' rollback has completed successfully.');
+        $this->log->logSuccess($granularType . ' rollback completed successfully.');
     }
 
     /**
@@ -192,7 +192,7 @@ class BackupRollback
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
-        $this->log->logSuccess('DB backup has completed successfully.');
+        $this->log->logSuccess('DB backup completed successfully.');
     }
 
     /**
@@ -225,7 +225,7 @@ class BackupRollback
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
-        $this->log->logSuccess('DB rollback has completed successfully.');
+        $this->log->logSuccess('DB rollback completed successfully.');
     }
 
     /**
