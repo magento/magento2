@@ -22,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -50,11 +49,6 @@ class ThemeUninstallCommand extends Command
      * @var MaintenanceMode
      */
     private $maintenanceMode;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
 
     /**
      * @var DependencyChecker
@@ -118,7 +112,6 @@ class ThemeUninstallCommand extends Command
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
      * @param MaintenanceMode $maintenanceMode
-     * @param ObjectManagerInterface $objectManager
      * @param Filesystem $filesystem
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
@@ -134,7 +127,6 @@ class ThemeUninstallCommand extends Command
         ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         MaintenanceMode $maintenanceMode,
-        ObjectManagerInterface $objectManager,
         Filesystem $filesystem,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
@@ -148,7 +140,6 @@ class ThemeUninstallCommand extends Command
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
-        $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
