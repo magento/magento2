@@ -68,7 +68,9 @@ class Session
             $customerGroupId = $customer->getGroupId();
             $customerGroup = $this->groupRepository->getById($customerGroupId);
             $customerTaxClassId = $customerGroup->getTaxClassId();
+            $websiteId = $customer->getWebsiteId();
             $this->customerSession->setCustomerTaxClassId($customerTaxClassId);
+            $this->customerSession->setWebsiteId($websiteId);
 
             /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
             $addresses = $customer->getAddresses();

@@ -13,6 +13,16 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected $taxHelperMock;
 
     /**
+     * @var \Magento\Weee\Helper\Data
+     */
+    protected $weeeHelperMock;
+
+    /**
+     * @var \Magento\Weee\Model\Tax
+     */
+    protected $weeeTaxMock;
+
+    /**
      * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContextMock;
@@ -49,6 +59,14 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->weeeHelperMock = $this->getMockBuilder('Magento\Weee\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->weeeTaxMock = $this->getMockBuilder('\Magento\Weee\Model\Tax')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->httpContextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,7 +78,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId'
+                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId', 'getWebsiteId'
             ])
             ->getMock();
 
@@ -78,57 +96,127 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'httpContext' => $this->httpContextMock,
                 'calculation' => $this->taxCalculationMock,
+                'weeeTax' => $this->weeeTaxMock,
                 'taxHelper' => $this->taxHelperMock,
+                'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock
             ]
         );
     }
 
-    public function testAroundDispatch()
+    /**
+     * @param bool $cache
+     * @param bool $taxEnabled
+     * @param bool $weeeEnabled
+     * @dataProvider dataProviderAroundDispatch
+     */
+    public function testAroundDispatch($cache, $taxEnabled, $weeeEnabled)
     {
         $this->moduleManagerMock->expects($this->any())
             ->method('isEnabled')
             ->with('Magento_PageCache')
-            ->willReturn(true);
+            ->willReturn($cache);
 
         $this->cacheConfigMock->expects($this->any())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->willReturn($cache);
 
-        $this->taxHelperMock->expects($this->any())
-            ->method('isCatalogPriceDisplayAffectedByTax')
-            ->willReturn(true);
+        if ($cache) {
+            $this->taxHelperMock->expects($this->any())
+                ->method('isCatalogPriceDisplayAffectedByTax')
+                ->willReturn($taxEnabled);
 
-        $this->customerSessionMock->expects($this->once())
-            ->method('getDefaultTaxBillingAddress')
-            ->willReturn(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('getDefaultTaxShippingAddress')
-            ->willReturn(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('getCustomerTaxClassId')
-            ->willReturn(1);
+            $this->weeeHelperMock->expects($this->any())
+                ->method('isEnabled')
+                ->willReturn($weeeEnabled);
 
-        $this->taxCalculationMock->expects($this->once())
-            ->method('getTaxRates')
-            ->with(
-                ['country_id' => 1, 'region_id' => null, 'postcode' => 11111],
-                ['country_id' => 1, 'region_id' => null, 'postcode' => 11111],
-                1
-            )
-            ->willReturn([]);
+            if ($taxEnabled || $weeeEnabled) {
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getDefaultTaxBillingAddress')
+                    ->willReturn(['country_id' => 1, 'region_id' => 1, 'postcode' => 11111]);
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getDefaultTaxShippingAddress')
+                    ->willReturn(['country_id' => 1, 'region_id' => 1, 'postcode' => 11111]);
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getCustomerTaxClassId')
+                    ->willReturn(1);
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getWebsiteId')
+                    ->willReturn(1);
+            }
 
-        $this->httpContextMock->expects($this->once())
-            ->method('setValue')
-            ->with('tax_rates', [], 0);
+            if ($taxEnabled && $weeeEnabled) {
+                $this->taxCalculationMock->expects($this->once())
+                    ->method('getTaxRates')
+                    ->with(
+                        ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                        ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                        1
+                    )
+                    ->willReturn([]);
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+                $this->weeeTaxMock->expects($this->once())
+                    ->method('getWeeeAttributes')
+                    ->with(1, 1, 1)
+                    ->willReturn([]);
+
+                $this->httpContextMock->expects($this->at(0))
+                    ->method('setValue')
+                    ->with('tax_rates', [], 0);
+
+                $this->httpContextMock->expects($this->at(1))
+                    ->method('setValue')
+                    ->with('weee_taxes', [], 0);
+            } else {
+                if ($taxEnabled) {
+                    $this->taxCalculationMock->expects($this->once())
+                        ->method('getTaxRates')
+                        ->with(
+                            ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                            ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                            1
+                        )
+                        ->willReturn([]);
+
+                    $this->httpContextMock->expects($this->any())
+                        ->method('setValue')
+                        ->with('tax_rates', [], 0);
+                }
+
+                if ($weeeEnabled) {
+                    $this->weeeTaxMock->expects($this->once())
+                        ->method('getWeeeAttributes')
+                        ->with(1, 1, 1)
+                        ->willReturn([]);
+
+                    $this->httpContextMock->expects($this->any())
+                        ->method('setValue')
+                        ->with('weee_taxes', [], 0);
+                }
+            }
+
+            $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+            $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
+            $expectedResult = 'expectedResult';
+            $proceed = function ($request) use ($expectedResult) {
+                return $expectedResult;
+            };
+            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        }
     }
+
+    /**
+     * @return array
+     */
+    public function dataProviderAroundDispatch()
+    {
+        return [
+            [false, false, false],
+            [true, true, false],
+            [true, false, true],
+            [true, true, true]
+        ];
+    }
+
 }

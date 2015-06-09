@@ -56,7 +56,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'setCustomerTaxClassId', 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress'
+                'setCustomerTaxClassId', 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
             ])
             ->getMock();
 
@@ -103,6 +103,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('getGroupId')
             ->willReturn(1);
 
+        $customerMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(1);
+
         $customerGroupMock = $this->getMockBuilder('Magento\Customer\Model\Data\Group')
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,6 +122,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('setCustomerTaxClassId')
+            ->with(1);
+
+        $this->customerSessionMock->expects($this->once())
+            ->method('setWebsiteId')
             ->with(1);
 
         $address = $this->objectManager->getObject('Magento\Customer\Model\Data\Address');
