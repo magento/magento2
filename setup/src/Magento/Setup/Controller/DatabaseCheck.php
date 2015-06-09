@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -14,13 +12,6 @@ use Magento\Setup\Validator\DbValidator;
 
 class DatabaseCheck extends AbstractActionController
 {
-    /**
-     * WebLogger to access log
-     *
-     * @var WebLogger
-     */
-    private $webLogger;
-
     /**
      * @var DbValidator
      */
@@ -30,12 +21,10 @@ class DatabaseCheck extends AbstractActionController
     /**
      * Constructor
      *
-     * @param WebLogger $webLogger
      * @param DbValidator $dbValidator
      */
-    public function __construct(WebLogger $webLogger, DbValidator $dbValidator)
+    public function __construct(DbValidator $dbValidator)
     {
-        $this->webLogger = $webLogger;
         $this->dbValidator = $dbValidator;
     }
 
