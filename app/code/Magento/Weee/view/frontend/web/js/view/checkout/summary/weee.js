@@ -8,33 +8,19 @@ define(
     [
         'uiComponent',
         'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/totals',
         'Magento_Catalog/js/price-utils'
     ],
-    function (Component,quote, priceUtils) {
+    function (Component,quote, totals, priceUtils) {
         "use strict";
         return Component.extend({
             defaults: {
                 template: 'Magento_Weee/checkout/summary/weee'
             },
             isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
-            totals: quote.getTotals(),
-            title: 'FPT',
-            colspan: 3,
-            getPureValue: function() {
-                var items = quote.getItems();
-                var sum = 0;
-                for (var i = 0; i < items.length; i++) {
-                    sum += parseFloat(items[i].weee_tax_applied_row_amount);
-                }
-                return sum;
-            },
+            totals: totals.totals(),
             getValue: function() {
-                var items = quote.getItems();
-                var sum = 0;
-                for (var i = 0; i < items.length; i++) {
-                    sum += parseFloat(items[i].weee_tax_applied_row_amount);
-                }
-                return priceUtils.formatPrice(sum, quote.getPriceFormat());
+                return priceUtils.formatPrice(this.totals.weee_tax_applied_amount, quote.getPriceFormat());
             }
         });
     }

@@ -106,6 +106,9 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         }
         $totals->setCouponCode($this->couponService->get($cartId));
         $calculatedTotals = $this->totalsConverter->process($quote->getTotals());
+        $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
+        $amount = $amount > 0 ? $amount : 0;
+        $totals->setGrandTotal($amount);
         $totals->setTotalSegments($calculatedTotals);
         $totals->setItems($items);
         $totals->setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);

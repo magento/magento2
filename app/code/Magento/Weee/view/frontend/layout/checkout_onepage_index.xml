@@ -18,10 +18,11 @@
                                     <item name="children" xsi:type="array">
                                         <item name="totals" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <!-- sort order for this and other totals is configured on admin panel-->
-                                                <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
                                                 <item name="weee" xsi:type="array">
                                                     <item name="component" xsi:type="string">Magento_Weee/js/view/checkout/summary/weee</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="title" xsi:type="string">FPT</item>
+                                                    </item>
                                                 </item>
                                             </item>
                                         </item>
@@ -33,7 +34,7 @@
                                                             <item name="children" xsi:type="array">
                                                                 <item name="weee_row_incl_tax" xsi:type="array">
                                                                     <item name="component"  xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_incl_tax</item>
-                                                                    <item name="displayArea" xsi:type="string">row_incl_tax</item>
+                                                                <item name="displayArea" xsi:type="string">row_incl_tax</item>
                                                                 </item>
                                                                 <item name="weee_row_excl_tax" xsi:type="array">
                                                                     <item name="component"  xsi:type="string">Magento_Weee/js/view/checkout/summary/item/price/row_excl_tax</item>
