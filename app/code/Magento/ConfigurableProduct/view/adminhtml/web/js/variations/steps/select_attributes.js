@@ -24,16 +24,9 @@ define([
         },
         force: function (wizard) {
             wizard.data.attributes = this.multiselect().selected();
-            $('body').notification('clear');
+
             if (!wizard.data.attributes || wizard.data.attributes.length === 0) {
-                $('body').notification('add', {
-                    error: true,
-                    message: $.mage.__('Please, select attribute(s)'),
-                    insertMethod: function(message) {
-                        $('.page-main-actions').after(message);
-                    }
-                });
-                return false;
+                throw new Error('Please, select attribute(s)');
             }
         },
         back: function (wizard) {

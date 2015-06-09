@@ -6,48 +6,56 @@ define([
     "uiRegistry",
     "jquery",
     "underscore",
-    "Magento_Ui/js/modal/modal"
+    "Magento_Ui/js/modal/modal",
+    "mage/backend/notification"
 ], function (uiRegistry, $, _) {
     "use strict";
-    var Wizard = function (steps) {
+    var Wizard = function (steps, element) {
         this.steps = steps;
         this.index = 0;
         this.step = undefined;
         this.data = {};
-        this.tab = {};
-        this.move = function (newIndex, tab) {
-            var render = true;
+        this.element = element;
+        $(this.element).notification();
+        this.move = function (newIndex) {
+            //TODO: move to constructor
             if (this.step == undefined) {
                 this.step = this.steps[this.index];
             }
-            this.tab = tab;
             if (newIndex > this.index) {
-                render = this._next(newIndex);
+                this._next(newIndex);
             } else if (newIndex < this.index) {
-                render = this._prev(newIndex);
-            }
-            if (render) {
-                this.render();
+                this._prev(newIndex);
             }
         };
         this._next = function () {
-            if (false === this.step.force(this)) {
-                return false;
+            try {
+                this.step.force(this);
+            } catch (e) {
+                this.notifyMessage(e.message, true);
+                throw new Error(e);
             }
             this.step = this.steps[++this.index];
-            return true;
+            this.render();
         };
         this._prev = function (newIndex) {
             this.step.back(this);
             this.index = newIndex;
             this.step = this.steps[this.index];
-            return true;
+        };
+        this.notifyMessage = function (message, error) {
+            $(this.element).notification('clear').notification('add', {
+                error: error,
+                message: $.mage.__(message)
+            });
         };
         this.render = function() {
+            $(this.element).notification('clear');
             this.step.render(this);
         };
     };
 
+    //TODO: to get rid of the widget
     $.widget('mage.step-wizard', $.ui.tabs, {
         wizard: undefined,
         options: {
@@ -62,6 +70,7 @@ define([
         _create: function () {
             this._control();
             this._super();
+            this.options.beforeActivate = this._handlerStep.bind(this);
         },
         _control: function () {
             var self = this;
@@ -79,20 +88,20 @@ define([
         },
         load: function (index, event) {
             this._disabledTabs(index);
-            this._super(index, event);
-            this._handlerStep(index);
             this._actionControl(index);
+            this._super(index, event);
         },
-        _handlerStep: function (index) {
+        _handlerStep: function (event, ui) {
+            var index = this.tabs.index(ui.newTab[0]);
             var tab = this.panels.eq(index);
             var steps =  uiRegistry.async(this.options.componentName);
 
             steps(function(component) {
                 if (this.wizard === undefined) {
-                    this.wizard = new Wizard(component.steps)
+                    this.wizard = new Wizard(component.steps, tab);
                 }
                 if (this.wizard.steps.length) {
-                    this.wizard.move(index, tab);
+                    this.wizard.move(index);
                 }
 
             }.bind(this));
@@ -101,7 +110,6 @@ define([
             return this.options.selected > index ? 'back' : 'force';
         },
         _actionControl: function (index) {
-            var self = this;
             if (index < 1) {
                 this.prev.find('button').addClass("disabled");
             }
@@ -123,7 +131,9 @@ define([
     });
     $(document).ready(function () {
         $('[data-role=step-wizard-dialog]').modal({type: 'slide'});
-        $('[data-action=open-steps-wizard]').on('click', function() { $('[data-role=step-wizard-dialog]').trigger('openModal')});
+        $('[data-action=open-steps-wizard]').on('click', function() {
+            $('[data-role=step-wizard-dialog]').trigger('openModal');
+        });
     });
 
     return $.mage["step-wizard"];
