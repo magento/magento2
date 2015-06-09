@@ -109,14 +109,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                null,
+                [],
                 [
                     'index' => [],
                     'separator' => '--'
                 ],
             ],
             [
-                'element1--element2--element3--element4',
+                ['element1','element2','element3--element4'],
                 [
                     'index' => [
                         'element1',

@@ -6,6 +6,9 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
@@ -55,6 +58,11 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $configurableAttributeFactory;
 
     /**
+     * @var Resource\Product\Type\Configurable
+     */
+    private $configurableTypeResource;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
      * @param ConfigurableType $configurableType
@@ -62,6 +70,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
+     * @param Resource\Product\Type\Configurable $configurableTypeResource
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -70,7 +79,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $optionResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
+        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableTypeResource
     ) {
         $this->productRepository = $productRepository;
         $this->optionValueFactory = $optionValueFactory;
@@ -79,6 +89,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $this->storeManager = $storeManager;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->configurableAttributeFactory = $configurableAttributeFactory;
+        $this->configurableTypeResource = $configurableTypeResource;
     }
 
     /**
@@ -118,8 +129,16 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function delete(OptionInterface $option)
     {
+        $product = $this->getProductById($option->getProductId());
+        try {
+            $this->configurableTypeResource->saveProducts($product, []);
+        } catch (\Exception $exception) {
+            throw new StateException(
+                __('Cannot delete variations from product: %1', $option->getProductId())
+            );
+        }
         try {
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
@@ -149,12 +168,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function save($sku, OptionInterface $option)
     {
         /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         if ($option->getId()) {
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->getProduct($sku);
             $configurableAttribute->load($option->getId());
             if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
@@ -182,7 +201,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
         } else {
             $this->validateNewOptionData($option);
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product = $this->productRepository->get($sku);
             $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
             if (!in_array($product->getTypeId(), $allowedTypes)) {
@@ -225,7 +244,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * Retrieve product instance by sku
      *
      * @param string $sku
-     * @return \Magento\Catalog\Model\Product
+     * @return ProductInterface
      * @throws InputException
      */
     private function getProduct($sku)
@@ -240,14 +259,32 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
+     * Retrieve product instance by id
+     *
+     * @param int $id
+     * @return ProductInterface
+     * @throws InputException
+     */
+    private function getProductById($id)
+    {
+        $product = $this->productRepository->getById($id);
+        if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
+            throw new InputException(
+                __('Only implemented for configurable product: %1', $id)
+            );
+        }
+        return $product;
+    }
+
+    /**
      * Ensure that all necessary data is available for a new option creation.
      *
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
+     * @param OptionInterface $option
      * @return void
      * @throws InputException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validateNewOptionData(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function validateNewOptionData(OptionInterface $option)
     {
         $inputException = new InputException();
         if (!$option->getAttributeId()) {
