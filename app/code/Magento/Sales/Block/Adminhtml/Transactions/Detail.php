@@ -27,16 +27,24 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Sales\Helper\Admin
+     */
+    private $adminHelper;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
+        $this->adminHelper = $adminHelper;
         parent::__construct($context, $data);
     }
 
@@ -97,7 +105,10 @@ class Detail extends \Magento\Backend\Block\Widget\Container
      */
     protected function _toHtml()
     {
-        $this->setTxnIdHtml($this->escapeHtml($this->_txn->getTxnId()));
+        $this->setTxnIdHtml($this->adminHelper->escapeHtmlWithLinks(
+            $this->_txn->getHtmlTxnId(),
+            ['a']
+        ));
 
         $this->setParentTxnIdUrlHtml(
             $this->escapeHtml($this->getUrl('sales/transactions/view', ['txn_id' => $this->_txn->getParentId()]))
