@@ -511,7 +511,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canVoidPayment()
     {
-        return $this->_canVoidOrder() ? $this->getPayment()->canVoid($this->getPayment()) : false;
+        return $this->_canVoidOrder() ? $this->getPayment()->canVoid() : false;
     }
 
     /**
