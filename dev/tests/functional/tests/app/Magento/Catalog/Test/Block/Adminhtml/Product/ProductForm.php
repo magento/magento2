@@ -249,6 +249,7 @@ class ProductForm extends FormTabs
      */
     public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
     {
+        $this->waitPageToLoad();
         return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
     }
 
@@ -349,7 +350,6 @@ class ProductForm extends FormTabs
      */
     public function getAttributeForm()
     {
-        /** @var AttributeForm $attributeForm */
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
             ['element' => $this->browser->find('body')]

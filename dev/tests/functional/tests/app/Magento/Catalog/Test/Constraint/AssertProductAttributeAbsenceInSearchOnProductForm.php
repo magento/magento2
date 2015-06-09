@@ -38,7 +38,7 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
     }
 
     /**
-     * Text absent Product Attribute in Attribute Search form
+     * Text absent Product Attribute in Attribute Search form.
      *
      * @return string
      */
