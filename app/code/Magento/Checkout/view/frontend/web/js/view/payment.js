@@ -10,23 +10,17 @@ define(
         'uiComponent',
         '../model/quote',
         '../action/select-payment-method',
-        'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/payment-service',
         'mage/translate',
         'mageUtils'
     ],
-    function ($, Component, quote, selectPaymentMethod, navigator, paymentService, $t, utils) {
-        var stepName = 'paymentMethod';
+    function ($, Component, quote, selectPaymentMethod, paymentService, $t, utils) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
                 activeMethod: ''
             },
-            stepClassAttributes: function() {
-                return navigator.getStepClassAttributes(stepName);
-            },
-            stepNumber: navigator.getStepNumber(stepName),
-            isVisible: navigator.isStepVisible(stepName),
+            isVisible: true,
             paymentForm: '#co-payment-form',
             initObservable: function () {
                 this._super()
@@ -123,14 +117,6 @@ define(
             },
             getActiveMethodView: function() {
                 return this.getMethodViewByCode(this.activeMethod());
-            },
-            backToShippingMethod: function() {
-                navigator.setCurrent(stepName).goBack();
-            },
-            navigateToCurrentStep: function() {
-                if (!navigator.isStepVisible(stepName)()) {
-                    navigator.goToStep(stepName);
-                }
             },
             isMethodActive: function(code) {
                 return this.activeMethod() === code;
