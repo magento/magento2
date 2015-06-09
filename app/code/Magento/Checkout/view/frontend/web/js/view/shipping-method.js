@@ -17,6 +17,7 @@ define(
     ],
     function ($, ko, _, Component, quote, shippingService, selectShippingMethodAction, priceUtils) {
         var rates = window.checkoutConfig.shippingRates;
+        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
 
         return Component.extend({

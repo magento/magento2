@@ -271,8 +271,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
             /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
             $estimatedAddress = $this->estimatedAddressFactory->create();
-            $estimatedAddress->setCountryId($this->directoryHelper->getDefaultCountry());
 
+            $address = $quote->getShippingAddress();
+            if ($address) {
+                $estimatedAddress->setCountryId($address->getCountryId());
+                $estimatedAddress->setPostcode($address->getPostcode());
+                $estimatedAddress->setRegion($address->getRegion());
+                $estimatedAddress->setRegionId($address->getRegionId());
+            } else {
+                $estimatedAddress->setCountryId($this->directoryHelper->getDefaultCountry());
+            }
             $rates = $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
             foreach ($rates as $rate) {
                 $output[] = $rate->__toArray();
@@ -428,22 +436,21 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Retrieve selected shipping method
      *
-     * @return string
+     * @return array|null
      */
     private function getSelectedShippingMethod()
     {
-        // Shipping method ID contains carrier code and shipping method code
-        $shippingMethodId = '';
+        $shippingMethodData = null;
         try {
             $quoteId = $this->checkoutSession->getQuote()->getId();
             $shippingMethod = $this->shippingMethodManager->get($quoteId);
             if ($shippingMethod) {
-                $shippingMethodId = $shippingMethod->getCarrierCode() . '_' . $shippingMethod->getMethodCode();
+                $shippingMethodData = $shippingMethod->__toArray();
             }
         } catch (\Exception $exception) {
-            $shippingMethodId = '';
+            $shippingMethodData = null;
         }
-        return $shippingMethodId;
+        return $shippingMethodData;
     }
 
     /**
