@@ -193,7 +193,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->notificationInterface->expects($this->once())->method('addMajor')
             ->with(
                 'Something went wrong during synchronization with Google Shopping.',
-                ['We cannot update 1 items.', 'The item "Product Name" hasn\'t been updated.']
+                ['We can\'t update 1 items.', 'The item "Product Name" hasn\'t been updated.']
             )->will($this->returnSelf());
         $this->massOperations->synchronizeItems([1]);
     }
