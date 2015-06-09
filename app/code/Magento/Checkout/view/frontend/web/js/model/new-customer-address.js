@@ -42,6 +42,9 @@ define([], function() {
             },
             getCacheKey: function() {
                 return this.getType() + identifier;
+            },
+            isEditable: function() {
+                return true;
             }
         }
     }
