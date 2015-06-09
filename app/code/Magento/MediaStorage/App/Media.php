@@ -15,6 +15,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Media implements AppInterface
 {
     /**
@@ -46,12 +49,12 @@ class Media implements AppInterface
     private $relativeFileName;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Response
+     * @var Response
      */
     private $response;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read $directory
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $directory;
 
@@ -101,7 +104,7 @@ class Media implements AppInterface
     /**
      * Run application
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return Response
      * @throws \LogicException
      */
     public function launch()

@@ -65,11 +65,23 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         };
         $this->configMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Config', [], [], '', false);
         $this->sync = $this->getMock('Magento\MediaStorage\Model\File\Storage\Synchronization', [], [], '', false);
-        $this->configFactoryMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\ConfigFactory', [], [], '', false);
+        $this->configFactoryMock = $this->getMock(
+            'Magento\MediaStorage\Model\File\Storage\ConfigFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->configFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->configMock));
-        $this->syncFactoryMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\SynchronizationFactory', [], [], '', false);
+        $this->syncFactoryMock = $this->getMock(
+            'Magento\MediaStorage\Model\File\Storage\SynchronizationFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->syncFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->sync));
@@ -119,7 +131,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap(
                 [
                     [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH,  $filePath],
+                    [self::RELATIVE_FILE_PATH, $filePath],
                 ]
             ));
         $this->configMock->expects($this->once())->method('save');
