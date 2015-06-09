@@ -111,7 +111,7 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->tester->execute(['--db' => true]);
         $this->assertStringMatchesFormat(
-            'No information is available: the application is not installed.%w',
+            'No information is available: the Magento application is not installed.%w',
             $this->tester->getDisplay()
         );
     }
@@ -123,7 +123,7 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->tester->execute([]);
         $expected = 'Enabling maintenance mode' . PHP_EOL
-            . 'No option is provided for the command to take backup.'  . PHP_EOL
+            . 'Not enough information provided to take backup.'  . PHP_EOL
             . 'Disabling maintenance mode';
         $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
     }
