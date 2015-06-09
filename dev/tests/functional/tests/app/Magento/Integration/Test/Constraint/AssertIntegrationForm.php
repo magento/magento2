@@ -131,7 +131,7 @@ class AssertIntegrationForm extends AbstractAssertForm
         $fixtureData = is_array($fixtureData) ? $fixtureData : [$fixtureData];
         return $this->strictResourcesVerify
             ? array_diff($formData, $fixtureData)
-            : $this->notStrictVerify($formData, $fixtureData);
+            : $this->notStrictVerification($formData, $fixtureData);
     }
 
     /**
@@ -141,7 +141,7 @@ class AssertIntegrationForm extends AbstractAssertForm
      * @param array $fixtureData
      * @return array
      */
-    protected function notStrictVerify (array $formData, array $fixtureData)
+    protected function notStrictVerification(array $formData, array $fixtureData)
     {
         $diff = [];
         foreach ($fixtureData as $itemData) {

@@ -114,6 +114,18 @@ abstract class Tree extends SimpleElement
     {
         $this->eventManager->dispatchEvent(['get_value'], [(string)$this->getAbsoluteSelector()]);
         $checkboxes = $this->getElements($this->selectedLabels, Locator::SELECTOR_XPATH);
+
+        return $this->prepareValues($checkboxes);
+    }
+
+    /**
+     * Prepare values for checked checkboxes.
+     *
+     * @param ElementInterface[] $checkboxes
+     * @return array
+     */
+    protected function prepareValues(array $checkboxes)
+    {
         $values = [];
         foreach ($checkboxes as $checkbox) {
             $fullPath = $this->getFullPath($checkbox);
