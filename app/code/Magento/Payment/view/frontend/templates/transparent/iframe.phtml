@@ -20,6 +20,7 @@ $params = $block->getParams();
             window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
             var require = window.top.require;
             require(['jquery'], function($) {
+                $('#edit_form').trigger('processStop');
                 $('#opc-review').trigger('hideAjaxLoader');
             });
         <?php elseif (isset($params['order_success'])): ?>
@@ -27,6 +28,16 @@ $params = $block->getParams();
         <?php else: ?>
             var require = window.top.require;
             require(['jquery'], function($) {
+                $('#edit_form').trigger('processStop');
+
+                $("input[name='payment[cc_number]']").prop('disabled', true);
+                $("select[name='payment[cc_type]']").prop('disabled', true);
+                $("select[name='payment[cc_exp_month]']").prop('disabled', true);
+                $("select[name='payment[cc_exp_year]']").prop('disabled', true);
+                $("input[name='payment[cc_cid]']").prop('disabled', true);
+
+                $('#edit_form').trigger('realOrder');
+
                 $('#originalPlaceOrder').click();
             });
         <?php endif; ?>

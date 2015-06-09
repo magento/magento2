@@ -27,7 +27,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
- * @method Quote setStoreId(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -678,16 +677,23 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     //@codeCoverageIgnoreEnd
 
     /**
-     * Get quote store identifier
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getStoreId()
     {
         if (!$this->hasStoreId()) {
             return $this->_storeManager->getStore()->getId();
         }
-        return $this->_getData('store_id');
+        return (int)$this->_getData(self::KEY_STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($storeId)
+    {
+        $this->setData(self::KEY_STORE_ID, (int)$storeId);
+        return $this;
     }
 
     /**

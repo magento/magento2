@@ -248,6 +248,13 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getRegion();
 
     /**
+     * Return 2 letter state code if available, otherwise full region name
+     *
+     * @return null|string
+     */
+    public function getRegionCode();
+
+    /**
      * Gets the region ID for the order address.
      *
      * @return int|null Region ID.
