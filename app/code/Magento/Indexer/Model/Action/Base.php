@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model\Action;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
-use Magento\Indexer\Model\FieldsetFactory;
+use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
 use Magento\Indexer\Model\HandlerPool;
@@ -25,6 +25,11 @@ class Base implements ActionInterface
      * @var SourcePool
      */
     protected $handlerPool;
+
+    /**
+     * @var FieldsetPool
+     */
+    protected $fieldsetPool;
 
     /**
      * @var AdapterInterface
@@ -48,19 +53,22 @@ class Base implements ActionInterface
 
     /**
      * @param Resource $resource
-     * @param SourcePool $sourceFactory
-     * @param HandlerPool $handlerFactory
+     * @param SourcePool $sourcePool
+     * @param HandlerPool $handlerPool
+     * @param FieldsetPool $fieldsetPool
      * @param array $data
      */
     public function __construct(
         Resource $resource,
-        SourcePool $sourceFactory,
-        HandlerPool $handlerFactory,
+        SourcePool $sourcePool,
+        HandlerPool $handlerPool,
+        FieldsetPool $fieldsetPool,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
-        $this->sourcePool = $sourceFactory;
-        $this->handlerPool = $handlerFactory;
+        $this->sourcePool = $sourcePool;
+        $this->handlerPool = $handlerPool;
+        $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
     }
 
@@ -113,6 +121,10 @@ class Base implements ActionInterface
         $select = $this->connection->select();
         $select->from($this->sources[$this->data['primary']]->getTableName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
+            if (isset($fieldset['class'])) {
+                $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
+                    ->update($fieldset);
+            }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $handler = $field['handler'];
                 $source = $field['source'];
