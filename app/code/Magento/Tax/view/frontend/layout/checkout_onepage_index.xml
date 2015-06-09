@@ -49,13 +49,11 @@
                                                         <!-- merge your components here -->
                                                     </item>
                                                 </item>
-                                                <item name="grand_total" xsi:type="array">
-                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand_total</item>
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="grandtotal_tax" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
-                                                        </item>
-                                                    </item>
+                                                <item name="tax" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
+                                                </item>
+                                                <item name="grand-total" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand-total</item>
                                                 </item>
                                             </item>
                                         </item>
