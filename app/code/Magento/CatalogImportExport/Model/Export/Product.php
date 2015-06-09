@@ -624,7 +624,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (!isset($rowCategories[$productId])) {
             return false;
         }
-        $categories = array();
+        $categories = [];
         foreach ($rowCategories[$productId] as $categoryId) {
             $categoryPath = $this->_rootCategories[$categoryId];
             if (isset($this->_categories[$categoryId])) {
@@ -854,7 +854,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
              * @var \Magento\Catalog\Model\Product $item
              */
             foreach ($collection as $itemId => $item) {
-                $additionalAttributes = array();
+                $additionalAttributes = [];
                 foreach ($this->_getExportAttrCodes() as $code) {
                     $attrValue = $item->getData($code);
                     if (!$this->isValidAttributeValue($code, $attrValue)) {
@@ -1020,29 +1020,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             unset($dataRow[self::COL_STORE]);
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
-                $websiteCodes = array();
+                $websiteCodes = [];
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
                 }
                 $dataRow['_product_websites'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
-                $multiRawData['rowWebsites'][$productId] = array();
+                $multiRawData['rowWebsites'][$productId] = [];
             }
             if (!empty($multiRawData['mediaGalery'][$productId])) {
-                $additionalImages = array();
-                $additionalImageLabels = array();
+                $additionalImages = [];
+                $additionalImageLabels = [];
                 foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
                     $additionalImages[] = $mediaItem['_media_image'];
                     $additionalImageLabels[] = $mediaItem['_media_label'];
                 }
                 $dataRow['additional_images'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImages);
                 $dataRow['additional_image_labels'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
-                $multiRawData['mediaGalery'][$productId] = array();
+                $multiRawData['mediaGalery'][$productId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
                 if (!empty($multiRawData['linksRows'][$productId][$linkId])) {
                     $colPrefix = $linkTypeName . '_';
 
-                    $associations = array();
+                    $associations = [];
                     foreach ($multiRawData['linksRows'][$productId][$linkId] as $linkData) {
                         if ($linkData['default_qty'] !== null) {
                             $skuItem = $linkData['sku'] . ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $linkData['default_qty'];
@@ -1051,7 +1051,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         }
                         $associations[$skuItem] = $linkData['position'];
                     }
-                    $multiRawData['linksRows'][$productId][$linkId] = array();
+                    $multiRawData['linksRows'][$productId][$linkId] = [];
                     asort($associations);
                     $dataRow[$colPrefix . 'skus'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_keys($associations));
                 }
@@ -1070,10 +1070,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         if (!empty($multiRawData['customOptionsData'][$productId][$storeId])) {
             $customOptionsRows = $multiRawData['customOptionsData'][$productId][$storeId];
-            $multiRawData['customOptionsData'][$productId][$storeId] = array();
+            $multiRawData['customOptionsData'][$productId][$storeId] = [];
             $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
 
-            $dataRow = array_merge($dataRow, array('custom_options' => $customOptions));
+            $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
         }
 
         if (empty($dataRow)) {
@@ -1099,10 +1099,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function _customFieldsMapping($rowData)
     {
-        foreach ($this->_fieldsMap as $system_field_name => $file_field_name) {
-            if (isset($rowData[$system_field_name])) {
-                $rowData[$file_field_name] = $rowData[$system_field_name];
-                unset($rowData[$system_field_name]);
+        foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
+            if (isset($rowData[$systemFieldName])) {
+                $rowData[$fileFieldName] = $rowData[$systemFieldName];
+                unset($rowData[$systemFieldName]);
             }
         }
         return $rowData;
@@ -1117,9 +1117,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function _customHeadersMapping($rowData)
     {
-        foreach ($rowData as $key => $field_name) {
-            if (isset($this->_fieldsMap[$field_name])) {
-                $rowData[$key] = $this->_fieldsMap[$field_name];
+        foreach ($rowData as $key => $fieldName) {
+            if (isset($this->_fieldsMap[$fieldName])) {
+                $rowData[$key] = $this->_fieldsMap[$fieldName];
             }
         }
         return $rowData;
@@ -1131,7 +1131,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function optionRowToCellString($option)
     {
-        $result = array();
+        $result = [];
 
         foreach ($option as $key => $value) {
             $result[] = $key . ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $value;

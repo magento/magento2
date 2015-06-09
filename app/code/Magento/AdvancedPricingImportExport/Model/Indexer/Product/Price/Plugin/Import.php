@@ -9,6 +9,8 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
 {
     /**
      * After import handler
+     *
+     * @return void
      */
     public function afterSaveAdvancedPricing()
     {
@@ -19,6 +21,8 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
 
     /**
      * After delete handler
+     *
+     * @return void
      */
     public function afterDeleteAdvancedPricing()
     {

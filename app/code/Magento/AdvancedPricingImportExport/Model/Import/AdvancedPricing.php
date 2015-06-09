@@ -8,6 +8,12 @@ namespace Magento\AdvancedPricingImportExport\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 
+/**
+ * Class AdvancedPricing
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
     const VALUE_ALL_GROUPS = 'ALL GROUPS';
@@ -140,8 +146,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
         AdvancedPricing\Validator\GroupPrice $groupPriceValidator
-    )
-    {
+    ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
@@ -225,6 +230,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /**
      * Save advanced pricing
+     *
+     * @return void
      */
     public function saveAdvancedPricing()
     {
@@ -266,6 +273,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /**
      * Deletes Advanced price data from raw data.
+     *
+     * @return void
      */
     public function deleteAdvancedPricing()
     {
@@ -330,12 +339,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
     {
         if ($tableName && $listSku) {
-            if(!$this->_cachedSkuToDelete) {
-                $this->_cachedSkuToDelete = $this->_connection->fetchCol($this->_connection->select()
+            if (!$this->_cachedSkuToDelete) {
+                $this->_cachedSkuToDelete = $this->_connection->fetchCol(
+                    $this->_connection->select()
                     ->from($this->_connection->getTableName('catalog_product_entity'), 'entity_id')
-                    ->where('sku IN (?)', $listSku));
+                    ->where('sku IN (?)', $listSku)
+                );
             }
-            if($this->_cachedSkuToDelete) {
+            if ($this->_cachedSkuToDelete) {
                 $this->_connection->delete(
                     $tableName,
                     $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
@@ -351,7 +362,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * Get website id by code
      *
-     * @param $websiteCode
+     * @param string $websiteCode
      * @return array|int|string
      */
     protected function getWebSiteId($websiteCode)

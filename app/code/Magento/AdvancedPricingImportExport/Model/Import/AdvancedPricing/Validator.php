@@ -41,6 +41,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * Init validators
+     *
+     * @return void
      */
     public function init()
     {

@@ -138,7 +138,8 @@ class Filter extends \PHPUnit_Framework_TestCase
             [],
             [],
             '',
-            false);
+            false
+        );
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
@@ -310,7 +311,7 @@ class Filter extends \PHPUnit_Framework_TestCase
      *
      * @todo to implement it.
      */
-    public function test_prepareForm()
+    public function testPrepareForm()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }

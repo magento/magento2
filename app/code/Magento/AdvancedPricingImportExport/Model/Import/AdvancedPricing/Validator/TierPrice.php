@@ -56,6 +56,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      *
      * @param mixed $value
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isValid($value)
     {
