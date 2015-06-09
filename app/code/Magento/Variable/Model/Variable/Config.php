@@ -71,6 +71,7 @@ class Config
      * Return url to wysiwyg plugin
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getWysiwygJsPluginSrc()
     {
@@ -82,6 +83,7 @@ class Config
      * Return url of action to get variables
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getVariablesWysiwygActionUrl()
     {
