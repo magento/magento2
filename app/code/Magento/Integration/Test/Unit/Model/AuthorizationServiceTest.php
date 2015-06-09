@@ -126,7 +126,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while deleting roles and permissions. You can find out more in the exceptions log.
+     * @expectedExceptionMessage Something went wrong while deleting roles and permissions.
      */
     public function testRemovePermissionsException()
     {
