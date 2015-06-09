@@ -12,7 +12,6 @@ interface ModuleServiceInterface
      * Returns an array of enabled modules
      *
      * @return string[]
-     * @api
      */
     public function getModules();
 }
