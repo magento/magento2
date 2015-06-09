@@ -92,7 +92,7 @@ class JoinProcessor
                 return $selectFieldData[Converter::JOIN_SELECT_FIELD];
             };
             $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
-            $collection->joinExtensionAttribute($joinData, [$this, 'extractExtensionAttributes']);
+            $collection->joinExtensionAttribute($joinData, $this);
         }
     }
 
