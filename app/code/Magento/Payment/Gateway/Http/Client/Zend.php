@@ -43,9 +43,21 @@ class Zend implements ClientInterface
 
         $client->setConfig($transferObject->getClientConfig());
         $client->setMethod($transferObject->getMethod());
-        $client->setParameterPost($transferObject->getBody());
+
+        switch($transferObject->getMethod()) {
+            case \Zend_Http_Client::GET:
+                $client->setParameterGet($transferObject->getBody());
+                break;
+            case \Zend_Http_Client::POST:
+                $client->setParameterPost($transferObject->getBody());
+                break;
+            default:
+                throw new \LogicException(sprintf('Unsupported HTTP method %s', $transferObject->getMethod()));
+        }
+
         $client->setHeaders($transferObject->getHeaders());
         $client->setUrlEncodeBody($transferObject->shouldEncode());
+        $client->setUri($transferObject->getUri());
 
         try {
             $response = $client->request();

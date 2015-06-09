@@ -127,21 +127,24 @@ class ZendTest extends \PHPUnit_Framework_TestCase
     private function setClientTransferObjects()
     {
         $config = ['key1' => 'value1', 'key2' => 'value2'];
-        $method = 'methodName';
+        $method = \Zend_Http_Client::POST;
         $headers = ['key1' => 'value1', 'key2' => 'value2'];
         $body = 'Body content';
+        $uri = 'https://example.com/listener';
         $shouldEncode = true;
 
         $this->transferObjectMock->expects($this->once())->method('getClientConfig')->willReturn($config);
-        $this->transferObjectMock->expects($this->once())->method('getMethod')->willReturn($method);
+        $this->transferObjectMock->expects($this->atLeastOnce())->method('getMethod')->willReturn($method);
         $this->transferObjectMock->expects($this->once())->method('getHeaders')->willReturn($headers);
         $this->transferObjectMock->expects($this->once())->method('getBody')->willReturn($body);
         $this->transferObjectMock->expects($this->once())->method('shouldEncode')->willReturn($shouldEncode);
+        $this->transferObjectMock->expects($this->once())->method('getUri')->willReturn($uri);
 
         $this->clientMock->expects($this->once())->method('setConfig')->with($config)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setParameterPost')->with($body)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setHeaders')->with($headers)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setUrlEncodeBody')->with($shouldEncode)->willReturnSelf();
+        $this->clientMock->expects($this->once())->method('setUri')->with($uri)->willReturnSelf();
     }
 }
