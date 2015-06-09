@@ -130,7 +130,11 @@ define([
         }
     });
     $(document).ready(function () {
-        $('[data-role=step-wizard-dialog]').modal({type: 'slide'});
+        $('[data-role=step-wizard-dialog]').modal({
+            type: 'slide',
+            title: $.mage.__('Create Product Configurations'),
+            buttons: []
+        });
         $('[data-action=open-steps-wizard]').on('click', function() {
             $('[data-role=step-wizard-dialog]').trigger('openModal');
         });
