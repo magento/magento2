@@ -190,7 +190,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua']]);
         $this->assertContains(
-            'Package vendor/language-ua_ua is not magento language and will be skipped',
+            'Package vendor/language-ua_ua is not a Magento language and will be skipped',
             $this->tester->getDisplay()
         );
         $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
