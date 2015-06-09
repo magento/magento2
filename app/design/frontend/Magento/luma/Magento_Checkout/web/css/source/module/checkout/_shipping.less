@@ -21,6 +21,9 @@
 @checkout-shipping-item__width: 100%/3;
 @checkout-shipping-item__active__border-color: @color-orange-red1;
 
+@checkout-shipping-item-icon__selected__height: 27px;
+@checkout-shipping-item-icon__selected__width: 29px;
+
 @checkout-shipping-item-mobile__padding: 0 0 15px;
 @checkout-shipping-item-mobile__margin: @checkout-shipping-item-mobile__padding;
 @checkout-shipping-item-mobile__active__padding: 15px (@indent__l + 5px) 15px 18px;
@@ -82,15 +85,15 @@
                     .css(color, @checkout-shipping-item-icon__color);
                     .css(content, @checkout-shipping-item-icon__content);
                     .css(font-family, @icons__font-name);
+                    .css(height, @checkout-shipping-item-icon__selected__height);
+                    .css(width, @checkout-shipping-item-icon__selected__width);
                     font-size: 19px;
-                    height: 27px;
                     line-height: 21px;
                     padding-top: 2px;
                     position: absolute;
                     right: 0;
                     text-align: center;
                     top: 0;
-                    width: 29px;
                 }
 
                 .action-select-shipping-item {
@@ -108,6 +111,18 @@
 
         .action-show-popup {
             .css(margin, 0 0 @indent__base);
+        }
+
+        .action-select-shipping-item {
+            .css(margin, @indent__base 0 0);
+            float: right;
+        }
+
+        .edit-address-link {
+            &:extend(.abs-action-button-as-link all);
+            display: block;
+            float: left;
+            margin: 26px 5px 0 0;
         }
     }
 
@@ -190,11 +205,16 @@
             &.selected-item {
                 .css(padding, @checkout-shipping-item-mobile__active__padding);
                 border-bottom-width: 2px;
+
+                .edit-address-link {
+                    .css(right, @checkout-shipping-item-icon__selected__width + @indent__s);
+                }
             }
         }
 
         .action-select-shipping-item {
             .css(margin-top, @indent__s);
+            float: none;
             width: 100%;
         }
 
@@ -206,6 +226,21 @@
             .css(border-bottom, @checkout-step-title__border);
         }
 
+        .edit-address-link {
+            .icon-font(
+                @icon-edit,
+                @_icon-font-size: 18px,
+                @_icon-font-line-height: 20px,
+                @_icon-font-text-hide: true,
+                @_icon-font-color: @minicart-icons-color,
+                @_icon-font-color-hover: @primary__color,
+                @_icon-font-color-active: @minicart-icons-color
+            );
+            margin: 0;
+            position: absolute;
+            right: 0;
+            top: 5px;
+        }
     }
 }
 
@@ -261,10 +296,6 @@
                     display: none;
                 }
             }
-        }
-        .action-select-shipping-item {
-            .css(margin, @indent__base 0 0);
-            float: right;
         }
     }
 }
