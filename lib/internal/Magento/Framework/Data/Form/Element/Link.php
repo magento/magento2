@@ -80,7 +80,9 @@ class Link extends AbstractElement
             'onmouseup',
             'onkeydown',
             'onkeypress',
-            'onkeyup'
+            'onkeyup',
+            'data-role',
+            'data-action'
         ];
     }
 }

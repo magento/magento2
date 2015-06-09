@@ -41,7 +41,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'joinLeft', 'where'])
+            ->setMethods(['from', 'joinLeft', 'where', 'joinInner'])
             ->getMock();
 
         $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
@@ -86,40 +86,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildWithOutOfStock()
     {
-        $tableSuffix = '_table';
+        $tableSuffix = 'index_default';
         $index = 'test_name_of_index';
 
-        $this->request->expects($this->once())
-            ->method('getIndex')
-            ->will($this->returnValue($index));
-
-        $this->resource->expects($this->any())
-            ->method('getTableName')
-            ->will(
-                $this->returnCallback(
-                    function ($index) use ($tableSuffix) {
-                        return $index . $tableSuffix;
-                    }
-                )
-            );
-
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with(
-                ['search_index' => $index . $tableSuffix],
-                ['entity_id' => 'search_index.product_id']
-            )
-            ->will($this->returnSelf());
-
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['category_index' => 'catalog_category_product_index' . $tableSuffix],
-                'search_index.product_id = category_index.product_id'
-                . ' AND search_index.store_id = category_index.store_id',
-                []
-            )
-            ->will($this->returnSelf());
+        $this->mockBuild($index, $tableSuffix);
 
         $this->config->expects($this->once())
             ->method('isSetFlag')
@@ -132,40 +102,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildWithoutOutOfStock()
     {
-        $tableSuffix = '_table';
+        $tableSuffix = 'index_default';
         $index = 'test_index_name';
 
-        $this->request->expects($this->once())
-            ->method('getIndex')
-            ->will($this->returnValue($index));
-
-        $this->resource->expects($this->any())
-            ->method('getTableName')
-            ->will(
-                $this->returnCallback(
-                    function ($index) use ($tableSuffix) {
-                        return $index . $tableSuffix;
-                    }
-                )
-            );
-
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with(
-                ['search_index' => $index . $tableSuffix],
-                ['entity_id' => 'search_index.product_id']
-            )
-            ->will($this->returnSelf());
-
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['category_index' => 'catalog_category_product_index' . $tableSuffix],
-                'search_index.product_id = category_index.product_id'
-                . ' AND search_index.store_id = category_index.store_id',
-                []
-            )
-            ->will($this->returnSelf());
+        $this->mockBuild($index, $tableSuffix);
 
         $this->config->expects($this->once())
             ->method('isSetFlag')
@@ -177,10 +117,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $website->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
 
-        $this->select->expects($this->at(2))
+        $this->select->expects($this->at(4))
             ->method('joinLeft')
             ->with(
-                ['stock_index' => 'cataloginventory_stock_status' . $tableSuffix],
+                ['stock_index' => 'cataloginventory_stock_status'],
                 'search_index.product_id = stock_index.product_id'
                 . ' AND stock_index.website_id = 1',
                 []
@@ -193,5 +133,57 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->target->build($this->request);
         $this->assertSame($this->select, $result);
+    }
+
+    protected function mockBuild($index, $tableSuffix)
+    {
+        $this->request->expects($this->once())
+            ->method('getIndex')
+            ->will($this->returnValue($index));
+
+        $this->resource->expects($this->any())
+            ->method('getTableName')
+            ->will(
+                $this->returnCallback(
+                    function ($index) {
+                        return is_array($index) ? $index[0] . $index[1] : $index;
+                    }
+                )
+            );
+
+        $this->select->expects($this->once())
+            ->method('from')
+            ->with(
+                ['search_index' => $index . $tableSuffix],
+                ['entity_id' => 'product_id']
+            )
+            ->will($this->returnSelf());
+
+        $this->select->expects($this->at(1))
+            ->method('joinLeft')
+            ->with(
+                ['category_index' => 'catalog_category_product_index'],
+                'search_index.product_id = category_index.product_id'
+                . ' AND search_index.store_id = category_index.store_id',
+                []
+            )
+            ->will($this->returnSelf());
+
+        $this->select->expects($this->at(2))
+            ->method('joinLeft')
+            ->with(
+                ['cea' => 'catalog_eav_attribute'],
+                'search_index.attribute_id = cea.attribute_id',
+                ['search_weight']
+            )
+            ->will($this->returnSelf());
+        $this->select->expects($this->at(3))
+            ->method('joinLeft')
+            ->with(
+                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                []
+            )
+            ->willReturnSelf();
     }
 }
