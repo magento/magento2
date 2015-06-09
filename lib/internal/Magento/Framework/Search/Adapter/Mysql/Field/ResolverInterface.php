@@ -10,8 +10,8 @@ interface ResolverInterface
     /**
      * Resolve field
      *
-     * @param string|array $fields
-     * @return string|array
+     * @param array $fields
+     * @return FieldInterface[]
      */
-    public function resolve($fields);
+    public function resolve(array $fields);
 }
