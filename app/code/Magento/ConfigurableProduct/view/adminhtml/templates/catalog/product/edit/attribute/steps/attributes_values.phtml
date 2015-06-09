@@ -7,6 +7,10 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: 'attributes-values-step'">
+    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Attribute Values') ?></h1>
+    <div style="padding-bottom: 10px">
+        <span><?= __('Choose options from each attribute to create unique products.') ?></span>
+    </div>
     <div data-bind="foreach: attributes, sortableList: attributes">
         <div style="padding-bottom: 30px;">
             <input style="float: left; border: 0px" data-bind="value: label" />
@@ -14,20 +18,21 @@
                 <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute" >
                     <?= __('Remove Attribute') ?>
                 </a>
-                <span style="cursor: pointer" data-bind="click: $parent.toggleOpened">
-                    <span data-bind="if: opened">-</span>
-                    <span data-bind="ifnot: opened">+</span>
+                <span style="cursor: pointer; padding: 10px;" data-bind="click: $parent.toggleOpened">
+                    <span data-bind="if: opened">&mdash;</span>
+                    <span data-bind="ifnot: opened">&#10010;</span>
                 </span>
             </div>
             <div data-bind="style: {'border-bottom': !opened() && '1px solid gray'}" style="clear: both;"></div>
-            <fieldset data-bind="visible: opened">
+            <fieldset style="background-color: white;" data-bind="visible: opened">
                 <div style="
                     float: left;
                     background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
                     width: 8px;
                     height: 14px;
                     cursor: ns-resize;" data-role="draggable" title="Sort Variations">#</div>
-                <span style="clear: both;" data-bind="text: $data.options().length"></span> <span><?= __('Options') ?></span>
+                <span style="clear: both;" data-bind="text: $data.options().length"></span>
+                <span><?= __('Options') ?></span>
                 <a href="#" data-bind="click: $parent.selectAllAttributes" style="
                     float: right;
                     font-size: smaller;
