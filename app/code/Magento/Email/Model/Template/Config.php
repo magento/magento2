@@ -19,24 +19,23 @@ class Config
      */
     protected $_moduleReader;
 
-
     /**
-     * @var \Magento\Email\Model\Template|FileSystem
+     * @var \Magento\Email\Model\Template\FileSystem
      */
-    protected $_fileSystem;
+    protected $emailTemplateFileSystem;
 
     /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
-     * @param \Magento\Email\Model\Template|FileSystem $fileSystem
+     * @param \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Email\Model\Template\FileSystem $fileSystem
+        \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
-        $this->_fileSystem = $fileSystem;
+        $this->emailTemplateFileSystem = $emailTemplateFileSystem;
     }
 
     /**
@@ -83,6 +82,17 @@ class Config
     }
 
     /**
+     * Retrieve the area an email template belongs to
+     *
+     * @param string $templateId
+     * @return string
+     */
+    public function getTemplateArea($templateId)
+    {
+        return $this->_getInfo($templateId, 'area');
+    }
+
+    /**
      * Retrieve full path to an email template file
      *
      * @param string $templateId
@@ -94,7 +104,7 @@ class Config
         $module = $this->getTemplateModule($templateId);
         $file = $this->_getInfo($templateId, 'file');
 
-         return $this->_fileSystem->getEmailTemplateFileName($file, $module, $designParams);
+        return $this->emailTemplateFileSystem->getEmailTemplateFileName($file, $module, $designParams);
     }
 
     /**

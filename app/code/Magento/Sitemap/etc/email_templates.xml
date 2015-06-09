@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
-    <template id="sitemap_generate_error_email_template" label="Sitemap Generation Warnings" file="generate_warnings.html" type="text" module="Magento_Sitemap"/>
+    <template id="sitemap_generate_error_email_template" label="Sitemap Generation Warnings" file="generate_warnings.html" type="text" module="Magento_Sitemap" area="adminhtml"/>
 </config>

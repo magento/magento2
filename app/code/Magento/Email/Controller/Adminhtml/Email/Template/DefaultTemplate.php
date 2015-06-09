@@ -19,6 +19,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
         $template = $this->_initTemplate('id');
         $templateCode = $this->getRequest()->getParam('code');
         try {
+            $template->setForcedArea($templateCode);
             $template->loadDefault($templateCode);
             $template->setData('orig_template_code', $templateCode);
             $template->setData('template_variables', \Zend_Json::encode($template->getVariablesOptionArray(true)));

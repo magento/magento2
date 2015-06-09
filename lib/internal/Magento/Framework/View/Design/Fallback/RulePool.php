@@ -61,7 +61,6 @@ class RulePool
     protected function createLocaleFileRule()
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
-
         return new Theme(
             new Simple("$themesDir/<area>/<theme_path>")
         );
@@ -76,7 +75,6 @@ class RulePool
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
-
         return new ModularSwitch(
             new Theme(
                 new Simple("$themesDir/<area>/<theme_path>/templates")
@@ -100,7 +98,6 @@ class RulePool
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
-
         return new ModularSwitch(
             new Theme(new Simple("$themesDir/<area>/<theme_path>")),
             new Composite(
@@ -123,7 +120,6 @@ class RulePool
         $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
         $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
         $libDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
-
         return new ModularSwitch(
             new Composite(
                 [
@@ -176,7 +172,6 @@ class RulePool
     {
         $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
         $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
-
         return new Composite(
             [
                 new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/" . DirectoryList::EMAIL)),
@@ -187,7 +182,6 @@ class RulePool
 
     /**
      * @param string $type
-     *
      * @return RuleInterface
      * @throws \InvalidArgumentException
      */
@@ -216,7 +210,6 @@ class RulePool
                 throw new \InvalidArgumentException("Fallback rule '$type' is not supported");
         }
         $this->rules[$type] = $rule;
-
         return $this->rules[$type];
     }
 }

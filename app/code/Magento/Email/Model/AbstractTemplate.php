@@ -345,7 +345,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
         $variables['this'] = $this;
 
-        // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         $isDesignApplied = $this->applyDesignConfig();
 
         if (isset($variables['subscriber'])) {
@@ -602,6 +601,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function applyDesignConfig()
     {
+        // Only run app emulation if this is the parent template and emulation isn't already running.
+        // Otherwise child will run inside parent emulation.
         if ($this->getIsChildTemplate() || $this->hasDesignBeenApplied) {
             return false;
         }
@@ -628,6 +629,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         $this->_appEmulation->stopEnvironmentEmulation();
         $this->hasDesignBeenApplied = false;
+        return $this;
+    }
+
+    /**
+     * Loads the area associated with a template and stores it so that it will be returned by getDesignConfig and
+     * getDesignParams.
+     *
+     * @param string $templateId
+     * @return $this
+     * @thr
+     */
+    public function setForcedArea($templateId)
+    {
+        if ($this->_area) {
+            throw new \LogicException(__('Area is already set'));
+        }
+        $this->_area = $this->emailConfig->getTemplateArea($templateId);
         return $this;
     }
 
