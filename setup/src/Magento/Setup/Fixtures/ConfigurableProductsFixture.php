@@ -624,7 +624,7 @@ class ConfigurableProductsFixture extends Fixture
                     $pathSize  = count($structure);
                     if ($pathSize > 1) {
                         $path = [];
-                        for ($i = 0; $i < $pathSize; $i++) {
+                        for ($i = 1; $i < $pathSize; $i++) {
                             $path[] = $category->load($structure[$i])->getName();
                         }
                         array_shift($path);
@@ -645,7 +645,7 @@ class ConfigurableProductsFixture extends Fixture
             return $result[$index % count($result)][0];
         };
         $productCategory = function ($index) use ($result) {
-            return $result[$index % count($result)][1];
+            return $result[$index % count($result)][2] . '/' . $result[$index % count($result)][1];
         };
 
         /**
