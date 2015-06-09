@@ -333,6 +333,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->setUpExecute();
+        $this->cleanupFiles->expects($this->never())->method('clearMaterializedViewFiles');
         $this->tester->execute(['theme' => ['test']]);
         $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
