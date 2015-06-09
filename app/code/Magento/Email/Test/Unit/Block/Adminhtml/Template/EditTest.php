@@ -256,15 +256,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->will($this->returnValue(['template_b2', 'template_a', 'template_b1']));
-        $this->_emailConfigMock
-            ->expects($this->exactly(3))
-            ->method('getTemplateModule')
-            ->will($this->onConsecutiveCalls('Fixture_ModuleB', 'Fixture_ModuleA', 'Fixture_ModuleB'));
-        $this->_emailConfigMock
-            ->expects($this->exactly(3))
-            ->method('getTemplateLabel')
-            ->will($this->onConsecutiveCalls('Template B2', 'Template A', 'Template B1'));
+            ->will($this->returnValue(
+                [
+                    [
+                        'value' => 'template_b2',
+                        'label' => 'Template B2',
+                        'group' => 'Fixture_ModuleB',
+                    ],
+                    [
+                        'value' => 'template_a',
+                        'label' => 'Template A',
+                        'group' => 'Fixture_ModuleA',
+                    ],
+                    [
+                        'value' => 'template_b1',
+                        'label' => 'Template B1',
+                        'group' => 'Fixture_ModuleB',
+                    ],
+                ]
+            ));
 
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');

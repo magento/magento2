@@ -354,7 +354,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function processTemplate()
     {
-        // Necessary to support theme fallback for email templates
+        // Support theme fallback for email templates
         $isDesignApplied = $this->applyDesignConfig();
 
         $templateId = $this->getId();

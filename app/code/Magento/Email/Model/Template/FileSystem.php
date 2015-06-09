@@ -25,7 +25,7 @@ class FileSystem
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface $resolver
+     * @param \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple $resolver
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
