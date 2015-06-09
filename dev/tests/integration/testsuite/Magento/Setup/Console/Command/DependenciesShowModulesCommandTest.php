@@ -38,9 +38,19 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
             ['--directory' => __DIR__ . '/_files/root', '--output' => __DIR__ . '/_files/output/modules.csv']
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
-        $this->assertFileEquals(
-            __DIR__ . '/_files/expected/modules.csv',
-            __DIR__ . '/_files/output/modules.csv'
+        $fileContents = file_get_contents(__DIR__ . '/_files/output/modules.csv');
+        $this->assertContains(
+            '"","All","Hard","Soft"' . PHP_EOL . '"Total number of dependencies","2","2","0"' . PHP_EOL,
+            $fileContents
+        );
+        $this->assertContains('"Dependencies for each module:","All","Hard","Soft"'. PHP_EOL, $fileContents);
+        $this->assertContains(
+            '"magento/module-a","1","1","0"' . PHP_EOL . '" -- magento/module-b","","1","0"' . PHP_EOL,
+            $fileContents
+        );
+        $this->assertContains(
+            '"magento/module-b","1","1","0"' . PHP_EOL . '" -- magento/module-a","","1","0"' . PHP_EOL,
+            $fileContents
         );
     }
 
