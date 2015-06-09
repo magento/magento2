@@ -548,7 +548,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $totals->setItems($items);
         $totals->setTotalSegments($totalSegmentsData);
         $totalsArray = $totals->toArray();
-        $totalsArray['extension_attributes'] = $totals->getExtensionAttributes()->__toArray();
+        if (is_object($totals->getExtensionAttributes())) {
+            $totalsArray['extension_attributes'] = $totals->getExtensionAttributes()->__toArray();
+        }
         return $totalsArray;
     }
 }
