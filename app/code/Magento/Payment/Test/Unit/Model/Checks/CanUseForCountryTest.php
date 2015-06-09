@@ -43,7 +43,7 @@ class CanUseForCountryTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
 
         $paymentMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\PaymentMethodChecksInterface'
+            '\Magento\Payment\Model\MethodInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
