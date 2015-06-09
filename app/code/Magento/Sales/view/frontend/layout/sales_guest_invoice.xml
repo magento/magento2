@@ -10,11 +10,17 @@
     <update handle="sales_order_item_price"/>
     <update handle="sales_order_guest_info_links"/>
     <body>
+        <referenceContainer name="page.main.title">
+            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
+            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+            <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false">
+                    <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+                </block>
+            </container>
+        </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-            </block>
-            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" after="sales.order.info" cacheable="false">
+            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" after="sales.order.info.links" cacheable="false">
                 <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="order/invoice/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
@@ -27,9 +33,7 @@
                     <block class="Magento\Sales\Block\Order\Comments" name="invoice_comments" template="order/comments.phtml"/>
                 </block>
             </block>
-        </referenceContainer>
-        <referenceContainer name="sales.order.info.buttons">
-            <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="-"/>
         </referenceContainer>
     </body>
 </page>

@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_DELETE_MESSAGE = 'The tax rate has been deleted.';
+    const SUCCESS_DELETE_MESSAGE = 'You deleted the tax rate.';
 
     /**
      * Assert that success delete message is displayed after tax rate deleted
