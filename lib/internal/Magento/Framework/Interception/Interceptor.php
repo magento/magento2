@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Interceptor trait that contains the common logic for all interceptor classes.
  *
  * A trait is used because our interceptor classes need to extend the class that they are intercepting.
+ *
+ * Any class using this trait is required to implement \Magento\Framework\Interception\InterceptorInterface
+ *
+ * @see \Magento\Framework\Interception\InterceptorInterface
  */
 trait Interceptor
 {
@@ -47,7 +53,7 @@ trait Interceptor
      */
     public function ___init()
     {
-        $this->pluginLocator = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->pluginLocator = ObjectManager::getInstance();
         $this->pluginList = $this->pluginLocator->get('Magento\Framework\Interception\PluginListInterface');
         $this->chain = $this->pluginLocator->get('Magento\Framework\Interception\ChainInterface');
         $this->subjectType = get_parent_class($this);
@@ -107,9 +113,9 @@ trait Interceptor
     {
         $capMethod = ucfirst($method);
         $result = null;
-        if (isset($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_BEFORE])) {
+        if (isset($pluginInfo[DefinitionInterface::LISTENER_BEFORE])) {
             // Call 'before' listeners
-            foreach ($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_BEFORE] as $code) {
+            foreach ($pluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
                 $beforeResult = call_user_func_array(
                     [$this->pluginList->getPlugin($this->subjectType, $code), 'before'. $capMethod],
                     array_merge([$this], $arguments)
@@ -119,12 +125,13 @@ trait Interceptor
                 }
             }
         }
-        if (isset($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_AROUND])) {
+        if (isset($pluginInfo[DefinitionInterface::LISTENER_AROUND])) {
             // Call 'around' listener
             $chain = $this->chain;
             $type = $this->subjectType;
+            /** @var \Magento\Framework\Interception\InterceptorInterface $subject */
             $subject = $this;
-            $code = $pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_AROUND];
+            $code = $pluginInfo[DefinitionInterface::LISTENER_AROUND];
             $next = function () use ($chain, $type, $method, $subject, $code) {
                 return $chain->invokeNext($type, $method, $subject, func_get_args(), $code);
             };
@@ -136,9 +143,9 @@ trait Interceptor
             // Call original method
             $result = call_user_func_array(['parent', $method], $arguments);
         }
-        if (isset($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_AFTER])) {
+        if (isset($pluginInfo[DefinitionInterface::LISTENER_AFTER])) {
             // Call 'after' listeners
-            foreach ($pluginInfo[\Magento\Framework\Interception\DefinitionInterface::LISTENER_AFTER] as $code) {
+            foreach ($pluginInfo[DefinitionInterface::LISTENER_AFTER] as $code) {
                 $result = $this->pluginList->getPlugin($this->subjectType, $code)
                     ->{'after' . $capMethod}($this, $result);
             }

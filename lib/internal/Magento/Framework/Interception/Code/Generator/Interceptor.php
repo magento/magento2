@@ -161,6 +161,9 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->_classGenerator->setExtendedClass($typeName);
         }
         $this->_classGenerator->addTrait('\Magento\Framework\Interception\Interceptor');
+        $interfaces = $this->_classGenerator->getImplementedInterfaces();
+        $interfaces[] = '\Magento\Framework\Interception\InterceptorInterface';
+        $this->_classGenerator->setImplementedInterfaces($interfaces);
         return parent::_generateCode();
     }
 
