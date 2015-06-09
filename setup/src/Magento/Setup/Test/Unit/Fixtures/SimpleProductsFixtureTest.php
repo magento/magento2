@@ -8,8 +8,8 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\SimpleProductsFixture;
 
-class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase {
-
+class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
@@ -17,7 +17,9 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
@@ -35,20 +37,31 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase {
             ->method('getGroups')
             ->willReturn([$storeMock]);
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')->disableOriginalConstructor()->getMock();
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$websiteMock]);
 
-        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')->disableOriginalConstructor()->getMock();
+        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')->disableOriginalConstructor()->getMock();
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')->setConstructorArgs([$contextMock])->setMethods(['getAllChildren'])->getMockForAbstractClass();
+        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+            ->setConstructorArgs([$contextMock])
+            ->setMethods(['getAllChildren'])
+            ->getMockForAbstractClass();
         $abstractDbMock->expects($this->any())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
-        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')->disableOriginalConstructor()->getMock();
+        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')
+            ->disableOriginalConstructor()
+            ->getMock();
         $categoryMock->expects($this->once())
             ->method('getResource')
             ->willReturn($abstractDbMock);
@@ -62,7 +75,9 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase {
             ->method('getName')
             ->willReturn('category_name');
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($storeManagerMock, $importMock));
@@ -96,5 +111,4 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase {
             'simple_products' => 'Simple products'
         ], $simpleProductsFixture->introduceParamLabels());
     }
-
 }

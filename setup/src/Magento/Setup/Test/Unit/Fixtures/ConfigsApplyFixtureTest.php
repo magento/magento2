@@ -18,7 +18,9 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
     public function testExecute()
     {
@@ -26,7 +28,9 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
         $valueMock = $this->getMockBuilder('\Magento\Framework\App\Config')->disableOriginalConstructor()->getMock();
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')->disableOriginalConstructor()->getMock();
+        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue($cacheMock));

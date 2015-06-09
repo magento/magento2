@@ -8,7 +8,6 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\CatalogPriceRulesFixture;
 
-
 class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,7 +17,9 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')->disableOriginalConstructor()->getMock();
+        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecute()
@@ -45,10 +46,14 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
-        $abstractDbMock = $this->getMockForAbstractClass('Magento\Framework\Model\Resource\Db\AbstractDb', [$contextMock], '', true, true, true, ['getAllChildren']);
-        $abstractDbMock
-            ->expects($this->any())
+        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+            ->setConstructorArgs([$contextMock])
+            ->setMethods(['getAllChildren'])
+            ->getMockForAbstractClass();
+        $abstractDbMock->expects($this->any())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
