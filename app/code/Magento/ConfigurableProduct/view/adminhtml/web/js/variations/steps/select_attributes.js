@@ -5,13 +5,12 @@
 define([
     "uiComponent",
     "jquery",
-    'uiRegistry'
+    "uiRegistry"
 ], function (Component, $, registry) {
     "use strict";
 
     var initNewAttributeListener = function (provider) {
-        var $form = $('[data-form=edit-product]');
-        $form.on('changeAttributeSet', function() {
+        $('#configurable-attributes-container').on('add', function() {
             provider().reload();
         });
     };
@@ -24,11 +23,20 @@ define([
         render: function (wizard) {
         },
         force: function (wizard) {
-            //TODO: add validation
             wizard.data.attributes = this.multiselect().selected();
+            $('body').notification('clear');
+            if (!wizard.data.attributes || wizard.data.attributes.length === 0) {
+                $('body').notification('add', {
+                    error: true,
+                    message: $.mage.__('Please, select attribute(s)'),
+                    insertMethod: function(message) {
+                        $('.page-main-actions').after(message);
+                    }
+                });
+                return false;
+            }
         },
         back: function (wizard) {
-            console.log(this.title + ':back');
         }
     });
 });

@@ -16,25 +16,32 @@ define([
         this.data = {};
         this.tab = {};
         this.move = function (newIndex, tab) {
+            var render = true;
             if (this.step == undefined) {
                 this.step = this.steps[this.index];
             }
             this.tab = tab;
             if (newIndex > this.index) {
-                this._next(newIndex);
+                render = this._next(newIndex);
             } else if (newIndex < this.index) {
-                this._prev(newIndex);
+                render = this._prev(newIndex);
             }
-            this.render();
+            if (render) {
+                this.render();
+            }
         };
         this._next = function () {
-            this.step.force(this);
+            if (false === this.step.force(this)) {
+                return false;
+            }
             this.step = this.steps[++this.index];
+            return true;
         };
         this._prev = function (newIndex) {
             this.step.back(this);
             this.index = newIndex;
             this.step = this.steps[this.index];
+            return true;
         };
         this.render = function() {
             this.step.render(this);
