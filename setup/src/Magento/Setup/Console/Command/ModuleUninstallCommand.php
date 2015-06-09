@@ -236,8 +236,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
-        $output->writeln('<info>Enabling maintenance mode</info>');
-        $this->maintenanceMode->set(true);
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
             'You are about to remove code and database tables. Are you sure?[y/N]',
@@ -247,6 +245,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
         try {
+            $output->writeln('<info>Enabling maintenance mode</info>');
+            $this->maintenanceMode->set(true);
             $this->takeBackup($input, $output);
             $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
@@ -277,11 +277,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $output->writeln('<info>Removing code from Magento codebase:</info>');
             $this->removeCode($modules);
             $this->cleanup($input, $output);
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-        } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
         }
     }
 

@@ -168,7 +168,7 @@ class ThemeUninstallCommand extends Command
             self::INPUT_KEY_THEMES,
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
             'Path of the theme. Theme path should be specified as full path which is area/vendor/name.'
-            . ' For example, frontend/Magento/Blank'
+            . ' For example, frontend/Magento/blank'
         );
         $this->addOption(
             self::INPUT_KEY_CLEAR_STATIC_CONTENT,
@@ -208,10 +208,9 @@ class ThemeUninstallCommand extends Command
             return;
         }
 
-        $output->writeln('<info>Enabling maintenance mode</info>');
-        $this->maintenanceMode->set(true);
-
         try {
+            $output->writeln('<info>Enabling maintenance mode</info>');
+            $this->maintenanceMode->set(true);
             if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
                 $time = time();
                 $codeBackup = $this->backupRollbackFactory->create($output);
@@ -226,11 +225,11 @@ class ThemeUninstallCommand extends Command
             }
             $this->remove->remove($themePackages);
             $this->cleanup($input, $output);
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-        } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
         }
     }
 
