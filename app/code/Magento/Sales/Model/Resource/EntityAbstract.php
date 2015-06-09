@@ -136,7 +136,7 @@ abstract class EntityAbstract extends AbstractDb
             $object->setIncrementId(
                 $this->sequenceManager->getSequence(
                     $object->getEntityType(),
-                    $object->getStore()->getId()
+                    $object->getStore()->getGroup()->getDefaultStoreId()
                 )->getNextValue()
             );
         }
