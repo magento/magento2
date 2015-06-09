@@ -23,20 +23,28 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
+        $this->escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -126,5 +134,30 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $collection;
+    }
+
+    /**
+     * Escape string preserving links
+     *
+     * @param string $data
+     * @param null|array $allowedTags
+     * @return string
+     */
+    public function escapeHtmlWithLinks($data, $allowedTags = null)
+    {
+        if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
+            $links = [];
+            $i = 1;
+            $data = str_replace('%', '%%', $data);
+            $regexp = '@(<a[^>]*>(?:[^<]|<[^/]|</[^a]|</a[^>])*</a>)@';
+            while (preg_match($regexp, $data, $matches)) {
+                $links[] = $matches[1];
+                $data = str_replace($matches[1], '%' . $i . '$s', $data);
+                ++$i;
+            }
+            $data = $this->escaper->escapeHtml($data, $allowedTags);
+            return vsprintf($data, $links);
+        }
+        return $this->escaper->escapeHtml($data, $allowedTags);
     }
 }

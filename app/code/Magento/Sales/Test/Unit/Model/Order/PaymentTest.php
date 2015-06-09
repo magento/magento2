@@ -1245,6 +1245,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'setTxnType',
                 'isFailsafe',
                 'getTxnId',
+                'getHtmlTxnId',
                 'getTxnType'
             ],
             [],
@@ -1285,6 +1286,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $newTransaction->expects($this->once())->method('setTxnId')->with(
             $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
         )->willReturn($newTransaction);
+        $newTransaction->expects($this->atLeastOnce())->method('getHtmlTxnId')->willReturn(
+            $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+        );
         $newTransaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn(
             $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
         );
