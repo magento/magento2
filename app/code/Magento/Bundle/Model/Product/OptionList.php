@@ -6,8 +6,6 @@
  */
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\Api\ExtensionAttributesFactory;
-
 class OptionList
 {
     /**
@@ -31,29 +29,29 @@ class OptionList
     protected $dataObjectHelper;
 
     /**
-     * @var ExtensionAttributesFactory
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
      */
-    protected $extensionAttributesFactory;
+    protected $extensionAttributesJoinProcessor;
 
     /**
      * @param Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
      * @param LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param ExtensionAttributesFactory $extensionAttributesFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
      */
     public function __construct(
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
         \Magento\Bundle\Model\Product\LinksList $linkList,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        ExtensionAttributesFactory $extensionAttributesFactory
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
     ) {
         $this->type = $type;
         $this->optionFactory = $optionFactory;
         $this->linkList = $linkList;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->extensionAttributesFactory = $extensionAttributesFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -63,7 +61,7 @@ class OptionList
     public function getItems(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $optionCollection = $this->type->getOptionsCollection($product);
-        $this->extensionAttributesFactory->process($optionCollection, '\Magento\Bundle\Model\Option');
+        $this->extensionAttributesJoinProcessor->process($optionCollection, '\Magento\Bundle\Model\Option');
         $optionList = [];
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($optionCollection as $option) {
