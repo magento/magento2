@@ -41,4 +41,11 @@ interface TransferInterface
      * @return string
      */
     public function getBody();
+
+    /**
+     * Returns URI
+     *
+     * @return string
+     */
+    public function getUri();
 }
