@@ -11,6 +11,29 @@ define([
 ], function (Component, $, ko, _, Collapsible) {
     'use strict';
 
+    //connect items with observableArrays
+    ko.bindingHandlers.sortableList = {
+        init: function(element, valueAccessor) {
+            var list = valueAccessor();
+            $(element).sortable({
+                axis: 'y',
+                handle: '[data-role="draggable"]',
+                tolerance: 'pointer',
+                update: function(event, ui) {
+                    var item = ko.contextFor(ui.item[0]).$data;
+                    var position = ko.utils.arrayIndexOf(ui.item.parent().children(), ui.item[0]);
+                    if (ko.contextFor(ui.item[0]).$index() != position) {
+                        if (position >= 0) {
+                            list.remove(item);
+                            list.splice(position, 0, item);
+                        }
+                        ui.item.remove();
+                    }
+                }
+            });
+        }
+    };
+
     var viewModel = Collapsible.extend({
         initialize: function () {
             this._super();
