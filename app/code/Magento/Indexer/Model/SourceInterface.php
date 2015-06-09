@@ -8,13 +8,7 @@ namespace Magento\Indexer\Model;
 interface SourceInterface
 {
     /**
-     * @param array $fieldName
      * @return string
      */
-    public function getRealField($fieldName);
-
-    /**
-     * @return string
-     */
-    public function getTableName();
+    public function getEntityName();
 }
