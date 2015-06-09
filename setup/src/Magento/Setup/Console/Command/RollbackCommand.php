@@ -146,19 +146,17 @@ class RollbackCommand extends AbstractSetupCommand
     private function doRollback(InputInterface $input, OutputInterface $output)
     {
         $inputOptionProvided = false;
+        $rollbackHandler = $this->backupRollbackFactory->create($output);
         if ($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE)) {
-            $codeRollback = $this->backupRollbackFactory->create($output);
-            $codeRollback->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE));
+            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE));
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
-            $mediaRollback = $this->backupRollbackFactory->create($output);
-            $mediaRollback->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA);
+            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA);
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE)) {
-            $dbRollback = $this->backupRollbackFactory->create($output);
-            $dbRollback->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE));
+            $rollbackHandler->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE));
             $inputOptionProvided = true;
         }
         if (!$inputOptionProvided) {
