@@ -93,7 +93,7 @@ class UninstallLanguageCommand extends Command
                 new InputArgument(
                     self::PACKAGE_ARGUMENT,
                     InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                    'Language code'
+                    'Language package name'
                 ),
                 new InputOption(
                     self::BACKUP_CODE_OPTION,
