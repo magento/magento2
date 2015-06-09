@@ -595,7 +595,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                     0 => ['value']
                 ],
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                '$error' => RowValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE,
+                '$error' => RowValidatorInterface::ERROR_SKU_IS_EMPTY,
             ],
             [
                 '$rowData' => [

@@ -39,9 +39,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $logger;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $abstractCollection;
 
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -159,17 +164,26 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->collection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->abstractCollection = $this->getMockForAbstractClass(
+            '\Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            [],
+            '',
+            false,
+            true,
+            true,
             [
                 'count',
                 'setOrder',
                 'setStoreId',
                 'getCurPage',
                 'getLastPageNumber',
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $this->exportConfig = $this->getMock(
             'Magento\ImportExport\Model\Export\Config',
@@ -370,17 +384,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $itemsPerPage = 10;
 
         $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product->expects($this->exactly(4))->method('_getEntityCollection')->willReturn($this->collection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->collection);
+        $this->product->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
+        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->collection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
-        $this->collection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
-        $this->collection->expects($this->once())->method('count')->willReturn(0);
+        $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
 
-        $this->collection->expects($this->never())->method('getCurPage');
-        $this->collection->expects($this->never())->method('getLastPageNumber');
+        $this->abstractCollection->expects($this->never())->method('getCurPage');
+        $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
         $this->product->expects($this->never())->method('_getHeaderColumns');
         $this->writer->expects($this->never())->method('setHeaderCols');
         $this->writer->expects($this->never())->method('writeRow');
@@ -398,17 +412,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $itemsPerPage = 10;
 
         $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product->expects($this->exactly(6))->method('_getEntityCollection')->willReturn($this->collection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->collection);
+        $this->product->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
+        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->collection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
-        $this->collection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
-        $this->collection->expects($this->once())->method('count')->willReturn(1);
+        $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
 
-        $this->collection->expects($this->once())->method('getCurPage')->willReturn($curPage);
-        $this->collection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
+        $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
+        $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
         $headers = ['headers'];
         $this->product->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
         $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
