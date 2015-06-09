@@ -10,7 +10,7 @@
         <!-- ko foreach: { data: element.elems, as: 'element' } -->
             <li class="address-list-item" data-bind="css: { 'ui-state-active': element.active }, click: activate">
                 <div class="address-list-item-actions">
-                    <button class="action-delete" type="button" data-bind="click: $parent.removeChild.bind($parent, element)">
+                    <button class="action-delete" type="button" data-bind="click: $parent.removeAddress.bind($parent, element)">
                         <span data-bind="text: $parent.removeLabel"></span>
                     </button>
                 </div>
