@@ -11,15 +11,19 @@ define([
 ], function (Component, $, ko, _, Collapsible) {
     'use strict';
 
-    var viewModel = Component.extend({
+    var viewModel = Collapsible.extend({
+        initialize: function () {
+            this._super();
+            return this;
+        },
         attributes: ko.observableArray([]),
         createOption: function (attribute) {
             attribute.options.push({value:0, label:''});
         },
         saveOption: function (option) {
             this.options.remove(option);
-            //TODO: ajax request to save attribute
-            var value = _.uniqueId()+this.id;
+            //TODO: improved generation uniqueid
+            var value = _.uniqueId() + this.id;
             this.options.push({value:value, label:option.label});
             this.chosenOptions.push(value);
         },
@@ -35,9 +39,12 @@ define([
             return attribute;
         },
         saveAttribute: function (attribute) {
-            attribute.chosenOptions = ko.observableArray([]);
-            attribute.options = ko.observableArray(attribute.options);
-            return attribute;
+            this.attributes.map(function(attribute) {
+                attribute.chosen = [];
+                attribute.chosenOptions.each(function(key) {
+                    attribute.chosen.push(_.where(attribute.options(), {value:key}));
+                });
+            });
         },
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'value'));
@@ -49,16 +56,11 @@ define([
                 data: {attributes: wizard.data.attributes},
                 showLoader: true
             }).done(function(attributes){
-                viewModel.prototype.attributes(_.map(attributes, this.createAttribute, this));
+                viewModel.prototype.attributes(_.map(attributes, viewModel.prototype.createAttribute, this));
             });
         },
         force: function(wizard) {
-            this.attributes.map(function(attribute) {
-                attribute.chosen = [];
-                attribute.chosenOptions.each(function(key) {
-                    attribute.chosen.push(_.where(attribute.options(), {value:key}));
-                });
-            });
+            viewModel.prototype.saveAttribute(wizard);
 
             wizard.data.attributesValues = ko.toJS(this.attributes);
         },
