@@ -33,6 +33,11 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataObjectHelperMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesFactoryMock;
+
     protected function setUp()
     {
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
@@ -43,15 +48,21 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
+        $this->extensionAttributesFactoryMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttributesFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Bundle\Model\Product\OptionList(
             $this->typeMock,
             $this->optionFactoryMock,
             $this->linkListMock,
-            $this->dataObjectHelperMock
+            $this->dataObjectHelperMock,
+            $this->extensionAttributesFactoryMock
         );
     }
 
