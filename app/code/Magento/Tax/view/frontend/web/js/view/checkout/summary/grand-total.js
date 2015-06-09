@@ -12,22 +12,13 @@ define(
     ],
     function (Component, quote, priceUtils) {
         "use strict";
-        var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal || false;
-        var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed || false;
         return Component.extend({
             defaults: {
-                isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
+                isFullTaxSummaryDisplayed: window.checkoutConfig.isFullTaxSummaryDisplayed || false,
                 template: 'Magento_Tax/checkout/summary/grand-total'
             },
-            colspan: 3,
-            style: "",
-            exclTaxLabel: 'Order Total Excl. Tax',
-            inclTaxLabel: 'Order Total Incl. Tax',
-            basicCurrencyMessage: 'Your credit card will be charged for',
-            getTitle: function() {
-                return "Order Total";
-            },
             totals: quote.getTotals(),
+            isTaxDisplayedInGrandTotal: window.checkoutConfig.includeTaxInGrandTotal || false,
             getValue: function() {
                 var price = 0;
                 if (this.totals()) {
@@ -42,17 +33,12 @@ define(
                 }
                 return priceUtils.formatPrice(price, quote.getBasePriceFormat());
             },
-            isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
             getGrandTotalExclTax: function() {
                 var totals = this.totals();
                 if (!totals) {
                     return 0;
                 }
-                var amount = totals.grand_total - totals.tax_amount;
-                if (amount < 0) {
-                    return 0;
-                }
-                return priceUtils.formatPrice(amount, quote.getPriceFormat());
+                return priceUtils.formatPrice(totals.grand_total, quote.getPriceFormat());
             },
             isBaseGrandTotalDisplayNeeded: function() {
                 var totals = this.totals();
