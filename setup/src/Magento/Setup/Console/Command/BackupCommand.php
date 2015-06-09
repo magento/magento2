@@ -119,19 +119,17 @@ class BackupCommand extends AbstractSetupCommand
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
             $time = time();
+            $backupHandler = $this->backupRollbackFactory->create($output);
             if ($input->getOption(self::INPUT_KEY_CODE)) {
-                $codeBackup = $this->backupRollbackFactory->create($output);
-                $codeBackup->codeBackup($time);
+                $backupHandler->codeBackup($time);
                 $inputOptionProvided = true;
             }
             if ($input->getOption(self::INPUT_KEY_MEDIA)) {
-                $mediaBackup = $this->backupRollbackFactory->create($output);
-                $mediaBackup->codeBackup($time, Factory::TYPE_MEDIA);
+                $backupHandler->codeBackup($time, Factory::TYPE_MEDIA);
                 $inputOptionProvided = true;
             }
             if ($input->getOption(self::INPUT_KEY_DB)) {
-                $dbBackup = $this->backupRollbackFactory->create($output);
-                $dbBackup->dbBackup($time);
+                $backupHandler->dbBackup($time);
                 $inputOptionProvided = true;
             }
             if (!$inputOptionProvided) {
