@@ -19,7 +19,7 @@ class Configure extends \Magento\Catalog\Test\Block\Adminhtml\Product\Composite\
      *
      * @var string
      */
-    protected $option = '//div[@class="composite-bundle"]//label[.="%option_name%"]//following-sibling::*//%selector%';
+    protected $option = '//fieldset[contains(@class,"composite-bundle")]//label[.="%option_name%"]//following-sibling::*//%selector%';
 
     /**
      * Fill options for the product
