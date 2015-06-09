@@ -13,6 +13,12 @@ define(
 
         return {
             totals: quote.totals,
+            getItems: function() {
+                if (!this.totals() || !this.totals().items) {
+                    return [];
+                }
+                return this.totals().items;
+            },
             getTotalByCode: function(code) {
                 if (!this.totals()) {
                     return null;

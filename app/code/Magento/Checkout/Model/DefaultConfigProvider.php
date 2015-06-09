@@ -533,19 +533,22 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function getTotalsData()
     {
+        /** @var \Magento\Quote\Api\Data\TotalsInterface $totals */
         $totals = $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId());
         $items = [];
         /** @var  \Magento\Quote\Model\Cart\Totals\Item $item */
         foreach ($totals->getItems() as $item) {
             $items[] = $item->__toArray();
         }
-        $TotalSegmentsData = [];
+        $totalSegmentsData = [];
         /** @var \Magento\Quote\Model\Cart\TotalSegment $totalSegment */
         foreach ($totals->getTotalSegments() as $totalSegment) {
-            $TotalSegmentsData[] = $totalSegment->toArray();
+            $totalSegmentsData[] = $totalSegment->toArray();
         }
         $totals->setItems($items);
-        $totals->setTotalSegments($TotalSegmentsData);
-        return $totals->toArray();
+        $totals->setTotalSegments($totalSegmentsData);
+        $totalsArray = $totals->toArray();
+        $totalsArray['extension_attributes'] = $totals->getExtensionAttributes()->__toArray();
+        return $totalsArray;
     }
 }
