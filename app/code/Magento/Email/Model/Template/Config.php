@@ -7,6 +7,8 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Config
 {
     /**
@@ -25,27 +27,112 @@ class Config
     protected $emailTemplateFileSystem;
 
     /**
+     * Themes directory
+     *
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    private $themesDirectory;
+
+    /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
      * @param \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
+     * @param \Magento\Framework\Filesystem $fileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
+        \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem,
+        \Magento\Framework\Filesystem $fileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
         $this->emailTemplateFileSystem = $emailTemplateFileSystem;
+        $this->themesDirectory = $fileSystem->getDirectoryRead(DirectoryList::THEMES);
     }
 
     /**
-     * Retrieve unique identifiers of all available email templates
+     * Return list of all email templates, both default module and theme-specific templates
      *
-     * @return string[]
+     * @return array[]
      */
     public function getAvailableTemplates()
     {
-        return array_keys($this->_dataStorage->get());
+        $templates = [];
+        foreach ($this->_dataStorage->get() as $templateId => $fields) {
+            $templates[] = [
+                'value' => $templateId,
+                'label' => $this->getTemplateLabel($templateId),
+                'group' => $this->getTemplateModule($templateId),
+            ];
+            $templatesFromThemes = $this->getThemeTemplates($templateId);
+            $templates = array_merge($templates, $templatesFromThemes);
+        }
+        return $templates;
+    }
+
+    /**
+     * Find all theme-based email templates for a given template ID
+     *
+     * @param string $templateId
+     * @return array[]
+     */
+    public function getThemeTemplates($templateId)
+    {
+        $templates = [];
+
+        $area = $this->getTemplateArea($templateId);
+        $themePath = '*/*';
+        $module = $this->getTemplateModule($templateId);
+        $filename = $this->_getInfo($templateId, 'file');
+        $emailDirectory = DirectoryList::EMAIL;
+        $searchPattern = "{$area}/{$themePath}/{$module}/{$emailDirectory}/{$filename}";
+        $files = $this->themesDirectory->search($searchPattern);
+
+        $pattern = "#^(?<area>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)/#i";
+        foreach ($files as $file) {
+            if (!preg_match($pattern, $file, $matches)) {
+                continue;
+            }
+            $themeVendor = $matches['themeVendor'];
+            $themeName = $matches['themeName'];
+
+            $templates[] = [
+                'value' => sprintf(
+                    '%s/%s/%s',
+                    $templateId,
+                    $themeVendor,
+                    $themeName
+                ),
+                'label' => sprintf(
+                    '%s (%s/%s)',
+                    $this->getTemplateLabel($templateId),
+                    $themeVendor,
+                    $themeName
+                ),
+                'group' => $this->getTemplateModule($templateId),
+            ];
+        }
+        return $templates;
+    }
+
+    /**
+     * Parses a template ID and returns an array of templateId and theme
+     *
+     * @param string $templateId
+     * @return array an array of array('templateId' => '...', 'theme' => '...')
+     */
+    public function parseTemplateIdParts($templateId)
+    {
+        $parts = [
+            'templateId' => $templateId,
+            'theme' => null
+        ];
+        $pattern = "#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i";
+        if (preg_match($pattern, $templateId, $matches)) {
+            $parts['templateId'] = $matches['templateId'];
+            $parts['theme'] = $matches['themeVendor'] . '/' . $matches['themeName'];
+        }
+        return $parts;
     }
 
     /**
