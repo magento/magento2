@@ -77,12 +77,12 @@ class SuggestElement extends SimpleElement
     }
 
     /**
-     * Set keys.
+     * Send keys.
      *
      * @param array $keys
      * @return void
      */
-    public function keys (array $keys)
+    public function keys(array $keys)
     {
         $input = $this->find($this->suggest);
         $input->click();

@@ -10,7 +10,6 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertIntegrationTokensPopup
  * Assert that pop-up with tokens is shown after clicking on "Allow" button on Resources popup.
  */
 class AssertIntegrationTokensPopup extends AbstractConstraint
@@ -20,7 +19,7 @@ class AssertIntegrationTokensPopup extends AbstractConstraint
     /* end tags */
 
     /**
-     * Fields to be checked
+     * Fields to be checked.
      *
      * @var array
      */
@@ -65,7 +64,7 @@ class AssertIntegrationTokensPopup extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of successful assertion
+     * Returns a string representation of successful assertion.
      *
      * @return string
      */

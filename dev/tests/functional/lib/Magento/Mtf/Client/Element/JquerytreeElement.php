@@ -15,6 +15,20 @@ use Magento\Mtf\Client\Locator;
 class JquerytreeElement extends Tree
 {
     /**
+     * Root element.
+     *
+     * @var string
+     */
+    protected $rootElement = '//div[contains(@class, "tree x-tree jstree")]';
+
+    /**
+     * Pattern for level node.
+     *
+     * @var string
+     */
+    protected $level = '/ul/li[contains(@class, "jstree")]';
+
+    /**
      * Pattern for child element node.
      *
      * @var string
@@ -57,6 +71,13 @@ class JquerytreeElement extends Tree
     protected $selectedLabels = '//li[contains(@class, "jstree-checked")]/a';
 
     /**
+     * Selected checkboxes by level.
+     *
+     * @var string
+     */
+    protected $selectedLabelsByLevel = '/ul/li[contains(@class, "jstree-checked")]/a';
+
+    /**
      * Display children.
      *
      * @param string $element
@@ -84,5 +105,40 @@ class JquerytreeElement extends Tree
     protected function getElementLabel(ElementInterface $element)
     {
         return trim($element->getText());
+    }
+
+    /**
+     * Get structure.
+     *
+     * @param int|null $level
+     * @return array
+     */
+    public function getStructure($level = null)
+    {
+        $nodesSelector = $this->getNodesSelector($level);
+        $Nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
+
+        return $this->prepareValues($Nodes);
+    }
+
+    /**
+     * Get nodes selector.
+     *
+     * @param int|null $level
+     * @return string
+     */
+    protected function getNodesSelector($level)
+    {
+        $selector = $this->rootElement;
+        if ($level !== null) {
+            for ($i = 1; $i < $level; $i++) {
+                $selector .= $this->level;
+            }
+            $selector .= $this->selectedLabelsByLevel;
+        } else {
+            $selector .= $this->selectedLabels;
+        }
+
+        return $selector;
     }
 }
