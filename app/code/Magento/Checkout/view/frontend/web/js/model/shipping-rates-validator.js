@@ -9,13 +9,15 @@ define(
         'ko',
         './shipping-rates-validation-rules',
         '../model/address-converter',
-        '../action/select-shipping-address'
+        '../action/select-shipping-address',
+        './postcode-validator'
     ],
-    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress) {
+    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator) {
         "use strict";
         var checkoutConfig = window.checkoutConfig;
         var validators = [];
         var observedElements = [];
+        var postcodeElement;
 
         return {
             validateAddressTimeout: 0,
@@ -39,6 +41,9 @@ define(
                 $.each(elements, function(index, elem) {
                     if (elem && observableFields.indexOf(elem.index) != -1) {
                         self.bindHandler(elem);
+                        if (elem.index == 'postcode') {
+                            postcodeElement = elem;
+                        }
                     }
                 });
             },
@@ -56,11 +61,30 @@ define(
                         }
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function() {
-                            self.validateFields();
+                            if (self.postcodeValidation()) {
+                                self.validateFields();
+                            }
                         }, self.validateDelay);
                     });
                     observedElements.push(element);
                 }
+            },
+
+            postcodeValidation: function() {
+                var postcode = $('#' + postcodeElement.uid).val(),
+                    countryId = $('select[name="shippingAddress[country_id]"]').val();
+
+                var validationResult = postcodeValidator.validate(postcode, countryId);
+
+                postcodeElement.error(null);
+                if (!validationResult) {
+                    var errorMessage = 'Invalid Zip/Postal code for current country!';
+                    if (postcodeValidator.validatedPostCodeExample.length) {
+                        errorMessage += ' Example: ' + postcodeValidator.validatedPostCodeExample.join('; ');
+                    }
+                    postcodeElement.error(errorMessage);
+                }
+                return validationResult;
             },
 
             validateFields: function() {

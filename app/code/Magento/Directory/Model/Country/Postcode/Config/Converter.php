@@ -47,7 +47,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     ) {
                         continue;
                     }
-                    $result[$groupName][$code->attributes->getNamedItem('id')->nodeValue] = $code->nodeValue;
+                    $result[$groupName][$code->attributes->getNamedItem('id')->nodeValue] = [
+                        'example' => $code->attributes->getNamedItem('example')->nodeValue,
+                        'pattern' => $code->nodeValue
+                    ];
                 }
             }
         }
