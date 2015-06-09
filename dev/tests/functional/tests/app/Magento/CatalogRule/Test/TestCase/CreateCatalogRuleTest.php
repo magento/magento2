@@ -23,7 +23,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
  * 8. Clear cache.
  * 9. Perform all assertions.
  *
- * @ticketId MAGETWO-23036
+ * @ZephyrId MAGETWO-23036
  */
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
