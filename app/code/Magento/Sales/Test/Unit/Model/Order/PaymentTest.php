@@ -196,7 +196,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         $this->serviceOrderFactory = $this->getMock(
             'Magento\Sales\Model\Service\OrderFactory',
-            [],
+            ['create'],
             [],
             '',
             false
