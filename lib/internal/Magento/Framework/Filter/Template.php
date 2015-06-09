@@ -102,7 +102,7 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        // "depend", "if", and "include" directives should be first
+        // "depend", "if", and "template" directives should be first
         foreach ([
                      self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
                      self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
@@ -258,9 +258,9 @@ class Template implements \Zend_Filter_Interface
             if ($i == 0 && isset($this->_templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->_templateVars[$stackVars[$i]['name']];
-            } elseif (isset(
-                $stackVars[$i - 1]['variable']
-                ) && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\Object
+            } elseif (
+                    isset($stackVars[$i - 1]['variable'])
+                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\Object
             ) {
                 // If object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {
