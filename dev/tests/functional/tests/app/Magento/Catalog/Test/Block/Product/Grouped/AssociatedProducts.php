@@ -30,7 +30,7 @@ class AssociatedProducts extends Tab
      *
      * @var string
      */
-    protected $productSearchGrid = "./ancestor::body//div[div[div[contains(@data-role,'add-product-dialog')]]]";
+    protected $productSearchGrid = "./ancestor::body//div[div[contains(@data-role,'add-product-dialog')]]";
 
     /**
      * Associated products list block
