@@ -9,18 +9,18 @@
 <div data-bind="scope: 'attributes-values-step'">
     <div data-bind="foreach: attributes" class="draggable-handle">
         <div class="attribute" style="padding-bottom: 30px;">
-            <input style="float: left;" data-bind="value: label" />
+            <input style="float: left; border: 0px" data-bind="value: label" />
             <div style="float: right; font-size: smaller;">
                 <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute" >
                     <?= __('Remove Attribute') ?>
                 </a>
-                <span
-                    style="font-size: smaller;"
-                    data-bind="click: $parent.toggleOpened.bind($parent), html: '-'"
-                >--</span>
+                <span style="cursor: pointer" data-bind="click: $parent.toggleOpened">
+                    <span data-bind="if: opened">-</span>
+                    <span data-bind="ifnot: opened">+</span>
+                </span>
             </div>
-            <div class="field"></div>
-            <fieldset data-bind="visible: $parent.opened" style="clear: both;">
+            <div data-bind="style: {'border-bottom': !opened() && '1px solid gray'}" style="clear: both;"></div>
+            <fieldset data-bind="visible: opened" style="clear: both;">
                 <span data-bind="text: $data.options().length"></span> <span><?= __('Options') ?></span>
                 <a href="#" data-bind="click: $parent.selectAllAttributes" style="
                     float: right;
