@@ -159,7 +159,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
             if (!isset($frontendLabel[0]) || $frontendLabel[0] === null || $frontendLabel[0] == '') {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Frontend label is not defined'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The storefront label is not defined.'));
             }
             $object->setFrontendLabel($frontendLabel[0])->setStoreLabels($frontendLabel);
         }

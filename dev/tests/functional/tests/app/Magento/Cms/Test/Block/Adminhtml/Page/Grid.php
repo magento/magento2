@@ -81,9 +81,29 @@ class Grid extends DataGrid
         $rowItem = $this->_rootElement->find($this->rowItem);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->previewCmsPage)->click();
-            $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
         }
+    }
+
+    /**
+     * Wait loader.
+     *
+     * @return void
+     */
+    protected function waitLoader()
+    {
+        try {
+            $browser = $this->browser;
+            $selector = $this->loader;
+            $browser->waitUntil(
+                function () use ($browser, $selector) {
+                    return $browser->find($selector)->isVisible() == true ? true : null;
+                }
+            );
+        } catch (\Exception $e) {
+        }
+
+        parent::waitLoader();
     }
 }
