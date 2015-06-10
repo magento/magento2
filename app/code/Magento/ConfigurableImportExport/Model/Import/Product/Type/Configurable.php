@@ -573,7 +573,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 !empty($oneOptionValuePrice['value']) &&
                 isset($oneOptionValuePrice['price'])
             ) {
-                $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] = $oneOptionValuePrice['price'];
+                $postfix = !empty($oneOptionValuePrice['price_type'])
+                && ($oneOptionValuePrice['price_type'] == 'percent') ? '%' : '';
+                $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] =
+                    $oneOptionValuePrice['price'] . $postfix;
             }
         }
         return $prices;

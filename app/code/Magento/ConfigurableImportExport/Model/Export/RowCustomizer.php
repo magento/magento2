@@ -51,7 +51,7 @@ class RowCustomizer implements RowCustomizerInterface
                         'price_type=' . $priceType;
                     if (!empty($optValues['super_attribute_label'])) {
                         $variationsLabels[$optValues['attribute_code']] =
-                            $optValues['attribute_code'] . '=' .$optValues['super_attribute_label'];
+                            $optValues['attribute_code'] . '=' . $optValues['super_attribute_label'];
                     }
                 }
 
