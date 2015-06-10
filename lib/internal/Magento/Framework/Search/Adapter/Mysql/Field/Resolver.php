@@ -8,10 +8,28 @@ namespace Magento\Framework\Search\Adapter\Mysql\Field;
 class Resolver implements ResolverInterface
 {
     /**
+     * @var FieldFactory
+     */
+    private $fieldFactory;
+
+    /**
+     * @param FieldFactory $fieldFactory
+     */
+    public function __construct(FieldFactory $fieldFactory)
+    {
+        $this->fieldFactory = $fieldFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function resolve($fields)
+    public function resolve(array $fields)
     {
-        return $fields;
+        $resolvedFields = [];
+        foreach ($fields as $field) {
+            $resolvedFields[] = $this->fieldFactory->create(['column' => $field]);
+        }
+
+        return $resolvedFields;
     }
 }
