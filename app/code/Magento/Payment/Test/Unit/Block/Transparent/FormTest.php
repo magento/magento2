@@ -99,7 +99,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodConfigData($fieldName, $fieldValue, $expected)
     {
-        $this->initializeMethodWithConfigMock([[$fieldName, $fieldValue]]);
+        $this->initializeMethodWithConfigMock([[$fieldName, null, $fieldValue]]);
 
         $this->form->setMethod($this->methodMock);
 
@@ -117,7 +117,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $configInterface->expects($this->any())
-            ->method('getConfigValue')
+            ->method('getValue')
             ->willReturnMap($configMap);
 
         $this->methodMock->expects($this->any())
@@ -155,9 +155,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->initializeMethodWithConfigMock(
             [
-                ['sandbox_flag', $sandboxFlag],
-                ['cgi_url_test_mode', $cgiUrlTestMode],
-                ['cgi_url', $cgiUrl]
+                ['sandbox_flag', null, $sandboxFlag],
+                ['cgi_url_test_mode', null, $cgiUrlTestMode],
+                ['cgi_url', null, $cgiUrl]
             ]
         );
 
@@ -198,7 +198,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $orderUrlPattern = 'order_url';
         $builtOrderUrl = 'built_url';
-        $this->initializeMethodWithConfigMock([['place_order_url', $orderUrlPattern]]);
+        $this->initializeMethodWithConfigMock([['place_order_url', null, $orderUrlPattern]]);
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
@@ -213,7 +213,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetDateDelim()
     {
         $dateDelimiter = '/';
-        $this->initializeMethodWithConfigMock([['date_delim', $dateDelimiter]]);
+        $this->initializeMethodWithConfigMock([['date_delim', null, $dateDelimiter]]);
 
         $this->form->setMethod($this->methodMock);
 
@@ -223,7 +223,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetCardFieldsMap()
     {
         $ccfields = 'x_card_code,x_exp_date,x_card_num';
-        $this->initializeMethodWithConfigMock([['ccfields', $ccfields]]);
+        $this->initializeMethodWithConfigMock([['ccfields', null, $ccfields]]);
 
         $this->form->setMethod($this->methodMock);
 
