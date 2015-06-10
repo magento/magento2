@@ -190,6 +190,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingMethodConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
