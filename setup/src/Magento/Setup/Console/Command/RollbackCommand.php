@@ -119,13 +119,14 @@ class RollbackCommand extends AbstractSetupCommand
             $this->maintenanceMode->set(true);
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion(
-                '<info>You are about to remove current code and database tables. Are you sure?[y/N]<info>',
+                '<info>You are about to remove current code and/or database tables. Are you sure?[y/N]<info>',
                 false
             );
             if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
                 return;
             }
             $this->doRollback($input, $output);
+            $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
 
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
