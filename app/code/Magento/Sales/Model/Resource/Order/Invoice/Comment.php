@@ -37,7 +37,6 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param string|null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -45,11 +44,18 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct(
+            $context,
+            $attribute,
+            $sequenceManager,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $resourcePrefix
+        );
     }
 
     /**

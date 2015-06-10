@@ -45,13 +45,21 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
+        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
         $resourcePrefix = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
+        parent::__construct(
+            $context,
+            $attribute,
+            $sequenceManager,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $resourcePrefix
+        );
     }
 
     /**
