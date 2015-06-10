@@ -67,7 +67,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->sync = $this->getMock('Magento\MediaStorage\Model\File\Storage\Synchronization', [], [], '', false);
         $this->configFactoryMock = $this->getMock(
             'Magento\MediaStorage\Model\File\Storage\ConfigFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -77,7 +77,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->configMock));
         $this->syncFactoryMock = $this->getMock(
             'Magento\MediaStorage\Model\File\Storage\SynchronizationFactory',
-            [],
+            ['create'],
             [],
             '',
             false
