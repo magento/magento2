@@ -44,3 +44,11 @@ $message->setRecipient('Jane Roe');
 $message->setMessage('Gift Message Text');
 $message->save();
 $quote->getItemByProduct($quoteProduct)->setGiftMessageId($message->getId())->save();
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create();
+$quoteIdMask->setQuoteId($quote->getId());
+$quoteIdMask->setDataChanges(true);
+$quoteIdMask->save();

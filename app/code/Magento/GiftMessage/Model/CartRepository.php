@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
- * Shopping cart gift message repository object.
+ * Shopping cart gift message repository object for registered customer
  */
 class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 {
