@@ -100,6 +100,7 @@ class Search extends SuggestElement
         }
         $input->click();
         $input->keys($keys);
+        $input->click();
         $this->waitResult();
     }
 
@@ -110,12 +111,9 @@ class Search extends SuggestElement
      */
     public function waitResult()
     {
-        $browser = $this;
-        $selector = $this->searchResult;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() ? true : null;
+        $this->waitUntil(
+            function () {
+                return $this->find($this->searchResult)->isVisible() ? true : null;
             }
         );
     }
