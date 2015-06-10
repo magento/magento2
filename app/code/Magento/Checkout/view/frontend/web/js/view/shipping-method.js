@@ -13,12 +13,18 @@ define(
         '../model/quote',
         '../model/shipping-service',
         '../action/select-shipping-method',
+        'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Catalog/js/price-utils'
     ],
-    function ($, ko, _, Component, quote, shippingService, selectShippingMethodAction, priceUtils) {
-        var rates = window.checkoutConfig.shippingRates;
+    function ($, ko, _, Component, quote, shippingService, selectShippingMethodAction, rateRegistry, priceUtils) {
+        var rates = window.checkoutConfig.shippingRates.data;
+        var rateKey = window.checkoutConfig.shippingRates.key;
+        if (rateKey) {
+            rateRegistry.set(rateKey, rates);
+        }
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
+
 
         return Component.extend({
             defaults: {
