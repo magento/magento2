@@ -119,7 +119,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();
 
-        $this->joinProcessor->process($collection, 'Magento\Eav\Api\Data\AttributeGroupInterface');
+        $this->joinProcessor->process($collection);
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);

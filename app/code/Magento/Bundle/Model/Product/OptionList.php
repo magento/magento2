@@ -61,7 +61,7 @@ class OptionList
     public function getItems(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $optionCollection = $this->type->getOptionsCollection($product);
-        $this->extensionAttributesJoinProcessor->process($optionCollection, '\Magento\Bundle\Api\Data\OptionInterface');
+        $this->extensionAttributesJoinProcessor->process($optionCollection);
         $optionList = [];
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($optionCollection as $option) {

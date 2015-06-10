@@ -130,7 +130,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attributeCollection->setCurPage($searchCriteria->getCurrentPage());
         $attributeCollection->setPageSize($searchCriteria->getPageSize());
 
-        $this->joinProcessor->process($attributeCollection, 'Magento\Eav\Api\Data\AttributeInterface');
+        $this->joinProcessor->process($attributeCollection);
 
         $attributes = [];
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */

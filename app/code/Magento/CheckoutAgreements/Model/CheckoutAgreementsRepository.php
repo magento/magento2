@@ -101,10 +101,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $storeId = $this->storeManager->getStore()->getId();
         /** @var $agreementCollection AgreementCollection */
         $agreementCollection = $this->collectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process(
-            $agreementCollection,
-            '\Magento\CheckoutAgreements\Api\Data\AgreementInterface'
-        );
+        $this->extensionAttributesJoinProcessor->process($agreementCollection);
         $agreementCollection->addStoreFilter($storeId);
         $agreementCollection->addFieldToFilter('is_active', 1);
         $agreementDataObjects = [];

@@ -74,8 +74,9 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     /**
      * {@inheritdoc}
      */
-    public function process(DbCollection $collection, $extensibleEntityClass)
+    public function process(DbCollection $collection, $extensibleEntityClass = null)
     {
+        $extensibleEntityClass = $extensibleEntityClass ?: $collection->getItemObjectClass();
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         foreach ($joinDirectives as $attributeCode => $directive) {
             /** @var JoinData $joinData */

@@ -278,7 +278,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Model\Data\Customer');
+        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\CustomerInterface');
         $customers = [];
         /** @var \Magento\Customer\Model\Customer $customerModel */
         foreach ($collection as $customerModel) {

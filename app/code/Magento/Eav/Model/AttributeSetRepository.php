@@ -106,7 +106,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
-        $this->joinProcessor->process($collection, 'Magento\Eav\Api\Data\AttributeSetInterface');
+        $this->joinProcessor->process($collection);
 
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);

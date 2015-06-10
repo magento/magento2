@@ -185,11 +185,9 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
             ['config' => $config]
         );
-        $productClassName = 'Magento\Catalog\Model\Product';
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
-
-        $extensionAttributesProcessor->process($collection, $productClassName);
+        $extensionAttributesProcessor->process($collection);
         $config->reset();
 
         $catalogProductEntity = $this->appResource->getTableName('catalog_product_entity');
