@@ -909,7 +909,7 @@ class Onepage
             $this->messageManager->addSuccess(
                 // @codingStandardsIgnoreStart
                 __(
-                    'You must confirm your account. Please check your e-mail for the confirmation link or <a href="%1">click here</a> for a new link.',
+                    'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
                 // @codingStandardsIgnoreEnd

@@ -371,33 +371,42 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initMessageTemplates()
     {
         // @codingStandardsIgnoreStart
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_STORE, __('Please correct the value for store.'));
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_TYPE, __('Please correct the value for type.'));
+        $this->_productEntity->addMessageTemplate(
+            self::ERROR_INVALID_STORE,
+            __('Please enter a correct value for "store".')
+        );
+        $this->_productEntity->addMessageTemplate(
+            self::ERROR_INVALID_TYPE,
+            __('Please enter a correct value for "type".')
+        );
         $this->_productEntity->addMessageTemplate(self::ERROR_EMPTY_TITLE, __('Please enter a value for title.'));
-        $this->_productEntity->addMessageTemplate(self::ERROR_INVALID_PRICE, __('Please correct the value for price.'));
+        $this->_productEntity->addMessageTemplate(
+            self::ERROR_INVALID_PRICE,
+            __('Please enter a correct value for "price".')
+        );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_MAX_CHARACTERS,
-            __('Please correct the value for maximum characters value.')
+            __('Please enter a correct value for "maximum characters".')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_SORT_ORDER,
-            __('Please correct the value for sort order.')
+            __('Please enter a correct value for "sort order".')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_PRICE,
-            __('Please correct the value for value price.')
+            __('Please enter a correct value for "value price".')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_INVALID_ROW_SORT,
-            __('Please correct the value for value sort order.')
+            __('Please enter a correct value for "sort order".')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_NEW_NAMES,
-            __('A custom option with this title already exists in source file.')
+            __('This name is already being used. Please enter a different name.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_OLD_NAMES,
-            __('Several custom options with this name already exist.')
+            __('This name is already being used. Please enter a different name.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_TYPES,

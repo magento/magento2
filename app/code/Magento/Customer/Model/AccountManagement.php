@@ -326,11 +326,13 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Activate a customer account using a key that was sent in a confirmation e-mail.
+     * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     private function activateCustomer($customer, $confirmationKey)
     {

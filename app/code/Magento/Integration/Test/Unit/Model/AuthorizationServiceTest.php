@@ -190,7 +190,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error happened while granting permissions. Check exception log for details.
+     * @expectedExceptionMessage Sorry, something went wrong granting permissions.
      */
     public function testGrantPermissionsException()
     {
