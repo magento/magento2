@@ -89,7 +89,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Join processor is set only if extension attributes were joined before the collection was loaded.
      *
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor|null
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|null
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -813,12 +813,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Join extension attribute.
      *
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @return $this
      */
     public function joinExtensionAttribute(
         $join,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
