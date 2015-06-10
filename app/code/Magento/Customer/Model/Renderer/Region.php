@@ -19,7 +19,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      *
      * Structure:
      * array(
-     *      [$countryId] => \Magento\Framework\Data\Collection\Db
+     *      [$countryId] => \Magento\Framework\Data\Collection\AbstractDb
      * )
      *
      * @var array
