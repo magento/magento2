@@ -10,7 +10,7 @@ namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -58,7 +58,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $agreementFactory;
 
     /**
-     * @var JoinProcessor
+     * @var JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -70,7 +70,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param ScopeConfigInterface $scopeConfig Scope config.
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
-     * @param JoinProcessor $extensionAttributesJoinProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
@@ -78,7 +78,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         ScopeConfigInterface $scopeConfig,
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
-        JoinProcessor $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;

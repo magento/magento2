@@ -36,7 +36,7 @@ class DataObjectHelper
     protected $extensionFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $joinProcessor;
 
@@ -50,7 +50,7 @@ class DataObjectHelper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param MethodsMap $methodsMapProcessor
      */
     public function __construct(
@@ -58,7 +58,7 @@ class DataObjectHelper
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         MethodsMap $methodsMapProcessor
     ) {
         $this->objectFactory = $objectFactory;

@@ -29,7 +29,7 @@ class OptionList
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
 
@@ -38,14 +38,14 @@ class OptionList
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
      * @param LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
         \Magento\Bundle\Model\Product\LinksList $linkList,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->type = $type;
         $this->optionFactory = $optionFactory;

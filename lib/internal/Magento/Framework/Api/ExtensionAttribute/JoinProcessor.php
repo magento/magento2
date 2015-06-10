@@ -19,7 +19,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 /**
  * Join processor allows to join extension attributes during collections loading.
  */
-class JoinProcessor
+class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
 {
     /**
      * Object Manager instance
@@ -72,11 +72,7 @@ class JoinProcessor
     }
 
     /**
-     * Processes join instructions to add to the collection for a data interface.
-     *
-     * @param DbCollection $collection
-     * @param string $extensibleEntityClass
-     * @return void
+     * {@inheritdoc}
      */
     public function process(DbCollection $collection, $extensibleEntityClass)
     {
@@ -97,12 +93,7 @@ class JoinProcessor
     }
 
     /**
-     * Extract extension attributes into separate extension object.
-     *
-     * @param string $extensibleEntityClass
-     * @param array $data
-     * @return array
-     * @throws \LogicException
+     * {@inheritdoc}
      */
     public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {

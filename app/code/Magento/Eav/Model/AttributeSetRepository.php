@@ -47,7 +47,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     private $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $joinProcessor;
 
@@ -57,7 +57,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param CollectionFactory $collectionFactory
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
@@ -65,7 +65,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         CollectionFactory $collectionFactory,
         EavConfig $eavConfig,
         \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;

@@ -43,7 +43,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     protected $attributeFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $joinProcessor;
 
@@ -53,7 +53,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
@@ -61,7 +61,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessor $joinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavResource = $eavResource;
