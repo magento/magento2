@@ -44,6 +44,11 @@ class AbstractForm extends \Magento\Framework\Object
     protected $_factoryCollection;
 
     /**
+     * @var array
+     */
+    protected $customAttributes = [];
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param array $data
@@ -203,6 +208,7 @@ class AbstractForm extends \Magento\Framework\Object
      *
      * @param array $arrAttributes
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function convertToArray(array $arrAttributes = [])
     {
@@ -213,5 +219,50 @@ class AbstractForm extends \Magento\Framework\Object
             $res['formElements'][] = $element->toArray();
         }
         return $res;
+    }
+
+    /**
+     * Add custom attribute
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function addCustomAttribute($key, $value)
+    {
+        $this->customAttributes[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * Convert data into string with defined keys and values
+     *
+     * @param array $keys
+     * @param string $valueSeparator
+     * @param string $fieldSeparator
+     * @param string $quote
+     * @return string
+     */
+    public function serialize($keys = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
+    {
+        $data = [];
+        if (empty($keys)) {
+            $keys = array_keys($this->_data);
+        }
+
+        $customAttributes = array_filter($this->customAttributes);
+        $keys = array_merge($keys, array_keys(array_diff($this->customAttributes, $customAttributes)));
+
+        foreach ($this->_data as $key => $value) {
+            if (in_array($key, $keys)) {
+                $data[] = $key . $valueSeparator . $quote . $value . $quote;
+            }
+        }
+
+        foreach ($customAttributes as $key => $value) {
+            $data[] = $key . $valueSeparator . $quote . $value . $quote;
+        }
+
+        return implode($fieldSeparator, $data);
     }
 }
