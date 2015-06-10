@@ -10,7 +10,7 @@ interface GuestShippingInformationManagementInterface
     /**
      * @param string $cartId
      * @param Data\ShippingInformationInterface $addressInformation
-     * @return mixed
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
      */
     public function saveAddressInformation(
         $cartId,
