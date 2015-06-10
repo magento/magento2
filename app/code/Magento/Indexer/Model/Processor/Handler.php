@@ -30,8 +30,8 @@ class Handler
     public function process(array $handlerNames)
     {
         $handlerObjects = [];
-        foreach ($handlerNames as $sourceName => $source) {
-            $handlerObjects[$sourceName] = $this->handlerPool->get($source);
+        foreach ($handlerNames as $name => $className) {
+            $handlerObjects[$name] = $this->handlerPool->get($className);
         }
 
         return $handlerObjects;
