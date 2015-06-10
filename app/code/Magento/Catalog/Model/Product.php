@@ -1941,7 +1941,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
             $collection = $this->getProductOptionsCollection();
-            $this->joinProcessor->process($collection, 'Magento\Catalog\Api\Data\ProductInterface');
+            $this->joinProcessor->process($collection, 'Magento\Catalog\Api\Data\ProductCustomOptionInterface');
             foreach ($collection as $option) {
                 $option->setProduct($this);
                 $this->addOption($option);

@@ -1231,12 +1231,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('setProduct')
             ->with($productModel)
             ->willReturn($option1Id);
-        $options = [$optionMock1, $optionMock2];
+        $optionColl = $this->objectManagerHelper->getCollectionMock(
+            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            [$optionMock1, $optionMock2]
+        );
 
         $optionInstanceMock->expects($this->once())
             ->method('getProductOptionCollection')
             ->with($productModel)
-            ->willReturn($options);
+            ->willReturn($optionColl);
 
         $expectedOptions = [
             $option1Id => $optionMock1,
