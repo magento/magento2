@@ -41,24 +41,29 @@ define([
         },
         saveOption: function (option) {
             this.options.remove(option);
-            //TODO: improved generation uniqueid
-            var value = _.uniqueId() + this.id;
-            this.options.push({value:value, label:option.label});
-            this.chosenOptions.push(value);
+            this.options.push(option);
+            this.chosenOptions.push(option.value);
         },
         removeOption: function (option) {
             this.options.remove(option);
         },
         removeAttribute: function (attribute) {
             viewModel.prototype.attributes.remove(attribute);
-            this.wizard.notifyMessage('An attribute has been removed. This attribute will no longer appear in your configurations.', false);
+            this.wizard.notifyMessage(
+                $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.'),
+                false
+            );
         },
         createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
             attribute.options = ko.observableArray(attribute.options);
-            attribute.opened = ko.observable(index < 3);
+            attribute.opened = ko.observable(this.initialOpened(index));
             attribute.collapsible = ko.observable(true);
             return attribute;
+        },
+        //first 3 attribute panels must be open
+        initialOpened: function (index) {
+            return index < 3;
         },
         saveAttribute: function (attribute) {
             this.attributes.map(function(attribute) {
@@ -79,7 +84,7 @@ define([
                 data: {attributes: wizard.data.attributes},
                 showLoader: true
             }).done(function(attributes){
-                viewModel.prototype.attributes(_.map(attributes, viewModel.prototype.createAttribute, this));
+                viewModel.prototype.attributes(_.map(attributes, viewModel.prototype.createAttribute, viewModel.prototype));
             });
         },
         force: function(wizard) {

@@ -26,7 +26,7 @@ define([
             wizard.data.attributes = this.multiselect().selected();
 
             if (!wizard.data.attributes || wizard.data.attributes.length === 0) {
-                throw new Error('Please, select attribute(s)');
+                throw new Error($.mage.__('Please, select attribute(s)'));
             }
         },
         back: function (wizard) {
