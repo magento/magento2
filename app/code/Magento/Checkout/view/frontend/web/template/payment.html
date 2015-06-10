@@ -6,7 +6,7 @@
 -->
 <li id="opc-payment" role="presentation">
     <div class="step-title" data-role="title">
-        <h2 data-bind="text: $t('Payment Information')"></h2>
+        <h2 data-bind="text: $t(title)"></h2>
     </div>
     <div id="checkout-step-payment"
          class="step-content"
@@ -18,7 +18,7 @@
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
                 <legend class="legend payments-title">
-                    <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>`
+                    <span><!-- ko text: $t(title)--><!-- /ko --></span>`
                 </legend>
                 <br>
                 <!-- ko foreach: getRegion('beforeMethods') -->

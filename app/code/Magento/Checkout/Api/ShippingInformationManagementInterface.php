@@ -8,7 +8,7 @@ namespace Magento\Checkout\Api;
 interface ShippingInformationManagementInterface
 {
     /**
-     * @param Data\ShippingInformationInterface $addressInformation
+     * @param \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
      * @return mixed
      */
     public function saveAddressInformation(
