@@ -123,6 +123,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * Retrieve quote model instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
