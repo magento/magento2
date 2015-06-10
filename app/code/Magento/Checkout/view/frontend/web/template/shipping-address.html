@@ -26,8 +26,8 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <button type="button" data-bind="visible: !isNewAddressAdded()" data-open-modal="opc-new-shipping-address" class="action action-show-popup">
-            <span data-bind="text: isNewAddressAdded() ? $t('Edit Delivery Address') : $t('+ New Address')"></span>
+        <button type="button" data-bind="click: showFormPopUp, visible: !isNewAddressAdded()" data-open-modal="opc-new-shipping-address" class="action action-show-popup">
+            <span data-bind="text: $t('New Address')"></span>
         </button>
         <div id="opc-new-shipping-address"
              data-bind="mageInit: {
@@ -48,7 +48,10 @@
                         {
                             text: $t('Cancel'),
                             class: 'action secondary action-hide-popup',
-                            click: function() {this.closeModal()}
+                            click: function() {
+                                hideFormPopUp();
+                                this.closeModal()
+                                }
                         }]
                 }}">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->

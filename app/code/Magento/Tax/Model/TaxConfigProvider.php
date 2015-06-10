@@ -43,6 +43,7 @@ class TaxConfigProvider implements ConfigProviderInterface
             'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
             'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
+            'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
         ];
     }
 

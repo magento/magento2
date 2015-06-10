@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- TODO remove this file as soon as enhanced checkout is implemented -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.root">
@@ -41,13 +40,25 @@
                                                 </item>
                                                 <item name="shipping" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
+                                                    <item name="sortOrder" xsi:type="string">20</item>
                                                 </item>
-                                                <item name="grand_total" xsi:type="array">
-                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand_total</item>
+                                                <item name="before_grandtotal" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">uiComponent</item>
+                                                    <item name="sortOrder" xsi:type="string">30</item>
                                                     <item name="children" xsi:type="array">
-                                                        <item name="grandtotal_tax" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
-                                                        </item>
+                                                        <!-- merge your components here -->
+                                                    </item>
+                                                </item>
+                                                <item name="tax" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
+                                                </item>
+                                                <item name="grand-total" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand-total</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="exclTaxLabel" xsi:type="string">Order Total Excl. Tax</item>
+                                                        <item name="inclTaxLabel" xsi:type="string">Order Total Incl. Tax</item>
+                                                        <item name="basicCurrencyMessage" xsi:type="string">Your credit card will be charged for</item>
+                                                        <item name="title" xsi:type="string">Order Total</item>
                                                     </item>
                                                 </item>
                                             </item>
