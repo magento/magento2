@@ -11,7 +11,7 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 class ServiceDataAttributesScanner implements ScannerInterface
 {
     /**
-     * Scan provided service_data_attributes.xml and find extenstion classes.
+     * Scan provided extension_attributes.xml and find extenstion classes.
      *
      * @param array $files
      * @return array

@@ -121,7 +121,7 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
      * @param \Magento\Framework\Stdlib\String $string
      * @param Option\Validator\Pool $validatorPool
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -133,7 +133,7 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
         \Magento\Framework\Stdlib\String $string,
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_productOptionValue = $productOptionValue;

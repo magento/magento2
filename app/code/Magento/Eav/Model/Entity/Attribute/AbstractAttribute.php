@@ -125,7 +125,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -143,7 +143,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
