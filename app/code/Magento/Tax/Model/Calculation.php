@@ -180,7 +180,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param CustomerGroupRepository $customerGroupRepository
      * @param CustomerRepository $customerRepository
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -199,7 +199,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         CustomerGroupRepository $customerGroupRepository,
         CustomerRepository $customerRepository,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="test_stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
+            <resources>
+                <resource ref="Magento_CatalogInventory::cataloginventory"/>
+            </resources>
+            <join reference_table="cataloginventory_stock_item"
+                  join_on_field="entity_id"
+                  reference_field="product_id"
+                    >
+                <select_field>qty</select_field>
+                <select_field>item_id</select_field>
+            </join>
+        </attribute>
+        <attribute code="test_stock_item_qty" type="string">
+            <resources>
+                <resource ref="Magento_CatalogInventory::cataloginventory"/>
+            </resources>
+            <join reference_table="cataloginventory_stock_item"
+                  join_on_field="entity_id"
+                  reference_field="product_id"
+                    >
+                <select_field>qty</select_field>
+            </join>
+        </attribute>
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="test_group_code" type="string">
+            <join reference_table="customer_group"
+                  join_on_field="group_id"
+                  reference_field="customer_group_id"
+                    >
+                <select_field>customer_group_code</select_field>
+            </join>
+        </attribute>
+        <attribute code="test_group" type="Magento\Customer\Api\Data\GroupInterface">
+            <join reference_table="customer_group"
+                  join_on_field="group_id"
+                  reference_field="customer_group_id"
+                    >
+                <select_field>tax_class_id</select_field>
+                <select_field setter_name="setCode">customer_group_code</select_field>
+            </join>
+        </attribute>
+    </extension_attributes>
+</config>

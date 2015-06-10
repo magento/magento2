@@ -15,14 +15,14 @@ class CollectionByPagesIterator
     /**
      * Load collection page by page and apply callbacks to each collection item
      *
-     * @param \Magento\Framework\Data\Collection\Db $collection Collection to load page by page
+     * @param \Magento\Framework\Data\Collection\AbstractDb $collection Collection to load page by page
      * @param int $pageSize Number of items to fetch from db in one query
      * @param array $callbacks Array of callbacks which should be applied to each collection item
      * @return void
      */
-    public function iterate(\Magento\Framework\Data\Collection\Db $collection, $pageSize, array $callbacks)
+    public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {
-        /** @var $paginatedCollection \Magento\Framework\Data\Collection\Db */
+        /** @var $paginatedCollection \Magento\Framework\Data\Collection\AbstractDb */
         $paginatedCollection = null;
         $pageNumber = 1;
         do {

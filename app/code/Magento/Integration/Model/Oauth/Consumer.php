@@ -50,7 +50,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @param \Magento\Framework\Url\Validator $urlValidator
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -60,7 +60,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->keyLengthValidator = $keyLength;
