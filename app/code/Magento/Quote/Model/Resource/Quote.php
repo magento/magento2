@@ -156,8 +156,11 @@ class Quote extends AbstractDb
      */
     public function getReservedOrderId($quote)
     {
-        return $this->sequenceManager->getSequence(\Magento\Sales\Model\Order::ENTITY, (int)$quote->getStoreId())
-            ->getNextValue();
+        return $this->sequenceManager->getSequence(
+            \Magento\Sales\Model\Order::ENTITY,
+            $quote->getStore()->getGroup()->getDefaultStoreId()
+        )
+        ->getNextValue();
     }
 
     /**
