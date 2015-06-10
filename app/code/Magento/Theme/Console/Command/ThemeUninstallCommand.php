@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Command for uninstalling theme and backup-code feature
@@ -41,31 +42,43 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
+     * Deployment Configuration
+     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * Maintenance Mode
+     *
      * @var MaintenanceMode
      */
     private $maintenanceMode;
 
     /**
+     * Composer general dependency checker
+     *
      * @var DependencyChecker
      */
     private $dependencyChecker;
 
     /**
+     * Root composer.json information
+     *
      * @var ComposerInformation
      */
     private $composer;
 
     /**
+     * File operation to read theme directory
+     *
      * @var Filesystem
      */
     private $filesystem;
 
     /**
+     * Code remover
+     *
      * @var Remove
      */
     private $remove;
@@ -73,7 +86,7 @@ class ThemeUninstallCommand extends Command
     /**
      * Theme collection in filesystem
      *
-     * @var \Magento\Theme\Model\Theme\Collection
+     * @var Collection
      */
     private $themeCollection;
 
@@ -85,21 +98,29 @@ class ThemeUninstallCommand extends Command
     private $themeProvider;
 
     /**
+     * Application States
+     *
      * @var State
      */
     private $appState;
 
     /**
+     * System cache model
+     *
      * @var Cache
      */
     private $cache;
 
     /**
+     * Cleaning up application state service
+     *
      * @var State\CleanupFiles
      */
     private $cleanupFiles;
 
     /**
+     * BackupRollback factory
+     *
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;
@@ -119,7 +140,7 @@ class ThemeUninstallCommand extends Command
      * @param Remove $remove
      * @param State $appState
      * @param BackupRollbackFactory $backupRollbackFactory
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
         Cache $cache,
@@ -256,7 +277,7 @@ class ThemeUninstallCommand extends Command
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
             $text = count($unknownPackages) > 1 ?
-                ' are not installed composer packages' : ' is not an installed composer package';
+                ' are not installed Composer packages' : ' is not an installed Composer package';
             $messages[] = '<error>' . implode(', ', $unknownPackages) . $text . '</error>';
         }
         if (!empty($unknownThemes)) {
@@ -308,9 +329,8 @@ class ThemeUninstallCommand extends Command
             }
         }
         if (!empty($themeHasChildren)) {
-            $text = count($themeHasChildren) > 1 ?
-                ' are bases of' : ' is a base of';
-            $messages[] = '<error>Unable to delete. '
+            $text = count($themeHasChildren) > 1 ? ' are parents of' : ' is a parent of';
+            $messages[] = '<error>Unable to uninstall. '
                 . implode(', ', $themeHasChildren) . $text . ' virtual theme</error>';
         }
         return $messages;
