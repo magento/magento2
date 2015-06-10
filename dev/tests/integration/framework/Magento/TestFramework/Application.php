@@ -331,6 +331,11 @@ class Application
                     'Magento\Framework\Mail\Template\TransportBuilder'
                         => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
                 ],
+                'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
+                    'arguments' => [
+                        'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
+                    ],
+                ],
             ]
         );
 
