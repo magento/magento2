@@ -7,9 +7,10 @@ define(
     [
         'jquery',
         'mageUtils',
-        './shipping-rates-validation-rules'
+        './shipping-rates-validation-rules',
+        'mage/translate'
     ],
-    function ($, utils, validationRules) {
+    function ($, utils, validationRules, $t) {
         "use strict";
         var checkoutConfig = window.checkoutConfig;
 
@@ -21,7 +22,8 @@ define(
 
                 $.each(rules, function(field, rule) {
                     if (rule.required && utils.isEmpty(address[field])) {
-                        self.validationErrors.push('Field ' + field + ' is required.');
+                        var message = $t('Field ') + field + $t(' is required.');
+                        self.validationErrors.push(message);
                     }
                 });
 
