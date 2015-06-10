@@ -132,18 +132,30 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'name'     => $this->getAttributeValue($node, 'name'),
             'source'   => $this->getAttributeValue($node, 'source'),
             'handler'  => $this->getAttributeValue($node, 'handler'),
+            'origin'   => $this->getAttributeValue($node, 'origin') ?: $this->getAttributeValue($node, 'name'),
             'dataType' => $this->getAttributeValue($node, 'dataType'),
             'type'     => $node->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'type'),
         ];
 
         $data['fields'][$this->getAttributeValue($node, 'name')]['filters'] = [];
+        $data['fields'][$this->getAttributeValue($node, 'name')]['reference'] = [];
         /** @var $childNode \DOMNode */
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
-            $data['fields'][$this->getAttributeValue($node, 'name')]['filters'][]
-                = $this->getAttributeValue($childNode, 'class');
+            switch ($childNode->nodeName){
+                case 'filter':
+                    $data['fields'][$this->getAttributeValue($node, 'name')]['filters'][]
+                        = $this->getAttributeValue($childNode, 'class');
+                    break;
+                case 'reference':
+                    $data['fields'][$this->getAttributeValue($node, 'name')]['reference'] = [
+                        'from' => $this->getAttributeValue($childNode, 'from'),
+                        'to' => $this->getAttributeValue($childNode, 'to'),
+                    ];
+                    break;
+            }
         }
         return $data;
     }

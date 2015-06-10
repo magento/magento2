@@ -10,16 +10,16 @@ interface HandlerInterface
     /**
      * @param \Zend_Db_Select $select
      * @param SourceInterface $source
-     * @param array $fieldName
+     * @param array $fieldInfo
      * @return void
      */
-    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldName);
+    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldInfo);
 
     /**
      * @param \Zend_Db_Select $select
      * @param SourceInterface $source
-     * @param array $fieldName
+     * @param array $fieldInfo
      * @return void
      */
-    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $fieldName);
+    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $fieldInfo);
 }

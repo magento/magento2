@@ -71,6 +71,39 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="fromType">
+        <xs:annotation>
+            <xs:documentation>
+                From attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="toType">
+        <xs:annotation>
+            <xs:documentation>
+                To attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="originType">
+        <xs:annotation>
+            <xs:documentation>
+                To attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="nameType">
         <xs:annotation>
             <xs:documentation>
@@ -91,6 +124,7 @@
         <xs:attribute name="name" type="nameType" use="required"/>
         <xs:attribute name="source" type="nameType" use="optional"/>
         <xs:attribute name="handler" type="nameType" use="optional"/>
+        <xs:attribute name="origin" type="originType" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="sourceType">
@@ -130,9 +164,10 @@
     <xs:complexType name="fieldType">
         <xs:complexContent>
             <xs:extension base="fieldTypeAbstract">
-                <xs:sequence>
+                <xs:choice>
                     <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
+                    <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="1" />
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -144,6 +179,16 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="referenceType">
+        <xs:annotation>
+            <xs:documentation>
+                Index field reference.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="from" type="fromType" use="required"/>
+        <xs:attribute name="to" type="toType" use="required"/>
     </xs:complexType>
 
     <xs:simpleType name="dataType">
