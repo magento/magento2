@@ -59,6 +59,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Consumer')
             ->disableOriginalConstructor()->setMethods(
@@ -79,9 +80,10 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_consumerFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->_consumerMock));
-        $this->_nonceFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\NonceFactory'
-        )->disableOriginalConstructor()->getMock();
+        $this->_nonceFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\NonceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\TokenFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();

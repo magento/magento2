@@ -51,9 +51,10 @@ class OauthServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_consumerFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\ConsumerFactory'
-        )->disableOriginalConstructor()->getMock();
+        $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->_tokenProviderMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Token\Provider'
         )->disableOriginalConstructor()->getMock();

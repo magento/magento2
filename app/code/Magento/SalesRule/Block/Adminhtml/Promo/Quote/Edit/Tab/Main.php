@@ -263,8 +263,8 @@ class Main extends Generic implements TabInterface
             'date',
             [
                 'name' => 'from_date',
-                'label' => __('From Date'),
-                'title' => __('From Date'),
+                'label' => __('From'),
+                'title' => __('From'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]
@@ -274,8 +274,8 @@ class Main extends Generic implements TabInterface
             'date',
             [
                 'name' => 'to_date',
-                'label' => __('To Date'),
-                'title' => __('To Date'),
+                'label' => __('To'),
+                'title' => __('To'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]

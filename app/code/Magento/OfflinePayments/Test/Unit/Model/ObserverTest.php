@@ -43,13 +43,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $payment->expects($this->once())
             ->method('setAdditionalInformation')
             ->with('instructions', 'payment configuration');
-        $method = $this->getMock(
-            'Magento\Payment\Model\MethodInterface',
-            ['getInstructions', 'getFormBlockType', 'getTitle', 'getCode'],
-            [],
-            '',
-            false
-        );
+        $method = $this->getMockBuilder('\Magento\OfflinePayments\Model\Banktransfer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $method->expects($this->once())
             ->method('getInstructions')
             ->willReturn('payment configuration');
@@ -96,13 +93,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $method = $this->getMock(
-            'Magento\Payment\Model\MethodInterface',
-            ['getPayableTo', 'getMailingAddress', 'getFormBlockType', 'getTitle', 'getCode'],
-            [],
-            '',
-            false
-        );
+        $method = $this->getMockBuilder('Magento\OfflinePayments\Model\Checkmo')
+            ->disableOriginalConstructor()
+            ->getMock();
         $method->expects($this->once())
             ->method('getPayableTo')
             ->willReturn('payable to');
