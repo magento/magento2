@@ -41,7 +41,20 @@
                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                 <item name="sortOrder" xsi:type="string">1</item>
                                                 <item name="children" xsi:type="array">
+                                                    <item name="step-config" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="shipping-rates-validation" xsi:type="array">
+                                                                <item name="children" xsi:type="array">
+                                                                    <!--Step configuration components-->
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
                                                     <item name="shippingAddress" xsi:type="array">
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="deps" xsi:type="string">checkout.steps.shipping-step.step-config</item>
+                                                        </item>
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
                                                         <item name="sortOrder" xsi:type="string">1</item>
