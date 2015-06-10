@@ -43,7 +43,7 @@ class EntityRelationCompositeTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->relationProcessorMock = $this->getMockBuilder('Magento\Sales\Model\AbstractModel')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClabss();
+            ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
