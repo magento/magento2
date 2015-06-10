@@ -11,9 +11,7 @@ use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
 use Magento\Indexer\Model\Processor\Source;
-use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
-use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -51,18 +49,24 @@ class Base implements ActionInterface
     /**
      * @var Source
      */
-    private $sourceProcessor;
+    protected $sourceProcessor;
 
     /**
      * @var Handler
      */
-    private $handlerProcessor;
+    protected $handlerProcessor;
 
     /**
-     * @param Resource|Resource $resource
+     * @var string
+     */
+    protected $defaultHandler;
+
+    /**
+     * @param \Magento\Framework\App\Resource $resource
      * @param Source $sourceProcessor
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
+     * @param string $defaultHandler
      * @param array $data
      */
     public function __construct(
@@ -70,6 +74,7 @@ class Base implements ActionInterface
         Source $sourceProcessor,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
+        $defaultHandler = 'Magento\Indexer\Model\DefaultHandler',
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -77,6 +82,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourceProcessor = $sourceProcessor;
         $this->handlerProcessor = $handlerProcessor;
+        $this->defaultHandler = $defaultHandler;
     }
 
     /**
@@ -113,8 +119,9 @@ class Base implements ActionInterface
 
     protected function execute()
     {
+        $this->data['handlers']['defaultHandler'] =$this->defaultHandler;
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
-        $this->handlers = $this->sourceProcessor->process($this->data['handlers']);
+        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $select = $this->createResultSelect();
         $this->connection->insertFromSelect(
@@ -131,7 +138,9 @@ class Base implements ActionInterface
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 if (isset($field['reference']['from']) && isset($field['reference']['to'])) {
-                    $currentEntityName = $field['source']->getEntityName();
+                    $source = $field['source'];
+                    /** @var SourceInterface $source */
+                    $currentEntityName = $source->getEntityName();
                     $select->joinInner(
                         $currentEntityName,
                         new \Zend_Db_Expr(
@@ -156,9 +165,13 @@ class Base implements ActionInterface
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sources[$fieldset['source']];
+            $defaultHandler = $this->handlers['defaultHandler'];
             if (isset($fieldset['class'])) {
-                $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
-                    ->update($fieldset);
+                $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
+                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->update($fieldset);
+
+                $defaultHandlerClass = $fieldsetObject->getDefaultHandler();
+                $defaultHandler = $this->handlerProcessor->process([$defaultHandlerClass])[0];
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
@@ -169,7 +182,7 @@ class Base implements ActionInterface
                     isset($this->handlers[$field['handler']])
                         ? $this->handlers[$field['handler']]
                         : $this->handlers[$this->data['fieldsets'][$fieldsetName]['handler']]
-                            ?: $this->handlerPool->get('Magento\Indexer\Model\Handler\DefaultHandler');
+                            ?: $defaultHandler;
             }
         }
     }
