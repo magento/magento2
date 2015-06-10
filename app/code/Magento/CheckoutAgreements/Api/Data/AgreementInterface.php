@@ -139,10 +139,10 @@ interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\CheckoutAgreements\Api\Data\AgreementInterfaceInterface $extensionAttributes
+     * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\CheckoutAgreements\Api\Data\AgreementInterfaceInterface $extensionAttributes
+        \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
     );
 }

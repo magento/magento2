@@ -60,7 +60,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     /**
      * @var JoinProcessorInterface
      */
-    protected $extensionAttributesJoinProcessor;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * Constructs a checkout agreement data object.
