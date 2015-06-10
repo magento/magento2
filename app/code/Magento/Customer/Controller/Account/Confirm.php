@@ -81,7 +81,6 @@ class Confirm extends \Magento\Customer\Controller\Account
      * Confirm customer account by id and confirmation key
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @throws \Exception
      */
     public function execute()
     {
@@ -92,31 +91,27 @@ class Confirm extends \Magento\Customer\Controller\Account
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
+        try {
+            $customerId = $this->getRequest()->getParam('id', false);
+            $key = $this->getRequest()->getParam('key', false);
+            if (empty($customerId) || empty($key)) {
+                throw new \Exception(__('Bad request.'));
+            }
 
-        $customerId = $this->getRequest()->getParam('id', false);
-        $key = $this->getRequest()->getParam('key', false);
-        if (empty($customerId) || empty($key)) {
-            throw new \Exception(__('Bad request.'));
+            // log in and send greeting email
+            $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
+            $customer = $this->customerAccountManagement->activate($customerEmail, $key);
+            $this->_getSession()->setCustomerDataAsLoggedIn($customer);
+
+            $this->messageManager->addSuccess($this->getSuccessMessage());
+            $resultRedirect->setUrl($this->getSuccessRedirect());
+            return $resultRedirect;
+        } catch (StateException $e) {
+            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('There was an error confirming the account'));
         }
 
-        // log in and send greeting email
-        $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
-        $customer = $this->customerAccountManagement->activate($customerEmail, $key);
-        $this->_getSession()->setCustomerDataAsLoggedIn($customer);
-
-        $this->messageManager->addSuccess($this->getSuccessMessage());
-        $resultRedirect->setUrl($this->getSuccessRedirect());
-        return $resultRedirect;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
         return $resultRedirect->setUrl($this->_redirect->error($url));
     }

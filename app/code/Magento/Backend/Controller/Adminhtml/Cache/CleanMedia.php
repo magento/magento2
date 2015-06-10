@@ -14,24 +14,20 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
      * Clean JS/css files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException
      */
     public function execute()
     {
-        $this->_objectManager->get('Magento\Framework\View\Asset\MergeService')->cleanMergedJsCss();
-        $this->_eventManager->dispatch('clean_media_cache_after');
-        $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
+        try {
+            $this->_objectManager->get('Magento\Framework\View\Asset\MergeService')->cleanMergedJsCss();
+            $this->_eventManager->dispatch('clean_media_cache_after');
+            $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('An error occurred while clearing the JavaScript/CSS cache.'));
+        }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');
     }

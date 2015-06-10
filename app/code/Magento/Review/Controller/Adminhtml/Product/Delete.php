@@ -15,29 +15,25 @@ class Delete extends ProductController
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $reviewId = $this->getRequest()->getParam('id', false);
-        $this->reviewFactory->create()->setId($reviewId)->aggregate()->delete();
-        $this->messageManager->addSuccess(__('The review has been deleted.'));
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        if ($this->getRequest()->getParam('ret') == 'pending') {
-            $resultRedirect->setPath('review/*/pending');
-        } else {
-            $resultRedirect->setPath('review/*/');
-        }
-        return $resultRedirect;
-    }
+        try {
+            $this->reviewFactory->create()->setId($reviewId)->aggregate()->delete();
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setPath('review/*/edit/', ['id' => $this->getRequest()->getParam('id', false)]);
-        return $resultRedirect;
+            $this->messageManager->addSuccess(__('The review has been deleted.'));
+            if ($this->getRequest()->getParam('ret') == 'pending') {
+                $resultRedirect->setPath('review/*/pending');
+            } else {
+                $resultRedirect->setPath('review/*/');
+            }
+            return $resultRedirect;
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
+        }
+
+        return $resultRedirect->setPath('review/*/edit/', ['id' => $reviewId]);
     }
 }

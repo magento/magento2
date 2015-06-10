@@ -10,29 +10,24 @@ use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 class PriceAll extends UnsubscribeController
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        $this->_objectManager->create('Magento\ProductAlert\Model\Price')
-            ->deleteCustomer(
-                $this->customerSession->getCustomerId(),
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
-                    ->getStore()
-                    ->getWebsiteId()
-            );
-        $this->messageManager->addSuccess(__('You will no longer receive price alerts for this product.'));
+        try {
+            $this->_objectManager->create('Magento\ProductAlert\Model\Price')
+                ->deleteCustomer(
+                    $this->customerSession->getCustomerId(),
+                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getWebsiteId()
+                );
+            $this->messageManager->addSuccess(__('You will no longer receive price alerts for this product.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+        }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('customer/account/');
     }

@@ -53,7 +53,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * Update product(s) status action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -61,26 +60,22 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
 
-        $this->_validateMassStatus($productIds, $status);
-        $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-            ->updateAttributes($productIds, ['status' => $status], $storeId);
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
-        $this->_productPriceIndexerProcessor->reindexList($productIds);
+        try {
+            $this->_validateMassStatus($productIds, $status);
+            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
+                ->updateAttributes($productIds, ['status' => $status], $storeId);
+            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
+            $this->_productPriceIndexerProcessor->reindexList($productIds);
+        } catch (\Magento\Framework\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
+        }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath(
-            'catalog/*/',
-            ['store' => $this->getRequest()->getParam('store', 0)]
-        );
+        return $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
     }
 }
