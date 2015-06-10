@@ -305,6 +305,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getDefaultShippingRates()
     {
         $output = [];
+        $addressKey = null;
         if ($this->checkoutSession->getQuote()->getId()) {
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
             /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
@@ -323,8 +324,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
             foreach ($rates as $rate) {
                 $output[] = $rate->__toArray();
             }
+
+            if ($address->getCustomerAddressId()) {
+                $addressKey = 'customer-address' . $address->getCustomerAddressId();
+            }
         };
-        return $output;
+        return ['key' => $addressKey, 'data' => $output];
 
     }
 
