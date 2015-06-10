@@ -54,8 +54,9 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
+     * @param EntityRelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

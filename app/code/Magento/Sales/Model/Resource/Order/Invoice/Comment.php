@@ -35,16 +35,17 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
+     * @param \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
-     * @param string|null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
         \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
+        \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;

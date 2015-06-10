@@ -40,6 +40,7 @@ class Relation implements EntityRelationInterface
      *
      * @param \Magento\Sales\Model\AbstractModel $object
      * @throws \Exception
+     * @return void
      */
     public function processRelation(\Magento\Sales\Model\AbstractModel $object)
     {

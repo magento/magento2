@@ -60,6 +60,7 @@ class Relation implements EntityRelationInterface
      * Save relations for Order
      *
      * @param AbstractModel $object
+     * @return void
      * @throws \Exception
      */
     public function processRelation(AbstractModel $object)

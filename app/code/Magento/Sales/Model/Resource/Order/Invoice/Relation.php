@@ -41,6 +41,7 @@ class Relation implements EntityRelationInterface
      * Process relations for Shipment
      *
      * @param \Magento\Sales\Model\AbstractModel $object
+     * @return void
      * @throws \Exception
      */
     public function processRelation(\Magento\Sales\Model\AbstractModel $object)

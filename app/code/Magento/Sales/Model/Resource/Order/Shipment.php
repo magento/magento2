@@ -65,15 +65,4 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
 
         return parent::_beforeSave($object);
     }
-
-    /**
-     * Perform actions after object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
-    {
-
-    }
 }
