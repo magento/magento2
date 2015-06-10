@@ -30,7 +30,9 @@ class SecureTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMock('Magento\Config\Model\Resource\Config\Data', [], [], '', false);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
-        $resourceCollection = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
+        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', [], [], '', false);
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $coreConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
