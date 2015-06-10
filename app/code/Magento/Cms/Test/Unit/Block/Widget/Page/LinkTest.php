@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->linkElement == null;
+        $this->linkElement = null;
     }
 
     public function testGetHrefEmpty()

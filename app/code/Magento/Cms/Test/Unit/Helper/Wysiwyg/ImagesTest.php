@@ -157,7 +157,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return string
      */
     protected function getAbsolutePath($path)
@@ -369,7 +369,9 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->directoryWriteMock->expects($this->any())
             ->method('create')
-            ->willThrowException(new \Magento\Framework\Exception\FileSystemException(__('')));
+            ->willThrowException(
+                new \Magento\Framework\Exception\FileSystemException(__('Could not create directory.'))
+            );
 
         $this->imagesHelper->getCurrentPath();
 
@@ -412,7 +414,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $baseUrl
-     * @param string $filename
+     * @param string $fileName
      * @param bool $isUsingStaticUrls
      * @param string $expectedHtml
      * @dataProvider providerGetImageHtmlDeclarationRenderingAsTag
