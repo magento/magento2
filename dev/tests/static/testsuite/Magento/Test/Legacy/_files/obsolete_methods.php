@@ -772,6 +772,7 @@ return [
     ['getCategoryWithRoot', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
     ['getCategory', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
     ['prepareGroupPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
+    ['prepareTierPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['prepareGoogleOptimizerScripts'],
     ['prepareRedirect', 'Magento\Core\Controller\Varien\Exception'],
     ['preparePriceAlertData', 'Magento\ProductAlert\Block\Product\View'],
