@@ -6,11 +6,10 @@
 /*global alert*/
 define(
     [
-        'uiComponent',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Checkout/js/view/summary/abstract-total',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (Component, quote, priceUtils) {
+    function (Component, quote) {
         var displaySubtotalMode = window.checkoutConfig.reviewTotalsDisplayMode;
         return Component.extend({
             defaults: {
@@ -19,16 +18,14 @@ define(
             },
             excludingTaxMessage: 'Cart Subtotal (Excl. Tax)',
             includingTaxMessage: 'Cart Subtotal (Incl. Tax)',
-            getTitle: function() {
-                return "Cart Subtotal"
-            },
+            title: 'Cart Subtotal',
             totals: quote.getTotals(),
             getValue: function () {
                 var price = 0;
                 if (this.totals()) {
                     price = this.totals().subtotal;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             },
             isBothPricesDisplayed: function() {
                 return 'both' == this.displaySubtotalMode;
@@ -41,7 +38,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().subtotal_incl_tax;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             }
         });
     }

@@ -6,11 +6,10 @@
 /*global alert*/
 define(
     [
-        'uiComponent',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Checkout/js/view/summary/abstract-total',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (Component, quote, priceUtils) {
+    function (Component, quote) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -24,21 +23,21 @@ define(
                 if (this.totals()) {
                     price = this.totals().grand_total;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             },
             getBaseValue: function() {
                 var price = 0;
                 if (this.totals()) {
                     price = this.totals().base_grand_total;
                 }
-                return priceUtils.formatPrice(price, quote.getBasePriceFormat());
+                return this.getFormattedPrice(price);
             },
             getGrandTotalExclTax: function() {
                 var totals = this.totals();
                 if (!totals) {
                     return 0;
                 }
-                return priceUtils.formatPrice(totals.grand_total, quote.getPriceFormat());
+                return this.getFormattedPrice(totals.grand_total);
             },
             isBaseGrandTotalDisplayNeeded: function() {
                 var totals = this.totals();

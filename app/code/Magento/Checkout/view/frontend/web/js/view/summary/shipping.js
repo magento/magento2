@@ -7,18 +7,15 @@
 define(
     [
         'jquery',
-        'uiComponent',
+        'Magento_Checkout/js/view/summary/abstract-total',
         'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/shipping-service'
     ],
-    function ($, Component, quote, priceUtils, shippingService) {
+    function ($, Component, quote, shippingService) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/shipping'
             },
-            colspan: 3,
-            style: "",
             notCalculatedMessage: 'Not yet calculated',
             quoteIsVirtual: quote.isVirtual(),
             totals: quote.getTotals(),
@@ -33,7 +30,7 @@ define(
                 } else {
                     return this.notCalculatedMessage;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             }
         });
     }
