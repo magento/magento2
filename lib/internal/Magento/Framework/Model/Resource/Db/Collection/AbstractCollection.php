@@ -12,7 +12,7 @@ namespace Magento\Framework\Model\Resource\Db\Collection;
  * Abstract Resource Collection
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
 {
     /**
      * Model name

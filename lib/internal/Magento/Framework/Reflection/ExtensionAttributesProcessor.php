@@ -6,17 +6,18 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Api\Config\Reader as ExtensionAttributesConfigReader;
-use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Processes extension attributes and produces an array for the data.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExtensionAttributesProcessor
 {
@@ -36,9 +37,9 @@ class ExtensionAttributesProcessor
     private $authorization;
 
     /**
-     * @var ExtensionAttributesConfigReader
+     * @var Config
      */
-    private $configReader;
+    private $config;
 
     /**
      * @var bool
@@ -61,7 +62,7 @@ class ExtensionAttributesProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param AuthorizationInterface $authorization
-     * @param ExtensionAttributesConfigReader $configReader
+     * @param Config $config
      * @param bool $isPermissionChecked
      */
     public function __construct(
@@ -70,7 +71,7 @@ class ExtensionAttributesProcessor
         TypeCaster $typeCaster,
         FieldNamer $fieldNamer,
         AuthorizationInterface $authorization,
-        ExtensionAttributesConfigReader $configReader,
+        Config $config,
         $isPermissionChecked = false
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
@@ -78,7 +79,7 @@ class ExtensionAttributesProcessor
         $this->typeCaster = $typeCaster;
         $this->fieldNamer = $fieldNamer;
         $this->authorization = $authorization;
-        $this->configReader = $configReader;
+        $this->config = $config;
         $this->isPermissionChecked = $isPermissionChecked;
     }
 
@@ -173,8 +174,7 @@ class ExtensionAttributesProcessor
      */
     private function getPermissionsForTypeAndMethod($typeName, $attributeCode)
     {
-        // TODO: Move function to the Config and hope this is cached
-        $attributes = $this->configReader->read();
+        $attributes = $this->config->get();
         if (isset($attributes[$typeName]) && isset($attributes[$typeName][$attributeCode])) {
             $attributeMetadata = $attributes[$typeName][$attributeCode];
             $permissions = [];
