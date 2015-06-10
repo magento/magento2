@@ -218,7 +218,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerMetadataInterface $metadataService
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -240,7 +240,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;

@@ -97,7 +97,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param Resource\Tax $resource
      * @param Config $weeeConfig
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -113,7 +113,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         \Magento\Weee\Model\Resource\Tax $resource,
         \Magento\Weee\Model\Config $weeeConfig,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_attributeFactory = $attributeFactory;

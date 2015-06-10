@@ -91,7 +91,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -111,7 +111,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_config = $config;

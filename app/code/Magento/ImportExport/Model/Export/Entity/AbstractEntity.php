@@ -191,7 +191,7 @@ abstract class AbstractEntity
      * Get entity collection
      *
      * @param bool $resetCollection
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     abstract protected function _getEntityCollection($resetCollection = false);
 
