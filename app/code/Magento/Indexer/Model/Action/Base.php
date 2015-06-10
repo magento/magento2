@@ -57,10 +57,16 @@ class Base implements ActionInterface
     private $handlerProcessor;
 
     /**
+     * @var string
+     */
+    private $defaultHandler;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param Source $sourceProcessor
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
+     * @param string $defaultHandler
      * @param array $data
      */
     public function __construct(
@@ -68,6 +74,7 @@ class Base implements ActionInterface
         Source $sourceProcessor,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
+        $defaultHandler = 'Magento\Indexer\Model\DefaultHandler',
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -75,6 +82,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourceProcessor = $sourceProcessor;
         $this->handlerProcessor = $handlerProcessor;
+        $this->defaultHandler = $defaultHandler;
     }
 
     /**
@@ -111,7 +119,7 @@ class Base implements ActionInterface
 
     protected function execute()
     {
-        $this->data['handlers']['defaultHandler'] = 'Magento\Indexer\Model\DefaultHandler';
+        $this->data['handlers']['defaultHandler'] =$this->defaultHandler;
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
@@ -157,9 +165,13 @@ class Base implements ActionInterface
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sources[$fieldset['source']];
+            $defaultHandler = $this->handlers['defaultHandler'];
             if (isset($fieldset['class'])) {
-                $this->data['fieldsets'][$fieldsetName] = $this->fieldsetPool->get($fieldset['class'])
-                    ->update($fieldset);
+                $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
+                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->update($fieldset);
+
+                $defaultHandlerClass = $fieldsetObject->getDefaultHandler();
+                $defaultHandler = $this->handlerProcessor->process([$defaultHandlerClass])[0];
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
@@ -170,7 +182,7 @@ class Base implements ActionInterface
                     isset($this->handlers[$field['handler']])
                         ? $this->handlers[$field['handler']]
                         : $this->handlers[$this->data['fieldsets'][$fieldsetName]['handler']]
-                            ?: $this->handlers['defaultHandler'];
+                            ?: $defaultHandler;
             }
         }
     }

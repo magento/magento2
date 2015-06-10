@@ -12,4 +12,9 @@ interface FieldsetInterface
      * @return array
      */
     public function update(array $data);
+
+    /**
+     * @return string
+     */
+    public function getDefaultHandler();
 }
