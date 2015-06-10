@@ -63,10 +63,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getTrackingUrl($key, $model, $method = 'getId')
     {
         $urlPart = "{$key}:{$model->{$method}()}:{$model->getProtectCode()}";
-        $param = ['hash' => $this->urlEncoder->encode($urlPart)];
+        $params = [
+            '_direct' => 'shipping/tracking/popup',
+            '_query' => ['hash' => $this->urlEncoder->encode($urlPart)]
+        ];
 
         $storeModel = $this->_storeManager->getStore($model->getStoreId());
-        return $storeModel->getUrl('shipping/tracking/popup', $param);
+        return $storeModel->getUrl('', $params);
     }
 
     /**
