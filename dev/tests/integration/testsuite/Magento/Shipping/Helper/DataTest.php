@@ -104,7 +104,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'setId',
                 42,
                 'abc',
-                'http://localhost/index.php/shipping/tracking/popup?hash=c2hpcF9pZDo0MjphYmM,'
+                'http://localhost/index.php/shipping/tracking/popup?hash=c2hpcF9pZDo0MjphYmM%2C'
             ],
             [
                 'Magento\Sales\Model\Order\Shipment\Track',

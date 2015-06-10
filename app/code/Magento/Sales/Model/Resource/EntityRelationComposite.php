@@ -38,6 +38,7 @@ class EntityRelationComposite
 
     /**
      * @param AbstractModel $object
+     * @return void
      */
     public function processRelations(AbstractModel $object)
     {

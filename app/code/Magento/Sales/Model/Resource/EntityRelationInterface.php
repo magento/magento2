@@ -15,6 +15,7 @@ interface EntityRelationInterface
      * Process object relations
      *
      * @param \Magento\Sales\Model\AbstractModel $object
+     * @return void
      */
     public function processRelation(\Magento\Sales\Model\AbstractModel $object);
 }

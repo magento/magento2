@@ -7,6 +7,8 @@ namespace Magento\Sales\Test\Unit\Model\Resource;
 
 use \Magento\Sales\Model\Resource\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 /**
  * Class OrderTest
  *
@@ -24,14 +26,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceMock;
     /**
-     * @var \Magento\Sales\Model\Resource\Attribute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $attributeMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Handler\State|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stateHandlerMock;
-    /**
      * @var \Magento\SalesSequence\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $salesSequenceManagerMock;
@@ -39,10 +33,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\SalesSequence\Model\Sequence|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $salesSequenceMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gridAggregatorMock;
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -55,26 +45,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeGroupMock;
-    /**
-     * \Magento\Sales\Model\Website|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $websiteMock;
-    /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderItemCollectionMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Payment\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderPaymentCollectionMock;
-    /**
-     * @var \Magento\Sales\Model\Resource\Order\Status\History\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderStatusHistoryCollectionMock;
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -99,48 +69,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->attributeMock = $this->getMock('Magento\Sales\Model\Resource\Attribute', [], [], '', false);
-        $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
-        $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
-        $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->storeGroupMock = $this->getMock('Magento\Store\Model\Group', [], [], '', false);
-        $this->websiteMock = $this->getMock('Magento\Sales\Model\Website', [], [], '', false);
-        $this->customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $this->orderItemCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Item\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderPaymentCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderStatusHistoryCollectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\Collection',
-            [],
-            [],
-            '',
-            false
-        );
         $this->adapterMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
@@ -192,13 +123,15 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectRelationProcessor')
             ->willReturn($this->objectRelationProcessorMock);
 
-        $this->resource = new Order(
-            $contextMock,
-            $this->attributeMock,
-            $this->salesSequenceManagerMock,
-            $this->entitySnapshotMock,
-            $this->relationCompositeMock,
-            $this->stateHandlerMock
+        $objectManager = new ObjectManagerHelper($this);
+        $this->resource = $objectManager->getObject(
+            'Magento\Sales\Model\Resource\Order',
+            [
+                'context' => $contextMock,
+                'sequenceManager' => $this->salesSequenceManagerMock,
+                'entitySnapshot' => $this->entitySnapshotMock,
+                'entityRelationComposite' => $this->relationCompositeMock
+            ]
         );
     }
 
