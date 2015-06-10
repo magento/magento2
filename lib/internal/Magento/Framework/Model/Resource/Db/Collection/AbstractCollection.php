@@ -569,7 +569,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         parent::_afterLoad();
         foreach ($this->_items as $item) {
             $item->setOrigData();
-            if ($this->_resetItemsDataChanged) {
+            if ($this->_resetItemsDataChanged && ($item instanceof \Magento\Framework\Model\AbstractModel)) {
                 $item->setDataChanges(false);
             }
         }

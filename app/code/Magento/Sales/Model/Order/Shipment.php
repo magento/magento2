@@ -204,6 +204,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Return order history item identifier
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getEntityType()
@@ -520,6 +522,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Returns increment id
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getIncrementId()
@@ -530,6 +534,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Returns packages
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getPackages()
@@ -539,6 +545,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setPackages(array $packages = null)
     {
@@ -567,6 +574,8 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * Sets items
      *
+     * @codeCoverageIgnore
+     *
      * @param mixed $items
      * @return $this
      */
@@ -594,6 +603,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         return $this->getData(ShipmentInterface::TRACKS);
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns tracks
      *
@@ -744,7 +754,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         return $this->setData(ShipmentInterface::COMMENTS, $comments);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
