@@ -5,32 +5,51 @@
  */
 namespace Magento\Wishlist\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface\Proxy as UrlInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Item as WishlistItem;
+use Magento\Wishlist\Model\Wishlist;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Wishlist\Helper\Data
-     */
-    protected $wishlistHelper;
+    /** @var  \Magento\Wishlist\Helper\Data */
+    protected $model;
 
-    /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     */
+    /** @var  WishlistProviderInterface |\PHPUnit_Framework_MockObject_MockObject */
     protected $wishlistProvider;
 
-    /**
-     * @var \Magento\Framework\Registry
-     */
+    /** @var  Registry |\PHPUnit_Framework_MockObject_MockObject */
     protected $coreRegistry;
 
-    /**
-     * @var string
-     */
-    protected $url;
+    /** @var  PostHelper |\PHPUnit_Framework_MockObject_MockObject */
+    protected $postDataHelper;
 
-    /**
-     * @var string
-     */
-    protected $configureUrl;
+    /** @var  WishlistItem |\PHPUnit_Framework_MockObject_MockObject */
+    protected $wishlistItem;
+
+    /** @var  Product |\PHPUnit_Framework_MockObject_MockObject */
+    protected $product;
+
+    /** @var  StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    protected $storeManager;
+
+    /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
+    protected $store;
+
+    /** @var  UrlInterface |\PHPUnit_Framework_MockObject_MockObject */
+    protected $urlBuilder;
+
+    /** @var  Wishlist |\PHPUnit_Framework_MockObject_MockObject */
+    protected $wishlist;
+
+    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
 
     /**
      * Set up mock objects for tested class
@@ -39,75 +58,91 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->url = 'http://magento.com/wishlist/index/index/wishlist_id/1/?___store=default';
-        $this->configureUrl = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $store->expects($this->any())
-            ->method('getUrl')
-            ->with('wishlist/index/cart', ['item' => '%item%'])
-            ->will($this->returnValue($this->url));
-
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManager->expects($this->any())
+
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($this->store);
 
-        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface\Proxy', ['getUrl'], [], '', false);
-        if ($this->getName() == 'testGetConfigureUrl') {
-            $urlBuilder->expects($this->once())
-                ->method('getUrl')
-                ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
-                ->will($this->returnValue($this->configureUrl));
-        } else {
-            $urlBuilder->expects($this->any())
-                ->method('getUrl')
-                ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
-                ->will($this->returnValue($this->url));
-        }
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface\Proxy')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUrl'])
+            ->getMock();
 
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $context->expects($this->once())
+        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->once())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilder));
+            ->willReturn($this->urlBuilder);
 
-        $this->wishlistProvider = $this->getMock(
-            'Magento\Wishlist\Controller\WishlistProviderInterface',
-            ['getWishlist'],
-            [],
-            '',
-            false
-        );
+        $this->wishlistProvider = $this->getMockBuilder('Magento\Wishlist\Controller\WishlistProviderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->coreRegistry = $this->getMock(
-            '\Magento\Framework\Registry',
-            ['registry'],
-            [],
-            '',
-            false
-        );
+        $this->coreRegistry = $this->getMockBuilder('Magento\Framework\Registry')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->postDataHelper = $this->getMockBuilder('Magento\Framework\Data\Helper\PostHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->wishlistItem = $this->getMockBuilder('Magento\Wishlist\Model\Item')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getProduct',
+                'getWishlistItemId',
+            ])
+            ->getMock();
+
+        $this->wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->wishlistHelper = $objectManager->getObject(
+        $this->model = $objectManager->getObject(
             'Magento\Wishlist\Helper\Data',
             [
-                'context' => $context,
-                'storeManager' => $storeManager,
+                'context' => $this->context,
+                'storeManager' => $this->storeManager,
                 'wishlistProvider' => $this->wishlistProvider,
-                'coreRegistry' => $this->coreRegistry
+                'coreRegistry' => $this->coreRegistry,
+                'postDataHelper' => $this->postDataHelper
             ]
         );
     }
 
     public function testGetAddToCartUrl()
     {
-        $this->assertEquals($this->url, $this->wishlistHelper->getAddToCartUrl('%item%'));
+        $url = 'http://magento.com/wishlist/index/index/wishlist_id/1/?___store=default';
+
+        $this->store->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/cart', ['item' => '%item%'])
+            ->will($this->returnValue($url));
+
+        $this->urlBuilder->expects($this->any())
+            ->method('getUrl')
+            ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
+            ->will($this->returnValue($url));
+
+        $this->assertEquals($url, $this->model->getAddToCartUrl('%item%'));
     }
 
     public function testGetConfigureUrl()
     {
+        $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
+
         $wishlistItem = $this->getMock(
             'Magento\Wishlist\Model\Item',
             ['getWishlistItemId', 'getProductId'],
@@ -124,26 +159,112 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getProductId')
             ->will($this->returnValue(30));
 
-        $this->assertEquals($this->configureUrl, $this->wishlistHelper->getConfigureUrl($wishlistItem));
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
+            ->will($this->returnValue($url));
+
+        $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));
     }
 
     public function testGetWishlist()
     {
-        $wishlist = $this->getMock('\Magento\Wishlist\Model\Wishlist', [], [], '', false);
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->will($this->returnValue($this->wishlist));
 
-        $this->assertEquals($wishlist, $this->wishlistHelper->getWishlist());
+        $this->assertEquals($this->wishlist, $this->model->getWishlist());
     }
 
     public function testGetWishlistWithCoreRegistry()
     {
-        $wishlist = $this->getMock('\Magento\Wishlist\Model\Wishlist', [], [], '', false);
         $this->coreRegistry->expects($this->any())
             ->method('registry')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($this->wishlist);
 
-        $this->assertEquals($wishlist, $this->wishlistHelper->getWishlist());
+        $this->assertEquals($this->wishlist, $this->model->getWishlist());
+    }
+
+    public function testGetAddToCartParams()
+    {
+        $url = 'result url';
+        $storeId = 1;
+        $wishlistItemId = 1;
+
+        $this->wishlistItem->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->product);
+        $this->wishlistItem->expects($this->once())
+            ->method('getWishlistItemId')
+            ->willReturn($wishlistItemId);
+
+        $this->product->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
+            ->willReturn(true);
+        $this->product->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->store->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/index/cart')
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url, ['item' => $wishlistItemId])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem));
+    }
+
+    public function testGetSharedAddToCartUrl()
+    {
+        $url = 'result url';
+        $storeId = 1;
+        $wishlistItemId = 1;
+
+        $this->wishlistItem->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->product);
+        $this->wishlistItem->expects($this->once())
+            ->method('getWishlistItemId')
+            ->willReturn($wishlistItemId);
+
+        $this->product->expects($this->once())
+            ->method('isVisibleInSiteVisibility')
+            ->willReturn(true);
+        $this->product->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->store->expects($this->once())
+            ->method('getUrl')
+            ->with('wishlist/shared/cart')
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url, ['item' => $wishlistItemId])
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));
+    }
+
+    public function testGetSharedAddAllToCartUrl()
+    {
+        $url = 'result url';
+
+        $this->store->expects($this->once())
+            ->method('getUrl')
+            ->with('*/*/allcart', ['_current' => true])
+            ->willReturn($url);
+
+        $this->postDataHelper->expects($this->once())
+            ->method('getPostData')
+            ->with($url)
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->model->getSharedAddAllToCartUrl());
     }
 }

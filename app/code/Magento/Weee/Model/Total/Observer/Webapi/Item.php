@@ -48,10 +48,6 @@ class Item
             ->setPrice($this->getUnitDisplayPriceExclTax($item))
             ->setPriceInclTax($this->getUnitDisplayPriceInclTax($item));
 
-        if ($item->getWeeeTaxApplied()) {
-            $weeeTaxApplied = unserialize($item->getWeeeTaxApplied());
-            $item->setWeeeTaxApplied(\Zend_Json::encode($weeeTaxApplied));
-        }
         return $item;
     }
 
