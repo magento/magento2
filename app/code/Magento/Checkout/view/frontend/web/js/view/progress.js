@@ -58,7 +58,7 @@ define(
                         return quote.getFormattedShippingAddress()||false;
                     break;
                     case 'shippingMethod':
-                        return quote.getShippingMethod()||false;
+                        return false;
                     break;
                     case 'paymentMethod':
                         return quote.getPaymentMethod()||false;
@@ -74,7 +74,7 @@ define(
                 return quote.getFormattedShippingAddress();
             },
             getShippingMethod: function() {
-                return quote.getShippingMethod()
+                return 'Not yet set'
             },
             getPaymentMethod: function() {
                 return quote.getPaymentMethod();

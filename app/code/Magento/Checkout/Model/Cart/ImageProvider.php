@@ -167,13 +167,16 @@ class ImageProvider
                     $this->imageHelper->constrainOnly(true);
                     $this->imageHelper->keepAspectRatio(true);
                     $this->imageHelper->resize($imageWidth, $imageHeight);
-                    $imageUrls[$cartItem->getItemId()] = (string)$this->imageHelper;
+                    $imageUrls[$cartItem->getItemId()]['src'] = (string)$this->imageHelper;
                     break;
                 }
             }
             if (!array_key_exists($cartItem->getItemId(), $imageUrls)) {
-                $imageUrls[$cartItem->getItemId()] = $this->getPlaceholderUrl($imageType);
+                $imageUrls[$cartItem->getItemId()]['src'] = $this->getPlaceholderUrl($imageType);
             }
+            $imageUrls[$cartItem->getItemId()]['width'] = $imageWidth;
+            $imageUrls[$cartItem->getItemId()]['height'] = $imageHeight;
+            $imageUrls[$cartItem->getItemId()]['alt'] = $cartItem->getName();
         }
         return $imageUrls;
     }
