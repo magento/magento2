@@ -87,7 +87,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\StoreFactory $storeFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -98,7 +98,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

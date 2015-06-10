@@ -94,13 +94,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionCodeRegion($region, $regionId)
     {
-        $this->address->setData(
-            [
-                'region' => $region,
-                'region_id' => $regionId,
-                'country_id' => 1
-            ]
-        );
+        $this->address->setData('region', $region);
+        $this->address->setData('region_id', $regionId);
+        $this->address->setData('country_id', 1);
         $this->regionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->regionMock);
@@ -119,13 +115,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRegionCodeRegionFailure()
     {
-        $this->address->setData(
-            [
-                'region' => 1,
-                'region_id' => 1,
-                'country_id' => 1
-            ]
-        );
+        $this->address->setData('region', 1);
+        $this->address->setData('region_id', 1);
+        $this->address->setData('country_id', 1);
         $this->regionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->regionMock);
@@ -143,15 +135,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->address->setData(
-            [
-                'suffix' => 'suffix',
-                'prefix' => 'prefix',
-                'firstname' => 'firstname',
-                'middlename' => 'middlename',
-                'lastname' => 'lastname'
-            ]
-        );
+        $this->address->setData('suffix', 'suffix');
+        $this->address->setData('prefix', 'prefix');
+        $this->address->setData('firstname', 'firstname');
+        $this->address->setData('middlename', 'middlename');
+        $this->address->setData('lastname', 'lastname');
         $this->assertEquals('prefix firstname middlename lastname suffix', $this->address->getName());
     }
 }
