@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
+use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
@@ -16,24 +17,24 @@ class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
 
         $builder->startQuery(); // start one query
 
-        $builder->addCondition('someCondition1', 1.1);
+        $builder->addCondition('someCondition1');
 
         $builder->startQuery(); // start two query
 
-        $builder->addCondition('someCondition2', 1.2);
-        $builder->addCondition('someCondition3', 1.3);
+        $builder->addCondition('someCondition2');
+        $builder->addCondition('someCondition3');
 
         $builder->startQuery(); // start three query
 
-        $builder->addCondition('someCondition4', 1.4);
-        $builder->addCondition('someCondition5', 1.5);
+        $builder->addCondition('someCondition4');
+        $builder->addCondition('someCondition5');
 
         $builder->endQuery(10.1); // end three query
 
         $builder->startQuery(); // start four query
 
-        $builder->addCondition('someCondition6', 1.6);
-        $builder->addCondition('someCondition7', 1.7);
+        $builder->addCondition('someCondition6');
+        $builder->addCondition('someCondition7');
 
         $builder->endQuery(10.2); // end four query
         $builder->endQuery(10.3); // start two query
@@ -44,10 +45,10 @@ class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
 
         $result = $builder->build();
 
-        $expected = '((someCondition1 * 1.1 + (someCondition2 * 1.2 + someCondition3 * 1.3 + ' .
-            '(someCondition4 * 1.4 + someCondition5 * 1.5) * 10.1 + (someCondition6 * 1.6 + ' .
-            'someCondition7 * 1.7) * 10.2) * 10.3) * 10.4 + (0)) AS global_score';
-
+        $expected = '((someCondition1 * %1$s + (someCondition2 * %1$s + someCondition3 * %1$s + ' .
+            '(someCondition4 * %1$s + someCondition5 * %1$s) * 10.1 + (someCondition6 * %1$s + ' .
+            'someCondition7 * %1$s) * 10.2) * 10.3) * 10.4 + (0)) AS ' . $builder->getScoreAlias();
+        $expected = sprintf($expected, ScoreBuilder::WEIGHT_FIELD);
         $this->assertEquals($expected, $result);
     }
 }
