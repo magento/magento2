@@ -54,15 +54,13 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $this->action = $this->getMockForAbstractClass('Magento\Framework\App\Action\AbstractAction', [$this->context]);
     }
 
-    public function testGetDefaultRedirect()
+    public function testGetRequest()
     {
-        $expectedResult = '/index';
+        $this->assertEquals($this->request, $this->action->getRequest());
+    }
 
-        $this->redirect->expects($this->once())
-            ->method('setRefererOrBaseUrl')
-            ->willReturn('/index');
-
-        $result = $this->action->getDefaultResult();
-        $this->assertSame($expectedResult, $result);
+    public function testGetResponse()
+    {
+        $this->assertEquals($this->response, $this->action->getResponse());
     }
 }

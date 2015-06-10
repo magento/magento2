@@ -11,8 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     *
-     * @throws \Exception
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -27,18 +25,12 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->messageManager->addError(__('This rule no longer exists.'));
             return $resultRedirect->setPath('tax/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('Something went wrong deleting this tax rule.'));
         }
-    }
 
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 }

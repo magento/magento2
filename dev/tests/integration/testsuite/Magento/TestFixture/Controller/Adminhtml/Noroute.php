@@ -34,13 +34,4 @@ class Noroute implements \Magento\Framework\App\ActionInterface
     public function getResponse()
     {
     }
-
-    /**
-     * Get default result object
-     *
-     * @return void
-     */
-    public function getDefaultResult()
-    {
-    }
 }

@@ -12,28 +12,23 @@ class Delete extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
      * Delete attribute set mapping
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Exception
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('Magento\GoogleShopping\Model\Type');
-        $model->load($id);
-        if ($model->getTypeId()) {
-            $model->delete();
+        try {
+            $id = $this->getRequest()->getParam('id');
+            $model = $this->_objectManager->create('Magento\GoogleShopping\Model\Type');
+            $model->load($id);
+            if ($model->getTypeId()) {
+                $model->delete();
+            }
+            $this->messageManager->addSuccess(__('Attribute set mapping was deleted'));
+        } catch (\Exception $e) {
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addError(__("We can't delete Attribute Set Mapping."));
         }
-        $this->messageManager->addSuccess(__('Attribute set mapping was deleted'));
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);
     }

@@ -15,29 +15,23 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
         $rid = $this->getRequest()->getParam('rid', false);
         /** @var \Magento\User\Model\User $currentUser */
         $currentUser = $this->_userFactory->create()->setId($this->_authSession->getUser()->getId());
 
         if (in_array($rid, $currentUser->getRoles())) {
             $this->messageManager->addError(__('You cannot delete self-assigned roles.'));
-            $this->_redirect('adminhtml/*/editrole', ['rid' => $rid]);
-            return;
+            return $resultRedirect->setPath('adminhtml/*/editrole', ['rid' => $rid]);
         }
 
-        $this->_initRole()->delete();
-        $this->messageManager->addSuccess(__('You deleted the role.'));
-        return $this->getDefaultResult();
-    }
+        try {
+            $this->_initRole()->delete();
+            $this->messageManager->addSuccess(__('You deleted the role.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while deleting this role.'));
+        }
 
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath("*/*/");
     }
 }
