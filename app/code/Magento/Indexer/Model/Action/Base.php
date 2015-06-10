@@ -9,6 +9,8 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
+use Magento\Indexer\Model\Processor\Handler;
+use Magento\Indexer\Model\Processor\Source;
 use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
 use Magento\Indexer\Model\HandlerPool;
@@ -16,16 +18,6 @@ use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
 {
-    /**
-     * @var SourcePool
-     */
-    protected $sourcePool;
-
-    /**
-     * @var SourcePool
-     */
-    protected $handlerPool;
-
     /**
      * @var FieldsetPool
      */
@@ -57,24 +49,34 @@ class Base implements ActionInterface
     protected $data;
 
     /**
-     * @param Resource $resource
-     * @param SourcePool $sourcePool
-     * @param HandlerPool $handlerPool
+     * @var Source
+     */
+    private $sourceProcessor;
+
+    /**
+     * @var Handler
+     */
+    private $handlerProcessor;
+
+    /**
+     * @param Resource|Resource $resource
+     * @param Source $sourceProcessor
+     * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
      * @param array $data
      */
     public function __construct(
         Resource $resource,
-        SourcePool $sourcePool,
-        HandlerPool $handlerPool,
+        Source $sourceProcessor,
+        Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
-        $this->sourcePool = $sourcePool;
-        $this->handlerPool = $handlerPool;
         $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
+        $this->sourceProcessor = $sourceProcessor;
+        $this->handlerProcessor = $handlerProcessor;
     }
 
     /**
@@ -111,8 +113,8 @@ class Base implements ActionInterface
 
     protected function execute()
     {
-        $this->collectSources();
-        $this->collectHandlers();
+        $this->sources = $this->sourceProcessor->process($this->data['sources']);
+        $this->handlers = $this->sourceProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $select = $this->createResultSelect();
         $this->connection->insertFromSelect(
@@ -169,20 +171,6 @@ class Base implements ActionInterface
                         : $this->handlers[$this->data['fieldsets'][$fieldsetName]['handler']]
                             ?: $this->handlerPool->get('Magento\Indexer\Model\Handler\DefaultHandler');
             }
-        }
-    }
-
-    protected function collectSources()
-    {
-        foreach ($this->data['sources'] as $sourceName => $source) {
-            $this->sources[$sourceName] = $this->sourcePool->get($source);
-        }
-    }
-
-    protected function collectHandlers()
-    {
-        foreach ($this->data['handlers'] as $handlerName => $handler) {
-            $this->sources[$handlerName] = $this->handlerPool->get($handler);
         }
     }
 }
