@@ -25,16 +25,18 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         $resourcePrefix = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $eavConfig, $resourcePrefix);
+        parent::__construct($context, $eavConfig, $tableStrategy, $resourcePrefix);
     }
 
     /**
@@ -45,7 +47,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->_tableStrategy->useIdxTable(true);
         $this->beginTransaction();
         try {
             $this->clearTemporaryIndexTable();
