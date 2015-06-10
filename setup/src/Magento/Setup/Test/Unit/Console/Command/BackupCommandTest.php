@@ -60,9 +60,7 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\Setup\BackupRollbackFactory', $this->backupRollbackFactory],
-            ]));
+            ->will($this->returnValue($this->backupRollbackFactory));
         $command = new BackupCommand(
             $objectManagerProvider,
             $maintenanceMode,

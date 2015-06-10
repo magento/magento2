@@ -23,13 +23,6 @@ class InfoBackupsListCommandTest extends \PHPUnit_Framework_TestCase
          * |\PHPUnit_Framework_MockObject_MockObject $directoryList
          */
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $path = realpath(__DIR__);
-        $directoryList->expects($this->any())
-            ->method('getRoot')
-            ->willReturn($path);
-        $directoryList->expects($this->any())
-            ->method('getPath')
-            ->willReturn($path);
         /** @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject $file */
         $file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
         $file->expects($this->once())->method('isExists')->will($this->returnValue(true));

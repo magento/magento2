@@ -20,7 +20,7 @@ class BackupRollbackFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager->expects($this->any())
+        $objectManager->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Framework\Setup\ConsoleLogger', ['output' => $output], $consoleLogger],

@@ -238,7 +238,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
-            'You are about to remove code and database tables. Are you sure?[y/N]',
+            'You are about to remove code and/or database tables. Are you sure?[y/N]',
             false
         );
         if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
