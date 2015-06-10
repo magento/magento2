@@ -65,17 +65,8 @@ class InfoBackupsListCommand extends Command
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
             . '/' . BackupRollback::DEFAULT_BACKUP_DIRECTORY;
         if ($this->file->isExists($backupsDir)) {
-            $output->writeln(
-                '<info>Showing backup files in ' . $backupsDir
-                . ' (first part of the filename is the time it was taken) ...</info>'
-            );
             $contents = $this->file->readDirectoryRecursively($backupsDir);
-            if (empty($contents)) {
-                $output->writeln('<info>No backup files found.</info>');
-                return;
-            }
-            $table = $this->getHelperSet()->get('table');
-            $table->setHeaders(['Backup Filename', 'Backup Type']);
+            $tempTable = [];
             foreach ($contents as $path) {
                 $partsOfPath = explode('/', str_replace('\\', '/', $path));
                 $fileName = $partsOfPath[count($partsOfPath) - 1];
@@ -86,13 +77,25 @@ class InfoBackupsListCommand extends Command
                     // and filename contains the type of backup separated by '_'
                     $fileNameParts = explode('_', $filenameWithoutExtension[0]);
                     if (in_array(Factory::TYPE_MEDIA, $fileNameParts)) {
-                        $table->addRow([$fileName, Factory::TYPE_MEDIA]);
+                        $tempTable[$fileName] = Factory::TYPE_MEDIA;
                     } elseif (in_array(Factory::TYPE_DB, $fileNameParts)) {
-                        $table->addRow([$fileName, Factory::TYPE_DB]);
-                    } elseif (in_array(Factory::TYPE_FILESYSTEM, $fileNameParts)) {
-                        $table->addRow([$fileName, Factory::TYPE_FILESYSTEM]);
+                        $tempTable[$fileName] = Factory::TYPE_DB;
+                    } elseif (in_array('code', $fileNameParts)) {
+                        $tempTable[$fileName] = 'code';
                     }
                 }
+            }
+            if (empty($tempTable)) {
+                $output->writeln('<info>No backup files found.</info>');
+                return;
+            }
+            $output->writeln("<info>Showing backup files in $backupsDir.</info>");
+            /** @var \Symfony\Component\Console\Helper\Table $table */
+            $table = $this->getHelperSet()->get('table');
+            $table->setHeaders(['Backup Filename', 'Backup Type']);
+            asort($tempTable);
+            foreach ($tempTable as $key => $value) {
+                $table->addRow([$key, $value]);
             }
             $table->render($output);
         } else {

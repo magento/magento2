@@ -25,7 +25,6 @@ class BackupCommand extends AbstractSetupCommand
     /**
      * Name of input options
      */
-
     const INPUT_KEY_CODE = 'code';
     const INPUT_KEY_MEDIA = 'media';
     const INPUT_KEY_DB = 'db';
@@ -38,11 +37,15 @@ class BackupCommand extends AbstractSetupCommand
     private $objectManager;
 
     /**
+     * Handler for maintenance mode
+     *
      * @var MaintenanceMode
      */
     private $maintenanceMode;
 
     /**
+     * Factory for BackupRollback
+     *
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;

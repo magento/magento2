@@ -92,6 +92,7 @@ class BackupRollback
         if ($type === Factory::TYPE_FILESYSTEM) {
             $fsBackup->addIgnorePaths($this->getCodeBackupIgnorePaths());
             $granularType = 'Code';
+            $fsBackup->setName('code');
         } elseif ($type === Factory::TYPE_MEDIA) {
             $fsBackup->addIgnorePaths($this->getMediaBackupIgnorePaths());
             $granularType = 'Media';
@@ -295,7 +296,6 @@ class BackupRollback
     private function checkRollbackFileValidity($time, $type)
     {
         $invalidFileNameMsg = 'Invalid rollback file.';
-        $count = count($time);
         if (!in_array(count($time), [2, 3])) {
             throw new LocalizedException(new Phrase($invalidFileNameMsg));
         }
