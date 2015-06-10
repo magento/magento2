@@ -33,7 +33,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\Resource\Order\Status\History|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderStatusHistoryResourceMock;
+    protected $statusHistoryResource;
 
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
@@ -87,7 +87,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->orderStatusHistoryResourceMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Status\History')
+        $this->statusHistoryResource = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Status\History')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -156,7 +156,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             $this->addressHandlerMock,
             $this->orderItemResourceMock,
             $this->orderPaymentResourceMock,
-            $this->orderStatusHistoryResourceMock
+            $this->statusHistoryResource
         );
     }
 
@@ -214,7 +214,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->method('setOrder')
             ->with($this->orderMock)
             ->willReturnSelf();
-        $this->orderStatusHistoryResourceMock->expects($this->once())
+        $this->statusHistoryResource->expects($this->once())
             ->method('save')
             ->with($this->orderStatusHistoryMock)
             ->willReturnSelf();
