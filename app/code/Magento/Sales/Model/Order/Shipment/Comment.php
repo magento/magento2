@@ -73,6 +73,8 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     /**
      * Declare Shipment instance
      *
+     * @codeCoverageIgnore
+     *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
      */
@@ -84,6 +86,8 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
 
     /**
      * Retrieve Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
      */
@@ -105,6 +109,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
         return $this->_storeManager->getStore();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns comment
      *
@@ -163,7 +168,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
         return $this->getData(ShipmentCommentInterface::PARENT_ID);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
