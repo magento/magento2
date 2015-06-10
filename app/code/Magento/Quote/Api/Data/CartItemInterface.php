@@ -16,6 +16,8 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      */
     const KEY_ITEM_ID = 'item_id';
 
+    const KEY_PRODUCT_ID = 'product_id';
+
     const KEY_SKU = 'sku';
 
     const KEY_QTY = 'qty';
@@ -44,6 +46,21 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setItemId($itemId);
+
+    /**
+     * Return the product id.
+     *
+     * @return int
+     */
+    public function getProductId();
+
+    /**
+     * Set the product id.
+     *
+     * @param int $productId
+     * @return $this
+     */
+    public function setProductId($productId);
 
     /**
      * Returns the product SKU.

@@ -76,7 +76,6 @@ class ImageProvider
     /**
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
      * @param \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $productGallery
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Model\Product\Image\View $imageView
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
@@ -86,8 +85,8 @@ class ImageProvider
      */
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $productGallery,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\Product\Image\View $imageView,
         \Magento\Framework\View\ConfigInterface $viewConfig,
@@ -96,8 +95,8 @@ class ImageProvider
         \Magento\Framework\UrlInterface $urlBuilder
     ) {
         $this->itemRepository = $itemRepository;
+        $this->productRepository = $productRepository;
         $this->productGallery = $productGallery;
-        $this->productFactory = $productFactory;
         $this->imageHelper = $imageHelper;
         $this->imageView = $imageView;
         $this->viewConfig = $viewConfig;
@@ -158,11 +157,12 @@ class ImageProvider
         /** @see code/Magento/Catalog/Helper/Product.php */
         $items = $this->itemRepository->getList($cartId);
         foreach ($items as $cartItem) {
-            $gallery = $this->productGallery->getList($cartItem->getSku());
+            $product = $this->productRepository->getById($cartItem->getProductId());
+            $sku = $product->getTypeInstance()->getSku($product);
+            $gallery = $this->productGallery->getList($sku);
             /** @var \Magento\Catalog\Model\Product\Gallery\Entry $galleryEntry */
             foreach ($gallery as $galleryEntry) {
                 if ($galleryEntry->getDisabled() == 0 && in_array($imageType, $galleryEntry->getTypes())) {
-                    $product = $this->productFactory->create();
                     $this->imageHelper->init($product, $imageType, $galleryEntry->getFile());
                     $this->imageHelper->constrainOnly(true);
                     $this->imageHelper->keepAspectRatio(true);
