@@ -141,15 +141,14 @@ class SuggestElement extends SimpleElement
     public function isExistValueInSearchResult($value)
     {
         $needle = $this->find($this->searchResult)->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
-        foreach (str_split($value) as $symbol) {
-            $this->keys([$symbol]);
-            if ($needle->isVisible()) {
-                try {
-                    return true;
-                } catch (\Exception $e) {
-                    // In parallel run on windows change the focus is lost on element
-                    // that causes disappearing of attribute suggest list.
-                }
+        $keys = str_split($value);
+        $this->keys($keys);
+        if ($needle->isVisible()) {
+            try {
+                return true;
+            } catch (\Exception $e) {
+                // In parallel run on windows change the focus is lost on element
+                // that causes disappearing of attribute suggest list.
             }
         }
 
