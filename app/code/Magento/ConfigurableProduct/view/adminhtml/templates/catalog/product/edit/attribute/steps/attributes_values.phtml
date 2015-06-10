@@ -6,7 +6,7 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-<div data-bind="scope: 'attributes-values-step'">
+<div data-bind="scope: '<?= $block->getId()?>'">
     <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Attribute Values') ?></h1>
     <div style="padding-bottom: 10px">
         <span><?= __('Choose options from each attribute to create unique products.') ?></span>
@@ -46,10 +46,10 @@
                             type="checkbox"
                             data-bind="checkedValue: value, checked: !value || $parent.chosenOptions"
                         />
-                        <span data-bind="text: label, visible: value"></span>
-                        <input data-bind="value: label, visible: !value" type="text">
-                        <a href="#" data-bind="visible: !value, click: $parents[1].saveOption.bind($parent)">-></a>
-                        <a href="#" data-bind="visible: !value, click: $parents[1].removeOption.bind($parent)
+                        <span data-bind="text: label, visible: label"></span>
+                        <input data-bind="value: label, visible: !label" type="text">
+                        <a href="#" data-bind="visible: !label, click: $parents[1].saveOption.bind($parent)">-></a>
+                        <a href="#" data-bind="visible: !label, click: $parents[1].removeOption.bind($parent)
                         ">X</a>
                     </li>
                 </ul>
@@ -65,7 +65,7 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "attributes-values-step": {
+                    "<?= $block->getId()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
                         "appendTo": "<?= $block->getParentComponentName()?>",
                         "options_url": "<?= $block->getUrl('catalog/product_attribute/getAttributes')?>"
