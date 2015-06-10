@@ -23,7 +23,7 @@ class ServiceDataAttributesScannerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->model = new ServiceDataAttributesScanner();
-        $this->testFile = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/service_data_attributes.xml');
+        $this->testFile = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/extension_attributes.xml');
     }
 
     public function testCollectEntities()
