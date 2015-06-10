@@ -23,7 +23,7 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     protected $adminFieldsList = [
         ['pageData' => 'username', 'fixture' => 'username'],
-        ['pageData' => 'e-mail', 'fixture' => 'email'],
+        ['pageData' => 'email', 'fixture' => 'email'],
         ['pageData' => 'your_store_address', 'fixture' => 'web'],
         ['pageData' => 'magento_admin_address', 'fixture' => 'admin']
     ];
