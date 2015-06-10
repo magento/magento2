@@ -312,7 +312,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $estimatedAddress = $this->estimatedAddressFactory->create();
 
             $address = $quote->getShippingAddress();
-            if ($address) {
+            if ($address &&
+                ($address->getCountryId() || $address->getPostcode() || $address->getRegion() || $address->getRegionId())
+            ) {
                 $estimatedAddress->setCountryId($address->getCountryId());
                 $estimatedAddress->setPostcode($address->getPostcode());
                 $estimatedAddress->setRegion($address->getRegion());
