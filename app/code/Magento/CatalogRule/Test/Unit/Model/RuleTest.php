@@ -72,7 +72,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->productModel = $this->getMock(
             'Magento\Catalog\Model\Product',
             [
-                '__wakeup', 'getId'
+                '__wakeup', 'getId', 'setData'
             ],
             [],
             '',

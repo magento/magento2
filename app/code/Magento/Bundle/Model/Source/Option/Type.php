@@ -38,7 +38,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param AttributeValueFactory $customAttributeFactory
      * @param array $options
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -48,7 +48,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
         AttributeValueFactory $customAttributeFactory,
         array $options,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->options = $options;
