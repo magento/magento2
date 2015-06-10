@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Api\Data;
 
-interface GrandTotalRatesInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface GrandTotalRatesInterface
 {
     /**
      * Get tax percentage value

@@ -5,17 +5,22 @@
  */
 namespace Magento\Checkout\Block\Checkout;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class TotalsProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
     }
