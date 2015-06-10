@@ -111,6 +111,12 @@
 
         .action-show-popup {
             .css(margin, 0 0 @indent__base);
+            > span {
+                &:before {
+                    .css(padding-right, @indent__xs);
+                    content: '+';
+                }
+            }
         }
 
         .action-select-shipping-item {
@@ -151,7 +157,7 @@
     .table-checkout-shipping-method {
         thead {
             th {
-                display: none;
+                &:extend(.abs-no-display all);
             }
         }
         tbody {
@@ -271,12 +277,12 @@
         .shipping-address-item {
             &.selected-item {
                 &:before {
-                    display: none;
+                    &:extend(.abs-no-display-desktop all);
                 }
 
                 + .shipping-address-item {
                     &:before {
-                        display: none;
+                        &:extend(.abs-no-display-desktop all);
                     }
                 }
             }
@@ -293,7 +299,7 @@
 
             &:nth-child(3n+1) {
                 &:before {
-                    display: none;
+                    &:extend(.abs-no-display-desktop all);
                 }
             }
         }
