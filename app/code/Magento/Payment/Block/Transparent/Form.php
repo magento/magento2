@@ -168,7 +168,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function getMethodConfigData($fieldName)
     {
-        return $this->getMethod()->getConfigInterface()->getConfigValue($fieldName);
+        return $this->getMethod()->getConfigInterface()->getValue($fieldName);
     }
 
     /**

@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
+use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -54,15 +55,26 @@ class IndexBuilder implements IndexBuilderInterface
      */
     public function build(RequestInterface $request)
     {
+        $tableName = [$request->getIndex(), 'index_default'];
         $select = $this->getSelect()
             ->from(
-                ['search_index' => $this->resource->getTableName($request->getIndex())],
-                ['entity_id' => 'search_index.product_id']
+                ['search_index' => $this->resource->getTableName($tableName)],
+                ['entity_id' => 'product_id']
             )
             ->joinLeft(
                 ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
                 'search_index.product_id = category_index.product_id'
                 . ' AND search_index.store_id = category_index.store_id',
+                []
+            )
+            ->joinLeft(
+                ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
+                'search_index.attribute_id = cea.attribute_id',
+                [ScoreBuilder::WEIGHT_FIELD]
+            )
+            ->joinLeft(
+                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
                 []
             );
 
