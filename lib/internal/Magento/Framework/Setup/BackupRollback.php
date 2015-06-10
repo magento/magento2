@@ -158,6 +158,7 @@ class BackupRollback
         $fsRollback->setBackupsDir($backupsDir);
         $fsRollback->setBackupExtension('tgz');
         $time = explode('_', $rollbackFile);
+        $this->checkRollbackFileValidity($time, 'tgz');
         $fsRollback->setTime($time[0]);
         $this->log->log($granularType . ' rollback is starting ...');
         $fsRollback->rollback();
@@ -215,6 +216,7 @@ class BackupRollback
         $dbRollback->setBackupsDir($backupsDir);
         $dbRollback->setBackupExtension('gz');
         $time = explode('_', $rollbackFile);
+        $this->checkRollbackFileValidity($time, 'gz');
         if (count($time) === 3) {
             $thirdPart = explode('.', $time[2]);
             $dbRollback->setName($thirdPart[0]);
@@ -280,5 +282,26 @@ class BackupRollback
             }
         }
         return $ignorePaths;
+    }
+
+    /**
+     * Check if the provided backup file for rollback is valid
+     *
+     * @param array $time
+     * @param string $type
+     * @return void
+     * @throws LocalizedException
+     */
+    private function checkRollbackFileValidity($time, $type)
+    {
+        $invalidFileNameMsg = 'Invalid rollback file.';
+        $count = count($time);
+        if (!in_array(count($time), [2, 3])) {
+            throw new LocalizedException(new Phrase($invalidFileNameMsg));
+        }
+        $extension = explode('.', $time[count($time) - 1]);
+        if ($extension[count($extension) - 1] !== $type) {
+            throw new LocalizedException(new Phrase($invalidFileNameMsg));
+        }
     }
 }
