@@ -49,17 +49,17 @@ class Base implements ActionInterface
     /**
      * @var Source
      */
-    private $sourceProcessor;
+    protected $sourceProcessor;
 
     /**
      * @var Handler
      */
-    private $handlerProcessor;
+    protected $handlerProcessor;
 
     /**
      * @var string
      */
-    private $defaultHandler;
+    protected $defaultHandler;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
