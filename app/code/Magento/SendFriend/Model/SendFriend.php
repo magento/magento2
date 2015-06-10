@@ -120,7 +120,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,7 +136,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -230,7 +230,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         $name = $this->getSender()->getName();
         if (empty($name)) {
-            $errors[] = __('The sender name cannot be empty.');
+            $errors[] = __('Please enter a sender name.');
         }
 
         $email = $this->getSender()->getEmail();
@@ -240,11 +240,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         $message = $this->getSender()->getMessage();
         if (empty($message)) {
-            $errors[] = __('The message cannot be empty.');
+            $errors[] = __('Please enter a message.');
         }
 
         if (!$this->getRecipients()->getEmails()) {
-            $errors[] = __('At least one recipient must be specified.');
+            $errors[] = __('Please specify at least one recipient.');
         }
 
         // validate recipients email addresses
@@ -347,7 +347,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     {
         $product = $this->_getData('_product');
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct Product instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct product instance.'));
         }
         return $product;
     }
@@ -378,7 +378,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Framework\Object) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please define the correct Sender information.')
+                __('Please define the correct sender information.')
             );
         }
         return $sender;
