@@ -296,9 +296,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please enter a user name.
-     * @expectedExceptionMessage Please enter a first name.
-     * @expectedExceptionMessage Please enter a last name.
+     * @expectedExceptionMessage User Name is a required field.
+     * @expectedExceptionMessage First Name is a required field.
+     * @expectedExceptionMessage Last Name is a required field.
      * @expectedExceptionMessage Please enter a valid email.
      * @expectedExceptionMessage Password is required field.
      * @magentoDbIsolation enabled
