@@ -34,7 +34,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollectionMock;
 
@@ -87,13 +87,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')->getMock();
         $this->metadataServiceMock
             ->expects($this->any())
@@ -106,8 +102,12 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->setMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
+        $extensionAttributesFactory->expects($this->any())
+            ->method('extractExtensionAttributes')
+            ->willReturnArgument(1);
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -204,7 +204,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             'invalid' => true,
         ];
         $modelData = ['key1' => 'value1', 'key2' => 222];
-        $this->model->setData($modelData);
+        foreach ($modelData as $key => $value) {
+            $this->model->setData($key, $value);
+        }
         $this->addCustomAttributesToModel($attributesAsArray, $this->model);
         $this->assertEquals(
             $modelData,
