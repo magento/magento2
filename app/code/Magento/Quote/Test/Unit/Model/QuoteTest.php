@@ -147,7 +147,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote\Address',
             [
                 'isDeleted', 'getCollection', 'getId', 'getCustomerAddressId',
-                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount'
+                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount', 'setData'
             ],
             [],
             '',
@@ -746,8 +746,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getAddressType')
             ->will($this->returnValue(\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING));
         $this->quoteAddressMock->expects($this->any())
+            ->method('getAddressType')
+            ->will($this->returnValue(\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING));
+        $this->quoteAddressMock->expects($this->any())
             ->method('isDeleted')
             ->will($this->returnValue(false));
+        $this->quoteAddressMock->expects($this->any())
+            ->method('setData')
+            ->will($this->returnSelf());
         $this->quoteAddressMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($id));
