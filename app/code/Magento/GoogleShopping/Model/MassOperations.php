@@ -292,7 +292,7 @@ class MassOperations
             )
         );
         if ($totalFailed > 0 || count($errors)) {
-            array_unshift($errors, __("We cannot update %1 items.", $totalFailed));
+            array_unshift($errors, __('We can\'t update %1 item(s).', $totalFailed));
             $this->_notifier->addMajor(
                 __('Something went wrong during synchronization with Google Shopping.'),
                 $errors

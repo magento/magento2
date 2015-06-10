@@ -194,7 +194,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'Something went wrong during synchronization with Google Shopping.',
                 [
-                    __('We cannot update %1 items.', [1]),
+                    __('We can\'t update %1 item(s).', [1]),
                     __('We can\'t update item "%1" right now.', [$item->getProduct()->getName()]),
                 ]
             )->will($this->returnSelf());
