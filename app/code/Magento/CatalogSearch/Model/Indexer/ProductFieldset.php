@@ -26,15 +26,25 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
      * @var Attribute[]
      */
     private $searchableAttributes;
+    
+    /**
+     * @var string
+     */
+    private $defaultHandler;
 
     /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory
+     * @param string $defaultHandler
      */
-    public function __construct(Config $eavConfig, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        Config $eavConfig,
+        CollectionFactory $collectionFactory,
+        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler'
+    ) {
         $this->eavConfig = $eavConfig;
         $this->collectionFactory = $collectionFactory;
+        $this->defaultHandler = $defaultHandler;
     }
 
     /**
@@ -50,6 +60,14 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
         $data['fields'] = $this->merge($data['fields'], $additionalFields);
 
         return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultHandler()
+    {
+        return $this->defaultHandler;
     }
 
     /**
