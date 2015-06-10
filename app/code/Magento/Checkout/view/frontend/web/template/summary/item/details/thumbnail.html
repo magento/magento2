@@ -4,4 +4,4 @@
  * See COPYING.txt for license details.
  */
 -->
-    <img data-bind="attr: {'src': getValue($parents[1])}" />
+    <img data-bind="attr: {'src': getSrc($parents[1]), 'width': getWidth($parents[1]), 'height': getHeight($parents[1]), 'alt': getAlt($parents[1]) }"/>
