@@ -17,9 +17,33 @@ define(
             },
             displayArea: 'before_details',
             imageData: imageData,
-            getValue: function(item) {
+            getImageItem: function(item) {
                 if (this.imageData[item.item_id]) {
                     return this.imageData[item.item_id];
+                }
+                return [];
+            },
+            getSrc: function(item) {
+                if (this.imageData[item.item_id]) {
+                    return this.imageData[item.item_id]['src'];
+                }
+                return null;
+            },
+            getWidth: function(item) {
+                if (this.imageData[item.item_id]) {
+                    return this.imageData[item.item_id]['width'];
+                }
+                return null;
+            },
+            getHeight: function(item) {
+                if (this.imageData[item.item_id]) {
+                    return this.imageData[item.item_id]['height'];
+                }
+                return null;
+            },
+            getAlt: function(item) {
+                if (this.imageData[item.item_id]) {
+                    return this.imageData[item.item_id]['alt'];
                 }
                 return null;
             }

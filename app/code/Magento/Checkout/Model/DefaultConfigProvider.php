@@ -23,6 +23,8 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -148,6 +150,21 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $estimatedAddressFactory;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Shipping\Model\Config
+     */
+    protected $shippingMethodConfig;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -171,6 +188,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param CartTotalRepositoryInterface $cartTotalRepository
      * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\Shipping\Model\Config $shippingMethodConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -196,7 +216,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
         Cart\ImageProvider $imageProvider,
         \Magento\Directory\Helper\Data $directoryHelper,
         CartTotalRepositoryInterface $cartTotalRepository,
-        \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
+        \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory,
+        ScopeConfigInterface $scopeConfig,
+        \Magento\Shipping\Model\Config $shippingMethodConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -221,6 +244,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->directoryHelper = $directoryHelper;
         $this->cartTotalRepository = $cartTotalRepository;
         $this->estimatedAddressFactory = $estimatedAddressFactory;
+        $this->scopeConfig = $scopeConfig;
+        $this->shippingMethodConfig = $shippingMethodConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -255,7 +281,19 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'imageData' => $this->imageProvider->getImages($quoteId),
             'countryData' => $this->getCountryData(),
             'totalsData' => $this->getTotalsData(),
-            'shippingRates' => $this->getDefaultShippingRates()
+            'shippingRates' => $this->getDefaultShippingRates(),
+            'shippingPolicy' => [
+                'isEnabled' => $this->scopeConfig->isSetFlag(
+                    'shipping/shipping_policy/enable_shipping_policy',
+                    ScopeInterface::SCOPE_STORE
+                ),
+                'shippingPolicyContent' => $this->scopeConfig->getValue(
+                    'shipping/shipping_policy/shipping_policy_content',
+                    ScopeInterface::SCOPE_STORE
+                )
+            ],
+            'activeCarriers' => $this->getActiveCarriers(),
+            'originCountryCode' => $this->getOriginCountryCode(),
         ];
     }
 
@@ -267,6 +305,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getDefaultShippingRates()
     {
         $output = [];
+        $addressKey = null;
         if ($this->checkoutSession->getQuote()->getId()) {
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
             /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
@@ -285,8 +324,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
             foreach ($rates as $rate) {
                 $output[] = $rate->__toArray();
             }
+
+            if ($address->getCustomerAddressId()) {
+                $addressKey = 'customer-address' . $address->getCustomerAddressId();
+            }
         };
-        return $output;
+        return ['key' => $addressKey, 'data' => $output];
 
     }
 
@@ -559,5 +602,31 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $totalsArray['extension_attributes'] = $totals->getExtensionAttributes()->__toArray();
         }
         return $totalsArray;
+    }
+
+    /**
+     * Returns active carriers codes
+     * @return array
+     */
+    private function getActiveCarriers()
+    {
+        $activeCarriers = [];
+        foreach ($this->shippingMethodConfig->getActiveCarriers() as $carrier) {
+            $activeCarriers[] = $carrier->getCarrierCode();
+        }
+        return $activeCarriers;
+    }
+
+    /**
+     * Returns origin country code
+     * @return string
+     */
+    private function getOriginCountryCode()
+    {
+        return $this->scopeConfig->getValue(
+            \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()
+        );
     }
 }

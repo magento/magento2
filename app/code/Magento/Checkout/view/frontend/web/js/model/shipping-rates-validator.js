@@ -10,9 +10,10 @@ define(
         './shipping-rates-validation-rules',
         '../model/address-converter',
         '../action/select-shipping-address',
-        './postcode-validator'
+        './postcode-validator',
+        'mage/translate'
     ],
-    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator) {
+    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, $t) {
         "use strict";
         var checkoutConfig = window.checkoutConfig;
         var validators = [];
@@ -78,15 +79,18 @@ define(
 
                 postcodeElement.error(null);
                 if (!validationResult) {
-                    var errorMessage = 'Invalid Zip/Postal code for current country!';
+                    var errorMessage = $t('Invalid Zip/Postal code for current country!');
                     if (postcodeValidator.validatedPostCodeExample.length) {
-                        errorMessage += ' Example: ' + postcodeValidator.validatedPostCodeExample.join('; ');
+                        errorMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ');
                     }
                     postcodeElement.error(errorMessage);
                 }
                 return validationResult;
             },
 
+            /**
+             * Convert form data to quote address and validate fields for shipping rates
+             */
             validateFields: function() {
                 var addressFlat = addressConverter.formDataProviderToFlatData(
                     this.collectObservedData(),
@@ -98,6 +102,11 @@ define(
                 }
             },
 
+            /**
+             * Collect observed fields data to object
+             *
+             * @returns {*}
+             */
             collectObservedData: function() {
                 var observedValues = {};
                 $.each(observedElements, function(index, field) {
