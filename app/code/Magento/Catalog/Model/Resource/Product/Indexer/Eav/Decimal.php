@@ -131,9 +131,6 @@ class Decimal extends AbstractEav
      */
     public function getIdxTable($table = null)
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_eav_decimal_idx');
-        }
-        return $this->getTable('catalog_product_index_eav_decimal_tmp');
+        return $this->_tableStrategy->getTableName('catalog_product_index_eav_decimal');
     }
 }
