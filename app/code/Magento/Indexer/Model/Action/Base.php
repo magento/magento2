@@ -112,7 +112,7 @@ class Base implements ActionInterface
     protected function execute()
     {
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
-        $this->handlers = $this->sourceProcessor->process($this->data['handlers']);
+        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $select = $this->createResultSelect();
         $this->connection->insertFromSelect(
