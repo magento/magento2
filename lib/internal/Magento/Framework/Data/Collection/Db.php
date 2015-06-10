@@ -224,7 +224,14 @@ class Db extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
         $countSelect->reset(\Zend_Db_Select::COLUMNS);
 
-        $countSelect->columns('COUNT(*)');
+        if(count($this->getSelect()->getPart(\Zend_Db_Select::GROUP)) > 0) {
+            $countSelect->reset(\Zend_Db_Select::GROUP);
+            $countSelect->distinct(true);
+            $group = $this->getSelect()->getPart(\Zend_Db_Select::GROUP);
+            $countSelect->columns('COUNT(DISTINCT '.implode(', ', $group).')');
+        } else {
+            $countSelect->columns('COUNT(*)');
+        }
 
         return $countSelect;
     }
