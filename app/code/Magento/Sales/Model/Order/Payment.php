@@ -404,7 +404,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         }
         $status = false;
-        if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
+        if (!$invoice->getIsPaid()) {
             // attempt to capture: this can trigger "is_transaction_pending"
             $this->getMethodInstance()->setStore($order->getStoreId())->capture($this, $amountToCapture);
 
