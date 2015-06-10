@@ -8,7 +8,7 @@
 <tr>
     <td colspan="2" data-bind="text: $t(title)"></td>
     <td class="col subtotal">
-        <span data-bind ="text: getFormattedValue(), attr:{'data-label': $t(title)}"></span>
+        <span data-bind ="text: getValue(), attr:{'data-label': $t(title)}"></span>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->

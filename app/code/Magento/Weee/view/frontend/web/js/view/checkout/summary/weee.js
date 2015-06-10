@@ -6,12 +6,12 @@
 /*global define*/
 define(
     [
-        'uiComponent',
+        'Magento_Checkout/js/view/summary/abstract-total',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/totals',
         'Magento_Catalog/js/price-utils'
     ],
-    function (Component,quote, totals, priceUtils) {
+    function (Component,quote, totals) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -20,7 +20,7 @@ define(
             isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
             totals: totals.totals(),
             getValue: function() {
-                return priceUtils.formatPrice(this.totals.weee_tax_applied_amount, quote.getPriceFormat());
+                return this.getFormattedPrice(this.totals.weee_tax_applied_amount);
             }
         });
     }

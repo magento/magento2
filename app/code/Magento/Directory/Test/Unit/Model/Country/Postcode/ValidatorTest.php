@@ -28,8 +28,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
         $postCodes = [
             'US' => [
-                'pattern_1' => '^[0-9]{5}\-[0-9]{4}$',
-                'pattern_2' => '^[0-9]{5}$'
+                'pattern_1' => ['pattern' => '^[0-9]{5}\-[0-9]{4}$'],
+                'pattern_2' => ['pattern' => '^[0-9]{5}$']
             ]
         ];
         $this->postcodesConfigMock->expects($this->once())->method('getPostCodes')->willReturn($postCodes);
