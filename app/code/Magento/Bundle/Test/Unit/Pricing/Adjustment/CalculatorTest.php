@@ -209,7 +209,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         foreach ($optionData['selections'] as $selectionData) {
             $selections[] = $this->createSelectionMock($selectionData);
         }
-        $option->setData($optionData['data']);
+        foreach ($optionData['data'] as $key => $value) {
+            $option->setData($key, $value);
+        }
         $option->setData('selections', $selections);
         return $option;
     }
@@ -230,7 +232,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         // All items are saleable
         $selection->expects($this->any())->method('isSalable')->will($this->returnValue(true));
-        $selection->setData($selectionData['data']);
+        foreach ($selectionData['data'] as $key => $value) {
+            $selection->setData($key, $value);
+        }
         $amountMock = $this->createAmountMock($selectionData['amount']);
         $selection->expects($this->any())->method('getAmount')->will($this->returnValue($amountMock));
         $selection->expects($this->any())->method('getQuantity')->will($this->returnValue(1));
