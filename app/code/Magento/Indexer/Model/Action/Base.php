@@ -9,11 +9,10 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
+use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\Processor\Handler;
 use Magento\Indexer\Model\Processor\Source;
-use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\SourceInterface;
-use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -39,6 +38,11 @@ class Base implements ActionInterface
     protected $primarySource;
 
     /**
+     * @var HandlerPool
+     */
+    protected $handlerPool;
+
+    /**
      * @var HandlerInterface[]
      */
     protected $handlers;
@@ -59,10 +63,11 @@ class Base implements ActionInterface
     private $handlerProcessor;
 
     /**
-     * @param Resource|Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param Source $sourceProcessor
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
+     * @param HandlerPool $handlerPool
      * @param array $data
      */
     public function __construct(
@@ -70,6 +75,7 @@ class Base implements ActionInterface
         Source $sourceProcessor,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
+        HandlerPool $handlerPool,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -77,6 +83,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourceProcessor = $sourceProcessor;
         $this->handlerProcessor = $handlerProcessor;
+        $this->handlerPool = $handlerPool;
     }
 
     /**
@@ -131,7 +138,9 @@ class Base implements ActionInterface
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 if (isset($field['reference']['from']) && isset($field['reference']['to'])) {
-                    $currentEntityName = $field['source']->getEntityName();
+                    $source = $field['source'];
+                    /** @var SourceInterface $source */
+                    $currentEntityName = $source->getEntityName();
                     $select->joinInner(
                         $currentEntityName,
                         new \Zend_Db_Expr(
