@@ -303,10 +303,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
-    public function testCreateEmptyCartForCustomerException()
+    public function testCreateEmptyCartForCustomerReturnExistsQuote()
     {
         $storeId = 345;
         $userId = 567;
@@ -316,10 +313,10 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock
             ->expects($this->once())
             ->method('getActiveForCustomer')
-            ->with($userId);
+            ->with($userId)->willReturn($quoteMock);
 
         $this->quoteRepositoryMock->expects($this->never())->method('create')->willReturn($quoteMock);
-        $this->quoteRepositoryMock->expects($this->never())->method('save')->with($quoteMock);
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
         $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
