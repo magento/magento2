@@ -31,10 +31,6 @@ class Refunded extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $this->_aggregateByOrderCreatedAt($from, $to);
         $this->_aggregateByRefundCreatedAt($from, $to);
 
@@ -65,7 +61,7 @@ class Refunded extends AbstractReport
             }
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to)
             );
@@ -162,7 +158,7 @@ class Refunded extends AbstractReport
             }
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $sourceTable],

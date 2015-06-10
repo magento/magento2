@@ -67,6 +67,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->customerFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterfaceFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
@@ -109,7 +110,6 @@ class RssTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->wishlistFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($wishlist);
 
         $this->requestMock->expects($this->once())
@@ -137,7 +137,6 @@ class RssTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->wishlistFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($wishlist);
 
         $this->requestMock->expects($this->at(0))
@@ -163,7 +162,6 @@ class RssTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($customer);
 
         $this->customerRepositoryMock->expects($this->never())

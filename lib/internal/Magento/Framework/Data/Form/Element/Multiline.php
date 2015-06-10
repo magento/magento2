@@ -46,7 +46,9 @@ class Multiline extends AbstractElement
             'onchange',
             'disabled',
             'maxlength',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 
