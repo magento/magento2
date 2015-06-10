@@ -17,11 +17,6 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
      */
     private $maintenanceMode;
@@ -78,7 +73,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $composerInformation->expects($this->any())
@@ -109,7 +103,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->cache,
             $this->cleanupFiles,
             $composerInformation,
-            $this->deploymentConfig,
             $this->maintenanceMode,
             $this->filesystem,
             $this->dependencyChecker,
@@ -122,19 +115,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->tester = new CommandTester($this->command);
     }
 
-    public function testExecuteWithoutApplicationInstalled()
-    {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
-        $this->tester->execute(['theme' => ['test']]);
-        $this->assertContains(
-            'You cannot run this command because the Magento application is not installed.',
-            $this->tester->getDisplay()
-        );
-    }
-
     public function testExecuteFailedValidationNotPackage()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         // package name "dummy" is not in root composer.json file
         $dirRead->expects($this->any())
@@ -167,7 +149,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationNotTheme()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $dirRead->expects($this->any())->method('isExist')->willReturn(false);
         $this->filesystem->expects($this->any())
@@ -187,7 +168,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationMixed()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         // package name "dummy" is not in root composer.json file
         $dirRead->expects($this->any())
@@ -237,7 +217,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUpPassValidation()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         // package name "dummy" is not in root composer.json file
         $dirRead->expects($this->any())

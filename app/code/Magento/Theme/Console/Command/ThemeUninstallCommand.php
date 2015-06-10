@@ -21,7 +21,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
@@ -40,13 +39,6 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_THEMES = 'theme';
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
-
-    /**
-     * Deployment Configuration
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
 
     /**
      * Maintenance Mode
@@ -131,7 +123,6 @@ class ThemeUninstallCommand extends Command
      * @param Cache $cache
      * @param State\CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
-     * @param DeploymentConfig $deploymentConfig
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
      * @param DependencyChecker $dependencyChecker
@@ -146,7 +137,6 @@ class ThemeUninstallCommand extends Command
         Cache $cache,
         State\CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
-        DeploymentConfig $deploymentConfig,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         DependencyChecker $dependencyChecker,
@@ -159,7 +149,6 @@ class ThemeUninstallCommand extends Command
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
-        $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
@@ -205,13 +194,6 @@ class ThemeUninstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln(
-                '<error>You cannot run this command because the Magento application is not installed.</error>'
-            );
-            return;
-        }
-
         $themePaths = $input->getArgument(self::INPUT_KEY_THEMES);
         $validationMessages = $this->validate($themePaths);
         if (!empty($validationMessages)) {
