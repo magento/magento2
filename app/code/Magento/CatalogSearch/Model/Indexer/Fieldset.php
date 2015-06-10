@@ -40,7 +40,7 @@ class Fieldset implements \Magento\Indexer\Model\FieldsetInterface
     /**
      * {@inheritdoc}
      */
-    public function update($data)
+    public function update(array $data)
     {
         $searchableAttributes = $this->getSearchableAttributes();
 

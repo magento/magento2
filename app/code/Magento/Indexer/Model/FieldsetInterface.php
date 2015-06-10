@@ -8,8 +8,8 @@ namespace Magento\Indexer\Model;
 interface FieldsetInterface
 {
     /**
-     * @param [] $data
-     * @return []
+     * @param array $data
+     * @return array
      */
-    public function update($data);
+    public function update(array $data);
 }
