@@ -111,6 +111,7 @@ class Base implements ActionInterface
 
     protected function execute()
     {
+        $this->data['handlers']['defaultHandler'] = 'Magento\Indexer\Model\DefaultHandler';
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
@@ -169,7 +170,7 @@ class Base implements ActionInterface
                     isset($this->handlers[$field['handler']])
                         ? $this->handlers[$field['handler']]
                         : $this->handlers[$this->data['fieldsets'][$fieldsetName]['handler']]
-                            ?: $this->handlerPool->get('Magento\Indexer\Model\Handler\DefaultHandler');
+                            ?: $this->handlers['defaultHandler'];
             }
         }
     }
