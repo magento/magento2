@@ -14,6 +14,7 @@ define(
         "use strict";
         var shippingRates = ko.observableArray([]);
         return {
+            isLoading: ko.observable(false),
             /**
              * Set shipping rates
              *
