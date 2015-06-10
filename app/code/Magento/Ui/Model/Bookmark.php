@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Model;
 
-use Magento\Framework\Data\Collection\Db;
 use Magento\Framework\Json\Decoder;
 use Magento\Framework\Json\Encoder;
 use Magento\Framework\Model\AbstractModel;
