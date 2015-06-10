@@ -1294,6 +1294,27 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Get subtotal amount with applied discount in base currency
+     *
+     * @return float
+     */
+    public function getBaseSubtotalWithDiscount()
+    {
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+    }
+
+    /**
+     * Get subtotal amount with applied discount
+     *
+     * @return float
+     */
+    public function getSubtotalWithDiscount()
+    {
+        return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Get all total amount values
      *
      * @return array
@@ -1314,26 +1335,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Get subtotal amount with applied discount in base currency
-     *
-     * @return float
-     */
-    public function getBaseSubtotalWithDiscount()
-    {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
-    }
-
-    /**
-     * Get subtotal amount with applied discount
-     *
-     * @return float
-     */
-    public function getSubtotalWithDiscount()
-    {
-        return $this->getSubtotal() + $this->getDiscountAmount();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function _getValidationRulesBeforeSave()
@@ -1343,7 +1344,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnoreStart
      */
     public function getCountryId()
     {
