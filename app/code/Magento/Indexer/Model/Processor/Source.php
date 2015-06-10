@@ -30,8 +30,8 @@ class Source
     public function process(array $sourceNames)
     {
         $sourceObjects = [];
-        foreach ($sourceNames as $sourceName => $source) {
-            $sourceObjects[$sourceName] = $this->sourcePool->get($source);
+        foreach ($sourceNames as $name => $className) {
+            $sourceObjects[$name] = $this->sourcePool->get($className);
         }
 
         return $sourceObjects;
