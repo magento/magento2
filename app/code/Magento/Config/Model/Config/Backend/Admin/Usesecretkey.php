@@ -22,7 +22,7 @@ class Usesecretkey extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -31,7 +31,7 @@ class Usesecretkey extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_backendUrl = $backendUrl;

@@ -160,7 +160,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -178,7 +178,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_escaper = $escaper;
