@@ -154,16 +154,13 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
-        $this->themeProvider->expects($this->any())->method('hasChildThemes')->willReturn(false);
         $this->tester->execute(['theme' => ['test1', 'test2']]);
         $this->assertContains(
-            'test1 is not an installed composer package',
+            'test1 is not an installed Composer package',
             $this->tester->getDisplay()
         );
         $this->assertNotContains(
-            'test2 is not an installed composer package',
+            'test2 is not an installed Composer package',
             $this->tester->getDisplay()
         );
     }
@@ -225,11 +222,11 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dirRead);
         $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4']]);
         $this->assertContains(
-            'test1, test4 are not installed composer packages',
+            'test1, test4 are not installed Composer packages',
             $this->tester->getDisplay()
         );
         $this->assertNotContains(
-            'test2 is not an installed composer package',
+            'test2 is not an installed Composer package',
             $this->tester->getDisplay()
         );
         $this->assertContains(
@@ -274,7 +271,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
         $this->tester->execute(['theme' => ['frontend/Magento/a']]);
         $this->assertContains(
-            'Unable to delete. frontend/Magento/a is a base of virtual theme',
+            'Unable to uninstall. frontend/Magento/a is a parent of virtual theme',
             $this->tester->getDisplay()
         );
     }
@@ -287,7 +284,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
         $this->tester->execute(['theme' => ['frontend/Magento/a', 'frontend/Magento/b']]);
         $this->assertContains(
-            'Unable to delete. frontend/Magento/a, frontend/Magento/b are bases of virtual theme',
+            'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme',
             $this->tester->getDisplay()
         );
     }
