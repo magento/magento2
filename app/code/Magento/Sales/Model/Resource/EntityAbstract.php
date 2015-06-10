@@ -130,7 +130,6 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-
         /** @var \Magento\Sales\Model\AbstractModel $object */
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
             $object->setIncrementId(
