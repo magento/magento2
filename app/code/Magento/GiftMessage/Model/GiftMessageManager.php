@@ -5,7 +5,6 @@
  */
 namespace Magento\GiftMessage\Model;
 
-use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 class GiftMessageManager
@@ -100,18 +99,9 @@ class GiftMessageManager
      * @param null|int $entityId The entity ID.
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address is not set.
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
-        if ($quote->getBillingAddress()->getCountryId() === null) {
-            throw new InvalidTransitionException(__('Billing address is not set'));
-        }
-
-        // check if shipping address is set
-        if ($quote->getShippingAddress()->getCountryId() === null) {
-            throw new InvalidTransitionException(__('Shipping address is not set'));
-        }
         $message[$type][$entityId] = [
             'from' => $giftMessage->getSender(),
             'to' => $giftMessage->getRecipient(),

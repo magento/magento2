@@ -4,7 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+require __DIR__ . '/../../Customer/_files/customer.php';
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+$customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+$customer = $customerRepository->getById(1);
 
 /** @var \Magento\GiftMessage\Model\Message $message */
 $message = $objectManager->create('Magento\GiftMessage\Model\Message');
@@ -22,7 +28,7 @@ $quote->setData(
         'reserved_order_id' => 'message_order_21',
         'gift_message_id' => $message->getId(),
     ]
-);
+)->assignCustomer($customer);
 $quote->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
