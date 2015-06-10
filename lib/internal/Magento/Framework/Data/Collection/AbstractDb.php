@@ -841,6 +841,16 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
+     * Get collection item object class name.
+     *
+     * @return string
+     */
+    public function getItemObjectClass()
+    {
+        return $this->_itemObjectClass;
+    }
+
+    /**
      * Identify main table alias or its name if alias is not defined.
      *
      * @return string

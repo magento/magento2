@@ -17,11 +17,11 @@ interface JoinProcessorInterface
      * Processes extension attributes join instructions to add necessary joins to the collection of extensible entities.
      *
      * @param DbCollection $collection
-     * @param string $extensibleEntityClass
+     * @param string|null $extensibleEntityClass
      * @return void
      * @throws \LogicException
      */
-    public function process(DbCollection $collection, $extensibleEntityClass);
+    public function process(DbCollection $collection, $extensibleEntityClass = null);
 
     /**
      * Extract extension attributes into separate extension object.
