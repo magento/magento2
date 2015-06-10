@@ -8,6 +8,9 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 
+/**
+ * @codeCoverageIgnoreStart
+ */
 class ShippingInformation extends AbstractExtensibleModel implements ShippingInformationInterface
 {
     /**

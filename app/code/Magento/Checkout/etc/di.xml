@@ -18,4 +18,5 @@
     </type>
     <preference for="Magento\Checkout\Api\GuestShippingInformationManagementInterface" type="Magento\Checkout\Model\GuestShippingInformationManagement" />
     <preference for="Magento\Checkout\Api\Data\ShippingInformationInterface" type="Magento\Checkout\Model\ShippingInformation" />
+    <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails" />
 </config>
