@@ -27,7 +27,9 @@ class TotalsProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     {
         $configData = $this->scopeConfig->getValue('sales/totals_sort');
         $totals = $jsLayout['components']['checkout']['children']['summary']['children']['totals']['children'];
-        foreach($totals as $code => &$total) {
+        foreach ($totals as $code => &$total) {
+            //convert JS naming style to config naming style
+            $code = str_replace('-', '_', $code);
             if (array_key_exists($code, $configData)) {
                 $total['sortOrder'] = $configData[$code];
             }

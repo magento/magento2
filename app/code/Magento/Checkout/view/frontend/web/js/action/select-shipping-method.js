@@ -10,28 +10,10 @@ define(
         'Magento_Checkout/js/model/shipping-service',
         'mage/translate'
     ],
-    function (quote, urlBuilder, shippingService, $t) {
+    function (quote) {
         "use strict";
-        return function (code, customOptions, callbacks) {
-            if (!code) {
-                alert($t('Please specify a shipping method'));
-                return;
-            }
-
-            var proceed = true;
-            _.each(callbacks, function (callback) {
-                proceed = proceed && callback();
-            });
-
-            if (proceed) {
-                var shippingMethodCode = code.split("_"),
-                    shippingRate = shippingService.getRateByCode(shippingMethodCode)[0];
-
-                quote.setShippingMethod(shippingMethodCode);
-                quote.setSelectedShippingMethod(code);
-                quote.setShippingCustomOptions(customOptions);
-                quote.setCollectedTotals('shipping', shippingRate.amount);
-            }
-        };
+        return function (shippingMethod) {
+            quote.shippingMethod(shippingMethod)
+        }
     }
 );

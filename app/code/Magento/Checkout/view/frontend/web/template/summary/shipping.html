@@ -6,11 +6,11 @@
 -->
 <!-- ko if: quoteIsVirtual == 0 -->
     <tr class="totals shipping excl">
-        <th data-bind="attr: {'style':style, 'colspan': colspan }" class="mark" scope="row">
+        <th colspan="3"  class="mark" scope="row">
             <p data-bind="text: $t(title)"></p>
             <p data-bind="text: $t(getShippingMethodTitle())"></p>
         </th>
-        <td  data-bind="text: $t(getValue()), attr: {'style':style, 'data-th': $t(title)}" class="amount"></td>
+        <td  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}" class="amount"></td>
     </tr>
 <!-- /ko -->
 

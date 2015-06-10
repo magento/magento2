@@ -28,6 +28,7 @@ define(
             isCustomerLoggedIn: customer.isLoggedIn,
             forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
             emailCheckTimeout: 0,
+            isLoading: ko.observable(false),
             initialize: function() {
                 this._super();
                 var self = this;
@@ -51,12 +52,15 @@ define(
                 var self = this;
                 this.validateRequest();
                 this.isEmailCheckComplete = $.Deferred();
+                this.isLoading(true);
                 this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
                 $.when(this.isEmailCheckComplete).done(function() {
                     self.isPasswordVisible(false);
                 }).fail( function() {
                     self.isPasswordVisible(true);
+                }).always(function () {
+                    self.isLoading(false);
                 });
             },
             validateRequest: function() {

@@ -42,6 +42,9 @@ define([], function() {
             },
             getKey: function() {
                 return this.getType() + this.customerAddressId;
+            },
+            isEditable: function() {
+                return false;
             }
         }
     }

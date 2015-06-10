@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" data-bind=", attr: {'class': stepClassAttributes() }" role="presentation">
-    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
-        <span class="number" data-bind="text: stepNumber()"></span>
+<li id="opc-payment" role="presentation">
+    <div class="step-title" data-role="title">
         <h2 data-bind="text: $t('Payment Information')"></h2>
     </div>
     <div id="checkout-step-payment"
@@ -14,7 +13,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isVisible() && quoteHasShippingMethod()">
+         data-bind="fadeVisible: isVisible">
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
@@ -45,18 +44,6 @@
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
             </fieldset>
-            <div class="actions-toolbar" id="payment-buttons-container">
-                <div class="primary">
-                    <button data-role="opc-continue"
-                            type="submit"
-                            class="button action continue primary">
-                        <span><!-- ko text: $t('Continue')--><!-- /ko --></span>
-                    </button>
-                </div>
-                <div class="secondary">
-                    <a class="action back" href="#" data-bind="click: backToShippingMethod"><span>Back</span></a>
-                </div>
-            </div>
         </form>
     </div>
 </li>

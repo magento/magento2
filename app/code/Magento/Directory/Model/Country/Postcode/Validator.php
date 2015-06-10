@@ -29,7 +29,7 @@ class Validator implements ValidatorInterface
         if (isset($postCodes[$countryId]) && is_array($postCodes[$countryId])) {
             $patterns = $postCodes[$countryId];
             foreach ($patterns as $pattern) {
-                preg_match('/' . $pattern . '/', $postcode, $matches);
+                preg_match('/' . $pattern['pattern'] . '/', $postcode, $matches);
                 if (count($matches)) {
                     return true;
                 }

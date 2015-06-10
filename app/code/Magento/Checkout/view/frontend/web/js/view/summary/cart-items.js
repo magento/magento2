@@ -6,33 +6,19 @@
 /*global define*/
 define(
     [
-        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/totals',
         'uiComponent'
     ],
-    function (quote, Component) {
+    function (totals, Component) {
         "use strict";
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/cart-items'
             },
-            getItemsCount: function() {
-                var totals = quote.getTotals()();
-                return totals.items.length;
-            },
-            getItems: function() {
-                var totals = quote.getTotals()();
-                if (!totals || !totals.items) {
-                    return [];
-                }
-                return totals.items;
-            },
+            totals: totals.totals(),
+            getItems: totals.getItems(),
             getItemsQty: function() {
-                var qty = 0;
-                var items = this.getItems();
-                for(var i in items) {
-                    qty += items[i].qty;
-                }
-                return qty;
+                return parseInt(this.totals.items_qty) || 0;
             }
         });
     }

@@ -35,8 +35,9 @@ define(
                 if (cache) {
                     shippingService.setShippingRates(cache);
                 } else {
+                    shippingService.isLoading(true);
                     storage.post(
-                        serviceUrl, payload
+                        serviceUrl, payload, false
                     ).done(
                         function (result) {
                             rateRegistry.set(address.getCacheKey(), result);
@@ -47,6 +48,10 @@ define(
                             var error = JSON.parse(response.responseText);
                             errorList.add(error);
                             shippingService.setShippingRates([]);
+                        }
+                    ).always(
+                        function () {
+                            shippingService.isLoading(false);
                         }
                     );
                 }

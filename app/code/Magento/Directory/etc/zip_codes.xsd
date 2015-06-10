@@ -32,6 +32,7 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="id" use="required"/>
+                <xs:attribute type="xs:string" name="example" use="required"/>
                 <xs:attribute type="xs:boolean" name="active" use="optional"/>
             </xs:extension>
         </xs:simpleContent>

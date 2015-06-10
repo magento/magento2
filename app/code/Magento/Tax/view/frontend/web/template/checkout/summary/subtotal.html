@@ -6,26 +6,26 @@
 -->
 <!-- ko if: isBothPricesDisplayed() -->
 <tr class="totals sub excl">
-    <th data-bind="text: excludingTaxMessage, attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+    <th colspan="3" data-bind="text: excludingTaxMessage" class="mark" scope="row">
     </th>
-    <td data-bind="text: getValue(), attr: {'style': style, 'data-th': $t(excludingTaxMessage) }" class="amount"></td>
+    <td data-bind="text: getValue(), attr: {'data-th': $t(excludingTaxMessage) }" class="amount"></td>
 </tr>
 <tr class="totals sub incl">
-    <th data-bind="text: includingTaxMessage, attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+    <th colspan="3" data-bind="text: includingTaxMessage" class="mark" scope="row">
     </th>
-    <td data-bind="text: getValueInclTax(), attr: {'style': style, 'data-th': $t(includingTaxMessage) }" class="amount">
+    <td data-bind="text: getValueInclTax(), attr: {'data-th': $t(includingTaxMessage) }" class="amount">
     </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: !isBothPricesDisplayed() && isIncludingTaxDisplayed() -->
 <tr class="totals sub">
-    <th data-bind="text: $t(getTitle()), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row"></th>
-    <td data-bind="text: getValueInclTax(), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
+    <th  colspan="3" data-bind="text: $t(getTitle())" class="mark" scope="row"></th>
+    <td data-bind="text: getValueInclTax(), attr: {'data-th': $t(getTitle())}" class="amount"></td>
 </tr>
 <!-- /ko -->
 <!-- ko if: !isBothPricesDisplayed() && !isIncludingTaxDisplayed() -->
 <tr class="totals sub">
-    <th data-bind="text: $t(getTitle()), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row"></th>
-    <td data-bind="text: getValue(), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
+    <th  colspan="3" data-bind="text: $t(getTitle())" class="mark" scope="row"></th>
+    <td data-bind="text: getValue(), attr: {'data-th': $t(getTitle())}" class="amount"></td>
 </tr>
 <!-- /ko -->

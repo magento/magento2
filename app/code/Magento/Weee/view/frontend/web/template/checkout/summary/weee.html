@@ -4,9 +4,9 @@
 * See COPYING.txt for license details.
 */
 -->
-<!-- ko if: isIncludedInSubtotal && getPureValue() > 0 -->
+<!-- ko if: isIncludedInSubtotal && totals.weee_tax_applied_amount > 0 -->
 <tr class="totals">
-    <th data-bind="text: title, attr: {'colspan': colspan}" class="mark" scope="row"></th>
+    <th data-bind="text: title" class="mark" scope="row"></th>
     <td class="amount" data-bind="attr: {'data-th': $t(title) }">
         <span data-bind="text: getValue()"></span>
     </td>

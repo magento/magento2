@@ -13,7 +13,6 @@ define(
         var quoteData = window.checkoutConfig.quoteData;
         var basePriceFormat = window.checkoutConfig.basePriceFormat;
         var priceFormat = window.checkoutConfig.priceFormat;
-        var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable(window.checkoutConfig.totalsData);
         var shippingCustomOptions = ko.observable(null);
@@ -23,6 +22,7 @@ define(
         return {
             totals: totals,
             shippingAddress: shippingAddress,
+            shippingMethod: shippingMethod,
 
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -74,18 +74,6 @@ define(
             },
             getPaymentMethod: function() {
                 return paymentMethod;
-            },
-            setShippingMethod: function(shippingMethodCode) {
-                shippingMethod(shippingMethodCode);
-            },
-            getShippingMethod: function() {
-                return shippingMethod;
-            },
-            getSelectedShippingMethod: function() {
-                return selectedShippingMethod;
-            },
-            setSelectedShippingMethod: function(shippingMethod) {
-                selectedShippingMethod(shippingMethod);
             },
             getStoreCode: function() {
                 return storeCode;
