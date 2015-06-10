@@ -37,23 +37,6 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param Attribute $attribute
-     * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param string|null $resourcePrefix
-     */
-    public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
-        Attribute $attribute,
-        Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        $resourcePrefix = null
-    ) {
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
-    }
-
-    /**
      * Perform actions before object save
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
@@ -68,29 +51,5 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
         }
 
         return parent::_beforeSave($object);
-    }
-
-    /**
-     * Perform actions after object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
-    {
-        /** @var \Magento\Sales\Model\Order\Creditmemo $object */
-        if (null !== $object->getItems()) {
-            foreach ($object->getItems() as $item) {
-                $item->setParentId($object->getId());
-                $item->save();
-            }
-        }
-
-        if (null !== $object->getComments()) {
-            foreach ($object->getComments() as $comment) {
-                $comment->save();
-            }
-        }
-        return parent::processRelations($object);
     }
 }
