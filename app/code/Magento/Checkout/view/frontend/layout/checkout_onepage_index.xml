@@ -181,6 +181,14 @@
                                                                 <item name="children" xsi:type="array">
                                                                     <!-- merge additional data before payment methods here -->
                                                                 </item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="validate-select" xsi:type="string">true</item>
+                                                                </item>
+                                                                <!-- Value of region_id field is filtered by the value of county_id attribute -->
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
                                                             <item name="afterMethods" xsi:type="array">

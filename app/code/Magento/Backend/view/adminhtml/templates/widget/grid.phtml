@@ -31,7 +31,7 @@ $numColumns = sizeof($block->getColumns());
 
         <div class="admin__data-grid-header admin__data-grid-toolbar">
             <?php $massActionAvailable = $block->getChildBlock('grid.massaction') && $block->getChildBlock('grid.massaction')->isAvailable() ?>
-            <?php if ($block->getPagerVisibility() || $block->getExportTypes() || $block->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
+            <?php if ($block->getPagerVisibility() || $block->getExportTypes() || $block->getChildBlock('grid.columnSet')->getFilterVisibility() || $massActionAvailable): ?>
             <div class="admin__data-grid-header-row">
                 <?php if ($massActionAvailable): ?>
                     <?php echo $block->getMainButtonsHtml() ? '<div class="admin__filter-actions">' . $block->getMainButtonsHtml() . '</div>' : ''; ?>
