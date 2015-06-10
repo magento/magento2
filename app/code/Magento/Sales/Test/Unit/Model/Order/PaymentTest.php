@@ -241,7 +241,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         // check fix for partial refunds in Payflow Pro
         $this->paymentMethodMock->expects($this->once())
             ->method('canVoid')
-            ->with($this->payment)
             ->willReturn(false);
 
         $this->assertEquals($this->payment, $this->payment->cancel());
