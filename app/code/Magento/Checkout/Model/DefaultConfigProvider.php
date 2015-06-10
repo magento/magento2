@@ -312,7 +312,13 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $estimatedAddress = $this->estimatedAddressFactory->create();
 
             $address = $quote->getShippingAddress();
-            if ($address) {
+            if ($address &&
+                ($address->getCountryId()
+                    || $address->getPostcode()
+                    || $address->getRegion()
+                    || $address->getRegionId()
+                )
+            ) {
                 $estimatedAddress->setCountryId($address->getCountryId());
                 $estimatedAddress->setPostcode($address->getPostcode());
                 $estimatedAddress->setRegion($address->getRegion());
@@ -392,13 +398,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quoteData = [];
         if ($this->checkoutSession->getQuote()->getId()) {
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
-            // the following condition is a legacy logic left here for compatibility
-            if (!$quote->getCustomer()->getId()) {
-                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod('guest'));
-            } else {
-                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod(null));
-            }
-
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 

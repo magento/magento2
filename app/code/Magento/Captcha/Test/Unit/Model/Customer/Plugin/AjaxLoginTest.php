@@ -52,7 +52,13 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $this->sessionManagerMock = $this->getMock('Magento\Checkout\Model\Session', ['setUsername'], [], '', false);
         $this->captchaHelperMock = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
         $this->captchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
-        $this->jsonFactoryMock = $this->getMock('Magento\Framework\Controller\Result\JsonFactory', [], [], '', false);
+        $this->jsonFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\Result\JsonFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->resultJsonMock = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->loginControllerMock = $this->getMock('Magento\Customer\Controller\Ajax\Login', [], [], '', false);

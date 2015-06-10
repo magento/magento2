@@ -17,16 +17,12 @@
                                     <item name="children" xsi:type="array">
                                         <item name="shipping-step" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="shippingAddress" xsi:type="array">
+                                                <item name="step-config" xsi:type="array">
                                                     <item name="children" xsi:type="array">
-                                                        <item name="shipping-address-fieldset" xsi:type="array">
+                                                        <item name="shipping-rates-validation" xsi:type="array">
                                                             <item name="children" xsi:type="array">
-                                                                <item name="shipping-rates-validation" xsi:type="array">
-                                                                    <item name="children" xsi:type="array">
-                                                                        <item name="ups-rates-validation" xsi:type="array">
-                                                                            <item name="component" xsi:type="string">Magento_Ups/js/view/shipping-rates-validation</item>
-                                                                        </item>
-                                                                    </item>
+                                                                <item name="ups-rates-validation" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Magento_Ups/js/view/shipping-rates-validation</item>
                                                                 </item>
                                                             </item>
                                                         </item>

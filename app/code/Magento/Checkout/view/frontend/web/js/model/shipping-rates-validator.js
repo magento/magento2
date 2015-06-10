@@ -18,7 +18,7 @@ define(
         var checkoutConfig = window.checkoutConfig;
         var validators = [];
         var observedElements = [];
-        var postcodeElement;
+        var postcodeElement = null;
 
         return {
             validateAddressTimeout: 0,
@@ -62,7 +62,7 @@ define(
                         }
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function() {
-                            if (self.postcodeValidation()) {
+                            if (postcodeElement != null && self.postcodeValidation()) {
                                 self.validateFields();
                             }
                         }, self.validateDelay);
