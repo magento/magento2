@@ -51,7 +51,7 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
         $this->extensionAttributesFactoryMock = $this->getMock(
-            '\Magento\Framework\Api\ExtensionAttributesFactory',
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
             [],
             [],
             '',
