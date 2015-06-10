@@ -35,10 +35,6 @@ define([
     };
 
     var viewModel = Collapsible.extend({
-        initialize: function () {
-            this._super();
-            return this;
-        },
         attributes: ko.observableArray([]),
         createOption: function (attribute) {
             attribute.options.push({value:0, label:''});
@@ -55,6 +51,7 @@ define([
         },
         removeAttribute: function (attribute) {
             viewModel.prototype.attributes.remove(attribute);
+            this.wizard.notifyMessage('An attribute has been removed. This attribute will no longer appear in your configurations.', false);
         },
         createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
@@ -74,10 +71,8 @@ define([
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'value'));
         },
-        getCollapsibleSymbol: function (attribute) {
-            return attribute.opened() ? '-' : '+';
-        },
         render: function(wizard) {
+            this.wizard = wizard;
             $.ajax({
                 type: "POST",
                 url: this.options_url,
