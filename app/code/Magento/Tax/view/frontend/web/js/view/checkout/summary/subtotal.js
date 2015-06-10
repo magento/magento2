@@ -17,8 +17,6 @@ define(
                 displaySubtotalMode: displaySubtotalMode,
                 template: 'Magento_Tax/checkout/summary/subtotal'
             },
-            colspan: 3,
-            style: "",
             excludingTaxMessage: 'Cart Subtotal (Excl. Tax)',
             includingTaxMessage: 'Cart Subtotal (Incl. Tax)',
             getTitle: function() {
