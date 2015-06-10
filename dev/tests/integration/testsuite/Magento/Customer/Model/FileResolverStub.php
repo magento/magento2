@@ -21,7 +21,7 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
                 'path' => realpath(__DIR__ . '/../_files/etc'),
             ]
         );
-        $paths = ['service_data_attributes.xml'];
+        $paths = ['extension_attributes.xml'];
         return new \Magento\Framework\Config\FileIterator($readDirectory, $paths);
     }
 }

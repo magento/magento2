@@ -40,7 +40,7 @@ class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Desig
                 );
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We cannot find file'));
+            $this->messageManager->addException($e, __('We can\'t find file.'));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }

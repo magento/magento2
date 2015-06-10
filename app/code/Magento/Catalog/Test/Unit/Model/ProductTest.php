@@ -11,6 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
 /**
  * Product Test
@@ -157,6 +158,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $entityCollectionProviderMock;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -203,7 +209,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $actionValidatorMock = $this->getMock(
             '\Magento\Framework\Model\ActionValidator\RemoveAction',
             [],
@@ -219,7 +225,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
-        $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
+        $contextMock->expects($this->any())
+            ->method('getEventDispatcher')
+            ->will($this->returnValue($this->eventManagerMock));
         $contextMock->expects($this->any())
             ->method('getCacheManager')
             ->will($this->returnValue($cacheInterfaceMock));
@@ -415,16 +423,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->model->getCategoryIds());
     }
 
+    public function testGetStatusInitial()
+    {
+        $this->assertEquals(Status::STATUS_ENABLED, $this->model->getStatus());
+    }
+
     public function testGetStatus()
     {
         $this->model->setStatus(null);
-        $expected = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
-        $this->assertEquals($expected, $this->model->getStatus());
+        $this->assertEquals(Status::STATUS_ENABLED, $this->model->getStatus());
     }
 
     public function testIsInStock()
     {
-        $this->model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $this->model->setStatus(Status::STATUS_ENABLED);
         $this->assertTrue($this->model->isInStock());
     }
 
@@ -510,7 +522,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->model->setOrigData($key, $value);
             }
         }
-        $this->model->setData($data);
+        foreach ($data as $key => $value) {
+            $this->model->setData($key, $value);
+        }
         $this->model->isDeleted($isDeleted);
         $this->assertEquals($expected, $this->model->getIdentities());
     }
@@ -521,12 +535,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function getIdentitiesProvider()
     {
         return [
-            [
+            'no changes' => [
                 ['catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
             ],
-            [
+            'new product' => [
                 ['catalog_product_1', 'catalog_category_product_1'],
                 null,
                 [
@@ -537,22 +551,55 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'is_changed_categories' => true
                 ]
             ],
-            [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+            'status and category change' => [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [2],
+                    'status' => 1,
+                    'affected_category_ids' => [1, 2],
+                    'is_changed_categories' => true
+                ],
             ],
-            [
+            'status change only' => [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_7'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 1],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 2],
+            ],
+            'status changed, category unassigned' => [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [],
+                    'status' => 1,
+                    'is_changed_categories' => true,
+                    'affected_category_ids' => [5]
+                ],
+            ],
+            'no status changes' => [
                 [0 => 'catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
-            ],
-            [
-                [0 => 'catalog_product_1'],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [], 'status' => 1],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             ]
         ];
+    }
+
+    public function testStatusAfterLoad()
+    {
+        $this->resource->expects($this->once())->method('load')->with($this->model, 1, null);
+        $this->eventManagerMock->expects($this->exactly(4))->method('dispatch');
+        $this->model->load(1);
+        $this->assertEquals(
+            Status::STATUS_ENABLED,
+            $this->model->getData(\Magento\Catalog\Model\Product::STATUS)
+        );
+        $this->assertFalse($this->model->hasDataChanges());
+        $this->model->setStatus(Status::STATUS_DISABLED);
+        $this->assertTrue($this->model->hasDataChanges());
     }
 
     /**
@@ -1142,5 +1189,63 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'receive null' => [null],
             'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
         ];
+    }
+
+    public function testGetOptions()
+    {
+        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // the productModel
+        $productModel = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductOption' => $optionInstanceMock,
+            ]
+        );
+        $productModel->setHasOptions(true);
+
+        $option1Id = 2;
+        $optionMock1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock1->expects($this->once())
+            ->method('getId')
+            ->willReturn($option1Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+
+        $option2Id = 3;
+        $optionMock2 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'setProduct'])
+            ->getMock();
+        $optionMock2->expects($this->once())
+            ->method('getId')
+            ->willReturn($option2Id);
+        $optionMock1->expects($this->once())
+            ->method('setProduct')
+            ->with($productModel)
+            ->willReturn($option1Id);
+        $options = [$optionMock1, $optionMock2];
+
+        $optionInstanceMock->expects($this->once())
+            ->method('getProductOptionCollection')
+            ->with($productModel)
+            ->willReturn($options);
+
+        $expectedOptions = [
+            $option1Id => $optionMock1,
+            $option2Id => $optionMock2
+        ];
+        $this->assertEquals($expectedOptions, $productModel->getOptions());
+
+        //Calling the method again, empty options array will be returned
+        $productModel->setOptions([]);
+        $this->assertEquals([], $productModel->getOptions());
     }
 }
