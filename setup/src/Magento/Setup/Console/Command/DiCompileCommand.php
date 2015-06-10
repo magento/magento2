@@ -102,7 +102,7 @@ class DiCompileCommand extends Command
             'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
         ];
         $dataAttributesIncludePattern = [
-            'service_data_attributes' => '/\/etc\/([a-zA-Z_]*\/service_data_attributes|service_data_attributes)\.xml$/'
+            'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'
         ];
         $this->configureObjectManager($output);
 
