@@ -1034,7 +1034,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
         $attribute = $this->_config->getAttribute($entityType, 'gender');
         if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
-            $errors[] = __('Please enter a gender value.');
+            $errors[] = __('Please enter a gender.');
         }
 
         $transport = new \Magento\Framework\Object(

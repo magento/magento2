@@ -173,7 +173,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ],
             [array_diff_key($data, ['dob' => '']), ['Please enter a date of birth.']],
             [array_diff_key($data, ['taxvat' => '']), ['Please enter a TAX/VAT number.']],
-            [array_diff_key($data, ['gender' => '']), ['Please enter a gender value.']],
+            [array_diff_key($data, ['gender' => '']), ['Please enter a gender.']],
             [$data, true],
         ];
     }
