@@ -26,6 +26,7 @@ define(
             },
             rates: shippingService.getSippingRates(),
             isVisible: ko.observable(true),
+            isLoading: shippingService.isLoading,
 
             isSelected: ko.computed(function () {
                     return quote.shippingMethod()
