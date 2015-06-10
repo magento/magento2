@@ -1884,6 +1884,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns increment id
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getIncrementId()
@@ -1907,6 +1909,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setItems($items)
     {
@@ -1929,6 +1932,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setPayments(array $payments = null)
     {
@@ -1951,12 +1955,49 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setAddresses(array $addresses = null)
     {
         return $this->setData(OrderInterface::ADDRESSES, $addresses);
     }
 
+    /**
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]
+     */
+    public function getStatusHistories()
+    {
+        if ($this->getData(OrderInterface::STATUS_HISTORIES) == null) {
+            $this->setData(
+                OrderInterface::STATUS_HISTORIES,
+                $this->getStatusHistoryCollection()->getItems()
+            );
+        }
+        return $this->getData(OrderInterface::STATUS_HISTORIES);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreStart
     /**
      * Returns adjustment_negative
      *
@@ -3256,41 +3297,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]
-     */
-    public function getStatusHistories()
-    {
-        if ($this->getData(OrderInterface::STATUS_HISTORIES) == null) {
-            $this->setData(
-                OrderInterface::STATUS_HISTORIES,
-                $this->getStatusHistoryCollection()->getItems()
-            );
-        }
-        return $this->getData(OrderInterface::STATUS_HISTORIES);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes)
-    {
-        return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setStatusHistories(array $statusHistories = null)
@@ -3298,7 +3304,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
