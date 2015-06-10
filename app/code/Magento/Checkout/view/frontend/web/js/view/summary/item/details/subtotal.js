@@ -6,11 +6,11 @@
 /*global alert*/
 define(
     [
-        '../details'
+        'Magento_Checkout/js/view/summary/abstract-total'
     ],
-    function (details) {
+    function (viewModel) {
         "use strict";
-        return details.extend({
+        return viewModel.extend({
             defaults: {
                 displayArea: 'after_details',
                 template: 'Magento_Checkout/summary/item/details/subtotal'
