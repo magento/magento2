@@ -12,7 +12,6 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
      * Delete store view post action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -33,11 +32,18 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
             return $redirectResult->setPath('*/*/editStore', ['store_id' => $itemId]);
         }
 
-        $model->delete();
+        try {
+            $model->delete();
 
-        $this->_eventManager->dispatch('store_delete', ['store' => $model]);
+            $this->_eventManager->dispatch('store_delete', ['store' => $model]);
 
-        $this->messageManager->addSuccess(__('The store view has been deleted.'));
-        return $redirectResult->setPath('adminhtml/*/');
+            $this->messageManager->addSuccess(__('The store view has been deleted.'));
+            return $redirectResult->setPath('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to delete store view. Please, try again later.'));
+        }
+        return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
     }
 }
