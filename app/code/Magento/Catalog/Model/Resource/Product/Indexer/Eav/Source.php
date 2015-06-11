@@ -28,6 +28,7 @@ class Source extends AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -35,10 +36,11 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         $resourcePrefix = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $eavConfig, $eventManager, $resourcePrefix);
+        parent::__construct($context, $eavConfig, $eventManager, $tableStrategy, $resourcePrefix);
     }
 
     /**
@@ -321,9 +323,6 @@ class Source extends AbstractEav
      */
     public function getIdxTable($table = null)
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_eav_idx');
-        }
-        return $this->getTable('catalog_product_index_eav_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_eav');
     }
 }
