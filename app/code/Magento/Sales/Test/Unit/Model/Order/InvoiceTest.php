@@ -112,8 +112,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'canVoid',
             '__wakeup'
-        )->with(
-            $this->equalTo($this->model)
         )->will(
             $this->returnValue($canVoid)
         );

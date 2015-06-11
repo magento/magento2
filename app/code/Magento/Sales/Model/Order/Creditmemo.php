@@ -398,7 +398,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
              * If we not retrieve negative answer from payment yet
              */
             if (is_null($canVoid)) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid($this);
+                $canVoid = $this->getOrder()->getPayment()->canVoid();
                 if ($canVoid === false) {
                     $this->setCanVoidFlag(false);
                     $this->_saveBeforeDestruct = true;
@@ -768,16 +768,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns discount_description
-     *
-     * @return string
-     */
-    public function getDiscountDescription()
-    {
-        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
-    }
-
-    /**
      * Return creditmemo items
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[]
@@ -791,6 +781,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             );
         }
         return $this->getData(CreditmemoInterface::ITEMS);
+    }
+
+    /**
+     * Return creditmemo comments
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
+     */
+    public function getComments()
+    {
+        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
+            $this->setData(
+                CreditmemoInterface::COMMENTS,
+                $this->getCommentsCollection()->getItems()
+            );
+        }
+        return $this->getData(CreditmemoInterface::COMMENTS);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * Returns discount_description
+     *
+     * @return string
+     */
+    public function getDiscountDescription()
+    {
+        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
     }
 
     /**
@@ -1293,22 +1310,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Return creditmemo comments
-     *
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
-     */
-    public function getComments()
-    {
-        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
-            $this->setData(
-                CreditmemoInterface::COMMENTS,
-                $this->getCommentsCollection()->getItems()
-            );
-        }
-        return $this->getData(CreditmemoInterface::COMMENTS);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setComments($comments)
@@ -1316,7 +1317,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         return $this->setData(CreditmemoInterface::COMMENTS, $comments);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
