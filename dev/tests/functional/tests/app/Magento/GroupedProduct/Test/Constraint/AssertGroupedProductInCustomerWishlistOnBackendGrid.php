@@ -26,7 +26,7 @@ class AssertGroupedProductInCustomerWishlistOnBackendGrid extends AssertProductI
     {
         $options = $this->prepareOptions($product);
 
-        return ['product_name' => $product->getName(), 'qty_from' => 0, 'qty_to' => 0, 'options' => $options];
+        return ['product_name' => $product->getName(), 'options' => $options];
     }
 
     /**
