@@ -73,6 +73,8 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     /**
      * Declare Creditmemo instance
      *
+     * @codeCoverageIgnore
+     *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      */
@@ -84,6 +86,8 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
 
     /**
      * Retrieve Creditmemo instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Creditmemo
      */
@@ -105,6 +109,7 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
         return $this->_storeManager->getStore();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns comment
      *
@@ -163,7 +168,6 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
         return $this->getData(CreditmemoCommentInterface::PARENT_ID);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
