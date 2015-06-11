@@ -48,12 +48,18 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     public function reindexAll()
     {
         $this->tableStrategy->setUseIdxTable(true);
-        $this->clearTemporaryIndexTable();
-        $this->_prepareIndex();
-        $this->_prepareRelationIndex();
-        $this->_removeNotVisibleEntityFromIndex();
-        $this->syncData();
-
+        $this->beginTransaction();
+        try {
+            $this->clearTemporaryIndexTable();
+            $this->_prepareIndex();
+            $this->_prepareRelationIndex();
+            $this->_removeNotVisibleEntityFromIndex();
+            $this->syncData();
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollBack();
+            throw $e;
+        }
         return $this;
     }
 
