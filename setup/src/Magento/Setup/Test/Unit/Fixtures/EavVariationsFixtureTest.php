@@ -86,6 +86,16 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
+    public function testExecuteEarlyReturn()
+    {
+        $this->fixtureModelMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(false);
+
+        $this->model->execute();
+    }
+
     public function testGetActionTitle()
     {
         $eavVariationsFixture = new EavVariationsFixture($this->fixtureModelMock);
