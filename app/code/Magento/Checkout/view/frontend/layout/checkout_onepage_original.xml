@@ -217,22 +217,6 @@
                                                     </item>
                                                 </item>
                                             </item>
-                                            <item name="shipping" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
-                                                <item name="sortOrder" xsi:type="string">4</item>
-                                                <item name="additional" xsi:type="array">
-                                                    <!-- merge your shipping methods here -->
-                                                </item>
-                                                <item name="children" xsi:type="array">
-                                                    <item name="afterSelect" xsi:type="array">
-                                                        <item name="component" xsi:type="string">uiComponent</item>
-                                                        <item name="displayArea" xsi:type="string">afterSelect</item>
-                                                        <item name="children" xsi:type="array">
-                                                            <!-- merge additional data after shipping methods here -->
-                                                        </item>
-                                                    </item>
-                                                </item>
-                                            </item>
                                             <item name="payment" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
                                                 <item name="sortOrder" xsi:type="string">5</item>
