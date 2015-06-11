@@ -103,4 +103,65 @@ class Session
             }
         }
     }
+
+    /**
+     * Check whether specified billing address is default for its customer
+     *
+     * @param Address $address
+     * @return bool
+     */
+    protected function _isDefaultBilling($address)
+    {
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling() ||
+        $address->getIsPrimaryBilling() ||
+        $address->getIsDefaultBilling();
+    }
+
+    /**
+     * Check whether specified shipping address is default for its customer
+     *
+     * @param Address $address
+     * @return bool
+     */
+    protected function _isDefaultShipping($address)
+    {
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping() ||
+        $address->getIsPrimaryShipping() ||
+        $address->getIsDefaultShipping();
+    }
+
+    /**
+     * Address after save event handler
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
+    public function afterAddressSave($observer)
+    {
+        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled()) {
+            /** @var $customerAddress Address */
+            $address = $observer->getCustomerAddress();
+
+            // Check if the address is either the default billing, shipping, or both
+            if ($this->_isDefaultBilling($address)) {
+                $this->customerSession->setDefaultTaxBillingAddress(
+                    [
+                        'country_id' => $address->getCountryId(),
+                        'region_id'  => $address->getRegion() ? $address->getRegionId() : null,
+                        'postcode'   => $address->getPostcode(),
+                    ]
+                );
+            }
+
+            if ($this->_isDefaultShipping($address)) {
+                $this->customerSession->setDefaultTaxShippingAddress(
+                    [
+                        'country_id' => $address->getCountryId(),
+                        'region_id'  => $address->getRegion() ? $address->getRegionId() : null,
+                        'postcode'   => $address->getPostcode(),
+                    ]
+                );
+            }
+        }
+    }
 }

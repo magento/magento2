@@ -47,6 +47,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
+            ->setMethods([
+                'getCustomerAddress', 'getData'
+            ])
             ->getMock();
 
         $this->groupRepositoryMock = $this->getMockBuilder('Magento\Customer\Model\Resource\GroupRepository')
@@ -139,5 +142,36 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
 
         $this->session->customerLoggedIn($this->observerMock);
+    }
+
+    public function testAfterAddressSave()
+    {
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->willReturn(true);
+
+        $this->cacheConfigMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $customer = $this->objectManager->getObject('Magento\Customer\Model\Customer');
+        $customer->setDefaultBilling(1);
+        $customer->setDefaultShipping(1);
+
+        $address = $this->objectManager->getObject('Magento\Customer\Model\Address');
+        $address->setIsDefaultShipping(true);
+        $address->setIsDefaultBilling(true);
+        $address->setCustomer($customer);
+        $address->setCustomerId(1);
+        $address->setId(1);
+        $address->setCountryId(1);
+        $address->setPostCode(11111);
+
+        $this->observerMock->expects($this->once())
+            ->method('getCustomerAddress')
+            ->willReturn($address);
+
+        $this->session->afterAddressSave($this->observerMock);
     }
 }
