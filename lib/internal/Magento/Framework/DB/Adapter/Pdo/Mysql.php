@@ -2003,6 +2003,24 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * Create temporary table like
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Pdo_Statement
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
+    {
+        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
+        $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
+        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
+
+        return $this->rawQuery($sql);
+    }
+
+    /**
      * Rename several tables
      *
      * @param array $tablePairs array('oldName' => 'Name1', 'newName' => 'Name2')
