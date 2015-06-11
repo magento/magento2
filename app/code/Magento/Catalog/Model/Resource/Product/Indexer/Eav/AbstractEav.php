@@ -48,19 +48,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     public function reindexAll()
     {
         $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->clearTemporaryIndexTable();
-            $this->_prepareIndex();
-            $this->_prepareRelationIndex();
-            $this->_removeNotVisibleEntityFromIndex();
-
-            $this->syncData();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
+        $this->clearTemporaryIndexTable();
+        $this->_prepareIndex();
+        $this->_prepareRelationIndex();
+        $this->_removeNotVisibleEntityFromIndex();
+        $this->syncData();
 
         return $this;
     }
@@ -96,20 +88,12 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
 
-        $adapter->beginTransaction();
-        try {
-            // remove old index
-            $where = $adapter->quoteInto('entity_id IN(?)', $processIds);
-            $adapter->delete($this->getMainTable(), $where);
+        // remove old index
+        $where = $adapter->quoteInto('entity_id IN(?)', $processIds);
+        $adapter->delete($this->getMainTable(), $where);
 
-            // insert new index
-            $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
-            $adapter->commit();
-        } catch (\Exception $e) {
-            $adapter->rollBack();
-            throw $e;
-        }
-
+        // insert new index
+        $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
         return $this;
     }
 
@@ -176,12 +160,12 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     }
 
     /**
-     * Prepare data index for product relations
+     * Prepare data index select for product relations
      *
      * @param array $parentIds the parent entity ids limitation
-     * @return $this
+     * @return \Magento\Framework\DB\Select
      */
-    protected function _prepareRelationIndex($parentIds = null)
+    protected function _prepareRelationIndexSelect($parentIds = null)
     {
         $write = $this->_getWriteAdapter();
         $idxTable = $this->getIdxTable();
@@ -217,8 +201,22 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
             ]
         );
 
+        return $select;
+    }
+
+    /**
+     * Prepare data index for product relations
+     *
+     * @param array $parentIds the parent entity ids limitation
+     * @return $this
+     */
+    protected function _prepareRelationIndex($parentIds = null)
+    {
+        $write = $this->_getWriteAdapter();
+        $idxTable = $this->getIdxTable();
+
         $query = $write->insertFromSelect(
-            $select,
+            $this->_prepareRelationIndexSelect($parentIds),
             $idxTable,
             [],
             \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
