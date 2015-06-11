@@ -14,7 +14,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
 use Magento\Framework\Filesystem;
-use Magento\Theme\Model\Theme\Collection;
+use Magento\Theme\Model\Theme\Data\Collection;
 use Magento\Theme\Model\Theme\ThemeProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -305,12 +305,13 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $themeHasVirtualChildren = [];
         $themeHasPhysicalChildren = [];
+        $parentChildMap = $this->getParentChildThemeMap();
         foreach ($themePaths as $themePath) {
             $theme = $this->themeProvider->getThemeByFullPath($themePath);
-            if ($theme->hasVirtualChildThemes()) {
+            if ($theme->hasChildThemes()) {
                 $themeHasVirtualChildren[] = $themePath;
             }
-            if ($theme->hasPhysicalChildThemes()) {
+            if (isset($parentChildMap[$themePath])) {
                 $themeHasPhysicalChildren[] = $themePath;
             }
         }
@@ -325,6 +326,24 @@ class ThemeUninstallCommand extends Command
                 . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme</error>';
         }
         return $messages;
+    }
+
+    /**
+     * Obtain a parent theme -> children themes map from the filesystem
+     *
+     * @return array
+     */
+    private function getParentChildThemeMap()
+    {
+        $map = [];
+        $this->themeCollection->addDefaultPattern('*');
+        /** @var \Magento\Theme\Model\Theme\Data $theme */
+        foreach ($this->themeCollection as $theme) {
+            if ($theme->getParentTheme()) {
+                $map[$theme->getParentTheme()->getFullPath()][] = $theme->getFullPath();
+            }
+        }
+        return $map;
     }
 
     /**

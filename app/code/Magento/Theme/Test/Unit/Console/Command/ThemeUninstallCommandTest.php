@@ -32,7 +32,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $dependencyChecker;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collection;
 
@@ -86,7 +86,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->collection = $this->getMock('Magento\Theme\Model\Theme\Collection', [], [], '', false);
+        $this->collection = $this->getMock('Magento\Theme\Model\Theme\Data\Collection', [], [], '', false);
         $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
@@ -238,9 +238,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function setupPassChildThemeCheck()
     {
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasVirtualChildThemes')->willReturn(false);
-        $theme->expects($this->any())->method('hasPhysicalChildThemes')->willReturn(false);
+        $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
+        $this->collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([]));
     }
 
     /**
@@ -255,9 +255,25 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpPassValidation();
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasVirtualChildThemes')->willReturn($hasVirtual);
-        $theme->expects($this->any())->method('hasPhysicalChildThemes')->willReturn($hasPhysical);
+        $theme->expects($this->any())->method('hasChildThemes')->willReturn($hasVirtual);
+        $parentThemeA = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $parentThemeA->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/a');
+        $parentThemeB = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $parentThemeB->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/b');
+        $childThemeC = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $childThemeC->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/c');
+        $childThemeD = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $childThemeD->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/d');
+
+        if ($hasPhysical) {
+            $childThemeC->expects($this->any())->method('getParentTheme')->willReturn($parentThemeA);
+            $childThemeD->expects($this->any())->method('getParentTheme')->willReturn($parentThemeB);
+        }
+
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
+        $this->collection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$childThemeC, $childThemeD]));
         $this->tester->execute($input);
         $this->assertContains(
             $expected,
