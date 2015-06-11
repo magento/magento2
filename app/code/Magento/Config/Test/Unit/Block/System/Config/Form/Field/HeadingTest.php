@@ -18,7 +18,7 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
 
         $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
             ->disableOriginalConstructor()
-                ->setMethods(['getHtmlId', 'getLabel'])
+            ->setMethods(['getHtmlId', 'getLabel'])
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
@@ -31,9 +31,9 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '<tr class="system-fieldset-sub-head" id="row_' . $htmlId . '">' .
-                '<td colspan="5">' .
-                    '<h4 id="' . $htmlId . '">' . $label . '</h4>' .
-                '</td>' .
+            '<td colspan="5">' .
+            '<h4 id="' . $htmlId . '">' . $label . '</h4>' .
+            '</td>' .
             '</tr>',
             $html
         );

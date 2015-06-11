@@ -44,25 +44,29 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->cellParameters = [
-            'label' => 'testLabel',
             'size'  => 'testSize',
             'style' => 'testStyle',
             'class' => 'testClass',
         ];
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->labelFactoryMock = $this->getMock('Magento\Framework\View\Design\Theme\LabelFactory', [], [], '', false);
-        $this->labelMock        = $this->getMock('Magento\Framework\View\Design\Theme\Label', [], [], '', false);
+        $this->labelFactoryMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\LabelFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->labelMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Label')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->elementFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['setForm', 'setName', 'setHtmlId', 'setValues', 'getName', 'getHtmlId', 'getValues', 'getElementHtml']
+            )
+            ->getMock();
 
-        $this->elementFactoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $this->elementMock        = $this->getMock(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
-            ['setForm', 'setName', 'setHtmlId', 'setValues', 'getName', 'getHtmlId', 'getValues', 'getElementHtml'],
-            [],
-            '',
-            false
-        );
         $data = [
             'elementFactory' => $this->elementFactoryMock,
             'labelFactory'   => $this->labelFactoryMock,
@@ -70,7 +74,7 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
                 'element' => $this->elementMock
             ],
         ];
-        $this->object = $helper->getObject('Magento\Config\Block\System\Config\Form\Field\Regexceptions', $data);
+        $this->object = $objectManager->getObject('Magento\Config\Block\System\Config\Form\Field\Regexceptions', $data);
     }
 
     public function testRenderCellTemplateValueColumn()
@@ -79,10 +83,10 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
         $expectedResult = 'testValueElementHtml';
 
         $this->elementFactoryMock->expects($this->once())->method('create')->willReturn($this->elementMock);
-        $this->elementMock->expects($this->once())->method('setForm')->willReturn($this->elementMock);
-        $this->elementMock->expects($this->once())->method('setName')->willReturn($this->elementMock);
-        $this->elementMock->expects($this->once())->method('setHtmlId')->willReturn($this->elementMock);
-        $this->elementMock->expects($this->once())->method('setValues')->willReturn($this->elementMock);
+        $this->elementMock->expects($this->once())->method('setForm')->willReturnSelf();
+        $this->elementMock->expects($this->once())->method('setName')->willReturnSelf();
+        $this->elementMock->expects($this->once())->method('setHtmlId')->willReturnSelf();
+        $this->elementMock->expects($this->once())->method('setValues')->willReturnSelf();
         $this->elementMock->expects($this->once())->method('getElementHtml')->willReturn($expectedResult);
 
         $this->labelFactoryMock->expects($this->once())->method('create')->willReturn($this->labelMock);
@@ -102,28 +106,24 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
     public function testRenderCellTemplateOtherColumn()
     {
         $columnName     = 'testCellName';
-        $expectedResult = '<input type="text" id="<%- _id %>_testCellName" name="[<%- _id %>][testCellName]"' .
-            ' value="<%- testCellName %>" size="testSize" class="testClass" style="testStyle"/>';
 
         $this->object->addColumn(
             $columnName,
             $this->cellParameters
         );
 
-        $this->assertEquals(
-            $expectedResult,
-            $this->object->renderCellTemplate($columnName)
-        );
+        $actual = $this->object->renderCellTemplate($columnName);
+        foreach ($this->cellParameters as $parameter) {
+            $this->assertContains($parameter, $actual, 'Parameter \'' . $parameter . '\' missing in render output.');
+        }
     }
 
     public function testRenderCellTemplateWrongColumnName()
     {
-        $columnName     = 'testCellName';
+        $columnName      = 'testCellName';
+        $wrongColumnName = 'wrongTestCellName';
 
-        $this->object->addColumn(
-            $columnName . 'Wrong',
-            $this->cellParameters
-        );
+        $this->object->addColumn($wrongColumnName, $this->cellParameters);
 
         $this->setExpectedException('\Exception', 'Wrong column name specified.');
 

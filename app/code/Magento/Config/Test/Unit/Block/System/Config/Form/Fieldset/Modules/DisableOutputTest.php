@@ -24,82 +24,63 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
 
         $configData = ['advanced/modules_disable_output/testModuleWithConfigData' => 'testModuleData'];
 
-        $fieldMock = $this->getMock('Magento\Config\Block\System\Config\Form\Field', [], [], '', false, false, true);
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
+        $fieldMock = $this->getMockBuilder('Magento\Config\Block\System\Config\Form\Field')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $layoutMock = $this->getMockBuilder('Magento\Framework\View\Layout')
+            ->disableOriginalConstructor()
+            ->getMock();
         $layoutMock->expects($this->once())
             ->method('getBlockSingleton')
             ->with('Magento\Config\Block\System\Config\Form\Field')
             ->willReturn($fieldMock);
 
-        $groupMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Group',
-            [],
-            [],
-            '',
-            false
-        );
+        $groupMock = $this->getMockBuilder('Magento\Config\Model\Config\Structure\Element\Group')
+            ->disableOriginalConstructor()
+            ->getMock();
         $groupMock->expects($this->once())->method('getFieldsetCss')->willReturn('test_fieldset_css');
 
-        $elementMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Text',
-            [
-                'getHtmlId', 'getExpanded', 'getElements',
-                'getLegend', 'getComment', 'addField', 'setRenderer', 'toHtml'
-            ],
-            [],
-            '',
-            false,
-            false,
-            true
-        );
-        $elementMock->expects(
-            $this->any()
-        )->method(
-            'getHtmlId'
-        )->willReturn(
-            $testData['htmlId']
-        );
+        $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Text')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getHtmlId', 'getExpanded', 'getElements', 'getLegend',
+                    'getComment', 'addField', 'setRenderer', 'toHtml'
+                ]
+            )->getMock();
+
+        $elementMock->expects($this->any())
+            ->method('getHtmlId')
+            ->willReturn($testData['htmlId']);
+
         $elementMock->expects($this->any())->method('getExpanded')->willReturn(true);
-        $elementMock->expects(
-            $this->any()
-        )->method(
-            'getLegend'
-        )->willReturn(
-            $testData['legend']
-        );
-        $elementMock->expects(
-            $this->any()
-        )->method(
-            'getComment'
-        )->willReturn(
-            $testData['comment']
-        );
+        $elementMock->expects($this->any())->method('getLegend')->willReturn($testData['legend']);
+        $elementMock->expects($this->any())->method('getComment')->willReturn($testData['comment']);
         $elementMock->expects($this->any())->method('addField')->willReturn($elementMock);
         $elementMock->expects($this->any())->method('setRenderer')->willReturn($elementMock);
         $elementMock->expects($this->any())->method('toHtml')->willReturn('test_element_html');
 
-        $moduleListMock = $this->getMock(
-            'Magento\Framework\Module\ModuleList',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-
+        $moduleListMock = $this->getMockBuilder('Magento\Framework\Module\ModuleList')
+            ->disableOriginalConstructor()
+            ->getMock();
         $moduleListMock->expects($this->any())->method('getNames')->willReturn(
-                array_merge(['Magento_Backend'], $testModuleList)
+            array_merge(['Magento_Backend'], $testModuleList)
         );
 
-        $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $factoryColl = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $formMock = $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [$factory, $factoryColl]);
+        $factory = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $factoryColl = $this->getMockBuilder('Magento\Framework\Data\Form\Element\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $formMock = $this->getMockBuilder('Magento\Framework\Data\Form\AbstractForm')
+            ->disableOriginalConstructor()
+            ->setConstructorArgs([$factory, $factoryColl])
+            ->getMock();
+
         $formMock->expects($this->any())->method('getConfigValue')->willReturn('testConfigData');
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
