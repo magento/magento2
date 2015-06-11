@@ -522,7 +522,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->model->setOrigData($key, $value);
             }
         }
-        $this->model->setData($data);
+        foreach ($data as $key => $value) {
+            $this->model->setData($key, $value);
+        }
         $this->model->isDeleted($isDeleted);
         $this->assertEquals($expected, $this->model->getIdentities());
     }
