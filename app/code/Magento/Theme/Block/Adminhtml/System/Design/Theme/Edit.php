@@ -70,7 +70,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             }
 
             if ($theme->isDeletable()) {
-                if ($theme->hasVirtualChildThemes()) {
+                if ($theme->hasChildThemes()) {
                     $message = __('Are you sure you want to delete this theme?');
                     $onClick = sprintf(
                         "deleteConfirm('%s', '%s')",
