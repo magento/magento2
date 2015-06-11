@@ -200,9 +200,9 @@ class ThemeUninstallCommand extends Command
             $output->writeln($validationMessages);
             return;
         }
-        $childVirtualThemeCheckMessages = $this->checkChildVirtualTheme($themePaths);
-        if (!empty($childVirtualThemeCheckMessages)) {
-            $output->writeln($childVirtualThemeCheckMessages);
+        $childThemeCheckMessages = $this->checkChildTheme($themePaths);
+        if (!empty($childThemeCheckMessages)) {
+            $output->writeln($childThemeCheckMessages);
             return;
         }
         $dependencyMessages = $this->checkDependencies($themePaths);
@@ -295,25 +295,34 @@ class ThemeUninstallCommand extends Command
     }
 
     /**
-     * Check theme if has child virtual theme
+     * Check theme if has child virtual and physical theme
      *
      * @param string[] $themePaths
      * @return string[] $messages
      */
-    private function checkChildVirtualTheme($themePaths)
+    private function checkChildTheme($themePaths)
     {
         $messages = [];
-        $themeHasChildren = [];
+        $themeHasVirtualChildren = [];
+        $themeHasPhysicalChildren = [];
         foreach ($themePaths as $themePath) {
             $theme = $this->themeProvider->getThemeByFullPath($themePath);
-            if ($theme->hasChildThemes()) {
-                $themeHasChildren[] = $themePath;
+            if ($theme->hasVirtualChildThemes()) {
+                $themeHasVirtualChildren[] = $themePath;
+            }
+            if ($theme->hasPhysicalChildThemes()) {
+                $themeHasPhysicalChildren[] = $themePath;
             }
         }
-        if (!empty($themeHasChildren)) {
-            $text = count($themeHasChildren) > 1 ? ' are parents of' : ' is a parent of';
+        if (!empty($themeHasVirtualChildren)) {
+            $text = count($themeHasVirtualChildren) > 1 ? ' are parents of' : ' is a parent of';
             $messages[] = '<error>Unable to uninstall. '
-                . implode(', ', $themeHasChildren) . $text . ' virtual theme</error>';
+                . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme</error>';
+        }
+        if (!empty($themeHasPhysicalChildren)) {
+            $text = count($themeHasPhysicalChildren) > 1 ? ' are parents of' : ' is a parent of';
+            $messages[] = '<error>Unable to uninstall. '
+                . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme</error>';
         }
         return $messages;
     }

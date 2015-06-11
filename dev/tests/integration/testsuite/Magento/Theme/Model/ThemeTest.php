@@ -43,21 +43,41 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test theme on child relations
+     * Test theme on virtual child relations
      */
-    public function testChildRelation()
+    public function testVirtualChildRelation()
     {
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\Design\ThemeInterface'
         );
-        $collection = $theme->getCollection()
+        $virtualCollection = $theme->getCollection()
             ->addTypeFilter(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
         /** @var $currentTheme \Magento\Framework\View\Design\ThemeInterface */
-        foreach ($collection as $currentTheme) {
+        foreach ($virtualCollection as $currentTheme) {
             $parentTheme = $currentTheme->getParentTheme();
             if (!empty($parentTheme)) {
-                $this->assertTrue($parentTheme->hasChildThemes());
+                $this->assertTrue($parentTheme->hasVirtualChildThemes());
+            }
+        }
+    }
+
+    /**
+     * Test theme on physical child relations
+     */
+    public function testPhysicalChildRelation()
+    {
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\Design\ThemeInterface'
+        );
+        $physicalCollection = $theme->getCollection()
+            ->addTypeFilter(\Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL);
+        /** @var $currentTheme \Magento\Framework\View\Design\ThemeInterface */
+        foreach ($physicalCollection as $currentTheme) {
+            $parentTheme = $currentTheme->getParentTheme();
+            if (!empty($parentTheme)) {
+                $this->assertTrue($parentTheme->hasPhysicalChildThemes());
             }
         }
     }

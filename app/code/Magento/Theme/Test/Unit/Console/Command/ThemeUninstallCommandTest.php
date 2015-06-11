@@ -235,43 +235,87 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
     }
 
-    public function setupPassChildVirtualThemeCheck()
+    public function setupPassChildThemeCheck()
     {
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
+        $theme->expects($this->any())->method('hasVirtualChildThemes')->willReturn(false);
+        $theme->expects($this->any())->method('hasPhysicalChildThemes')->willReturn(false);
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
     }
 
-    public function testExecuteFailedChildVirtualThemeCheck()
+    /**
+     * @dataProvider executeFailedChildThemeCheckDataProvider
+     * @param bool $hasVirtual
+     * @param bool $hasPhysical
+     * @param array $input
+     * @param string $expected
+     * @return void
+     */
+    public function testExecuteFailedChildThemeCheck($hasVirtual, $hasPhysical, array $input, $expected)
     {
         $this->setUpPassValidation();
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasChildThemes')->willReturn(true);
+        $theme->expects($this->any())->method('hasVirtualChildThemes')->willReturn($hasVirtual);
+        $theme->expects($this->any())->method('hasPhysicalChildThemes')->willReturn($hasPhysical);
         $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
-        $this->tester->execute(['theme' => ['frontend/Magento/a']]);
+        $this->tester->execute($input);
         $this->assertContains(
-            'Unable to uninstall. frontend/Magento/a is a parent of virtual theme',
+            $expected,
             $this->tester->getDisplay()
         );
     }
 
-    public function testExecuteFailedMultipleChildVirtualThemeCheck()
+    /**
+     * @return array
+     */
+    public function executeFailedChildThemeCheckDataProvider()
     {
-        $this->setUpPassValidation();
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasChildThemes')->willReturn(true);
-        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
-        $this->tester->execute(['theme' => ['frontend/Magento/a', 'frontend/Magento/b']]);
-        $this->assertContains(
-            'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme',
-            $this->tester->getDisplay()
-        );
+        return [
+            [
+                true,
+                false,
+                ['theme' => ['frontend/Magento/a']],
+                'Unable to uninstall. frontend/Magento/a is a parent of virtual theme'
+            ],
+            [
+                true,
+                false,
+                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
+                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme'
+            ],
+            [
+                false,
+                true,
+                ['theme' => ['frontend/Magento/a']],
+                'Unable to uninstall. frontend/Magento/a is a parent of physical theme'
+            ],
+            [
+                false,
+                true,
+                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
+                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of physical theme'
+            ],
+            [
+                true,
+                true,
+                ['theme' => ['frontend/Magento/a']],
+                'Unable to uninstall. frontend/Magento/a is a parent of virtual theme' . PHP_EOL .
+                'Unable to uninstall. frontend/Magento/a is a parent of physical theme'
+            ],
+            [
+                true,
+                true,
+                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
+                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme' . PHP_EOL .
+                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of physical theme'
+            ],
+        ];
     }
 
     public function testExecuteFailedDependencyCheck()
     {
         $this->setUpPassValidation();
-        $this->setupPassChildVirtualThemeCheck();
+        $this->setupPassChildThemeCheck();
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependencies')
             ->willReturn(['magento/theme-a' => ['magento/theme-b', 'magento/theme-c']]);
@@ -286,6 +330,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function setUpExecute()
     {
         $this->setUpPassValidation();
+        $this->setupPassChildThemeCheck();
         $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
         $this->remove->expects($this->once())->method('remove');
         $this->cache->expects($this->once())->method('clean');
