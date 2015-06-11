@@ -77,7 +77,7 @@ class ProductUrlPathGenerator
      */
     protected function _prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
     {
-        $storedProduct = $this->productRepository->getById($product->getId(), false, Store::DEFAULT_STORE_ID);
+        $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
         return $storedUrlKey ?: $product->formatUrlKey($storedProduct->getName());
     }
