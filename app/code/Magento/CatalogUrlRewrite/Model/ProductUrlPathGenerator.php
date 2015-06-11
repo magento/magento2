@@ -77,7 +77,7 @@ class ProductUrlPathGenerator
      */
     protected function _prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
     {
-        $storedProduct = $this->productRepository->getById($product->getId(), false, Store::DEFAULT_STORE_ID, true);
+        $storedProduct = $this->productRepository->getById($product->getId(), false, Store::DEFAULT_STORE_ID);
         $storedUrlKey = $storedProduct->getUrlKey();
         return $storedUrlKey ?: $product->formatUrlKey($storedProduct->getName());
     }
@@ -116,10 +116,7 @@ class ProductUrlPathGenerator
      */
     public function generateUrlKey($product)
     {
-        if ($product->getUrlKey() === false) {
-            return false;
-        }
-        return $this->_prepareProductUrlKey($product);
+        return $product->getUrlKey() === false ? false : $this->_prepareProductUrlKey($product);
     }
 
     /**
