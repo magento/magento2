@@ -5,22 +5,26 @@
 
 'use strict';
 
-var banner = {
-    firstLine: 'Copyright © 2015 Magento. All rights reserved.',
-    secondLine: 'See COPYING.txt for license details.',
-
-    css: function () {
-        return '/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n';
-    },
-
-    less: function () {
-        return '// /**\n//  * ' + this.firstLine + '\n//  * ' + this.secondLine + '\n//  */\n';
-    },
-
-    html: function () {
-        return '<!--\n/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n-->\n';
+function printCopyright(lang) {
+    var copyrightText = {
+            firstLine: 'Copyright © 2015 Magento. All rights reserved.',
+            secondLine: 'See COPYING.txt for license details.'
+        },
+        nlWin = '\r\n';
+    switch (lang) {
+        case 'css':
+            return '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin;
+            break;
+        case 'less':
+            return '// /**' + nlWin + '//  * ' + copyrightText.firstLine + nlWin + '//  * ' + copyrightText.secondLine + nlWin + '//  */' + nlWin;
+            break;
+        case 'html':
+            return '<!--' + nlWin + '/**' + nlWin + ' * ' + copyrightText.firstLine + nlWin + ' * ' + copyrightText.secondLine + nlWin + ' */' + nlWin + '-->' + nlWin;
+            break;
+        default:
+            return;
     }
-};
+}
 
 module.exports = {
     options: {
@@ -29,7 +33,7 @@ module.exports = {
     },
     setup: {
         options: {
-            banner: banner.css()
+            banner: printCopyright('css')
         },
         files: {
             src: '<%= path.css.setup %>/*.css'
@@ -37,7 +41,7 @@ module.exports = {
     },
     documentationCss: {
         options: {
-            banner: banner.css()
+            banner: printCopyright('css')
         },
         files: {
             src: '<%= path.doc %>/**/*.css'
@@ -45,7 +49,7 @@ module.exports = {
     },
     documentationLess: {
         options: {
-            banner: banner.less()
+            banner: printCopyright('less')
         },
         files: {
             src: '<%= path.doc %>/**/*.less'
@@ -53,7 +57,7 @@ module.exports = {
     },
     documentationHtml: {
         options: {
-            banner: banner.html()
+            banner: printCopyright('html')
         },
         files: {
             src: '<%= path.doc %>/**/*.html'

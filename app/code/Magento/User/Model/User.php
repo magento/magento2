@@ -484,7 +484,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('Access denied.'));
+                throw new AuthenticationException(__('You need more permissions to access this.'));
             }
             $result = true;
         }

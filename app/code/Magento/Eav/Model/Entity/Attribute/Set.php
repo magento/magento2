@@ -265,7 +265,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new LocalizedException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
+            throw new LocalizedException(__('An attribute set named "%1" already exists.', $attributeSetName));
         }
 
         return true;

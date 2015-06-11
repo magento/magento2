@@ -45,7 +45,7 @@ class IntegrationService implements \Magento\Integration\Api\IntegrationServiceI
     public function create(array $integrationData)
     {
         $this->_checkIntegrationByName($integrationData['name']);
-        $integration = $this->_integrationFactory->create($integrationData);
+        $integration = $this->_integrationFactory->create()->setData($integrationData);
         $integration->save();
         $consumerName = 'Integration' . $integration->getId();
         $consumer = $this->_oauthService->createConsumer(['name' => $consumerName]);

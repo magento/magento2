@@ -21,7 +21,7 @@ define([
          * Calls initListeners and pushParams methods.
          */
         initialize: function () {
-            _.bindAll(this, 'onChildrenUpdate', 'onContentLoading', 'onContentLoaded');
+            _.bindAll(this, 'onChildrenUpdate', 'onContentLoading');
 
             return this._super();
         },
@@ -49,8 +49,7 @@ define([
 
             elem.on({
                 'update':   this.onChildrenUpdate,
-                'loading':  this.onContentLoading,
-                'loaded':   this.onContentLoaded
+                'loading':  this.onContentLoading
             });
 
             return this;
@@ -75,15 +74,8 @@ define([
         /**
          * Callback that sets loading property to true.
          */
-        onContentLoading: function () {
-            this.loading(true);
-        },
-
-        /**
-         * Callback that sets loading property to true.
-         */
-        onContentLoaded: function () {
-            this.loading(false);
+        onContentLoading: function (isLoading) {
+            this.loading(isLoading);
         }
     });
 });
