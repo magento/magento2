@@ -37,6 +37,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     private $cacheConfigMock;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxHelperMock;
+
+    /**
      * @var \Magento\Tax\Model\Observer\Session
      */
     protected $session;
@@ -71,11 +76,16 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->session = $this->objectManager->getObject(
             'Magento\Tax\Model\Observer\Session',
             [
                 'groupRepository' => $this->groupRepositoryMock,
                 'customerSession' => $this->customerSessionMock,
+                'taxHelper' => $this->taxHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock
             ]
@@ -91,6 +101,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $this->cacheConfigMock->expects($this->once())
             ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->taxHelperMock->expects($this->any())
+            ->method('isCatalogPriceDisplayAffectedByTax')
             ->willReturn(true);
 
         $customerMock = $this->getMockBuilder('Magento\Customer\Model\Data\Customer')
@@ -155,18 +169,24 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $customer = $this->objectManager->getObject('Magento\Customer\Model\Customer');
-        $customer->setDefaultBilling(1);
-        $customer->setDefaultShipping(1);
+        $this->taxHelperMock->expects($this->any())
+            ->method('isCatalogPriceDisplayAffectedByTax')
+            ->willReturn(true);
 
         $address = $this->objectManager->getObject('Magento\Customer\Model\Address');
         $address->setIsDefaultShipping(true);
         $address->setIsDefaultBilling(true);
-        $address->setCustomer($customer);
-        $address->setCustomerId(1);
-        $address->setId(1);
+        $address->setIsPrimaryBilling(true);
+        $address->setIsPrimaryShipping(true);
         $address->setCountryId(1);
-        $address->setPostCode(11111);
+        $address->setData('postcode', 11111);
+
+        $this->customerSessionMock->expects($this->once())
+            ->method('setDefaultTaxBillingAddress')
+            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
+        $this->customerSessionMock->expects($this->once())
+            ->method('setDefaultTaxShippingAddress')
+            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
 
         $this->observerMock->expects($this->once())
             ->method('getCustomerAddress')
