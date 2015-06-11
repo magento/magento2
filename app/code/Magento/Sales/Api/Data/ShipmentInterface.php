@@ -93,14 +93,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets the billing address ID for the shipment.
      *
-     * @return int Billing address ID.
+     * @return int|null Billing address ID.
      */
     public function getBillingAddressId();
 
     /**
      * Gets the created-at timestamp for the shipment.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -115,21 +115,21 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets the customer ID for the shipment.
      *
-     * @return int Customer ID.
+     * @return int|null Customer ID.
      */
     public function getCustomerId();
 
     /**
      * Gets the email-sent flag value for the shipment.
      *
-     * @return int Email-sent flag value.
+     * @return int|null Email-sent flag value.
      */
     public function getEmailSent();
 
     /**
      * Gets the ID for the shipment.
      *
-     * @return int Shipment ID.
+     * @return int|null Shipment ID.
      */
     public function getEntityId();
 
@@ -144,7 +144,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets the increment ID for the shipment.
      *
-     * @return string Increment ID.
+     * @return string|null Increment ID.
      */
     public function getIncrementId();
 
@@ -173,49 +173,49 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets the shipment status.
      *
-     * @return int Shipment status.
+     * @return int|null Shipment status.
      */
     public function getShipmentStatus();
 
     /**
      * Gets the shipping address ID for the shipment.
      *
-     * @return int Shipping address ID.
+     * @return int|null Shipping address ID.
      */
     public function getShippingAddressId();
 
     /**
      * Gets the shipping label for the shipment.
      *
-     * @return string Shipping label.
+     * @return string|null Shipping label.
      */
     public function getShippingLabel();
 
     /**
      * Gets the store ID for the shipment.
      *
-     * @return int Store ID.
+     * @return int|null Store ID.
      */
     public function getStoreId();
 
     /**
      * Gets the total quantity for the shipment.
      *
-     * @return float Total quantity.
+     * @return float|null Total quantity.
      */
     public function getTotalQty();
 
     /**
      * Gets the total weight for the shipment.
      *
-     * @return float Total weight.
+     * @return float|null Total weight.
      */
     public function getTotalWeight();
 
     /**
      * Gets the updated-at timestamp for the shipment.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 
