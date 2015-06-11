@@ -49,7 +49,7 @@ interface GuestShippingMethodManagementInterface
     /**
      * Estimate shipping
      *
-     * @param int $cartId The shopping cart ID.
+     * @param string $cartId The shopping cart ID.
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      */
