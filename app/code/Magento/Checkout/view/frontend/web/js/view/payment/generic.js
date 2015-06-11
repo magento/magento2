@@ -24,6 +24,10 @@ define(
             },
             afterSave: function() {
                 return true;
+            },
+            placeOrder: function() {
+                alert('Kaboom!');
+                // TODO: Place order info here
             }
         });
     }
