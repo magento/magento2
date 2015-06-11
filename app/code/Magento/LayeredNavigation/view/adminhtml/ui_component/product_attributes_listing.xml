@@ -18,7 +18,6 @@
                         <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.listing_filters.is_comparable</item>
-
                     </item>
                 </argument>
             </filterSelect>

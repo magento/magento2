@@ -8,12 +8,13 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\Resource\Eav\AttributeFactory;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Catalog\Model\Product\Type;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class CategorySetup extends EavSetup
 {
@@ -471,7 +472,7 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                        'apply_to' => Type::TYPE_SIMPLE,
                     ],
                     'meta_title' => [
                         'type' => 'varchar',
@@ -578,7 +579,7 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE])
                     ],
                     'news_from_date' => [
                         'type' => 'datetime',

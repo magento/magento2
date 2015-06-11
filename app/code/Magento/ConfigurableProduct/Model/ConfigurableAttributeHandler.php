@@ -54,6 +54,6 @@ class ConfigurableAttributeHandler
             \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
         ];
-        return (!$attribute->getApplyTo() || count(array_diff($types, $attribute->getApplyTo())) === 0) ? true : false;
+        return !$attribute->getApplyTo() || count(array_diff($types, $attribute->getApplyTo())) === 0;
     }
 }
