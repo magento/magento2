@@ -18,7 +18,7 @@
             </query>
 
             <query xsi:type="matchQuery" value="$fulltext_search_query$" name="fulltext_search_query" boost="5">
-                <match field="title" boost="2" />
+                <match field="title" />
                 <match field="description" />
             </query>
 

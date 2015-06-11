@@ -11,6 +11,7 @@ namespace Magento\Quote\Model;
 class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Quote\Api\Data\AddressDetailsInterface
 {
+    //@codeCoverageIgnoreStart
     /**
      * @{inheritdoc}
      */
@@ -76,6 +77,23 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     }
 
     /**
+     * @{inheritdoc}
+     */
+    public function getTotals()
+    {
+        return $this->getData(self::TOTALS);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setTotals($totals)
+    {
+        return $this->setData(self::TOTALS, $totals);
+    }
+    //@codeCoverageIgnoreEnd
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\AddressDetailsExtensionInterface|null
@@ -95,21 +113,5 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
         \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * @{inheritdoc}
-     */
-    public function getTotals()
-    {
-        return $this->getData(self::TOTALS);
-    }
-
-    /**
-     * @{inheritdoc}
-     */
-    public function setTotals($totals)
-    {
-        return $this->setData(self::TOTALS, $totals);
     }
 }
