@@ -34,14 +34,14 @@ class Strategy implements StrategyInterface
      *
      * @var bool
      */
-    protected $_useIdxTable = false;
+    protected $useIdxTable = false;
 
     /**
      * {@inheritdoc}
      */
     public function getUseIdxTable()
     {
-        return $this->_useIdxTable;
+        return $this->useIdxTable;
     }
 
     /**
@@ -49,7 +49,7 @@ class Strategy implements StrategyInterface
      */
     public function setUseIdxTable($value = false)
     {
-        $this->_useIdxTable = (bool) $value;
+        $this->useIdxTable = (bool) $value;
         return $this;
     }
 
