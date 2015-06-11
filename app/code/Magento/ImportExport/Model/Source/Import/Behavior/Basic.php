@@ -17,7 +17,7 @@ class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
     {
         return [
             \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND => __('Add/Update'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __('Replace Existing Complex Data'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __('Replace'),
             \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE => __('Delete Entities')
         ];
     }
