@@ -24,7 +24,7 @@ class GetFilter extends ExportController
         $data = $this->getRequest()->getParams();
         if ($this->getRequest()->isXmlHttpRequest() && $data) {
             try {
-                if($data['entity'] == self::ADVANCED_PRICING) {
+                if ($data['entity'] == self::ADVANCED_PRICING) {
                     $data['entity'] = self::CATALOG_PRODUCT;
                 }
                 /** @var \Magento\Framework\View\Result\Layout $resultLayout */
