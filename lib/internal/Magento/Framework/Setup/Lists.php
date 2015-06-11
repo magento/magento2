@@ -79,9 +79,9 @@ class Lists
     {
         $languages = (new LanguageBundle())->get(Resolver::DEFAULT_LOCALE)['Languages'];
         $countries = (new RegionBundle())->get(Resolver::DEFAULT_LOCALE)['Countries'];
-        $locales = \ResourceBundle::getLocales(null);
+        $locales = \ResourceBundle::getLocales('') ?: [];
         $list = [];
-        foreach ((array)$locales as $locale) {
+        foreach ($locales as $locale) {
             if (!in_array($locale, $this->allowedLocales)) {
                 continue;
             }

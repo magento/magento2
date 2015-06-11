@@ -70,13 +70,7 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
      */
     public function run()
     {
-        $this->cmsIndex->open();
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
-            $this->cmsIndex->getLinksBlock()->openLink("Log Out");
-            $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
-            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-        }
+        $this->logoutCustomerOnFrontend->run();
         $this->cmsIndex->getLinksBlock()->openLink("Log In");
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountLogin->getLoginBlock()->login($this->customer);

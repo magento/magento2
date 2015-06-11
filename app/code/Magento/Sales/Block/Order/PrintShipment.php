@@ -26,19 +26,27 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     protected $_paymentHelper;
 
     /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
         $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
+        $this->addressRenderer = $addressRenderer;
         parent::__construct($context, $data);
     }
 
@@ -75,7 +83,17 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     protected function _prepareItem(AbstractBlock $renderer)
     {
         $renderer->setPrintStatus(true);
-
         return parent::_prepareItem($renderer);
+    }
+
+    /**
+     * Returns string with formatted address
+     *
+     * @param Address $address
+     * @return null|string
+     */
+    public function getFormattedAddress(\Magento\Sales\Model\Order\Address $address)
+    {
+        return $this->addressRenderer->format($address, 'html');
     }
 }

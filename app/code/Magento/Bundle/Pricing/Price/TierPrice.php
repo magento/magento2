@@ -7,6 +7,7 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Bundle tier prices model
@@ -88,5 +89,14 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
     public function isPercentageDiscount()
     {
         return true;
+    }
+
+    /**
+     * @param AmountInterface $amount
+     * @return float
+     */
+    public function getSavePercent(AmountInterface $amount)
+    {
+        return round($amount->getBaseAmount());
     }
 }

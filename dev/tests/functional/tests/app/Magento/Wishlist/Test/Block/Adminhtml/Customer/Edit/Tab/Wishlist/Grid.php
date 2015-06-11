@@ -51,6 +51,13 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $configureLink = 'a[onclick*="configureItem"]';
 
     /**
+     * Secondary part of row locator template for getRow() method with strict option.
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[contains(.,normalize-space("%s"))]';
+
+    /**
      * Delete product
      *
      * @return void
@@ -96,7 +103,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
     {
         $options = [];
-        $this->openFilterBlock();
         if (isset($filter['options'])) {
             $options = $filter['options'];
             unset($filter['options']);
@@ -105,7 +111,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
             $this->search($filter);
         }
         $location = '//tr[';
-        $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
+        $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
             $rows[] = sprintf($rowTemplate, $value);

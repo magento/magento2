@@ -14,6 +14,7 @@
             <data name="customer/dataSet" xsi:type="string">customer_UK_1_default_billing_address</data>
             <data name="vatId/data/vat_id" xsi:type="string">584451913</data>
             <data name="customerGroup" xsi:type="string">valid_intra_union_group</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
@@ -24,6 +25,7 @@
             <data name="customer/dataSet" xsi:type="string">customer_UK_1_default_billing_address</data>
             <data name="vatId/data/vat_id" xsi:type="string">123456789</data>
             <data name="customerGroup" xsi:type="string">invalid_group</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>

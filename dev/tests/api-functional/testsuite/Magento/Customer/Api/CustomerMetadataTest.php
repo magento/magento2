@@ -80,7 +80,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::NOTE             => '',
                     AttributeMetadata::SYSTEM           => true,
                     AttributeMetadata::USER_DEFINED     => false,
-                    AttributeMetadata::BACKEND_TYPE     => 'varchar',
+                    AttributeMetadata::BACKEND_TYPE     => 'static',
                     AttributeMetadata::SORT_ORDER       => 40
                 ],
             ],
@@ -106,7 +106,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::NOTE             => '',
                     AttributeMetadata::SYSTEM           => false,
                     AttributeMetadata::USER_DEFINED     => false,
-                    AttributeMetadata::BACKEND_TYPE     => 'int',
+                    AttributeMetadata::BACKEND_TYPE     => 'static',
                     AttributeMetadata::SORT_ORDER       => 110
                 ],
             ],
@@ -187,9 +187,8 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        //Default custom attribute code 'disable_auto_group_change'
-        $this->assertCount(1, $attributeMetadata);
-        $this->assertEquals('disable_auto_group_change', $attributeMetadata[0]['attribute_code']);
+        // There are no default custom attributes.
+        $this->assertCount(0, $attributeMetadata);
     }
 
     /**
