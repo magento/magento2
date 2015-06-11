@@ -16,45 +16,36 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected $file;
 
+    /**
+     * @var array
+     */
+    protected $testData;
+
     protected function setUp()
     {
-        $factoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectionFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\CollectionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->testData = [
+            'before_element_html' => 'test_before_element_html',
+            'html_id'             => 'test_id',
+            'name'                => 'test_name',
+            'value'               => 'test_value',
+            'title'               => 'test_title',
+            'disabled'            => true,
+            'after_element_js'    => 'test_after_element_js',
+            'after_element_html'  => 'test_after_element_html',
+            'html_id_prefix'      => 'test_id_prefix_',
+            'html_id_suffix'      => '_test_id_suffix',
+        ];
 
         $this->file = $objectManager->getObject(
             'Magento\Config\Block\System\Config\Form\Field\File',
-            [
-                'factoryElement'    => $factoryMock,
-                'factoryCollection' => $collectionFactoryMock,
-                'escaper'           => $escaperMock,
-                'data'              =>
-                [
-                    'before_element_html' => 'test_before_element_html',
-                    'html_id'             => 'test_id',
-                    'name'                => 'test_name',
-                    'value'               => 'test_value',
-                    'title'               => 'test_title',
-                    'disabled'            => true,
-                    'after_element_js'    => 'test_after_element_js',
-                    'after_element_html'  => 'test_after_element_html',
-                ]
-            ]
+            ['data' => $this->testData]
         );
 
         $formMock = new \Magento\Framework\Object();
-        $formMock->getHtmlIdPrefix('id_prefix');
-        $formMock->getHtmlIdPrefix('id_suffix');
+        $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
+        $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->file->setForm($formMock);
     }
 
@@ -62,16 +53,20 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $html = $this->file->getElementHtml();
 
-        $this->assertContains('<label class="addbefore" for="test_id"', $html);
-        $this->assertContains('test_before_element_html', $html);
-        $this->assertContains('<input id="test_id"', $html);
-        $this->assertContains('name="test_name"', $html);
-        $this->assertContains('value="test_value"', $html);
+        $expectedHtmlId = $this->testData['html_id_prefix']
+            . $this->testData['html_id']
+            . $this->testData['html_id_suffix'];
+
+        $this->assertContains('<label class="addbefore" for="' . $expectedHtmlId . '"', $html);
+        $this->assertContains($this->testData['before_element_html'], $html);
+        $this->assertContains('<input id="' . $expectedHtmlId . '"', $html);
+        $this->assertContains('name="' . $this->testData['name'] . '"', $html);
+        $this->assertContains('value="' . $this->testData['value'] . '"', $html);
         $this->assertContains('disabled="disabled"', $html);
         $this->assertContains('type="file"', $html);
-        $this->assertContains('test_after_element_js', $html);
-        $this->assertContains('<label class="addafter" for="test_id"', $html);
-        $this->assertContains('test_after_element_html', $html);
-        $this->assertContains('<input type="checkbox" name="test_name[delete]"', $html);
+        $this->assertContains($this->testData['after_element_js'], $html);
+        $this->assertContains('<label class="addafter" for="' . $expectedHtmlId . '"', $html);
+        $this->assertContains($this->testData['after_element_html'], $html);
+        $this->assertContains('<input type="checkbox" name="' . $this->testData['name'] . '[delete]"', $html);
     }
 }

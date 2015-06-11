@@ -21,30 +21,36 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field\Image
      */
-    protected $_image;
+    protected $image;
+
+    /**
+     * @var array
+     */
+    protected $testData;
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $collectionFactoryMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilderMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $this->_image = new \Magento\Config\Block\System\Config\Form\Field\Image(
-            $factoryMock,
-            $collectionFactoryMock,
-            $escaperMock,
-            $this->urlBuilderMock
+        $this->image = $objectManager->getObject(
+            'Magento\Config\Block\System\Config\Form\Field\Image',
+            [
+                'urlBuilder' => $this->urlBuilderMock,
+            ]
         );
+
+        $this->testData = [
+            'html_id_prefix' => 'test_id_prefix_',
+            'html_id'        => 'test_id',
+            'html_id_suffix' => '_test_id_suffix',
+            'path'           => 'catalog/product/placeholder',
+            'value'          => 'test_value',
+        ];
+
         $formMock = new \Magento\Framework\Object();
-        $formMock->getHtmlIdPrefix('id_prefix');
-        $formMock->getHtmlIdPrefix('id_suffix');
-        $this->_image->setForm($formMock);
+        $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
+        $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
+        $this->image->setForm($formMock);
     }
 
     /**
@@ -57,8 +63,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
             ->with(['_type' => $type])->will($this->returnValue($url));
 
-        $this->_image->setValue('test_value');
-        $this->_image->setFieldConfig(
+        $this->image->setValue($this->testData['value']);
+        $this->image->setHtmlId($this->testData['html_id']);
+        $this->image->setFieldConfig(
             [
                 'id' => 'placeholder',
                 'type' => 'image',
@@ -71,25 +78,33 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'upload_dir' => [
                     'config' => 'system/filesystem/media',
                     'scope_info' => '1',
-                    'value' => 'catalog/product/placeholder',
+                    'value' => $this->testData['path'],
                 ],
                 'base_url' => [
                     'type' => $type,
                     'scope_info' => '1',
-                    'value' => 'catalog/product/placeholder',
+                    'value' => $this->testData['path'],
                 ],
                 '_elementType' => 'field',
                 'path' => 'catalog/placeholder',
             ]);
 
-        $html = $this->_image->getElementHtml();
+        $expectedHtmlId = $this->testData['html_id_prefix']
+            . $this->testData['html_id']
+            . $this->testData['html_id_suffix'];
+
+        $html = $this->image->getElementHtml();
         $this->assertContains('class="input-file"', $html);
         $this->assertContains('<input', $html);
         $this->assertContains('type="file"', $html);
         $this->assertContains('value="test_value"', $html);
         $this->assertContains(
-            '<a href="' . $url
-                . 'catalog/product/placeholder/test_value" onclick="imagePreview(\'_image\'); return false;"',
+            '<a href="'
+            . $url
+            . $this->testData['path']
+            . '/'
+            . $this->testData['value']
+            . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"',
             $html
         );
         $this->assertContains('<input type="checkbox"', $html);
