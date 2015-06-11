@@ -61,8 +61,8 @@ class ProductUrlPathGenerator
         $path = $product->getData('url_path');
         if ($path === null) {
             $path = $product->getUrlKey() === false
-                ? $this->_prepareProductDefaultUrlKey($product)
-                : $this->_prepareProductUrlKey($product);
+                ? $this->prepareProductDefaultUrlKey($product)
+                : $this->prepareProductUrlKey($product);
         }
         return $category === null
             ? $path
@@ -73,9 +73,9 @@ class ProductUrlPathGenerator
      * Prepare URL Key with stored product data (fallback for "Use Default Value" logic)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return mixed|null|string
+     * @return string
      */
-    protected function _prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
+    protected function prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
     {
         $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
@@ -116,7 +116,7 @@ class ProductUrlPathGenerator
      */
     public function generateUrlKey($product)
     {
-        return $product->getUrlKey() === false ? false : $this->_prepareProductUrlKey($product);
+        return $product->getUrlKey() === false ? false : $this->prepareProductUrlKey($product);
     }
 
     /**
@@ -125,7 +125,7 @@ class ProductUrlPathGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @return string
      */
-    protected function _prepareProductUrlKey(\Magento\Catalog\Model\Product $product)
+    protected function prepareProductUrlKey(\Magento\Catalog\Model\Product $product)
     {
         $urlKey = $product->getUrlKey();
         return $product->formatUrlKey($urlKey === '' || $urlKey === null ? $product->getName() : $urlKey);
