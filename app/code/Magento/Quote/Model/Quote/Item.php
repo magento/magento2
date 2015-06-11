@@ -288,6 +288,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Retrieve quote model object
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
@@ -394,6 +396,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Set option product with Qty
+     *
+     * @codeCoverageIgnore
      *
      * @param array $qtyOptions
      * @return $this
@@ -528,6 +532,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Return real product type of item
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getRealProductType()
@@ -569,6 +575,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Get all item options
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote\Item\Option[]
      */
     public function getOptions()
@@ -578,6 +586,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Get all item options as array with codes in array key
+     *
+     * @codeCoverageIgnore
      *
      * @return array
      */
@@ -741,6 +751,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Mar option save requirement
      *
+     * @codeCoverageIgnore
+     *
      * @param bool $flag
      * @return void
      */
@@ -751,6 +763,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Were options saved
+     *
+     * @codeCoverageIgnore
      *
      * @return bool
      */
