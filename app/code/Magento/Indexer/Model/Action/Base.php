@@ -84,7 +84,7 @@ class Base implements ActionInterface
      */
     public function executeFull()
     {
-        throw new \Exception('Not implemented yet');
+        $this->connection->query($this->prepareQuery());
     }
 
     /**
@@ -109,14 +109,14 @@ class Base implements ActionInterface
         throw new \Exception('Not implemented yet');
     }
 
-    protected function execute()
+    protected function prepareQuery()
     {
-        $this->data['handlers']['defaultHandler'] = 'Magento\Indexer\Model\DefaultHandler';
+        $this->data['handlers']['defaultHandler'] = 'Magento\Indexer\Model\Handler\DefaultHandler';
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $select = $this->createResultSelect();
-        $this->connection->insertFromSelect(
+        return $this->connection->insertFromSelect(
             $select,
             'index_' . $this->sources[$this->data['primary']]->getEntityName()
         );
@@ -165,12 +165,13 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
                     isset($this->sources[$field['source']])
                         ? $this->sources[$field['source']]
-                        : $this->sources[$this->data['fieldsets'][$fieldsetName]['source']];
+                        : $this->data['fieldsets'][$fieldsetName]['source'];
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     isset($this->handlers[$field['handler']])
                         ? $this->handlers[$field['handler']]
-                        : $this->handlers[$this->data['fieldsets'][$fieldsetName]['handler']]
-                            ?: $this->handlers['defaultHandler'];
+                        : isset($this->data['fieldsets'][$fieldsetName]['handler'])
+                            ? $this->data['fieldsets'][$fieldsetName]['handler']
+                            : $this->handlers['defaultHandler'];
             }
         }
     }

@@ -18,7 +18,7 @@ class DefaultHandler implements HandlerInterface
      */
     public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldInfo)
     {
-        $select->columns(new \Zend_Db_Expr($source->getEntityName() . '.' . $fieldInfo['origin']), $fieldInfo['name']);
+        $select->columns([$fieldInfo['name'] => $fieldInfo['origin']], $source->getEntityName());
     }
 
     /**
