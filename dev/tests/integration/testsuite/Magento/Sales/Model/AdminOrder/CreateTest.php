@@ -154,9 +154,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Magento\Wishlist\Model\Wishlist',
             $wishlist,
-            'New wishlist is expected to be created if existing customer does not have one yet.'
+            'New Wish List is expected to be created if existing Customer does not have one yet.'
         );
-        $this->assertEquals(0, $wishlist->getItemsCount(), 'New wishlist must be empty just after creation.');
+        $this->assertEquals(0, $wishlist->getItemsCount(), 'New Wish List must be empty just after creation.');
 
         /** Add new item to wishlist and try to get it using getCustomerWishlist once again */
         $wishlist->addNewItem($productIdFromFixture)->save();
@@ -164,7 +164,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             1,
             $updatedWishlist->getItemsCount(),
-            'Wishlist must contain a product which was added to it earlier.'
+            'Wish List must contain a Product which was added to it earlier.'
         );
 
         /** Try to load wishlist from cache in the class after it is deleted from DB */
@@ -172,12 +172,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $updatedWishlist,
             $this->_model->getCustomerWishlist(false),
-            'Wishlist cached in class variable is expected to be returned.'
+            'Wish List cached in class variable is expected to be returned.'
         );
         $this->assertNotSame(
             $updatedWishlist,
             $this->_model->getCustomerWishlist(true),
-            'New wishlist is expected to be created when cache is forced to be refreshed.'
+            'New Wish List is expected to be created when cache is forced to be refreshed.'
         );
     }
 
