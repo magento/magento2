@@ -37,10 +37,18 @@
                                                 <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
                                                 <item name="subtotal" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
+                                                        <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
+                                                    </item>
                                                 </item>
                                                 <item name="shipping" xsi:type="array">
                                                     <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
                                                     <item name="sortOrder" xsi:type="string">20</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="excludingTaxMessage" xsi:type="string">Excl. Tax</item>
+                                                        <item name="includingTaxMessage" xsi:type="string">Incl. Tax</item>
+                                                    </item>
                                                 </item>
                                                 <item name="before_grandtotal" xsi:type="array">
                                                     <item name="component"  xsi:type="string">uiComponent</item>

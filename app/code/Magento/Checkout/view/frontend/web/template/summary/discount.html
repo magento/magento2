@@ -6,7 +6,9 @@
 -->
 <!-- ko if: getPureValue() != 0 -->
 <tr class="totals">
-    <th data-bind="text: getTitle()"  colspan="3" class="mark" scope="row">
+    <th colspan="3" class="mark" scope="row">
+        <span class="title" data-bind="text: title"></span>
+        <span class="discount coupon" data-bind="text: getCouponCode()"></span>
     </th>
     <td data-bind="text: getValue(), attr: {'data-th': $t(name) }" class="amount"></td>
 </tr>

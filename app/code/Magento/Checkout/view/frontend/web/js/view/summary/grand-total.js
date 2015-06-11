@@ -14,7 +14,6 @@ define(
             defaults: {
                 template: 'Magento_Checkout/summary/subtotal'
             },
-            title: 'Order Total',
             getPureValue: function() {
                 var totals = quote.getTotals()();
                 if (totals) {

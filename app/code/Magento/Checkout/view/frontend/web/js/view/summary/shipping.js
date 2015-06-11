@@ -16,16 +16,14 @@ define(
             defaults: {
                 template: 'Magento_Checkout/summary/shipping'
             },
-            notCalculatedMessage: 'Not yet calculated',
             quoteIsVirtual: quote.isVirtual(),
             totals: quote.getTotals(),
-            title: 'Shipping',
             getShippingMethodTitle: function() {
                 return shippingService.getTitleByCode(quote.shippingMethod())
             },
             getValue: function() {
                 var price = 0;
-                if (this.totals() && this.totals().shipping_amount) {
+                if (this.totals() && quote.shippingMethod()) {
                     price =  this.totals().shipping_amount;
                 } else {
                     return this.notCalculatedMessage;
