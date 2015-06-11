@@ -582,70 +582,70 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the negative adjustment value for the order.
      *
-     * @return float Negative adjustment value.
+     * @return float|null Negative adjustment value.
      */
     public function getAdjustmentNegative();
 
     /**
      * Gets the positive adjustment value for the order.
      *
-     * @return float Positive adjustment value.
+     * @return float|null Positive adjustment value.
      */
     public function getAdjustmentPositive();
 
     /**
      * Gets the applied rule IDs for the order.
      *
-     * @return string Applied rule IDs.
+     * @return string|null Applied rule IDs.
      */
     public function getAppliedRuleIds();
 
     /**
      * Gets the base negative adjustment value for the order.
      *
-     * @return float Base negative adjustment value.
+     * @return float|null Base negative adjustment value.
      */
     public function getBaseAdjustmentNegative();
 
     /**
      * Gets the base positive adjustment value for the order.
      *
-     * @return float Base positive adjustment value.
+     * @return float|null Base positive adjustment value.
      */
     public function getBaseAdjustmentPositive();
 
     /**
      * Gets the base currency code for the order.
      *
-     * @return string Base currency code.
+     * @return string|null Base currency code.
      */
     public function getBaseCurrencyCode();
 
     /**
      * Gets the base discount amount for the order.
      *
-     * @return float Base discount amount.
+     * @return float|null Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base discount canceled for the order.
      *
-     * @return float Base discount canceled.
+     * @return float|null Base discount canceled.
      */
     public function getBaseDiscountCanceled();
 
     /**
      * Gets the base discount invoiced amount for the order.
      *
-     * @return float Base discount invoiced.
+     * @return float|null Base discount invoiced.
      */
     public function getBaseDiscountInvoiced();
 
     /**
      * Gets the base discount refunded amount for the order.
      *
-     * @return float Base discount refunded.
+     * @return float|null Base discount refunded.
      */
     public function getBaseDiscountRefunded();
 
@@ -659,259 +659,259 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the base hidden tax amount for the order.
      *
-     * @return float Base hidden tax amount.
+     * @return float|null Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
      * Gets the base hidden tax invoiced amount for the order.
      *
-     * @return float Base hidden tax invoiced.
+     * @return float|null Base hidden tax invoiced.
      */
     public function getBaseHiddenTaxInvoiced();
 
     /**
      * Gets the base hidden tax refunded amount for the order.
      *
-     * @return float Base hidden tax refunded.
+     * @return float|null Base hidden tax refunded.
      */
     public function getBaseHiddenTaxRefunded();
 
     /**
      * Gets the base shipping amount for the order.
      *
-     * @return float Base shipping amount.
+     * @return float|null Base shipping amount.
      */
     public function getBaseShippingAmount();
 
     /**
      * Gets the base shipping canceled for the order.
      *
-     * @return float Base shipping canceled.
+     * @return float|null Base shipping canceled.
      */
     public function getBaseShippingCanceled();
 
     /**
      * Gets the base shipping discount amount for the order.
      *
-     * @return float Base shipping discount amount.
+     * @return float|null Base shipping discount amount.
      */
     public function getBaseShippingDiscountAmount();
 
     /**
      * Gets the base shipping hidden tax amount for the order.
      *
-     * @return float Base shipping hidden tax amount.
+     * @return float|null Base shipping hidden tax amount.
      */
     public function getBaseShippingHiddenTaxAmnt();
 
     /**
      * Gets the base shipping including tax for the order.
      *
-     * @return float Base shipping including tax.
+     * @return float|null Base shipping including tax.
      */
     public function getBaseShippingInclTax();
 
     /**
      * Gets the base shipping invoiced amount for the order.
      *
-     * @return float Base shipping invoiced.
+     * @return float|null Base shipping invoiced.
      */
     public function getBaseShippingInvoiced();
 
     /**
      * Gets the base shipping refunded amount for the order.
      *
-     * @return float Base shipping refunded.
+     * @return float|null Base shipping refunded.
      */
     public function getBaseShippingRefunded();
 
     /**
      * Gets the base shipping tax amount for the order.
      *
-     * @return float Base shipping tax amount.
+     * @return float|null Base shipping tax amount.
      */
     public function getBaseShippingTaxAmount();
 
     /**
      * Gets the base shipping tax refunded amount for the order.
      *
-     * @return float Base shipping tax refunded.
+     * @return float|null Base shipping tax refunded.
      */
     public function getBaseShippingTaxRefunded();
 
     /**
      * Gets the base subtotal for the order.
      *
-     * @return float Base subtotal.
+     * @return float|null Base subtotal.
      */
     public function getBaseSubtotal();
 
     /**
      * Gets the base subtotal canceled for the order.
      *
-     * @return float Base subtotal canceled.
+     * @return float|null Base subtotal canceled.
      */
     public function getBaseSubtotalCanceled();
 
     /**
      * Gets the base subtotal including tax for the order.
      *
-     * @return float Base subtotal including tax.
+     * @return float|null Base subtotal including tax.
      */
     public function getBaseSubtotalInclTax();
 
     /**
      * Gets the base subtotal invoiced amount for the order.
      *
-     * @return float Base subtotal invoiced.
+     * @return float|null Base subtotal invoiced.
      */
     public function getBaseSubtotalInvoiced();
 
     /**
      * Gets the base subtotal refunded amount for the order.
      *
-     * @return float Base subtotal refunded.
+     * @return float|null Base subtotal refunded.
      */
     public function getBaseSubtotalRefunded();
 
     /**
      * Gets the base tax amount for the order.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the base tax canceled for the order.
      *
-     * @return float Base tax canceled.
+     * @return float|null Base tax canceled.
      */
     public function getBaseTaxCanceled();
 
     /**
      * Gets the base tax invoiced amount for the order.
      *
-     * @return float Base tax invoiced.
+     * @return float|null Base tax invoiced.
      */
     public function getBaseTaxInvoiced();
 
     /**
      * Gets the base tax refunded amount for the order.
      *
-     * @return float Base tax refunded.
+     * @return float|null Base tax refunded.
      */
     public function getBaseTaxRefunded();
 
     /**
      * Gets the base total canceled for the order.
      *
-     * @return float Base total canceled.
+     * @return float|null Base total canceled.
      */
     public function getBaseTotalCanceled();
 
     /**
      * Gets the base total due for the order.
      *
-     * @return float Base total due.
+     * @return float|null Base total due.
      */
     public function getBaseTotalDue();
 
     /**
      * Gets the base total invoiced amount for the order.
      *
-     * @return float Base total invoiced.
+     * @return float|null Base total invoiced.
      */
     public function getBaseTotalInvoiced();
 
     /**
      * Gets the base total invoiced cost for the order.
      *
-     * @return float Base total invoiced cost.
+     * @return float|null Base total invoiced cost.
      */
     public function getBaseTotalInvoicedCost();
 
     /**
      * Gets the base total offline refunded amount for the order.
      *
-     * @return float Base total offline refunded.
+     * @return float|null Base total offline refunded.
      */
     public function getBaseTotalOfflineRefunded();
 
     /**
      * Gets the base total online refunded amount for the order.
      *
-     * @return float Base total online refunded.
+     * @return float|null Base total online refunded.
      */
     public function getBaseTotalOnlineRefunded();
 
     /**
      * Gets the base total paid for the order.
      *
-     * @return float Base total paid.
+     * @return float|null Base total paid.
      */
     public function getBaseTotalPaid();
 
     /**
      * Gets the base total quantity ordered for the order.
      *
-     * @return float Base total quantity ordered.
+     * @return float|null Base total quantity ordered.
      */
     public function getBaseTotalQtyOrdered();
 
     /**
      * Gets the base total refunded amount for the order.
      *
-     * @return float Base total refunded.
+     * @return float|null Base total refunded.
      */
     public function getBaseTotalRefunded();
 
     /**
      * Gets the base-to-global rate for the order.
      *
-     * @return float Base-to-global rate.
+     * @return float|null Base-to-global rate.
      */
     public function getBaseToGlobalRate();
 
     /**
      * Gets the base-to-order rate for the order.
      *
-     * @return float Base-to-order rate.
+     * @return float|null Base-to-order rate.
      */
     public function getBaseToOrderRate();
 
     /**
      * Gets the billing address ID for the order.
      *
-     * @return int Billing address ID.
+     * @return int|null Billing address ID.
      */
     public function getBillingAddressId();
 
     /**
      * Gets the can-ship-partially flag value for the order.
      *
-     * @return int Can-ship-partially flag value.
+     * @return int|null Can-ship-partially flag value.
      */
     public function getCanShipPartially();
 
     /**
      * Gets the can-ship-partially-item flag value for the order.
      *
-     * @return int Can-ship-partially-item flag value.
+     * @return int|null Can-ship-partially-item flag value.
      */
     public function getCanShipPartiallyItem();
 
     /**
      * Gets the coupon code for the order.
      *
-     * @return string Coupon code.
+     * @return string|null Coupon code.
      */
     public function getCouponCode();
 
     /**
      * Gets the created-at timestamp for the order.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -926,7 +926,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the customer date-of-birth (DOB) for the order.
      *
-     * @return string Customer date-of-birth (DOB).
+     * @return string|null Customer date-of-birth (DOB).
      */
     public function getCustomerDob();
 
@@ -940,140 +940,140 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the customer first name for the order.
      *
-     * @return string Customer first name.
+     * @return string|null Customer first name.
      */
     public function getCustomerFirstname();
 
     /**
      * Gets the customer gender for the order.
      *
-     * @return int Customer gender.
+     * @return int|null Customer gender.
      */
     public function getCustomerGender();
 
     /**
      * Gets the customer group ID for the order.
      *
-     * @return int Customer group ID.
+     * @return int|null Customer group ID.
      */
     public function getCustomerGroupId();
 
     /**
      * Gets the customer ID for the order.
      *
-     * @return int Customer ID.
+     * @return int|null Customer ID.
      */
     public function getCustomerId();
 
     /**
      * Gets the customer-is-guest flag value for the order.
      *
-     * @return int Customer-is-guest flag value.
+     * @return int|null Customer-is-guest flag value.
      */
     public function getCustomerIsGuest();
 
     /**
      * Gets the customer last name for the order.
      *
-     * @return string Customer last name.
+     * @return string|null Customer last name.
      */
     public function getCustomerLastname();
 
     /**
      * Gets the customer middle name for the order.
      *
-     * @return string Customer middle name.
+     * @return string|null Customer middle name.
      */
     public function getCustomerMiddlename();
 
     /**
      * Gets the customer note for the order.
      *
-     * @return string Customer note.
+     * @return string|null Customer note.
      */
     public function getCustomerNote();
 
     /**
      * Gets the customer-note-notify flag value for the order.
      *
-     * @return int Customer-note-notify flag value.
+     * @return int|null Customer-note-notify flag value.
      */
     public function getCustomerNoteNotify();
 
     /**
      * Gets the customer prefix for the order.
      *
-     * @return string Customer prefix.
+     * @return string|null Customer prefix.
      */
     public function getCustomerPrefix();
 
     /**
      * Gets the customer suffix for the order.
      *
-     * @return string Customer suffix.
+     * @return string|null Customer suffix.
      */
     public function getCustomerSuffix();
 
     /**
      * Gets the customer value-added tax (VAT) for the order.
      *
-     * @return string Customer value-added tax (VAT).
+     * @return string|null Customer value-added tax (VAT).
      */
     public function getCustomerTaxvat();
 
     /**
      * Gets the discount amount for the order.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
     /**
      * Gets the discount canceled for the order.
      *
-     * @return float Discount canceled.
+     * @return float|null Discount canceled.
      */
     public function getDiscountCanceled();
 
     /**
      * Gets the discount description for the order.
      *
-     * @return string Discount description.
+     * @return string|null Discount description.
      */
     public function getDiscountDescription();
 
     /**
      * Gets the discount invoiced amount for the order.
      *
-     * @return float Discount invoiced.
+     * @return float|null Discount invoiced.
      */
     public function getDiscountInvoiced();
 
     /**
      * Gets the discount refunded amount for the order.
      *
-     * @return float Discount refunded amount.
+     * @return float|null Discount refunded amount.
      */
     public function getDiscountRefunded();
 
     /**
      * Gets the edit increment value for the order.
      *
-     * @return int Edit increment value.
+     * @return int|null Edit increment value.
      */
     public function getEditIncrement();
 
     /**
      * Gets the email-sent flag value for the order.
      *
-     * @return int Email-sent flag value.
+     * @return int|null Email-sent flag value.
      */
     public function getEmailSent();
 
     /**
      * Gets the ID for the order.
      *
-     * @return int Order ID.
+     * @return int|null Order ID.
      */
     public function getEntityId();
 
@@ -1088,28 +1088,28 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the external customer ID for the order.
      *
-     * @return string External customer ID.
+     * @return string|null External customer ID.
      */
     public function getExtCustomerId();
 
     /**
      * Gets the external order ID for the order.
      *
-     * @return string External order ID.
+     * @return string|null External order ID.
      */
     public function getExtOrderId();
 
     /**
      * Gets the forced-shipment-with-invoice flag value for the order.
      *
-     * @return int Forced-shipment-with-invoice flag value.
+     * @return int|null Forced-shipment-with-invoice flag value.
      */
     public function getForcedShipmentWithInvoice();
 
     /**
      * Gets the global currency code for the order.
      *
-     * @return string Global currency code.
+     * @return string|null Global currency code.
      */
     public function getGlobalCurrencyCode();
 
@@ -1123,416 +1123,416 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the hidden tax amount for the order.
      *
-     * @return float Hidden tax amount.
+     * @return float|null Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
      * Gets the hidden tax invoiced amount for the order.
      *
-     * @return float Hidden tax invoiced amount.
+     * @return float|null Hidden tax invoiced amount.
      */
     public function getHiddenTaxInvoiced();
 
     /**
      * Gets the hidden tax refunded amount for the order.
      *
-     * @return float Hidden tax refunded amount.
+     * @return float|null Hidden tax refunded amount.
      */
     public function getHiddenTaxRefunded();
 
     /**
      * Gets the hold before state for the order.
      *
-     * @return string Hold before state.
+     * @return string|null Hold before state.
      */
     public function getHoldBeforeState();
 
     /**
      * Gets the hold before status for the order.
      *
-     * @return string Hold before status.
+     * @return string|null Hold before status.
      */
     public function getHoldBeforeStatus();
 
     /**
      * Gets the increment ID for the order.
      *
-     * @return string Increment ID.
+     * @return string|null Increment ID.
      */
     public function getIncrementId();
 
     /**
      * Gets the is-virtual flag value for the order.
      *
-     * @return int Is-virtual flag value.
+     * @return int|null Is-virtual flag value.
      */
     public function getIsVirtual();
 
     /**
      * Gets the order currency code for the order.
      *
-     * @return string Order currency code.
+     * @return string|null Order currency code.
      */
     public function getOrderCurrencyCode();
 
     /**
      * Gets the original increment ID for the order.
      *
-     * @return string Original increment ID.
+     * @return string|null Original increment ID.
      */
     public function getOriginalIncrementId();
 
     /**
      * Gets the payment authorization amount for the order.
      *
-     * @return float Payment authorization amount.
+     * @return float|null Payment authorization amount.
      */
     public function getPaymentAuthorizationAmount();
 
     /**
      * Gets the payment authorization expiration date for the order.
      *
-     * @return int Payment authorization expiration date.
+     * @return int|null Payment authorization expiration date.
      */
     public function getPaymentAuthExpiration();
 
     /**
      * Gets the protect code for the order.
      *
-     * @return string Protect code.
+     * @return string|null Protect code.
      */
     public function getProtectCode();
 
     /**
      * Gets the quote address ID for the order.
      *
-     * @return int Quote address ID.
+     * @return int|null Quote address ID.
      */
     public function getQuoteAddressId();
 
     /**
      * Gets the quote ID for the order.
      *
-     * @return int Quote ID.
+     * @return int|null Quote ID.
      */
     public function getQuoteId();
 
     /**
      * Gets the relation child ID for the order.
      *
-     * @return string Relation child ID.
+     * @return string|null Relation child ID.
      */
     public function getRelationChildId();
 
     /**
      * Gets the relation child real ID for the order.
      *
-     * @return string Relation child real ID.
+     * @return string|null Relation child real ID.
      */
     public function getRelationChildRealId();
 
     /**
      * Gets the relation parent ID for the order.
      *
-     * @return string Relation parent ID.
+     * @return string|null Relation parent ID.
      */
     public function getRelationParentId();
 
     /**
      * Gets the relation parent real ID for the order.
      *
-     * @return string Relation parent real ID.
+     * @return string|null Relation parent real ID.
      */
     public function getRelationParentRealId();
 
     /**
      * Gets the remote IP address for the order.
      *
-     * @return string Remote IP address.
+     * @return string|null Remote IP address.
      */
     public function getRemoteIp();
 
     /**
      * Gets the shipping address ID for the order.
      *
-     * @return int Shipping address ID.
+     * @return int|null Shipping address ID.
      */
     public function getShippingAddressId();
 
     /**
      * Gets the shipping amount for the order.
      *
-     * @return float Shipping amount.
+     * @return float|null Shipping amount.
      */
     public function getShippingAmount();
 
     /**
      * Gets the shipping canceled amount for the order.
      *
-     * @return float Shipping canceled amount.
+     * @return float|null Shipping canceled amount.
      */
     public function getShippingCanceled();
 
     /**
      * Gets the shipping description for the order.
      *
-     * @return string Shipping description.
+     * @return string|null Shipping description.
      */
     public function getShippingDescription();
 
     /**
      * Gets the shipping discount amount for the order.
      *
-     * @return float Shipping discount amount.
+     * @return float|null Shipping discount amount.
      */
     public function getShippingDiscountAmount();
 
     /**
      * Gets the shipping hidden tax amount for the order.
      *
-     * @return float Shipping hidden tax amount.
+     * @return float|null Shipping hidden tax amount.
      */
     public function getShippingHiddenTaxAmount();
 
     /**
      * Gets the shipping including tax amount for the order.
      *
-     * @return float Shipping including tax amount.
+     * @return float|null Shipping including tax amount.
      */
     public function getShippingInclTax();
 
     /**
      * Gets the shipping invoiced amount for the order.
      *
-     * @return float Shipping invoiced amount.
+     * @return float|null Shipping invoiced amount.
      */
     public function getShippingInvoiced();
 
     /**
      * Gets the shipping method for the order.
      *
-     * @return string Shipping method.
+     * @return string|null Shipping method.
      */
     public function getShippingMethod();
 
     /**
      * Gets the shipping refunded amount for the order.
      *
-     * @return float Shipping refunded amount.
+     * @return float|null Shipping refunded amount.
      */
     public function getShippingRefunded();
 
     /**
      * Gets the shipping tax amount for the order.
      *
-     * @return float Shipping tax amount.
+     * @return float|null Shipping tax amount.
      */
     public function getShippingTaxAmount();
 
     /**
      * Gets the shipping tax refunded amount for the order.
      *
-     * @return float Shipping tax refunded amount.
+     * @return float|null Shipping tax refunded amount.
      */
     public function getShippingTaxRefunded();
 
     /**
      * Gets the state for the order.
      *
-     * @return string State.
+     * @return string|null State.
      */
     public function getState();
 
     /**
      * Gets the status for the order.
      *
-     * @return string Status.
+     * @return string|null Status.
      */
     public function getStatus();
 
     /**
      * Gets the store currency code for the order.
      *
-     * @return string Store currency code.
+     * @return string|null Store currency code.
      */
     public function getStoreCurrencyCode();
 
     /**
      * Gets the store ID for the order.
      *
-     * @return int Store ID.
+     * @return int|null Store ID.
      */
     public function getStoreId();
 
     /**
      * Gets the store name for the order.
      *
-     * @return string Store name.
+     * @return string|null Store name.
      */
     public function getStoreName();
 
     /**
      * Gets the store-to-base rate for the order.
      *
-     * @return float Store-to-base rate.
+     * @return float|null Store-to-base rate.
      */
     public function getStoreToBaseRate();
 
     /**
      * Gets the store-to-order rate for the order.
      *
-     * @return float Store-to-order rate.
+     * @return float|null Store-to-order rate.
      */
     public function getStoreToOrderRate();
 
     /**
      * Gets the subtotal for the order.
      *
-     * @return float Subtotal.
+     * @return float|null Subtotal.
      */
     public function getSubtotal();
 
     /**
      * Gets the subtotal canceled amount for the order.
      *
-     * @return float Subtotal canceled amount.
+     * @return float|null Subtotal canceled amount.
      */
     public function getSubtotalCanceled();
 
     /**
      * Gets the subtotal including tax amount for the order.
      *
-     * @return float Subtotal including tax amount.
+     * @return float|null Subtotal including tax amount.
      */
     public function getSubtotalInclTax();
 
     /**
      * Gets the subtotal invoiced amount for the order.
      *
-     * @return float Subtotal invoiced amount.
+     * @return float|null Subtotal invoiced amount.
      */
     public function getSubtotalInvoiced();
 
     /**
      * Gets the subtotal refunded amount for the order.
      *
-     * @return float Subtotal refunded amount.
+     * @return float|null Subtotal refunded amount.
      */
     public function getSubtotalRefunded();
 
     /**
      * Gets the tax amount for the order.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
     /**
      * Gets the tax canceled amount for the order.
      *
-     * @return float Tax canceled amount.
+     * @return float|null Tax canceled amount.
      */
     public function getTaxCanceled();
 
     /**
      * Gets the tax invoiced amount for the order.
      *
-     * @return float Tax invoiced amount.
+     * @return float|null Tax invoiced amount.
      */
     public function getTaxInvoiced();
 
     /**
      * Gets the tax refunded amount for the order.
      *
-     * @return float Tax refunded amount.
+     * @return float|null Tax refunded amount.
      */
     public function getTaxRefunded();
 
     /**
      * Gets the total canceled for the order.
      *
-     * @return float Total canceled.
+     * @return float|null Total canceled.
      */
     public function getTotalCanceled();
 
     /**
      * Gets the total due for the order.
      *
-     * @return float Total due.
+     * @return float|null Total due.
      */
     public function getTotalDue();
 
     /**
      * Gets the total invoiced amount for the order.
      *
-     * @return float Total invoiced amount.
+     * @return float|null Total invoiced amount.
      */
     public function getTotalInvoiced();
 
     /**
      * Gets the total item count for the order.
      *
-     * @return int Total item count.
+     * @return int|null Total item count.
      */
     public function getTotalItemCount();
 
     /**
      * Gets the total offline refunded amount for the order.
      *
-     * @return float Total offline refunded amount.
+     * @return float|null Total offline refunded amount.
      */
     public function getTotalOfflineRefunded();
 
     /**
      * Gets the total online refunded amount for the order.
      *
-     * @return float Total online refunded amount.
+     * @return float|null Total online refunded amount.
      */
     public function getTotalOnlineRefunded();
 
     /**
      * Gets the total paid for the order.
      *
-     * @return float Total paid.
+     * @return float|null Total paid.
      */
     public function getTotalPaid();
 
     /**
      * Gets the total quantity ordered for the order.
      *
-     * @return float Total quantity ordered.
+     * @return float|null Total quantity ordered.
      */
     public function getTotalQtyOrdered();
 
     /**
      * Gets the total amount refunded amount for the order.
      *
-     * @return float Total amount refunded.
+     * @return float|null Total amount refunded.
      */
     public function getTotalRefunded();
 
     /**
      * Gets the updated-at timestamp for the order.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
      * Gets the weight for the order.
      *
-     * @return float Weight.
+     * @return float|null Weight.
      */
     public function getWeight();
 
     /**
      * Gets the X-Forwarded-For HTTP header field for the order.
-     * 
-     * This field identifies the originating IP address of a client 
+     *
+     * This field identifies the originating IP address of a client
      * connecting to a web server through an HTTP proxy or load balancer.
      *
-     * @return string X-Forwarded-For field value.
+     * @return string|null X-Forwarded-For field value.
      */
     public function getXForwardedFor();
 
@@ -1599,7 +1599,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets addresses for the order.
      *
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface[] Array of addresses.
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface[]|null Array of addresses.
      */
     public function getAddresses();
 
@@ -1614,7 +1614,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets status histories for the order.
      *
-     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] Array of status histories.
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]|null Array of status histories.
      */
     public function getStatusHistories();
 
