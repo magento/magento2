@@ -61,7 +61,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -71,7 +71,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -109,6 +109,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * Retrieve invoice instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Invoice
      */
@@ -149,6 +151,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * Declare qty
+     *
+     * @codeCoverageIgnore
      *
      * @param float $qty
      * @return $this
@@ -253,6 +257,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -483,7 +488,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return $this->getData(InvoiceItemInterface::TAX_AMOUNT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

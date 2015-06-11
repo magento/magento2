@@ -45,7 +45,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('admin:user:create')
-            ->setDescription('Creates admin user')
+            ->setDescription('Creates an administrator')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
@@ -62,7 +62,9 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());
-        $output->writeln('<info>Created admin user ' . $input->getOption(AdminAccount::KEY_USER) . '</info>');
+        $output->writeln(
+            '<info>Created Magento administrator user named ' . $input->getOption(AdminAccount::KEY_USER) . '</info>'
+        );
     }
 
     /**
@@ -73,11 +75,21 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     public function getOptionsList()
     {
         return [
-            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, 'Admin user'),
-            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, 'Admin password', ''),
-            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, 'Admin email'),
-            new InputOption(AdminAccount::KEY_FIRST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin first name'),
-            new InputOption(AdminAccount::KEY_LAST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin last name'),
+            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, '(Required) Admin user'),
+            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, '(Required) Admin password'),
+            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, '(Required) Admin email'),
+            new InputOption(
+                AdminAccount::KEY_FIRST_NAME,
+                null,
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin first name'
+            ),
+            new InputOption(
+                AdminAccount::KEY_LAST_NAME,
+                null,
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin last name'
+            ),
         ];
     }
 
@@ -95,7 +107,10 @@ class AdminUserCreateCommand extends AbstractSetupCommand
             ->setLastname($input->getOption(AdminAccount::KEY_LAST_NAME))
             ->setUsername($input->getOption(AdminAccount::KEY_USER))
             ->setEmail($input->getOption(AdminAccount::KEY_EMAIL))
-            ->setPassword($input->getOption(AdminAccount::KEY_PASSWORD));
+            ->setPassword(
+                $input->getOption(AdminAccount::KEY_PASSWORD) === null
+                ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
+            );
 
         $validator = new \Magento\Framework\Validator\Object;
         $this->validationRules->addUserInfoRules($validator);

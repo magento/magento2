@@ -69,6 +69,9 @@ class DataObjectHelper
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
+        if ($dataObject instanceof ExtensibleDataInterface) {
+            $data = $this->extensionFactory->extractExtensionAttributes(get_class($dataObject), $data);
+        }
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
     }
@@ -115,10 +118,8 @@ class DataObjectHelper
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
-            } else {
-                if ($dataObject instanceof ExtensibleDataInterface) {
-                    $dataObject->setCustomAttribute($key, $value);
-                }
+            } elseif ($dataObject instanceof CustomAttributesDataInterface) {
+                $dataObject->setCustomAttribute($key, $value);
             }
         }
 
