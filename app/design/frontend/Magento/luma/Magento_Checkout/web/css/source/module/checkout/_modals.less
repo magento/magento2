@@ -18,29 +18,7 @@
         .modal-popup {
             .field-tooltip {
                 .field-tooltip-content {
-                    .css(right, @checkout-tooltip-content-mobile__right);
-                    .css(top, @checkout-tooltip-content-mobile__top);
-                    left: auto;
-
-                    &:before,
-                    &:after {
-                        .arrow(
-                        @_position: top,
-                        @_size: @checkout-tooltip-icon-arrow__font-size,
-                        @_color: @checkout-tooltip-content__background-color
-                        );
-                        .css(margin-top, @checkout-tooltip-icon-arrow__left);
-                        .css(right, @indent__s);
-                        left: auto;
-                        top: 0%;
-                    }
-                    &:before {
-                        .css(border-bottom-color, @checkout-tooltip-content__border-color);
-                    }
-                    &:after {
-                        .css(border-bottom-color, @checkout-tooltip-content__background-color);
-                        top: 1px;
-                    }
+                    &:extend(.abs-checkout-tooltip-content-position-top all);
                 }
             }
             .fieldset {

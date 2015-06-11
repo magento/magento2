@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="shipping police" data-bind="visible: config.isEnabled">
-    <!-- ko text: $t('See our shipping policy') --><!-- /ko -->
-    <div class="tooltip content">
+<div class="shipping-policy-block field-tooltip" data-bind="visible: config.isEnabled">
+    <span class="field-tooltip-action" tabindex="0">
+        <!-- ko text: $t('See our shipping policy') --><!-- /ko -->
+    </span>
+    <div class="field-tooltip-content">
         <!-- ko text: config.shippingPolicyContent --><!-- /ko -->
     </div>
 </div>

@@ -1,0 +1,65 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkout-shipping-policy-action__color: @link__color;
+@checkout-shipping-policy-tooltip__width: 420px;
+@checkout-shipping-policy-tooltip-mobile__width: 300px;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .checkout-shipping-method {
+        position: relative;
+    }
+
+    .shipping-policy-block {
+        &.field-tooltip {
+            top: 8px;
+
+            .field-tooltip-action {
+                .css(color, @checkout-shipping-policy-action__color);
+                cursor: pointer;
+                &:before {
+                    &:extend(.abs-no-display all);
+                }
+            }
+
+            .field-tooltip-content {
+                &:extend(.abs-checkout-tooltip-content-position-top all);
+                .css(top, @indent__l);
+                .css(width, @checkout-shipping-policy-tooltip__width);
+                box-sizing: border-box;
+            }
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .shipping-policy-block {
+        &.field-tooltip {
+            right: auto;
+            top: 27px;
+
+            .field-tooltip-content {
+                .css(width, @checkout-shipping-policy-tooltip-mobile__width);
+                right: auto;
+                &:before,
+                &:after {
+                    right: auto;
+                }
+            }
+        }
+    }
+}
