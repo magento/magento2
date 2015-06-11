@@ -402,11 +402,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_NEW_NAMES,
-            __('This name is already being used. Please enter a different name.')
+            __('This name is already being used for custom option. Please enter a different name.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_OLD_NAMES,
-            __('This name is already being used. Please enter a different name.')
+            __('This name is already being used for custom option. Please enter a different name.')
         );
         $this->_productEntity->addMessageTemplate(
             self::ERROR_AMBIGUOUS_TYPES,
