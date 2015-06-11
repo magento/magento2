@@ -40,6 +40,10 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction($expected)
     {
         $this->sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);
+        $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
+            ->willReturn($expected['isSampleDataInstalled']);
+        $this->sampleData->expects($this->once())->method('isInstallationError')
+            ->willReturn($expected['isSampleDataErrorInstallation']);
         $this->lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
         $this->lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
         $this->lists->expects($this->once())->method('getLocaleList')->willReturn($expected['language']);
@@ -64,8 +68,13 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $timezones = ['timezone' => ['America/New_York'=>'EST', 'America/Chicago' => 'CST']];
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
-        $sampleDataTrue = ['isSampledataEnabled' => true];
-        $sampleDataFalse = ['isSampledataEnabled' => false];
+        $sampleData = [
+            'isSampleDataInstalled' => null,
+            'isSampleDataErrorInstallation' => null,
+            'isSampledataEnabled' => null
+        ];
+        $sampleDataTrue = array_merge($sampleData, ['isSampledataEnabled' => true]);
+        $sampleDataFalse = array_merge($sampleData, ['isSampledataEnabled' => false]);
 
         return [
             'with_all_data' => [array_merge($timezones, $currency, $language, $sampleDataTrue)],
@@ -76,7 +85,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
             'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleDataTrue)],
             'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleDataTrue)],
             'false_sample_data' => [array_merge($timezones, $currency, $language, $sampleDataFalse)],
-            'no_sample_data' => [array_merge($timezones, $currency, $language, ['isSampledataEnabled' => null])],
+            'no_sample_data' => [array_merge($timezones, $currency, $language, $sampleData)],
         ];
     }
 
