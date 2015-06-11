@@ -6,9 +6,12 @@
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use \Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use \Magento\CatalogInventory\Api\Data as InventoryApiData;
 
 /**
  * Class StockItemRepositoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,12 +45,12 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $stockItemResourceMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InventoryApiData\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockItemFactoryMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InventoryApiData\StockItemCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockItemCollectionMock;
 

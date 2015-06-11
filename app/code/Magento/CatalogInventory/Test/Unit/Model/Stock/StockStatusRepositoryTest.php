@@ -6,6 +6,7 @@
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use \Magento\CatalogInventory\Model\Stock\StockStatusRepository;
+use \Magento\CatalogInventory\Api\Data as InventoryApiData;
 
 /**
  * Class StockStatusRepositoryTest
@@ -33,7 +34,7 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $stockStatusFactoryMock;
 
     /**
-     * @var Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InventoryApiData\StockStatusCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockStatusCollectionMock;
 

@@ -211,6 +211,6 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     public function testGetThresholdQty()
     {
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(5);
-        $this->assertEquals(5,$this->block->getThresholdQty());
+        $this->assertEquals(5, $this->block->getThresholdQty());
     }
 }
