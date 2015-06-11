@@ -34,6 +34,7 @@ define(
                     function (response) {
                         console.log(response);
                         paymentService.setPaymentMethods(response.payment_methods);
+                        quote.setTotals(response.totals)
                     }
                 ).fail(
                     function (response) {
