@@ -37,8 +37,10 @@ body {
 }
 
 .page-wrapper {
+    display: inline-block;
     background-color: @page-wrapper__background-color;
-    float: left;
+    margin-left: -4px; // Clear inline-block gap
+    vertical-align: top;
     width: ~'calc(100% - @{menu__width})';
 }
 
