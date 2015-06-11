@@ -9,7 +9,7 @@ namespace Magento\Theme\Console\Command;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\State;
+use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
@@ -90,13 +90,6 @@ class ThemeUninstallCommand extends Command
     private $themeProvider;
 
     /**
-     * Application States
-     *
-     * @var State
-     */
-    private $appState;
-
-    /**
      * System cache model
      *
      * @var Cache
@@ -106,7 +99,7 @@ class ThemeUninstallCommand extends Command
     /**
      * Cleaning up application state service
      *
-     * @var State\CleanupFiles
+     * @var CleanupFiles
      */
     private $cleanupFiles;
 
@@ -121,7 +114,7 @@ class ThemeUninstallCommand extends Command
      * Constructor
      *
      * @param Cache $cache
-     * @param State\CleanupFiles $cleanupFiles
+     * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
@@ -129,13 +122,12 @@ class ThemeUninstallCommand extends Command
      * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
      * @param Remove $remove
-     * @param State $appState
      * @param BackupRollbackFactory $backupRollbackFactory
      * @throws LocalizedException
      */
     public function __construct(
         Cache $cache,
-        State\CleanupFiles $cleanupFiles,
+        CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
@@ -143,7 +135,6 @@ class ThemeUninstallCommand extends Command
         Collection $themeCollection,
         ThemeProvider $themeProvider,
         Remove $remove,
-        State $appState,
         BackupRollbackFactory $backupRollbackFactory
     ) {
         $this->cache = $cache;
@@ -155,8 +146,6 @@ class ThemeUninstallCommand extends Command
         $this->remove = $remove;
         $this->themeCollection = $themeCollection;
         $this->themeProvider = $themeProvider;
-        $this->appState = $appState;
-        $this->appState->setAreaCode(Area::AREA_ADMIN);
         $this->backupRollbackFactory = $backupRollbackFactory;
         parent::__construct();
     }
