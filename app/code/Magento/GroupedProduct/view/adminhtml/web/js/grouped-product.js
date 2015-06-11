@@ -9,8 +9,7 @@ define([
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'mage/adminhtml/grid',
-    ''
+    'mage/adminhtml/grid'
 ], function ($, mageTemplate) {
     'use strict';
 
@@ -116,7 +115,7 @@ define([
                 buttons: [{
                     id: 'grouped-product-dialog-apply-button',
                     text: $.mage.__('Add Selected Products'),
-                    class: 'action-primary action-add',
+                    'class': 'action-primary action-add',
                     click: function () {
                         $.each(selectedProductList, function (index, product) {
                             widget._add(null, product);
