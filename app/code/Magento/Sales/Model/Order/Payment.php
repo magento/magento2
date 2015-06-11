@@ -112,7 +112,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,7 +129,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -163,6 +163,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Declare order model object
      *
+     * @codeCoverageIgnore
+     *
      * @param Order $order
      * @return $this
      */
@@ -174,6 +176,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Retrieve order model object
+     *
+     * @codeCoverageIgnore
      *
      * @return Order
      */
@@ -1694,6 +1698,7 @@ class Payment extends Info implements OrderPaymentInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns account_status
      *
@@ -2214,7 +2219,6 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->getData(OrderPaymentInterface::SHIPPING_REFUNDED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

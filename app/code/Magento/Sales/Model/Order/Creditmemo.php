@@ -129,7 +129,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -147,7 +147,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
@@ -768,16 +768,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns discount_description
-     *
-     * @return string
-     */
-    public function getDiscountDescription()
-    {
-        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
-    }
-
-    /**
      * Return creditmemo items
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[]
@@ -791,6 +781,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             );
         }
         return $this->getData(CreditmemoInterface::ITEMS);
+    }
+
+    /**
+     * Return creditmemo comments
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
+     */
+    public function getComments()
+    {
+        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
+            $this->setData(
+                CreditmemoInterface::COMMENTS,
+                $this->getCommentsCollection()->getItems()
+            );
+        }
+        return $this->getData(CreditmemoInterface::COMMENTS);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * Returns discount_description
+     *
+     * @return string
+     */
+    public function getDiscountDescription()
+    {
+        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
     }
 
     /**
@@ -1293,22 +1310,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Return creditmemo comments
-     *
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
-     */
-    public function getComments()
-    {
-        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
-            $this->setData(
-                CreditmemoInterface::COMMENTS,
-                $this->getCommentsCollection()->getItems()
-            );
-        }
-        return $this->getData(CreditmemoInterface::COMMENTS);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setComments($comments)
@@ -1316,7 +1317,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         return $this->setData(CreditmemoInterface::COMMENTS, $comments);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
