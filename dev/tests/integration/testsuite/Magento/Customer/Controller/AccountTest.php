@@ -74,6 +74,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->save();
 
         $this->getRequest()->setParam('token', $token);
         $this->getRequest()->setParam('id', $customer->getId());
@@ -95,6 +96,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->save();
 
         $this->getRequest()->setParam('token', 'INVALIDTOKEN');
         $this->getRequest()->setParam('id', $customer->getId());
@@ -250,6 +252,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
+        $customer->save();
 
         $this->getRequest()->setParam('token', $token);
         $this->getRequest()->setParam('id', $customer->getId());

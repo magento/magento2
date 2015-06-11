@@ -206,7 +206,7 @@ abstract class Grid extends Block
      * @param array $filters
      * @throws \Exception
      */
-    private function prepareForSearch(array $filters)
+    protected function prepareForSearch(array $filters)
     {
         foreach ($filters as $key => $value) {
             if (isset($this->filters[$key])) {

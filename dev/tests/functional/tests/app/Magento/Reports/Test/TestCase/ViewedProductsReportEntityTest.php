@@ -34,6 +34,7 @@ class ViewedProductsReportEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**

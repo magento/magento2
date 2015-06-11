@@ -7,8 +7,8 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class File implements DriverInterface
 {
@@ -299,7 +299,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage()
+                        $this->getWarningMessage(),
                     ]
                 )
             );
@@ -329,7 +329,7 @@ class File implements DriverInterface
                     [
                         $source,
                         $destination,
-                        $this->getWarningMessage()
+                        $this->getWarningMessage(),
                     ]
                 )
             );
@@ -644,6 +644,16 @@ class File implements DriverInterface
      */
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
+        /**
+        * Security enhancement for CSV data processing by Excel-like applications.
+        * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
+        */
+        foreach ($data as $key => $value) {
+            if (isset($value[0]) && $value[0] === '=') {
+                $data[$key] = ' ' . $value;
+            }
+        }
+
         $result = @fputcsv($resource, $data, $delimiter, $enclosure);
         if (!$result) {
             throw new FileSystemException(

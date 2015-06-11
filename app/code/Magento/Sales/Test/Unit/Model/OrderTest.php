@@ -482,8 +482,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 $this->any()
             )->method(
                 'canVoid'
-            )->with(
-                new \PHPUnit_Framework_Constraint_IsIdentical($payment)
             )->will(
                 $this->returnValue($expected)
             );
@@ -653,13 +651,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             true,
             ['setOrder']
         );
-        $dbMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            ['setOrder'],
-            [],
-            '',
-            false
-        );
+        $dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->setMethods(['setOrder'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $collectionMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Status\History\Collection',
             [

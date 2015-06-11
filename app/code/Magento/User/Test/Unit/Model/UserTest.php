@@ -30,7 +30,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Model\Resource\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $_resourceMock;
 
-    /** @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
     protected $_collectionMock;
 
     /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -69,10 +69,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $this->_collectionMock = $this->getMockBuilder(
-            'Magento\Framework\Data\Collection\Db'
+            'Magento\Framework\Data\Collection\AbstractDb'
         )->disableOriginalConstructor()->setMethods(
             []
-        )->getMock();
+        )->getMockForAbstractClass();
         $coreRegistry = $this->getMockBuilder(
             'Magento\Framework\Registry'
         )->disableOriginalConstructor()->setMethods(
@@ -379,7 +379,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->_model->setIsActive(true);
         $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(false));
-        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'Access denied.');
+        $this->setExpectedException(
+            'Magento\\Framework\\Exception\\AuthenticationException',
+            'You need more permissions to access this.'
+        );
         $this->_model->verifyIdentity($password);
     }
 }

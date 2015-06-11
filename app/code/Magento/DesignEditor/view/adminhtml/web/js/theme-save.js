@@ -219,13 +219,13 @@ define([
                 success: function(data) {
                     if (data.error) {
                         /** @todo add error validator */
-                        throw Error($.mage.__('Some problem with save action'));
+                        throw Error($.mage.__('We can\'t save right now.'));
                         return;
                     }
                     postResult = data.success;
                 },
                 error: function(data) {
-                    throw Error($.mage.__('Some problem with save action'));
+                    throw Error($.mage.__('We can\'t save right now.'));
                 }
             });
             return postResult;

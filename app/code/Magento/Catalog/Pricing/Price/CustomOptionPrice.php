@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
@@ -26,39 +27,80 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     protected $priceOptions;
 
     /**
-     * Get minimal optoin item values
+     * Get minimal and maximal option values
      *
-     * @return bool|float
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getValue()
     {
-        $requiredMinimalOptions = [];
+        $optionValues = [];
         $options = $this->product->getOptions();
         if ($options) {
             /** @var $optionItem \Magento\Catalog\Model\Product\Option */
             foreach ($options as $optionItem) {
+                $min = null;
                 if (!$optionItem->getIsRequire()) {
-                    continue;
+                    $min = 0.;
                 }
-                $min = 0.;
-                /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
-                foreach ($optionItem->getValues() as $optionValue) {
-                    $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
-                    if (!$min) {
+                $max = 0.;
+                if ($optionItem->getValues() === null && $optionItem->getPrice() !== null) {
+                    $price = $optionItem->getPrice($optionItem->getPriceType() == Value::TYPE_PERCENT);
+                    if ($min === null) {
+                        $min = $price;
+                    } elseif ($price < $min) {
                         $min = $price;
                     }
-                    if ($price < $min) {
-                        $min = $price;
+                    if ($price > $max) {
+                        $max = $price;
+                    }
+                } else {
+                    /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                    foreach ($optionItem->getValues() as $optionValue) {
+                        $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
+                        if ($min === null) {
+                            $min = $price;
+                        } elseif ($price < $min) {
+                            $min = $price;
+                        }
+                        $type = $optionItem->getType();
+                        if ($type == Option::OPTION_TYPE_CHECKBOX || $type == Option::OPTION_TYPE_MULTIPLE) {
+                            $max += $price;
+                        } elseif ($price > $max) {
+                            $max = $price;
+                        }
                     }
                 }
-                $requiredMinimalOptions[] = [
+                $optionValues[] = [
                     'option_id' => $optionItem->getId(),
                     'type' => $optionItem->getType(),
-                    'min' => $min,
+                    'min' => ($min === null) ? 0. : $min,
+                    'max' => $max,
                 ];
             }
         }
-        return $requiredMinimalOptions;
+        return $optionValues;
+    }
+
+    /**
+     * Return the minimal or maximal price for custom options
+     *
+     * @param bool $getMin
+     * @return float
+     */
+    public function getCustomOptionRange($getMin)
+    {
+        $optionValue = 0.;
+        $options = $this->getValue();
+        foreach ($options as $option) {
+            if ($getMin) {
+                $optionValue += $option['min'];
+            } else {
+                $optionValue += $option['max'];
+            }
+        }
+        return $this->priceCurrency->convertAndRound($optionValue);
     }
 
     /**

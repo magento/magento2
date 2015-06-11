@@ -7,15 +7,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
-    <rule scope="testsuite">
-        <allow>
-            <namespace value="Magento" />
-        </allow>
-    </rule>
     <rule scope="testcase">
         <deny>
-            <tag group="test_type" value="3rd_party_test" />
             <tag group="test_type" value="3rd_party_test_deprecated" />
+        </deny>
+    </rule>
+    <rule scope="variation">
+        <deny>
+            <tag group="test_type" value="3rd_party_test" />
         </deny>
     </rule>
 </config>
