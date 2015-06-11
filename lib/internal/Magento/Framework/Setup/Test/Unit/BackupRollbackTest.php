@@ -120,9 +120,9 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->setupCodeBackupRollback();
         $this->file->expects($this->once())
             ->method('isExists')
-            ->with($this->path . '/backups/RollbackFile_A.tgz')
+            ->with($this->path . '/backups/12345_filesystem_code.tgz')
             ->willReturn(true);
-        $this->model->codeRollback('RollbackFile_A.tgz');
+        $this->model->codeRollback('12345_filesystem_code.tgz');
     }
 
     /**
@@ -134,7 +134,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->file->expects($this->once())
             ->method('isExists')
             ->willReturn(false);
-        $this->model->codeRollback('RollbackFile_A.tgz');
+        $this->model->codeRollback('12345_filesystem_code.tgz');
     }
 
     /**
@@ -143,22 +143,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testCodeRollbackWithInvalidFileType()
     {
-        $this->file->expects($this->once())
-            ->method('isExists')
-            ->willReturn(true);
         $this->model->codeRollback('RollbackFile_A.txt');
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid rollback file.
-     */
-    public function testCodeRollbackWithInvalidFileFormat()
-    {
-        $this->file->expects($this->once())
-            ->method('isExists')
-            ->willReturn(true);
-        $this->model->codeRollback('RollbackFile.gz');
     }
 
     public function testMediaBackup()
@@ -177,9 +162,9 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->setupCodeBackupRollback();
         $this->file->expects($this->once())
             ->method('isExists')
-            ->with($this->path . '/backups/RollbackFile_A.tgz')
+            ->with($this->path . '/backups/12345_filesystem_media.tgz')
             ->willReturn(true);
-        $this->model->codeRollback('RollbackFile_A.tgz', Factory::TYPE_MEDIA);
+        $this->model->codeRollback('12345_filesystem_media.tgz', Factory::TYPE_MEDIA);
     }
 
     public function testDbBackup()
@@ -197,9 +182,9 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->database->expects($this->once())->method('rollback');
         $this->file->expects($this->once())
             ->method('isExists')
-            ->with($this->path . '/backups/RollbackFile_A.gz')
+            ->with($this->path . '/backups/12345_db.gz')
             ->willReturn(true);
-        $this->model->dbRollback('RollbackFile_A.gz');
+        $this->model->dbRollback('12345_db.gz');
     }
 
     private function setupCodeBackupRollback()
@@ -217,7 +202,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturn('RollbackFile_A.tgz');
         $this->filesystem->expects($this->once())
             ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.tgz');
+            ->willReturn('pathToFile/12345_filesystem_code.tgz');
         $this->log->expects($this->once())
             ->method('logSuccess');
     }
@@ -235,7 +220,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturn('RollbackFile_A.gz');
         $this->database->expects($this->once())
             ->method('getBackupPath')
-            ->willReturn('pathToFile/RollbackFile_A.gz');
+            ->willReturn('pathToFile/12345_db.tgz');
         $this->log->expects($this->once())
             ->method('logSuccess');
     }
