@@ -17,13 +17,20 @@ interface StrategyInterface
     const TMP_SUFFIX = '_tmp';
 
     /**
-     * Is direct table writing required
-     *
-     * @param bool $value
+     * Get IDX table usage flag
      *
      * @return bool
      */
-    public function useIdxTable($value = null);
+    public function getUseIdxTable();
+
+    /**
+     * Set IDX table usage flag
+     *
+     * @param bool $value
+     *
+     * @return $this
+     */
+    public function setUseIdxTable($value = false);
 
     /**
      * Prepare index table name

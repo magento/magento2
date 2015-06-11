@@ -17,7 +17,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->useIdxTable(true);
+        $this->_tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();

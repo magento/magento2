@@ -20,7 +20,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->useIdxTable(true);
+        $this->_tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();

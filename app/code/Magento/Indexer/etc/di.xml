@@ -10,7 +10,8 @@
     <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State" />
     <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
     <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
-    <preference for="\Magento\Indexer\Model\Indexer\Table\StrategyInterface" type="\Magento\Indexer\Model\Indexer\Table\Strategy" />
+    <preference for="Magento\Indexer\Model\Indexer\Table\StrategyInterface" type="Magento\Indexer\Model\Indexer\Table\Strategy" />
+    <type name="Magento\Indexer\Model\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
             <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>

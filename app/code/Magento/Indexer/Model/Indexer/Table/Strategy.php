@@ -39,12 +39,18 @@ class Strategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function useIdxTable($value = null)
+    public function getUseIdxTable()
     {
-        if ($value !== null) {
-            $this->_useIdxTable = (bool) $value;
-        }
         return $this->_useIdxTable;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUseIdxTable($value = false)
+    {
+        $this->_useIdxTable = (bool) $value;
+        return $this;
     }
 
     /**
@@ -64,7 +70,7 @@ class Strategy implements StrategyInterface
      */
     public function prepareTableName($tablePrefix)
     {
-        return $this->useIdxTable()
+        return $this->getUseIdxTable()
             ? $tablePrefix . self::IDX_SUFFIX
             : $tablePrefix . self::TMP_SUFFIX;
     }
