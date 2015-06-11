@@ -16,7 +16,13 @@ define(
             availablePaymentMethods: ko.observableArray([]),
             selectedPaymentData: ko.observableArray(),
             selectedPaymentInfo: ko.observableArray([]),
+            isFreeAvailable: false,
             setPaymentMethods: function(methods) {
+                $.each(methods, function (key, method) {
+                    if (method['code'] == 'free') {
+                        this.isFreeAvailable = true;
+                    }
+                });
                 this.paymentMethods(methods);
             },
             getAvailablePaymentMethods: function () {
@@ -34,13 +40,7 @@ define(
                 return methods;
             },
             isFreeMethodActive: function () {
-                var isAvailable = false;
-                $.each(this.paymentMethods(), function (key, method) {
-                    if (method['code'] == 'free') {
-                        isAvailable = true;
-                    }
-                });
-                return isAvailable;
+                return this.isFreeAvailable;
             },
             setSelectedPaymentData: function(data) {
                 this.selectedPaymentData(data);
