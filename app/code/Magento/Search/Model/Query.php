@@ -261,6 +261,7 @@ class Query extends AbstractModel implements QueryInterface
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     public function getQueryText()
     {
@@ -269,6 +270,7 @@ class Query extends AbstractModel implements QueryInterface
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isQueryTextExceeded()
     {
