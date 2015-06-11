@@ -163,6 +163,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Declare order model object
      *
+     * @codeCoverageIgnore
+     *
      * @param Order $order
      * @return $this
      */
@@ -174,6 +176,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * Retrieve order model object
+     *
+     * @codeCoverageIgnore
      *
      * @return Order
      */
@@ -1701,6 +1705,7 @@ class Payment extends Info implements OrderPaymentInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns account_status
      *
@@ -2221,7 +2226,6 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->getData(OrderPaymentInterface::SHIPPING_REFUNDED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

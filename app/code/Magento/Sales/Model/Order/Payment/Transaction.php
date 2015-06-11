@@ -911,6 +911,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         $this->_verifyTxnType();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns transaction_id
      *
@@ -1020,7 +1021,6 @@ class Transaction extends AbstractModel implements TransactionInterface
         return $this->getData(TransactionInterface::IS_CLOSED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * Gets the created-at timestamp for the transaction.
      *
