@@ -2008,7 +2008,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $temporaryTableName
      * @param string $originTableName
      * @param bool $ifNotExists
-     * @return \Zend_Db_Pdo_Statement
+     * @return \Zend_Db_Statement_Pdo
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
     {
@@ -2017,7 +2017,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
         $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
 
-        return $this->rawQuery($sql);
+        return $this->query($sql);
     }
 
     /**
