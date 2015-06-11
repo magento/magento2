@@ -104,6 +104,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     /**
      * Set order
      *
+     * @codeCoverageIgnore
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return $this
      */
@@ -229,6 +231,32 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         return $this->order;
     }
 
+    /**
+     * Retrieve street field of an address
+     *
+     * @return string[]
+     */
+    public function getStreet()
+    {
+        if (is_array($this->getData(OrderAddressInterface::STREET))) {
+            return $this->getData(OrderAddressInterface::STREET);
+        }
+        return explode(PHP_EOL, $this->getData(OrderAddressInterface::STREET));
+    }
+
+    /**
+     * Get street line by number
+     *
+     * @param int $number
+     * @return string
+     */
+    public function getStreetLine($number)
+    {
+        $lines = $this->getStreet();
+        return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
+    }
+
+    //@codeCoverageIgnoreStart
     /**
      * Returns address_type
      *
@@ -421,31 +449,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Retrieve street field of an address
-     *
-     * @return string[]
-     */
-    public function getStreet()
-    {
-        if (is_array($this->getData(OrderAddressInterface::STREET))) {
-            return $this->getData(OrderAddressInterface::STREET);
-        }
-        return explode(PHP_EOL, $this->getData(OrderAddressInterface::STREET));
-    }
-
-    /**
-     * Get street line by number
-     *
-     * @param int $number
-     * @return string
-     */
-    public function getStreetLine($number)
-    {
-        $lines = $this->getStreet();
-        return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
-    }
-
-    /**
      * Returns suffix
      *
      * @return string
@@ -515,7 +518,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         return $this->getData(OrderAddressInterface::VAT_REQUEST_SUCCESS);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
