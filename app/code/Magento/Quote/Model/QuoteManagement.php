@@ -375,15 +375,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function resolveItems(QuoteEntity $quote)
     {
         $quoteItems = $quote->getAllItems();
-        for ($i = 0; $i < count($quoteItems) - 1; $i++) {
-            for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
-                if ($quoteItems[$i]->getParentItemId() == $quoteItems[$j]->getId()) {
-                    $tempItem = $quoteItems[$i];
-                    $quoteItems[$i] = $quoteItems[$j];
-                    $quoteItems[$j] = $tempItem;
-                }
-            }
-        }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
