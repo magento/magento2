@@ -129,12 +129,21 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             'title' => 'Updated downloadable link #1',
             'website_price' => '15.0000',
         ];
-
-
+        $expectedExtensionAttributes = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'admin@example.com'
+        ];
         $links = $this->_model->getLinks($product);
         $this->assertNotEmpty($links);
         $this->assertCount(1, $links);
+        /** @var \Magento\Downloadable\Model\Link $link */
         $link = reset($links);
+        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        $testAttribute = $link->getExtensionAttributes()->getTestAttribute();
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
         foreach ($expectedLink as $key => $value) {
             $this->assertTrue($link->hasData($key), 'Key ' . $key . ' not exist!');
             $this->assertArrayHasKey($key, $link);
@@ -157,6 +166,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $samples->count());
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $samples->getFirstItem()->getData();
+        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        $testAttribute = $sample['extension_attributes']->getTestAttribute();
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
         foreach ($expectedSample as $key => $value) {
             $this->assertArrayHasKey($key, $sample);
             $this->assertEquals($value, $sample[$key]);
