@@ -91,7 +91,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->themeProvider = $this->getMock('Magento\Theme\Model\Theme\ThemeProvider', [], [], '', false);
-        $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->backupRollbackFactory = $this->getMock(
             'Magento\Framework\Setup\BackupRollbackFactory',
             [],
@@ -109,7 +108,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->collection,
             $this->themeProvider,
             $this->remove,
-            $state,
             $this->backupRollbackFactory
         );
         $this->tester = new CommandTester($this->command);
