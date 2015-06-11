@@ -15,7 +15,7 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     public function getId()
     {
         if (null === $this->getData('id')) {
-            $this->setData('id', $this->getAppendToComponentName() . '_' . $this->getNameInLayout());
+            $this->setData('id', $this->getParentComponentName() . '_' . $this->getNameInLayout());
         }
         return $this->getData('id');
     }

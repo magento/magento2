@@ -29,13 +29,40 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
     }
 
     /**
-     * Retrieve currently edited product object
+     * Get Add new Attribute button
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return string
      */
-    public function getProduct()
+    public function getAddNewAttributeButton()
     {
-        return $this->registry->registry('current_product');
+        /** @var \Magento\Backend\Block\Widget\Button $attributeCreate */
+        $attributeCreate = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        );
+        $attributeCreate->setDataAttribute(
+            [
+                'mage-init' => [
+                    'productAttributes' => [
+                        'url' => $this->getUrl('catalog/product_attribute/new', [
+                            'store' => $this->registry->registry('current_product')->getStoreId(),
+                            'product_tab' => 'variations',
+                            'popup' => 1,
+                            '_query' => [
+                                'attribute' => [
+                                    'is_global' => 1,
+                                    'frontend_input' => 'select',
+                                ],
+                            ],
+                        ]),
+                    ],
+                ],
+            ]
+        )->setType(
+            'button'
+        )->setLabel(
+            __('Add New Attribute')
+        );
+        return $attributeCreate->toHtml();
     }
 
     /**

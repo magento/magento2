@@ -7,35 +7,7 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
 <?php
-/** @var \Magento\Backend\Block\Widget\Button $attributeCreate */
-$attributeCreate = $this->getLayout()->createBlock(
-    'Magento\Backend\Block\Widget\Button'
-);
-$attributeCreate->setDataAttribute(
-    [
-        'mage-init' => [
-            'productAttributes' => [
-                'url' => $this->getUrl('catalog/product_attribute/new', [
-                    'store' => $block->getProduct()->getStoreId(),
-                    'product_tab' => 'variations',
-                    'popup' => 1,
-                    '_query' => [
-                        'attribute' => [
-                            'is_global' => 1,
-                            'frontend_input' => 'select',
-                        ],
-                    ],
-                ]),
-            ],
-        ],
-    ]
-)->setType(
-    'button'
-)->setLabel(
-    __('Add New Attribute')
-);
-echo $attributeCreate->toHtml();
-
+echo $block->getAddNewAttributeButton();
 echo $block->getChildHtml();
 ?>
 
