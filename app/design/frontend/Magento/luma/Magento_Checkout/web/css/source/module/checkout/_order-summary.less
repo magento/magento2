@@ -132,9 +132,11 @@
                 .font-size(16);
                 font-weight: @font-weight__regular;
             }
-            .price-excluding-tax {
-                .price {
-                    .font-size(10);
+            .price-including-tax {
+                & + .price-excluding-tax {
+                    .price {
+                        .font-size(10);
+                    }
                 }
             }
         }
