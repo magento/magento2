@@ -54,7 +54,6 @@ define(
                 template: 'Magento_Checkout/shipping',
                 visible: true
             },
-            isVisible: ko.observable(true),
             isCustomerLoggedIn: customer.isLoggedIn,
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
@@ -133,11 +132,24 @@ define(
                         : null;
                 }
             ),
+
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
                 return true;
             },
+
             setShippingInformation: function () {
+                if (this.isFormInline) {
+                    this.source.set('params.invalid', false);
+                    this.source.trigger('shippingAddress.data.validate');
+                    if (this.source.get('params.invalid')
+                        || !quote.shippingMethod()
+                        || !quote.shippingMethod().method_code
+                        || !quote.shippingMethod().carrier_code
+                    ) {
+                        return false;
+                    }
+                }
                 setShippingInformation();
             }
         });
