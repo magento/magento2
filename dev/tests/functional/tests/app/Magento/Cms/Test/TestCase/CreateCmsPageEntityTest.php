@@ -30,7 +30,6 @@ class CreateCmsPageEntityTest extends Injectable
     const DOMAIN = 'PS';
     const TEST_TYPE = 'acceptance_test';
     const TO_MAINTAIN = 'yes';
-    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -71,6 +70,8 @@ class CreateCmsPageEntityTest extends Injectable
         // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getPageActionsBlock()->addNew();
+        //TODO: remove cms page new refresh after resolve issue with static js files publication (MAGETWO-37898)
+        $this->cmsPageNew->open();
         $this->cmsPageNew->getPageForm()->fill($cms);
         $this->cmsPageNew->getPageMainActions()->save();
     }
