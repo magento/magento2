@@ -50,6 +50,16 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
+    public function testExecuteEarlyReturn()
+    {
+        $this->fixtureModelMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(false);
+
+        $this->model->execute();
+    }
+
     public function testGetActionTitle()
     {
         $this->assertSame('Config Changes', $this->model->getActionTitle());
