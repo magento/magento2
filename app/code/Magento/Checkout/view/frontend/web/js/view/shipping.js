@@ -10,12 +10,16 @@ define(
         'ko',
         'Magento_Customer/js/model/customer',
         'Magento_Customer/js/model/address-list',
-        '../model/address-converter',
-        '../model/quote',
-        '../action/create-shipping-address',
-        '../action/select-shipping-address',
-        '../model/shipping-rates-validator',
-        '../model/shipping-address/form-popup-state',
+        'Magento_Checkout/js/model/address-converter',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/action/create-shipping-address',
+        'Magento_Checkout/js/action/select-shipping-address',
+        'Magento_Checkout/js/model/shipping-rates-validator',
+        'Magento_Checkout/js/model/shipping-address/form-popup-state',
+        'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/action/select-shipping-method',
+        'Magento_Checkout/js/model/shipping-rate-registry',
+        'Magento_Checkout/js/action/set-shipping-information',
         'mage/translate'
     ],
     function(
@@ -29,12 +33,25 @@ define(
         createShippingAddress,
         selectShippingAddress,
         shippingRatesValidator,
-        formPopUpState
+        formPopUpState,
+        shippingService,
+        selectShippingMethodAction,
+        rateRegistry,
+        setShippingInformation
     ) {
         'use strict';
+
+        var rates = window.checkoutConfig.shippingRates.data;
+        var rateKey = window.checkoutConfig.shippingRates.key;
+        if (rateKey) {
+            rateRegistry.set(rateKey, rates);
+        }
+        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
+        shippingService.setShippingRates(rates);
+
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/shipping-address',
+                template: 'Magento_Checkout/shipping',
                 visible: true
             },
             isVisible: ko.observable(true),
@@ -46,18 +63,6 @@ define(
 
             initialize: function () {
                 this._super();
-
-                this._initializeDefaultAddress();
-
-                return this;
-            },
-
-            /**
-             * Initialize default shipping address
-             *
-             * @private
-             */
-            _initializeDefaultAddress: function() {
                 var shippingAddress = quote.shippingAddress();
                 if (!shippingAddress) {
                     var isShippingAddressInitialized = addressList.some(function (address) {
@@ -71,9 +76,11 @@ define(
                         selectShippingAddress(addressList()[0]);
                     }
                 }
+                return this;
             },
 
             initElement: function(element) {
+                //@todo refactor this condition
                 if (this.isFormInline && element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
@@ -115,6 +122,23 @@ define(
                     this.isFormPopUpVisible(false);
                     this.isNewAddressAdded(true);
                 }
+            },
+
+            /** Shipping Method View **/
+            rates: shippingService.getSippingRates(),
+            isLoading: shippingService.isLoading,
+            isSelected: ko.computed(function () {
+                    return quote.shippingMethod()
+                        ? quote.shippingMethod().carrier_code + '_' + quote.shippingMethod().method_code
+                        : null;
+                }
+            ),
+            selectShippingMethod: function(shippingMethod) {
+                selectShippingMethodAction(shippingMethod);
+                return true;
+            },
+            setShippingInformation: function () {
+                setShippingInformation();
             }
         });
     }
