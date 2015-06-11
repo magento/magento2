@@ -6,11 +6,11 @@
 define(
     [
         '../model/quote',
-        '../model/url-builder',
+        '../model/resource-url-manager',
         'mage/storage',
         'Magento_Checkout/js/model/payment-service'
     ],
-    function (quote, urlBuilder, storage, paymentService) {
+    function (quote, resourceUrlManager, storage, paymentService) {
         "use strict";
         return function (customOptions, callbacks) {
             var proceed = true;
@@ -19,7 +19,6 @@ define(
             });
 
             if (proceed) {
-
                 var payload = {
                     addressInformation: {
                         shipping_address: quote.shippingAddress(),
@@ -28,13 +27,9 @@ define(
                     }
                 };
 
-                var serviceUrl = urlBuilder.createUrl(
-                    '/carts/:cartId/shipping-information',
-                    {cartId: quote.getQuoteId()}
-                );
-
                 storage.post(
-                    serviceUrl, JSON.stringify(payload)
+                    resourceUrlManager.getUrlForSetShippingInformation(quote),
+                    JSON.stringify(payload)
                 ).done(
                     function (response) {
                         console.log(response);
