@@ -18,6 +18,7 @@
         "ext-iconv": "*",
         "ext-gd": "*",
         "lib-libxml": "*",
+        "ext-xsl": "*",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
