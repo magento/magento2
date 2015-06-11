@@ -299,7 +299,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     {
         if ($this->getState() == self::STATE_PAID) {
             if ($this->getCanVoidFlag() === null) {
-                return (bool)$this->getOrder()->getPayment()->canVoid($this);
+                return (bool)$this->getOrder()->getPayment()->canVoid();
             }
         }
         return (bool)$this->getCanVoidFlag();
@@ -755,6 +755,41 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * Returns invoice items
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
+     */
+    public function getItems()
+    {
+        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
+            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+            foreach ($collection as $item) {
+                $item->setInvoice($this);
+            }
+            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
+        }
+        return $this->getData(InvoiceInterface::ITEMS);
+    }
+
+    /**
+     * Return invoice comments
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]
+     */
+    public function getComments()
+    {
+        if ($this->getData(InvoiceInterface::COMMENTS) === null && $this->getId()) {
+            $collection = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId());
+            foreach ($collection as $comment) {
+                $comment->setInvoice($this);
+            }
+            $this->setData(InvoiceInterface::COMMENTS, $collection->getItems());
+        }
+        return $this->getData(InvoiceInterface::COMMENTS);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Returns increment id
      *
      * @return string
@@ -782,23 +817,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getDiscountDescription()
     {
         return $this->getData(InvoiceInterface::DISCOUNT_DESCRIPTION);
-    }
-
-    /**
-     * Returns invoice items
-     *
-     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
-     */
-    public function getItems()
-    {
-        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
-            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
-            foreach ($collection as $item) {
-                $item->setInvoice($this);
-            }
-            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
-        }
-        return $this->getData(InvoiceInterface::ITEMS);
     }
 
     /**
@@ -1228,24 +1246,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         return $this->getData(InvoiceInterface::UPDATED_AT);
     }
 
-    /**
-     * Return invoice comments
-     *
-     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]
-     */
-    public function getComments()
-    {
-        if ($this->getData(InvoiceInterface::COMMENTS) === null && $this->getId()) {
-            $collection = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId());
-            foreach ($collection as $comment) {
-                $comment->setInvoice($this);
-            }
-            $this->setData(InvoiceInterface::COMMENTS, $collection->getItems());
-        }
-        return $this->getData(InvoiceInterface::COMMENTS);
-    }
-
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

@@ -2242,4 +2242,13 @@ return [
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['getDataSetDefault', 'Magento\Framework\Object'],
+    ['isDeleted', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['hasDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setIdFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getIdFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
 ];
