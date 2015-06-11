@@ -94,6 +94,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->productFactory = $this->getMockBuilder('\Magento\Catalog\Model\ProductFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
