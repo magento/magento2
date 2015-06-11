@@ -55,7 +55,6 @@ define([
         };
     };
 
-    //TODO: to get rid of the widget
     $.widget('mage.step-wizard', $.ui.tabs, {
         wizard: undefined,
         options: {
