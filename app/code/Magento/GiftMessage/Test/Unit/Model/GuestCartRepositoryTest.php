@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
+namespace Magento\GiftMessage\Test\Unit\Model;
 
 // @codingStandardsIgnoreFile
 
