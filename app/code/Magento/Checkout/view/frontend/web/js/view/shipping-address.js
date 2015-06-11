@@ -61,7 +61,7 @@ define(
                 var shippingAddress = quote.shippingAddress();
                 if (!shippingAddress) {
                     var isShippingAddressInitialized = addressList.some(function (address) {
-                        if (address.isDefaultShipping) {
+                        if (address.isDefaultShipping()) {
                             selectShippingAddress(address);
                             return true;
                         }

@@ -66,17 +66,17 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Checkout\Api\Data\AddressInformationExtensionInterface|null
+     * @return \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Checkout\Api\Data\AddressInformationExtensionInterface $extensionAttributes
+     * @param \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Checkout\Api\Data\AddressInformationExtensionInterface $extensionAttributes
+        \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes
     );
 }
