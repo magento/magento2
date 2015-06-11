@@ -47,7 +47,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->useIdxTable(true);
+        $this->_tableStrategy->setUseIdxTable(true);
         return $this;
     }
 
@@ -162,17 +162,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
         }
 
         return $this;
-    }
-
-    /**
-     * Set or get what either "_idx" or "_tmp" suffixed temporary index table need to use
-     *
-     * @param bool $value
-     * @return bool
-     */
-    public function useIdxTable($value = null)
-    {
-        return $this->_tableStrategy->useIdxTable($value);
     }
 
     /**

@@ -53,7 +53,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testReindexAll()
     {
         $this->_tableStrategyInterface->expects($this->once())
-            ->method('useIdxTable')
+            ->method('setUseIdxTable')
             ->with(true);
         $this->_tableStrategyInterface->expects($this->once())
             ->method('prepareTableName')
@@ -61,27 +61,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_idx'));
         $this->model->reindexAll();
         $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
-    }
-
-    public function testUseIdxTable()
-    {
-        $this->_tableStrategyInterface->expects($this->once())
-            ->method('prepareTableName')
-            ->with('test')
-            ->will($this->returnValue('test_idx'));
-
-        $this->model->useIdxTable(true);
-        $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
-    }
-
-    public function testUseTmpTable()
-    {
-        $this->_tableStrategyInterface->expects($this->once())
-            ->method('prepareTableName')
-            ->with('test')
-            ->will($this->returnValue('test_tmp'));
-        $this->model->useIdxTable(false);
-        $this->assertEquals('test_tmp', $this->model->getIdxTable('test'));
     }
 
     public function testClearTemporaryIndexTable()
