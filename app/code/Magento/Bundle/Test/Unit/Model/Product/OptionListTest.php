@@ -38,6 +38,11 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
      */
     protected $extensionAttributesFactoryMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
@@ -57,12 +62,17 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Bundle\Model\Product\OptionList(
-            $this->typeMock,
-            $this->optionFactoryMock,
-            $this->linkListMock,
-            $this->dataObjectHelperMock,
-            $this->extensionAttributesFactoryMock
+
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
+            'Magento\Bundle\Model\Product\OptionList',
+            [
+                'type' => $this->typeMock,
+                'optionFactory' => $this->optionFactoryMock,
+                'linkList' => $this->linkListMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesFactoryMock
+            ]
         );
     }
 
@@ -82,8 +92,7 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $optionsCollMock = $objectManager->getCollectionMock(
+        $optionsCollMock = $this->objectManager->getCollectionMock(
             'Magento\Bundle\Model\Resource\Option\Collection',
             [$optionMock]
         );
