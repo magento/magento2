@@ -14,9 +14,21 @@ define(
         '../model/shipping-service',
         '../action/select-shipping-method',
         'Magento_Checkout/js/model/shipping-rate-registry',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Catalog/js/price-utils',
+        '../action/set-shipping-information'
     ],
-    function ($, ko, _, Component, quote, shippingService, selectShippingMethodAction, rateRegistry, priceUtils) {
+    function (
+        $,
+        ko,
+        _,
+        Component,
+        quote,
+        shippingService,
+        selectShippingMethodAction,
+        rateRegistry,
+        priceUtils,
+        setShippingInformation
+    ) {
         var rates = window.checkoutConfig.shippingRates.data;
         var rateKey = window.checkoutConfig.shippingRates.key;
         if (rateKey) {
@@ -24,7 +36,6 @@ define(
         }
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
-
 
         return Component.extend({
             defaults: {
@@ -45,30 +56,20 @@ define(
                 return true;
             },
 
-
-
-
-
-
-
             quoteHasShippingAddress: function() {
                 return quote.isVirtual() || quote.getShippingAddress();
             },
 
-            setShippingInformation: function (form) {
-                //var item,
-                //    customOptions = {};
-                //for (item in this.elems()) {
-                //    if ('submit' in this.elems()[item]) {
-                //        customOptions = _.extend(customOptions, this.elems()[item].submit());
-                //    }
-                //}
-                //form = $(form);
-                //var code = form.find("input[name='shipping_method']:checked").val();
-                //selectShippingMethodAction(code, customOptions, this.getAfterSelectCallbacks());
+            setShippingInformation: function () {
+                var item,
+                    customOptions = {};
+                for (item in this.elems()) {
+                    if ('submit' in this.elems()[item]) {
+                        customOptions = _.extend(customOptions, this.elems()[item].submit());
+                    }
+                }
+                setShippingInformation(customOptions, this.getAfterSelectCallbacks());
             },
-
-
 
             getAfterSelectCallbacks: function() {
                 var callbacks = [];

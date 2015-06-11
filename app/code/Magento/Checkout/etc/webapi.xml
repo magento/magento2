@@ -10,7 +10,7 @@
 
     <!-- Managing shipping guest information -->
     <route url="/V1/carts/:cartId/shipping-information" method="POST">
-        <service class="Magento\Checkout\Api\ShippingInformationManagementInterface" method="saveAddressInformation"/>
+        <service class="Magento\Checkout\Api\GuestShippingInformationManagementInterface" method="saveAddressInformation"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -18,10 +18,13 @@
 
     <!-- Managing My shipping information -->
     <route url="/V1/carts/mine/shipping-information" method="POST">
-        <service class="Magento\Checkout\Api\GuestShippingInformationManagementInterface" method="saveAddressInformation"/>
+        <service class="Magento\Checkout\Api\ShippingInformationManagementInterface" method="saveAddressInformation"/>
         <resources>
             <resource ref="self" />
         </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 
 </routes>

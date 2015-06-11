@@ -5,14 +5,10 @@
  */
 namespace Magento\Checkout\Model;
 
-use Magento\Checkout\Api\Data\PaymentDetailsInterface;
-use Magento\Quote\Api\CartTotalRepositoryInterface;
-
-class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestShippingInformationManagementInterface
-{
-    /**
-     * @var \Magento\Quote\Api\GuestShippingAddressManagementInterface
-     */
+class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
+{/**
+ * @var \Magento\Quote\Api\GuestShippingAddressManagementInterface
+ */
     protected $shippingAddressManagement;
 
     /**
@@ -31,37 +27,29 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     protected $paymentDetailsFactory;
 
     /**
-     * @var CartTotalRepositoryInterface
+     * @var \Magento\Quote\Api\CartTotalRepositoryInterface
      */
     protected $cartTotalsRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteIdMaskFactory
-     */
-    protected $quoteIdMaskFactory;
-
-    /**
-     * @param \Magento\Quote\Api\GuestShippingAddressManagementInterface $shippingAddressManagement
-     * @param \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingMethodManagement
+     * @param \Magento\Quote\Api\ShippingAddressManagementInterface $shippingAddressManagement
+     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
-     * @param CartTotalRepositoryInterface $cartTotalsRepository
-     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      */
     public function __construct(
-        \Magento\Quote\Api\GuestShippingAddressManagementInterface $shippingAddressManagement,
-        \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingMethodManagement,
+        \Magento\Quote\Api\ShippingAddressManagementInterface $shippingAddressManagement,
+        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
-        CartTotalRepositoryInterface $cartTotalsRepository,
-        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
     ) {
         $this->shippingAddressManagement = $shippingAddressManagement;
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -78,13 +66,10 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
             $addressInformation->getShippingMethodCode()
         );
 
-        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-
-        /** @var PaymentDetailsInterface $paymentDetails */
+        /** @var \Magento\Checkout\Api\Data\PaymentDetailsInterface $paymentDetails */
         $paymentDetails = $this->paymentDetailsFactory->create();
-        $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($quoteIdMask->getQuoteId()));
-        $paymentDetails->setTotals($this->cartTotalsRepository->get($quoteIdMask->getQuoteId()));
+        $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
+        $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
         return $paymentDetails;
     }
 }
