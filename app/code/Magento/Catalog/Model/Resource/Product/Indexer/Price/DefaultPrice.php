@@ -65,6 +65,26 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     }
 
     /**
+     * Get Table strategy
+     *
+     * @return \Magento\Indexer\Model\Indexer\Table\StrategyInterface
+     */
+    public function getTableStrategy()
+    {
+        return $this->tableStrategy;
+    }
+
+    /**
+     * Get write connection
+     *
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getWriteConnection()
+    {
+        return $this->_getWriteAdapter();
+    }
+
+    /**
      * Define main price index table
      *
      * @return void
