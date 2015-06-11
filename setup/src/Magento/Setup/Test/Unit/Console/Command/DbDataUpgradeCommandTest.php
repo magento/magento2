@@ -51,7 +51,7 @@ class DbDataUpgradeCommandTest extends \PHPUnit_Framework_TestCase
         );
         $commandTester->execute([]);
         $this->assertStringMatchesFormat(
-            'No information is available: the application is not installed.%w',
+            'No information is available: the Magento application is not installed.%w',
             $commandTester->getDisplay()
         );
     }
