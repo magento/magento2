@@ -808,14 +808,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($linkTypes);
 
         $inputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $inputRelatedLink->setProductSku("Simple Product 1");
+        $inputRelatedLink->setSku("Simple Product 1");
         $inputRelatedLink->setLinkType("related");
         $inputRelatedLink->setData("sku", "Simple Product 2");
         $inputRelatedLink->setData("type", "simple");
         $inputRelatedLink->setPosition(0);
 
         $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $outputRelatedLink->setProductSku("Simple Product 1");
+        $outputRelatedLink->setSku("Simple Product 1");
         $outputRelatedLink->setLinkType("related");
         $outputRelatedLink->setLinkedProductSku("Simple Product 2");
         $outputRelatedLink->setLinkedProductType("simple");
@@ -862,7 +862,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testSetProductLinks()
     {
         $link = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $link->setProductSku("Simple Product 1");
+        $link->setSku("Simple Product 1");
         $link->setLinkType("upsell");
         $link->setLinkedProductSku("Simple Product 2");
         $link->setLinkedProductType("simple");
