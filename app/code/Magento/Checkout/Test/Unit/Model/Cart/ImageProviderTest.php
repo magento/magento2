@@ -12,4 +12,9 @@ class ImageProviderTest extends \PHPUnit_Framework_TestCase
     {
         //@TODO implement test
     }
+
+    public function testGetImages()
+    {
+        $this->fail('to be implemented');
+    }
 }
