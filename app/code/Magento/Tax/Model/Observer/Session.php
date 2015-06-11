@@ -118,6 +118,7 @@ class Session
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterAddressSave($observer)
     {
