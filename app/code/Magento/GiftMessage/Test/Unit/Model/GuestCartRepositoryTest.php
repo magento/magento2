@@ -4,7 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Test\Unit\Model;
+namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
+
+// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Model\ItemRepository;
