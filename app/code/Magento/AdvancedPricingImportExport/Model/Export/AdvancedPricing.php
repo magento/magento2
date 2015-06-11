@@ -81,7 +81,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ) {
         $this->_storeResolver = $storeResolver;
         $this->_groupRepository = $groupRepository;
-       parent::__construct(
+        parent::__construct(
             $localeDate,
             $config,
             $resource,
