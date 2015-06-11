@@ -9,7 +9,6 @@ namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Phrase;
 
 class File implements DriverInterface
 {
@@ -640,7 +639,6 @@ class File implements DriverInterface
      * @param array $data
      * @param string $delimiter
      * @param string $enclosure
-     * @var $value string|Phrase
      * @return int
      * @throws FileSystemException
      */
@@ -651,6 +649,7 @@ class File implements DriverInterface
         * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
         */
         foreach ($data as $key => $value) {
+            /** @var $value string|\Magento\Framework\Phrase */
             $value = (string)$value;
             if (isset($value[0]) && $value[0] === '=') {
                 $data[$key] = ' ' . $value;
