@@ -124,7 +124,7 @@ define([
                     if (!data.result.error) {
                         $galleryContainer.trigger('addItem', data.result);
                     } else {
-                        alert($.mage.__('File extension not known or unsupported type.'));
+                        alert($.mage.__('We don\'t recognize or support this file extension type.'));
                     }
                 },
                 add: function (event, data) {

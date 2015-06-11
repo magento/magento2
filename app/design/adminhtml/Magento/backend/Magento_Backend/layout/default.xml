@@ -13,7 +13,7 @@
 
     <body>
 
-        <referenceContainer name="page.wrapper">
+        <referenceContainer name="root">
             <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
         </referenceContainer>
 

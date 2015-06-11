@@ -28,9 +28,9 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param Resource\Message $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param TypeFactory $typeFactory
+     * @param Resource\Message $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -38,9 +38,9 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\GiftMessage\Model\Resource\Message $resource,
-        \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
+        \Magento\GiftMessage\Model\Resource\Message $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_typeFactory = $typeFactory;

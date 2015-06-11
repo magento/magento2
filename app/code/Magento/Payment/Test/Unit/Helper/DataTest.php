@@ -132,32 +132,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, 'empty'))
             ->will($this->returnValue(null));
 
-        $methodInstanceMockA = $this->getMock(
-            'Magento\Framework\Object',
-            ['isAvailable', 'getConfigData'],
-            [],
-            '',
-            false
-        );
+        $methodInstanceMockA = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+            ->getMockForAbstractClass();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
             ->will($this->returnValue(true));
         $methodInstanceMockA->expects($this->any())
             ->method('getConfigData')
+            ->with('sort_order', null)
             ->will($this->returnValue($methodA['data']['sort_order']));
 
-        $methodInstanceMockB = $this->getMock(
-            'Magento\Framework\Object',
-            ['isAvailable', 'getConfigData'],
-            [],
-            '',
-            false
-        );
+        $methodInstanceMockB = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+            ->getMockForAbstractClass();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
             ->will($this->returnValue(true));
         $methodInstanceMockB->expects($this->any())
             ->method('getConfigData')
+            ->with('sort_order', null)
             ->will($this->returnValue($methodB['data']['sort_order']));
 
         $this->methodFactory->expects($this->at(0))
@@ -169,7 +161,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($methodInstanceMockB));
 
         $sortedMethods = $this->helper->getStoreMethods();
-        $this->assertTrue(array_shift($sortedMethods)->getSortOrder() < array_shift($sortedMethods)->getSortOrder());
+        $this->assertTrue(
+            array_shift($sortedMethods)->getConfigData('sort_order')
+            < array_shift($sortedMethods)->getConfigData('sort_order')
+        );
     }
 
     public function testGetMethodFormBlock()
@@ -177,9 +172,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
 
         $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -204,9 +197,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $blockType = 'method_block_type';
 
         $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getFormBlockType', 'getTitle', 'getInfoBlockType'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $infoMock = $this->getMockBuilder('Magento\Payment\Model\Info')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -231,9 +222,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
         $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getFormBlockType', 'getTitle', 'getInfoBlockType', 'setStore'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $infoMock = $this->getMockBuilder('Magento\Payment\Model\Info')
             ->disableOriginalConstructor()
             ->setMethods([])
