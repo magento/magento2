@@ -32,7 +32,7 @@ class CanUseForCurrencyTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable($expectation)
     {
         $paymentMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\PaymentMethodChecksInterface'
+            '\Magento\Payment\Model\MethodInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE

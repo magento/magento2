@@ -61,7 +61,7 @@ After verifying your prerequisites, perform the following tasks in order to prep
 <h2>Contributing to the Magento 2 code base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
-To make learn about how to make a contribution, click [here][1].
+To learn about how to make a contribution, click [here][1].
 
 To learn about issues, click [here][2]. To open an issue, click [here][3].
 
