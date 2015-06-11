@@ -75,6 +75,7 @@ class ImageProvider
 
     /**
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $productGallery
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Model\Product\Image\View $imageView
