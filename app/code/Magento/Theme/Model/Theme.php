@@ -201,18 +201,38 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * Check is theme has child virtual themes
+     * Check is theme has virtual child themes
      *
      * @return bool
      */
-    public function hasChildThemes()
+    public function hasVirtualChildThemes()
     {
-        return (bool)$this->getCollection()->addTypeFilter(
-            self::TYPE_VIRTUAL
-        )->addFieldToFilter(
-            'parent_id',
-            ['eq' => $this->getId()]
-        )->getSize();
+        return $this->hasChildThemes(true);
+    }
+
+    /**
+     * Check is theme has physical child themes
+     *
+     * @return bool
+     */
+    public function hasPhysicalChildThemes()
+    {
+        return $this->hasChildThemes(false);
+    }
+
+    /**
+     * Helper method for checking child themes
+     *
+     * @param $isVirtual
+     * @return bool
+     */
+    private function hasChildThemes($isVirtual)
+    {
+        $type = $isVirtual ? self::TYPE_VIRTUAL : self::TYPE_PHYSICAL;
+        return (bool)$this->getCollection()
+            ->addTypeFilter($type)
+            ->addFieldToFilter('parent_id', ['eq' => $this->getId()])
+            ->getSize();
     }
 
     /**
