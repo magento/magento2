@@ -166,16 +166,9 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
 );
 $billingAddress->setAddressType('billing');
 
-/** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
-$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
-$rate->setCode('freeshipping_freeshipping');
-$rate->getPrice(1);
-
 /** @var Magento\Quote\Model\Quote\Address $shippingAddress */
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
-$shippingAddress->setShippingMethod('freeshipping_freeshipping');
-$shippingAddress->addShippingRate($rate);
 
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = $objectManager->create('Magento\Quote\Model\Quote');
@@ -196,6 +189,13 @@ $quote->setCustomerIsGuest(
 )->addProduct(
     $product, $buyRequest
 );
+
+/** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
+$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
+$rate->setCode('freeshipping_freeshipping');
+$rate->getPrice(1);
+$quote->getShippingAddress()->setShippingMethod('freeshipping_freeshipping');
+$quote->getShippingAddress()->addShippingRate($rate);
 
 $quote->getPayment()->setMethod('checkmo');
 $quote->collectTotals();
