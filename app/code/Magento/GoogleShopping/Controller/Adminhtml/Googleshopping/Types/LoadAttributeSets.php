@@ -38,7 +38,8 @@ class LoadAttributeSets extends \Magento\GoogleShopping\Controller\Adminhtml\Goo
             /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
             $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
             return $resultRaw->setContents(
-                $this->layoutFactory->create()->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
+                $this->layoutFactory->create()
+                    ->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
                     ->getAttributeSetsSelectElement($this->getRequest()->getParam('target_country'))
                     ->toHtml()
             );
