@@ -46,7 +46,9 @@ class Checkbox extends AbstractElement
             'onchange',
             'disabled',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 

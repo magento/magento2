@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Model\Checks;
 
+use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
 class Composite implements SpecificationInterface
@@ -23,11 +24,11 @@ class Composite implements SpecificationInterface
     /**
      * Check whether payment method is applicable to quote
      *
-     * @param PaymentMethodChecksInterface $paymentMethod
+     * @param MethodInterface $paymentMethod
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
-    public function isApplicable(PaymentMethodChecksInterface $paymentMethod, Quote $quote)
+    public function isApplicable(MethodInterface $paymentMethod, Quote $quote)
     {
         foreach ($this->list as $specification) {
             if (!$specification->isApplicable($paymentMethod, $quote)) {
