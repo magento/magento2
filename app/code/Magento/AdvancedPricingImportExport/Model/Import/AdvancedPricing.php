@@ -42,6 +42,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
 
+    const ENTITY_TYPE_CODE = 'advanced_pricing';
+
     /**
      * Validation failure message template definitions
      *

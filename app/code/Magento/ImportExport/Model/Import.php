@@ -75,6 +75,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     const MAX_IMPORT_CHUNKS = 4;
 
+    const IMPORT_HISTORY_DIR = 'import_history/';
+
     /**#@-*/
 
     /**
@@ -137,6 +139,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
+     * Entity types supporting import history
+     *
+     * @var array
+     */
+    protected $processedReportsEntities = [
+        \Magento\Catalog\Model\Product::ENTITY,
+        \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::ENTITY_TYPE_CODE
+    ];
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -149,6 +161,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param History $importHistoryModel
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -165,6 +179,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\ImportExport\Model\History $importHistoryModel,
+        \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
         array $data = []
     ) {
         $this->_importExportData = $importExportData;
@@ -178,6 +194,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
+        $this->importHistoryModel = $importHistoryModel;
+        $this->localeDate = $localeDate;
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -435,6 +453,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
+        $this->importHistoryModel->updateReport($this);
 
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
@@ -452,6 +471,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 __('Import has been done successfuly.'),
             ]
         );
+        $this->importHistoryModel->updateReport($this, true);
 
         return $result;
     }
@@ -518,6 +538,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             }
         }
         $this->_removeBom($sourceFile);
+        $this->createHistoryReport($entity, $extension, $sourceFileRelative);
         // trying to create source adapter for file and catch possible exception to be convinced in its adequacy
         try {
             $this->_getSourceAdapter($sourceFile);
@@ -640,5 +661,48 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             }
         }
         return $uniqueBehaviors;
+    }
+
+    /**
+     * Retrieve processed reports entity types
+     *
+     * @param string|null $entity
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isReportEntityType($entity = null)
+    {
+        $result = false;
+        if (!$entity) {
+            $entity = $this->getEntity();
+        }
+        if (in_array($entity, $this->processedReportsEntities)) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Create history report
+     *
+     * @param string $entity
+     * @param string $extension
+     * @param string $sourceFileRelative
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function createHistoryReport($entity, $extension, $sourceFileRelative)
+    {
+        if ($this->isReportEntityType($entity)) {
+            $copyName = $entity . '_' . $this->localeDate->gmtTimestamp() . '.' . $extension;
+            $copyFile = self::IMPORT_HISTORY_DIR . $copyName;
+            try {
+                $this->_varDirectory->copyFile($sourceFileRelative, $copyFile);
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Source file coping failed'));
+            }
+            $this->importHistoryModel->addReport($copyName);
+        }
+        return $this;
     }
 }
