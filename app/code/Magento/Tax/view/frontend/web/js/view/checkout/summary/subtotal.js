@@ -16,9 +16,6 @@ define(
                 displaySubtotalMode: displaySubtotalMode,
                 template: 'Magento_Tax/checkout/summary/subtotal'
             },
-            excludingTaxMessage: 'Cart Subtotal (Excl. Tax)',
-            includingTaxMessage: 'Cart Subtotal (Incl. Tax)',
-            title: 'Cart Subtotal',
             totals: quote.getTotals(),
             getValue: function () {
                 var price = 0;

@@ -7,23 +7,19 @@ define(
     [
         'Magento_Checkout/js/view/summary/abstract-total',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/totals',
-        'mage/translate'
     ],
-    function (Component, quote, totals, $t) {
+    function (Component, quote) {
         "use strict";
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/discount'
             },
             totals: quote.getTotals(),
-            getTitle: function() {
-                var discountTotal = totals.getTotalByCode('discount');
-                if (discountTotal) {
-                    var title = $t(discountTotal.title);
-                    return title.replace("%1", this.totals().coupon_code);
+            getCouponCode: function() {
+                if (!this.totals()) {
+                    return null;
                 }
-                return null;
+                return this.totals()['coupon_code'];
             },
             getPureValue: function() {
                 var price = 0;
