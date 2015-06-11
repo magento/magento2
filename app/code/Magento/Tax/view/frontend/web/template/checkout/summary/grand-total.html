@@ -5,36 +5,38 @@
  */
 -->
 <!-- ko if: isTaxDisplayedInGrandTotal -->
-<tr class="grand totals excl">
-    <th colspan="3" class="mark" scope="row">
-        <strong data-bind="text: $t(exclTaxLabel)"></strong>
-    </th>
-    <td data-bind="attr: {'data-th': exclTaxLabel }" class="amount">
-        <strong data-bind="text: getGrandTotalExclTax()"></strong>
-    </td>
-</tr>
 <tr class="grand totals incl">
-    <th colspan="3" class="mark" scope="row">
+    <th class="mark" scope="row">
         <strong data-bind="text: $t(inclTaxLabel)"></strong>
     </th>
     <td data-bind="attr: {'data-th': $t(inclTaxLabel) }" class="amount">
-        <strong data-bind="text: getValue()"></strong>
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
+    </td>
+</tr>
+<tr class="grand totals excl">
+    <th class="mark" scope="row">
+        <strong data-bind="text: $t(exclTaxLabel)"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': exclTaxLabel }" class="amount">
+        <strong><span class="price" data-bind="text: getGrandTotalExclTax()"></span></strong>
     </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: !isTaxDisplayedInGrandTotal -->
 <tr class="grand totals">
-    <th colspan="3" class="mark" scope="row">
+    <th class="mark" scope="row">
         <strong data-bind="text: $t(title)"></strong>
     </th>
     <td data-bind="attr: {'data-th': $t(title)}" class="amount">
-        <strong data-bind="text: getValue()"></strong>
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
     </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: isBaseGrandTotalDisplayNeeded() -->
 <tr class="totals charge">
-    <th class="mark"  colspan="3" data-bind="text: $t(basicCurrencyMessage)" scope="row"></th>
-    <td class="amount" data-bind="text: getBaseValue(), attr: {'data-th': $t(basicCurrencyMessage)}"></td>
+    <th class="mark" data-bind="text: $t(basicCurrencyMessage)" scope="row"></th>
+    <td class="amount">
+        <span class="price" data-bind="text: getBaseValue(), attr: {'data-th': $t(basicCurrencyMessage)}"></span>
+    </td>
 </tr>
 <!-- /ko -->
