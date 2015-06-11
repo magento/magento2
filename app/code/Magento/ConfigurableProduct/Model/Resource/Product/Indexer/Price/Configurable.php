@@ -17,7 +17,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();
@@ -63,7 +63,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _getConfigurableOptionAggregateTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_cfg_opt_agr');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_cfg_opt_agr');
     }
 
     /**
@@ -73,7 +73,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _getConfigurableOptionPriceTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_cfg_opt');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_cfg_opt');
     }
 
     /**

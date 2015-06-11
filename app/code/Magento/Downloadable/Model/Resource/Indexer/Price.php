@@ -20,7 +20,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();
@@ -68,7 +68,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getDownloadableLinkPriceTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_downlod');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_downlod');
     }
 
     /**

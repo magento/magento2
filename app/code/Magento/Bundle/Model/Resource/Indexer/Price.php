@@ -20,7 +20,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
 
         $this->beginTransaction();
         try {
@@ -54,7 +54,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundlePriceTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_bundle');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle');
     }
 
     /**
@@ -64,7 +64,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundleSelectionTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_bundle_sel');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle_sel');
     }
 
     /**
@@ -74,7 +74,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundleOptionTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_bundle_opt');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle_opt');
     }
 
     /**

@@ -323,6 +323,6 @@ class Source extends AbstractEav
      */
     public function getIdxTable($table = null)
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_eav');
+        return $this->tableStrategy->getTableName('catalog_product_index_eav');
     }
 }
