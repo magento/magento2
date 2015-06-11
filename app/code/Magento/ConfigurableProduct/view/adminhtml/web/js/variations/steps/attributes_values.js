@@ -37,7 +37,7 @@ define([
     var viewModel = Collapsible.extend({
         attributes: ko.observableArray([]),
         createOption: function (attribute) {
-            attribute.options.push({value:0, label:''});
+            attribute.options.push({value: 0, label: ''});
         },
         saveOption: function (option) {
             this.options.remove(option);
