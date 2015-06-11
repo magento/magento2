@@ -159,7 +159,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -173,7 +173,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         TransactionFactory $transactionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_paymentFactory = $paymentFactory;
@@ -911,6 +911,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         $this->_verifyTxnType();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns transaction_id
      *
@@ -1009,7 +1010,6 @@ class Transaction extends AbstractModel implements TransactionInterface
         return $this->getData(TransactionInterface::IS_CLOSED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * Gets the created-at timestamp for the transaction.
      *

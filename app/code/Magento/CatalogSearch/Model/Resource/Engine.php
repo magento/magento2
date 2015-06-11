@@ -66,7 +66,7 @@ class Engine extends AbstractDb implements EngineInterface
      */
     protected function _construct()
     {
-        $this->_init('catalogsearch_fulltext', 'product_id');
+        $this->_init('catalogsearch_fulltext_index_default', 'product_id');
     }
 
     /**
@@ -102,9 +102,15 @@ class Engine extends AbstractDb implements EngineInterface
     public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
     {
         $data = [];
-        $storeId = (int)$storeId;
-        foreach ($entityIndexes as $entityId => $index) {
-            $data[] = ['product_id' => (int)$entityId, 'store_id' => $storeId, 'data_index' => $index];
+        foreach ($entityIndexes as $entityId => $productAttributes) {
+            foreach ($productAttributes as $attributeId => $indexValue) {
+                $data[] = [
+                    'product_id' => (int)$entityId,
+                    'attribute_id' =>(int)$attributeId,
+                    'store_id' => (int)$storeId,
+                    'data_index' => $indexValue
+                ];
+            }
         }
 
         if ($data) {
@@ -187,10 +193,6 @@ class Engine extends AbstractDb implements EngineInterface
     {
         $where = [];
 
-        if ($storeId !== null) {
-            $where[] = $this->_getWriteAdapter()
-                ->quoteInto('store_id=?', $storeId);
-        }
         if ($entityId !== null) {
             $where[] = $this->_getWriteAdapter()
                 ->quoteInto('product_id IN (?)', $entityId);

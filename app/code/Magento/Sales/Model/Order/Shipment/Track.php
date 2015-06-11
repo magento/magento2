@@ -56,7 +56,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -68,7 +68,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -97,6 +97,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * Tracking number getter
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getNumber()
@@ -106,6 +108,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * Tracking number setter
+     *
+     * @codeCoverageIgnore
      *
      * @param string $number
      * @return \Magento\Framework\Object
@@ -117,6 +121,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * Declare Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
@@ -201,6 +207,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         return parent::addData($data);
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns track_number
      *
@@ -309,7 +316,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         return $this->getData(ShipmentTrackInterface::WEIGHT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
