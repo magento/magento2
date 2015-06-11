@@ -42,6 +42,16 @@
     .opc-status-bar {
         &:extend(.abs-no-display-s all);
         &:extend(.abs-reset-list all);
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+
+    .opc-status-bar {
         .css(margin, 0 0 @checkout-status-bar__margin);
         counter-reset: i;
         font-size: 0;
