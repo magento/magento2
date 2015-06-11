@@ -15,16 +15,22 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\CategoriesFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new CategoriesFixture($this->fixtureModelMock);
     }
     public function testExecute()
     {
-        $categoryMock = $this->getMockBuilder('\Magento\Catalog\Model\Category')->disableOriginalConstructor()
-            ->setMethods([
+        $categoryMock = $this->getMock(
+            '\Magento\Catalog\Model\Category',
+            [
                 'getName',
                 'setId',
                 'setUrlKey',
@@ -37,9 +43,11 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
                 'setDefaultSortBy',
                 'setIsActive',
                 'save'
-            ])->getMock();
-        $categoryMock
-            ->expects($this->once())
+            ],
+            [],
+            '',
+            false);
+        $categoryMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('category_name'));
         $categoryMock->expects($this->once())
@@ -72,49 +80,47 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('setIsActive')
             ->willReturnSelf();
+        $valueMap[] = ['Magento\Catalog\Model\Category', [], $categoryMock];
 
         $groupMock = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
-        $groupMock
-            ->expects($this->once())
+        $groupMock->expects($this->once())
             ->method('getRootCategoryId')
             ->will($this->returnValue('root_category_id'));
 
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $storeManagerMock
-            ->expects($this->once())
+        $storeManagerMock->expects($this->once())
             ->method('getGroups')
             ->will($this->returnValue([$groupMock]));
+        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
-        $objectManagerMock
-            ->expects($this->exactly(2))
+        $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($storeManagerMock, $categoryMock));
+            ->will($this->returnValueMap($valueMap));
 
+        $valueMap[] = ['categories', 0, 1];
+        $valueMap[] = ['categories_nesting_level', 3, 3];
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->onConsecutiveCalls(1, 3));
+            ->will($this->returnValueMap($valueMap));
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 
-        $categoriesFixture = new CategoriesFixture($this->fixtureModelMock);
-        $categoriesFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $categoriesFixture = new CategoriesFixture($this->fixtureModelMock);
-        $this->assertSame('Generating categories', $categoriesFixture->getActionTitle());
+        $this->assertSame('Generating categories', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $categoriesFixture = new CategoriesFixture($this->fixtureModelMock);
         $this->assertSame([
             'categories' => 'Categories'
-        ], $categoriesFixture->introduceParamLabels());
+        ], $this->model->introduceParamLabels());
     }
 }

@@ -15,22 +15,23 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new IndexersStatesApplyFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $cacheInterfaceMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($cacheInterfaceMock);
@@ -46,19 +47,16 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->willReturn($objectManagerMock);
 
-        $indexersStatesApplyFixture = new IndexersStatesApplyFixture($this->fixtureModelMock);
-        $indexersStatesApplyFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $indexersStatesApplyFixture = new IndexersStatesApplyFixture($this->fixtureModelMock);
-        $this->assertSame('Indexers Mode Changes', $indexersStatesApplyFixture->getActionTitle());
+        $this->assertSame('Indexers Mode Changes', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $indexersStatesApplyFixture = new IndexersStatesApplyFixture($this->fixtureModelMock);
-        $this->assertSame([], $indexersStatesApplyFixture->introduceParamLabels());
+        $this->assertSame([], $this->model->introduceParamLabels());
     }
 }

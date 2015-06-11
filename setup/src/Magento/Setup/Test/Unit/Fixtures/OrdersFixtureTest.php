@@ -33,11 +33,16 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\OrdersFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new OrdersFixture($this->fixtureModelMock);
     }
 
     /**
@@ -47,7 +52,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         foreach ($this->mockObjectNames as $mockObjectName) {
-            $mockObject = $this->getMockBuilder($mockObjectName)->disableOriginalConstructor()->getMock();
+            $mockObject = $this->getMock($mockObjectName, [], [], '', false);
             $path = explode('\\', $mockObjectName);
             $name = array_pop($path);
             if (strcasecmp($mockObjectName, 'Magento\Sales\Model\Resource\Order') == 0) {
@@ -59,28 +64,20 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
                     ->method('getTable')
                     ->willReturn(strtolower($name) . '_table_name');
             }
-            $map = [$mockObjectName, $mockObject];
-            $this->mockObjects[] = $map;
+            $this->mockObjects[] = [$mockObjectName, $mockObject];
         }
 
-        $adapterInterfaceMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $adapterInterfaceMock->expects($this->any())
+        $adapterInterfaceMock = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface', [], '', true, true, true, []);
+        $adapterInterfaceMock->expects($this->exactly(14))
             ->method('getTableName')
             ->willReturn('table_name');
 
-        $resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resourceMock->expects($this->any())
+        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock->expects($this->exactly(15))
             ->method('getConnection')
             ->willReturn($adapterInterfaceMock);
 
-        $websiteMock = $this->getMockBuilder('\Magento\Store\Model\Website')
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getName'])
-            ->getMock();
+        $websiteMock = $this->getMock('\Magento\Store\Model\Website', ['getId', 'getName'], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn('website_id');
@@ -88,21 +85,24 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn('website_name');
 
-        $groupMock = $this->getMockBuilder('\Magento\Store\Model\Group')
-            ->disableOriginalConstructor()
-            ->setMethods(['getName'])
-            ->getMock();
+        $groupMock = $this->getMock('\Magento\Store\Model\Group', ['getName'], [], '', false);
         $groupMock->expects($this->once())
             ->method('getName')
             ->willReturn('group_name');
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->setMethods([
-            'getStoreId',
-            'getWebsite',
-            'getGroup',
-            'getName',
-            'getRootCategoryId'
-        ])->getMock();
+        $storeMock = $this->getMock(
+            '\Magento\Store\Model\Store',
+            [
+                'getStoreId',
+                'getWebsite',
+                'getGroup',
+                'getName',
+                'getRootCategoryId'
+            ],
+            [],
+            '',
+            false
+        );
         $storeMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn(1);
@@ -119,105 +119,94 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getRootCategoryId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeManager->expects($this->once())
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock->expects($this->once())
             ->method('getStores')
             ->willReturn([$storeMock]);
+        $this->mockObjects[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
-        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
-            ->setConstructorArgs([$contextMock])
-            ->setMethods(['getAllChildren'])
-            ->getMockForAbstractClass();
-        $abstractDbMock->expects($this->any())
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $abstractDbMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            [$contextMock],
+            '',
+            true,
+            true,
+            true,
+            ['getAllChildren']
+        );
+        $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
-        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $categoryMock->expects($this->once())
             ->method('getResource')
             ->willReturn($abstractDbMock);
         $categoryMock->expects($this->once())
             ->method('getPath')
             ->willReturn('path/to/category');
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn('category_name');
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->exactly(5))
             ->method('load')
             ->willReturnSelf();
         $this->mockObjects[] = ['Magento\Catalog\Model\Category', $categoryMock];
 
-        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getSku', 'getName'])
-            ->getMock();
-        $productMock->expects($this->any())
+        $productMock = $this->getMock('\Magento\Catalog\Model\Product', ['load', 'getSku', 'getName'], [], '', false);
+        $productMock->expects($this->exactly(2))
             ->method('load')
             ->willReturnSelf();
-        $productMock->expects($this->any())
+        $productMock->expects($this->exactly(2))
             ->method('getSku')
             ->willReturn('product_sku');
-        $productMock->expects($this->any())
+        $productMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn('product_name');
         $this->mockObjects[] = ['Magento\Catalog\Model\Product', $productMock];
         $this->mockObjects[] = ['Magento\Framework\App\Resource', $resourceMock];
 
-        $selectMock = $this->getMockBuilder('\Magento\Framework\DB\Select')->disableOriginalConstructor()->getMock();
+        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
-        $collectionMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
         $collectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($selectMock);
         $collectionMock->expects($this->once())
             ->method('getAllIds')
             ->willReturn([1, 1]);
+        $this->mockObjects[] = ['Magento\Catalog\Model\Resource\Product\Collection', [], $collectionMock];
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManagerMock
-            ->expects($this->any())
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->exactly(32))
             ->method('get')
             ->will($this->returnValueMap($this->mockObjects));
-        $objectManagerMock
-            ->expects($this->exactly(2))
+        $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($storeManager, $collectionMock));
+            ->will($this->returnValueMap($this->mockObjects));
 
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
             ->willReturn(1);
         $this->fixtureModelMock
-            ->expects($this->any())
+            ->expects($this->exactly(34))
             ->method('getObjectManager')
             ->willReturn($objectManagerMock);
 
-        $ordersFixture = new OrdersFixture($this->fixtureModelMock);
-        $ordersFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $ordersFixture = new OrdersFixture($this->fixtureModelMock);
-        $this->assertSame('Generating orders', $ordersFixture->getActionTitle());
+        $this->assertSame('Generating orders', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $ordersFixture = new OrdersFixture($this->fixtureModelMock);
         $this->assertSame([
             'orders'     => 'Orders'
-        ], $ordersFixture->introduceParamLabels());
+        ], $this->model->introduceParamLabels());
     }
 }

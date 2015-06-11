@@ -15,51 +15,61 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\ConfigurableProductsFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new ConfigurableProductsFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $valueMap[] = [
+            'Magento\ImportExport\Model\Import',
+            ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']],
+            $importMock
+        ];
 
-        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
-            ->setConstructorArgs([$contextMock])
-            ->setMethods(['getAllChildren'])
-            ->getMockForAbstractClass();
-        $abstractDbMock->expects($this->any())
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $abstractDbMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            [$contextMock],
+            '',
+            true,
+            true,
+            true,
+            ['getAllChildren']
+        );
+        $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
-        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $categoryMock->expects($this->once())
             ->method('getResource')
             ->will($this->returnValue($abstractDbMock));
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->exactly(3))
             ->method('getName')
             ->will($this->returnValue('category_name'));
         $categoryMock->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue('path/to/category'));
-        $categoryMock->expects($this->any())->method('load')
+        $categoryMock->expects($this->exactly(4))
+            ->method('load')
             ->willReturnSelf();
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getRootCategoryId')
             ->will($this->returnValue([2]));
 
-        $websiteMock = $this->getMockBuilder('\Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('website_code'));
@@ -67,19 +77,16 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getGroups')
             ->will($this->returnValue([$storeMock]));
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
+        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($storeManagerMock, $importMock));
+            ->will($this->returnValueMap($valueMap));
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue($categoryMock));
@@ -93,21 +100,18 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 
-        $configurableProductsFixture = new ConfigurableProductsFixture($this->fixtureModelMock);
-        $configurableProductsFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $configurableProductsFixture = new ConfigurableProductsFixture($this->fixtureModelMock);
-        $this->assertSame('Generating configurable products', $configurableProductsFixture->getActionTitle());
+        $this->assertSame('Generating configurable products', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $configurableProductsFixture = new ConfigurableProductsFixture($this->fixtureModelMock);
         $this->assertSame([
             'configurable_products' => 'Configurable products'
-        ], $configurableProductsFixture->introduceParamLabels());
+        ], $this->model->introduceParamLabels());
     }
 }
