@@ -1014,7 +1014,7 @@ class Installer
                     return;
                 }
                 $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-                $this->log->log("Recreating database {$dbName}");
+                $this->log->log("Cleaning up database {$dbName}");
                 $connection->query("DROP DATABASE IF EXISTS {$dbName}");
                 $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
                 return;
@@ -1056,7 +1056,10 @@ class Installer
     private function assertDeploymentConfigExists()
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            throw new \Magento\Setup\Exception("Can't run this operation: deployment configuration is absent.");
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: deployment configuration is absent."
+                . " Run 'magento setup:config:set --help' for options."
+            );
         }
     }
 
