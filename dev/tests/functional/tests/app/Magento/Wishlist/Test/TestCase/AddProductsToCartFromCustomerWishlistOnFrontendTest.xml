@@ -20,7 +20,6 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation3">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36215</data>
             <data name="products" xsi:type="string">catalogProductSimple::default,catalogProductVirtual::product_50_dollar,catalogProductSimple::default,catalogProductVirtual::product_50_dollar</data>
             <data name="qty" xsi:type="string">-</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />

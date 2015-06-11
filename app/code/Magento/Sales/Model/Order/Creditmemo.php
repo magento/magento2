@@ -398,7 +398,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
              * If we not retrieve negative answer from payment yet
              */
             if (is_null($canVoid)) {
-                $canVoid = $this->getOrder()->getPayment()->canVoid($this);
+                $canVoid = $this->getOrder()->getPayment()->canVoid();
                 if ($canVoid === false) {
                     $this->setCanVoidFlag(false);
                     $this->_saveBeforeDestruct = true;
