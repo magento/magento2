@@ -1176,7 +1176,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         } else {
             if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PAYMENT_REVIEW;
+                $state = Order::STATE_PROCESSING;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
