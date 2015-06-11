@@ -21,7 +21,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      *
      * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface
      */
-    protected $_tableStrategy;
+    protected $tableStrategy;
 
     /**
      * Class constructor
@@ -36,7 +36,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
         \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         $resourcePrefix = null
     ) {
-        $this->_tableStrategy = $tableStrategy;
+        $this->tableStrategy = $tableStrategy;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -47,7 +47,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         return $this;
     }
 
@@ -70,9 +70,9 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function getIdxTable($table = null)
     {
         if ($table) {
-            return $this->_tableStrategy->prepareTableName($table);
+            return $this->tableStrategy->prepareTableName($table);
         }
-        return $this->_tableStrategy->prepareTableName($this->getMainTable());
+        return $this->tableStrategy->prepareTableName($this->getMainTable());
     }
 
     /**

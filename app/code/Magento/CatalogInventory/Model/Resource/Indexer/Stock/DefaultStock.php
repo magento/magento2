@@ -70,7 +70,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->_prepareIndexTable();
@@ -289,6 +289,6 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getIdxTable($table = null)
     {
-        return $this->_tableStrategy->getTableName('cataloginventory_stock_status');
+        return $this->tableStrategy->getTableName('cataloginventory_stock_status');
     }
 }

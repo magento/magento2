@@ -49,7 +49,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -133,7 +133,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function reindexAll()
     {
-        $this->_tableStrategy->setUseIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();
@@ -180,7 +180,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getDefaultFinalPriceTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_final');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_final');
     }
 
     /**
@@ -331,7 +331,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getCustomOptionAggregateTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_opt_agr');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt_agr');
     }
 
     /**
@@ -341,7 +341,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getCustomOptionPriceTable()
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price_opt');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt');
     }
 
     /**
@@ -625,7 +625,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getIdxTable($table = null)
     {
-        return $this->_tableStrategy->getTableName('catalog_product_index_price');
+        return $this->tableStrategy->getTableName('catalog_product_index_price');
     }
 
     /**
