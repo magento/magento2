@@ -8,9 +8,10 @@ define(
         '../model/quote',
         '../model/resource-url-manager',
         'mage/storage',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Ui/js/model/errorlist'
     ],
-    function (quote, resourceUrlManager, storage, paymentService) {
+    function (quote, resourceUrlManager, storage, paymentService, errorList) {
         "use strict";
         return function () {
             var payload = {
@@ -26,14 +27,13 @@ define(
                 JSON.stringify(payload)
             ).done(
                 function (response) {
-                    console.log(response);
                     paymentService.setPaymentMethods(response.payment_methods);
                     quote.setTotals(response.totals)
                 }
             ).fail(
                 function (response) {
                     var error = JSON.parse(response.responseText);
-                    console.log(error);
+                    errorList.add(error);
                 }
             );
         }

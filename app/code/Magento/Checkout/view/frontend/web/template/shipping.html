@@ -11,7 +11,7 @@
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content"
-         data-bind="fadeVisible: isVisible()">
+         data-bind="fadeVisible: visible()">
         <!-- ko foreach: getRegion('address-list') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
@@ -41,12 +41,8 @@
     </div>
 </li>
 
-<!--
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
+
+<!--Shipping method template-->
 <style type="text/css">
     .shippingMethod {
         margin-top: 120px;
@@ -65,7 +61,7 @@
              data-role="content"
              role="tabpanel"
              aria-hidden="false"
-             data-bind="fadeVisible: isVisible()">
+             data-bind="fadeVisible: visible()">
             <!-- ko if: rates().length  -->
             <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation" novalidate="novalidate">
                 <div id="checkout-shipping-method-load">
@@ -137,4 +133,3 @@
         </div>
     </div>
 </li>
-
