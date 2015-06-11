@@ -170,6 +170,7 @@ class File extends AbstractIo
      * @param array $row
      * @param string $delimiter
      * @param string $enclosure
+     * @var $value string|Phrase
      * @return int|false The length of the written string or false
      */
     public function streamWriteCsv(array $row, $delimiter = ',', $enclosure = '"')
@@ -182,6 +183,7 @@ class File extends AbstractIo
          * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
          */
         foreach ($row as $key => $value) {
+            $value = (string)$value;
             if (isset($value[0]) && $value[0] === '=') {
                 $row[$key] = ' ' . $value;
             }
