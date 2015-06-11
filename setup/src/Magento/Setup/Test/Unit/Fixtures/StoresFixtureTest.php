@@ -16,11 +16,16 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\StoresFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new StoresFixture($this->fixtureModelMock);
     }
 
     /**
@@ -29,21 +34,21 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $websiteMock = $this->getMockBuilder('\Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
-        $websiteMock->expects($this->any())
+        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $websiteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn('website_id');
         $websiteMock->expects($this->once())
             ->method('save');
 
-        $groupMock = $this->getMockBuilder('\Magento\Store\Model\Group')->disableOriginalConstructor()->getMock();
-        $groupMock->expects($this->any())
+        $groupMock = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
+        $groupMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn('group_id');
         $groupMock->expects($this->once())
             ->method('save');
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getRootCategoryId')
             ->willReturn(1);
@@ -53,9 +58,7 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())
             ->method('save');
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
@@ -68,15 +71,13 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
+        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
-        $categoryMock = $this->getMockBuilder('Magento\Catalog\Model\Category')
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $categoryMock = $this->getMock(
+            'Magento\Catalog\Model\Category',
+            [
                 'setId',
-                'setUrlKey',
-                'setUrlPath',
                 'setName',
-                'setParentId',
                 'setPath',
                 'setLevel',
                 'setAvailableSortBy',
@@ -84,75 +85,65 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
                 'setIsActive',
                 'getId',
                 'save'
-            ])
-            ->getMock();
+            ],
+            [],
+            '',
+            false
+        );
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
-            ->method('setUrlKey')
-            ->willReturnSelf();
-        $categoryMock->expects($this->any())
-            ->method('setUrlPath')
-            ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setName')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
-            ->method('setParentId')
-            ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setPath')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setLevel')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setAvailableSortBy')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setDefaultSortBy')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('setIsActive')
             ->willReturnSelf();
-        $categoryMock->expects($this->any())
+        $categoryMock->expects($this->once())
             ->method('getId')
             ->willReturn('category_id');
+        $valueMap[] = ['Magento\Catalog\Model\Category', [], $categoryMock];
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($storeManagerMock, $categoryMock));
+            ->will($this->returnValueMap($valueMap));
 
         $this->fixtureModelMock
             ->expects($this->exactly(3))
             ->method('getValue')
-            ->will($this->onConsecutiveCalls(1, 1, 1));
+            ->will($this->returnValue(1));
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getObjectManager')
             ->willReturn($objectManagerMock);
 
-        $storesFixture = new StoresFixture($this->fixtureModelMock);
-        $storesFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $storesFixture = new StoresFixture($this->fixtureModelMock);
-        $this->assertSame('Generating websites, stores and store views', $storesFixture->getActionTitle());
+        $this->assertSame('Generating websites, stores and store views', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $storesFixture = new StoresFixture($this->fixtureModelMock);
         $this->assertSame([
             'websites' => 'Websites',
             'store_groups' => 'Store Groups',
             'store_views' => 'Store Views'
-        ], $storesFixture->introduceParamLabels());
+        ], $this->model->introduceParamLabels());
     }
 }

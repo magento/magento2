@@ -16,54 +16,63 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\EavVariationsFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new EavVariationsFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $attributeMock = $this->getMockBuilder('Magenot\Catalog\Model\Resource\Eav\Attribute')
-            ->setMethods(['setAttributeGroupId', 'addData', 'setAttributeSetId', 'save'])
-            ->getMock();
+        $attributeMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            [
+                'setAttributeSetId',
+                'setAttributeGroupId',
+                'save'
+            ],
+            [],
+            '',
+            false
+        );
         $attributeMock->expects($this->exactly(2))
             ->method('setAttributeSetId')
             ->willReturnSelf();
         $attributeMock->expects($this->once())
             ->method('setAttributeGroupId')
             ->willReturnSelf();
+        $valueMap[] = ['Magento\Catalog\Model\Resource\Eav\Attribute', [], $attributeMock];
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getStores')
             ->will($this->returnValue([$storeMock]));
+        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
-        $setMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $setMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false);
         $setMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->will($this->returnValue(2));
+        $valueMap[] = ['Magento\Eav\Model\Entity\Attribute\Set', $setMock];
 
-        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cacheMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
+        $valueMap[] = ['Magento\Framework\App\CacheInterface', $cacheMock];
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($attributeMock, $storeManagerMock));
+            ->will($this->returnValueMap($valueMap));
         $objectManagerMock->expects($this->exactly(2))
             ->method('get')
-            ->will($this->onConsecutiveCalls($setMock, $cacheMock));
+            ->will($this->returnValueMap($valueMap));
 
         $this->fixtureModelMock
             ->expects($this->once())
@@ -74,8 +83,7 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 
-        $eavVariationsFixture = new EavVariationsFixture($this->fixtureModelMock);
-        $eavVariationsFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()

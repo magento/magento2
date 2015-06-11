@@ -15,45 +15,50 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\CustomersFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new CustomersFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $valueMap[] = [
+            'Magento\ImportExport\Model\Import',
+            ['data' => ['entity' => 'customer_composite', 'behavior' => 'append']],
+            $importMock
+        ];
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
-        $websiteMock = $this->getMockBuilder('\Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('website_code'));
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->will($this->returnValue($storeMock));
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
+        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
-        $objectManagerMode = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManagerMode->expects($this->exactly(2))
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->onConsecutiveCalls($storeManagerMock, $importMock));
+            ->will($this->returnValueMap($valueMap));
 
         $this->fixtureModelMock
             ->expects($this->once())
@@ -62,23 +67,20 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMode));
+            ->will($this->returnValue($objectManagerMock));
 
-        $customersFixture = new CustomersFixture($this->fixtureModelMock);
-        $customersFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $customersFixture = new CustomersFixture($this->fixtureModelMock);
-        $this->assertSame('Generating customers', $customersFixture->getActionTitle());
+        $this->assertSame('Generating customers', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $customersFixture = new CustomersFixture($this->fixtureModelMock);
         $this->assertSame([
             'customers' => 'Customers'
-        ], $customersFixture->introduceParamLabels());
+        ], $this->model->introduceParamLabels());
     }
 }

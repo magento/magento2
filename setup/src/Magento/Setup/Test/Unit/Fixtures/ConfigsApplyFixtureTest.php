@@ -16,21 +16,24 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModelMock;
 
+    /**
+     * @var \Magento\Setup\Fixtures\ConfigsApplyFixture
+     */
+    private $model;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMockBuilder('\Magento\Setup\Fixtures\FixtureModel')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+
+        $this->model = new ConfigsApplyFixture($this->fixtureModelMock);
     }
     public function testExecute()
     {
-        $cacheMock = $this->getMockBuilder('\Magento\Framework\App\Cache')->disableOriginalConstructor()->getMock();
+        $cacheMock = $this->getMock('\Magento\Framework\App\Cache', [], [], '', false);
 
-        $valueMock = $this->getMockBuilder('\Magento\Framework\App\Config')->disableOriginalConstructor()->getMock();
+        $valueMock = $this->getMock('\Magento\Framework\App\Config', [], [], '', false);
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue($cacheMock));
@@ -44,19 +47,16 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 
-        $configsApplyFixture = new ConfigsApplyFixture($this->fixtureModelMock);
-        $configsApplyFixture->execute();
+        $this->model->execute();
     }
 
     public function testGetActionTitle()
     {
-        $configsApplyFixture = new ConfigsApplyFixture($this->fixtureModelMock);
-        $this->assertSame('Config Changes', $configsApplyFixture->getActionTitle());
+        $this->assertSame('Config Changes', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
     {
-        $configsApplyFixture = new ConfigsApplyFixture($this->fixtureModelMock);
-        $this->assertSame([], $configsApplyFixture->introduceParamLabels());
+        $this->assertSame([], $this->model->introduceParamLabels());
     }
 }
