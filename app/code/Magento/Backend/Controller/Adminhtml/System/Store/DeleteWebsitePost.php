@@ -10,7 +10,6 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -34,8 +33,15 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
             return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
         }
 
-        $model->delete();
-        $this->messageManager->addSuccess(__('The website has been deleted.'));
-        return $redirectResult->setPath('adminhtml/*/');
+        try {
+            $model->delete();
+            $this->messageManager->addSuccess(__('The website has been deleted.'));
+            return $redirectResult->setPath('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to delete website. Please, try again later.'));
+        }
+        return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }
 }
