@@ -8,6 +8,14 @@ namespace Magento\AdvancedPricingImportExport\Model\Export;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
+/**
+ * Export Advanced Pricing
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
 
@@ -86,7 +94,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ) {
         $this->_storeResolver = $storeResolver;
         $this->_groupRepository = $groupRepository;
-
        parent::__construct(
             $localeDate,
             $config,
@@ -107,6 +114,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         );
     }
 
+    /**
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     protected function initTypeModels()
     {
         $productTypes = $this->_exportConfig->getEntityTypes(self::CATALOG_PRODUCT);
@@ -139,7 +150,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             );
         }
         $this->_disabledAttrs = array_unique($this->_disabledAttrs);
-
         return $this;
     }
 
@@ -207,14 +217,22 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         if ($exportData) {
             foreach ($exportData as $key => $row) {
-                $exportData[$key][self::TIER_PRICE_WEBSITE] =
-                    $this->_getWebsiteCode($exportData[$key][self::TIER_PRICE_WEBSITE]);
-                $exportData[$key][self::GROUP_PRICE_WEBSITE] =
-                    $this->_getWebsiteCode($exportData[$key][self::GROUP_PRICE_WEBSITE]);
-                $exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP] =
-                    $this->_getCustomerGroupById((int)$exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP]);
-                $exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP] =
-                    $this->_getCustomerGroupById((int)$exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP]);
+                if (isset($exportData[$key][self::TIER_PRICE_WEBSITE])) {
+                    $exportData[$key][self::TIER_PRICE_WEBSITE] =
+                        $this->_getWebsiteCode($exportData[$key][self::TIER_PRICE_WEBSITE]);
+                }
+                if (isset($exportData[$key][self::GROUP_PRICE_WEBSITE])) {
+                    $exportData[$key][self::GROUP_PRICE_WEBSITE] =
+                        $this->_getWebsiteCode($exportData[$key][self::GROUP_PRICE_WEBSITE]);
+                }
+                if (isset($exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP])) {
+                    $exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP] =
+                        $this->_getCustomerGroupById((int)$exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP]);
+                }
+                if (isset($exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP])) {
+                    $exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP] =
+                        $this->_getCustomerGroupById((int)$exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP]);
+                }
             }
         }
         return $exportData;
