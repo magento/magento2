@@ -47,7 +47,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -62,7 +62,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -114,22 +114,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         )->setCcSsStartYear(
             $data->getCcSsStartYear()
         );
-        return $this;
-    }
-
-    /**
-     * Prepare info instance for save
-     *
-     * @return $this
-     */
-    public function prepareSave()
-    {
-        $info = $this->getInfoInstance();
-        if ($this->_canSaveCc) {
-            $info->setCcNumberEnc($info->encrypt($info->getCcNumber()));
-        }
-        //$info->setCcCidEnc($info->encrypt($info->getCcCid()));
-        $info->setCcNumber(null)->setCcCid(null);
         return $this;
     }
 
