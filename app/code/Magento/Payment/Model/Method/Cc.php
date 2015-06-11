@@ -118,22 +118,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Prepare info instance for save
-     *
-     * @return $this
-     */
-    public function prepareSave()
-    {
-        $info = $this->getInfoInstance();
-        if ($this->_canSaveCc) {
-            $info->setCcNumberEnc($info->encrypt($info->getCcNumber()));
-        }
-        //$info->setCcCidEnc($info->encrypt($info->getCcCid()));
-        $info->setCcNumber(null)->setCcCid(null);
-        return $this;
-    }
-
-    /**
      * Validate payment method information object
      *
      * @return $this

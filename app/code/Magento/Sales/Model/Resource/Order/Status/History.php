@@ -27,19 +27,28 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
+     * @param \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite
      * @param Validator $validator
-     * @param string|null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
+        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         Validator $validator,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
+        parent::__construct(
+            $context,
+            $attribute,
+            $sequenceManager,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $resourcePrefix
+        );
     }
 
     /**

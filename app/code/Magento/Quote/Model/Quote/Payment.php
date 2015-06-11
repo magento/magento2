@@ -123,6 +123,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * Retrieve quote model instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
@@ -182,12 +184,6 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         if ($this->getQuote()) {
             $this->setQuoteId($this->getQuote()->getId());
         }
-        try {
-            $method = $this->getMethodInstance();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            return parent::beforeSave();
-        }
-        $method->prepareSave();
         return parent::beforeSave();
     }
 
@@ -227,7 +223,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getMethodInstance()
     {
         $method = parent::getMethodInstance();
-        return $method->setStore($this->getQuote()->getStore());
+        $method->setStore($this->getQuote()->getStore()->getStoreId());
+        return $method;
     }
 
     /**

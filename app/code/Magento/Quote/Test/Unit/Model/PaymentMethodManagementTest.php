@@ -162,7 +162,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -279,7 +279,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -344,7 +344,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(false);
         $quoteMock->expects($this->exactly(4))->method('getShippingAddress')->willReturn($shippingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())

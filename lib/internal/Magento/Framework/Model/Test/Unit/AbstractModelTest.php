@@ -122,4 +122,78 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $this->model->afterDelete();
         $this->assertEmpty($this->model->getStoredData());
     }
+
+    /**
+     * Tests \Magento\Framework\Object->isDeleted()
+     */
+    public function testIsDeleted()
+    {
+        $this->assertFalse($this->model->isDeleted());
+        $this->model->isDeleted();
+        $this->assertFalse($this->model->isDeleted());
+        $this->model->isDeleted(true);
+        $this->assertTrue($this->model->isDeleted());
+    }
+
+    /**
+     * Tests \Magento\Framework\Object->hasDataChanges()
+     */
+    public function testHasDataChanges()
+    {
+        $this->assertFalse($this->model->hasDataChanges());
+        $this->model->setData('key', 'value');
+        $this->assertTrue($this->model->hasDataChanges(), 'Data changed');
+
+        $this->model->setDataChanges(false);
+        $this->model->setData('key', 'value');
+        $this->assertFalse($this->model->hasDataChanges(), 'Data not changed');
+
+        $this->model->setData(['key' => 'value']);
+        $this->assertFalse($this->model->hasDataChanges(), 'Data not changed (array)');
+
+        $this->model->unsetData();
+        $this->assertTrue($this->model->hasDataChanges(), 'Unset data');
+    }
+
+    /**
+     * Tests \Magento\Framework\Object->getId()
+     */
+    public function testSetGetId()
+    {
+        $this->model->setId('test');
+        $this->assertEquals('test', $this->model->getId());
+    }
+
+    public function testSetGetIdFieldName()
+    {
+        $name = 'entity_id_custom';
+        $this->model->setIdFieldName($name);
+        $this->assertEquals($name, $this->model->getIdFieldName());
+    }
+
+    /**
+     * Tests \Magento\Framework\Object->setOrigData()
+     */
+    public function testOrigData()
+    {
+        $data = ['key1' => 'value1', 'key2' => 'value2'];
+        $this->model->setData($data);
+        $this->model->setOrigData();
+        $this->model->setData('key1', 'test');
+        $this->assertTrue($this->model->dataHasChangedFor('key1'));
+        $this->assertEquals($data, $this->model->getOrigData());
+
+        $this->model->setOrigData('key1', 'test');
+        $this->assertEquals('test', $this->model->getOrigData('key1'));
+    }
+
+    /**
+     * Tests \Magento\Framework\Object->setDataChanges()
+     */
+    public function testSetDataChanges()
+    {
+        $this->assertFalse($this->model->hasDataChanges());
+        $this->model->setDataChanges(true);
+        $this->assertTrue($this->model->hasDataChanges());
+    }
 }
