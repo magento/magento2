@@ -126,6 +126,8 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     /**
      * Retrieve order instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
@@ -175,6 +177,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         return $this;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns comment
      *
@@ -263,7 +266,6 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         return $this->getData(OrderStatusHistoryInterface::STATUS);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
