@@ -15,6 +15,15 @@ use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Dir
 {
+    /**#@+
+     * Directories within modules
+     */
+    const MODULE_ETC_DIR = 'etc';
+    const MODULE_I18N_DIR = 'i18n';
+    const MODULE_VIEW_DIR = 'view';
+    const MODULE_CONTROLLER_DIR = 'Controller';
+    /**#@-*/
+
     /**
      * Modules root directory
      *
@@ -63,9 +72,14 @@ class Dir
             $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
             $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
         }
-        
+
         if ($type) {
-            if (!in_array($type, ['etc', 'i18n', 'view', 'Controller'])) {
+            if (!in_array($type, [
+                self::MODULE_ETC_DIR,
+                self::MODULE_I18N_DIR,
+                self::MODULE_VIEW_DIR,
+                self::MODULE_CONTROLLER_DIR
+            ])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;

@@ -11,7 +11,7 @@ namespace Magento\Framework\Module;
 interface ModuleRegistryInterface
 {
     /**
-     * Get list of Magento module paths
+     * Get list of registered Magento module paths
      *
      * Returns an array where key is fully-qualified module name and value is absolute path to module
      *
@@ -20,6 +20,8 @@ interface ModuleRegistryInterface
     public function getModulePaths();
 
     /**
+     * Get path of a module if it is already registered
+     *
      * @param string $moduleName
      * @return null|string
      */

@@ -6,7 +6,8 @@
 namespace Magento\Framework\Module;
 
 /**
- * Provides ability to statically register modules which do not reside in the modules directory
+ * Provides ability to statically register modules which do not reside in the modules directory. Not all modules
+ * will be registered by default.
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
