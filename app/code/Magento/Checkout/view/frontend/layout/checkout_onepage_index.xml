@@ -289,5 +289,6 @@
                 </arguments>
             </block>
         </referenceContainer>
+        <remove name="page.messages" />
     </body>
 </page>
