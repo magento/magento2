@@ -73,7 +73,7 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
      * {@inheritdoc}
      */
     public function setExtensionAttributes(
-        \Magento\Checkout\Api\Data\AddressInformationExtensionInterface $extensionAttributes
+        \Magento\Checkout\Api\Data\ShippingInformationExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

@@ -27,7 +27,6 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
 
     /**
      * @var PaymentDetailsFactory
-     *
      */
     protected $paymentDetailsFactory;
 
@@ -37,24 +36,32 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     protected $cartTotalsRepository;
 
     /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
      * @param \Magento\Quote\Api\GuestShippingAddressManagementInterface $shippingAddressManagement
      * @param \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingMethodManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param CartTotalRepositoryInterface $cartTotalsRepository
+     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Magento\Quote\Api\GuestShippingAddressManagementInterface $shippingAddressManagement,
         \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
-        CartTotalRepositoryInterface $cartTotalsRepository
+        CartTotalRepositoryInterface $cartTotalsRepository,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->shippingAddressManagement = $shippingAddressManagement;
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -70,10 +77,14 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
             $addressInformation->getShippingCarrierCode(),
             $addressInformation->getShippingMethodCode()
         );
+
+        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+
         /** @var PaymentDetailsInterface $paymentDetails */
         $paymentDetails = $this->paymentDetailsFactory->create();
-        $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
-        $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
+        $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($quoteIdMask->getQuoteId()));
+        $paymentDetails->setTotals($this->cartTotalsRepository->get($quoteIdMask->getQuoteId()));
         return $paymentDetails;
     }
 }
