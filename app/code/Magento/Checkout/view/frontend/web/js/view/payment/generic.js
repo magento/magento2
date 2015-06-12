@@ -6,9 +6,11 @@
 /*global define*/
 define(
     [
-        'uiComponent'
+        'uiComponent',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/action/place-order'
     ],
-    function (Component) {
+    function (Component, quote, placeOrderAction) {
         return Component.extend({
             getCode: function() {
                 return this.index;
@@ -26,8 +28,19 @@ define(
                 return true;
             },
             placeOrder: function() {
-                alert('Kaboom!');
-                // TODO: Place order info here
+                var data = {
+                    "method": this.index,
+                    "po_number": null,
+                    "cc_owner": null,
+                    "cc_number": null,
+                    "cc_type": null,
+                    "cc_exp_year": null,
+                    "cc_exp_month": null,
+                    "additional_data": null
+                };
+                //@todo temporary billing address same as shipping
+                quote.billingAddress(quote.shippingAddress());
+                placeOrderAction(data);
             }
         });
     }
