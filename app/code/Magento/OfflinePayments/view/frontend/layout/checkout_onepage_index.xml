@@ -23,24 +23,28 @@
                                                     <item name="children" xsi:type="array">
                                                         <item name="checkmo" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_OfflinePayments/js/view/payment/checkmo-method</item>
+                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                             <item name="config" xsi:type="array">
                                                                 <item name="formTemplate" xsi:type="string">Magento_OfflinePayments/payment/checkmo-form</item>
                                                             </item>
                                                         </item>
                                                         <item name="cashondelivery" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_OfflinePayments/js/view/payment/instructions-method</item>
+                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                             <item name="config" xsi:type="array">
                                                                 <item name="formTemplate" xsi:type="string">Magento_OfflinePayments/payment/instructions-form</item>
                                                             </item>
                                                         </item>
                                                         <item name="banktransfer" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_OfflinePayments/js/view/payment/instructions-method</item>
+                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                             <item name="config" xsi:type="array">
                                                                 <item name="formTemplate" xsi:type="string">Magento_OfflinePayments/payment/instructions-form</item>
                                                             </item>
                                                         </item>
                                                         <item name="purchaseorder" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_OfflinePayments/js/view/payment/purchaseorder-method</item>
+                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                             <item name="config" xsi:type="array">
                                                                 <item name="formTemplate" xsi:type="string">Magento_OfflinePayments/payment/purchaseorder-form</item>
                                                             </item>

@@ -10,7 +10,5 @@
     <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
 
     <!-- ko text: currentBillingAddress().telephone --><!-- /ko --><br/>
-    <!-- ko: if (!isAddressSameAsShipping()) -->
-    <a data-bind="click: editAddress, text: $t('Edit')"></a>
-    <!-- /ko -->
+    <a data-bind="visible: !isAddressSameAsShipping(), click: editAddress, text: $t('Edit')"></a>
 </div>
