@@ -4,12 +4,13 @@
  */
 /*global define*/
 define([
+    'jquery',
     'ko',
     'uiComponent',
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/shipping-address/form-popup-state'
-], function(ko, Component, selectShippingAddressAction, quote, formPopUpState) {
+], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState) {
     'use strict';
     var countryData = window.checkoutConfig.countryData;
     return Component.extend({
@@ -42,6 +43,11 @@ define([
 
         editAddress: function() {
             formPopUpState.isVisible(true);
+            this.showPopup();
+
+        },
+        showPopup: function() {
+            $('[data-open-modal="opc-new-shipping-address"]').trigger('click');
         }
     });
 });
