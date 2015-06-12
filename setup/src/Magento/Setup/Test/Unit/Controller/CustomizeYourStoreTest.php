@@ -69,9 +69,9 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
         $sampleData = [
+            'isSampledataEnabled' => null,
             'isSampleDataInstalled' => null,
-            'isSampleDataErrorInstallation' => null,
-            'isSampledataEnabled' => null
+            'isSampleDataErrorInstallation' => null
         ];
         $sampleDataTrue = array_merge($sampleData, ['isSampledataEnabled' => true]);
         $sampleDataFalse = array_merge($sampleData, ['isSampledataEnabled' => false]);
