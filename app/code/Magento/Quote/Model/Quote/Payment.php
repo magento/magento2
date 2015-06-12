@@ -67,7 +67,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -80,7 +80,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
@@ -182,12 +182,6 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         if ($this->getQuote()) {
             $this->setQuoteId($this->getQuote()->getId());
         }
-        try {
-            $method = $this->getMethodInstance();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            return parent::beforeSave();
-        }
-        $method->prepareSave();
         return parent::beforeSave();
     }
 
@@ -227,7 +221,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getMethodInstance()
     {
         $method = parent::getMethodInstance();
-        return $method->setStore($this->getQuote()->getStore());
+        $method->setStore($this->getQuote()->getStore()->getStoreId());
+        return $method;
     }
 
     /**

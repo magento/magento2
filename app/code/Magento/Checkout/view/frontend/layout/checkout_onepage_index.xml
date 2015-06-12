@@ -44,8 +44,21 @@
                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                 <item name="sortOrder" xsi:type="string">1</item>
                                                 <item name="children" xsi:type="array">
+                                                    <item name="step-config" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="shipping-rates-validation" xsi:type="array">
+                                                                <item name="children" xsi:type="array">
+                                                                    <!--Step configuration components-->
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
                                                     <item name="shippingAddress" xsi:type="array">
-                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="deps" xsi:type="string">checkout.steps.shipping-step.step-config</item>
+                                                        </item>
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping</item>
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
@@ -130,30 +143,6 @@
                                                             </item>
                                                         </item>
                                                     </item>
-                                                    <!-- shipping method form can be added here -->
-                                                    <item name="shipping" xsi:type="array">
-                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
-                                                        <item name="sortOrder" xsi:type="string">4</item>
-                                                        <item name="additional" xsi:type="array">
-                                                            <!-- merge your shipping methods here -->
-                                                        </item>
-                                                        <item name="children" xsi:type="array">
-                                                            <item name="beforeSelect" xsi:type="array">
-                                                                <item name="component" xsi:type="string">uiComponent</item>
-                                                                <item name="displayArea" xsi:type="string">beforeSelect</item>
-                                                                <item name="children" xsi:type="array">
-                                                                    <!-- merge additional data after shipping methods here -->
-                                                                </item>
-                                                            </item>
-                                                            <item name="afterSelect" xsi:type="array">
-                                                                <item name="component" xsi:type="string">uiComponent</item>
-                                                                <item name="displayArea" xsi:type="string">afterSelect</item>
-                                                                <item name="children" xsi:type="array">
-                                                                    <!-- merge additional data after shipping methods here -->
-                                                                </item>
-                                                            </item>
-                                                        </item>
-                                                    </item>
                                                 </item>
                                             </item>
                                             <item name="billing-step" xsi:type="array">
@@ -162,7 +151,9 @@
                                                 <item name="children" xsi:type="array">
                                                     <item name="payment" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
-                                                        <item name="sortOrder" xsi:type="string">5</item>
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="title" xsi:type="string">Payment</item>
+                                                        </item>
                                                         <item name="children" xsi:type="array">
                                                             <!-- TODO: add billing address form -->
                                                             <item name="beforeMethods" xsi:type="array">
@@ -170,6 +161,14 @@
                                                                 <item name="displayArea" xsi:type="string">beforeMethods</item>
                                                                 <item name="children" xsi:type="array">
                                                                     <!-- merge additional data before payment methods here -->
+                                                                </item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="validate-select" xsi:type="string">true</item>
+                                                                </item>
+                                                                <!-- Value of region_id field is filtered by the value of county_id attribute -->
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
                                                                 </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
@@ -269,5 +268,6 @@
                 </arguments>
             </block>
         </referenceContainer>
+        <remove name="page.messages" />
     </body>
 </page>

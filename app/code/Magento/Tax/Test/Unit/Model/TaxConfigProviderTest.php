@@ -72,7 +72,8 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->taxConfigMock->expects(($this->any()))->method('displayCartTaxWithGrandTotal')
             ->will($this->returnValue(1));
-
+        $this->taxConfigMock->expects(($this->any()))->method('displayCartZeroTax')
+            ->will($this->returnValue(1));
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 
@@ -92,6 +93,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'both',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 1,
                 'cartShippingExclTax' => 1,
@@ -109,6 +111,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'excluding',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 1,
@@ -126,6 +129,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'including',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 0,
@@ -143,6 +147,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'including',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 0,
@@ -160,6 +165,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'both',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 1,
                 'cartShippingExclTax' => 0,
@@ -177,6 +183,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'reviewTotalsDisplayMode' => 'both',
                     'includeTaxInGrandTotal' => 1,
                     'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1
                 ],
                 'cartShippingBoth' => 0,
                 'cartShippingExclTax' => 1,

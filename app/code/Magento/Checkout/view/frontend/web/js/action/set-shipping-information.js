@@ -6,32 +6,36 @@
 define(
     [
         '../model/quote',
-        '../model/url-builder',
-        'Magento_Checkout/js/model/shipping-service',
-        'mage/translate'
+        '../model/resource-url-manager',
+        'mage/storage',
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Ui/js/model/errorlist'
     ],
-    function (quote, urlBuilder, shippingService, $t) {
+    function (quote, resourceUrlManager, storage, paymentService, errorList) {
         "use strict";
-        return function (code, customOptions, callbacks) {
-            if (!code) {
-                alert($t('Please specify a shipping method'));
-                return;
-            }
+        return function () {
+            var payload = {
+                addressInformation: {
+                    shipping_address: quote.shippingAddress(),
+                    shipping_method_code: quote.shippingMethod().method_code,
+                    shipping_carrier_code: quote.shippingMethod().carrier_code
+                }
+            };
 
-            var proceed = true;
-            _.each(callbacks, function (callback) {
-                proceed = proceed && callback();
-            });
-
-            if (proceed) {
-                var shippingMethodCode = code.split("_"),
-                    shippingRate = shippingService.getRateByCode(shippingMethodCode)[0];
-
-                quote.setShippingMethod(shippingMethodCode);
-                quote.setSelectedShippingMethod(code);
-                quote.setShippingCustomOptions(customOptions);
-                quote.setCollectedTotals('shipping', shippingRate.amount);
-            }
-        };
+            storage.post(
+                resourceUrlManager.getUrlForSetShippingInformation(quote),
+                JSON.stringify(payload)
+            ).done(
+                function (response) {
+                    paymentService.setPaymentMethods(response.payment_methods);
+                    quote.setTotals(response.totals)
+                }
+            ).fail(
+                function (response) {
+                    var error = JSON.parse(response.responseText);
+                    errorList.add(error);
+                }
+            );
+        }
     }
 );

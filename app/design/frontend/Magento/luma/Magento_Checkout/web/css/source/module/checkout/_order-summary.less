@@ -8,12 +8,11 @@
 //  _____________________________________________
 
 @checkout-summary__background-color: @color-white-smoke;
-@checkout-summary__margin: @indent__base;
-@checkout-summary__margin__xl: @indent__xl;
 @checkout-summary__padding: 22px @indent__l;
-@checkout-summary__width: 31%;
 
 @checkout-summary-title__margin: @indent__s;
+@checkout-summary-mark-value__color: @color-gray60;
+@checkout-summary-items__max-height: 370px;
 
 //
 //  Common
@@ -27,20 +26,39 @@
 
     .opc-block-summary {
         .css(background, @checkout-summary__background-color);
+        .css(margin, 0 0 @checkout-sidebar__margin);
         .css(padding, @checkout-summary__padding);
         &:extend(.abs-add-box-sizing all);
+
         > .title {
             &:extend(.abs-checkout-title all);
-            .css(margin, 0 0 @checkout-summary-title__margin);
             display: block;
         }
 
         //  Totals table
-        .totals {
+        .table-totals {
             &:extend(.abs-sidebar-totals all);
-            //  ToDo UI: totals table styles
-            .css(margin, 0 0 @checkout-summary__margin);
-            width: 100%;
+        }
+
+        .mark {
+            .value {
+                .css(color, @checkout-summary-mark-value__color);
+                display: block;
+            }
+        }
+
+        .grand.incl {
+            & + .grand.excl {
+                .mark,
+                .amount {
+                    border-top: 0;
+                    .font-size(14);
+                    padding-top: 0;
+                    strong {
+                        font-weight: @font-weight__regular;
+                    }
+                }
+            }
         }
 
         //
@@ -50,6 +68,7 @@
         //  Block title
         .items-in-cart {
             > .title {
+                border-bottom: @border-width__base solid @border-color__base;
                 .css(padding, @indent__s @indent__xl @indent__s 0);
                 cursor: pointer;
                 .icon-font(
@@ -65,7 +84,7 @@
                 position: relative;
                 &:after {
                     position: absolute;
-                    right: @indent__base;
+                    right: 0;
                     top: @indent__s;
                 }
                 strong {
@@ -76,26 +95,47 @@
             }
             &.active {
                 > .title {
-                    &:after {
-                        .icon-font-symbol(
-                        @_icon-font-content: @icon-up,
-                        @_icon-font-position: after
-                        );
-                    }
+                    .icon-font-symbol(
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
+                    );
                 }
+            }
+            .product {
+                position: relative;
             }
         }
         
         //  Cart items
         .minicart-items-wrapper {
-            border-bottom: 0;
-            margin: 0;
-            padding: 15px 0 0;
+            border: 0;
+            margin: 0 -15px 0 0;
+            .css(max-height, @checkout-summary-items__max-height);
+            padding: 15px 15px 0 0;
         }
         .column.main & {
             .product-item {
                 margin: 0;
                 padding-left: 0;
+            }
+        }
+        .product-item {
+            .subtotal {
+                position: absolute;
+                right: 0;
+                text-align: right;
+                top: -6px;
+            }
+            .price {
+                .font-size(16);
+                font-weight: @font-weight__regular;
+            }
+            .price-including-tax {
+                & + .price-excluding-tax {
+                    .price {
+                        .font-size(10);
+                    }
+                }
             }
         }
         .product-item-name {
@@ -119,17 +159,5 @@
         .totals {
             &:extend(.abs-sidebar-totals-mobile all);
         }
-    }
-}
-
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .opc-block-summary {
-        .css(margin, @checkout-summary__margin__xl 0 @checkout-summary__margin);
-        .css(width, @checkout-summary__width);
-        float: right;
     }
 }

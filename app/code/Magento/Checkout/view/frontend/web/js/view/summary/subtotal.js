@@ -5,31 +5,25 @@
 /*global define*/
 define(
     [
-        'uiComponent',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Checkout/js/view/summary/abstract-total',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (Component, quote, priceUtils) {
+    function (Component, quote) {
         "use strict";
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/subtotal'
             },
             title: 'Subtotal',
-            getValue: function() {
+            getPureValue: function() {
                 var totals = quote.getTotals()();
                 if (totals) {
                     return totals.subtotal;
                 }
                 return quote.subtotal;
             },
-            getFormattedValue: function (price) {
-                var totals = quote.getTotals()();
-                var subtotal = 0;
-                if (totals) {
-                    subtotal = totals.subtotal;
-                }
-                return priceUtils.formatPrice(subtotal, quote.getPriceFormat());
+            getValue: function () {
+                return this.getFormattedPrice(this.getPureValue());
             }
 
         });

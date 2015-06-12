@@ -7,12 +7,11 @@
 define(
     [
         'ko',
-        'uiComponent',
+        'Magento_Checkout/js/view/summary/abstract-total',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/totals',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Checkout/js/model/totals'
     ],
-    function (ko, Component, quote, totals, priceUtils) {
+    function (ko, Component, quote, totals) {
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal;
         var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed;
@@ -60,10 +59,10 @@ define(
                         return this.notCalculatedMessage;
                     }
                 }
-                return priceUtils.formatPrice(amount, quote.getPriceFormat());
+                return this.getFormattedPrice(amount);
             },
             formatPrice: function(amount) {
-                return priceUtils.formatPrice(amount, quote.getPriceFormat());
+                return this.getFormattedPrice(amount);
             },
             getDetails: function() {
                 var totals = this.totals();

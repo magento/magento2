@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<form class="form form-shipping-address" id="co-shipping-form" data-hasrequired="* Required Fields">
+<form class="form form-shipping-address" id="co-shipping-form" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
     <!-- ko foreach: getRegion('before-fields') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->

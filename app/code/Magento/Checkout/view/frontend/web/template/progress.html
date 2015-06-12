@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-    <div data-bind = "attr: {'class': getClassName()}">
+<div data-bind = "attr: {'class': getClassName()}">
     <div class="title">
     </div>
     <div class="content">
@@ -48,9 +48,9 @@
                 <!--shipping method price rendering-->
 
                 <!-- ko foreach: {data: getShippingRates(), as: 'item'} -->
-                    <!-- ko foreach: $parent.getRegion('shipping') -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-                    <!--/ko-->
+                <!-- ko foreach: $parent.getRegion('shipping') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
                 <!--/ko-->
 
                 <!-- ko ifnot : (getShippingRates().length > 0) -->

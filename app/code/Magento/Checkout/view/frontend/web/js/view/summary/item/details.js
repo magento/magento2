@@ -18,11 +18,7 @@ define(
             },
             getValue: function(quoteItem) {
                 return quoteItem.name;
-            },
-            getFormattedPrice: function (price) {
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
-
         });
     }
 );

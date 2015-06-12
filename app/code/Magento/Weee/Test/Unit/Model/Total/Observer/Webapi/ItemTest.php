@@ -84,7 +84,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',
             [
-                'setRowTotal', 'setRowTotalInclTax', 'setPrice', 'setPriceInclTax', 'setWeeeTaxApplied',
+                'setRowTotal', 'setRowTotalInclTax', 'setPrice', 'setPriceInclTax',
                 'getPriceInclTax', 'getCalculationPrice', 'getRowTotal', 'getRowTotalInclTax', 'getWeeeTaxApplied',
                 'getWeeeTaxAppliedRowAmount', 'getWeeeTaxAppliedAmount'
             ],
@@ -123,8 +123,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())->method('setPrice')->with($expectedPrice)
             ->will($this->returnSelf());
         $itemMock->expects($this->once())->method('setPriceInclTax')->with($expectedPriceInclTax)
-            ->will($this->returnSelf());
-        $itemMock->expects($this->once())->method('setWeeeTaxApplied')->with(json_encode(unserialize($weeeTaxApplied)))
             ->will($this->returnSelf());
 
         $this->model->processTaxData($observerMock);

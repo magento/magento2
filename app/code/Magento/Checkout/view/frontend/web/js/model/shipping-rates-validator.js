@@ -14,11 +14,11 @@ define(
         'mage/translate'
     ],
     function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, $t) {
-        "use strict";
+        'use strict';
         var checkoutConfig = window.checkoutConfig;
         var validators = [];
         var observedElements = [];
-        var postcodeElement;
+        var postcodeElement = null;
 
         return {
             validateAddressTimeout: 0,
@@ -56,13 +56,10 @@ define(
                         self.bindHandler(elem);
                     });
                 } else {
-                    $('#checkout').on('keyup change', '#' + element.uid, function(event) {
-                        if ($(this).is('input') && event.type == 'change') {
-                            return false;
-                        }
+                    element.on('value', function() {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function() {
-                            if (self.postcodeValidation()) {
+                            if (postcodeElement != null && self.postcodeValidation()) {
                                 self.validateFields();
                             }
                         }, self.validateDelay);
@@ -72,10 +69,8 @@ define(
             },
 
             postcodeValidation: function() {
-                var postcode = $('#' + postcodeElement.uid).val(),
-                    countryId = $('select[name="shippingAddress[country_id]"]').val();
-
-                var validationResult = postcodeValidator.validate(postcode, countryId);
+                var countryId = $('select[name="shippingAddress[country_id]"]').val();
+                var validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
 
                 postcodeElement.error(null);
                 if (!validationResult) {
@@ -110,8 +105,7 @@ define(
             collectObservedData: function() {
                 var observedValues = {};
                 $.each(observedElements, function(index, field) {
-                    var fieldSelector = '#' + field.uid;
-                    observedValues[field.dataScope] = $(fieldSelector).val();
+                    observedValues[field.dataScope] = field.value();
                 });
                 return observedValues;
             }

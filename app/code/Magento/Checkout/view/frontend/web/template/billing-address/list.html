@@ -1,0 +1,14 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="control" data-bind="if: (addressOptions.length > 1)">
+    <select name="billing_address_id" data-bind="
+        options: addressOptions,
+        optionsText: addressOptionsText,
+        value: selectedAddress,
+        event: {change: onAddressChange(selectedAddress())};
+    "></select>
+</div>

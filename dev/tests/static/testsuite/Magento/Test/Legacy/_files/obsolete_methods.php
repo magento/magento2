@@ -950,7 +950,7 @@ return [
     ['_getGridHtml', 'Magento\User\Block\Role\Tab\Users', 'getGridHtml'],
     ['_getSelectedRoles', 'Magento\User\Block\User\Edit\Tab\Roles', 'getSelectedRoles'],
     ['_prepareSelect', 'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection'],
-    ['_prepareSelect', 'Magento\Framework\Data\Collection\Db'],
+    ['_prepareSelect', 'Magento\Framework\Data\Collection\AbstractDb'],
     ['_createOrderFromAddress', 'Magento\Checkout\Model\Type\AbstractType'],
     ['_addLoadAttributesSelectFields', 'Magento\Catalog\Model\Resource\AbstractResource'],
     ['attributeSelectFields', 'Magento\Catalog\Model\Resource\Helper'],
@@ -1583,7 +1583,7 @@ return [
     ['_compareSortOrder', 'Magento\Sales\Model\Config\Ordered'],
     [
         '_toOptionHashOptimized',
-        'Magento\Framework\Data\Collection\Db',
+        'Magento\Framework\Data\Collection\AbstractDb',
         'Magento\Tax\Model\Resource\Calculation\Rate\Collection::toOptionHashOptimized',
     ],
     ['getSwitchCurrencyUrl', 'Magento\Directory\Block\Currency'],

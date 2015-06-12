@@ -5,10 +5,10 @@
  */
 -->
 
-<tr>
-    <td colspan="2" data-bind="text: $t(title)"></td>
-    <td class="col subtotal">
-        <span data-bind ="text: getFormattedValue(), attr:{'data-label': $t(title)}"></span>
+<tr class="totals">
+    <th class="mark" scope="row" data-bind="text: $t(title)"></th>
+    <td class="amount">
+        <span class="price" data-bind ="text: getValue(), attr:{'data-label': $t(title)}"></span>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
