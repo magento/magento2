@@ -12,7 +12,7 @@ namespace Magento\Theme\Test\Unit\Model;
 class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Theme\Model\ThemeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ThemeValidator
      */
     protected $themeValidator;
 
@@ -72,10 +72,20 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(2))
             ->method('addFieldToFilter')
             ->willReturn([$defaultEntity, $websitesEntity, $storesEntity]);
-        $website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $website = $this->getMock('Magento\Store\Model\Website', ['getName'], [], '', false);
+        $website->expects($this->once())->method('getName')->willReturn('websiteA');
+        $store = $this->getMock('Magento\Store\Model\Store', ['getName'], [], '', false);
+        $store->expects($this->once())->method('getName')->willReturn('storeA');
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
-        $this->themeValidator->validateIsThemeInUse(['frontend/Magento/a']);
+        $result = $this->themeValidator->validateIsThemeInUse(['frontend/Magento/a']);
+        $this->assertEquals(
+            [
+                'frontend/Magento/a is in use in default config',
+                'frontend/Magento/a is in use in website websiteA',
+                'frontend/Magento/a is in use in store storeA'
+            ],
+            $result
+        );
     }
 }
