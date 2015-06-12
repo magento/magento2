@@ -19,6 +19,8 @@
 @checkout-shipping-item__padding: @indent__base (@indent__l + 5px) @indent__base @indent__base;
 @checkout-shipping-item__transition: .3s border-color;
 @checkout-shipping-item__width: 100%/3;
+@checkout-shipping-item-table__width: 100%/2;
+@checkout-shipping-item-mobile__width: 100%;
 @checkout-shipping-item__active__border-color: @color-orange-red1;
 
 @checkout-shipping-item-icon__selected__height: 27px;
@@ -72,7 +74,7 @@
             .css(margin, @checkout-shipping-item__margin);
             .css(padding, @checkout-shipping-item__padding);
             .css(transition, @checkout-shipping-item__transition);
-            .css(width, @checkout-shipping-item__width);
+            .css(width, @checkout-shipping-item-table__width);
             display: inline-block;
             position: relative;
             vertical-align: top;
@@ -141,6 +143,16 @@
         .step-title {
             h2 {
                 margin-bottom: 0;
+            }
+        }
+    }
+
+    .methods-shipping {
+        .actions-toolbar {
+            .action {
+                &.primary {
+                    .css(margin, @indent__base 0 0);
+                }
             }
         }
     }
@@ -234,11 +246,13 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .checkout-shipping-method {
         .actions-toolbar {
-            .primary {
+            > .primary {
                 float: right;
             }
-            .secondary {
-                .css(margin-right, @indent__s);
+            .action {
+                &.primary {
+                    margin: 0;
+                }
             }
         }
     }
@@ -248,19 +262,13 @@
         .form-shipping-address {
             .css(max-width, @checkout-shipping-address__max-width);
         }
+    }
+}
 
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .opc-wrapper {
         .shipping-address-item {
-            &.selected-item {
-                &:before {
-                    &:extend(.abs-no-display-desktop all);
-                }
-
-                + .shipping-address-item {
-                    &:before {
-                        &:extend(.abs-no-display-desktop all);
-                    }
-                }
-            }
+            .css(width, @checkout-shipping-item__width);
 
             &:before {
                 .css(background, @checkout-shipping-item-before__border-color);
@@ -274,7 +282,19 @@
 
             &:nth-child(3n+1) {
                 &:before {
-                    &:extend(.abs-no-display-desktop all);
+                    display: none;
+                }
+            }
+
+            &.selected-item {
+                &:before {
+                    display: none;
+                }
+
+                + .shipping-address-item {
+                    &:before {
+                        display: none;
+                    }
                 }
             }
         }
