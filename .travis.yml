@@ -8,6 +8,9 @@ env:
   - TEST_SUITE=integration_integrity
   - TEST_SUITE=static_phpcs
   - TEST_SUITE=static_annotation
+cache:
+  directories:
+    - $HOME/.composer/cache
 matrix:
   exclude:
     - php: 5.6
@@ -17,6 +20,7 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
+  - composer self-update
 before_script:
   # Mock mail
   - sudo service postfix stop
@@ -45,7 +49,7 @@ before_script:
   # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
-  - composer install --no-interaction --dev
+  - composer install --no-interaction --prefer-dist
 script:
   # Unit tests
   - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
