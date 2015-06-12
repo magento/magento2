@@ -37,6 +37,9 @@ define(
                 return true;
             },
             ifShowDetails: function() {
+                if (this.getTotalsMode() == 'initial') {
+                    return false;
+                }
                 return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
             },
             getPureValue: function() {
