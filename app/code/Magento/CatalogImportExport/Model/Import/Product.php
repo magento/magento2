@@ -10,7 +10,6 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\Framework\File\Uploader;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
@@ -1354,23 +1353,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 5. Media gallery phase
-                $dispertionPath = Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
+                $dispertionPath = \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
                 $imageName = preg_replace('/[^a-z0-9\._-]+/i','', $rowData[self::COL_MEDIA_IMAGE]);
                 $fullDispertionPath = $dispertionPath.'/'.$imageName;
                 $imageIsSet = null;
                 $imageFromProduct = null;
                 $imageInProductIsSet = null;
-                foreach($this->cachedImages as $image) {
-                    if($image['sku'] == $rowData[self::COL_SKU] && preg_replace('/_[0-9]+/','', $image['value']) == $fullDispertionPath) {
+                foreach ($this->cachedImages as $image) {
+                    if ($image['sku'] == $rowData[self::COL_SKU] && preg_replace('/_[0-9]+/', '', $image['value']) == $fullDispertionPath) {
                         $imageInProductIsSet = true;
-                        $imageFromProduct = preg_replace('/_[0-9]+/','', $image['value']);
+                        $imageFromProduct = preg_replace('/_[0-9]+/', '', $image['value']);
                         break;
-                    } elseif(in_array($fullDispertionPath, $image)) {
+                    } elseif (in_array($fullDispertionPath, $image)) {
                         $imageIsSet = true;
                         break;
                     }
                 }
-                if( ($imageInProductIsSet && $imageFromProduct != $fullDispertionPath) || (!isset($imageIsSet) && !isset($imageInProductIsSet)) ) {
+                if (($imageInProductIsSet && $imageFromProduct != $fullDispertionPath) || (!isset($imageIsSet) && !isset($imageInProductIsSet))) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
@@ -1419,7 +1418,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ];
                         }
                     }
-                } elseif($imageInProductIsSet && $imageFromProduct == $fullDispertionPath) {
+                } elseif ($imageInProductIsSet && $imageFromProduct == $fullDispertionPath) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
