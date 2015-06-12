@@ -6,6 +6,7 @@
 namespace Magento\ImportExport\Model\Import\Entity;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import as ImportExport;
 
 /**
  * Import entity abstract model
@@ -697,6 +698,7 @@ abstract class AbstractEntity
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
@@ -708,30 +710,32 @@ abstract class AbstractEntity
                 );
             }
 
-            // check attribute columns names validity
-            $columnNumber = 0;
-            $emptyHeaderColumns = [];
-            $invalidColumns = [];
-            foreach ($this->getSource()->getColNames() as $columnName) {
-                $columnNumber++;
-                if (!$this->isAttributeParticular($columnName)) {
-                    if (trim($columnName) == '') {
-                        $emptyHeaderColumns[] = $columnNumber;
-                    } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
-                        $invalidColumns[] = $columnName;
+            if (ImportExport::BEHAVIOR_DELETE != $this->getBehavior()) {
+                // check attribute columns names validity
+                $columnNumber = 0;
+                $emptyHeaderColumns = [];
+                $invalidColumns = [];
+                foreach ($this->getSource()->getColNames() as $columnName) {
+                    $columnNumber++;
+                    if (!$this->isAttributeParticular($columnName)) {
+                        if (trim($columnName) == '') {
+                            $emptyHeaderColumns[] = $columnNumber;
+                        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                            $invalidColumns[] = $columnName;
+                        }
                     }
                 }
-            }
 
-            if ($emptyHeaderColumns) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
-                );
-            }
-            if ($invalidColumns) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
-                );
+                if ($emptyHeaderColumns) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
+                    );
+                }
+                if ($invalidColumns) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
+                    );
+                }
             }
 
             // initialize validation related attributes

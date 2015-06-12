@@ -1108,23 +1108,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
                 $customOptionsDataPre[$productId][$optionId][] = $row;
 
-                foreach ($values as $value) {
-                    $row = [];
-                    $valuePriceType = $value['price_type'] == 'percent' ? '%' : '';
+                if ($values) {
+                    foreach ($values as $value) {
+                        $row = [];
+                        $valuePriceType = $value['price_type'] == 'percent' ? '%' : '';
 
-                    if (Store::DEFAULT_STORE_ID == $storeId) {
-                        $row['_custom_option_row_title'] = $value['title'];
-                        $row['_custom_option_row_price'] = $value['price'] . $valuePriceType;
-                        $row['_custom_option_row_sku'] = $value['sku'];
-                        $row['_custom_option_row_sort'] = $value['sort_order'];
-                    } else {
-                        $row['_custom_option_row_title'] = $value['title'];
-                    }
-                    if ($row) {
-                        if (Store::DEFAULT_STORE_ID != $storeId) {
-                            $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
+                        if (Store::DEFAULT_STORE_ID == $storeId) {
+                            $row['_custom_option_row_title'] = $value['title'];
+                            $row['_custom_option_row_price'] = $value['price'] . $valuePriceType;
+                            $row['_custom_option_row_sku'] = $value['sku'];
+                            $row['_custom_option_row_sort'] = $value['sort_order'];
+                        } else {
+                            $row['_custom_option_row_title'] = $value['title'];
                         }
-                        $customOptionsDataPre[$option['product_id']][$optionId][] = $row;
+                        if ($row) {
+                            if (Store::DEFAULT_STORE_ID != $storeId) {
+                                $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
+                            }
+                            $customOptionsDataPre[$option['product_id']][$optionId][] = $row;
+                        }
                     }
                 }
                 $option = null;
