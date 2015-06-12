@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<table>
-<!-- ko foreach: elems() -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-<!-- /ko -->
+<table class="data table table-totals">
+    <caption class="table-caption" data-bind="text: $t('Order Summary')"></caption>
+    <tbody>
+    <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+    </tbody>
 </table>

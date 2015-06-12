@@ -36,6 +36,7 @@ define([
             wrapperClass: 'modals-wrapper',
             overlayClass: 'modals-overlay',
             responsiveClass: 'modal-slide',
+            trigger: '',
             modalLeftMargin: 45,
             closeText: $.mage.__('Close'),
             buttons: [{
@@ -56,6 +57,7 @@ define([
             this._createButtons();
 
             this.modal.find(this.options.modalCloseBtn).on('click',  _.bind(this.closeModal, this));
+            $('[data-open-modal="' + this.options.trigger + '"]').on('click', _.bind(this.openModal, this));
             this.element.on('openModal', _.bind(this.openModal, this));
             this.element.on('closeModal', _.bind(this.closeModal, this));
         },

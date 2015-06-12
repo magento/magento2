@@ -6,30 +6,37 @@
 -->
 <!-- ko if: isBothPricesDisplayed() -->
 <tr class="totals sub excl">
-    <th colspan="3" class="mark" scope="row">
+    <th class="mark" scope="row">
         <span data-bind="$t(title)"></span>
         <span data-bind="$t(excludingTaxMessage)"></span>
     </th>
-    <td data-bind="text: getValue(), attr: {'data-th': $t(title) + ' ' + $t(excludingTaxMessage) }" class="amount"></td>
+    <td class="amount">
+        <span class="price" data-bind="text: getValue(), attr: {'data-th': $t(excludingTaxMessage) }"></span>
+    </td>
 </tr>
 <tr class="totals sub incl">
-    <th colspan="3" class="mark" scope="row">
+    <th class="mark" scope="row">
         <span data-bind="$t(title)"></span>
         <span data-bind="$t(includingTaxMessage)"></span>
     </th>
-    <td data-bind="text: getValueInclTax(), attr: {'data-th': $t(title) + ' ' + $t(includingTaxMessage) }" class="amount">
+    <td class="amount">
+        <span class="price" data-bind="text: getValueInclTax(), attr: {'data-th': $t(includingTaxMessage) }"></span>
     </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: !isBothPricesDisplayed() && isIncludingTaxDisplayed() -->
 <tr class="totals sub">
-    <th  colspan="3" data-bind="text: $t(title)" class="mark" scope="row"></th>
-    <td data-bind="text: getValueInclTax(), attr: {'data-th': $t(title)}" class="amount"></td>
+    <th data-bind="text: $t(title)" class="mark" scope="row"></th>
+    <td class="amount">
+        <span class="price" data-bind="text: getValueInclTax(), attr: {'data-th': $t(title)}"></span>
+    </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: !isBothPricesDisplayed() && !isIncludingTaxDisplayed() -->
 <tr class="totals sub">
-    <th  colspan="3" data-bind="text: $t(title)" class="mark" scope="row"></th>
-    <td data-bind="text: getValue(), attr: {'data-th': $t(title)}" class="amount"></td>
+    <th data-bind="text: $t(title)" class="mark" scope="row"></th>
+    <td class="amount">
+        <span class="price" data-bind="text: getValue(), attr: {'data-th': $t(title)}"></span>
+    </td>
 </tr>
 <!-- /ko -->

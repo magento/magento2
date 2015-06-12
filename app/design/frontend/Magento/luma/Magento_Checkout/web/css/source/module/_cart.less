@@ -132,99 +132,12 @@
 
     //  Totals block
     &-totals {
-        border-top: 1px solid @border-color__base;
-        padding-top: 10px;
+        &:extend(.abs-sidebar-totals all);
         tbody,
-        tfoot {
+        tfoot{
             .mark {
-                border: 0;
-                font-weight: @font-weight__regular;
-                padding: 6px 0;
                 text-align: left;
             }
-            .amount {
-                border: 0;
-                font-weight: @font-weight__regular;
-                padding: 6px 0 6px 14px;
-                text-align: right;
-            }
-        }
-        .table-caption {
-            &:extend(.abs-no-display all);
-        }
-        .grand {
-            th,
-            td {
-                padding: 11px 0;
-            }
-            .mark {
-                border-top: 1px solid @border-color__base;
-                .font-size(16);
-                padding-right: @indent__s;
-                strong {
-                    display: inline-block;
-                    font-weight: @font-weight__regular;
-                    padding: 3px 0 0;
-                }
-            }
-            .amount {
-                border-top: 1px solid @border-color__base;
-                .font-size(18);
-            }
-        }
-        .msrp {
-            margin-bottom: @indent__s;
-        }
-        tbody tr:last-child td {
-            padding-bottom: 19px;
-        }
-        .totals-tax {
-            &-summary {
-                .mark,
-                .amount {
-                    border-top: @border-width__base solid @border-color__base;
-                    border-bottom: @border-width__base solid @border-color__base;
-                    cursor: pointer;
-                }
-                .amount .price {
-                    position: relative;
-                    padding-right: 20px;
-                    .icon-font(
-                        @icon-down,
-                        @_icon-font-size: 12px,
-                        @_icon-font-line-height: 12px,
-                        @_icon-font-text-hide: true,
-                        @_icon-font-position: after
-                    );
-                    &:after {
-                        position: absolute;
-                        right: 3px;
-                        top: 3px;
-                    }
-                }
-                &.expanded {
-                    .mark,
-                    .amount {
-                        border-bottom: 0;
-                    }
-                    .amount .price {
-                        .icon-font-symbol(
-                            @_icon-font-content: @icon-up,
-                            @_icon-font-position: after
-                        );
-                    }
-                }
-            }
-            &-details {
-                display: none;
-                border-bottom: @border-width__base solid @border-color__base;
-                &.shown {
-                    display: table-row;
-                }
-            }
-        }
-        .table-wrapper {
-            margin-bottom: 0;
         }
     }
 
@@ -435,21 +348,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .cart {
         &-totals {
-             .table.totals {
-                 th {
-                     &:extend(.abs-col-no-prefix all);
-                     display: table-cell;
-                 }
-                 td {
-                     &:extend(.abs-col-no-prefix all);
-                     display: table-cell;
-                 }
-                 tbody tr:not(:last-child) td {
-                     &:extend(.abs-no-border-bottom-top all);
-                 }
-                 .amount {
-                     text-align: right;
-                 }
+             .totals {
+                 &:extend(.abs-sidebar-totals-mobile all);
              }
         }
         .table.items {

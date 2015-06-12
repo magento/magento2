@@ -26,11 +26,37 @@
 
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
-        <input type="button" data-bind="click: showFormPopUp, value: $t('New Address'), visible: !isNewAddressAdded()" />
-        <div data-bind="fadeVisible: isFormPopUpVisible">
+        <button type="button"
+                data-bind="click: showFormPopUp, visible: !isNewAddressAdded()"
+                data-open-modal="opc-new-shipping-address"
+                class="action action-show-popup">
+            <span data-bind="text: $t('New Address')"></span></button>
+        <div id="opc-new-shipping-address"
+             data-bind="mageInit: {
+                'Magento_Ui/js/modal/modal': {
+                    type:'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    title: $t('Shipping Address'),
+                    trigger:'opc-new-shipping-address',
+                    buttons: [{
+                        text: $t('Save Address'),
+                        class: 'action primary action-save-address',
+                        click: function() {
+                            saveNewAddress();
+                            this.closeModal();
+                            }
+                        },
+                        {
+                            text: $t('Cancel'),
+                            class: 'action secondary action-hide-popup',
+                            click: function() {
+                                hideFormPopUp();
+                                this.closeModal()
+                                }
+                        }]
+                }}">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
-            <input type="button" data-bind="click: saveNewAddress, value: $t('Ship Here')" />
-            <input type="button" data-bind="click: hideFormPopUp, value: $t('Cancel')" />
         </div>
         <!-- /ko -->
 
@@ -43,11 +69,6 @@
 
 
 <!--Shipping method template-->
-<style type="text/css">
-    .shippingMethod {
-        margin-top: 120px;
-    }
-</style>
 <li id="opc-shipping_method" data-bind="fadeVisible: isActive(), blockLoader: isLoading" role="presentation">
     <div class="shippingMethod ">
         <div class="step-title" data-role="title">
@@ -65,16 +86,19 @@
             <!-- ko if: rates().length  -->
             <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation" novalidate="novalidate">
                 <div id="checkout-shipping-method-load">
-                    <table border="1" width="100%">
-                        <tr>
-                            <td></td>
-                            <td>Price</td>
-                            <td>Method Title</td>
-                            <td>Carrier Title</td>
-                        </tr>
+                    <table class="table-checkout-shipping-method">
+                        <thead>
+                            <tr>
+                                <th class="col">&nbsp;</th>
+                                <th class="col col-price">Price</th>
+                                <th class="col col-method">Method Title</th>
+                                <th class="col col-carrier">Carrier Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <!--ko foreach: { data: rates(), as: 'method'}-->
                         <tr>
-                            <td>
+                            <td class="col">
                                 <!-- ko if:  method.error_message -->
                                 <div class="message error">
                                     <div data-bind="text: $t(method.error_message)"></div>
@@ -101,18 +125,16 @@
                                 <!--/ko-->
                                 <!-- /ko -->
                             </td>
-                            <td>
+                            <td class="col col-price">
                                 <!-- ko foreach: $parent.getRegion('price') -->
                                 <!-- ko template: getTemplate() --><!-- /ko -->
                                 <!-- /ko -->
                             </td>
-                            <td data-bind="text: $t(method.method_title)"></td>
-                            <td data-bind="text: $t(method.carrier_title)"></td>
+                            <td class="col col-method" data-bind="text: $t(method.method_title)"></td>
+                            <td class="col col-carrier" data-bind="text: $t(method.carrier_title)"></td>
                         </tr>
                         <!-- /ko -->
-
-                        </tr>
-                        <!-- /ko -->
+                        </tbody>
                     </table>
                 </div>
 

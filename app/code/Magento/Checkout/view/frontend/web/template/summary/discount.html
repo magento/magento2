@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: isDisplayed() -->
-<tr class="totals">
-    <th colspan="3" class="mark" scope="row">
+<!-- ko if: getPureValue() != 0 -->
+<tr class="totals discount">
+    <th class="mark" scope="row">
         <span class="title" data-bind="text: title"></span>
         <span class="discount coupon" data-bind="text: getCouponCode()"></span>
     </th>
-    <td data-bind="text: getValue(), attr: {'data-th': $t(name) }" class="amount"></td>
+    <td class="amount">
+        <span class="price" data-bind="text: getValue(), attr: {'data-th': $t(name) }"></span>
+    </td>
 </tr>
 <!-- /ko -->
