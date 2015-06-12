@@ -62,11 +62,11 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <tbody>
                         <tr>
                             <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var formattedBillingAddress }}
+                                {{var formattedBillingAddress|raw}}
                             </td>
                             <td>&nbsp;</td>
                             <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var payment_html}}
+                                {{var payment_html|raw}}
                             </td>
                         </tr>
                         </tbody>
@@ -84,7 +84,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <tbody>
                         <tr>
                             <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var formattedShippingAddress }}
+                                {{var formattedShippingAddress|raw}}
                                 &nbsp;
                             </td>
                             <td>&nbsp;</td>

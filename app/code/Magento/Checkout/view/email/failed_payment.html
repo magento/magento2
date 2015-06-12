@@ -53,11 +53,11 @@ Use vars: {{var var_name}}
                 </p>
                 <p>
                     <b>Billing Address:</b><br />
-                    {{var billingAddress.format('html')}}
+                    {{var billingAddress.format('html')|raw}}
                 </p>
                 <p>
                     <b>Shipping Address:</b><br />
-                    {{var shippingAddress.format('html')}}
+                    {{var shippingAddress.format('html')|raw}}
                 </p>
                 <p>
                     <b>Shipping Method:</b><br />
