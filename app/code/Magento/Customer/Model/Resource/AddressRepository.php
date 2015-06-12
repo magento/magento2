@@ -175,7 +175,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $addresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($collection->getItems() as $address) {
-            $addresses[] = $address->getDataModel();
+            $addresses[] = $this->getById($address->getId());
         }
         $searchResults->setItems($addresses);
         $searchResults->setSearchCriteria($searchCriteria);
