@@ -22,7 +22,7 @@ define(
                 return shippingService.getTitleByCode(quote.shippingMethod())
             },
             getValue: function() {
-                if (this.getTotalsMode() != 'initial') {
+                if (this.getTotalsMode() == 'initial') {
                     return this.notCalculatedMessage;
                 }
                 var price = 0;
