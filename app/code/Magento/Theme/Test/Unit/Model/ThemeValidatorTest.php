@@ -35,7 +35,11 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $this->themeProvider = $this->getMock(
-            'Magento\Framework\View\Design\Theme\ThemeProviderInterface', [], [], '', false
+            'Magento\Framework\View\Design\Theme\ThemeProviderInterface',
+            [],
+            [],
+            '',
+            false
         );
         $this->configData = $this->getMock(
             'Magento\Framework\App\Config\Value',

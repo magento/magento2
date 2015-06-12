@@ -48,8 +48,7 @@ class ThemeValidator
         StoreManagerInterface $storeManager,
         ThemeProviderInterface $themeProvider,
         ValueInterface $configData
-    )
-    {
+    ) {
         $this->storeManager = $storeManager;
         $this->themeProvider = $themeProvider;
         $this->configData = $configData;
