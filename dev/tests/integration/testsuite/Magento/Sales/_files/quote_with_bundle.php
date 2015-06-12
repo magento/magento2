@@ -62,7 +62,7 @@ $product
             [
                 'title' => 'Bundle Product Items',
                 'default_title' => 'Bundle Product Items',
-                'type' => 'select',
+                'type' => 'checkbox',
                 'required' => 1,
                 'delete' => '',
                 'position' => 0,
@@ -141,7 +141,7 @@ $quote
     ->setStoreId($objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId())
     ->setReservedOrderId('test01')
     ->setBillingAddress($billingAddress)
-    ->setShippingAddress($shippingAddres)
+    ->setShippingAddress($shippingAddress)
     ->setCustomerEmail('test@test.magento.com')
     ->addProduct($product, $buyRequest);
 
