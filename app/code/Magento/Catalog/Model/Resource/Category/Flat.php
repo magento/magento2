@@ -84,6 +84,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -93,6 +94,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         $resourcePrefix = null
     ) {
         $this->_categoryFactory = $categoryFactory;
@@ -100,7 +102,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $resourcePrefix);
     }
 
     /**
