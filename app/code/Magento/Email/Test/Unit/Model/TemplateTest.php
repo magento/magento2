@@ -564,7 +564,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                         'label' => __('%1', 'Email Logo Image Url'),
                     ],
                     [
-                        'value' => '{{escapehtml var=$customer.name}}',
+                        'value' => '{{var customer.name}}',
                         'label' => __('%1', 'Customer Name'),
                     ],
                 ],
@@ -585,7 +585,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                             'label' => __('%1', 'Email Logo Image Url'),
                         ],
                         [
-                            'value' => '{{escapehtml var=$customer.name}}',
+                            'value' => '{{var customer.name}}',
                             'label' => __('%1', 'Customer Name'),
                         ],
                     ],
