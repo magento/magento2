@@ -75,7 +75,7 @@ define(
                         selectShippingAddress(addressList()[0]);
                     }
                 }
-                if(rates.length = 1) {
+                if (rates.length == 1) {
                     selectShippingMethodAction(rates[0])
                 }
                 return this;

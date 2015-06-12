@@ -4,42 +4,46 @@
  */
 define(
     [
-        '../model/quote',
-        '../model/url-builder',
-        '../model/payment-service',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
         'Magento_Customer/js/model/customer',
         'underscore'
     ],
-    function (quote, urlBuilder, paymentService, storage, url, errorList, customer, _) {
+    function (quote, urlBuilder, storage, url, errorList, customer, _) {
         'use strict';
 
-        return function (customParams, callback) {
-            var payload, serviceUrl;
-            customParams = customParams || {
-                cartId: quote.getQuoteId(),
-                paymentMethod: paymentService.getSelectedPaymentData()
-            };
+        return function (paymentData, callback) {
+            var serviceUrl, payload;
+
             /**
              * Checkout for guest and registered customer.
              */
-            if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/order', {
+            if (!customer.isLoggedIn) {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
                     quoteId: quote.getQuoteId()
                 });
+                payload = {
+                    cartId: quote.getQuoteId(),
+                    email: quote.guestEmail,
+                    paymentMethod: paymentData,
+                    billingAddress: quote.billingAddress()
+                };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+                payload = {
+                    cartId: quote.getQuoteId(),
+                    paymentMethod: paymentData,
+                    billingAddress: quote.billingAddress()
+                };
             }
-            payload = customParams;
-            storage.put(
+            storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
-                    if (!_.isFunction(callback) || callback()) {
-                        window.location.replace(url.build('checkout/onepage/success/'));
-                    }
+                    window.location.replace(url.build('checkout/onepage/success/'));
                 }
             ).fail(
                 function (response) {

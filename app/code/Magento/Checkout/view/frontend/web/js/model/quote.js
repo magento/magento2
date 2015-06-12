@@ -24,6 +24,8 @@ define(
             shippingAddress: shippingAddress,
             shippingMethod: shippingMethod,
             billingAddress: billingAddress,
+            paymentMethod: paymentMethod,
+            guestEmail: 'user@example.com', //@todo get this data from Guest Form
 
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -51,12 +53,6 @@ define(
                 }
                 totals(totalsData);
                 this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
-            },
-            setBillingAddress: function (address) {
-                billingAddress(address);
-            },
-            getBillingAddress: function() {
-                return billingAddress;
             },
             setFormattedBillingAddress: function (address) {
                 formattedBillingAddress(address);
