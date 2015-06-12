@@ -6,7 +6,7 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-<div data-bind="scope: '<?= $block->getId()?>'">
+<div data-bind="scope: '<?= $block->getComponentName()?>'">
     <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Attribute Values') ?></h1>
     <div style="padding-bottom: 10px">
         <span><?= __('Choose options from each attribute to create unique products.') ?></span>
@@ -65,7 +65,7 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= $block->getId()?>": {
+                    "<?= $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
                         "appendTo": "<?= $block->getParentComponentName()?>",
                         "options_url": "<?= $block->getUrl('catalog/product_attribute/getAttributes')?>"

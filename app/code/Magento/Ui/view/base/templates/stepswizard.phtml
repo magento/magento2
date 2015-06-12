@@ -10,12 +10,14 @@
     <span><?= __('Create Configurations') ?></span>
 </button>
 <div data-role="step-wizard-dialog" style="display: none">
-    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{"componentName": "<?= $block->getComponentName()?>"}}'>
+    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
+        "steps": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getStepComponents()) ?>,
+        "stepRegistryComponent": "<?= $block->getComponentName()?>"}}'>
         <div data-role="messages"></div>
         <ul class="nav-bar">
             <?php foreach ($block->getSteps() as $step) { ?>
             <li data-role="collapsible">
-                <a href="#<?= $step->getId() ?>">
+                <a href="#<?= $step->getComponentName() ?>">
                     <?= $step->getCaption() ?>
                 </a>
             </li>
@@ -38,7 +40,7 @@
             </div>
         </div>
         <?php foreach ($block->getSteps() as $step) { ?>
-        <div class="content" id="<?= $step->getId() ?>" data-role="content">
+        <div class="content" id="<?= $step->getComponentName() ?>" data-role="content">
             <?= $step->getContent() ?>
         </div>
         <?php } ?>

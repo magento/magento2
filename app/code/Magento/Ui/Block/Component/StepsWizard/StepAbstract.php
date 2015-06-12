@@ -8,19 +8,6 @@ namespace Magento\Ui\Block\Component\StepsWizard;
 abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements StepInterface
 {
     /**
-     * Get step id
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        if (null === $this->getData('id')) {
-            $this->setData('id', $this->getParentComponentName() . '_' . $this->getNameInLayout());
-        }
-        return $this->getData('id');
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getContent()
@@ -29,19 +16,21 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     }
 
     /**
-     * Get json data
-     * @return string json
-     */
-    public function getJsonData()
-    {
-        return '';
-    }
-
-    /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getParentComponentName()
     {
         return $this->getParentBlock()->getComponentName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getComponentName()
+    {
+        if (null === $this->getData('component_name')) {
+            $this->setData('component_name', $this->getParentComponentName() . '_' . $this->getNameInLayout());
+        }
+        return $this->getData('component_name');
     }
 }

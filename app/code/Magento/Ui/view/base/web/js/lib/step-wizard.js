@@ -10,18 +10,14 @@ define([
     "mage/backend/notification"
 ], function (uiRegistry, $, _) {
     "use strict";
+    var stepComponents;
     var Wizard = function (steps, element) {
         this.steps = steps;
         this.index = 0;
-        this.step = undefined;
         this.data = {};
         this.element = element;
         $(this.element).notification();
         this.move = function (newIndex) {
-            //TODO: move to constructor
-            if (this.step == undefined) {
-                this.step = this.steps[this.index];
-            }
             if (newIndex > this.index) {
                 this._next(newIndex);
             } else if (newIndex < this.index) {
@@ -30,18 +26,20 @@ define([
         };
         this._next = function () {
             try {
-                this.step.force(this);
+                this.getStep().force(this);
             } catch (e) {
                 this.notifyMessage(e.message, true);
                 throw new Error(e);
             }
-            this.step = this.steps[++this.index];
+            this.index++;
             this.render();
         };
+        this.getStep = function() {
+            return _.findWhere(stepComponents, {name: this.steps[this.index]});
+        };
         this._prev = function (newIndex) {
-            this.step.back(this);
+            this.getStep().back(this);
             this.index = newIndex;
-            this.step = this.steps[this.index];
         };
         this.notifyMessage = function (message, error) {
             $(this.element).notification('clear').notification('add', {
@@ -51,7 +49,7 @@ define([
         };
         this.render = function() {
             $(this.element).notification('clear');
-            this.step.render(this);
+            this.getStep().render(this);
         };
     };
 
@@ -64,7 +62,8 @@ define([
             buttonNextElement: '[data-role="step-wizard-next"]',
             buttonPrevElement: '[data-role="step-wizard-prev"]',
             buttonFinalElement: '[data-role="step-wizard-final"]',
-            componentName: null
+            stepRegistryComponent: null,
+            steps: null
         },
         _create: function () {
             this._control();
@@ -93,16 +92,14 @@ define([
         _handlerStep: function (event, ui) {
             var index = this.tabs.index(ui.newTab[0]);
             var tab = this.panels.eq(index);
-            var steps =  uiRegistry.async(this.options.componentName);
+            var steps =  uiRegistry.async(this.options.stepRegistryComponent);
 
             steps(function(component) {
                 if (this.wizard === undefined) {
-                    this.wizard = new Wizard(component.steps, tab);
+                    this.wizard = new Wizard(this.options.steps, tab);
+                    stepComponents = component.steps;
                 }
-                if (this.wizard.steps.length) {
-                    this.wizard.move(index);
-                }
-
+                this.wizard.move(index);
             }.bind(this));
         },
         _way: function (index) {

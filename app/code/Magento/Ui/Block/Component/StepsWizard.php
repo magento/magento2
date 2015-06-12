@@ -22,11 +22,19 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
         if ($this->steps == null) {
             foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $step) {
                 if ($step instanceof StepsWizard\StepInterface) {
-                    $this->steps[] = $step;
+                    $this->steps[$step->getComponentName()] = $step;
                 }
             }
         }
         return $this->steps;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStepComponents()
+    {
+        return array_keys($this->getSteps());
     }
 
     /**
