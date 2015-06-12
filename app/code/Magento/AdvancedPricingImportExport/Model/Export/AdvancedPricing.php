@@ -20,6 +20,8 @@ use Magento\Catalog\Model\Product as CatalogProduct;
  */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
+    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
+
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
@@ -34,8 +36,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @var string
      */
     protected $_entityTypeCode;
-
-    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -233,7 +233,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         if ($listSku) {
             try {
-                $cachedSkuToDelete = $this->_connection->fetchAll($this->_connection->select()
+                $exportData = $this->_connection->fetchAll($this->_connection->select()
                     ->from(['cpe' => $this->_connection->getTableName('catalog_product_entity')],
                         [
                             ImportAdvancedPricing::COL_SKU => 'cpe.sku',
@@ -261,7 +261,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 return false;
             }
         }
-        return $cachedSkuToDelete;
+        return $exportData;
     }
 
     /**
@@ -270,10 +270,15 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected function _getWebsiteCode($websiteId)
     {
-        $storeName = $this->_storeManager->getWebsite($websiteId)->getName();
+        $storeName = ($websiteId == 0)
+            ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
+            : $this->_storeManager->getWebsite($websiteId)->getName();
         $currencyCode = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
-
-        return $storeName . ' [' . $currencyCode . ']';
+        if ($storeName && $currencyCode && ($websiteId == 0)) {
+            return $storeName . ' [' . $currencyCode . ']';
+        } else {
+            return $storeName;
+        }
     }
 
     /**
