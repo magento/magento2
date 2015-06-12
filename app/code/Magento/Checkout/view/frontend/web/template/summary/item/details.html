@@ -30,12 +30,14 @@
     </div>
     <!-- /ko -->
 
-    <div class="details-qty">
-        <span class="label"><!-- ko text: $t('Qty') --><!-- /ko --></span>
-        <span class="value" data-bind="text: $parent.qty"></span>
-    </div>
+    <div class="product-item-details-inner">
+        <div class="details-qty">
+            <span class="label"><!-- ko text: $t('Qty') --><!-- /ko --></span>
+            <span class="value" data-bind="text: $parent.qty"></span>
+        </div>
 
-    <!-- ko foreach: getRegion('after_details') -->
+        <!-- ko foreach: getRegion('after_details') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
+        <!-- /ko -->
+    </div>
 </div>
