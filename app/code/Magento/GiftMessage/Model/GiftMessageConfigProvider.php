@@ -7,6 +7,8 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Customer\Model\Context as CustomerContext;
 
 /**
  * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
@@ -38,17 +40,20 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * @param \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param HttpContext $httpContext
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository,
         \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        HttpContext $httpContext
     ) {
         $this->scopeConfiguration = $context->getScopeConfig();
         $this->cartRepository = $cartRepository;
         $this->itemRepository = $itemRepository;
         $this->checkoutSession = $checkoutSession;
+        $this->httpContext = $httpContext;
     }
 
     /**
@@ -67,7 +72,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         );
         if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = true;
+            $configuration['isOrderLevelGiftOptionsEnabled'] = $this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
         if ($itemLevelGiftMessageConfiguration) {
@@ -75,7 +80,39 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $configuration['isItemLevelGiftOptionsEnabled'] = true;
             $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
         }
+        $configuration['storeCode'] = $this->getStoreCode();
+        $configuration['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
         return $configuration;
+    }
+
+    /**
+     * Check if customer is logged in
+     *
+     * @return bool
+     */
+    private function isCustomerLoggedIn()
+    {
+        return (bool)$this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+    }
+
+    /**
+     * Retrieve store code
+     *
+     * @return string
+     */
+    protected function getStoreCode()
+    {
+        return $this->checkoutSession->getQuote()->getStore()->getCode();
+    }
+
+    /**
+     * Check if quote is virtual
+     *
+     * @return bool
+     */
+    protected function isQuoteVirtual()
+    {
+        return $this->checkoutSession->loadCustomerQuote()->getQuote()->isVirtual();
     }
 
     /**
