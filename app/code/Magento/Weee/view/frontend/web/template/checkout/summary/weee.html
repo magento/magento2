@@ -4,7 +4,7 @@
 * See COPYING.txt for license details.
 */
 -->
-<!-- ko if: isIncludedInSubtotal && totals.weee_tax_applied_amount > 0 -->
+<!-- ko if: isDisplayed() -->
 <tr class="totals">
     <th data-bind="text: title" class="mark" scope="row"></th>
     <td class="amount" data-bind="attr: {'data-th': $t(title) }">

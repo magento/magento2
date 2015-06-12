@@ -6,8 +6,8 @@
 -->
 <!-- ko if: ifShowValue() && !ifShowDetails() -->
 <tr class="totals-tax">
-    <th data-bind="text: getTitle()" class="mark" scope="row"></th>
-    <td data-bind="attr: {'data-th': $t(getTitle()) }" class="amount">
+    <th data-bind="text: $t(title)" class="mark" scope="row"></th>
+    <td data-bind="attr: {'data-th': $t(title) }" class="amount">
         <span class="price" data-bind="text: $t(getValue())"></span>
     </td>
 </tr>
@@ -15,8 +15,8 @@
 <!-- ko if: ifShowValue() && ifShowDetails() -->
     <tr class="totals-tax-summary"
         data-bind="mageInit: {'toggleAdvanced':{'selectorsToggleClass': 'shown', 'baseToggleClass': 'expanded', 'toggleContainers': '.totals-tax-details'}}">
-        <th data-bind="text: getTitle()" class="mark" scope="row"></th>
-        <td data-bind="attr: {'data-th': $t(getTitle()) }" class="amount">
+        <th data-bind="text: $t(title)" class="mark" scope="row"></th>
+        <td data-bind="attr: {'data-th': $t(title) }" class="amount">
             <span class="price" data-bind="text: $t(getValue())"></span>
         </td>
     </tr>

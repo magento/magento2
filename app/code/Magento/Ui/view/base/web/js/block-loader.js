@@ -3,16 +3,24 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko', 'jquery', 'Magento_Ui/js/lib/loader'
-], function (ko, $, templateLoader) {
+    'ko',
+    'jquery',
+    'Magento_Ui/js/lib/loader',
+    'mage/template'
+], function (ko, $, templateLoader, template) {
     'use strict';
-    var blockLoaderTemplate = 'ui/block-loader',
+
+    var blockLoaderTemplatePath = 'ui/block-loader',
         blockContentLoadingClass = '_block-content-loading',
         blockLoader,
-        blockLoaderClass;
+        blockLoaderClass,
+        loaderImageHref;
 
-    templateLoader.loadTemplate(blockLoaderTemplate).done(function (template) {
-        blockLoader = $($.trim(template));
+    templateLoader.loadTemplate(blockLoaderTemplatePath).done(function (blockLoaderTemplate) {
+        blockLoader = template($.trim(blockLoaderTemplate), {
+            loaderImageHref: loaderImageHref
+        });
+        blockLoader = $(blockLoader);
         blockLoaderClass = '.' + blockLoader.attr('class');
     });
 
@@ -60,7 +68,8 @@ define([
         element.removeClass(blockContentLoadingClass);
     }
 
-    return function () {
+    return function (loaderHref) {
+        loaderImageHref = loaderHref;
         ko.bindingHandlers.blockLoader = {
             /**
              * Process loader for block

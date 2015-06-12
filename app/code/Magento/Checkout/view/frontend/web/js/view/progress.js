@@ -22,10 +22,10 @@ define(
             getClassName: function()
             {
                 className('opc-block-progress');
-                if(quote.getBillingAddress()() && (quote.getShippingAddress()) || quote.isVirtual()) {
+                if(quote.billingAddress() && (quote.shippingAddress()) || quote.isVirtual()) {
                     className('opc-block-progress active')
                 }
-                if (quote.getPaymentMethod()()) {
+                if (quote.paymentMethod()) {
                     className('opc-block-progress order-review-step')
                 }
                 return className()
@@ -61,7 +61,7 @@ define(
                         return false;
                     break;
                     case 'paymentMethod':
-                        return quote.getPaymentMethod()||false;
+                        return quote.paymentMethod()||false;
                         break;
                     default:
                         return false;
@@ -77,7 +77,7 @@ define(
                 return 'Not yet set'
             },
             getPaymentMethod: function() {
-                return quote.getPaymentMethod();
+                return quote.paymentMethod;
             },
             getPaymentMethodTitle: function() {
                 var code = this.getPaymentMethod()();

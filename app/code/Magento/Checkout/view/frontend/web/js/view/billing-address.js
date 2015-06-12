@@ -39,15 +39,20 @@ define(
                     .observe({
                         selectedAddress: null,
                         isAddressDetailsVisible: quote.shippingAddress() != null,
-                        isAddressDetailsEditable: false,
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
-                        isAddressSameAsShipping: quote.shippingAddress() != null && quote.shippingAddress() == quote.billingAddress()
+                        isAddressSameAsShipping: false
                     });
-
+                quote.billingAddress.subscribe(function(newAddress) {
+                    this.isAddressSameAsShipping(newAddress == quote.shippingAddress());
+                    this.isAddressDetailsVisible(true);
+                }, this);
                 return this;
             },
 
-            canUseShippingAddress: !quote.isVirtual(),
+            canUseShippingAddress: ko.computed(function(){
+                return !quote.isVirtual() && quote.shippingAddress()
+                    && quote.shippingAddress().canUseForBilling();
+            }),
 
             saveInAddressBook: true,
 
@@ -72,18 +77,15 @@ define(
             updateAddress: function () {
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
-                    this.isAddressDetailsVisible(true);
                 } else {
                     this.source.set('params.invalid', false);
-                    // TODO Provide unique data provider for every billing form
-                    this.source.trigger('shippingAddress.data.validate');
+                    this.source.trigger(this.dataScopePrefix + '.data.validate');
                     if (!this.source.get('params.invalid')) {
-                        var addressData = this.source.get('shippingAddress');
+                        var addressData = this.source.get(this.dataScopePrefix);
                         addressData.save_in_address_book = this.saveInAddressBook;
 
                         // New address must be selected as a billing address
                         selectBillingAddress(createBillingAddress(addressData));
-                        this.isAddressDetailsVisible(true);
                     }
                 }
             },
