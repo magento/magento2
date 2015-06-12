@@ -182,14 +182,14 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->transactionFactory = $this->getMock(
             'Magento\Sales\Model\Order\Payment\TransactionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
         );
         $this->transactionCollectionFactory = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -365,7 +365,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseCurrency')
             ->willReturn($baseCurrencyMock);
 
-        $this->assertOrderUpdated(Order::STATE_PAYMENT_REVIEW, Order::STATUS_FRAUD, $message);
+        $this->assertOrderUpdated(Order::STATE_PROCESSING, Order::STATUS_FRAUD, $message);
 
         $this->paymentMethodMock->expects($this->once())
             ->method('authorize')
