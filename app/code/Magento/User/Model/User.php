@@ -123,7 +123,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param UserValidationRules $validationRules
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,7 +140,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
