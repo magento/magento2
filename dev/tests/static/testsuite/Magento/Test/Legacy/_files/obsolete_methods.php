@@ -2230,4 +2230,6 @@ return [
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
 ];

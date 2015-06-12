@@ -180,8 +180,8 @@ class Wishlist implements DataProviderInterface
             }
         } else {
             $data = [
-                'title' => __('We cannot retrieve the wish list.'),
-                'description' => __('We cannot retrieve the wish list.'),
+                'title' => __('We cannot retrieve the Wish List.'),
+                'description' => __('We cannot retrieve the Wish List.'),
                 'link' => $this->urlBuilder->getUrl(),
                 'charset' => 'UTF-8',
             ];

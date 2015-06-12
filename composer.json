@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta10",
+    "version": "0.74.0-beta12",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -30,7 +30,7 @@
         "zendframework/zend-serializer": "2.4.0",
         "zendframework/zend-log": "2.4.0",
         "zendframework/zend-http": "2.4.0",
-        "magento/zendframework1": "1.12.10",
+        "magento/zendframework1": "1.12.13",
         "composer/composer": "1.0.0-alpha9",
         "monolog/monolog": "1.11.0",
         "oyejorge/less.php": "1.7.0.3",
@@ -126,7 +126,7 @@
         "magento/module-sales-rule": "self.version",
         "magento/module-sales-sequence": "self.version",
         "magento/module-search": "self.version",
-        "magento/module-sendfriend": "self.version",
+        "magento/module-send-friend": "self.version",
         "magento/module-shipping": "self.version",
         "magento/module-sitemap": "self.version",
         "magento/module-store": "self.version",

@@ -101,12 +101,19 @@ class DiCompileCommand extends Command
             'application' => '#^' . $appCodePath . '/[\\w]+/[\\w]+/Test#',
             'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
         ];
+        $dataAttributesIncludePattern = [
+            'service_data_attributes' => '/\/etc\/([a-zA-Z_]*\/service_data_attributes|service_data_attributes)\.xml$/'
+        ];
         $this->configureObjectManager($output);
 
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR => [
                 'path' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+            ],
+            OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
+                'path' => $compiledPathsList['application'],
+                'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [
                 $compiledPathsList['application'],

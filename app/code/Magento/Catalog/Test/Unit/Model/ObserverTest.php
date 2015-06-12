@@ -66,17 +66,26 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $layerResolver = $this->_getCleanMock('Magento\Catalog\Model\Layer\Resolver');
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
-        $this->_observer = (new ObjectManager($this))->getObject('Magento\Catalog\Model\Observer', [
-            'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
-            'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
-            'storeManager' => $this->_storeManager,
-            'layerResolver' => $layerResolver,
-            'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
-            'catalogCategory' => $this->_catalogCategory,
-            'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
-            'categoryFlatState' => $this->_categoryFlatState,
-            'productResourceFactory' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\ProductFactory'),
-        ]);
+        $this->_observer = (new ObjectManager($this))->getObject(
+            'Magento\Catalog\Model\Observer',
+            [
+                'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
+                'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
+                'storeManager' => $this->_storeManager,
+                'layerResolver' => $layerResolver,
+                'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
+                'catalogCategory' => $this->_catalogCategory,
+                'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
+                'categoryFlatState' => $this->_categoryFlatState,
+                'productResourceFactory' => $this->getMock(
+                    'Magento\Catalog\Model\Resource\ProductFactory',
+                    ['create'],
+                    [],
+                    '',
+                    false
+                )
+            ]
+        );
     }
 
     /**

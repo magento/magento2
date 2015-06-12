@@ -38,7 +38,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productBlockForm->openTab('variations');
 
         /** @var TabVariation $tabVariation */
-        $tabVariation = $productBlockForm->getTabElement('variations');
+        $tabVariation = $productBlockForm->getTab('variations');
         $configurableAttributeSelector = $tabVariation->getAttributeBlock()->getAttributeSelector();
         \PHPUnit_Framework_Assert::assertTrue(
             $configurableAttributeSelector->isExistAttributeInSearchResult($attributeSearch),

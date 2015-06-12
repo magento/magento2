@@ -43,7 +43,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="from_date">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Start on</argument>
+                            <argument name="header" xsi:type="string" translate="true">Start</argument>
                             <argument name="type" xsi:type="string">date</argument>
                             <argument name="index" xsi:type="string">from_date</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
@@ -52,7 +52,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="to_date">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">End on</argument>
+                            <argument name="header" xsi:type="string" translate="true">End</argument>
                             <argument name="type" xsi:type="string">date</argument>
                             <argument name="default" xsi:type="string">--</argument>
                             <argument name="index" xsi:type="string">to_date</argument>

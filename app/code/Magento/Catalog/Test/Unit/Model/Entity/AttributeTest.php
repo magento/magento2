@@ -141,6 +141,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeFactoryMock = $this->getMockBuilder('Magento\Eav\Model\Entity\TypeFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
@@ -153,6 +154,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->attributeOptionFactoryMock =
             $this->getMockBuilder('Magento\Eav\Api\Data\AttributeOptionInterfaceFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')

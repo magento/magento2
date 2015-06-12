@@ -189,7 +189,7 @@ class OauthHelper
         $integration->setStatus(\Magento\Integration\Model\Integration::STATUS_ACTIVE)->save();
 
         /** Magento cache must be cleared to activate just created ACL role. */
-        $varPath = realpath('../../../var');
+        $varPath = realpath(BP . '/var');
         if (!$varPath) {
             throw new LogicException("Magento cache cannot be cleared after new ACL role creation.");
         } else {

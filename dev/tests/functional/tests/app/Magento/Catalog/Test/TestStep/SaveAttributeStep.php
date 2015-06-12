@@ -73,6 +73,6 @@ class SaveAttributeStep implements TestStepInterface
         $this->objectManager->create(
             'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
             ['attribute' => $this->attribute]
-        );
+        )->run();
     }
 }

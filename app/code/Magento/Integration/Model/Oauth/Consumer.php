@@ -31,12 +31,12 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     /**
      * @var \Magento\Framework\Url\Validator
      */
-    protected $_urlValidator;
+    protected $urlValidator;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory
+     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
      */
-    protected $_keyLengthFactory;
+    protected $keyLengthValidator;
 
     /**
      * @var  \Magento\Integration\Helper\Oauth\Data
@@ -46,7 +46,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
+     * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength
      * @param \Magento\Framework\Url\Validator $urlValidator
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -56,15 +56,15 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
+        \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->_keyLengthFactory = $keyLengthFactory;
-        $this->_urlValidator = $urlValidator;
+        $this->keyLengthValidator = $keyLength;
+        $this->urlValidator = $urlValidator;
         $this->dataHelper = $dataHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -87,9 +87,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      */
     public function beforeSave()
     {
-        if (!$this->getId()) {
-            $this->setUpdatedAt(time());
-        }
+        $this->setUpdatedAt(time());
         $this->validate();
         parent::beforeSave();
         return $this;
@@ -104,29 +102,27 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
             $this->setCallbackUrl(trim($this->getCallbackUrl()));
             $this->setRejectedCallbackUrl(trim($this->getRejectedCallbackUrl()));
 
-            if ($this->getCallbackUrl() && !$this->_urlValidator->isValid($this->getCallbackUrl())) {
+            if ($this->getCallbackUrl() && !$this->urlValidator->isValid($this->getCallbackUrl())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Callback URL'));
             }
-            if ($this->getRejectedCallbackUrl() && !$this->_urlValidator->isValid($this->getRejectedCallbackUrl())) {
+            if ($this->getRejectedCallbackUrl() && !$this->urlValidator->isValid($this->getRejectedCallbackUrl())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Rejected Callback URL'));
             }
         }
 
-        /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
-        $validatorLength = $this->_keyLengthFactory->create(
-            ['options' => ['length' => \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY]]
-        );
-
-        $validatorLength->setName('Consumer Key');
-        if (!$validatorLength->isValid($this->getKey())) {
-            $messages = $validatorLength->getMessages();
+        $this->keyLengthValidator
+            ->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY)
+            ->setName('Consumer Key');
+        if (!$this->keyLengthValidator->isValid($this->getKey())) {
+            $messages = $this->keyLengthValidator->getMessages();
             throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
 
-        $validatorLength->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
-        $validatorLength->setName('Consumer Secret');
-        if (!$validatorLength->isValid($this->getSecret())) {
-            $messages = $validatorLength->getMessages();
+        $this->keyLengthValidator
+            ->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET)
+            ->setName('Consumer Secret');
+        if (!$this->keyLengthValidator->isValid($this->getSecret())) {
+            $messages = $this->keyLengthValidator->getMessages();
             throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
         return true;
