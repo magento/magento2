@@ -61,17 +61,23 @@ require(['jquery', 'prototype'], function(jQuery){
          */
         showBehaviorFieldset: function(behaviorId, isShow) {
             var behaviorFieldset = jQuery('#' + behaviorId + '_fieldset'),
-                behavior = jQuery('#' + behaviorId);
+                behaviorFields = jQuery('.' + behaviorId);
             if (isShow) {
                 behaviorFieldset.show();
-                behavior.prop('disabled', false);
-                behavior.addClass('required-entry');
             } else {
                 behaviorFieldset.hide();
                 this.resetSelectIndex(behaviorId);
-                behavior.prop('disabled', 'disabled');
-                behavior.removeClass('required-entry');
             }
+            behaviorFields.each(function(k, behaviorField){
+                behaviorField = jQuery(behaviorField);
+                if (isShow) {
+                    behaviorField.prop('disabled', false);
+                    behaviorField.addClass('required-entry');
+                } else {
+                    behaviorField.prop('disabled', 'disabled');
+                    behaviorField.removeClass('required-entry');
+                }
+            });
         },
 
         /**
