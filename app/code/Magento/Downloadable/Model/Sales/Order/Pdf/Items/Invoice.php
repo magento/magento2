@@ -26,7 +26,7 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -41,7 +41,7 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->string = $string;

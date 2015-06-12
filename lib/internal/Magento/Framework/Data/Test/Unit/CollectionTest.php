@@ -103,8 +103,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
-        $secondItemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $firstItemMock = $this->getMock('Magento\Framework\Object', ['getId', 'getData', 'toArray'], [], '', false);
+        $secondItemMock = $this->getMock('Magento\Framework\Object', ['getId', 'getData', 'toArray'], [], '', false);
         $requiredFields = ['required_field_one', 'required_field_two'];
         $arrItems = [
             'totalRecords' => 1,

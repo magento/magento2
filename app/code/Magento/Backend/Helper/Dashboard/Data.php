@@ -14,7 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Data\Collection\Db
+     * @var \MagentoFrameworkDataCollectionAbstractDb
      */
     protected $_stores;
 
@@ -48,7 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve stores configured in system.
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \MagentoFrameworkDataCollectionAbstractDb
      */
     public function getStores()
     {
