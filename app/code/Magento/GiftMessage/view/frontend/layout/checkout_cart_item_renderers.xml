@@ -14,6 +14,11 @@
                         <item name="types" xsi:type="array"/>
                         <item name="components" xsi:type="array">
                             <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -27,6 +32,11 @@
                         <item name="types" xsi:type="array"/>
                         <item name="components" xsi:type="array">
                             <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -40,6 +50,11 @@
                         <item name="types" xsi:type="array"/>
                         <item name="components" xsi:type="array">
                             <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -53,6 +68,11 @@
                         <item name="types" xsi:type="array"/>
                         <item name="components" xsi:type="array">
                             <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -66,6 +86,11 @@
                         <item name="types" xsi:type="array"/>
                         <item name="components" xsi:type="array">
                             <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
                             </item>
                         </item>
                     </argument>
