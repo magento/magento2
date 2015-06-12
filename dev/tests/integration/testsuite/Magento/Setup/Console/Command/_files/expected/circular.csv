@@ -1,9 +1,0 @@
-"Circular dependencies:","Total number of chains"
-"","2"
-
-"Circular dependencies for each module:",""
-"magento/module-a","1"
-"magento/module-a->magento/module-b->magento/module-a"
-
-"magento/module-b","1"
-"magento/module-b->magento/module-a->magento/module-b"
