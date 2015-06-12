@@ -6,6 +6,17 @@
 -->
 
 <!-- Temp MAGETWO-36025 markup -->
+<ul class="opc-status-bar">
+    <li class="opc-status-bar-item _active">
+        <span data-bind="text: $t('Shipping')"></span>
+    </li>
+    <li class="opc-status-bar-item">
+        <span data-bind="text: $t('Review & Payments')"></span>
+    </li>
+</ul>
+<!-- /Temp MAGETWO-36025 markup -->
+
+<!-- Temp MAGETWO-36025 markup -->
 <div class="opc-estimated-wrapper">
     <div class="estimated-block">
         <span class="estimated-label" data-bind="text: $t('Estimated Total')"></span>
@@ -21,12 +32,6 @@
 </div>
 <!-- /Temp MAGETWO-36025 markup -->
 
-<div class="opc-block-progress-wrapper">
-    <!-- ko foreach: getRegion('progress') -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-    <!--/ko-->
-</div>
-
 <!-- ko foreach: getRegion('errors') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
@@ -37,8 +42,16 @@
     <!--/ko-->
     </ol>
 </div>
-<div class="opc-block-summary">
-    <!-- ko foreach: getRegion('summary') -->
+
+<div class="opc-sidebar">
+    <div class="opc-block-summary">
+        <!-- ko foreach: getRegion('summary') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-    <!--/ko-->
+        <!--/ko-->
+    </div>
+    <div class="opc-block-progress-wrapper">
+        <!-- ko foreach: getRegion('progress') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+    </div>
 </div>

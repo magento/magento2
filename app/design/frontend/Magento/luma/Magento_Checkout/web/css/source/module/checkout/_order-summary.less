@@ -8,10 +8,7 @@
 //  _____________________________________________
 
 @checkout-summary__background-color: @color-white-smoke;
-@checkout-summary__margin: @indent__base;
-@checkout-summary__margin__xl: @indent__xl;
 @checkout-summary__padding: 22px @indent__l;
-@checkout-summary__width: 31%;
 
 @checkout-summary-title__margin: @indent__s;
 @checkout-summary-mark-value__color: @color-gray60;
@@ -29,6 +26,7 @@
 
     .opc-block-summary {
         .css(background, @checkout-summary__background-color);
+        .css(margin, 0 0 @checkout-sidebar__margin);
         .css(padding, @checkout-summary__padding);
         &:extend(.abs-add-box-sizing all);
 
@@ -161,17 +159,5 @@
         .totals {
             &:extend(.abs-sidebar-totals-mobile all);
         }
-    }
-}
-
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .opc-block-summary {
-        .css(margin, @checkout-summary__margin__xl 0 @checkout-summary__margin);
-        .css(width, @checkout-summary__width);
-        float: right;
     }
 }

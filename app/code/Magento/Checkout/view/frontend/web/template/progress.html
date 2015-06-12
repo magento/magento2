@@ -4,11 +4,67 @@
  * See COPYING.txt for license details.
  */
 -->
-<ul class="opc-status-bar">
-    <li class="opc-status-bar-item _active">
-        <span data-bind="text: $t('Shipping')"></span>
-    </li>
-    <li class="opc-status-bar-item">
-        <span data-bind="text: $t('Review & Payments')"></span>
-    </li>
-</ul>
+<div data-bind = "attr: {'class': getClassName()}">
+    <div class="title">
+    </div>
+    <div class="content">
+        <dl class="items">
+            <!-- ko if: isShowStep('shippingAddress') -->
+            <!-- ko if: isStepComplete('shippingAddress') -->
+            <dt class="item-title complete">
+                <span id="shipping-address-label" data-bind="text: $t('Ship To')"></span>
+                <a href="#shipping"
+                   data-goto-section="shipping"
+                   class="action shipping address"
+                   aria-describedby="shipping-address-label" data-bind="text:$t('Change'), click: goToStep('shippingAddress')">
+                </a>
+            </dt>
+            <dd class="item-content complete">
+                <address data-bind="html:getShippingAddress()"></address>
+            </dd>
+            <!--/ko-->
+            <!-- ko ifnot: isStepComplete('shippingAddress') -->
+            <dt class="item-title">
+                <span data-bind="text:$t('Ship To')"></span>
+            </dt>
+            <!--/ko-->
+            <!--/ko-->
+
+            <!-- ko if: isShowStep('shippingMethod') -->
+            <!-- ko if: isStepComplete('shippingMethod') -->
+            <dt class="item-title complete">
+                <span id="shipping-method-label" data-bind="text:$t('Shipping Method')"></span>
+                <a href="#shipping_method"
+                   data-goto-section="shipping_method"
+                   class="action shipping method"
+                   aria-describedby="shipping-method-label" data-bind="text:$t('Change'), click: goToStep('shippingMethod')">
+                </a>
+            </dt>
+            <dd class="item-content complete">
+                <!--<?php if ($block->getShippingMethod()): ?>-->
+
+                <!-- ko text: getShippingMethodTitle() --><!--/ko-->
+
+                <!--shipping method price rendering-->
+
+                <!-- ko foreach: {data: getShippingRates(), as: 'item'} -->
+                <!-- ko foreach: $parent.getRegion('shipping') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+                <!--/ko-->
+
+                <!-- ko ifnot : (getShippingRates().length > 0) -->
+                <!-- ko text: $t('Shipping method has not been selected yet') --><!--/ko-->
+                <!--/ko-->
+            </dd>
+            <!--/ko-->
+            <!-- ko ifnot: isStepComplete('shippingMethod') -->
+            <dt class="item-title">
+                <span data-bind="text:$t('Ship Via')"></span>
+            </dt>
+            <!--/ko-->
+            <!--/ko-->
+
+        </dl>
+    </div>
+</div>
