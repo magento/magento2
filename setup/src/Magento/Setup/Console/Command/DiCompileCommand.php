@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -22,31 +23,24 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DiCompileCommand extends Command
 {
-    /**
-     * @var DeploymentConfig
-     */
+    /** @var DeploymentConfig */
     private $deploymentConfig;
 
-    /**
-     * @var ObjectManagerInterface
-     */
+    /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /**
-     * @var Manager
-     */
+    /** @var Manager */
     private $taskManager;
 
-    /**
-     * @var DirectoryList
-     */
+    /** @var DirectoryList */
     private $directoryList;
 
-    /**
-     * @var array
-     */
-    private $excludedPathsList;
+    /** @var Filesystem */
+    private $filesystem;
 
+    /** @var array */
+    private $excludedPathsList;
+    
     /**
      * Constructor
      *
@@ -54,17 +48,20 @@ class DiCompileCommand extends Command
      * @param DirectoryList $directoryList
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param Filesystem $filesystem
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
         DirectoryList $directoryList,
         Manager $taskManager,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        Filesystem $filesystem
     ) {
         $this->deploymentConfig = $deploymentConfig;
-        $this->directoryList = $directoryList;
-        $this->objectManager = $objectManagerProvider->get();
-        $this->taskManager = $taskManager;
+        $this->directoryList    = $directoryList;
+        $this->objectManager    = $objectManagerProvider->get();
+        $this->taskManager      = $taskManager;
+        $this->filesystem       = $filesystem;
         parent::__construct();
     }
 
@@ -92,6 +89,7 @@ class DiCompileCommand extends Command
             $output->writeln('You cannot run this command because the Magento application is not installed.');
             return;
         }
+        $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
             'application' => $appCodePath,
             'library' => $libraryPath . '/Magento/Framework',
@@ -141,6 +139,13 @@ class DiCompileCommand extends Command
         ];
 
         try {
+            $this->cleanupFilesystem(
+                [
+                    DirectoryList::CACHE,
+                    DirectoryList::GENERATION,
+                    DirectoryList::DI,
+                ]
+            );
             foreach ($operations as $operationCode => $arguments) {
                 $this->taskManager->addOperation(
                     $operationCode,
@@ -151,6 +156,19 @@ class DiCompileCommand extends Command
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
+    }
+
+    /**
+     * Delete directories by their code from "var" directory
+     *
+     * @param array $directoryCodeList
+     * @return void
+     */
+    private function cleanupFilesystem($directoryCodeList)
+    {
+        foreach ($directoryCodeList as $code) {
+            $this->filesystem->getDirectoryWrite($code)->delete();
         }
     }
 
