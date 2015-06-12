@@ -69,7 +69,7 @@ class GetAttributes extends Action
             $this->getRequest()->getParam('attributes')
         );
         $attributes = [];
-        foreach ($collection->getItems() as $id => $attribute) {
+        foreach ($collection->getItems() as $attribute) {
             $attributes[] = [
                 'id' => $attribute->getId(),
                 'label' => $attribute->getFrontendLabel(),
