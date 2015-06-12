@@ -5,13 +5,14 @@
 /*global define,alert*/
 define(
     [
+        'ko',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'mage/storage',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Ui/js/model/errorlist'
     ],
-    function (quote, resourceUrlManager, storage, paymentService, errorList) {
+    function (ko, quote, resourceUrlManager, storage, paymentService, errorList) {
         'use strict';
         return {
             saveShippingInformation: function() {
