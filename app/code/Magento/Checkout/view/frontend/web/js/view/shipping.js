@@ -152,6 +152,22 @@ define(
                     ) {
                         return false;
                     }
+
+                    var shippingAddress = quote.shippingAddress();
+                    var addressData = addressConverter.formAddressDataToQuoteAddress(
+                        this.source.get('shippingAddress')
+                    );
+
+                    //Copy form data to quote shipping address object
+                    for (var field in addressData) {
+                        if (addressData.hasOwnProperty(field)
+                            && shippingAddress.hasOwnProperty(field)
+                            && typeof addressData[field] != 'function'
+                        ) {
+                            shippingAddress[field] = addressData[field];
+                        }
+                    }
+                    selectShippingAddress(shippingAddress);
                 }
                 setShippingInformation();
             }
