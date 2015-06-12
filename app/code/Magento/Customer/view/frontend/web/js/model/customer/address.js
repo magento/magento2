@@ -49,6 +49,9 @@ define([], function() {
             },
             isEditable: function() {
                 return false;
+            },
+            canUseForBilling: function() {
+                return true;
             }
         }
     }

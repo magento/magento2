@@ -49,7 +49,8 @@ define(
                 return this;
             },
 
-            canUseShippingAddress: !quote.isVirtual(),
+            canUseShippingAddress: !quote.isVirtual() && quote.shippingAddress()
+                && quote.shippingAddress().canUseForBilling(),
 
             saveInAddressBook: true,
 
