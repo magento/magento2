@@ -10,10 +10,11 @@
     * Improved performance of Product Import/Export
     * Implemented Payment\Gateway infrastructure as a new design for payment methods
     * Fixed messages in Setup CLI
-    * JS: Smart fixed scroll
+    * JS Smart fixed scroll
     * Improved sub-menu animation and sub-menu links mouse event effects
     * Automated UI Documentation build process with Grunt.js
     * Updated composer dependency to newer version
+    * Implemented direct web link on Magento order transactions records
 * Tests:
     * Reduced Travis CI integration test time
     * Increased test coverage for the Integration module
@@ -54,8 +55,6 @@
     * Fixed an issue where Form_key cookie was not listed in privacy page
     * Fixed an issue where merchant wasn’t redirected to correspondent option when trying to enable Dashboard charts
     * Fixed an issue where wrong message was displayed after exceeding maximum failed login attempts
-* Various improvements:
-    * Implemented direct web link on Magento order transactions records
 * GitHub issues:
     * [#1292](https://github.com/magento/magento2/pull/1292) Admin menu with 1 submenu item does not show the subitem
     * [#1133](https://github.com/magento/magento2/pull/1133) Getter methods shouldn't change values
