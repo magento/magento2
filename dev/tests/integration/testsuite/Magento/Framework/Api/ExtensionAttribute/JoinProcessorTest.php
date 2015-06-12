@@ -99,7 +99,17 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
         $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
         $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
-        $this->assertEquals(['review_id'], $extensionAttributeJoinData->getSelectFields());
+        $this->assertEquals(
+            [
+                [
+                    'external_alias' => 'review_id',
+                    'internal_alias' => 'extension_attribute_review_id_review_id',
+                    'with_db_prefix' => 'extension_attribute_review_id.review_id',
+                    'setter' => 'serReviewId',
+                ]
+            ],
+            $extensionAttributeJoinData->getSelectFields()
+        );
     }
 
     private function getConfig()
@@ -115,6 +125,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_SELECT_FIELDS => [
                             [
                                 Converter::JOIN_SELECT_FIELD => "review_id",
+                                Converter::JOIN_SELECT_FIELD_SETTER => "serReviewId",
                             ],
                         ],
                         Converter::JOIN_JOIN_ON_FIELD => "id",
@@ -130,6 +141,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_SELECT_FIELDS => [
                             [
                                 Converter::JOIN_SELECT_FIELD => "library_card_id",
+                                Converter::JOIN_SELECT_FIELD_SETTER => "",
                             ],
                         ],
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
@@ -143,9 +155,11 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_SELECT_FIELDS => [
                             [
                                 Converter::JOIN_SELECT_FIELD => "comment",
+                                Converter::JOIN_SELECT_FIELD_SETTER => "",
                             ],
                             [
                                 Converter::JOIN_SELECT_FIELD => "rating",
+                                Converter::JOIN_SELECT_FIELD_SETTER => "",
                             ],
                         ],
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
@@ -301,5 +315,64 @@ EXPECTED_SQL;
         /** Check population of complex extension attributes */
         $this->assertEquals($taxClassId, $customer->getExtensionAttributes()->getTestGroup()->getTaxClassId());
         $this->assertEquals($customerGroupName, $customer->getExtensionAttributes()->getTestGroup()->getCode());
+    }
+
+    public function testGetListWithFilterBySimpleDummyAttributeWithMapping()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        $searchCriteriaBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        $builder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
+        $joinedExtensionAttribute = 'test_dummy_attribute';
+        $joinedExtensionAttributeValue = 'website_id';
+        $filter = $builder->setField($joinedExtensionAttribute)
+            ->setValue($joinedExtensionAttributeValue)
+            ->create();
+        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchResults = $groupRepository->getList($searchCriteriaBuilder->create());
+        $items = $searchResults->getItems();
+        $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');
+        $expectedGroupCode = 'General';
+        $this->assertEquals($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
+        $this->assertNotNull($items[0]->getExtensionAttributes(), "Extension attributes not loaded");
+        $this->assertEquals(
+            $joinedExtensionAttributeValue,
+            $items[0]->getExtensionAttributes()->getTestDummyAttribute(),
+            "Extension attributes were not loaded correctly"
+        );
+    }
+
+    public function testGetListWithFilterByComplexDummyAttributeWithSetterMapping()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        $searchCriteriaBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        $builder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
+        $joinedExtensionAttribute = 'test_complex_dummy_attribute.frontend_label';
+        $joinedExtensionAttributeValue = 'firstname';
+        $filter = $builder->setField($joinedExtensionAttribute)
+            ->setValue($joinedExtensionAttributeValue)
+            ->create();
+        $searchCriteriaBuilder->addFilter([$filter]);
+        $searchResults = $groupRepository->getList($searchCriteriaBuilder->create());
+        $items = $searchResults->getItems();
+        $this->assertCount(1, $items, 'Filtration by extension attribute does not work.');
+        $expectedGroupCode = 'General';
+        $this->assertEquals($expectedGroupCode, $items[0]->getCode(), 'Invalid group loaded.');
+        $this->assertNotNull($items[0]->getExtensionAttributes(), "Extension attributes not loaded");
+        $this->assertNotNull(
+            $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute(),
+            "Complex extension attribute not loaded"
+        );
+        $this->assertEquals(
+            'user',
+            $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute()->getAttributeCode(),
+            "Extension attributes were not loaded correctly"
+        );
+        $this->assertEquals(
+            $joinedExtensionAttributeValue,
+            $items[0]->getExtensionAttributes()->getTestComplexDummyAttribute()->getFrontendLabel(),
+            "Extension attributes were not loaded correctly"
+        );
     }
 }

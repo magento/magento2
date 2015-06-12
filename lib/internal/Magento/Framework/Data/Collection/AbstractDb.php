@@ -8,7 +8,8 @@ namespace Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -812,28 +813,30 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Join extension attribute.
      *
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param JoinDataInterface $join
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @return $this
      */
     public function joinExtensionAttribute(
-        $join,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinDataInterface $join,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
+            $joinOn = $this->getMainTableAlias() . '.' . $join->getJoinField()
+                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField();
             $this->getSelect()->joinLeft(
                 [$join->getReferenceTableAlias() => $this->getResource()->getTable($join->getReferenceTable())],
-                $this->getMainTableAlias() . '.' . $join->getJoinField()
-                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField(),
+                $joinOn,
                 []
             );
         }
         $columns = [];
         foreach ($join->getSelectFields() as $selectField) {
-            $fieldAlias = $join->getReferenceTableAlias() . '_' . $selectField;
-            $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
+            $fieldWIthDbPrefix = $selectField[JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX];
+            $columns[$selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS]] = $fieldWIthDbPrefix;
+            $this->addFilterToMap($selectField[JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS], $fieldWIthDbPrefix);
         }
         $this->getSelect()->columns($columns);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;

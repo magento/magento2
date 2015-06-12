@@ -95,6 +95,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     {
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
         $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
 
         /** The only possible/meaningful search criteria for attribute set is entity type code */
         $entityTypeCode = $this->getEntityTypeCode($searchCriteria);
@@ -105,8 +106,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-
-        $this->joinProcessor->process($collection);
 
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);

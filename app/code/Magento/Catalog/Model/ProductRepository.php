@@ -648,6 +648,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection);
         $defaultAttributeSetId = $this->eavConfig
             ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
             ->getDefaultAttributeSetId();
@@ -680,7 +681,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $this->extensionAttributesJoinProcessor->process($collection);
         $collection->load();
 
         $searchResult = $this->searchResultsFactory->create();

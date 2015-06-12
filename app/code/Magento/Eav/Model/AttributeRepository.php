@@ -95,6 +95,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection $attributeCollection */
         $attributeCollection = $this->attributeCollectionFactory->create();
+        $this->joinProcessor->process($attributeCollection);
         $attributeCollection->addFieldToFilter('entity_type_code', ['eq' => $entityTypeCode]);
         $attributeCollection->join(
             ['entity_type' => $attributeCollection->getTable('eav_entity_type')],
@@ -129,8 +130,6 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attributeCollection->addAttributeGrouping();
         $attributeCollection->setCurPage($searchCriteria->getCurrentPage());
         $attributeCollection->setPageSize($searchCriteria->getPageSize());
-
-        $this->joinProcessor->process($attributeCollection);
 
         $attributes = [];
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
