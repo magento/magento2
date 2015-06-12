@@ -1,4 +1,4 @@
-sku,price,name,_type,_attribute_set,_upsell_sku,description
+sku,price,name,product_type,_attribute_set,_upsell_sku,description
 simple1,25,"Simple Product",simple,Default,,description
 simple2,NULL,"Simple Product2",invalid attribute set,Default,,HiThere
 simple3,58,"Simple Product 3",simple,Default,simple2,description
