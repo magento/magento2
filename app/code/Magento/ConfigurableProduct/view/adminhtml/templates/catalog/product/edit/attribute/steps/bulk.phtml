@@ -6,7 +6,7 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 ?>
-<div data-bind="scope: 'bulk-step'">
+<div data-bind="scope: '<?= $block->getComponentName()?>'">
     <ul data-bind="foreach: { data: attributesValues, as: 'attribute' }">
         <li>
             <span data-bind="text: attribute.label"></span>
@@ -24,7 +24,7 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "bulk-step": {
+                    "<?= $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
                         "appendTo": "<?= $block->getParentComponentName()?>"
                     }
