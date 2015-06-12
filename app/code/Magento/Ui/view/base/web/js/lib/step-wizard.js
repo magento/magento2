@@ -11,6 +11,9 @@ define([
 ], function (uiRegistry, $, _) {
     "use strict";
     var stepComponents;
+    var getStep = _.memoize(function(step) {
+        return _.findWhere(stepComponents, {name: step});
+    });
     var Wizard = function (steps, element) {
         this.steps = steps;
         this.index = 0;
@@ -35,7 +38,7 @@ define([
             this.render();
         };
         this.getStep = function() {
-            return _.findWhere(stepComponents, {name: this.steps[this.index]});
+            return getStep(this.steps[this.index]);
         };
         this._prev = function (newIndex) {
             this.getStep().back(this);
