@@ -9,7 +9,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -79,18 +79,68 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $extensibleEntityClass = $extensibleEntityClass ?: $collection->getItemObjectClass();
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         foreach ($joinDirectives as $attributeCode => $directive) {
-            /** @var JoinData $joinData */
+            /** @var JoinDataInterface $joinData */
             $joinData = $this->extensionAttributeJoinDataFactory->create();
-            $joinData->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
-                ->setReferenceTableAlias('extension_attribute_' . $attributeCode)
+            $joinData->setAttributeCode($attributeCode)
+                ->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
+                ->setReferenceTableAlias($this->getReferenceTableAlias($attributeCode))
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);
-            $selectFieldsMapper = function ($selectFieldData) {
-                return $selectFieldData[Converter::JOIN_SELECT_FIELD];
-            };
-            $joinData->setSelectFields(array_map($selectFieldsMapper, $directive[Converter::JOIN_SELECT_FIELDS]));
+            $joinData->setSelectFields(
+                $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_SELECT_FIELDS])
+            );
             $collection->joinExtensionAttribute($joinData, $this);
         }
+    }
+
+    /**
+     * Generate a list of select fields with mapping of client facing attribute names to field names used in SQL select.
+     *
+     * @param string $attributeCode
+     * @param array $selectFields
+     * @return array
+     */
+    private function getSelectFieldsMap($attributeCode, $selectFields)
+    {
+        $referenceTableAlias = $this->getReferenceTableAlias($attributeCode);
+        $useFieldInAlias = (count($selectFields) > 1);
+        $selectFieldsAliases = [];
+        foreach ($selectFields as $selectField) {
+            $externalFieldName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                ? substr(
+                    SimpleDataObjectConverter::camelCaseToSnakeCase($selectField[Converter::JOIN_SELECT_FIELD_SETTER]),
+                    strlen('set_')
+                )
+                : $selectField[Converter::JOIN_SELECT_FIELD];
+            $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
+                :'set' . ucfirst(
+                    SimpleDataObjectConverter::snakeCaseToCamelCase(
+                        $selectField[Converter::JOIN_SELECT_FIELD]
+                    )
+                );
+            $selectFieldsAliases[] = [
+                JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS => $attributeCode
+                    . ($useFieldInAlias ? '.' . $externalFieldName : ''),
+                JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS => $referenceTableAlias
+                    . '_' . $selectField[Converter::JOIN_SELECT_FIELD],
+                JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX => $referenceTableAlias
+                    . '.' . $selectField[Converter::JOIN_SELECT_FIELD],
+                JoinDataInterface::SELECT_FIELD_SETTER => $setterName
+            ];
+        }
+        return $selectFieldsAliases;
+    }
+
+    /**
+     * Generate reference table alias.
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    private function getReferenceTableAlias($attributeCode)
+    {
+        return 'extension_attribute_' . $attributeCode;
     }
 
     /**
@@ -139,11 +189,10 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $extensibleEntityClass
     ) {
         $attributeType = $directive[Converter::DATA_TYPE];
-        $selectFields = $directive[Converter::JOIN_SELECT_FIELDS];
+        $selectFields = $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_SELECT_FIELDS]);
         foreach ($selectFields as $selectField) {
-            $selectFieldAlias = 'extension_attribute_' . $attributeCode
-                . '_' . $selectField[Converter::JOIN_SELECT_FIELD];
-            if (isset($data[$selectFieldAlias])) {
+            $internalAlias = $selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS];
+            if (isset($data[$internalAlias])) {
                 if ($this->typeProcessor->isArrayType($attributeType)) {
                     throw new \LogicException(
                         sprintf(
@@ -155,22 +204,16 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                         )
                     );
                 } elseif ($this->typeProcessor->isTypeSimple($attributeType)) {
-                    $extensionData['data'][$attributeCode] = $data[$selectFieldAlias];
-                    unset($data[$selectFieldAlias]);
+                    $extensionData['data'][$attributeCode] = $data[$internalAlias];
+                    unset($data[$internalAlias]);
                     break;
                 } else {
                     if (!isset($extensionData['data'][$attributeCode])) {
                         $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
                     }
-                    $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                        ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                        :'set' . ucfirst(
-                            SimpleDataObjectConverter::snakeCaseToCamelCase(
-                                $selectField[Converter::JOIN_SELECT_FIELD]
-                            )
-                        );
-                    $extensionData['data'][$attributeCode]->$setterName($data[$selectFieldAlias]);
-                    unset($data[$selectFieldAlias]);
+                    $setterName = $selectField[JoinDataInterface::SELECT_FIELD_SETTER];
+                    $extensionData['data'][$attributeCode]->$setterName($data[$internalAlias]);
+                    unset($data[$internalAlias]);
                 }
             }
         }
