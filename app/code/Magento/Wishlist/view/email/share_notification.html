@@ -33,7 +33,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     <td valign="top">
                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">{{var message}}</p>
-                        {{var items}}
+                        {{var items|raw}}
                         <br/>
                         <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;text-align: center;"><strong><a href="{{var viewOnSiteLink}}" style="color:#1E7EC8;">View all Wish List items</a></strong></p>
                     </td>
