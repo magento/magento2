@@ -8,6 +8,16 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 class CategoryProcessor
 {
     /**
+     * Delimiter in import file between categories.
+     */
+    const DELIMITER_CATEGORIES = '|';
+
+    /**
+     * Delimiter in category path.
+     */
+    const DELIMITER_CATEGORY = '/';
+
+    /**
      * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
      */
     protected $categoryColFactory;
@@ -20,19 +30,23 @@ class CategoryProcessor
     protected $categories = [];
 
     /**
-     * Categories text-path to ID hash with roots checking.
+     * Instance of catalog category factory.
      *
-     * @var array
+     * @var \Magento\Catalog\Model\CategoryFactory
      */
-    protected $categoriesWithRoots = [];
+    protected $categoryFactory;
 
     /**
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
+        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory
     ) {
         $this->categoryColFactory = $categoryColFactory;
+        $this->categoryFactory = $categoryFactory;
+        $this->initCategories();
     }
 
     /**
@@ -40,26 +54,20 @@ class CategoryProcessor
      */
     protected function initCategories()
     {
-        if (empty($this->categories) && empty($this->categoriesWithRoots)) {
-            $collection = $this->categoryColFactory->create()->addNameToResult();
+        if (empty($this->categories)) {
+            $collection = $this->categoryColFactory->create();
+            $collection->addNameToResult();
             /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
             foreach ($collection as $category) {
-                $structure = explode('/', $category->getPath());
+                $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
                 $pathSize = count($structure);
                 if ($pathSize > 1) {
                     $path = [];
                     for ($i = 1; $i < $pathSize; $i++) {
-                        $path[] = $collection->getItemById($structure[$i])->getName();
+                        $path[] = $collection->getItemById((int)$structure[$i])->getName();
                     }
-                    $rootCategoryName = array_shift($path);
-                    if (!isset($this->categoriesWithRoots[$rootCategoryName])) {
-                        $this->categoriesWithRoots[$rootCategoryName] = [];
-                    }
-                    $index = implode('/', $path);
-                    $this->categoriesWithRoots[$rootCategoryName][$index] = $category->getId();
-                    if ($pathSize > 2) {
-                        $this->categories[$index] = $category->getId();
-                    }
+                    $index = implode(self::DELIMITER_CATEGORY, $path);
+                    $this->categories[$index] = $category->getId();
                 }
             }
         }
@@ -67,27 +75,73 @@ class CategoryProcessor
     }
 
     /**
-     * @param string $root
-     * @param null|string $index
-     * @return mixed
+     * Creates a category.
+     *
+     * @param string $name
+     * @param int $parentId
+     *
+     * @return int
      */
-    public function getCategoryWithRoot($root, $index = null)
+    protected function createCategory($name, $parentId)
     {
-        $this->initCategories();
-        $returnVal = isset($this->categoriesWithRoots[$root]) ? $this->categoriesWithRoots[$root] : null;
-        if (empty($returnVal) || $index === null) {
-            return $returnVal;
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = $this->categoryFactory->create();
+        $parentCategory = $this->categoryFactory->create()->load($parentId);
+        $category->setPath($parentCategory->getPath());
+        $category->setParentId($parentId);
+        $category->setName($name);
+        $category->setIsActive(true);
+        $category->setIncludeInMenu(true);
+        $category->setAttributeSetId($category->getDefaultAttributeSetId());
+        $category->save();
+
+        return $category->getId();
+    }
+
+
+    /**
+     * Returns ID of category by string path creating nonexistent ones.
+     *
+     * @param string $categoryPath
+     * 
+     * @return int
+     */
+    protected function upsertCategory($categoryPath)
+    {
+        if (!isset($this->categories[$categoryPath])) {
+            $pathParts = explode(self::DELIMITER_CATEGORY, $categoryPath);
+            $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+            $path = '';
+
+            foreach ($pathParts as $pathPart) {
+                $path .= $pathPart;
+                if (!isset($this->categories[$path])) {
+                    $this->categories[$path] = $this->createCategory($pathPart, $parentId);
+                }
+                $parentId = $this->categories[$path];
+                $path .= self::DELIMITER_CATEGORY;
+            }
         }
-        return isset($returnVal[$index]) ? $returnVal[$index] : null;
+
+        return $this->categories[$categoryPath];
     }
 
     /**
-     * @param string $index
-     * @return null|string
+     * Returns IDs of categories by string path creating nonexistent ones.
+     *
+     * @param string $categoriesString
+     *
+     * @return array
      */
-    public function getCategory($index)
+    public function upsertCategories($categoriesString)
     {
-        $this->initCategories();
-        return isset($this->categories[$index]) ? $this->categories[$index] : null;
+        $categoriesIds = [];
+        $categories = explode(self::DELIMITER_CATEGORIES, $categoriesString);
+
+        foreach ($categories as $category) {
+            $categoriesIds[] = $this->upsertCategory($category);
+        }
+
+        return $categoriesIds;
     }
 }
