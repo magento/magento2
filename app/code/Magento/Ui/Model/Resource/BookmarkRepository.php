@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Model\Resource;
 
+use Magento\Ui\Model\Resource\Bookmark\CollectionFactory as BookmarkCollectionFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\Search\FilterGroup;
@@ -22,6 +24,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class BookmarkRepository implements BookmarkRepositoryInterface
 {
     /**
+     * Collection factory.
+     *
+     * @var BookmarkCollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @var \Magento\Ui\Model\BookmarkFactory
      */
     protected $bookmarkFactory;
@@ -37,19 +46,29 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     protected $searchResultsFactory;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
+     * @param BookmarkCollectionFactory $collectionFactory Collection factory.
      * @param \Magento\Ui\Model\BookmarkFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
      * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
+        BookmarkCollectionFactory $collectionFactory,
         \Magento\Ui\Model\BookmarkFactory $bookmarkFactory,
         \Magento\Ui\Model\Resource\Bookmark $bookmarkResourceModel,
-        \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+        \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
-
+        $this->collectionFactory = $collectionFactory;
         $this->bookmarkResourceModel = $bookmarkResourceModel;
         $this->bookmarkFactory = $bookmarkFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -99,7 +118,8 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $searchResults->setSearchCriteria($searchCriteria);
 
         /** @var \Magento\Ui\Model\Resource\Bookmark\Collection $collection */
-        $collection = $this->bookmarkFactory->create()->getCollection();
+        $collection = $this->collectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection);
         // Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
