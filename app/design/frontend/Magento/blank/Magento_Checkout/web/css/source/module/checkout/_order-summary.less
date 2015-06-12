@@ -120,11 +120,18 @@
             }
         }
         .product-item {
+            .product-item-details-inner {
+                display: table;
+                width: 100%;
+            }
+            .details-qty {
+                .css(padding-top, @indent__s);
+                display: table-cell;
+                text-align: left;
+            }
             .subtotal {
-                position: absolute;
-                right: 0;
+                display: table-cell;
                 text-align: right;
-                top: -6px;
             }
             .price {
                 .font-size(16);
