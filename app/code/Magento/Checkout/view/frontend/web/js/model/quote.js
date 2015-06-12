@@ -27,7 +27,7 @@ define(
             shippingMethod: shippingMethod,
             billingAddress: billingAddress,
             paymentMethod: paymentMethod,
-            guestEmail: 'user@example.com', //@todo get this data from Guest Form
+            guestEmail: null,
 
             getQuoteId: function() {
                 return quoteData.entity_id;
