@@ -50,6 +50,8 @@ class ComposerInformation
             throw new \Exception('Composer file not found: ' . $composerJson);
         }
 
+        putenv('COMPOSER_HOME='.$filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
+
         // Create Composer
         $this->composer = ComposerFactory::create($io, $composerJson);
         $this->locker = $this->composer->getLocker();
