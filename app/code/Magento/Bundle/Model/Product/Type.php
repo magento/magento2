@@ -1319,7 +1319,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if (!isset($_result[0])) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We cannot add this item to your shopping cart.')
+                __('We can\'t add this item to your cart right now.')
             );
         }
     }

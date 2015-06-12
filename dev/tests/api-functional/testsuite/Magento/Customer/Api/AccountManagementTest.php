@@ -535,8 +535,8 @@ class AccountManagementTest extends WebapiAbstract
         $requestData = ['customer' => $customerData];
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
-        $this->assertEquals('The first name cannot be empty.', $validationResponse['messages'][0]);
-        $this->assertEquals('The last name cannot be empty.', $validationResponse['messages'][1]);
+        $this->assertEquals('Please enter a first name.', $validationResponse['messages'][0]);
+        $this->assertEquals('Please enter a last name.', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()

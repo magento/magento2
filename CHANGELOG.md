@@ -1,3 +1,78 @@
+0.74.0-beta12
+=============
+* MTF Improvements:
+    * Functional tests maintenance
+* Framework improvements:
+    * Customer entity table was transformed from EAV into a flat model to minimize DB operations
+    * Improved admin authentication and removed bypass
+    * Exposed CMS api's as web API
+* Fixed bugs:
+    * Fixed an issue where "Add Item To Return" button became disabled after required item fields were filled on Frontend
+    * Fixed an issue with fatal error during place order with non default time zone
+    * Fixed an issue where it was not possible to filter backups on name
+    * Fixed an issue where routeIdType did not allow numbers
+    * Fixed an issue with discounted prices for fixed bundle product
+    * Fixed an issue with catalog prices not including custom option prices
+    * Fixed an issue with tier prices being displayed 4 characters
+    * Fixed an issue with extra FPT labels in mini shopping cart
+    * Fixed an issue where it was not possible to place orders for products with FPT and catalog prices including tax
+    * Fixed an issue with FPT attribute being required when creating product
+    * Fixed an issue where final price was not recalculated after selecting product options
+    * Fixed an issue where tax labels were not displayed for Bundle options on 'multi-select' and 'dropdown' controls
+    * Fixed an issue where filters were not shown on product reviews report grid
+    * Fixed an issue where second customer address was not deleted from customer account
+    * Fixed an issue where custom options pop-up was still displayed after submit
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where customer invalid email message was not displayed
+    * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
+    * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
+    * Magento_Sendfriend module should have upper case 'F'
+    * Fixed set of issues with Ui module
+    * Fixed JavaScript error on Invoice creation page
+* Various improvements:
+    * Hide payment credentials in debug log
+    * Simplification of Payment Configuration
+    * Introduced new Dialog widget
+* Github issues:
+    * [#1330](https://github.com/magento/magento2/pull/1330) -- Removing unused memory limit in htaccess
+    * [#1307](https://github.com/magento/magento2/pull/1307) -- Corrected a sentence by removing a word
+
+0.74.0-beta11
+=============
+* Framework improvements:
+    * Improved component Bookmarks component in scope of Enhanced Data Grids on CMS
+    * Improved component Advanced Filtering component in scope of Enhanced Data Grids on CMS
+* Fixed bugs:
+    * Fixed an issue where incorrect keys in REST request body allowed the request to go through successfully
+    * Fixed an issue where interceptors were Generated with Invalid __wakeup() 
+    * Fixed an issue where redirect on the current page was not working in certain conditions
+    * Fixed an issue where first store could not be selected on frontend
+    * Fixed an issue with performance toolkit category creation
+    * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
+    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
+    * Fixed an issue where email was not required during Guest Checkout 
+    * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
+    * Fixed an issue where `bin/magento indexer:reindex` command failed after `bin/magento setup:di:compile` was run
+    * Fixed bug with broken JS i18n
+    * Fixed an issue with wrong value at created_at updated_at fields after quote* save
+    * Fixed an issue where customer could not be created in backend after adding Image type attribute
+    * Fixed Sales InvoiceItem and Order data interfaces implementation
+    * Fixed an issue with performance toolkit medium profile
+    * Fixed an issue where Excel Formula Injection via CSV/XML export
+    * Fixed an issue where it was not possible to open the Customers page in backend
+    * Fixed an issue with internal server error after clicking Continue on Billing information
+    * Fixed an issue where it was not possible to place order with Fedex shipping method
+* Various changes:
+    * Magento Centinel Removal
+    * Removed ability to have multi-statement queries
+* Test coverage:
+    * Unit tests coverage
+    * Covered php code by unit tests after new checkout implementation
+* Github issues:
+    * [#424](https://github.com/magento/magento2/issues/424) -- Combine tier pricing messages into block sentences
+    * [#1300](https://github.com/magento/magento2/issues/1300), [#1311](https://github.com/magento/magento2/issues/1311), [#1313](https://github.com/magento/magento2/issues/1313) -- Creating product error with startdate
+
 0.74.0-beta10
 =============
 * Framework improvements:
@@ -2514,7 +2589,7 @@
   * Canadian provincial sales taxes
   * Fixed issues with bundle product price inconsistency across the system
   * Added warnings if invalid tax configuration is created in the Admin panel
-  * Fixed issues with regards to hidden tax
+  * Fixed issues with regards to discount tax compensation
 * Fixed bugs:
   * Fixed an issue where grouped price was not applied for grouped products
   * Fixed an issue where a fatal error occurred when opening a grouped product page without assigned products on the frontend

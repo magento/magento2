@@ -627,7 +627,7 @@ class Full
     {
         if (!isset($this->productEmulators[$typeId])) {
             $productEmulator = new \Magento\Framework\Object();
-            $productEmulator->setIdFieldName('entity_id')->setTypeId($typeId);
+            $productEmulator->setTypeId($typeId);
             $this->productEmulators[$typeId] = $productEmulator;
         }
         return $this->productEmulators[$typeId];
@@ -651,15 +651,20 @@ class Full
             $attributeCode = $attribute->getAttributeCode();
 
             if (isset($productData[$attributeCode])) {
+
+                if ('store_id' === $attributeCode) {
+                    continue;
+                }
+
                 $value = $this->getAttributeValue($attribute->getId(), $productData[$attributeCode], $storeId);
                 if ($value) {
-                    if (isset($index[$attributeCode])) {
-                        if (!is_array($index[$attributeCode])) {
-                            $index[$attributeCode] = [$index[$attributeCode]];
+                    if (isset($index[$attribute->getId()])) {
+                        if (!is_array($index[$attribute->getId()])) {
+                            $index[$attribute->getId()] = [$index[$attribute->getId()]];
                         }
-                        $index[$attributeCode][] = $value;
+                        $index[$attribute->getId()][] = $value;
                     } else {
-                        $index[$attributeCode] = $value;
+                        $index[$attribute->getId()] = $value;
                     }
                 }
             }
@@ -669,12 +674,10 @@ class Full
             foreach ($attributeData as $attributeId => $attributeValue) {
                 $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
                 if (!empty($value)) {
-                    $attributeCode = $this->getSearchableAttribute($attributeId)->getAttributeCode();
-
-                    if (isset($index[$attributeCode])) {
-                        $index[$attributeCode][$entityId] = $value;
+                    if (isset($index[$attributeId])) {
+                        $index[$attributeId][$entityId] = $value;
                     } else {
-                        $index[$attributeCode] = [$entityId => $value];
+                        $index[$attributeId] = [$entityId => $value];
                     }
                 }
             }

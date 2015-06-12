@@ -53,7 +53,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
                 self::INPUT_KEY_IP,
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Allowed IP addresses'
+                "Allowed IP addresses (use 'none' to clear allowed IP list)"
             ),
         ];
         $this->setDefinition($options);

@@ -18,7 +18,6 @@
     <type name="Magento\CatalogImportExport\Model\Import\Product\Validator">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="сategory" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Category</item>
                 <item name="groupPrice" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice</item>
                 <item name="media" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Media</item>
                 <item name="superProductsSku" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku</item>
