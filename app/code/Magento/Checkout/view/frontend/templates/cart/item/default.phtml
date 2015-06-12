@@ -85,10 +85,10 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <?php $cols++; ?>
             </td>
         <?php endif; ?>
-        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
+        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
             <div class="field qty">
                 <label class="label" for="cart-<?php echo $_item->getId() ?>-qty">
-                    <span><?php echo __('Quantity') ?></span>
+                    <span><?php echo __('Qty') ?></span>
                 </label>
                 <div class="control qty">
                     <input id="cart-<?php echo $_item->getId() ?>-qty"
@@ -96,7 +96,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                            value="<?php echo $block->getQty() ?>"
                            type="number"
                            size="4"
-                           title="<?php echo $block->escapeHtml(__('Quantity')); ?>"
+                           title="<?php echo $block->escapeHtml(__('Qty')); ?>"
                            class="input-text qty"
                            maxlength="12"
                            data-validate="{required:true,'validate-greater-than-zero':true}"
