@@ -59,7 +59,7 @@ define(
                     element.on('value', function() {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function() {
-                            if (postcodeElement != null && self.postcodeValidation()) {
+                            if (self.postcodeValidation()) {
                                 self.validateFields();
                             }
                         }, self.validateDelay);
@@ -69,6 +69,10 @@ define(
             },
 
             postcodeValidation: function() {
+                if (postcodeElement == null || postcodeElement.value() == null) {
+                    return true;
+                }
+
                 var countryId = $('select[name="shippingAddress[country_id]"]').val();
                 var validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
 
