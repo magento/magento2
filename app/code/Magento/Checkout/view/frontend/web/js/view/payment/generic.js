@@ -38,8 +38,6 @@ define(
                     "cc_exp_month": null,
                     "additional_data": null
                 };
-                //@todo temporary billing address same as shipping
-                quote.billingAddress(quote.shippingAddress());
                 placeOrderAction(data);
             }
         });
