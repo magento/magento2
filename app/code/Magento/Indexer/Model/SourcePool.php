@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Indexer\Model\Source\DataInterface as SourceDataInterface;
+use Magento\Indexer\Model\Source\DataInterface;
+
 class SourcePool
 {
     /**
@@ -25,12 +28,12 @@ class SourcePool
      *
      * @param string $className
      * @throws \InvalidArgumentException
-     * @return SourceInterface
+     * @return SourceInterface|DataInterface
      */
     public function get($className)
     {
         $source = $this->objectManager->get($className);
-        if (!$source instanceof SourceInterface) {
+        if (!$source instanceof SourceInterface && !$source instanceof SourceDataInterface) {
             throw new \InvalidArgumentException(
                 $className . ' doesn\'t implement \Magento\Indexer\Model\SourceInterface'
             );

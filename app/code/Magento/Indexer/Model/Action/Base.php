@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model\Action;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
-use Magento\Indexer\Model\FieldsetPool;
+use Magento\Indexer\Model\Fieldset\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
 use Magento\Indexer\Model\Processor\Source;
 use Magento\Indexer\Model\SourceInterface;
