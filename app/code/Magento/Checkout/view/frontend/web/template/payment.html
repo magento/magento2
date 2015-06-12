@@ -17,10 +17,6 @@
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
-                <legend class="legend payments-title">
-                    <span><!-- ko text: $t(title)--><!-- /ko --></span>`
-                </legend>
-                <br>
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
