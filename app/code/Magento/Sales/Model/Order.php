@@ -287,7 +287,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -316,7 +316,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
