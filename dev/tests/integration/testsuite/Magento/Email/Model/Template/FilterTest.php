@@ -75,31 +75,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertStringMatchesFormat('http://example.com/index.php/backend/translation/ajax/index/%A', $url);
     }
 
-    public function testEscapehtmlDirective()
-    {
-        $this->_model->setVariables(
-            ['first' => '<p><i>Hello</i> <b>world!</b></p>', 'second' => '<p>Hello <strong>world!</strong></p>']
-        );
-
-        $allowedTags = 'i,b';
-
-        $expectedResults = [
-            'first' => '&lt;p&gt;<i>Hello</i> <b>world!</b>&lt;/p&gt;',
-            'second' => '&lt;p&gt;Hello &lt;strong&gt;world!&lt;/strong&gt;&lt;/p&gt;',
-        ];
-
-        foreach ($expectedResults as $varName => $expectedResult) {
-            $result = $this->_model->escapehtmlDirective(
-                [
-                    '{{escapehtml var=$' . $varName . ' allowed_tags=' . $allowedTags . '}}',
-                    'escapehtml',
-                    ' var=$' . $varName . ' allowed_tags=' . $allowedTags,
-                ]
-            );
-            $this->assertEquals($expectedResult, $result);
-        }
-    }
-
     /**
      * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
      * @magentoAppIsolation enabled

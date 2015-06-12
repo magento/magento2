@@ -490,34 +490,12 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Directive for converting special characters to HTML entities
-     * Supported options:
-     *     allowed_tags - Comma separated html tags that have not to be converted
-     *
-     * @param string[] $construction
-     * @return string
-     * @todo: @davidalger: get rid of this after {{var}} auto-escapes
-     */
-    public function escapehtmlDirective($construction)
-    {
-        $params = $this->_getParameters($construction[2]);
-        if (!isset($params['var'])) {
-            return '';
-        }
-
-        $allowedTags = null;
-        if (isset($params['allowed_tags'])) {
-            $allowedTags = preg_split('/\s*\,\s*/', $params['allowed_tags'], 0, PREG_SPLIT_NO_EMPTY);
-        }
-
-        return $this->_escaper->escapeHtml($params['var'], $allowedTags);
-    }
-
-    /**
      * Trans directive for localized strings support
      *
-     * Example 1: {{trans "string to translate"}}
-     * Example 2: {{trans "string to %var" var="$variable"}}
+     * Usage:
+     *
+     *   {{trans "string to translate"}}
+     *   {{trans "string to %var" var="$variable"}}
      *
      * The |escape modifier is applied by default, use |raw to override
      *
@@ -541,10 +519,8 @@ class Filter extends \Magento\Framework\Filter\Template
      * Return associative array of parameters, using
      * __trans to identify the nameless text argument
      *
-     * Returns: [value, [param, ...]]
-     *
      * @param string $value raw parameters
-     * @return array
+     * @return array always a two-part array in the format [value, [param, ...]]
      */
     protected function getTransParameters($value) {
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
@@ -564,22 +540,20 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * Var directive with modifiers support
      *
+     * The |escape modifier is applied by default, use |raw to override
+     *
      * @param string[] $construction
      * @return string
      */
     public function varDirective($construction)
     {
+        // just return the escaped value if no template vars exist to process
         if (count($this->_templateVars) == 0) {
-            // If template preprocessing
             return $construction[0];
         }
 
-        // todo: @davidalger: apply default 'escape' modifier, updating email templates to use |raw where needed
-        list($directive, $modifiers) = $this->explodeModifiers($construction[2]);
-        if ($modifiers) {
-            return $this->applyModifiers($this->_getVariable($directive, ''), $modifiers);
-        }
-        return $this->_getVariable($directive, '');
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        return $this->applyModifiers($this->_getVariable($directive, ''), $modifiers);
     }
 
     /**
