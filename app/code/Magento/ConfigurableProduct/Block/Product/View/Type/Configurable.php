@@ -7,6 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
@@ -52,6 +53,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $priceCurrency;
 
     /**
+     * @var ConfigurableAttributeData
+     */
+    protected $configurableAttributeData;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -59,6 +65,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param CurrentCustomer $currentCustomer
      * @param PriceCurrencyInterface $priceCurrency
+     * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
      */
     public function __construct(
@@ -69,6 +76,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Catalog\Helper\Product $catalogProduct,
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
+        ConfigurableAttributeData $configurableAttributeData,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -76,6 +84,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->jsonEncoder = $jsonEncoder;
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
+        $this->configurableAttributeData = $configurableAttributeData;
         parent::__construct(
             $context,
             $arrayUtils,
@@ -166,17 +175,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $regularPrice = $currentProduct->getPriceInfo()->getPrice('regular_price');
         $finalPrice = $currentProduct->getPriceInfo()->getPrice('final_price');
 
-        /**
-         * @var \Magento\ConfigurableProduct\Pricing\Price\AttributePrice $attributePrice
-         */
-        $attributePrice = $currentProduct
-            ->getPriceInfo()
-            ->getPrice('attribute_price');
         $options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
-        $attributes = $attributePrice->prepareAttributes($options);
+        $attributesData = $this->configurableAttributeData->getAttributesData($currentProduct, $options);
 
         $config = [
-            'attributes' => $attributes['attributes'],
+            'attributes' => $attributesData['attributes'],
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'optionPrices' => $this->getOptionPrices(),
             'prices' => [
@@ -197,8 +200,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'baseImage' => $options['baseImage'],
         ];
 
-        if ($currentProduct->hasPreconfiguredValues() && !empty($attributes['defaultValues'])) {
-            $config['defaultValues'] = $attributes['defaultValues'];
+        if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
+            $config['defaultValues'] = $attributesData['defaultValues'];
         }
 
         $config = array_merge($config, $this->_getAdditionalConfig());
