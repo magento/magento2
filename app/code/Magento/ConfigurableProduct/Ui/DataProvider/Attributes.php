@@ -54,7 +54,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
         }
         return [
-            'totalRecords' => count($items),
+            'totalRecords' => $this->collection->getSize(),
             'items' => $items
         ];
     }
