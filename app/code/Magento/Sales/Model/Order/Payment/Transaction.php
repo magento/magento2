@@ -981,6 +981,17 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
+     * Get HTML format for transaction id
+     *
+     * @return string
+     */
+    public function getHtmlTxnId()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_html_txn_id', $this->_getEventData());
+        return isset($this->_data['html_txn_id']) ? $this->_data['html_txn_id'] : $this->getTxnId();
+    }
+
+    /**
      * Returns parent_txn_id
      *
      * @return string
