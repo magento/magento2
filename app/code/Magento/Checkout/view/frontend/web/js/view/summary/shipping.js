@@ -19,6 +19,9 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             totals: quote.getTotals(),
             getShippingMethodTitle: function() {
+                if (this.getTotalsMode() == 'initial') {
+                    return '';
+                }
                 return shippingService.getTitleByCode(quote.shippingMethod())
             },
             getValue: function() {
