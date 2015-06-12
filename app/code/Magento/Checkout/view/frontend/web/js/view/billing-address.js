@@ -49,8 +49,10 @@ define(
                 return this;
             },
 
-            canUseShippingAddress: !quote.isVirtual() && quote.shippingAddress()
-                && quote.shippingAddress().canUseForBilling(),
+            canUseShippingAddress: ko.computed(function(){
+                return !quote.isVirtual() && quote.shippingAddress()
+                    && quote.shippingAddress().canUseForBilling();
+            }),
 
             saveInAddressBook: true,
 
