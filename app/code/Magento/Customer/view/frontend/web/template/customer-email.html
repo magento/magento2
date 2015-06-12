@@ -8,7 +8,7 @@
 <!-- ko foreach: getRegion('before-login-form') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
-<form class="form login" data-role="login"
+<form class="form form-login" data-role="login"
       data-bind="submit:login"
       method="post">
     <fieldset id="customer-email" class="fieldset" data-bind="blockLoader: isLoading">
@@ -16,9 +16,9 @@
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email Address')"></span>
             </label>
-            <div class="control">
+            <div class="control _with-tooltip">
                 <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
-                <span><!-- ko text: $t("Here we'll send your order confirmation.")--><!-- /ko --></span>
+                <span class="note"><!-- ko text: $t("Here we'll send your order confirmation.")--><!-- /ko --></span>
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
         </div>
@@ -26,13 +26,13 @@
         <!--Hidden fields -->
         <fieldset class="fieldset hidden-fields" data-bind="fadeVisible: isPasswordVisible">
             <div class="field">
-                <span data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
                 <label class="label" for="customer-password">
                     <span data-bind="text: $t('Password')"></span>
                 </label>
                 <div class="control">
                     <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
                 </div>
+                <span class="note" data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
             </div>
             <!-- ko foreach: getRegion('additional-login-form-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -53,5 +53,4 @@
 
     </fieldset>
 </form>
-<hr>
 <!-- /ko -->

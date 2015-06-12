@@ -5,9 +5,7 @@
  */
 -->
 
-<div style="background-color: #F5F5F5; width: 25%;">
-    <span data-bind="text: $t('Order Summary')"></span>
-    <!-- ko foreach: elems() -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    <!-- /ko -->
-</div>
+<span data-bind="text: $t('Order Summary')" class="title"></span>
+<!-- ko foreach: elems() -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->

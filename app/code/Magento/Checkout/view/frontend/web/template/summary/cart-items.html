@@ -4,19 +4,25 @@
  * See COPYING.txt for license details.
  */
 -->
-<div data-collapsible="true">
-<div class="title">
-    <strong role="heading"><span data-bind="text: getItemsQty()"></span>
-        <!-- ko text: $t('Items in cart') --><!-- /ko -->
-    </strong>
-</div>
-    <div class="content">
-    <!-- ko foreach: getItems -->
-        <div class="cart_item">
-        <!-- ko foreach: $parent.elems() -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+<div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active'}}">
+    <div class="title" data-role="title">
+        <strong role="heading"><span data-bind="text: getItemsQty()"></span>
+            <!-- ko text: $t('Items in cart') --><!-- /ko -->
+        </strong>
+    </div>
+    <div class="content minicart-items" data-role="content">
+        <div class="minicart-items-wrapper overflowed">
+            <ol class="minicart-items">
+            <!-- ko foreach: getItems -->
+                <li class="product-item">
+                    <div class="product">
+                    <!-- ko foreach: $parent.elems() -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
+                    </div>
+                </li>
+            <!-- /ko -->
+            </ol>
         </div>
-    <!-- /ko -->
     </div>
 </div>

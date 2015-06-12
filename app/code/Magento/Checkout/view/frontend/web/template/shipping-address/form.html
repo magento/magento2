@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+<form class="form form-shipping-address" id="co-shipping-form" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
     <!-- ko foreach: getRegion('before-fields') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
@@ -13,7 +13,7 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
         <!-- ko if: (isCustomerLoggedIn) -->
-        <div class="choice field">
+        <div class="field choice">
             <input type="checkbox" class="checkbox" id="shipping-save-in-address-book" data-bind="checked: saveInAddressBook" />
             <label class="label" for="shipping-save-in-address-book">
                 <span data-bind="text: $t('Save in address book')"></span>
