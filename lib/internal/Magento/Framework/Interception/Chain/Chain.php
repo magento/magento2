@@ -35,8 +35,13 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
      * @param array $arguments
      * @return mixed|void
      */
-    public function invokeNext($type, $method, InterceptorInterface $subject, array $arguments, $previousPluginCode = null)
-    {
+    public function invokeNext(
+        $type,
+        $method,
+        InterceptorInterface $subject,
+        array $arguments,
+        $previousPluginCode = null
+    ) {
         $pluginInfo = $this->pluginList->getNext($type, $method, $previousPluginCode);
         $capMethod = ucfirst($method);
         $result = null;

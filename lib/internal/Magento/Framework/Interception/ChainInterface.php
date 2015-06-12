@@ -16,5 +16,11 @@ interface ChainInterface
      * @param string $previousPluginCode
      * @return mixed
      */
-    public function invokeNext($type, $method, InterceptorInterface $subject, array $arguments, $previousPluginCode = null);
+    public function invokeNext(
+        $type,
+        $method,
+        InterceptorInterface $subject,
+        array $arguments,
+        $previousPluginCode = null
+    );
 }
