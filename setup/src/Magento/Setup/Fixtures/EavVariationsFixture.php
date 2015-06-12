@@ -58,7 +58,7 @@ class EavVariationsFixture extends Fixture
                 ],
             ],
             'default'                       => ['option_0'],
-            'attribute_code'                => 'configurable_variations',
+            'attribute_code'                => 'configurable_variation',
             'is_global'                     => '1',
             'default_value_text'            => '',
             'default_value_yesno'           => '0',
