@@ -157,7 +157,7 @@
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="source" type="sourceType" use="required"/>
-        <xs:attribute name="class" type="classType" use="optional"/>
+        <xs:attribute name="class" type="classType" use="required"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 

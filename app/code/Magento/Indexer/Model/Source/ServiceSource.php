@@ -1,0 +1,88 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Indexer\Model\Source;
+
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\ObjectManagerInterface;
+
+class ServiceSource implements DataInterface
+{
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var string
+     */
+    private $service;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param string $service
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        $service
+    ) {
+        $this->objectManager = $objectManager;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->service = $service;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData(array $fieldsData)
+    {
+        /** @var \Magento\Cms\Api\PageRepositoryInterface $service */
+        $service = $this->getService();
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+
+        /** @var \Magento\Framework\Api\SearchResults $list */
+        $list = $service->getList($searchCriteria);
+
+        return $this->getRequestedFields($list, $fieldsData);
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchResults $list
+     * @param array $fields
+     * @return array
+     * @throws NotFoundException
+     */
+    private function getRequestedFields(\Magento\Framework\Api\SearchResults $list, array $fields)
+    {
+        $requestedData = [];
+        foreach($list->getItems() as $key => $item) {
+            foreach($fields as $fieldName => $fieldDetails) {
+                if (!isset($item[$fieldName])) {
+                    throw new NotFoundException("Field {$fieldName} not found");
+                }
+
+                $requestedData[$key][$fieldName] = $item[$fieldName];
+            }
+        }
+        return $requestedData;
+    }
+
+    /**
+     * @return Object
+     */
+    private function getService()
+    {
+        return $this->objectManager->get($this->service);
+    }
+}

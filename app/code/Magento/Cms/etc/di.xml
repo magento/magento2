@@ -56,4 +56,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Cms\Model\Indexer\Source\ServiceSource" type="Magento\Indexer\Model\Source\ServiceSource">
+        <arguments>
+            <argument name="service" xsi:type="string">Magento\Cms\Api\PageRepositoryInterface</argument>
+        </arguments>
+    </virtualType>
 </config>
