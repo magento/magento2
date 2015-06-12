@@ -27,7 +27,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="started_at">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Started at</argument>
+                            <argument name="header" xsi:type="string" translate="true">Start Date&amp;Time</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
                             <argument name="index" xsi:type="string">started_at</argument>
                             <argument name="gmtoffset" xsi:type="boolean">true</argument>
@@ -45,9 +45,8 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="imported_file">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Imported file</argument>
+                            <argument name="header" xsi:type="string" translate="true">Imported File</argument>
                             <argument name="index" xsi:type="string">type</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="align" xsi:type="string">center</argument>
                             <argument name="type" xsi:type="string">action</argument>
@@ -56,9 +55,10 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="execution_time">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Execution time</argument>
+                            <argument name="header" xsi:type="string" translate="true">Execution Time</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="index" xsi:type="string">execution_time</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="summary">
@@ -66,6 +66,7 @@
                             <argument name="header" xsi:type="string" translate="true">Summary</argument>
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="index" xsi:type="string">summary</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
                         </arguments>
                     </block>
                 </block>
