@@ -7,13 +7,11 @@ namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
 
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
+use Magento\Catalog\Model\Product as CatalogProduct;
 
 class GetFilter extends ExportController
 {
-    const CATALOG_PRODUCT = 'catalog_product';
-
-    const ADVANCED_PRICING = 'advanced_pricing';
-
     /**
      * Get grid-filter of entity attributes action.
      *
@@ -24,8 +22,8 @@ class GetFilter extends ExportController
         $data = $this->getRequest()->getParams();
         if ($this->getRequest()->isXmlHttpRequest() && $data) {
             try {
-                if ($data['entity'] == self::ADVANCED_PRICING) {
-                    $data['entity'] = self::CATALOG_PRODUCT;
+                if ($data['entity'] == ExportAdvancedPricing::ENTITY_ADVANCED_PRICING) {
+                    $data['entity'] = CatalogProduct::ENTITY;
                 }
                 /** @var \Magento\Framework\View\Result\Layout $resultLayout */
                 $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
