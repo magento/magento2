@@ -30,4 +30,15 @@ class Listing extends AbstractComponent
     {
         return static::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataSourceData()
+    {
+        return [
+            'data' => $this->getContext()->getDataProvider()->getData(),
+            'totalCount' => $this->getContext()->getDataProvider()->count()
+        ];
+    }
 }

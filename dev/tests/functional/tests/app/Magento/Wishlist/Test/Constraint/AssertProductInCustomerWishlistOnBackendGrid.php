@@ -29,7 +29,7 @@ class AssertProductInCustomerWishlistOnBackendGrid extends AbstractConstraint
         $filter = $this->prepareFilter($product);
 
         /** @var Grid $wishlistGrid */
-        $wishlistGrid = $customerIndexEdit->getCustomerForm()->getTabElement('wishlist')->getSearchGridBlock();
+        $wishlistGrid = $customerIndexEdit->getCustomerForm()->getTab('wishlist')->getSearchGridBlock();
         \PHPUnit_Framework_Assert::assertTrue(
             $wishlistGrid->isRowVisible($filter, true, false),
             'Product ' . $product->getName() . ' is absent in grid with configure option.'
@@ -85,6 +85,6 @@ class AssertProductInCustomerWishlistOnBackendGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return "Product is visible in customer wishlist on backend.";
+        return "Product is visible in Customer Wish List on Backend.";
     }
 }

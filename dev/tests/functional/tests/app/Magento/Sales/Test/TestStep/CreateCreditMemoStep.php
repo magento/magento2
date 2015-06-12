@@ -101,6 +101,6 @@ class CreateCreditMemoStep implements TestStepInterface
     protected function getCreditMemoIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('creditmemos');
-        return $this->salesOrderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock()->getIds();
+        return $this->salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock()->getIds();
     }
 }

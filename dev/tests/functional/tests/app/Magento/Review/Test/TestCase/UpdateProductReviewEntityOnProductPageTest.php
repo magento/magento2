@@ -144,7 +144,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
             'title' => $this->reviewInitial->getTitle(),
             'sku' => $product->getSku(),
         ];
-        $this->catalogProductEdit->getProductForm()->getTabElement('product_reviews')->getReviewsGrid()
+        $this->catalogProductEdit->getProductForm()->getTab('product_reviews')->getReviewsGrid()
             ->searchAndOpen($filter);
         $this->reviewEdit->getReviewForm()->fill($review);
         $this->reviewEdit->getPageActions()->save();

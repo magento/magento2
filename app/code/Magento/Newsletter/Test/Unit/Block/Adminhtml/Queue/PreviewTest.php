@@ -13,22 +13,27 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Newsletter\Model\Template
+     * @var \Magento\Newsletter\Model\Template|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $template;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Newsletter\Model\Queue
+     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subscriber;
+
+    /**
+     * @var \Magento\Newsletter\Model\Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $queue;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -39,14 +44,13 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
-        $this->template = $this->getMock('Magento\Newsletter\Model\Template', [], [], '', false);
-        $templateFactory->expects($this->once())->method('create')->will($this->returnValue($this->template));
-        $queueFactory = $this->getMock('Magento\Newsletter\Model\QueueFactory', ['create'], [], '', false);
-        $this->queue = $this->getMock('Magento\Newsletter\Model\Queue', ['load'], [], '', false);
-        $queueFactory->expects($this->any())->method('create')->will($this->returnValue($this->queue));
-
+        $context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $context->expects($this->once())->method('getEventManager')->will($this->returnValue($eventManager));
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
         $this->storeManager = $this->getMock(
             'Magento\Store\Model\StoreManager',
             ['getStores', 'getDefaultStoreView'],
@@ -54,15 +58,30 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $context->expects($this->once())->method('getStoreManager')->will($this->returnValue($this->storeManager));
+        $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $context->expects($this->once())->method('getAppState')->will($this->returnValue($appState));
+
+        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
+        $this->template = $this->getMock('Magento\Newsletter\Model\Template', [], [], '', false);
+        $templateFactory->expects($this->once())->method('create')->will($this->returnValue($this->template));
+
+        $subscriberFactory = $this->getMock('Magento\Newsletter\Model\SubscriberFactory', ['create'], [], '', false);
+        $this->subscriber = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
+        $subscriberFactory->expects($this->once())->method('create')->will($this->returnValue($this->subscriber));
+
+        $queueFactory = $this->getMock('Magento\Newsletter\Model\QueueFactory', ['create'], [], '', false);
+        $this->queue = $this->getMock('Magento\Newsletter\Model\Queue', ['load'], [], '', false);
+        $queueFactory->expects($this->any())->method('create')->will($this->returnValue($this->queue));
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->preview = $this->objectManager->getObject(
             'Magento\Newsletter\Block\Adminhtml\Queue\Preview',
             [
+                'context' => $context,
                 'templateFactory' => $templateFactory,
+                'subscriberFactory' => $subscriberFactory,
                 'queueFactory' => $queueFactory,
-                'request' => $this->request,
-                'storeManager' => $this->storeManager
             ]
         );
     }

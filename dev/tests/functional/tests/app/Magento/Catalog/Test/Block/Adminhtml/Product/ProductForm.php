@@ -116,7 +116,6 @@ class ProductForm extends FormTabs
             if ($category) {
                 $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
-            $this->showAdvancedSettings();
             $this->fillTabs($tabs, $element);
 
             if ($product->hasData('custom_attribute')) {
@@ -168,7 +167,9 @@ class ProductForm extends FormTabs
      */
     public function openTab($tabName)
     {
-        $this->showAdvancedSettings();
+        if (!$this->isTabVisible($tabName)) {
+            $this->showAdvancedSettings();
+        }
         return parent::openTab($tabName);
     }
 
@@ -255,12 +256,12 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Check tab visibility on Product form.
+     * Check custom tab visibility on Product form.
      *
      * @param string $tabName
      * @return bool
      */
-    public function isTabVisible($tabName)
+    public function isCustomTabVisible($tabName)
     {
         $tabName = strtolower($tabName);
         $selector = sprintf($this->customTab, $tabName);
@@ -294,7 +295,7 @@ class ProductForm extends FormTabs
         $data = [];
         $tabs = $this->getFieldsByTabs($product);
         foreach ($tabs as $tabName => $fields) {
-            $tab = $this->getTabElement($tabName);
+            $tab = $this->getTab($tabName);
             $this->openTab($tabName);
             $errors = $tab->getJsErrors();
             if (!empty($errors)) {
@@ -367,7 +368,7 @@ class ProductForm extends FormTabs
      */
     public function addNewAttribute($tabName = 'product-details')
     {
-        $tab = $this->getTabElement($tabName);
+        $tab = $this->getTab($tabName);
         if ($tab instanceof ProductTab) {
             $this->openTab($tabName);
             $tab->addNewAttribute($tabName);

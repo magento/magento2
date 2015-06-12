@@ -9,4 +9,4 @@
 ?>
 <?php if ($block->getRealOrderId()) : ?><p><?php echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?php echo $error ?></p><?php endif ?>
-<p><?php echo __('Click <a href="%1">here</a> to continue shopping.', $block->getContinueShoppingUrl()) ?></p>
+<p><?php echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>

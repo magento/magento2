@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
  * Class PageRepository
@@ -45,7 +46,12 @@ class PageRepository implements PageRepositoryInterface
     protected $dataObjectHelper;
 
     /**
-     * @var Data\PageInterfaceFactory
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Cms\Api\Data\PageInterfaceFactory
      */
     protected $dataPageFactory;
 
@@ -56,6 +62,7 @@ class PageRepository implements PageRepositoryInterface
      * @param Resource\Page\CollectionFactory $pageCollectionFactory
      * @param Data\PageSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
+     * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
         Resource\Page $resource,
@@ -63,7 +70,8 @@ class PageRepository implements PageRepositoryInterface
         Data\PageInterfaceFactory $dataPageFactory,
         Resource\Page\CollectionFactory $pageCollectionFactory,
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        DataObjectProcessor $dataObjectProcessor
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -71,16 +79,17 @@ class PageRepository implements PageRepositoryInterface
         $this->searchResultsFactory = $searchResultsFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataPageFactory = $dataPageFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
      * Save Page data
      *
-     * @param Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return Page
      * @throws CouldNotSaveException
      */
-    public function save(Data\PageInterface $page)
+    public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
         try {
             $this->resource->save($page);
@@ -112,28 +121,23 @@ class PageRepository implements PageRepositoryInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param SearchCriteriaInterface $criteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return Resource\Page\Collection
      */
-    public function getList(SearchCriteriaInterface $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
 
         $collection = $this->pageCollectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $fields = [];
-            $conditions = [];
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'store_id') {
                     $collection->addStoreFilter($filter->getValue(), false);
                     continue;
                 }
                 $condition = $filter->getConditionType() ?: 'eq';
-                $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
-            }
-            if ($fields) {
-                $collection->addFieldToFilter($fields, $conditions);
+                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
         $searchResults->setTotalCount($collection->getSize());
@@ -151,9 +155,14 @@ class PageRepository implements PageRepositoryInterface
         $pages = [];
         /** @var Page $pageModel */
         foreach ($collection as $pageModel) {
-            $pages[] = $this->dataObjectHelper->populateWithArray(
-                $this->dataPageFactory->create(),
+            $pageData = $this->dataPageFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $pageData,
                 $pageModel->getData(),
+                'Magento\Cms\Api\Data\PageInterface'
+            );
+            $pages[] = $this->dataObjectProcessor->buildOutputDataArray(
+                $pageData,
                 'Magento\Cms\Api\Data\PageInterface'
             );
         }
@@ -164,11 +173,11 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Delete Page
      *
-     * @param Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return bool
      * @throws CouldNotDeleteException
      */
-    public function delete(Data\PageInterface $page)
+    public function delete(\Magento\Cms\Api\Data\PageInterface $page)
     {
         try {
             $this->resource->delete($page);
