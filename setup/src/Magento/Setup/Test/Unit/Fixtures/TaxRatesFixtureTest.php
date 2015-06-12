@@ -7,8 +7,6 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\TaxRatesFixture;
-use Magento\Weee\Model\Attribute\Backend\Weee\Tax;
-use Test\AAaa\test;
 
 class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
 {
