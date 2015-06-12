@@ -8,7 +8,7 @@
 <!-- ko foreach: getRegion('before_details') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
-<div class="product-item-details" data-th="Product Name">
+<div class="product-item-details">
     <strong class="product-item-name" data-bind="text: $t($parent.name)"></strong>
     <!-- ko if: (JSON.parse($parent.options).length > 0)-->
     <div class="product options" data-bind="mageInit: {'collapsible':{'openedState': 'active'}}">
