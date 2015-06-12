@@ -33,10 +33,10 @@
             }
 
             .field-tooltip-content {
+                &:extend(.abs-add-box-sizing all);
                 &:extend(.abs-checkout-tooltip-content-position-top all);
                 .css(top, @indent__l);
                 .css(width, @checkout-shipping-policy-tooltip__width);
-                box-sizing: border-box;
             }
         }
     }
