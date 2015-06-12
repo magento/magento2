@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: isTaxDisplayedInGrandTotal -->
+<!-- ko if: isTaxDisplayedInGrandTotal && isDisplayed() -->
 <tr class="grand totals incl">
     <th class="mark" scope="row">
         <strong data-bind="text: $t(inclTaxLabel)"></strong>
@@ -22,7 +22,7 @@
     </td>
 </tr>
 <!-- /ko -->
-<!-- ko if: !isTaxDisplayedInGrandTotal -->
+<!-- ko if: !isTaxDisplayedInGrandTotal && isDisplayed() -->
 <tr class="grand totals">
     <th class="mark" scope="row">
         <strong data-bind="text: $t(title)"></strong>
@@ -32,7 +32,7 @@
     </td>
 </tr>
 <!-- /ko -->
-<!-- ko if: isBaseGrandTotalDisplayNeeded() -->
+<!-- ko if: isBaseGrandTotalDisplayNeeded() && isDisplayed() -->
 <tr class="totals charge">
     <th class="mark" data-bind="text: $t(basicCurrencyMessage)" scope="row"></th>
     <td class="amount">

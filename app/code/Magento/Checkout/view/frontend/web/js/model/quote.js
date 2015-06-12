@@ -14,7 +14,9 @@ define(
         var basePriceFormat = window.checkoutConfig.basePriceFormat;
         var priceFormat = window.checkoutConfig.priceFormat;
         var storeCode = window.checkoutConfig.storeCode;
-        var totals = ko.observable(window.checkoutConfig.totalsData);
+        var totalsData = window.checkoutConfig.totalsData;
+        totalsData['mode'] = ko.observable('initial');
+        var totals = ko.observable(totalsData);
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
         var formattedBillingAddress = ko.observable(null);
@@ -24,6 +26,8 @@ define(
             shippingAddress: shippingAddress,
             shippingMethod: shippingMethod,
             billingAddress: billingAddress,
+            paymentMethod: paymentMethod,
+            guestEmail: null,
 
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -41,7 +45,7 @@ define(
                 return window.checkoutConfig.quoteItemData;
             },
             getTotals: function() {
-                return totals
+                return totals;
             },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {
@@ -51,12 +55,6 @@ define(
                 }
                 totals(totalsData);
                 this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
-            },
-            setBillingAddress: function (address) {
-                billingAddress(address);
-            },
-            getBillingAddress: function() {
-                return billingAddress;
             },
             setFormattedBillingAddress: function (address) {
                 formattedBillingAddress(address);

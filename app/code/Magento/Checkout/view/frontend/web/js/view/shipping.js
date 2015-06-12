@@ -20,6 +20,7 @@ define(
         'Magento_Checkout/js/action/select-shipping-method',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
+        'Magento_Checkout/js/model/new-customer-address',
         'mage/translate'
     ],
     function(
@@ -37,7 +38,9 @@ define(
         shippingService,
         selectShippingMethodAction,
         rateRegistry,
-        setShippingInformation
+        setShippingInformation,
+        newAddress,
+        $t
     ) {
         'use strict';
 
@@ -48,6 +51,14 @@ define(
         }
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
+
+
+        if (addressList().length == 0) {
+            var address = new newAddress({});
+            rateRegistry.set(address.getCacheKey(), rates);
+            shippingService.setShippingRates(rates);
+            selectShippingAddress(address);
+        }
 
         return Component.extend({
             defaults: {
@@ -74,6 +85,9 @@ define(
                     if (!isShippingAddressInitialized && addressList().length == 1) {
                         selectShippingAddress(addressList()[0]);
                     }
+                }
+                if (rates.length == 1) {
+                    selectShippingMethodAction(rates[0])
                 }
                 return this;
             },
@@ -139,16 +153,34 @@ define(
             },
 
             setShippingInformation: function () {
+                if (!quote.shippingMethod()) {
+                    alert($t('Please specify a shipping method'));
+                    return false;
+                }
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
                     if (this.source.get('params.invalid')
-                        || !quote.shippingMethod()
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code
                     ) {
                         return false;
                     }
+                    var shippingAddress = quote.shippingAddress();
+                    var addressData = addressConverter.formAddressDataToQuoteAddress(
+                        this.source.get('shippingAddress')
+                    );
+
+                    //Copy form data to quote shipping address object
+                    for (var field in addressData) {
+                        if (addressData.hasOwnProperty(field)
+                            && shippingAddress.hasOwnProperty(field)
+                            && typeof addressData[field] != 'function'
+                        ) {
+                            shippingAddress[field] = addressData[field];
+                        }
+                    }
+                    selectShippingAddress(shippingAddress);
                 }
                 setShippingInformation();
             }

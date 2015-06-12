@@ -8,21 +8,21 @@
     <!-- ko if: isBothPricesDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(getExcludingLabel())"></span>
+            <span class="label" data-bind="text: $t(title) + ' ' + $t(excludingTaxMessage)"></span>
             <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
         </th>
         <td class="amount">
-            <span class="price" data-bind="text: $t(getExcludingValue()), attr: {'data-th': $t(getExcludingLabel())}"></span>
+            <span class="price" data-bind="text: $t(getExcludingValue()), attr: {'data-th': $t(excludingTaxMessage)}"></span>
         </td>
     </tr>
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(getIncludingLabel())"></span>
+            <span class="label" data-bind="text: $t(title) + ' ' + $t(includingTaxMessage)"></span>
             <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
         </th>
         <td class="amount">
             <span class="price"
-                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(getIncludingLabel())}"></span>
+                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title) + ' ' + $t(excludingTaxMessage)}"></span>
         </td>
     </tr>
     <!-- /ko -->

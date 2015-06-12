@@ -20,8 +20,13 @@
             window.customerData = window.checkoutConfig.customerData;
         </script>
         <script>
-            require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
+            require([
+                'mage/url',
+                'Magento_Checkout/js/model/step-loader',
+                'Magento_Ui/js/block-loader'
+            ], function(url, loader, blockLoader) {
                 loader.registerLoader();
+                blockLoader("<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
                 return url.setBaseUrl('<?php echo $block->getBaseUrl();?>');
             })
         </script>

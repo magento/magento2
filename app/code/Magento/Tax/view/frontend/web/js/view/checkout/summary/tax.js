@@ -24,12 +24,12 @@ define(
             },
             totals: quote.getTotals(),
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
-            getTitle: function() {
-                return "Tax";
-            },
             ifShowValue: function() {
                 if (!isTaxDisplayedInGrandTotal) {
                     return false;
+                }
+                if (!this.totals() || null == totals.getTotalByCode('tax')) {
+                    return true;
                 }
                 if (this.getPureValue() == 0) {
                     return isZeroTaxDisplayed;
@@ -37,6 +37,9 @@ define(
                 return true;
             },
             ifShowDetails: function() {
+                if (this.getTotalsMode() == 'initial') {
+                    return false;
+                }
                 return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
             },
             getPureValue: function() {
@@ -53,7 +56,7 @@ define(
                 var amount = 0;
                 if (this.totals()) {
                     var taxTotal = totals.getTotalByCode('tax');
-                    if (taxTotal) {
+                    if (this.getTotalsMode() != 'initial' && taxTotal) {
                         amount = taxTotal.value;
                     } else {
                         return this.notCalculatedMessage;
