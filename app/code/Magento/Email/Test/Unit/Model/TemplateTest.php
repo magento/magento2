@@ -553,7 +553,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables' => [
                 'withGroup' => false,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     [
                         'value' => '{{store url=""}}',
@@ -572,7 +572,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables with grouped option' => [
                 'withGroup' => true,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     'label' => __('Template Variables'),
                     'value' => [
