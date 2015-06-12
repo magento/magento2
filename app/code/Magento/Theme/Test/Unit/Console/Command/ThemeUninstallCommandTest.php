@@ -67,6 +67,13 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $backupRollbackFactory;
 
     /**
+     * Theme Validator
+     *
+     * @var ThemeValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themeValidator;
+
+    /**
      * @var CommandTester
      */
     private $tester;
@@ -98,6 +105,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator',[], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -108,7 +116,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->collection,
             $this->themeProvider,
             $this->remove,
-            $this->backupRollbackFactory
+            $this->backupRollbackFactory,
+            $this->themeValidator
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -324,6 +333,16 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of physical theme'
             ],
         ];
+    }
+
+    public function testExecuteFailedThemeInUseCheck()
+    {
+        $this->setUpPassValidation();
+        $this->themeValidator
+            ->expects($this->once())
+            ->method('validateIsThemeInUse')
+            ->willReturn(['frontend/Magento/a']);
+        $this->tester->execute(['theme' => ['frontend/Magento/a']]);
     }
 
     public function testExecuteFailedDependencyCheck()

@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Theme\Model\ThemeValidator;
 
 /**
  * Command for uninstalling theme and backup-code feature
@@ -111,6 +112,13 @@ class ThemeUninstallCommand extends Command
     private $backupRollbackFactory;
 
     /**
+     * Theme Validator
+     *
+     * @var ThemeValidator
+     */
+    private $themeValidator;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
@@ -123,6 +131,7 @@ class ThemeUninstallCommand extends Command
      * @param ThemeProvider $themeProvider
      * @param Remove $remove
      * @param BackupRollbackFactory $backupRollbackFactory
+     * @param ThemeValidator $themeValidator
      * @throws LocalizedException
      */
     public function __construct(
@@ -135,7 +144,8 @@ class ThemeUninstallCommand extends Command
         Collection $themeCollection,
         ThemeProvider $themeProvider,
         Remove $remove,
-        BackupRollbackFactory $backupRollbackFactory
+        BackupRollbackFactory $backupRollbackFactory,
+        ThemeValidator $themeValidator
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
@@ -147,6 +157,7 @@ class ThemeUninstallCommand extends Command
         $this->themeCollection = $themeCollection;
         $this->themeProvider = $themeProvider;
         $this->backupRollbackFactory = $backupRollbackFactory;
+        $this->themeValidator = $themeValidator;
         parent::__construct();
     }
 
@@ -187,6 +198,11 @@ class ThemeUninstallCommand extends Command
         $validationMessages = $this->validate($themePaths);
         if (!empty($validationMessages)) {
             $output->writeln($validationMessages);
+            return;
+        }
+        $isThemeInUseMessages = $this->themeValidator->validateIsThemeInUse($themePaths);
+        if (!empty($isThemeInUseMessages)) {
+            $output->writeln($isThemeInUseMessages);
             return;
         }
         $childThemeCheckMessages = $this->checkChildTheme($themePaths);
