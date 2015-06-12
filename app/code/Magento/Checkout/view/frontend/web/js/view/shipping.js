@@ -153,11 +153,14 @@ define(
             },
 
             setShippingInformation: function () {
+                if (!quote.shippingMethod()) {
+                    alert($t('Please specify a shipping method'));
+                    return false;
+                }
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
                     if (this.source.get('params.invalid')
-                        || !quote.shippingMethod()
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code
                     ) {
@@ -178,10 +181,6 @@ define(
                         }
                     }
                     selectShippingAddress(shippingAddress);
-                }
-                if (!quote.shippingMethod()) {
-                    alert($t('Please specify a shipping method'));
-                    return false;
                 }
                 setShippingInformation();
             }
