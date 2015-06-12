@@ -27,6 +27,9 @@ define(
                 return 'excluding' == this.displayMode;
             },
             getIncludingValue: function() {
+                if (this.getTotalsMode() != 'initial') {
+                    return this.notCalculatedMessage;
+                }
                 var price = 0;
                 if (this.totals() && quote.shippingMethod()) {
                     price =  this.totals().shipping_incl_tax;
@@ -36,6 +39,9 @@ define(
                 return this.getFormattedPrice(price);
             },
             getExcludingValue: function() {
+                if (this.getTotalsMode() != 'initial') {
+                    return this.notCalculatedMessage;
+                }
                 var price = 0;
                 if (this.totals() && quote.shippingMethod()) {
                     price =  this.totals().shipping_amount;
