@@ -105,7 +105,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator',[], [], '', false);
+        $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
