@@ -19,10 +19,10 @@ Available vars in this template:
 Use vars: {{var var_name}}
 *}<!--@subject Welcome, {{var name}} @-->
 <!--@vars
-{"escapehtml var=$name":"Recipient Name",
+{"var name":"Recipient Name",
 "var product_url":"Url for Product",
 "var product_name":"Product Name",
 "var message":"Sender Message"}
 @-->
 
-Welcome, {{escapehtml var=$name}}<br /><br />Please look at <a href="{{var product_url}}">{{var product_name}}</a><br /><br />Here is message: <br />{{var message}}<br /><br />
+Welcome, {{var name}}<br /><br />Please look at <a href="{{var product_url}}">{{var product_name}}</a><br /><br />Here is message: <br />{{var message}}<br /><br />
