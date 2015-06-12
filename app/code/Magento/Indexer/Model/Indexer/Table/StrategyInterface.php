@@ -20,6 +20,7 @@ interface StrategyInterface
      * Get IDX table usage flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseIdxTable();
 
