@@ -13,7 +13,7 @@ define([
          *
          * @return {Boolean}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             return !!+this._super();
         },
 
