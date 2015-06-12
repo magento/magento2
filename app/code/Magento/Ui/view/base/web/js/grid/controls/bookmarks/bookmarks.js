@@ -45,7 +45,7 @@ define([
                 },
                 newView: {
                     label: 'New View',
-                    index: '${ Date.now() }',
+                    index: '_${ Date.now() }',
                     editing: true,
                     isNew: true
                 }
