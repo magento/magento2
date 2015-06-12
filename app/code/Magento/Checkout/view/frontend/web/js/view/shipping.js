@@ -39,7 +39,8 @@ define(
         selectShippingMethodAction,
         rateRegistry,
         setShippingInformation,
-        newAddress
+        newAddress,
+        $t
     ) {
         'use strict';
 
@@ -162,7 +163,6 @@ define(
                     ) {
                         return false;
                     }
-
                     var shippingAddress = quote.shippingAddress();
                     var addressData = addressConverter.formAddressDataToQuoteAddress(
                         this.source.get('shippingAddress')
@@ -178,6 +178,10 @@ define(
                         }
                     }
                     selectShippingAddress(shippingAddress);
+                }
+                if (!quote.shippingMethod()) {
+                    alert($t('Please specify a shipping method'));
+                    return false;
                 }
                 setShippingInformation();
             }
