@@ -1443,11 +1443,46 @@
 }
 
 //
+//  Checkout Tooltip Content (position: top)
+//  ---------------------------------------------
+
+.abs-checkout-tooltip-content-position-top {
+    .css(right, @checkout-tooltip-content-mobile__right);
+    .css(top, @checkout-tooltip-content-mobile__top);
+    left: auto;
+
+    &:before,
+    &:after {
+        .arrow(
+            @_position: top,
+            @_size: @checkout-tooltip-icon-arrow__font-size,
+            @_color: @checkout-tooltip-content__background-color
+        );
+        .css(margin-top, @checkout-tooltip-icon-arrow__left);
+        .css(right, @indent__s);
+        left: auto;
+        top: 0%;
+    }
+    &:before {
+        .css(border-bottom-color, @checkout-tooltip-content__border-color);
+    }
+    &:after {
+        .css(border-bottom-color, @checkout-tooltip-content__background-color);
+        top: 1px;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .abs-checkout-tooltip-content-position-top-mobile {
+        .abs-checkout-tooltip-content-position-top;
+    }
+}
+
+//
 //  Checkout title
 //  ---------------------------------------------
 
 .abs-checkout-title {
-    .css(border-bottom, @checkout-step-title__border);
     .css(padding-bottom, @checkout-step-title__padding);
     .typography(
     @_font-size: @checkout-step-title__font-size,
@@ -1471,7 +1506,6 @@
             border: 0;
             font-weight: @font-weight__regular;
             padding: 6px 0;
-            text-align: left;
         }
         .amount {
             border: 0;
@@ -1488,15 +1522,15 @@
         td {
             padding: 11px 0;
         }
+        strong {
+            display: inline-block;
+            font-weight: @font-weight__semibold;
+            padding: 3px 0 0;
+        }
         .mark {
             border-top: 1px solid @border-color__base;
-            .font-size(16);
+            .font-size(18);
             padding-right: @indent__s;
-            strong {
-                display: inline-block;
-                font-weight: @font-weight__regular;
-                padding: 3px 0 0;
-            }
         }
         .amount {
             border-top: 1px solid @border-color__base;
@@ -1519,7 +1553,7 @@
             }
             .amount .price {
                 position: relative;
-                padding-right: 20px;
+                padding-right: @indent__base;
                 .icon-font(
                 @icon-down,
                 @_icon-font-size: 12px,
@@ -1563,11 +1597,9 @@
     .abs-sidebar-totals-mobile {
         th {
             &:extend(.abs-col-no-prefix all);
-            display: table-cell;
         }
         td {
             &:extend(.abs-col-no-prefix all);
-            display: table-cell;
         }
         tbody tr:not(:last-child) td {
             &:extend(.abs-no-border-bottom-top all);

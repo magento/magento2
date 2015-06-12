@@ -12,9 +12,9 @@
       data-bind="submit:login"
       method="post">
     <fieldset id="customer-email" class="fieldset" data-bind="blockLoader: isLoading">
-        <div class="field">
+        <div class="field required">
             <label class="label" for="customer-email">
-                <span data-bind="text: $t('Email')"></span>
+                <span data-bind="text: $t('Email Address')"></span>
             </label>
             <div class="control _with-tooltip">
                 <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">

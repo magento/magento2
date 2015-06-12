@@ -30,10 +30,14 @@ define([], function() {
             prefix: addressData.prefix,
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
-            isDefaultShipping: addressData.default_shipping,
-            isDefaultBilling: addressData.default_billing,
             sameAsBilling: addressData.same_as_billing,
             saveInAddressBook: addressData.save_in_address_book,
+            isDefaultShipping: function() {
+                return addressData.default_shipping;
+            },
+            isDefaultBilling: function() {
+                return addressData.default_billing;
+            },
             getAddressInline: function() {
                 return addressData.inline;
             },

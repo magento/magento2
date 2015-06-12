@@ -6,11 +6,10 @@
 /*global define*/
 define(
     [
-        'uiComponent',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Checkout/js/view/summary/abstract-total',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (Component,quote, priceUtils) {
+    function (Component,quote) {
         "use strict";
         return Component.extend({
 
@@ -25,9 +24,6 @@ define(
                     return false;
                 }
                 return window.checkoutConfig.isDisplayFinalPrice;
-            },
-            getFormattedPrice: function (price) {
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getWeeeTaxApplied: function(item) {
                 if (item.weee_tax_applied) {

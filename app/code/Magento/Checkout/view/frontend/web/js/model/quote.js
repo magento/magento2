@@ -23,6 +23,7 @@ define(
             totals: totals,
             shippingAddress: shippingAddress,
             shippingMethod: shippingMethod,
+            billingAddress: billingAddress,
 
             getQuoteId: function() {
                 return quoteData.entity_id;

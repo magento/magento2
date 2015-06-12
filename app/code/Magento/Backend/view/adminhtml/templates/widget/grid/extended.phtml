@@ -30,8 +30,8 @@ $numColumns = sizeof($block->getColumns());
     <?php else: ?>
         <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
-    <?php if ($block->getPagerVisibility() || $block->getExportTypes() || $block->getFilterVisibility()): ?>
-        <?php $massActionAvailable = $block->getMassactionBlock() && $block->getMassactionBlock()->isAvailable() ?>
+    <?php $massActionAvailable = $block->getMassactionBlock() && $block->getMassactionBlock()->isAvailable() ?>
+    <?php if ($block->getPagerVisibility() || $block->getExportTypes() || $block->getFilterVisibility() || $massActionAvailable): ?>
         <div class="admin__data-grid-header admin__data-grid-toolbar">
             <div class="admin__data-grid-header-row">
                 <?php if ($massActionAvailable): ?>

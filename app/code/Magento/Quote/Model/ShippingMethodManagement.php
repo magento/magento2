@@ -139,10 +139,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         if (!$shippingAddress->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
-        $billingAddress = $quote->getBillingAddress();
-        if (!$billingAddress->getCountryId()) {
-            throw new StateException(__('Billing address is not set'));
-        }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
         if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
             throw new NoSuchEntityException(

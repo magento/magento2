@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e7db98585f27879f05719eb96e9e8f28",
+    "hash": "fd98054e20f79a501ae6a65f774f39d7",
     "packages": [
         {
             "name": "composer/composer",
@@ -261,7 +261,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-02-06 17:25:45"
+            "time": "2015-06-02 08:04:41"
         },
         {
             "name": "monolog/monolog",

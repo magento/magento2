@@ -9,10 +9,9 @@ define(
         'jquery',
         'Magento_Checkout/js/view/summary/shipping',
         'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/shipping-service'
     ],
-    function ($, Component, quote, priceUtils, shippingService) {
+    function ($, Component, quote, shippingService) {
         var displayMode = window.checkoutConfig.reviewShippingDisplayMode;
         return Component.extend({
             defaults: {
@@ -41,7 +40,7 @@ define(
                 } else {
                     return this.notCalculatedMessage;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             },
             getExcludingValue: function() {
                 var price = 0;
@@ -50,7 +49,7 @@ define(
                 } else {
                     return this.notCalculatedMessage;
                 }
-                return priceUtils.formatPrice(price, quote.getPriceFormat());
+                return this.getFormattedPrice(price);
             }
         });
     }
