@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**

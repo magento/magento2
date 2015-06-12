@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * Category flat model
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
 {
