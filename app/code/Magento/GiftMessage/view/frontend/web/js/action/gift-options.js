@@ -8,11 +8,12 @@ define(
         '../model/url-builder',
         'mage/storage',
         'Magento_Ui/js/model/errorlist',
-        '../model/gift-message'
+        'mage/url'
     ],
-    function(urlBuilder, storage, errorList, giftMessage) {
+    function(urlBuilder, storage, errorList, url) {
         "use strict";
         var result = function(giftMessage) {
+            url.setBaseUrl(giftMessage.getConfigValue('baseUrl'));
             var quoteId = giftMessage.getConfigValue('quoteId');
             var serviceUrl;
             if (giftMessage.getConfigValue('isCustomerLoggedIn')) {
