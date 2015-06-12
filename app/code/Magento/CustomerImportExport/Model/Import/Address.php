@@ -522,8 +522,8 @@ class Address extends AbstractCustomer
 
             if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
                 $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
-                $entityRow[self::COLUMN_REGION] = $regionId;
-                $entityRow[self::COLUMN_COUNTRY_ID] = $this->_regions[$regionId];
+                $entityRow[self::COLUMN_REGION] = $this->_regions[$regionId];
+                $entityRow['region_id'] = $regionId;
             }
         }
 
