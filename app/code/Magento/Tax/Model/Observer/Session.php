@@ -18,6 +18,11 @@ class Session
     protected $customerSession;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxHelper;
+
+    /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     protected $groupRepository;
@@ -39,17 +44,20 @@ class Session
     /**
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
     ) {
         $this->groupRepository = $groupRepository;
         $this->customerSession = $customerSession;
+        $this->taxHelper = $taxHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
     }
@@ -62,7 +70,8 @@ class Session
      */
     public function customerLoggedIn(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled()) {
+        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled() &&
+            $this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
             /** @var \Magento\Customer\Model\Data\Customer $customer */
             $customer = $observer->getData('customer');
             $customerGroupId = $customer->getGroupId();
@@ -102,6 +111,43 @@ class Session
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Address after save event handler
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function afterAddressSave($observer)
+    {
+        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled() &&
+            $this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
+            /** @var $customerAddress Address */
+            $address = $observer->getCustomerAddress();
+
+            // Check if the address is either the default billing, shipping, or both
+            if ($address->getIsPrimaryBilling() || $address->getIsDefaultBilling()) {
+                $this->customerSession->setDefaultTaxBillingAddress(
+                    [
+                        'country_id' => $address->getCountryId(),
+                        'region_id'  => $address->getRegion() ? $address->getRegionId() : null,
+                        'postcode'   => $address->getPostcode(),
+                    ]
+                );
+            }
+
+            if ($address->getIsPrimaryShipping() || $address->getIsDefaultShipping()) {
+                $this->customerSession->setDefaultTaxShippingAddress(
+                    [
+                        'country_id' => $address->getCountryId(),
+                        'region_id'  => $address->getRegion() ? $address->getRegionId() : null,
+                        'postcode'   => $address->getPostcode(),
+                    ]
+                );
             }
         }
     }

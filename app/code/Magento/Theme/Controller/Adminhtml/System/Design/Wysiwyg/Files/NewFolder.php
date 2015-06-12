@@ -22,7 +22,7 @@ class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwy
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
-            $result = ['error' => true, 'message' => __('Sorry, there was an unknown error.')];
+            $result = ['error' => true, 'message' => __('Sorry, something went wrong.')];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(

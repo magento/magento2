@@ -160,8 +160,6 @@
 #product-variations-matrix .action-choose:hover,
 #product-variations-matrix .action-choose[disabled] {
     color: #b8b3a7;
-    float: right;
-    margin: 2px 0 0 5px;
 }
 
 #product-variations-matrix .action-choose:hover {
@@ -187,26 +185,13 @@
     color: #a09a8c;
 }
 
-#product-variations-matrix .col-name > input {
-    width: 88%;
+#product-variations-matrix .col-name > input,
+#product-variations-matrix .col-sku > input {
+    width: 90%;
 }
 
 #product-variations-matrix .col-actions {
     width: 60px;
-}
-
-#product-variations-matrix .col-name {
-    width: 29%;
-}
-
-#product-variations-matrix .col-sku {
-    width: 20%;
-}
-
-#product-variations-matrix .col-display,
-#product-variations-matrix .col-qty,
-#product-variations-matrix .col-weight {
-    width: 5%;
 }
 
 /* Select Associated Product popup window */

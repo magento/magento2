@@ -3,18 +3,18 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-backend": "0.74.0-beta10",
-        "magento/module-catalog": "0.74.0-beta10",
-        "magento/module-catalog-import-export": "0.74.0-beta10",
-        "magento/module-eav": "0.74.0-beta10",
-        "magento/module-import-export": "0.74.0-beta10",
-        "magento/module-store": "0.74.0-beta10",
-        "magento/module-url-rewrite": "0.74.0-beta10",
-        "magento/framework": "0.74.0-beta10",
+        "magento/module-backend": "0.74.0-beta12",
+        "magento/module-catalog": "0.74.0-beta12",
+        "magento/module-catalog-import-export": "0.74.0-beta12",
+        "magento/module-eav": "0.74.0-beta12",
+        "magento/module-import-export": "0.74.0-beta12",
+        "magento/module-store": "0.74.0-beta12",
+        "magento/module-url-rewrite": "0.74.0-beta12",
+        "magento/framework": "0.74.0-beta12",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta10",
+    "version": "0.74.0-beta12",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

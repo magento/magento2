@@ -8,6 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="customer_data_object_login">
-        <observer name="customer_tax_address" instance="Magento\Tax\Model\Observer\Session" method="customerLoggedIn" />
+        <observer name="customer_tax_logged_in" instance="Magento\Tax\Model\Observer\Session" method="customerLoggedIn" />
+    </event>
+    <event name="customer_address_save_after">
+        <observer name="customer_tax_after_address_save" instance="Magento\Tax\Model\Observer\Session" method="afterAddressSave" />
     </event>
 </config>
