@@ -1,0 +1,161 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+// The contents of this file will get split into two output files: email.less and email-inline.less.
+//
+// email.less
+// Styles contained in the .email-non-inline() and .media-width() mixins will be output in the email.less file
+// and will be included in a <style> tag in emails. Non-inline styles should be used for styles that can't be applied
+// as inline CSS, such as media queries.
+//
+// email-inline.less
+// Styles not included in the mixins mentioned above will be included in the email-inline.less file.
+// Since email client support for CSS in <style> tags is limited, the majority of styles should be added as "inline"
+// styles. CSS will be applied to transactional email HTML via the Emogrifier library, which only has support for
+// certain CSS selectors (source: https://github.com/jjriv/emogrifier#supported-css-selectors):
+//
+// Supported selectors (examples in parenthesis):
+//     * ID (#logo)
+//     * class (.logo)
+//     * type (h1)
+//     * descendant (.logo > a)
+//     * child (.logo a)
+//     * adjacent (.logo + .second-example)
+//     * attribute presence (a[title])
+//     * attribute value (a[title="example"])
+//     * attribute only ([title="example"])
+//
+// Unsupported selectors (examples in parenthesis):
+//     * first-child (div:first-child)
+//     * last-child (div:last-child)
+//     * nth-child (div:nth-child(3n+1))
+//     * universal (*)
+//     * pseudo (a:hover, a:active, a:focus, span:before, span:after, etc)
+
+//
+//  Resets
+//  ---------------------------------------------
+
+// TODO: Populate with email-specific resets
+
+//
+//  Typography
+//  ---------------------------------------------
+
+// TODO: refactor this to more specific email-friendly declarations (e.g., use px rather than rem for font-size)
+.typography-all();
+
+body {
+    font-family: @font-family__base;
+    font-weight: normal;
+    text-align: left;
+}
+
+a {
+    color: @link__color;
+    text-decoration: @link__text-decoration;
+}
+
+.email-non-inline() {
+    a {
+        .link();
+    }
+
+    // Remove link color on iOS
+    .no-link a {
+        color: @text__color !important;
+        cursor: default !important;
+        text-decoration: none !important;
+    }
+}
+
+//
+//  Layout
+//  ---------------------------------------------
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: @email__background-color;
+}
+
+.wrapper {
+    margin: 0 auto;
+}
+
+.wrapper-inner {
+    width: 100%;
+    padding-top: 15px;
+}
+
+.main {
+    margin: 0 auto;
+    width: 600px;
+}
+
+.header {
+    background-color: @email-content__background-color;
+    padding: 15px 15px 0 15px;
+}
+
+.content {
+    background-color: @email-content__background-color;
+    padding: 15px;
+}
+
+.footer {
+    padding: 15px;
+}
+
+// Layout (Mobile)
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    html,
+    body {
+        width: 100% !important;
+        // Change background/foreground to same color
+        background-color: @email-content__background-color;
+    }
+
+    .main {
+        width: auto !important;
+        max-width: 100% !important;
+        min-width: 240px;
+    }
+
+    .content {
+        padding: 15px !important;
+    }
+}
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+// TODO: Add button styles
+
+//
+//  Messages
+//  ---------------------------------------------
+
+.message-info,
+.message-gift {
+    background-color: @message__background__email;
+    border: 1px solid @message__border-color__email;
+    margin: 15px 0;
+    width: 100%;
+}
+
+.message-info td,
+.message-gift td {
+    color: @message__color;
+    padding: 10px 15px;
+    margin: 0;
+}
+
+.message-info td a,
+.message-gift td a {
+    color: @message-link__color__email;
+}

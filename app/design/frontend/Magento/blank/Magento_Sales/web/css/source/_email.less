@@ -1,0 +1,25 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Sales Module Styles
+//  ---------------------------------------------
+
+.order-information {
+    width: 100%;
+}
+
+table.items {
+    .table();
+    .table-background-color();
+    .table-bordered(@_table_type: horizontal);
+    .css(border, @table__border-width @table__border-style @table__border-color);
+}
+
+.email-non-inline() {
+    table.items {
+        .table-overflow();
+    }
+}

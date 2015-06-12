@@ -3,68 +3,39 @@
  * See COPYING.txt for license details.
  */
 
+// See comments in lib/web/css/source/_email.less for explanation of email styles
+
 @import 'source/lib/_lib.less'; // Global lib
+@import 'source/_theme.less'; // Global variables override
 @import 'source/_variables.less'; // Local theme variables
+@import 'source/_email-variables.less'; // Email variables
 
 //
-//  Resets
+//  Styles for emails
 //  ---------------------------------------------
 
-// TODO: Populate with email-specific resets
+// Import this file by reference so that only the styles included in the .email-non-inline() and .media-width()
+// mixins will be output. All other styles will be output via the email-inline.less file.
+@import (reference) 'source/_email.less';
 
 //
-//  Typography
+//  Module-specific styles for emails
 //  ---------------------------------------------
 
-a {
-    .link(
-        @_link-color: @link__color__email,
-        @_link-text-decoration: @link__text-decoration__email,
-        @_link-color-visited: @link__visited__color__email,
-        @_link-text-decoration-visited: @link__visited__text-decoration__email,
-        @_link-color-hover: @link__hover__color__email,
-        @_link-text-decoration-hover: @link__hover__text-decoration__email,
-        @_link-color-active: @link__active__color__email,
-        @_link-text-decoration-active: @link__active__text-decoration__email
-    );
-}
-
-// Remove link color on iOS
-.no-link a {
-    color: @text__color__email !important;
-    cursor: default !important;
-    text-decoration: none !important;
-}
+// TODO: Add support for the (reference) directive so that module files can be included in the same way as above
+//@magento_import (reference) 'source/_email.less';
 
 //
-//  Layout (Mobile)
+//  Media queries collector
 //  ---------------------------------------------
 
-// TODO: Get this mixin to work
-//.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-@media screen and (max-width: @screen__s) {
-    html,
-    body {
-        width: 100% !important;
-        // Change background/foreground to same color
-        background-color: @email-content__background-color;
-    }
-
-    .main {
-        width: auto !important;
-        max-width: 100% !important;
-        min-width: 240px;
-    }
-
-    .content {
-        padding: 15px !important;
-    }
-}
+@import 'source/lib/_responsive.less';
+// It is impossible to apply media queries as inline styles, so all media queries must be output in this file
+@media-target: all;
 
 //
-//  Sales Module Styles (Mobile)
+//  Non-inline styles
 //  ---------------------------------------------
 
-table.items {
-    .table-overflow();
-}
+// Include all styles that have been indicated as non-inline styles
+.email-non-inline();
