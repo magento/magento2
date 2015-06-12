@@ -60,23 +60,10 @@
         .action.login {
             &:extend(.abs-button-l all);
         }
+        .legend {
+            margin-bottom: @indent__xs;
+        }
         .fieldset {
-            .legend {
-                margin-bottom: @indent__xs;
-                margin-left: 0;
-            }
-            .field:not(choice) {
-                margin-bottom: @indent__s;
-                .label {
-                    float: none;
-                    width: auto;
-                    margin-bottom: @indent__xs;
-                }
-                .control {
-                    float: none;
-                    width: auto;
-                }
-            }
             .css(padding, @block-sign-in__fieldset__padding);
             margin-bottom: 0;
             & + .fieldset {
