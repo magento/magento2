@@ -3,116 +3,21 @@
  * See COPYING.txt for license details.
  */
 
+// See comments in lib/web/css/source/_email.less for explanation of email styles
+
 @import 'source/lib/_lib.less'; // Global lib
+@import 'source/_theme.less'; // Global variables override
 @import 'source/_variables.less'; // Local theme variables
+@import 'source/_email-variables.less'; // Email variables
 
 //
-//  Resets
+//  Styles for emails
 //  ---------------------------------------------
 
-// TODO: Populate with email-specific resets
+@import 'source/_email.less'; // Email source
 
 //
-//  Typography
+//  Module-specific styles for emails
 //  ---------------------------------------------
 
-// TODO: refactor this to more specific email-friendly declarations (e.g., use px rather than rem for font-size)
-// TODO: Incorporate email-specific variables, such as @text__color__email
-.typography-all();
-
-body {
-    font-family: @font-family__email;
-    font-weight: normal;
-    text-align: left;
-}
-
-a {
-    color: @link__color__email;
-    text-decoration: @link__text-decoration__email;
-}
-
-//
-//  Layout
-//  ---------------------------------------------
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    background-color: @email__background-color;
-}
-
-.wrapper {
-    margin: 0 auto;
-}
-
-.wrapper-inner {
-    width: 100%;
-    padding-top: 15px;
-}
-
-.main {
-    margin: 0 auto;
-    width: 600px;
-}
-
-.header {
-    background-color: @email-content__background-color;
-    padding: 15px 15px 0 15px;
-}
-
-.content {
-    background-color: @email-content__background-color;
-    padding: 15px;
-}
-
-.footer {
-    padding: 15px;
-}
-
-//
-//  Buttons
-//  ---------------------------------------------
-
-// TODO: Add button styles
-
-//
-//  Messages
-//  ---------------------------------------------
-
-.message-info,
-.message-gift {
-    background-color: @message__background__email;
-    border: 1px solid @message__border-color__email;
-    margin: 15px 0;
-    width: 100%;
-}
-
-.message-info td,
-.message-gift td {
-    color: @message__color__email;
-    padding: 10px 15px;
-    margin: 0;
-}
-
-.message-info td a,
-.message-gift td a {
-    color: @message-link__color__email;
-}
-
-//
-//  Sales Module Styles
-//  ---------------------------------------------
-
-.order-information {
-    width: 100%;
-}
-
-table.items {
-    .table();
-    .table-background-color(
-        @_table-head-background-color: @table-head__background-color__email
-    );
-    .table-bordered(@_table_type: horizontal);
-    .css(border, @table__border-width @table__border-style @table__border-color);
-}
+//@magento_import 'source/_email.less';
