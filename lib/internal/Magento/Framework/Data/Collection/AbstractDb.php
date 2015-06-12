@@ -588,7 +588,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Returns a collection item that corresponds to the fetched row
      * and moves the internal data pointer ahead
      *
-     * @return  \Magento\Framework\Object|bool
+     * @return  \Magento\Framework\Model\AbstractModel|bool
      */
     public function fetchItem()
     {
