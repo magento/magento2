@@ -21,7 +21,7 @@ define(
             /**
              * Checkout for guest and registered customer.
              */
-            if (!customer.isLoggedIn) {
+            if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
                     quoteId: quote.getQuoteId()
                 });

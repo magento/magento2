@@ -27,7 +27,7 @@
         </data>
     </route>
     <!-- Managing payment guest information -->
-    <route url="/V1/carts/:cartId/payment-information" method="POST">
+    <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
         <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformation"/>
         <resources>
             <resource ref="anonymous" />
