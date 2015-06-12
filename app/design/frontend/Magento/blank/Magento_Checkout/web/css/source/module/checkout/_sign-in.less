@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 @block-sign-in__fieldset__padding: @indent__m;
-@block-sign-in__or-label__size: 3.6rem;
+@block-sign-in__or-label__size: 36px;
 
 //
 //  Common
@@ -17,8 +17,8 @@
 & when (@media-common = true) {
     .action-sign-in {
         float: right;
-        max-width: 50%;
         margin-top: 1.5rem;
+        max-width: 50%;
     }
     .block-sign-in-wrapper {
         .action.close {
@@ -35,11 +35,11 @@
                     color: @modal-action-close__hover__color;
                 }
             }
+            .css(right, @block-sign-in__fieldset__padding);
+            .css(top, @block-sign-in__fieldset__padding);
+            .css(z-index, @modal-slide__z-index + 1);
             pointer-events: auto;
             position: absolute;
-            right: @block-sign-in__fieldset__padding;
-            top: @block-sign-in__fieldset__padding;
-            z-index: @modal-slide__z-index + 1;
         }
     }
     .block-sign-in {
@@ -63,30 +63,30 @@
             margin-bottom: @indent__xs;
         }
         .fieldset {
-            padding: @block-sign-in__fieldset__padding;
+            .css(padding, @block-sign-in__fieldset__padding);
             margin-bottom: 0;
             & + .fieldset {
-                border-top: 1px solid @color-gray-light5; //@+var 1
+                border-top: 1px solid @color-gray-light5;
                 position: relative;
                 &::before {
-                    box-sizing: border-box;
-                    background: @color-white; //@+var
+                    .css(height, @block-sign-in__or-label__size);
+                    .css(line-height, @block-sign-in__or-label__size - .2rem);
+                    .css(margin, -(@block-sign-in__or-label__size/2 + .1rem) 0 0 -(@block-sign-in__or-label__size / 2));
+                    .css(min-width, @block-sign-in__or-label__size);
+                    background: @color-white;
                     border-radius: 50%;
-                    border: .1rem solid @color-gray-light5; //@+var 1
+                    border: .1rem solid @color-gray-light5;
+                    box-sizing: border-box;
                     color: @color-gray-light5;
                     content: attr(data-label);
                     display: inline-block;
                     left: 50%;
                     letter-spacing: normal;
-                    line-height: @block-sign-in__or-label__size - .2rem;
-                    margin: -(@block-sign-in__or-label__size/2 + .1rem) 0 0 -(@block-sign-in__or-label__size / 2) ;
-                    min-width: @block-sign-in__or-label__size;
-                    height: @block-sign-in__or-label__size;
                     padding: 0 .2rem;
                     position: absolute;
                     text-align: center;
-                    top: 0;
                     text-transform: uppercase;
+                    top: 0;
                 }
             }
         }
@@ -104,6 +104,7 @@
         width: 100%;
         &:before {
             .css(background-color, @modal-overlay__background-color);
+            .css(z-index, @overlay__z-index);
             bottom: 0;
             content: "";
             display: block;
@@ -111,7 +112,6 @@
             position: fixed;
             right: 0;
             top: 0;
-            z-index: @overlay__z-index;
         }
     }
     .block-sign-in-wrapper {
@@ -124,20 +124,20 @@
             }
         }
         .ui-dialog {
+            .css(left, @modal-slide__first__indent-left);
+            .css(z-index, @modal-slide__z-index);
             bottom: 0;
             display: block !important;
-            left: @modal-slide__first__indent-left;
             overflow: auto;
             pointer-events: none;
             position: fixed;
             right: 0;
             top: 0;
             visibility: hidden;
-            z-index: @modal-slide__z-index;
         }
     }
     .block-sign-in {
-        background: #f4f4f4; //@+var
+        background: @color-gray-light01;
         margin-bottom: 0;
         min-height: 100%;
         pointer-events: auto;
@@ -160,8 +160,9 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-sign-in-wrapper {
         .ui-dialog {
-            background: #fff;
-            border: 1px solid #aeaeae;
+            .css(width, ~"calc(@{checkout-summary__width} - @{indent__base}/2 - 2px)");
+            background: @color-white;
+            border: 1px solid @color-gray-light3;
             box-sizing: border-box;
             display: block !important;
             margin-top: 4rem;
@@ -171,14 +172,13 @@
             transform: scale(1,0);
             transition: visibility 0s linear .1s, transform .1s linear 0s;
             visibility: hidden;
-            width: ~"calc(@{checkout-summary__width} - @{indent__base}/2)";
         }
         &._active {
             .ui-dialog {
-                visibility: visible;
+                .css(z-index, @dropdown-list__z-index);
                 transform: scale(1,1);
                 transition: visibility 0s linear ,transform .1s linear 0s;
-                z-index: @dropdown-list__z-index;
+                visibility: visible;
             }
         }
     }
@@ -204,17 +204,17 @@
         }
         .actions-toolbar {
             & > .primary {
-                float: right;
                 display: inline;
+                float: right;
                 margin-right: 0;
                 .action {
                     margin-right: 0;
                 }
             }
             & > .secondary {
-                padding-top: 1rem;
-                margin-right: 2rem;
                 float: left;
+                margin-right: 2rem;
+                padding-top: 1rem;
             }
         }
     }
