@@ -12,9 +12,10 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Customer/js/action/check-email-availability',
         'Magento_Customer/js/action/login',
+        'Magento_Checkout/js/model/quote',
         'mage/validation'
     ],
-    function ($, Component, ko, customer, checkEmailAvailability, login) {
+    function ($, Component, ko, customer, checkEmailAvailability, login, quote) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -42,6 +43,7 @@ define(
                 this.emailCheckTimeout = setTimeout(function () {
                     if (self.validateEmail()) {
                         self.checkEmailAvailability();
+                        quote.guestEmail = self.email();
                     } else {
                         self.isPasswordVisible(false);
                     }
