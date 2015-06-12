@@ -5,8 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Store\Model\Store;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
+use Magento\Catalog\Model\Product as CatalogProduct;
 
 /**
  * Export Advanced Pricing
@@ -18,7 +20,6 @@ use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
  */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
-
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
@@ -34,21 +35,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_entityTypeCode;
 
-    const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
-
-    const TABLE_GROUPED_PRICE = 'catalog_product_entity_group_price';
-
-    const TIER_PRICE_WEBSITE = 'tier_price_website';
-
-    const GROUP_PRICE_WEBSITE = 'group_price_website';
-
-    const TIER_PRICE_CUSTOMER_GROUP = 'tier_price_customer_group';
-
-    const GROUP_PRICE_CUSTOMER_GROUP = 'group_price_customer_group';
-
-    const CATALOG_PRODUCT = 'catalog_product';
-
-    const ADVANCED_PRICING = 'advanced_pricing';
+    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -120,7 +107,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected function initTypeModels()
     {
-        $productTypes = $this->_exportConfig->getEntityTypes(self::CATALOG_PRODUCT);
+        $productTypes = $this->_exportConfig->getEntityTypes(CatalogProduct::ENTITY);
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -217,21 +204,21 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         if ($exportData) {
             foreach ($exportData as $key => $row) {
-                if (isset($exportData[$key][self::TIER_PRICE_WEBSITE])) {
-                    $exportData[$key][self::TIER_PRICE_WEBSITE] =
-                        $this->_getWebsiteCode($exportData[$key][self::TIER_PRICE_WEBSITE]);
+                if (isset($exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE])) {
+                    $exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE] =
+                        $this->_getWebsiteCode($exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE]);
                 }
-                if (isset($exportData[$key][self::GROUP_PRICE_WEBSITE])) {
-                    $exportData[$key][self::GROUP_PRICE_WEBSITE] =
-                        $this->_getWebsiteCode($exportData[$key][self::GROUP_PRICE_WEBSITE]);
+                if (isset($exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE])) {
+                    $exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE] =
+                        $this->_getWebsiteCode($exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE]);
                 }
-                if (isset($exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP])) {
-                    $exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP] =
-                        $this->_getCustomerGroupById((int)$exportData[$key][self::TIER_PRICE_CUSTOMER_GROUP]);
+                if (isset($exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP])) {
+                    $exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP] =
+                        $this->_getCustomerGroupById((int)$exportData[$key][ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP]);
                 }
-                if (isset($exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP])) {
-                    $exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP] =
-                        $this->_getCustomerGroupById((int)$exportData[$key][self::GROUP_PRICE_CUSTOMER_GROUP]);
+                if (isset($exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])) {
+                    $exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] =
+                        $this->_getCustomerGroupById((int)$exportData[$key][ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]);
                 }
             }
         }
@@ -249,23 +236,23 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 $cachedSkuToDelete = $this->_connection->fetchAll($this->_connection->select()
                     ->from(['cpe' => $this->_connection->getTableName('catalog_product_entity')],
                         [
-                            'sku' => 'cpe.sku',
-                            'tier_price_website' => 'cpetp.website_id',
-                            'tier_price_customer_group' => 'cpetp.customer_group_id',
-                            'tier_price_qty' => 'cpetp.qty',
-                            'tier_price' => 'cpetp.value',
-                            'group_price_website' => 'cpegp.website_id',
-                            'group_price_customer_group' => 'cpegp.customer_group_id',
-                            'group_price' => 'cpegp.value'
+                            ImportAdvancedPricing::COL_SKU => 'cpe.sku',
+                            ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => 'cpetp.website_id',
+                            ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'cpetp.customer_group_id',
+                            ImportAdvancedPricing::COL_TIER_PRICE_QTY => 'cpetp.qty',
+                            ImportAdvancedPricing::COL_TIER_PRICE => 'cpetp.value',
+                            ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'cpegp.website_id',
+                            ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'cpegp.customer_group_id',
+                            ImportAdvancedPricing::COL_GROUP_PRICE => 'cpegp.value'
                         ]
                     )
                     ->joinInner(
-                        ['cpegp' => $this->_connection->getTableName(self::TABLE_GROUPED_PRICE)],
+                        ['cpegp' => $this->_connection->getTableName(ImportAdvancedPricing::TABLE_GROUPED_PRICE)],
                         'cpegp.entity_id = cpe.entity_id',
                         []
                     )
                     ->joinInner(
-                        ['cpetp' => $this->_connection->getTableName(self::TABLE_TIER_PRICE)],
+                        ['cpetp' => $this->_connection->getTableName(ImportAdvancedPricing::TABLE_TIER_PRICE)],
                         'cpetp.entity_id = cpe.entity_id',
                         []
                     )
@@ -304,9 +291,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     public function getEntityTypeCode()
     {
         if (!$this->_entityTypeCode) {
-            $this->_entityTypeCode = self::CATALOG_PRODUCT;
+            $this->_entityTypeCode = CatalogProduct::ENTITY;
         } else {
-            $this->_entityTypeCode = self::ADVANCED_PRICING;
+            $this->_entityTypeCode = self::ENTITY_ADVANCED_PRICING;
         }
         return $this->_entityTypeCode;
     }
