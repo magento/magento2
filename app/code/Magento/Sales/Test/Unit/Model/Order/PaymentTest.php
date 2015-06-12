@@ -182,14 +182,14 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->transactionFactory = $this->getMock(
             'Magento\Sales\Model\Order\Payment\TransactionFactory',
-            ['create'],
+            [],
             [],
             '',
             false
         );
         $this->transactionCollectionFactory = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
-            ['create'],
+            [],
             [],
             '',
             false
@@ -586,6 +586,26 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test offline IPN calls
+     */
+    public function testDenyPaymentIpn()
+    {
+        $isOnline = false;
+        $message = sprintf('Denied the payment online Transaction ID: "%s"', $this->transactionId);
+
+        $this->payment->setTransactionId($this->transactionId);
+        $this->payment->setNotificationResult(true);
+
+        $this->mockInvoice($this->transactionId);
+        $this->mockResultFalseMethods($message);
+
+        $this->helperMock->expects($this->never())
+            ->method('getMethodInstance');
+
+        $this->payment->deny($isOnline);
+    }
+
+    /**
      * @dataProvider acceptPaymentFalseProvider
      * @param bool $isFraudDetected
      * @param bool $status
@@ -658,6 +678,44 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test offline IPN call, negative
+     */
+    public function testDenyPaymentIpnNegativeStateReview()
+    {
+        $isOnline = false;
+        $message = sprintf('Registered notification about denied payment. Transaction ID: "%s"', $this->transactionId);
+
+        $orderState = Order::STATE_PAYMENT_REVIEW;
+
+        $this->payment->setTransactionId($this->transactionId);
+        $this->payment->setNotificationResult(false);
+
+        $this->orderMock->expects($this->once())
+            ->method('getState')
+            ->willReturn($orderState);
+
+        $this->orderMock->expects($this->never())
+            ->method('setState');
+        $this->orderMock->expects($this->once())
+            ->method('addStatusHistoryComment')
+            ->with($message);
+
+        $this->helperMock->expects($this->never())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+
+        $this->paymentMethodMock->expects($this->never())
+            ->method('setStore')
+            ->will($this->returnSelf());
+
+        $this->paymentMethodMock->expects($this->never())
+            ->method('denyPayment')
+            ->with($this->payment);
+
+        $this->payment->deny($isOnline);
+    }
+
+    /**
      * @param int $transactionId
      * @param int $countCall
      */
@@ -706,6 +764,41 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment, $this->transactionId);
 
         $this->payment->update();
+        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
+    }
+
+    /**
+     * Test update calls from IPN controller
+     */
+    public function testUpdateOnlineTransactionApprovedIpn()
+    {
+        $isOnline = false;
+        $message = sprintf('Registered update about approved payment. Transaction ID: "%s"', $this->transactionId);
+
+        $storeId = 50;
+        $baseGrandTotal = 299.99;
+
+        $this->payment->setTransactionId($this->transactionId);
+        $this->payment->setData('is_transaction_approved', true);
+
+        $this->mockInvoice($this->transactionId);
+        $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
+
+        $this->orderMock->expects($this->never())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->helperMock->expects($this->never())
+            ->method('getMethodInstance')
+            ->will($this->returnValue($this->paymentMethodMock));
+        $this->paymentMethodMock->expects($this->never())
+            ->method('setStore')
+            ->with($storeId)
+            ->willReturn($this->paymentMethodMock);
+        $this->paymentMethodMock->expects($this->never())
+            ->method('fetchTransactionInfo')
+            ->with($this->payment, $this->transactionId);
+
+        $this->payment->update($isOnline);
         $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
@@ -1152,6 +1245,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'setTxnType',
                 'isFailsafe',
                 'getTxnId',
+                'getHtmlTxnId',
                 'getTxnType'
             ],
             [],
@@ -1192,6 +1286,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $newTransaction->expects($this->once())->method('setTxnId')->with(
             $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
         )->willReturn($newTransaction);
+        $newTransaction->expects($this->atLeastOnce())->method('getHtmlTxnId')->willReturn(
+            $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+        );
         $newTransaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn(
             $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
         );
