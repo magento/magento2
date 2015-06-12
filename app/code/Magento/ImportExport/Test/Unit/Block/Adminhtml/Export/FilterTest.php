@@ -171,7 +171,12 @@ class Filter extends \PHPUnit_Framework_TestCase
         );
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
         $this->resource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
-        $this->resourceCollection = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
+        $this->resourceCollection = $this->getMockForAbstractClass(
+            'Magento\Framework\Data\Collection\AbstractDb',
+            [],
+            '',
+            false
+        );
         $this->context = $this->getMock(
             'Magento\Backend\Block\Template\Context',
             ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'],
