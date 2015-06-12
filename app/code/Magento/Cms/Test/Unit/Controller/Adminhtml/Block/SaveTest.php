@@ -79,21 +79,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
-            [
-                'getTitle',
-                'getRequest',
-                'getObjectManager',
-                'getEventManager',
-                'getResponse',
-                'getMessageManager',
-                'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
 
         $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
@@ -132,12 +118,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['getParam', 'getPostValue']
         );
 
-        $this->blockMock = $this->getMockBuilder('Magento\Cms\Model\Block')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                ['load', 'getId', 'setData', 'save']
-            )
-            ->getMock();
+        $this->blockMock = $this->getMockBuilder('Magento\Cms\Model\Block')->disableOriginalConstructor()->getMock();
 
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
 
@@ -191,7 +172,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;'
         ];
 
-        $this->dataProcessorMock->expects($this->any())->method('filter')->willReturn($filteredPostData);
+        $this->dataProcessorMock->expects($this->any())
+            ->method('filter')
+            ->with($postData)
+            ->willReturn($filteredPostData);
 
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
         $this->requestMock->expects($this->atLeastOnce())
@@ -232,16 +216,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
-
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
-
-        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionNoId()
@@ -274,7 +256,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveAndContinue()
@@ -321,7 +303,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['block_id' => $this->blockId])
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
     public function testSaveActionThrowsException()
@@ -370,6 +352,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['block_id' => $this->blockId])
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->saveController->execute());
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 }
