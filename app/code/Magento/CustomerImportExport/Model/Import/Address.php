@@ -517,8 +517,8 @@ class Address extends AbstractCustomer
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
-                $attribute = $this->_getCustomerEntity()->getAttribute($attributeCode);
-                $defaults[$attribute->getBackend()->getTable()][$customerId][$attribute->getId()] = $addressId;
+                $table = $this->_getCustomerEntity()->getResource()->getTable('customer_entity');
+                $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
 
@@ -586,21 +586,15 @@ class Address extends AbstractCustomer
      */
     protected function _saveCustomerDefaults(array $defaults)
     {
-        /** @var $entity \Magento\Customer\Model\Customer */
-        $entity = $this->_customerFactory->create();
-
         foreach ($defaults as $tableName => $data) {
-            $tableData = [];
-            foreach ($data as $customerId => $attributeData) {
-                foreach ($attributeData as $attributeId => $value) {
-                    $tableData[] = [
-                        'entity_id' => $customerId,
-                        'attribute_id' => $attributeId,
-                        'value' => $value,
-                    ];
-                }
+            foreach ($data as $customerId => $defaultsData) {
+                $data = array_merge(
+                    ['entity_id' => $customerId],
+                    $defaultsData
+                );
+                $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-            $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
+
         }
         return $this;
     }

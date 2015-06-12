@@ -182,21 +182,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->transactionFactory = $this->getMock(
             'Magento\Sales\Model\Order\Payment\TransactionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
         );
         $this->transactionCollectionFactory = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
         );
         $this->serviceOrderFactory = $this->getMock(
             'Magento\Sales\Model\Service\OrderFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -241,7 +241,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         // check fix for partial refunds in Payflow Pro
         $this->paymentMethodMock->expects($this->once())
             ->method('canVoid')
-            ->with($this->payment)
             ->willReturn(false);
 
         $this->assertEquals($this->payment, $this->payment->cancel());

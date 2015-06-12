@@ -6,10 +6,8 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -36,20 +34,6 @@ class DeleteCustomerAddressTest extends Injectable
     /* end tags */
 
     /**
-     * Cms index page.
-     *
-     * @var CmsIndex
-     */
-    protected $cmsIndex;
-
-    /**
-     * Customer login page.
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
      * Customer index page.
      *
      * @var CustomerAccountIndex
@@ -59,18 +43,12 @@ class DeleteCustomerAddressTest extends Injectable
     /**
      * Prepare pages for test.
      *
-     * @param CustomerAccountLogin $customerAccountLogin
-     * @param CmsIndex $cmsIndex
      * @param CustomerAccountIndex $customerAccountIndex
      * @return void
      */
     public function __inject(
-        CustomerAccountLogin $customerAccountLogin,
-        CmsIndex $cmsIndex,
         CustomerAccountIndex $customerAccountIndex
     ) {
-        $this->cmsIndex = $cmsIndex;
-        $this->customerAccountLogin = $customerAccountLogin;
         $this->customerAccountIndex = $customerAccountIndex;
     }
 
@@ -82,15 +60,15 @@ class DeleteCustomerAddressTest extends Injectable
      */
     public function test(Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34634');
         // Precondition:
         $customer->persist();
         $addressToDelete = $customer->getDataFieldConfig('address')['source']->getAddresses()[1];
 
         // Steps:
-        $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink("Log In");
-        $this->customerAccountLogin->getLoginBlock()->login($customer);
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
         $this->customerAccountIndex->getAccountMenuBlock()->openMenuItem('Address Book');
         $this->customerAccountIndex->getAdditionalAddressBlock()->deleteAdditionalAddress($addressToDelete);
 

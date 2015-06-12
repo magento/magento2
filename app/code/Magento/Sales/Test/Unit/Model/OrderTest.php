@@ -482,8 +482,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 $this->any()
             )->method(
                 'canVoid'
-            )->with(
-                new \PHPUnit_Framework_Constraint_IsIdentical($payment)
             )->will(
                 $this->returnValue($expected)
             );

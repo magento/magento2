@@ -49,7 +49,6 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
      */
     public function searchAndUnassign(array $filter)
     {
-        $this->openFilterBlock();
         $this->search($filter);
         $selectItem = $this->_rootElement->find($this->unassignLink);
         if ($selectItem->isVisible()) {
