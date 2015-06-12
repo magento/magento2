@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
+
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**
@@ -26,6 +27,7 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setPostValue('form_key', $formKey->getFormKey());
         $this->getRequest()->setPostValue('entity', 'catalog_product');
         $this->getRequest()->setPostValue('behavior', 'replace');
+        $this->getRequest()->setPostValue('_import_field_separator', ',');
 
 
         $name = 'catalog_product.csv';
