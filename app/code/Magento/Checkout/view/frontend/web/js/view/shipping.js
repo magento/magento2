@@ -20,6 +20,7 @@ define(
         'Magento_Checkout/js/action/select-shipping-method',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
+        'Magento_Checkout/js/model/new-customer-address',
         'mage/translate'
     ],
     function(
@@ -37,7 +38,8 @@ define(
         shippingService,
         selectShippingMethodAction,
         rateRegistry,
-        setShippingInformation
+        setShippingInformation,
+        newAddress
     ) {
         'use strict';
 
@@ -48,6 +50,14 @@ define(
         }
         selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
         shippingService.setShippingRates(rates);
+
+
+        if (addressList().length == 0) {
+            var address = new newAddress({});
+            rateRegistry.set(address.getCacheKey(), rates);
+            shippingService.setShippingRates(rates);
+            selectShippingAddress(address);
+        }
 
         return Component.extend({
             defaults: {
