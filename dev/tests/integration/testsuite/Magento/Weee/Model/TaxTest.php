@@ -36,7 +36,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getAttributeCodesByFrontendType')->will(
             $this->returnValue(['price'])
         );
-        $attributeFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', [], [], '', false);
+        $attributeFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', ['create'], [], '', false);
         $attributeFactory->expects($this->any())->method('create')->will($this->returnValue($attribute));
         $this->_model = $objectManager->create(
             'Magento\Weee\Model\Tax',

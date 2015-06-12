@@ -74,11 +74,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'not_delete' => '72701',  // not deleted address
     ];
 
+    /** @var \Magento\Customer\Model\Resource\Customer */
+    protected $customerResource;
+
     /**
      * Init new instance of address entity adapter
      */
     protected function setUp()
     {
+        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
+        $this->customerResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Model\Resource\Customer'
+        );
         $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             $this->_testClassName
         );
@@ -335,14 +342,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $customerId = $addressCustomer->getId();
 
         // set customer defaults
-        $defaults = [];
-        foreach (Address::getDefaultAddressAttributeMapping() as $attributeCode) {
-            /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
-            $attribute = $addressCustomer->getAttribute($attributeCode);
-            $attributeTable = $attribute->getBackend()->getTable();
-            $attributeId = $attribute->getId();
-            $defaults[$attributeTable][$customerId][$attributeId] = $addressId;
-        }
+        $defaults = [
+            $this->customerResource->getTable('customer_entity') => [
+                $customerId => ['default_billing' => $addressId, 'default_shipping' => $addressId],
+            ],
+        ];
 
         // invoke _saveCustomerDefaults
         $saveDefaults = new \ReflectionMethod($this->_testClassName, '_saveCustomerDefaults');

@@ -23,12 +23,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCurrentBase64Url()
     {
-        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdA,,', $this->_helper->getCurrentBase64Url());
+        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MQ,,', $this->_helper->getCurrentBase64Url());
     }
 
     public function testGetEncodedUrl()
     {
-        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdA,,', $this->_helper->getEncodedUrl());
+        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MQ,,', $this->_helper->getEncodedUrl());
         $this->assertEquals('aHR0cDovL2V4YW1wbGUuY29tLw,,', $this->_helper->getEncodedUrl('http://example.com/'));
     }
 }

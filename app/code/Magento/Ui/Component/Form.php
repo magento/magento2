@@ -23,4 +23,27 @@ class Form extends AbstractComponent
     {
         return static::NAME;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataSourceData()
+    {
+        $dataSource = [];
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
+
+        if ($id) {
+            $this->getContext()->getDataProvider()
+                ->addFilter($this->getContext()->getDataProvider()->getPrimaryFieldName(), $id);
+        }
+        $data = $this->getContext()->getDataProvider()->getData();
+
+        if (isset($data[$id])) {
+            $dataSource = [
+                'data' => $data[$id]
+            ];
+        }
+
+        return $dataSource;
+    }
 }

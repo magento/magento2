@@ -35,6 +35,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
     {
         $stockRegistryMock = $this->getMock('\Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->productExtensionFactoryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

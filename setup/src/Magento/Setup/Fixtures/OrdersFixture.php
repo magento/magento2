@@ -194,7 +194,6 @@ class OrdersFixture extends Fixture
             $zip = '11111';
             $phone = '911';
             $dateStart = new \DateTime();
-            $dateStart->setTimezone(new \DateTimeZone('Etc/UTC'));
             $time = $dateStart->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
 
             $simpleProductIdLen[0] = strlen($simpleProductId[0]($entityId));
@@ -268,7 +267,7 @@ class OrdersFixture extends Fixture
             $queries[] = "INSERT INTO `{$salesOrderStatusHistoryTableName}` (`entity_id`, `parent_id`, `is_customer_notified`, `is_visible_on_front`, `comment`, `status`, `created_at`, `entity_name`) VALUES ({$salesOrderStatusHistoryId}, {$salesOrderId}, 1, 0, NULL, 'pending', '{$time}', 'order');";
 
             // @codingStandardsIgnoreEnd
-            foreach($queries as $query) {
+            foreach ($queries as $query) {
                 $writeAdapter->query($query);
             }
 

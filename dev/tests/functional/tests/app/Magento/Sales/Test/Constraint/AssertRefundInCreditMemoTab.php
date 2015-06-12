@@ -36,7 +36,7 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         $salesOrderView->getOrderForm()->openTab('creditmemos');
         /** @var Grid $grid */
-        $grid = $salesOrderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock();
+        $grid = $salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock();
         $amount = $order->getPrice();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [

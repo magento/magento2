@@ -31,7 +31,7 @@ class AssertBestsellersOnDashboard extends AbstractConstraint
         $dashboard->open();
         $dashboard->getStoreStatsBlock()->refreshData();
         /** @var \Magento\Backend\Test\Block\Dashboard\Tab\Products\Ordered $bestsellersGrid */
-        $bestsellersGrid = $dashboard->getStoreStatsBlock()->getTabElement('bestsellers')->getBestsellersGrid();
+        $bestsellersGrid = $dashboard->getStoreStatsBlock()->getTab('bestsellers')->getBestsellersGrid();
         $products = $order->getEntityId()['products'];
         foreach ($products as $product) {
             \PHPUnit_Framework_Assert::assertTrue(

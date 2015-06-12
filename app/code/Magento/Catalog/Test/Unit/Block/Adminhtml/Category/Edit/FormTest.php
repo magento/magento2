@@ -82,7 +82,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
         $this->categoryFactoryMock = $this->getMock(
             'Magento\Catalog\Model\CategoryFactory',
-            [],
+            ['create'],
             [],
             '',
             false

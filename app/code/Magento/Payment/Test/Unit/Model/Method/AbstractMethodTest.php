@@ -35,6 +35,11 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
@@ -50,20 +55,33 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
-
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
+        $this->loggerMock = $this->getMockBuilder('\Magento\Payment\Model\Method\Logger')
+            ->setConstructorArgs([$this->getMockForAbstractClass('Psr\Log\LoggerInterface')])
+            ->setMethods(['debug'])
+            ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->payment = $helper->getObject(
             'Magento\Payment\Test\Unit\Model\Method\AbstractMethod\Stub',
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'context' => $contextMock
+                'context' => $contextMock,
+                'logger' => $this->loggerMock
             ]
         );
+    }
+
+    public function testDebugData()
+    {
+        $debugData = ['masked' => '123'];
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with($this->equalTo($debugData));
+
+        $this->payment->debugData($debugData);
     }
 
     /**
