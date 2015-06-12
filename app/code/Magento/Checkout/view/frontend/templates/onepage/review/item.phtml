@@ -48,7 +48,7 @@ $_item = $block->getItem();
             </span>
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
     <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal'));?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
             <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax'));?>">
