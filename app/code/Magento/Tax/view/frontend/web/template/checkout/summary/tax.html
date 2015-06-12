@@ -6,18 +6,18 @@
 -->
 <!-- ko if: ifShowValue() && !ifShowDetails() -->
 <tr class="totals-tax">
-    <th data-bind="text: getTitle()" colspan="3" class="mark" scope="row">
+    <th data-bind="text: $t(title)" colspan="3" class="mark" scope="row">
     </th>
-    <td data-bind="attr: {'data-th': $t(getTitle()) }" class="amount">
+    <td data-bind="attr: {'data-th': $t(title) }" class="amount">
         <span class="price" data-bind="text: $t(getValue())"></span>
     </td>
 </tr>
 <!-- /ko -->
 <!-- ko if: ifShowValue() && ifShowDetails() -->
     <tr class="totals-tax-summary">
-        <th data-bind="text: getTitle()" class="mark" scope="row" colspan="3">
+        <th data-bind="text: $t(title)" class="mark" scope="row" colspan="3">
         </th>
-        <td data-bind="attr: {'data-th': $t(getTitle()) }" class="amount">
+        <td data-bind="attr: {'data-th': $t(title) }" class="amount">
             <span class="price" data-bind="text: $t(getValue())"></span>
         </td>
     </tr>

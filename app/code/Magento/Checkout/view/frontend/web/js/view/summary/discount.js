@@ -15,6 +15,9 @@ define(
                 template: 'Magento_Checkout/summary/discount'
             },
             totals: quote.getTotals(),
+            isDisplayed: function() {
+                return this.getTotalsMode() != 'initial' && this.getPureValue() != 0;
+            },
             getCouponCode: function() {
                 if (!this.totals()) {
                     return null;

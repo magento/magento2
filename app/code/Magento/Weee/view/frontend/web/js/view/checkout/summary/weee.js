@@ -18,9 +18,13 @@ define(
                 template: 'Magento_Weee/checkout/summary/weee'
             },
             isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
-            totals: totals.totals(),
+            totals: totals.totals,
             getValue: function() {
-                return this.getFormattedPrice(this.totals.weee_tax_applied_amount);
+                return this.getFormattedPrice(this.totals()['weee_tax_applied_amount']);
+            },
+            isDisplayed: function() {
+                return this.getTotalsMode() != 'initial' && this.isIncludedInSubtotal &&
+                    this.totals()['weee_tax_applied_amount'] > 0;
             }
         });
     }

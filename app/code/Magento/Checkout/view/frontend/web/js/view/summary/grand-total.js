@@ -12,7 +12,10 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/summary/subtotal'
+                template: 'Magento_Checkout/summary/grand-total'
+            },
+            isDisplayed: function() {
+                return this.getTotalsMode() != 'initial';
             },
             getPureValue: function() {
                 var totals = quote.getTotals()();

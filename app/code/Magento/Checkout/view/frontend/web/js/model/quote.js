@@ -14,7 +14,9 @@ define(
         var basePriceFormat = window.checkoutConfig.basePriceFormat;
         var priceFormat = window.checkoutConfig.priceFormat;
         var storeCode = window.checkoutConfig.storeCode;
-        var totals = ko.observable(window.checkoutConfig.totalsData);
+        var totalsData = window.checkoutConfig.totalsData;
+        totalsData['mode'] = ko.observable('initial');
+        var totals = ko.observable(totalsData);
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
         var formattedBillingAddress = ko.observable(null);
@@ -43,7 +45,7 @@ define(
                 return window.checkoutConfig.quoteItemData;
             },
             getTotals: function() {
-                return totals
+                return totals;
             },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {
