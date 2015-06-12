@@ -45,10 +45,11 @@ class ConfigurableAttributeHandler
     }
 
     /**
-     * @param $attribute
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return bool
      */
-    public function isAttributeApplicable($attribute) {
+    public function isAttributeApplicable($attribute)
+    {
         $types = [
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
             \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,

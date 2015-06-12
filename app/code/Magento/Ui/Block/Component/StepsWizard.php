@@ -7,6 +7,11 @@ namespace Magento\Ui\Block\Component;
 
 class StepsWizard extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Wizard step template
+     *
+     * @var string
+     */
     protected $_template = 'Magento_Ui::stepswizard.phtml';
 
     /**

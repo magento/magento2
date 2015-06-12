@@ -13,9 +13,10 @@
     </div>
     <div data-bind="foreach: attributes, sortableList: attributes">
         <div style="padding-bottom: 30px;">
-            <input style="float: left; border: 0px" data-bind="value: label" />
+            <input style="float: left; border: 0px" data-bind="value: label"/>
             <div style="float: right; font-size: smaller;">
-                <a style="text-decoration: underline;" href="#" data-bind="click: $parent.removeAttribute.bind($parent)" >
+                <a style="text-decoration: underline;" href="#"
+                   data-bind="click: $parent.removeAttribute.bind($parent)">
                     <?= __('Remove Attribute') ?>
                 </a>
                 <span style="cursor: pointer; padding: 10px;" data-bind="click: $parent.toggleOpened">

@@ -7,7 +7,9 @@
 ?>
 <div data-role="product-variations-generator">
     <!-- Configurable Attributes list -->
-    <div id="configurable-attributes-container" data-role="configurable-attributes-container" data-mage-init='{"variationsAttributes":{}}'>
+    <div id="configurable-attributes-container"
+         data-role="configurable-attributes-container"
+         data-mage-init='{"variationsAttributes":{}}'>
         <?php echo $block->getChildHtml('template'); ?>
         <?php
         foreach ($block->getAttributes() as $attribute) {
