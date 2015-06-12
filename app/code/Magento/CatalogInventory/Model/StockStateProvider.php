@@ -303,7 +303,7 @@ class StockStateProvider implements StockStateProviderInterface
             return $result;
         }
 
-        $qtyIncrements = $stockItem->getQtyIncrements();
+        $qtyIncrements = $stockItem->getQtyIncrements() * 1;
 
         if ($qtyIncrements && $this->mathDivision->getExactDivision($qty, $qtyIncrements) != 0) {
             $result->setHasError(true)
@@ -312,10 +312,14 @@ class StockStateProvider implements StockStateProviderInterface
                 ->setQuoteMessageIndex('qty');
             if ($stockItem->getIsChildItem()) {
                 $result->setMessage(
-                    __('You can buy %1 only in increments of %2.', $stockItem->getProductName(), $qtyIncrements * 1)
+                    __(
+                        'You can buy %1 only in quantities of %2 at a time.',
+                        $stockItem->getProductName(),
+                        $qtyIncrements
+                    )
                 );
             } else {
-                $result->setMessage(__('You can buy this product only in increments of %1.', $qtyIncrements * 1));
+                $result->setMessage(__('You can buy this product only in quantities of %1 at a time.', $qtyIncrements));
             }
         }
         return $result;
