@@ -5,8 +5,8 @@
 define([
     "uiComponent",
     "jquery",
-    "uiRegistry"
-], function (Component, $, registry) {
+    "underscore"
+], function (Component, $, _) {
     "use strict";
 
     var initNewAttributeListener = function (provider) {
@@ -15,15 +15,39 @@ define([
         });
     };
     return Component.extend({
+        defaults: {
+            modules: {
+                multiselect: '${ $.multiselectName }',
+                attributeProvider: '${ $.providerName }'
+            },
+            listens: {
+                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels'
+            }
+        },
         initialize: function () {
             this._super();
-            this.multiselect = registry.async(this.multiselectName);
-            initNewAttributeListener(registry.async(this.providerName));
+            this.selected = [];
+
+            initNewAttributeListener(this.attributeProvider);
+        },
+        initObservable: function () {
+            this._super().observe(['selectedAttributes']);
+            return this;
         },
         render: function (wizard) {
         },
+        doSelectedAttributesLabels: function(selected) {
+            this.selected = selected;
+            var labels = [];
+            _.each(this.multiselect().rows(), function(attribute) {
+                if (_.contains(selected, attribute.attribute_id)) {
+                    labels.push(attribute.frontend_label);
+                }
+            });
+            this.selectedAttributes(labels.join(', '))
+        },
         force: function (wizard) {
-            wizard.data.attributes = this.multiselect().selected();
+            wizard.data.attributes = this.selected;
 
             if (!wizard.data.attributes || wizard.data.attributes.length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
