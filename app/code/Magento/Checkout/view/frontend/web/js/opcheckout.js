@@ -156,7 +156,7 @@ define([
 
                     this.element.find(this.options.checkout.registerCustomerPasswordSelector).show();
                 } else {
-                    alert($.mage.__('Please choose to register or to checkout as a guest.'));
+                    alert($.mage.__('You can create an account or check out as a guest.'));
 
                     return false;
                 }
@@ -427,7 +427,7 @@ define([
             var methods = this.element.find('[name="shipping_method"]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We are not able to ship to the selected shipping address. Please choose another address or edit the current address.'));
+                alert($.mage.__('We can\'t ship to this address. Please enter another address or edit this one.'));
 
                 return false;
             }
@@ -562,7 +562,7 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please specify payment method.'));
+            alert($.mage.__('Please choose a payment method.'));
 
             return false;
         },

@@ -105,7 +105,6 @@ class Environment extends AbstractActionController
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
 
         $settings = array_merge(
-            $this->checkRawPost(),
             $this->checkXDebugNestedLevel()
         );
 
@@ -185,40 +184,6 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set
-     *
-     * @return array
-     */
-    private function checkRawPost()
-    {
-        $data = [];
-        $error = false;
-        $iniSetting = ini_get('always_populate_raw_post_data');
-
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && (int)$iniSetting > -1) {
-            $error = true;
-        }
-
-        $message = sprintf(
-            'Your PHP Version is %s, but always_populate_raw_post_data = %d.
-            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-            Please open your php.ini file and set always_populate_raw_post_data to -1.
-            If you need more help please call your hosting provider.
-            ',
-            PHP_VERSION,
-            ini_get('always_populate_raw_post_data')
-        );
-
-        $data['rawpost'] = [
-            'message' => $message,
-            'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
-            'error' => $error
-        ];
-
-        return $data;
-    }
-
-    /**
      * Checks if xdebug.max_nesting_level is set 200 or more
      * @return array
      */
@@ -226,7 +191,7 @@ class Environment extends AbstractActionController
     {
         $data = [];
         $error = false;
-
+    
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
 
