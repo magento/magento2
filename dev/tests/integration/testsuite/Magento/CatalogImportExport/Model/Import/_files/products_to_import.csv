@@ -1,5 +1,5 @@
-sku,_store,name,price
+sku,store_view_code,name,price
 simple1,,"simple 1",25
-,German,"simple 1 German",
+simple1,German,"simple 1 German",
 simple2,,"simple 2",34
 simple3,,"simple 3",58
