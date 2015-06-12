@@ -51,6 +51,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     ) {
+        $billingAddress->setEmail($email);
         $this->billingAddressManagement->assign($cartId,  $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return $this->cartManagement->placeOrder($cartId);
