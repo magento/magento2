@@ -7,9 +7,8 @@ define([
     'mageUtils',
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/block-loader',
     'Magento_Ui/js/lib/storage'
-], function (ko, utils, _, registry, blockLoader) {
+], function (ko, utils, _, registry) {
     'use strict';
 
     return {
@@ -43,7 +42,6 @@ define([
                 .initModules()
                 .initUnique()
                 .initLinks()
-                .initBlockLoader()
                 .setListners(this.listens);
 
             return this;
@@ -155,17 +153,6 @@ define([
          */
         initElement: function (elem) {
             elem.initContainer(this);
-
-            return this;
-        },
-
-        /**
-         * Called to initialize binding which processes block specific loaders.
-         *
-         * @returns {Component} Chainable.
-         */
-        initBlockLoader: function () {
-            blockLoader();
 
             return this;
         },
