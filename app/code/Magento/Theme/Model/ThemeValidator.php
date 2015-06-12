@@ -55,6 +55,7 @@ class ThemeValidator
     }
 
     /**
+     * Validate the theme if being in use in default, website, or store.
      *
      * @param string[] $themePaths
      * @return array
@@ -81,7 +82,7 @@ class ThemeValidator
                         . $this->storeManager->getWebsite($row['scope_id'])->getName();
                     break;
                 case ScopeInterface::SCOPE_STORES:
-                    $messages[] = $themesById[$row['value']] . ' is in use in website '
+                    $messages[] = $themesById[$row['value']] . ' is in use in store '
                         . $this->storeManager->getStore($row['scope_id'])->getName();
                     break;
             }
