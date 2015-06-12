@@ -164,7 +164,7 @@
                     text-align: center;
                     white-space: normal;
                     &.empty {
-                        display: none;
+                        &:extend(.abs-no-display all);
                     }
                 }
                 .counter-label {
@@ -300,7 +300,7 @@
             vertical-align: top;
         }
         .subtitle {
-            display: none;
+            &:extend(.abs-no-display all);
         }
         .action {
             &.edit,
