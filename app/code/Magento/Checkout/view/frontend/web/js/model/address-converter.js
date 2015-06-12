@@ -2,26 +2,29 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
 define(
     [
         'jquery',
-        'Magento_Checkout/js/model/new-customer-address'
+        'Magento_Checkout/js/model/new-customer-address',
+        'mage/utils/objects'
     ],
-    function($, Address) {
+    function($, address, mageUtils) {
         'use strict';
         var countryData = window.checkoutConfig.countryData;
+
         return {
             /**
              * Convert address form data to Address object
-             * @param formData
-             * @returns {address}
+             * @param {Object} formData
+             * @returns {Object}
              */
             formAddressDataToQuoteAddress: function(formData) {
                 // clone address form data to new object
-                var addressData = $.extend(true, {}, formData);
-                if (typeof addressData.street == 'object') {
-                    addressData.street = this.objectToString(addressData.street, ', ');
+                var addressData = $.extend(true, {}, formData),
+                    region = countryData[addressData.country_id]['regions'][addressData.region_id];
+
+                if (mageUtils.isObject(addressData.street)) {
+                    addressData.street = this.objectToArray(addressData.street);
                 }
 
                 addressData.region = {
@@ -29,8 +32,8 @@ define(
                     region_code: null,
                     region: null
                 };
+
                 if (addressData.region_id) {
-                    var region = countryData[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
                         addressData.region.region_code = region['code'];
@@ -38,7 +41,8 @@ define(
                     }
                 }
                 delete addressData.region_id;
-                return Address(addressData);
+
+                return address(addressData);
             },
 
             formDataProviderToFlatData: function(formProviderData, formIndex) {
@@ -63,19 +67,17 @@ define(
             },
 
             /**
-             * Convert object to string with delimiter
-             * @param object
-             * @param delimiter
-             * @returns {string}
+             * Convert object to array
+             * @param {Object} object
+             * @returns {Array}
              */
-            objectToString: function(object, delimiter) {
-                var streetConcatenated = '';
-                $.each(object, function(key, item) {
-                    if (item.length > 0) {
-                        streetConcatenated += item + delimiter;
-                    }
+            objectToArray: function (object) {
+                var convertedArray = [];
+                $.each(object, function (key) {
+                    return object[key].length ? convertedArray.push(object[key]) : false;
                 });
-                return streetConcatenated.slice(0, -(delimiter.length));
+
+                return convertedArray.slice(0);
             }
         };
     }
