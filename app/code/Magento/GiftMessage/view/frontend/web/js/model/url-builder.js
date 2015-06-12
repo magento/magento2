@@ -8,7 +8,7 @@ define(
     ['jquery'],
     function($) {
         return {
-            method: "/rest",
+            method: "rest",
             storeCode: window.giftOptionsConfig.storeCode,
             version: 'V1',
             serviceUrl: ':method/:storeCode/:version',
