@@ -71,7 +71,8 @@
                     "form": "#shipping-zip-form",
                     "regionJson": <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
                     "defaultRegion": "<?php echo $block->getEstimateRegionId() ?>",
-                    "countriesWithOptionalZip": <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+                    "countriesWithOptionalZip": <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>,
+                    "isMultipleCountriesAllowed": <?php echo $block->isMultipleCountriesAllowed(); ?>
                 }
             }
         }

@@ -5,16 +5,90 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+use Magento\Checkout\Block\Cart\Shipping;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Directory\Block\Data as DirectoryData;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Layout;
+use Magento\Shipping\Model\CarrierFactoryInterface;
+
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
-    protected $objectManager;
+    /** @var  Shipping */
+    protected $model;
 
-    protected $shippingBlock;
+    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
+
+    /** @var  CustomerSession |\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerSession;
+
+    /** @var  CheckoutSession |\PHPUnit_Framework_MockObject_MockObject */
+    protected $checkoutSession;
+
+    /** @var  DirectoryData |\PHPUnit_Framework_MockObject_MockObject */
+    protected $directory;
+
+    /** @var  CarrierFactoryInterface |\PHPUnit_Framework_MockObject_MockObject */
+    protected $carrierFactory;
+
+    /** @var  PriceCurrencyInterface |\PHPUnit_Framework_MockObject_MockObject */
+    protected $priceCurrency;
+
+    /** @var  Layout |\PHPUnit_Framework_MockObject_MockObject */
+    protected $layout;
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->prepareContext();
+
+        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->checkoutSession = $this->getMockBuilder('Magento\Checkout\Model\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->directory = $this->getMockBuilder('Magento\Directory\Block\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->carrierFactory = $this->getMockBuilder('Magento\Shipping\Model\CarrierFactoryInterface')
+            ->getMockForAbstractClass();
+
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
+            ->getMockForAbstractClass();
+
+        $this->model = new Shipping(
+            $this->context,
+            $this->customerSession,
+            $this->checkoutSession,
+            $this->directory,
+            $this->carrierFactory,
+            $this->priceCurrency
+        );
+    }
+
+    protected function prepareContext()
+    {
+        $this->layout = $this->getMockBuilder('Magento\Framework\View\Layout')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getLayout',
+            ])
+            ->getMock();
+
+        $this->context->expects($this->once())
+            ->method('getLayout')
+            ->will($this->returnValue($this->layout));
+
     }
 
     public function testGetShippingPriceHtml()
@@ -38,30 +112,46 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('toHtml')
             ->will($this->returnValue($shippingPriceHtml));
 
-        $layoutMock = $this->getMockBuilder('\Magento\Framework\View\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $layoutMock->expects($this->once())
+        $this->layout->expects($this->once())
             ->method('getBlock')
             ->with('checkout.shipping.price')
             ->will($this->returnValue($priceBlockMock));
 
-        $contextMock = $this->getMockBuilder('\Magento\Framework\View\Element\Template\Context')
+        $this->assertEquals($shippingPriceHtml, $this->model->getShippingPriceHtml($shippingRateMock));
+    }
+
+    /**
+     * @param int $count
+     * @param bool $expectedResult
+     * @dataProvider dataProviderIsMultipleCountriesAllowed
+     */
+    public function testIsMultipleCountriesAllowed(
+        $count,
+        $expectedResult
+    ) {
+        $collection = $this->getMockBuilder('Magento\Directory\Model\Resource\Country\Collection')
             ->disableOriginalConstructor()
-            ->setMethods(['getLayout'])
             ->getMock();
+        $collection->expects($this->once())
+            ->method('count')
+            ->willReturn($count);
 
-        $contextMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+        $this->directory->expects($this->once())
+            ->method('getCountryCollection')
+            ->willReturn($collection);
 
-        /** @var \Magento\Checkout\Block\Cart\Shipping $shippingBlock */
-        $shippingBlock = $this->objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Shipping',
-            ['context' => $contextMock]
-        );
+        $this->assertEquals($expectedResult, $this->model->isMultipleCountriesAllowed());
+    }
 
-        $this->assertEquals($shippingPriceHtml, $shippingBlock->getShippingPriceHtml($shippingRateMock));
+    /**
+     * @return array
+     */
+    public function dataProviderIsMultipleCountriesAllowed()
+    {
+        return [
+            [0, false],
+            [1, false],
+            [2, true],
+        ];
     }
 }

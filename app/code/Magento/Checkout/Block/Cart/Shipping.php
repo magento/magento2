@@ -309,4 +309,15 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $block->setShippingRate($shippingRate);
         return $block->toHtml();
     }
+
+    /**
+     * Check if multiple countries for shipping is allowed
+     *
+     * @return bool
+     */
+    public function isMultipleCountriesAllowed()
+    {
+        $collection = $this->_directoryBlock->getCountryCollection();
+        return $collection->count() > 1 ? true : false;
+    }
 }
