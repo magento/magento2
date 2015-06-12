@@ -65,6 +65,7 @@
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",
         "magento/module-bundle": "self.version",
+        "magento/module-bundle-import-export": "self.version",
         "magento/module-cache-invalidate": "self.version",
         "magento/module-captcha": "self.version",
         "magento/module-catalog": "self.version",
