@@ -27,6 +27,7 @@ class Start extends ImportController
             $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
             try {
+                $importModel->setData($data);
                 $importModel->importSource();
                 $importModel->invalidateIndex();
                 $resultBlock->addAction('show', 'import_validation_container')
