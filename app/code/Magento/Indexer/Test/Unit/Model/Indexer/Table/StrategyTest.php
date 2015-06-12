@@ -80,7 +80,8 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
     public function testGetTableName()
     {
         $prefix = 'pre_';
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnCallback(
+        $this->_resourceMock->expects($this->any())->method('getTableName')->will(
+            $this->returnCallback(
                 function ($tableName) use ($prefix) {
                     return $prefix . $tableName;
                 }
