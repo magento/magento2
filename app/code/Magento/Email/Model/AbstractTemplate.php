@@ -60,7 +60,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * List of CSS files that should be inlined on this template
      *
-     * @var array
+     * @var []
      */
     private $inlineCssFiles = array();
 
@@ -338,7 +338,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $processor = $this->getTemplateFilter()
             ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
-            ->setIsChildTemplate($this->getIsChildTemplate())
+            ->setIsChildTemplate($this->isChildTemplate())
             ->setTemplateProcessor([$this, 'getTemplateContent'])
             ->setTemplateModel($this);
 
@@ -601,14 +601,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function applyDesignConfig()
     {
-        if ($this->getIsChildTemplate() || $this->hasDesignBeenApplied) {
+        if ($this->isChildTemplate() || $this->hasDesignBeenApplied) {
             return false;
         }
         $this->hasDesignBeenApplied = true;
 
         $designConfig = $this->getDesignConfig();
-        $store = $designConfig->getStore();
-        $storeId = is_object($store) ? $store->getId() : $store;
+        $storeId = $designConfig->getStore();
         $area = $designConfig->getArea();
         if ($storeId !== null) {
             // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
@@ -689,7 +688,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @return bool
      */
-    public function getIsChildTemplate()
+    public function isChildTemplate()
     {
         return $this->isChildTemplate;
     }
