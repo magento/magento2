@@ -53,13 +53,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Registry'),
                 $objectManager->get('Magento\Store\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
-                $filesystem,
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
+                $filesystem,
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
-                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
-                $objectManager->get('Magento\Email\Model\TemplateFactory')
+                $objectManager->get('Magento\Email\Model\TemplateFactory'),
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory')
             ]
         )->getMock();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');

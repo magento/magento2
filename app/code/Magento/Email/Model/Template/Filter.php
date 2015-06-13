@@ -222,7 +222,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @return bool
      */
-    public function getIsChildTemplate()
+    public function isChildTemplate()
     {
         return $this->isChildTemplate;
     }
@@ -695,6 +695,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Set file to apply as inline CSS
+     *
      * This directive will cause CSS files to be applied inline to the HTML in the email template.
      * This directive does not inline the CSS itself, but adds the files to the parent template model so that the model
      * can handle the inlining at a later point, once all HTML has been assembled.
@@ -707,7 +709,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         // If this template is a child of another template, skip processing so that the parent template will process
         // this directive. This is important as CSS inlining must operate on the entire HTML document.
-        if ($this->getIsChildTemplate()) {
+        if ($this->isChildTemplate()) {
             return $construction[0];
         }
 
