@@ -82,9 +82,16 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
         $storeManager->expects($this->any())->method('getDefaultStoreView')->will($this->returnValue(null));
         $storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$store]));
+        $appState = $this->getMockBuilder('Magento\Framework\App\State')
+            ->setConstructorArgs([
+                $scopeConfig
+            ])
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $context = $this->getMock('Magento\Backend\Block\Template\Context',
-            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager'],
+            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState'],
             [], '', false
         );
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($request));
@@ -92,6 +99,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $context->expects($this->any())->method('getDesignPackage')->will($this->returnValue($design));
         $context->expects($this->any())->method('getStoreManager')->will($this->returnValue($storeManager));
+        $context->expects($this->once())->method('getAppState')->will($this->returnValue($appState));
 
         $maliciousCode = $this->getMock(
             'Magento\Framework\Filter\Input\MaliciousCode',
@@ -103,26 +111,14 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $maliciousCode->expects($this->once())->method('filter')->with($this->equalTo($requestParamMap[1][2]))
             ->will($this->returnValue(self::MALICIOUS_TEXT));
 
-        $preview = $this->getMockBuilder('Magento\Email\Block\Adminhtml\Template\Preview')
-            ->setConstructorArgs([
+        $preview = $this->objectManagerHelper->getObject(
+            'Magento\Email\Block\Adminhtml\Template\Preview',
+            [
                 'context' => $context,
                 'maliciousCode' => $maliciousCode,
                 'emailFactory' => $emailFactory
-            ])
-            ->setMethods(['getAppState'])
-            ->getMock();
-
-        $appState = $this->getMockBuilder('Magento\Framework\App\State')
-            ->setConstructorArgs([
-                $scopeConfig
-            ])
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $preview->expects($this->atLeastOnce())
-            ->method('getAppState')
-            ->will($this->returnValue($appState));
-
+            ]
+        );
         $this->assertEquals(self::MALICIOUS_TEXT, $preview->toHtml());
     }
 
