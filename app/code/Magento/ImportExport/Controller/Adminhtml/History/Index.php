@@ -21,7 +21,7 @@ class Index extends HistoryController
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_ImportExport::system_convert_history');
         $resultPage->getConfig()->getTitle()->prepend(__('History'));
-        $resultPage->getConfig()->getTitle()->prepend(__('Import'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Import History'));
         $resultPage->addBreadcrumb(__('Import history'), __('Import history'));
         return $resultPage;
     }
