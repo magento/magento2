@@ -61,6 +61,7 @@ class RowCustomizer implements RowCustomizerInterface
                         . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
                 }
                 $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
+                $variationsPrices = array_unique($variationsPrices);
                 $variationsPrices = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variationsPrices);
                 $variationsLabels = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
 
