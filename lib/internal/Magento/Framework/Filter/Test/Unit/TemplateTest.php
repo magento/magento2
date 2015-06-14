@@ -8,12 +8,21 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFilter()
+    /**
+     * @var \Magento\Framework\Filter\Template
+     */
+    private $templateFilter;
+
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Filter\Template $templateFilter */
-        $templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
-        $templateFilter->setVariables(
+        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+    }
+
+    public function testFilter()
+    {
+
+        $this->templateFilter->setVariables(
             [
                 'customer' => new \Magento\Framework\Object(['firstname' => 'Felicia', 'lastname' => 'Henry']),
                 'company' => 'A. L. Price',
@@ -55,6 +64,33 @@ T: 760-663-5876
 
 EXPECTED_RESULT;
 
-        $this->assertEquals($expectedResult, $templateFilter->filter($template), 'Template was processed incorrectly');
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($template), 'Template was processed incorrectly');
+    }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::afterFilter
+     * @covers \Magento\Framework\Filter\Template::addAfterFilterCallback
+     */
+    public function testAfterFilter()
+    {
+        $value = 'test string';
+        $expectedResult = 'TEST STRING';
+
+        // Build arbitrary object to pass into the addAfterFilterCallback method
+        $callbackObject = $this->getMockBuilder('stdObject')
+            ->setMethods(['afterFilterCallbackMethod'])
+            ->getMock();
+
+        $callbackObject->expects($this->once())
+            ->method('afterFilterCallbackMethod')
+            ->with($value)
+            ->will($this->returnValue($expectedResult));
+
+        // Add callback twice to ensure that the check in addAfterFilterCallback prevents the callback from being called
+        // more than once
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
     }
 }
