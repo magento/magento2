@@ -18,7 +18,11 @@ class BlockActions extends Column
     /**
      * Url path
      */
-    const URL_PATH = 'cms/block/edit';
+    const URL_PATH_EDIT = 'cms/block/edit';
+
+    const URL_PATH_DELETE = 'cms/block/delete';
+
+    const URL_PATH_DETAILS = 'cms/block/details';
 
     /**
      * @var UrlInterface
@@ -46,6 +50,10 @@ class BlockActions extends Column
     }
 
     /**
+     * @param array $items
+     * @return array
+     */
+    /**
      * Prepare Data Source
      *
      * @param array $dataSource
@@ -58,8 +66,35 @@ class BlockActions extends Column
                 if (isset($item['block_id'])) {
                     $item[$this->getData('name')] = [
                         'edit' => [
-                            'href' => $this->urlBuilder->getUrl(static::URL_PATH, ['block_id' => $item['block_id']]),
-                            'label' => __('Edit'),
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_EDIT,
+                                [
+                                    'block_id' => $item['block_id']
+                                ]
+                            ),
+                            'label' => __('Edit')
+                        ],
+                        'details' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_DETAILS,
+                                [
+                                    'block_id' => $item['block_id']
+                                ]
+                            ),
+                            'label' => __('Details')
+                        ],
+                        'delete' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_DELETE,
+                                [
+                                    'block_id' => $item['block_id']
+                                ]
+                            ),
+                            'label' => __('Delete'),
+                            'confirm' => array(
+                                'title' => __('Delete "${ $.$data.title }"'),
+                                'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
+                            )
                         ]
                     ];
                 }

@@ -225,13 +225,17 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">cms_block_listing.cms_block_listing.cms_block_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="delete" xsi:type="array">
-                            <item name="confirm" xsi:type="string" translate="true">Are you sure you want to perform this action?</item>
                             <item name="type" xsi:type="string">delete</item>
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">cms/block/massDelete</item>
+                            <item name="confirm" xsi:type="array">
+                                <item name="title" xsi:type="string" translate="true">Delete items</item>
+                                <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                            </item>
                         </item>
                     </item>
                     <item name="indexField" xsi:type="string">block_id</item>
@@ -245,6 +249,7 @@
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
+                    <item name="selectProvider" xsi:type="string">cms_block_listing.cms_block_listing.cms_block_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -398,6 +403,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">actions</item>
+                    <item name="indexField" xsi:type="string">block_id</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Action</item>
                     <item name="data_type" xsi:type="string">actions</item>
