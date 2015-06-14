@@ -125,20 +125,21 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->orderItemMock->expects($this->once())->method('setBaseDiscountInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setRowInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseRowInvoiced')->with(2)->willReturnSelf();
-        $this->item->setData(
-            [
-                'order_item_id' => 1,
-                'qty' => 1,
-                'tax_amount' => 1,
-                'base_tax_amount' => 1,
-                'hidden_tax_amount' => 1,
-                'base_hidden_tax_amount' => 1,
-                'discount_amount' => 1,
-                'base_discount_amount' => 1,
-                'row_total' => 1,
-                'base_row_total' => 1
-            ]
-        );
+        $data = [
+            'order_item_id' => 1,
+            'qty' => 1,
+            'tax_amount' => 1,
+            'base_tax_amount' => 1,
+            'hidden_tax_amount' => 1,
+            'base_hidden_tax_amount' => 1,
+            'discount_amount' => 1,
+            'base_discount_amount' => 1,
+            'row_total' => 1,
+            'base_row_total' => 1
+        ];
+        foreach ($data as $key => $value) {
+            $this->item->setData($key, $value);
+        }
         $this->assertEquals($this->item->register(), $this->item);
     }
 
@@ -164,29 +165,28 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->orderItemMock->expects($this->once())->method('setBaseDiscountInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setRowInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseRowInvoiced')->with(0)->willReturnSelf();
-        $this->item->setData(
-            [
-                'order_item_id' => 1,
-                'qty' => 1,
-                'tax_amount' => 1,
-                'base_tax_amount' => 1,
-                'hidden_tax_amount' => 1,
-                'base_hidden_tax_amount' => 1,
-                'discount_amount' => 1,
-                'base_discount_amount' => 1,
-                'row_total' => 1,
-                'base_row_total' => 1
-            ]
-        );
+        $data = [
+            'order_item_id' => 1,
+            'qty' => 1,
+            'tax_amount' => 1,
+            'base_tax_amount' => 1,
+            'hidden_tax_amount' => 1,
+            'base_hidden_tax_amount' => 1,
+            'discount_amount' => 1,
+            'base_discount_amount' => 1,
+            'row_total' => 1,
+            'base_row_total' => 1
+        ];
+        foreach ($data as $key => $value) {
+            $this->item->setData($key, $value);
+        }
         $this->assertEquals($this->item->cancel(), $this->item);
     }
 
     public function testCalcRowTotal()
     {
-        $this->item->setData([
-            'order_item_id' => 1,
-            'qty' => 2
-        ]);
+        $this->item->setData('order_item_id', 1);
+        $this->item->setData('qty', 2);
         $this->item->setInvoice($this->invoiceMock);
         $this->invoiceMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())->method('getItemById')->with(1)->willReturn($this->orderItemMock);

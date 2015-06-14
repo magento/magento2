@@ -67,7 +67,9 @@ class Textarea extends AbstractElement
             'disabled',
             'onkeyup',
             'tabindex',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 
