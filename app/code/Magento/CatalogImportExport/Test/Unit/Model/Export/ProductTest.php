@@ -384,7 +384,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $itemsPerPage = 10;
 
         $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
+        $this->product
+            ->expects($this->exactly(1))
+            ->method('_getEntityCollection')
+            ->willReturn($this->abstractCollection);
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
@@ -412,7 +415,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $itemsPerPage = 10;
 
         $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
+        $this->product
+            ->expects($this->exactly(1))
+            ->method('_getEntityCollection')
+            ->willReturn($this->abstractCollection);
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
@@ -452,6 +458,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      *
      * @param $object
      * @param $property
+     * @return mixed
      */
     protected function getPropertyValue($object, $property)
     {
