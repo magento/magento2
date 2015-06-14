@@ -58,13 +58,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_designConfig;
 
     /**
-     * List of CSS files that should be inlined on this template
-     *
-     * @var []
-     */
-    private $inlineCssFiles = array();
-
-    /**
      * Whether template is child of another template
      *
      * @var bool
@@ -339,13 +332,15 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
             ->setIsChildTemplate($this->isChildTemplate())
-            ->setTemplateProcessor([$this, 'getTemplateContent'])
-            ->setTemplateModel($this);
+            ->setTemplateProcessor([$this, 'getTemplateContent']);
 
         $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         $isDesignApplied = $this->applyDesignConfig();
+
+        // Set design params so that CSS will be loaded from the proper theme
+        $processor->setDesignParams($this->getDesignParams());
 
         if (isset($variables['subscriber'])) {
             $storeId = $variables['subscriber']->getStoreId();
@@ -359,15 +354,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $processor->setVariables($variables);
 
         try {
-            // Filter the template text so that all HTML content will be present
             $result = $processor->filter($this->getTemplateText());
-
-            if (!$this->isPlain()) {
-                // Now that all HTML has been assembled, run email through CSS inlining process
-                $processedResult = $this->applyInlineCss($result);
-            } else {
-                $processedResult = $result;
-            }
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
@@ -375,100 +362,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($isDesignApplied) {
             $this->cancelDesignConfig();
         }
-        return $processedResult;
-    }
-
-    /**
-     * Add filename of CSS file to inline
-     *
-     * @param string $file
-     * @return $this
-     */
-    public function addInlineCssFile($file)
-    {
-        $this->inlineCssFiles[] = $file;
-        return $this;
-    }
-
-    /**
-     * Get filename of CSS file to inline
-     *
-     * @return array
-     */
-    public function getInlineCssFiles()
-    {
-        return $this->inlineCssFiles;
-    }
-
-    /**
-     * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
-     * in order to support all email clients.
-     *
-     * @param string $html
-     * @return string
-     */
-    protected function applyInlineCss($html)
-    {
-        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
-        $cssToInline = $this->getCssFilesContent(
-            $this->getInlineCssFiles()
-        );
-        // Only run Emogrify if HTML and CSS contain content
-        if ($html && $cssToInline) {
-            try {
-                // Don't try to compile CSS that has LESS compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
-                    !== false
-                ) {
-                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
-                }
-
-                $emogrifier = new \Pelago\Emogrifier();
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
-
-                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
-
-                $processedHtml = $emogrifier->emogrify();
-            } catch (\Exception $e) {
-                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
-                        . PHP_EOL
-                        . $html;
-                } else {
-                    $processedHtml = $html;
-                }
-                $this->_logger->error($e);
-            }
-        } else {
-            $processedHtml = $html;
-        }
-        return $processedHtml;
-    }
-
-    /**
-     * Loads CSS file from materialized static view directory
-     *
-     * @param string|array $files
-     * @return string
-     */
-    public function getCssFilesContent($files)
-    {
-        if (!is_array($files)) {
-            $files = [$files];
-        }
-
-        // Remove duplicate files
-        $files = array_unique($files);
-
-        $designParams = $this->getDesignParams();
-        $css = '';
-        foreach ($files as $file) {
-            $asset = $this->assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
-        }
-        return $css;
+        return $result;
     }
 
     /**
