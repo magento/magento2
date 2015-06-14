@@ -14,7 +14,6 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
 
-
 /**
  * Import entity product model
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -488,6 +487,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $categoryProcessor;
 
+    /** @var array */
+    protected $websitesCache = [];
+
+    /** @var array */
+    protected $categoriesCache = [];
+
     /**
      * Instance of product tax class processor.
      *
@@ -516,13 +521,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'sku';
-
-    /**
-     * Instance of catalog product factory.
-     *
-     * @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory
-     */
-    protected $catalogProductFactory;
 
     /**
      * @var ObjectRelationProcessor
@@ -580,7 +578,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\CategoryProcessor $categoryProcessor
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param Product\Validator $validator
-     * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -616,7 +613,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
         Product\Validator $validator,
-        \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
@@ -646,7 +642,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->validator = $validator;
         $this->objectRelationProcessor = $objectRelationProcessor;
         $this->transactionManager = $transactionManager;
-        $this->catalogProductFactory = $catalogProductFactory;
         $this->taxClassProcessor = $taxClassProcessor;
         parent::__construct($jsonHelper, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
@@ -1263,8 +1258,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
-            $websites = [];
-            $categories = [];
+            $this->websitesCache = [];
+            $this->categoriesCache = [];
             $tierPrices = [];
             $groupPrices = [];
             $mediaGallery = [];
@@ -1320,14 +1315,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
                     $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
-                    $websites[$rowSku][$websiteId] = true;
+                    $this->websitesCache[$rowSku][$websiteId] = true;
                 }
 
                 // 3. Categories phase
                 $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
                 if (!empty($categoriesString)) {
                     foreach ($this->categoryProcessor->upsertCategories($categoriesString) as $categoryId) {
-                        $categories[$rowSku][$categoryId] = true;
+                        $this->categoriesCache[$rowSku][$categoryId] = true;
                     }
                 }
 
@@ -1587,9 +1582,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $entityRowsIn,
                 $entityRowsUp
             )->_saveProductWebsites(
-                $websites
+                $this->websitesCache
             )->_saveProductCategories(
-                $categories
+                $this->categoriesCache
             )->_saveProductTierPrices(
                 $tierPrices
             )->_saveProductGroupPrices(
@@ -1606,6 +1601,36 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
         return $this;
+    }
+
+    /**
+     * @param $productSku
+     * @return array
+     */
+    public function getProductWebsites($productSku)
+    {
+        return array_keys($this->websitesCache[$productSku]);
+    }
+
+    /**
+     * @param $productSku
+     * @return array
+     */
+    public function getProductCategories($productSku)
+    {
+        return array_keys($this->categoriesCache[$productSku]);
+    }
+
+    /**
+     * @param $storeCode
+     * @return array|int|null|string
+     */
+    public function getStoreIdByCode($storeCode)
+    {
+        if (empty($storeCode)) {
+            return self::SCOPE_DEFAULT;
+        }
+        return $this->storeResolver->getStoreCodeToId($storeCode);
     }
 
     /**
@@ -1984,11 +2009,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * New products SKU data.
      *
+     * @var string $sku
      * @return array
      */
-    public function getNewSku()
+    public function getNewSku($sku = null)
     {
-        return $this->skuProcessor->getNewSku();
+        return $this->skuProcessor->getNewSku($sku);
     }
 
     /**
@@ -2009,6 +2035,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function getOldSku()
     {
         return $this->_oldSku;
+    }
+
+    /**
+     * Retrieve Category Processor
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor
+     */
+    public function getCategoryProcessor()
+    {
+        return $this->categoryProcessor;
     }
 
     /**
@@ -2242,47 +2278,5 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
-    }
-
-    /**
-     * Get array of affected products
-     *
-     * @return array
-     */
-    public function getAffectedProducts()
-    {
-        $products = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
-                    continue;
-                }
-                if ($product = $this->_populateToUrlGeneration($rowData)) {
-                    $products[] = $product;
-                }
-            }
-        }
-        return $products;
-    }
-
-    /**
-     * Create product model from imported data for URL rewrite purposes.
-     *
-     * @param $rowData
-     *
-     * @return \Magento\Framework\Model\AbstractModel|void
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function _populateToUrlGeneration($rowData)
-    {
-        $product = $this->catalogProductFactory->create();
-        $newSku = $this->skuProcessor->getNewSku($rowData[self::COL_SKU]);
-        if (empty($newSku) || !isset($newSku['entity_id'])) {
-            return;
-        }
-        $rowData['entity_id'] = $newSku['entity_id'];
-        $product->addData($rowData);
-        return $product;
     }
 }
