@@ -42,6 +42,13 @@ class Filter extends \Magento\Framework\Filter\Template
     private $isChildTemplate = false;
 
     /**
+     * List of CSS files to inline
+     *
+     * @var []
+     */
+    private $inlineCssFiles = [];
+
+    /**
      * Store id
      *
      * @var int
@@ -49,16 +56,14 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_storeId = null;
 
     /**
-     * The template model that is using this filter to process its content
-     *
-     * @var null|\Magento\Email\Model\AbstractTemplate
+     * @var array
      */
-    protected $_templateModel = null;
+    private $designParams = [];
 
     /**
      * @var bool
      */
-    protected $_plainTemplateMode = false;
+    private $plainTemplateMode = false;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -125,6 +130,11 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $backendUrlBuilder;
 
     /**
+     * @var \Pelago\Emogrifier
+     */
+    private $emogrifier;
+
+    /**
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -136,6 +146,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Pelago\Emogrifier $emogrifier
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -152,6 +163,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Pelago\Emogrifier $emogrifier,
         $variables = []
     ) {
         $this->_escaper = $escaper;
@@ -165,6 +177,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
         $this->backendUrlBuilder = $backendUrlBuilder;
+        $this->emogrifier = $emogrifier;
         parent::__construct($string, $variables);
     }
 
@@ -201,12 +214,22 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->_plainTemplateMode = (bool)$plainTemplateMode;
+        $this->plainTemplateMode = (bool) $plainTemplateMode;
         return $this;
     }
 
     /**
-     * Sets whether template being filtered is child of another template
+     * Check whether template is plain
+     *
+     * @return bool
+     */
+    public function isPlainTemplateMode()
+    {
+        return $this->plainTemplateMode;
+    }
+
+    /**
+     * Set whether template being filtered is child of another template
      *
      * @param bool $isChildTemplate
      * @return $this
@@ -218,7 +241,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Gets whether template being filtered is child of another template
+     * Get whether template being filtered is child of another template
      *
      * @return bool
      */
@@ -240,25 +263,25 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Sets the template model that is using this filter to process its content
+     * Set design parameters
      *
-     * @param \Magento\Email\Model\AbstractTemplate $templateModel
+     * @param array $designParams
      * @return $this
      */
-    public function setTemplateModel(\Magento\Email\Model\AbstractTemplate $templateModel)
+    public function setDesignParams(array $designParams)
     {
-        $this->_templateModel = $templateModel;
+        $this->designParams = $designParams;
         return $this;
     }
 
     /**
-     * Gets the template model that is using this filter to process its content
+     * Get design parameters
      *
-     * @return null|\Magento\Email\Model\AbstractTemplate
+     * @return array
      */
-    public function getTemplateModel()
+    public function getDesignParams()
     {
-        return $this->_templateModel;
+        return $this->designParams;
     }
 
     /**
@@ -651,7 +674,7 @@ class Filter extends \Magento\Framework\Filter\Template
             )->loadByCode(
                 $params['code']
             );
-            $mode = $this->_plainTemplateMode
+            $mode = $this->isPlainTemplateMode()
                 ? \Magento\Variable\Model\Variable::TYPE_TEXT
                 : \Magento\Variable\Model\Variable::TYPE_HTML;
             $value = $variable->getValue($mode);
@@ -663,8 +686,12 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * This directive will load and return the contents of a CSS file.
-     * Syntax: {{css file=""}}
+     * Load and return the contents of a CSS file
+     *
+     * Usage:
+     *
+     *     {{css file="css/filename.css"}} - Load file from theme directory
+     *     {{css file="Magento_Sales::css/filename.css"}} - Load file from module directory or module directory in theme
      *
      * @param string[] $construction
      * @return string
@@ -674,8 +701,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $params = $this->_getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if ($file) {
-            $css = $this->getTemplateModel()
-                ->getCssFilesContent($params['file']);
+            $css = $this->getCssFilesContent([$params['file']]);
 
             if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
                 !== false
@@ -686,12 +712,12 @@ class Filter extends \Magento\Framework\Filter\Template
                 return $css;
             } else {
                 // Return CSS comment for debugging purposes
-                return sprintf(__('/* Contents of %s could not be loaded or is empty */'), $file);
+                return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
             }
         }
 
         // Return CSS comment for debugging purposes
-        return __('/* "file" argument must be specified */');
+        return '/* ' . __('"file" argument must be specified') . ' */';
     }
 
     /**
@@ -700,13 +726,23 @@ class Filter extends \Magento\Framework\Filter\Template
      * This directive will cause CSS files to be applied inline to the HTML in the email template.
      * This directive does not inline the CSS itself, but adds the files to the parent template model so that the model
      * can handle the inlining at a later point, once all HTML has been assembled.
-     * Syntax: {{inlinecss file=""}}
+     *
+     * Usage:
+     *
+     *     {{inlinecss file="css/filename.css"}} - Load file from theme directory
+     *     {{inlinecss file="Magento_Sales::css/filename.css"}} - Load file from module directory or module
+     *                                                            directory in theme
      *
      * @param string[] $construction
      * @return string
      */
     public function inlinecssDirective($construction)
     {
+        // Plain text templates shouldn't have CSS applied inline
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
         // If this template is a child of another template, skip processing so that the parent template will process
         // this directive. This is important as CSS inlining must operate on the entire HTML document.
         if ($this->isChildTemplate()) {
@@ -715,15 +751,113 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $params = $this->_getParameters($construction[2]);
         if (isset($params['file'])) {
-            $this->getTemplateModel()
-                ->addInlineCssFile($params['file']);
+            $this->addInlineCssFile($params['file']);
+
+            // CSS should be applied after entire template has been filtered, so add as after filter callback
+            $this->addAfterFilterCallback([$this, 'applyInlineCss']);
+        } else {
+            throw new \LogicException(__('"file" argument must be specified'));
         }
         return '';
     }
 
     /**
-     * Filter the string as template.
-     * Rewrited for logging exceptions
+     * Add filename of CSS file to inline
+     *
+     * @param string $file
+     * @return $this
+     */
+    protected function addInlineCssFile($file)
+    {
+        $this->inlineCssFiles[] = $file;
+        return $this;
+    }
+
+    /**
+     * Get filename of CSS file to inline
+     *
+     * @return array
+     */
+    protected function getInlineCssFiles()
+    {
+        return $this->inlineCssFiles;
+    }
+
+    /**
+     * Load CSS file from materialized static view directory
+     *
+     * @param [] $files
+     * @return string
+     * @throws \LogicException
+     */
+    public function getCssFilesContent(array $files)
+    {
+        // Remove duplicate files
+        $files = array_unique($files);
+
+        $designParams = $this->getDesignParams();
+        if (!count($designParams)) {
+            throw new \LogicException(__('Design params must be set before calling this method'));
+        }
+        $css = '';
+        foreach ($files as $file) {
+            $asset = $this->_assetRepo->createAsset($file, $designParams);
+            $css .= $asset->getContent();
+        }
+        return $css;
+    }
+
+    /**
+     * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
+     * in order to support all email clients.
+     *
+     * @param string $html
+     * @return string
+     */
+    public function applyInlineCss($html)
+    {
+        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
+        $cssToInline = $this->getCssFilesContent(
+            $this->getInlineCssFiles()
+        );
+        // Only run Emogrify if HTML and CSS contain content
+        if ($html && $cssToInline) {
+            try {
+                // Don't try to compile CSS that has LESS compilation errors
+                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                    !== false
+                ) {
+                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
+                }
+
+                $emogrifier = $this->emogrifier;
+                $emogrifier->setHtml($html);
+                $emogrifier->setCss($cssToInline);
+
+                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
+                $emogrifier->disableStyleBlocksParsing();
+
+                $processedHtml = $emogrifier->emogrify();
+            } catch (\Exception $e) {
+                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
+                        . PHP_EOL
+                        . $html;
+                } else {
+                    $processedHtml = $html;
+                }
+                $this->_logger->error($e);
+            }
+        } else {
+            $processedHtml = $html;
+        }
+        return $processedHtml;
+    }
+
+    /**
+     * Filter the string as template
+     *
+     * Overrides parent method in order to handle exceptions
      *
      * @param string $value
      * @return string

@@ -15,11 +15,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model = null;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Email\Model\Template\Filter'
         );
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
@@ -181,5 +187,135 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         return $result;
+    }
+
+    /**
+     * Ensures that the css directive will successfully compile and output contents of a LESS file,
+     * as well as supporting loading files from a theme fallback structure.
+     *
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoAppIsolation enabled
+     * @dataProvider cssDirectiveDataProvider
+     *
+     * @param $directiveParams
+     * @param $expectedOutput
+     */
+    public function testCssDirective($directiveParams, $expectedOutput)
+    {
+        $this->setUpDesignParams();
+        $this->_model->setStoreId('fixturestore');
+
+        $this->assertContains($expectedOutput, $this->_model->cssDirective(
+            ['{{css ' . $directiveParams . '}}', 'css', ' ' . $directiveParams]
+        ));
+    }
+
+    /**
+     * @return array
+     */
+    public function cssDirectiveDataProvider()
+    {
+        return [
+            'CSS from theme' => [
+                'file="css/email-1.css"',
+                'color: #111;'
+            ],
+            'CSS from parent theme' => [
+                'file="css/email-2.css"',
+                'color: #222;'
+            ],
+            'CSS from grandparent theme' => [
+                'file="css/email-3.css"',
+                'color: #333;'
+            ],
+            'Missing file argument' => [
+                '',
+                '/* "file" argument must be specified */'
+            ],
+            'Empty or missing file' => [
+                'file="css/non-existent-file.css"',
+                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
+            ],
+            'File with compilation error results in error message' => [
+                'file="css/file-with-error.css"',
+                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+            ],
+        ];
+    }
+
+    /**
+     * Ensures that the inlinecss directive will successfully load and inline CSS to HTML markup,
+     * as well as supporting loading files from a theme fallback structure.
+     *
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoAppIsolation enabled
+     * @dataProvider inlinecssDirectiveDataProvider
+     *
+     * @param string $templateText
+     * @param string $expectedOutput
+     * @param bool $productionMode
+     */
+    public function testInlinecssDirective($templateText, $expectedOutput, $productionMode = false)
+    {
+        $this->setUpDesignParams();
+
+        if ($productionMode) {
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+                ->setMode(\Magento\Framework\App\State::MODE_PRODUCTION);
+        }
+
+        $this->assertContains($expectedOutput, $this->_model->filter($templateText));
+    }
+
+    /**
+     * @return array
+     */
+    public function inlinecssDirectiveDataProvider()
+    {
+        return [
+            'CSS from theme' => [
+                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                '<p style="color: #111; text-align: left;">'
+            ],
+            'CSS from parent theme' => [
+                '<html><p></p> {{inlinecss file="css/email-inline-2.css"}}</html>',
+                '<p style="color: #222; text-align: left;">'
+            ],
+            'CSS from grandparent theme' => [
+                '<html><p></p> {{inlinecss file="css/email-inline-3.css"}}',
+                '<p style="color: #333; text-align: left;">'
+            ],
+            'Non-existent file results in unmodified markup' => [
+                '<html><p></p> {{inlinecss file="css/non-existent-file.css"}}</html>',
+                '<html><p></p> </html>',
+            ],
+            'Production mode - File with compilation error results in unmodified markup' => [
+                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
+                '<html><p></p> </html>',
+                true,
+            ],
+            'Developer mode - File with compilation error results in error message' => [
+                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
+                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * Setup the design params
+     */
+    protected function setUpDesignParams()
+    {
+        $themeCode = 'Vendor/custom_theme';
+        $this->_model->setDesignParams(
+            [
+                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                'theme' => $themeCode,
+                'locale' => \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE,
+            ]
+        );
     }
 }

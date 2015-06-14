@@ -219,7 +219,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
                 'setIsChildTemplate',
-                'setTemplateModel',
+                'setDesignParams',
                 'setVariables',
                 'setStoreId',
                 'filter',
@@ -241,7 +241,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('setIsChildTemplate')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
-            ->method('setTemplateModel')
+            ->method('setDesignParams')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
