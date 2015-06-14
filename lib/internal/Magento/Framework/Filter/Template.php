@@ -28,6 +28,13 @@ class Template implements \Zend_Filter_Interface
     /**#@-*/
 
     /**
+     * Callbacks that will be applied after filtering
+     *
+     * @var array
+     */
+    private $afterFilterCallbacks = [];
+
+    /**
      * Assigned template variables
      *
      * @var array
@@ -76,7 +83,7 @@ class Template implements \Zend_Filter_Interface
      * @param callable $callback it must return string
      * @return $this
      */
-    public function setTemplateProcessor(array $callback)
+    public function setTemplateProcessor(callable $callback)
     {
         $this->_templateProcessor = $callback;
         return $this;
@@ -138,7 +145,41 @@ class Template implements \Zend_Filter_Interface
                 $value = str_replace($construction[0], $replacedValue, $value);
             }
         }
+
+        $value = $this->afterFilter($value);
         return $value;
+    }
+
+    /**
+     * Runs callbacks that have been added to filter content after directive processing is finished.
+     *
+     * @param $value
+     * @return string
+     */
+    protected function afterFilter($value)
+    {
+        foreach ($this->afterFilterCallbacks as $callback) {
+            $value = call_user_func($callback, $value);
+        }
+        return $value;
+    }
+
+    /**
+     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
+     * a string of the processed value.
+     *
+     * @param callable $afterFilterCallback
+     * @return $this
+     */
+    public function addAfterFilterCallback(callable $afterFilterCallback)
+    {
+        // Only add callback if it doesn't already exist
+        if (in_array($afterFilterCallback, array_values($this->afterFilterCallbacks))) {
+            return $this;
+        }
+
+        $this->afterFilterCallbacks[] = $afterFilterCallback;
+        return $this;
     }
 
     /**
