@@ -5,14 +5,18 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin;
 
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+
 class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
 {
     /**
      * After import handler
      *
+     * @param AdvancedPricing $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSaveAdvancedPricing()
+    public function afterSaveAdvancedPricing(AdvancedPricing $subject)
     {
         if (!$this->getPriceIndexer()->isScheduled()) {
             $this->invalidateIndexer();
@@ -22,9 +26,11 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
     /**
      * After delete handler
      *
+     * @param AdvancedPricing $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDeleteAdvancedPricing()
+    public function afterDeleteAdvancedPricing(AdvancedPricing $subject)
     {
         if (!$this->getPriceIndexer()->isScheduled()) {
             $this->invalidateIndexer();

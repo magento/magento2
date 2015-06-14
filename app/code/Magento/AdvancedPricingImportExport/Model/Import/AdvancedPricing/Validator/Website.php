@@ -18,20 +18,20 @@ class Website extends AbstractValidator implements RowValidatorInterface
     protected $storeResolver;
 
     /**
-     * @var \Magento\Store\Model\WebSite
+     * @var \Magento\Store\Model\Website
      */
-    protected $webSiteModel;
+    protected $websiteModel;
 
     /**
      * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
-     * @param \Magento\Store\Model\WebSite $webSiteModel
+     * @param \Magento\Store\Model\Website $websiteModel
      */
     public function __construct(
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
-        \Magento\Store\Model\WebSite $webSiteModel
+        \Magento\Store\Model\Website $websiteModel
     ) {
         $this->storeResolver = $storeResolver;
-        $this->webSiteModel = $webSiteModel;
+        $this->websiteModel = $websiteModel;
     }
 
     /**
@@ -74,6 +74,6 @@ class Website extends AbstractValidator implements RowValidatorInterface
      */
     public function getAllWebsitesValue()
     {
-        return AdvancedPricing::VALUE_ALL_WEBSITES . ' ['.$this->webSiteModel->getBaseCurrency()->getCurrencyCode().']';
+        return AdvancedPricing::VALUE_ALL_WEBSITES . ' ['.$this->websiteModel->getBaseCurrency()->getCurrencyCode().']';
     }
 }
