@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Import history model
  *
@@ -15,7 +13,7 @@ use Magento\Framework\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class History extends AbstractModel
+class History extends \Magento\Framework\Model\AbstractModel
 {
     const HISTORY_ID = 'history_id';
 
