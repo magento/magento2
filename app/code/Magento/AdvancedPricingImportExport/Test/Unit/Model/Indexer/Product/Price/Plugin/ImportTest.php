@@ -20,12 +20,24 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $import;
 
+    /**
+     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $advancedPricing;
+
     public function setUp()
     {
         $this->indexer = $this->getMockForAbstractClass('\Magento\Indexer\Model\IndexerInterface', [], '', false);
         $this->import = $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import',
             ['getPriceIndexer', 'invalidateIndexer'],
+            [],
+            '',
+            false
+        );
+        $this->advancedPricing = $this->getMock(
+            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
+            [],
             [],
             '',
             false
@@ -38,7 +50,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->indexer->expects($this->once())->method('isScheduled')->willReturn(false);
         $this->import->expects($this->once())->method('invalidateIndexer');
 
-        $this->import->afterSaveAdvancedPricing();
+        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
     }
 
     public function testAfterDeleteAdvancedPricing()
@@ -46,6 +58,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->indexer->expects($this->once())->method('isScheduled')->willReturn(false);
         $this->import->expects($this->once())->method('invalidateIndexer');
 
-        $this->import->afterSaveAdvancedPricing();
+        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
     }
 }
