@@ -154,7 +154,11 @@
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
         }
+
         //  Action select data grid styles (can be action-select-secondary in future)
+        .action-select-wrap {
+            position: static;
+        }
         .action-select {
             .link-pattern();
             background-color: transparent;
@@ -168,6 +172,9 @@
             }
             &:after {
                 border-color: @link__color transparent transparent transparent;
+                margin: .6rem 0 0 .7rem;
+                right: auto;
+                top: auto;
             }
             &:before {
                 display: none;
@@ -175,6 +182,8 @@
         }
         .action-menu {
             left: auto;
+            right: auto;
+            top: auto;
             z-index: 1;
         }
     }

@@ -4,28 +4,30 @@
  */
 define([
     'jquery',
+    'underscore',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
-], function($) {
+], function ($, _) {
     'use strict';
 
     $.widget('mage.confirm', $.mage.modal, {
         options: {
             modalClass: 'confirm',
+            title: '',
             actions: {
                 always: function(){},
                 confirm: function(){},
                 cancel: function(){}
             },
             buttons: [{
-                text: $.mage.__('No'),
+                text: $.mage.__('Cancel'),
                 class: 'action-tertiary',
                 click: function(){
                     this.closeModal();
                 }
-            },{
-                text: $.mage.__('Yes'),
+            }, {
+                text: $.mage.__('OK'),
                 class: 'action-secondary',
                 click: function() {
                     this.closeModal(true);
@@ -58,7 +60,7 @@ define([
         }
     });
 
-    return function(config) {
+    return function (config) {
         return $('<div></div>').html(config.content).confirm(config);
     };
 });
