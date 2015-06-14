@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<mapping strict="0">
+<mapping strict="1">
     <wrapper>order[account]</wrapper>
     <fields>
-        <group>
+        <group_id>
             <input>select</input>>
-        </group>
+        </group_id>
         <email />
     </fields>
 </mapping>

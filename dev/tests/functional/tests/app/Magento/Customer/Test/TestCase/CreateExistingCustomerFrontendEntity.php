@@ -102,6 +102,6 @@ class CreateExistingCustomerFrontendEntity extends Injectable
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
     }
 }
