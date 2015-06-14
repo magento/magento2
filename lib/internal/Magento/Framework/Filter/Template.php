@@ -198,9 +198,14 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * This directive allows templates to be included inside other email templates using the following syntax:
-     * {{template config_path="<PATH>"}}, where <PATH> equals the XPATH to the system configuration value that contains
-     * the value of the template. This directive is useful to include things like a global header/footer.
+     * Allows templates to be included inside other templates
+     *
+     * Usage:
+     *
+     *     {{template config_path="<PATH>"}}
+     *
+     * <PATH> equals the XPATH to the system configuration value that contains the value of the template.
+     * This directive is useful to include things like a global header/footer.
      *
      * @param string[] $construction
      * @return mixed
@@ -268,7 +273,7 @@ class Template implements \Zend_Filter_Interface
      */
     protected function _getParameters($value)
     {
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Parameter();
+        $tokenizer = new Template\Tokenizer\Parameter();
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
@@ -290,7 +295,7 @@ class Template implements \Zend_Filter_Interface
     protected function _getVariable($value, $default = '{no_value_defined}')
     {
         \Magento\Framework\Profiler::start('email_template_processing_variables');
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Variable();
+        $tokenizer = new Template\Tokenizer\Variable();
         $tokenizer->setString($value);
         $stackVars = $tokenizer->tokenize();
         $result = $default;
