@@ -14,6 +14,8 @@ use Magento\Store\Model\ScopeInterface;
  * Template model class
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {
@@ -161,11 +163,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -177,8 +182,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        Template\Config $emailConfig,
+        TemplateFactory $templateFactory,
         array $data = []
     ) {
         $this->_design = $design;
@@ -431,6 +436,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param array $variables
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function addEmailVariables($variables, $storeId)
     {
@@ -530,14 +538,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getDesignParams()
     {
-        return array(
+        return [
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
             'theme' => $this->_design->getDesignTheme()->getCode(),
             'themeModel' => $this->_design->getDesignTheme(),
             'locale' => $this->_design->getLocale(),
-        );
+        ];
     }
 
     /**
@@ -578,7 +586,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Gets whether template is child of another template
+     * Check whether template is child of another template
      *
      * @return bool
      */
@@ -588,7 +596,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Sets whether template is child of another template
+     * Set whether template is child of another template
      *
      * @param bool $isChildTemplate
      * @return $this

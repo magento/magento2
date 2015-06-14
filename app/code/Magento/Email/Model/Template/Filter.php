@@ -600,11 +600,12 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * HTTP Protocol directive
      *
-     * Using:
-     * {{protocol}} - current protocol http or https
-     * {{protocol url="www.domain.com/"}} domain URL with current protocol
-     * {{protocol http="http://url" https="https://url"}
-     * also allow additional parameter "store"
+     * Usage:
+     *
+     *     {{protocol}} - current protocol http or https
+     *     {{protocol url="www.domain.com/"}} - domain URL with current protocol
+     *     {{protocol http="http://url" https="https://url"}}
+     *     {{protocol store="1"}} - Optional parameter which gets protocol from provide store based on store ID or code
      *
      * @param string[] $construction
      * @throws \Magento\Framework\Exception\MailException
