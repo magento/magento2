@@ -13,8 +13,8 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 
