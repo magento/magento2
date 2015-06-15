@@ -245,6 +245,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * Instance of category collection.
+     *
+     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     */
+    protected $categoryCollection;
+
+    /**
      * @var Product\Image\CacheFactory
      */
     protected $imageCacheFactory;
@@ -283,6 +290,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
+
+    /**
+     * @var int
+     */
+    protected $_productIdCached;
 
     /**
      * List of attributes in ProductInterface
@@ -704,7 +716,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryCollection()
     {
-        return $this->_getResource()->getCategoryCollection($this);
+        if ($this->categoryCollection === null || $this->getId() != $this->_productIdCached) {
+            $categoryCollection = $this->_getResource()->getCategoryCollection($this);
+            $this->setCategoryCollection($categoryCollection);
+            $this->_productIdCached = $this->getId();
+        }
+        return $this->categoryCollection;
+    }
+
+    /**
+     * Set product categories.
+     *
+     * @param \Magento\Framework\Data\Collection $categoryCollection
+     * @return $this
+     */
+    protected function setCategoryCollection(\Magento\Framework\Data\Collection $categoryCollection)
+    {
+        $this->categoryCollection = $categoryCollection;
+        return $this;
     }
 
     /**

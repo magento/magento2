@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  *
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
@@ -391,6 +392,89 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
         $this->assertInstanceOf('\Magento\Framework\Data\Collection', $this->model->getCategoryCollection());
+    }
+
+    /**
+     * @dataProvider getCategoryCollectionCollectionNullDataProvider
+     */
+    public function testGetCategoryCollectionCollectionNull($initCategoryCollection, $getIdResult, $productIdCached)
+    {
+        $product = $this->getMock(
+            '\Magento\Catalog\Model\Product',
+            [
+                '_getResource',
+                'setCategoryCollection',
+                'getId',
+            ],
+            [],
+            '',
+            false
+        );
+
+        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getCategoryCollection',
+            ])
+            ->getMockForAbstractClass();
+        $getCategoryCollectionMock = $this->getMock(
+            '\Magento\Framework\Data\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $product
+            ->expects($this->once())
+            ->method('setCategoryCollection')
+            ->with($getCategoryCollectionMock);
+        $product
+            ->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($getIdResult);
+        $abstractDbMock
+            ->expects($this->once())
+            ->method('getCategoryCollection')
+            ->with($product)
+            ->willReturn($getCategoryCollectionMock);
+        $product
+            ->expects($this->once())
+            ->method('_getResource')
+            ->willReturn($abstractDbMock);
+
+        $this->setPropertyValue($product, 'categoryCollection', $initCategoryCollection);
+        $this->setPropertyValue($product, '_productIdCached', $productIdCached);
+
+        $result = $product->getCategoryCollection();
+
+        $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached', $productIdCached);
+        $this->assertEquals($getIdResult, $productIdCachedActual);
+        $this->assertEquals($initCategoryCollection, $result);
+    }
+
+    public function getCategoryCollectionCollectionNullDataProvider()
+    {
+        return [
+            [
+                '$initCategoryCollection' => null,
+                '$getIdResult' => 'getIdResult value',
+                '$productIdCached' => 'productIdCached value',
+            ],
+            [
+                '$initCategoryCollection' => 'value',
+                '$getIdResult' => 'getIdResult value',
+                '$productIdCached' => 'not getIdResult value',
+            ],
+        ];
+    }
+
+    public function testSetCategoryCollection()
+    {
+        $collection = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->assertSame($this->model->getCategoryCollection(), $this->model->getCategoryCollection());
     }
 
     public function testGetCategory()
@@ -1250,5 +1334,32 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         //Calling the method again, empty options array will be returned
         $productModel->setOptions([]);
         $this->assertEquals([], $productModel->getOptions());
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
     }
 }
