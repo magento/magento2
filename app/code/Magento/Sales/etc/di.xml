@@ -268,4 +268,9 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Config">
+        <arguments>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+        </arguments>
+    </type>
 </config>
