@@ -132,7 +132,7 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @var \Pelago\Emogrifier
      */
-    private $emogrifier;
+    protected $emogrifier;
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
