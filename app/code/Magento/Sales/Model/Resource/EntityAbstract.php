@@ -59,25 +59,30 @@ abstract class EntityAbstract extends AbstractDb
     protected $entitySnapshot;
 
     /**
+     * @var EntityRelationComposite
+     */
+    protected $entityRelationComposite;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param string|null $resourcePrefix
-     * @param GridInterface|null $gridAggregator
+     * @param EntityRelationComposite $entityRelationComposite
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        EntityRelationComposite $entityRelationComposite,
+        $resourcePrefix = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
-        $this->gridAggregator = $gridAggregator;
         $this->entitySnapshot = $entitySnapshot;
+        $this->entityRelationComposite = $entityRelationComposite;
         if ($resourcePrefix === null) {
             $resourcePrefix = 'sales';
         }
@@ -125,13 +130,12 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-
         /** @var \Magento\Sales\Model\AbstractModel $object */
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
             $object->setIncrementId(
                 $this->sequenceManager->getSequence(
                     $object->getEntityType(),
-                    $object->getStore()->getId()
+                    $object->getStore()->getGroup()->getDefaultStoreId()
                 )->getNextValue()
             );
         }
@@ -192,18 +196,6 @@ abstract class EntityAbstract extends AbstractDb
     }
 
     /**
-     * Process entity relations
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
-    {
-        return $this;
-    }
-
-    /**
      * Save entity
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -216,7 +208,7 @@ abstract class EntityAbstract extends AbstractDb
             return $this->delete($object);
         }
         if (!$this->entitySnapshot->isModified($object)) {
-            $this->processRelations($object);
+            $this->entityRelationComposite->processRelations($object);
             return $this;
         }
         $this->beginTransaction();
@@ -238,9 +230,7 @@ abstract class EntityAbstract extends AbstractDb
                     $bind = $this->_prepareDataForSave($object);
                     unset($bind[$this->getIdFieldName()]);
                     $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-
                     $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
-
                     if ($this->_useIsObjectNew) {
                         $object->isObjectNew(false);
                     }
@@ -249,7 +239,7 @@ abstract class EntityAbstract extends AbstractDb
                 $this->_afterSave($object);
                 $this->entitySnapshot->registerSnapshot($object);
                 $object->afterSave();
-                $this->processRelations($object);
+                $this->entityRelationComposite->processRelations($object);
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
