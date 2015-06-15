@@ -94,6 +94,9 @@ class Install extends AbstractActionController
         } catch (\Exception $e) {
             $this->log->logError($e);
             $json->setVariable('success', false);
+            if ($e instanceof \Magento\Setup\SampleDataException) {
+                $json->setVariable('isSampleDataError', true);
+            }
         }
         return $json;
     }
@@ -107,6 +110,7 @@ class Install extends AbstractActionController
     {
         $percent = 0;
         $success = false;
+        $json = new JsonModel();
         try {
             $progress = $this->progressFactory->createFromLog($this->log);
             $percent = sprintf('%d', $progress->getRatio() * 100);
@@ -114,8 +118,11 @@ class Install extends AbstractActionController
             $contents = $this->log->get();
         } catch (\Exception $e) {
             $contents = [(string)$e];
+            if ($e instanceof \Magento\Setup\SampleDataException) {
+                $json->setVariable('isSampleDataError', true);
+            }
         }
-        return new JsonModel(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+        return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
     }
 
     /**
@@ -178,6 +185,8 @@ class Install extends AbstractActionController
             ? $source['store']['currency'] : '';
         $result[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA] = isset($source['store']['useSampleData'])
             ? $source['store']['useSampleData'] : '';
+        $result[InstallCommand::INPUT_KEY_CLEANUP_DB] = isset($source['store']['cleanUpDatabase'])
+            ? $source['store']['cleanUpDatabase'] : '';
         return $result;
     }
 
