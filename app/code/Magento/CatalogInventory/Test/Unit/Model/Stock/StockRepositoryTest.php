@@ -60,15 +60,18 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->stockFactoryMock = $this->getMockBuilder(
             'Magento\CatalogInventory\Model\StockFactory'
         )
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockCollectionMock = $this->getMockBuilder(
             'Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory'
         )
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder('Magento\Framework\DB\QueryBuilderFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mapperMock = $this->getMockBuilder('Magento\Framework\DB\MapperFactory')
