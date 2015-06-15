@@ -143,17 +143,16 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->orderMock->expects($this->once())->method('load')->with($orderId)->willReturn($this->orderMock);
         $this->orderMock->expects($this->any())->method('getId')->willReturn($orderId);
-        $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
         $this->orderMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->messageManagerMock->expects($this->once())->method('addSuccess')
-            ->with('The payment update has been made.');
+            ->with('There is no update for the transaction.');
 
         $this->resultRedirectMock->expects($this->once())->method('setPath')->with('sales/*/')->willReturnSelf();
 
         $this->paymentMock->expects($this->once())->method('update');
 
-        $result = $this->reviewPayment->execute();
-        $this->assertEquals($this->resultRedirectMock, $result);
+        $this->assertSame($this->resultRedirectMock, $this->reviewPayment->execute());
     }
 }
