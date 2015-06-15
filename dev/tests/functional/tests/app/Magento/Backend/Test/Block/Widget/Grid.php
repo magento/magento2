@@ -137,7 +137,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $rowTemplate = 'td[contains(text(),normalize-space("%s"))]';
+    protected $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
 
     /**
      * Secondary part of row locator template for getRow() method with strict option

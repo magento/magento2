@@ -35,6 +35,16 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected $_resized = false;
 
     /**
+     * For properties reset, e.g. mimeType caching.
+     *
+     * @return void
+     */
+    protected function _reset()
+    {
+        $this->_fileMimeType = null;
+        $this->_fileType = null;
+    }
+    /**
      * Open image for processing
      *
      * @param string $filename
@@ -44,6 +54,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     public function open($filename)
     {
         $this->_fileName = $filename;
+        $this->_reset();
         $this->getMimeType();
         $this->_getFileAttributes();
         if ($this->_isMemoryLimitReached()) {
