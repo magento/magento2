@@ -9,7 +9,8 @@
 
 @block-sign-in__fieldset__padding: @indent__m;
 @block-sign-in__or-label__size: 36px;
-@block-sign-in__width: ~"calc(@{checkout-sidebar__width} - @{indent__base}/2 - 2px)";
+@block-sign-in__width: ~"calc(100%/@{total-columns}*@{checkout-sidebar__columns} - @{indent__base}/2 - 2px)";
+@block-sign-in__border: 1px solid @color-gray-light3;
 
 //
 //  Common
@@ -162,8 +163,8 @@
     .block-sign-in-wrapper {
         .ui-dialog {
             .css(width, @block-sign-in__width);
+            .css(border, @block-sign-in__border);
             background: @color-white;
-            border: 1px solid @color-gray-light3;
             box-sizing: border-box;
             display: block !important;
             margin-top: 4rem;
