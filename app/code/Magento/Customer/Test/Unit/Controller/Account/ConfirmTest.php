@@ -129,15 +129,16 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
 
-        $redirectFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
+        $resultFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\ResultFactory',
             ['create'],
             [],
             '',
             false
         );
-        $redirectFactoryMock->expects($this->once())
+        $resultFactoryMock->expects($this->once())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
@@ -158,8 +159,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($redirectFactoryMock);
+            ->method('getResultFactory')
+            ->willReturn($resultFactoryMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

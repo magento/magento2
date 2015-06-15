@@ -7,6 +7,7 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Email
@@ -67,7 +68,7 @@ class Email extends \Magento\Backend\App\Action
             $this->messageManager->addError(__('Cannot send shipment information.'));
         }
 
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/view', ['shipment_id' => $this->getRequest()->getParam('shipment_id')]);
     }
 }

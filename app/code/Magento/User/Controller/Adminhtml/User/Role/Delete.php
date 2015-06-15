@@ -6,6 +6,8 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
@@ -15,7 +17,8 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $rid = $this->getRequest()->getParam('rid', false);
         /** @var \Magento\User\Model\User $currentUser */
         $currentUser = $this->_userFactory->create()->setId($this->_authSession->getUser()->getId());

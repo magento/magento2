@@ -6,6 +6,7 @@
 namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class AbstractMassStatus
@@ -70,7 +71,7 @@ class AbstractMassStatus extends \Magento\Backend\App\Action
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 

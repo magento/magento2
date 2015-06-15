@@ -8,6 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Account;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -69,7 +70,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath("*/*/");
     }
 }

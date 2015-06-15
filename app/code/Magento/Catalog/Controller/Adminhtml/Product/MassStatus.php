@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\Controller\ResultFactory;
 
 class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -73,7 +74,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
     }
 }

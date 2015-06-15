@@ -6,6 +6,8 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**
@@ -43,7 +45,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         $path = (bool)$this->getRequest()->getParam('back', false)
             ? 'adminhtml/system_design_editor/index/'
             : 'adminhtml/*/';
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath($path);
     }
 }

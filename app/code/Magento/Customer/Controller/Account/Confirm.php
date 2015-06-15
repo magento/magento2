@@ -18,6 +18,7 @@ use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Confirm
@@ -85,7 +86,7 @@ class Confirm extends \Magento\Customer\Controller\Account
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if ($this->_getSession()->isLoggedIn()) {
             $resultRedirect->setPath('*/*/');
