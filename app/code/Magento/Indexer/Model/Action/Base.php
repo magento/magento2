@@ -129,6 +129,7 @@ class Base implements ActionInterface
     {
         $this->prepareFields();
         $this->prepareSchema();
+        $this->prepareIndexes();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect()
@@ -146,6 +147,7 @@ class Base implements ActionInterface
     {
         $this->prepareFields();
         $this->prepareSchema();
+        $this->prepareIndexes();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect($ids)
@@ -163,6 +165,7 @@ class Base implements ActionInterface
     {
         $this->prepareFields();
         $this->prepareSchema();
+        $this->prepareIndexes();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect($id)

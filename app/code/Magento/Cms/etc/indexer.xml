@@ -12,8 +12,8 @@
 
         <fieldset name="cms_page" source="Magento\Cms\Model\Resource\Page">
             <field name="title" dataType="varchar" xsi:type="both"/>
-            <field name="meta_keywords" dataType="text" xsi:type="filterable"/>
-            <field name="meta_description" dataType="text"/>
+            <field name="meta_keywords" dataType="text" xsi:type="searchable"/>
+            <field name="meta_description" dataType="text" xsi:type="searchable"/>
             <field name="identifier" dataType="varchar" xsi:type="filterable"/>
             <field name="content_heading" dataType="varchar" xsi:type="searchable"/>
             <field name="content" dataType="mediumtext" xsi:type="searchable"/>
