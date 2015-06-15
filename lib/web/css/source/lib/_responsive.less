@@ -60,9 +60,9 @@
         .media-width('min', @screen__m);
     }
 
-    @media all and (min-width: @screen__m + 1),
+    @media all and (min-width: (@screen__m + 1)),
     print {
-        .media-width('min', @screen__m + 1);
+        .media-width('min', (@screen__m + 1));
     }
 
     @media all and (min-width: @screen__l),
