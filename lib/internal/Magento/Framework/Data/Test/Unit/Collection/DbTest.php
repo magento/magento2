@@ -11,7 +11,7 @@ namespace Magento\Framework\Data\Test\Unit\Collection;
 class DbTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Collection\Db
+     * @var \Magento\Framework\Data\Collection\AbstractDb
      */
     protected $collection;
 
@@ -39,7 +39,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Data\Collection\EntityFactory', ['create'], [], '', false
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->collection = new \Magento\Framework\Data\Collection\Db(
+        $this->collection = new \Magento\Framework\Data\Test\Unit\Collection\DbCollection(
             $this->entityFactoryMock,
             $this->loggerMock,
             $this->fetchStrategyMock
@@ -258,7 +258,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      * Test that after cloning collection $this->_select in initial and cloned collections
      * do not reference the same object
      *
-     * @covers \Magento\Framework\Data\Collection\Db::__clone
+     * @covers \Magento\Framework\Data\Collection\AbstractDb::__clone
      */
     public function testClone()
     {

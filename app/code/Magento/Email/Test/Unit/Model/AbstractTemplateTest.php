@@ -11,8 +11,6 @@
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\AbstractTemplate;
-
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -187,7 +185,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
                 'setIsChildTemplate',
-                'setTemplateModel',
+                'setDesignParams',
                 'setVariables',
                 'setStoreId',
                 'filter',
@@ -209,7 +207,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
             ->method('setIsChildTemplate')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
-            ->method('setTemplateModel')
+            ->method('setDesignParams')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->any())
             ->method('setStoreId')

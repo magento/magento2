@@ -9,16 +9,16 @@
     <event name="sales_order_place_after">
         <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment" method="execute" />
     </event>
-    <event name="sales_order_save_after">
+    <event name="sales_order_process_relation">
         <observer name="sales_grid_order_sync_insert" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_invoice_save_after">
+    <event name="sales_order_invoice_process_relation">
         <observer name="sales_grid_order_invoice_sync_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_shipment_save_after">
+    <event name="sales_order_shipment_process_relation">
         <observer name="sales_grid_order_shipment_sync_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_creditmemo_save_after">
+    <event name="sales_order_creditmemo_process_relation">
         <observer name="sales_grid_order_creditmemo_sync_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="syncInsert" />
     </event>
     <event name="sales_order_delete_after">

@@ -38,19 +38,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $request;
+    private $assetRepo;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filesystem;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $assetRepo;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -71,6 +66,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $templateFactory;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
 
     /**
      * @var \Magento\Newsletter\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -109,13 +109,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
@@ -128,6 +125,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterFactory = $this->getMockBuilder('Magento\Newsletter\Model\Template\FilterFactory')
@@ -152,13 +152,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->registry,
                     $this->appEmulation,
                     $this->storeManager,
-                    $this->request,
-                    $this->scopeConfig,
                     $this->assetRepo,
                     $this->filesystem,
+                    $this->scopeConfig,
                     $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
+                    $this->request,
                     $this->filterFactory
                 ]
             )
@@ -219,7 +219,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
                 'setIsChildTemplate',
-                'setTemplateModel',
+                'setDesignParams',
                 'setVariables',
                 'setStoreId',
                 'filter',
@@ -241,7 +241,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('setIsChildTemplate')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
-            ->method('setTemplateModel')
+            ->method('setDesignParams')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
