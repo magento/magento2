@@ -156,6 +156,7 @@
                 <xs:choice>
                     <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
                 </xs:choice>
+                <xs:attribute type="dataType" name="dataType" use="optional" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -184,6 +185,7 @@
             <xs:enumeration value="int" />
             <xs:enumeration value="float" />
             <xs:enumeration value="varchar" />
+            <xs:enumeration value="text" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -195,9 +197,7 @@
 
     <xs:complexType name="filterable">
         <xs:complexContent>
-            <xs:extension base="fieldType">
-                <xs:attribute type="dataType" name="dataType" use="required" />
-            </xs:extension>
+            <xs:extension base="fieldType"/>
         </xs:complexContent>
     </xs:complexType>
 
