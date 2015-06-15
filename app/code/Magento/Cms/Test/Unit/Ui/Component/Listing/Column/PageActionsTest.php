@@ -61,10 +61,22 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         // Configure mocks and object data
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->returnValueMap(
+            ->willReturnMap(
                 [
-                    PageActions::CMS_URL_PATH_EDIT, ['page_id' => $pageId], 'test/url/edit',
-                    PageActions::CMS_URL_PATH_DELETE, ['page_id' => $pageId], 'test/url/delete',
+                    [
+                        PageActions::CMS_URL_PATH_EDIT,
+                        [
+                            'page_id' => $pageId
+                        ],
+                        'test/url/edit',
+                    ],
+                    [
+                        PageActions::CMS_URL_PATH_DELETE,
+                        [
+                            'page_id' => $pageId
+                        ],
+                        'test/url/delete',
+                    ],
                 ]
             );
 
