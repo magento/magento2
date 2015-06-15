@@ -25,22 +25,22 @@ class Source extends AbstractEav
      * Construct
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         $resourcePrefix = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $eavConfig, $eventManager, $tableStrategy, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $resourcePrefix);
     }
 
     /**
