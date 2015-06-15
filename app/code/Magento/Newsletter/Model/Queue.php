@@ -119,6 +119,8 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\ProblemFactory $problemFactory
      * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
