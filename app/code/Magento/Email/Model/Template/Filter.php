@@ -702,24 +702,22 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $params = $this->_getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
-        if ($file) {
-            $css = $this->getCssFilesContent([$params['file']]);
-
-            if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
-                !== false
-            ) {
-                // Return LESS compilation error wrapped in CSS comment
-                return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
-            } elseif (!empty($css)) {
-                return $css;
-            } else {
-                // Return CSS comment for debugging purposes
-                return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
-            }
+        if (!$file) {
+            // Return CSS comment for debugging purposes
+            return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        // Return CSS comment for debugging purposes
-        return '/* ' . __('"file" argument must be specified') . ' */';
+        $css = $this->getCssFilesContent([$params['file']]);
+
+        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false ) {
+            // Return LESS compilation error wrapped in CSS comment
+            return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
+        } elseif (!empty($css)) {
+            return $css;
+        } else {
+            // Return CSS comment for debugging purposes
+            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+        }
     }
 
     /**
@@ -737,6 +735,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function inlinecssDirective($construction)
     {
@@ -752,14 +751,16 @@ class Filter extends \Magento\Framework\Filter\Template
         }
 
         $params = $this->_getParameters($construction[2]);
-        if (isset($params['file'])) {
-            $this->addInlineCssFile($params['file']);
-
-            // CSS should be applied after entire template has been filtered, so add as after filter callback
-            $this->addAfterFilterCallback([$this, 'applyInlineCss']);
-        } else {
-            throw new \LogicException(__('"file" argument must be specified'));
+        if (!isset($params['file']) || !$params['file']) {
+            throw new \Magento\Framework\Exception\MailException(
+                __('"file" parameter must be specified and must not be empty')
+            );
         }
+
+        $this->addInlineCssFile($params['file']);
+
+        // CSS should be applied after entire template has been filtered, so add as after filter callback
+        $this->addAfterFilterCallback([$this, 'applyInlineCss']);
         return '';
     }
 
