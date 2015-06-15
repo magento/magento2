@@ -58,8 +58,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     protected $_request;
 
     /**
-     * Constructor
-     *
      * Filter factory
      *
      * @var \Magento\Newsletter\Model\Template\FilterFactory
@@ -72,7 +70,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
@@ -80,6 +77,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
      *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -90,13 +88,13 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
         array $data = []
     ) {

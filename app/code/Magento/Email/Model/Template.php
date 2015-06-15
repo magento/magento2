@@ -112,13 +112,13 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
-     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -129,13 +129,13 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         StoreManagerInterface $storeManager,
-        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = []
     ) {
         $this->filterFactory = $filterFactory;

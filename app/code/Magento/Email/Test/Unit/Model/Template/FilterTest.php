@@ -8,68 +8,74 @@ namespace Magento\Email\Test\Unit\Model\Template;
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Email\Model\Template\Filter
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $filter;
+    private $objectManager;
 
     /**
-     * @var $string \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
     /**
-     * @var $logger \Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
 
     /**
-     * @var $escaper \Magento\Framework\Escaper
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $escaper;
 
     /**
-     * @var $assetRepo \Magento\Framework\View\Asset\Repository
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
      */
     private $assetRepo;
 
     /**
-     * @var $scopeConfig \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var $coreVariableFactory \Magento\Variable\Model\VariableFactory
+     * @var \Magento\Variable\Model\VariableFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $coreVariableFactory;
 
     /**
-     * @var $storeManager \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManager;
 
     /**
-     * @var $layout \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layout;
 
     /**
-     * @var $layoutFactory \Magento\Framework\View\LayoutFactory
+     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $layoutFactory;
 
     /**
-     * @var $appState \Magento\Framework\App\State
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
     private $appState;
 
     /**
-     * @var $backendUrlBuilder \Magento\Backend\Model\UrlInterface
+     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $backendUrlBuilder;
 
+    /**
+     * @var \Pelago\Emogrifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $emogrifier;
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,20 +121,33 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filter = new \Magento\Email\Model\Template\Filter(
-            $this->string,
-            $this->logger,
-            $this->escaper,
-            $this->assetRepo,
-            $this->scopeConfig,
-            $this->coreVariableFactory,
-            $this->storeManager,
-            $this->layout,
-            $this->layoutFactory,
-            $this->appState,
-            $this->backendUrlBuilder,
-            []
-        );
+        $this->emogrifier = $this->objectManager->getObject('\Pelago\Emogrifier');
+    }
+
+    /**
+     * @param null $mockedMethods Methods to mock
+     * @return \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getModel($mockedMethods = null)
+    {
+        return $this->getMockBuilder('\Magento\Email\Model\Template\Filter')
+            ->setConstructorArgs([
+                $this->string,
+                $this->logger,
+                $this->escaper,
+                $this->assetRepo,
+                $this->scopeConfig,
+                $this->coreVariableFactory,
+                $this->storeManager,
+                $this->layout,
+                $this->layoutFactory,
+                $this->appState,
+                $this->backendUrlBuilder,
+                $this->emogrifier,
+                []
+            ])
+            ->setMethods($mockedMethods)
+            ->getMock();
     }
 
     /**
@@ -205,5 +224,69 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test basic usages of applyInlineCss
+     *
+     * @param $html
+     * @param $css
+     * @param $expectedResults
+     *
+     * @dataProvider applyInlineCssDataProvider
+     */
+    public function testApplyInlineCss($html, $css, $expectedResults){
+        /* @var $filter \Magento\Email\Model\Template\Filter */
+        $filter = $this->getModel(['getCssFilesContent']);
+
+        $filter->expects($this->exactly(count($expectedResults)))
+            ->method('getCssFilesContent')
+            ->will($this->returnValue($css));
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $filter->setDesignParams($designParams);
+
+        foreach ($expectedResults as $expectedResult) {
+            $this->assertContains($expectedResult, $filter->applyInlineCss($html));
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function applyInlineCssDataProvider()
+    {
+        return [
+            'Ensure styles get inlined' => [
+                '<html><p></p></html>',
+                'p { color: #000 }',
+                ['<p style="color: #000;"></p>'],
+            ],
+            'CSS with error does not get inlined' => [
+                '<html><p></p></html>',
+                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                ['<html><p></p></html>'],
+            ],
+            'Ensure disableStyleBlocksParsing option is working' => [
+                '<html><head><style type="text/css">div { color: #111; }</style></head><p></p></html>',
+                'p { color: #000 }',
+                [
+                    '<head><style type="text/css">div { color: #111; }</style></head>',
+                    '<p style="color: #000;"></p>',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
+    {
+        $this->getModel()->applyInlineCss('test');
     }
 }
