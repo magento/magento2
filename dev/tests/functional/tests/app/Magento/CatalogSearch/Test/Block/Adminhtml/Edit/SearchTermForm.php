@@ -6,11 +6,10 @@
 
 namespace Magento\CatalogSearch\Test\Block\Adminhtml\Edit;
 
-use Magento\Backend\Test\Block\Widget\Form as WidgetForm;
+use Magento\Mtf\Block\Form as WidgetForm;
 
 /**
- * Class Form
- * Form for search term
+ * Form for search term.
  */
 class SearchTermForm extends WidgetForm
 {

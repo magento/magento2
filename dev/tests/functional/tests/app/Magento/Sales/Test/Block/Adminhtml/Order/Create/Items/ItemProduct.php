@@ -91,6 +91,9 @@ class ItemProduct extends Form
         if (isset($data['cartItem'])) {
             unset($data['cartItem']);
         }
+        if (isset($data['options'])) {
+            unset($data['options']);
+        }
         $mapping = $this->dataMapping($data);
         $this->_fill($mapping, $element);
 
