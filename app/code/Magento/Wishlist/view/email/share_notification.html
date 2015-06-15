@@ -15,10 +15,10 @@
 
 {{template config_path="design/email/header_template"}}
 
-                        <p>Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
-                        <p>{{var message}}</p>
-                        {{var items|raw}}
-                        <br/>
-                        <p><strong><a href="{{var viewOnSiteLink}}">View all Wish List items</a></strong></p>
+<p>Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
+<p>{{var message}}</p>
+{{var items|raw}}
+<br/>
+<p><strong><a href="{{var viewOnSiteLink}}">View all Wish List items</a></strong></p>
 
 {{template config_path="design/email/footer_template"}}
