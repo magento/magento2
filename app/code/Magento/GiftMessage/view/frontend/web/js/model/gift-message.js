@@ -93,7 +93,6 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                             );
                         }
                     });
-                    console.log('params', params);
                     return params;
                 }
             };

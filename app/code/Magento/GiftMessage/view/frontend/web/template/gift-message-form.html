@@ -5,13 +5,10 @@
  */
 -->
 <div class="gift-message">
-    <!-- ko if: isActive() -->
     <div class="gift-options-title">
         <span data-bind="text: $t('Gift Message (optional)')"></span>
     </div>
-    <!-- /ko -->
     <div class="gift-options-content">
-        <!-- ko if: isActive() -->
         <fieldset class="fieldset">
             <div class="field field-to">
                 <label for="gift-message-whole-to" class="label">
@@ -48,7 +45,6 @@
                 </div>
             </div>
         </fieldset>
-        <!-- /ko -->
         <div class="actions-toolbar">
             <div class="secondary">
                 <button type="submit" class="action secondary action-update" data-bind="
