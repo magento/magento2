@@ -2025,6 +2025,18 @@ return [
         'Magento\Core\Model\Layout\Argument\UpdaterInterface',
         'Magento\Framework\View\Layout\Argument\UpdaterInterface',
     ],
+    [
+        'Magento\Framework\Api\Config\Converter',
+        'Magento\Framework\Api\ExtensionAttribute\Config\Converter',
+    ],
+    [
+        'Magento\Framework\Api\Config\Reader',
+        'Magento\Framework\Api\ExtensionAttribute\Config\Reader',
+    ],
+    [
+        'Magento\Framework\Api\Config\SchemaLocator',
+        'Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator',
+    ],
     ['Magento\Core\Model\Layout\Filter\Acl', 'Magento\Backend\Model\Layout\Filter\Acl'],
     [
         'Magento\Framework\View\Layout\Argument\HandlerInterface',
@@ -2082,6 +2094,7 @@ return [
     ['Magento\Core\Model\Context', 'Magento\Framework\Model\Context'],
     ['Magento\Core\Model\Registry', 'Magento\Framework\Registry'],
     ['Magento\Framework\Code\Plugin\InvocationChain'],
+    ['Magento\Framework\Data\Collection\Db', 'Magento\Framework\Data\Collection\AbstractDb'],
     ['Magento\Catalog\Helper\Product\Flat'],
     ['Magento\Catalog\Helper\Flat\AbstractFlat'],
     ['Magento\Core\App\Action\Plugin\Install', 'Magento\Framework\App\Bootstrap'],
