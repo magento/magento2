@@ -227,6 +227,13 @@
                                                                     <item name="field" xsi:type="string">country_id</item>
                                                                 </item>
                                                             </item>
+                                                            <item name="payments-list" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
+                                                                <item name="displayArea" xsi:type="string">payment-methods-list</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge payment method renderers here -->
+                                                                </item>
+                                                            </item>
                                                             <!-- merge your payment methods here -->
                                                             <item name="afterMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
