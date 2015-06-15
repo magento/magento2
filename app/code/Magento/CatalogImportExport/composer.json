@@ -8,6 +8,7 @@
         "magento/module-import-export": "0.74.0-beta12",
         "magento/module-indexer": "0.74.0-beta12",
         "magento/module-store": "0.74.0-beta12",
+        "magento/module-tax": "0.74.0-beta12",
         "magento/module-catalog-inventory": "0.74.0-beta12",
         "magento/module-media-storage": "0.74.0-beta12",
         "magento/module-customer": "0.74.0-beta12",

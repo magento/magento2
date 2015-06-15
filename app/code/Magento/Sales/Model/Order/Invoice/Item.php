@@ -110,6 +110,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Retrieve invoice instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Sales\Model\Order\Invoice
      */
     public function getInvoice()
@@ -149,6 +151,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
     /**
      * Declare qty
+     *
+     * @codeCoverageIgnore
      *
      * @param float $qty
      * @return $this
@@ -253,6 +257,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -483,7 +488,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return $this->getData(InvoiceItemInterface::TAX_AMOUNT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
