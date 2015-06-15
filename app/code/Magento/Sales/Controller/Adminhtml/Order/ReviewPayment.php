@@ -39,7 +39,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         } else if ($order->getPayment()->getIsTransactionDenied()) {
                             $message = __('Transaction has been voided/declined.');
                         } else {
-                            $message = __('The payment update has been made.');
+                            $message = __('There is no update for the transaction.');
                         }
                         break;
                     default:
