@@ -20,7 +20,6 @@ define([
             indetermine: false,
             selected: [],
             excluded: [],
-            ns: '${ $.provider }:params',
             actions: [{
                 value: 'selectAll',
                 label: $t('Select all')
@@ -41,13 +40,9 @@ define([
             },
 
             listens: {
-                '${ $.ns }.filters': 'deselectAll',
+                '${ $.provider }:params.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
-            },
-
-            modules: {
-                source: '${ $.provider }'
             }
         },
 
@@ -223,18 +218,17 @@ define([
         },
 
         /**
-         * Exports selections to the data provider.
+         * Returns selections data.
+         *
+         * @returns {Object}
          */
-        exportSelections: function () {
-            var data = {},
-                type;
-
-            type = this.excludeMode() ? 'excluded' : 'selected';
-
-            data[type] = this[type]();
-            data.total = this.totalSelected();
-
-            this.source('set', 'config.multiselect', data);
+        getSelections: function () {
+            return {
+                excluded: this.excluded(),
+                selected: this.selected(),
+                total: this.totalSelected(),
+                excludeMode: this.excludeMode()
+            };
         },
 
         /**
@@ -245,27 +239,27 @@ define([
          */
         isActionRelevant: function (actionId) {
             var pageIds = this.getIds().length,
-                multiplePages = pageIds < this.totalRecords();
+                multiplePages = pageIds < this.totalRecords(),
+                result = true;
 
             switch (actionId) {
                 case 'selectPage':
-
-                    return multiplePages && !this.isPageSelected(true);
+                    result = multiplePages && !this.isPageSelected(true);
+                    break;
 
                 case 'deselectPage':
-
-                    return multiplePages && this.isPageSelected();
+                    result =  multiplePages && this.isPageSelected();
+                    break;
 
                 case 'selectAll':
-
-                    return !this.allSelected();
+                    result = !this.allSelected();
+                    break;
 
                 case 'deselectAll':
-
-                    return this.totalSelected() > 0;
+                    result = this.totalSelected() > 0;
             }
 
-            return true;
+            return result;
         },
 
         /**
@@ -332,8 +326,7 @@ define([
         onSelectedChange: function (selected) {
             this.updateExcluded(selected)
                 .countSelected()
-                .updateState()
-                .exportSelections();
+                .updateState();
         },
 
         /**
@@ -341,12 +334,12 @@ define([
          * based on "selectMode" property.
          */
         onRowsChange: function () {
-            var newSelected;
+            var newSelections;
 
             if (this.excludeMode()) {
-                newSelected = _.union(this.getIds(true), this.selected());
+                newSelections = _.union(this.getIds(true), this.selected());
 
-                this.selected(newSelected);
+                this.selected(newSelections);
             }
         }
     });
