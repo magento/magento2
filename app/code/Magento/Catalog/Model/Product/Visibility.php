@@ -49,7 +49,6 @@ class Visibility extends \Magento\Framework\Object
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;
         parent::__construct($data);
-        $this->setIdFieldName('visibility_id');
     }
 
     /**

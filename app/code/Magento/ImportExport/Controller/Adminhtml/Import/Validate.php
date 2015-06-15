@@ -75,7 +75,8 @@ class Validate extends ImportController
                 $source = ImportAdapter::findAdapterFor(
                     $import->uploadSource(),
                     $this->_objectManager->create('Magento\Framework\Filesystem')
-                        ->getDirectoryWrite(DirectoryList::ROOT)
+                        ->getDirectoryWrite(DirectoryList::ROOT),
+                    $data[$import::FIELD_FIELD_SEPARATOR]
                 );
                 $validationResult = $import->validateSource($source);
 
