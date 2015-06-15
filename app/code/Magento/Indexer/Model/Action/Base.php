@@ -88,6 +88,11 @@ class Base implements ActionInterface
     protected $string;
 
     /**
+     * @var []
+     */
+    protected $columns = [];
+
+    /**
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param Handler $handlerProcessor
@@ -220,8 +225,7 @@ class Base implements ActionInterface
             ['identity' => true, 'nullable' => false, 'primary' => true]
         );
 
-        $columns = array_merge($this->filterColumns, $this->searchColumns);
-        foreach ($columns as $column) {
+        foreach ($this->columns as $column) {
             $table->addColumn($column['name'], $column['type'], $column['size']);
         }
         $this->connection->createTable($table);
@@ -301,32 +305,32 @@ class Base implements ActionInterface
                     : ['type' => Table::TYPE_TEXT, 'size' => Table::DEFAULT_TEXT_SIZE];
                 switch ($field['type']) {
                     case 'filterable':
-                        $this->filterColumns[] = [
+                        $this->columns[] = $this->filterColumns[] = [
                             'name' => $fieldName,
                             'type' => $columnMap['type'],
                             'size' => $columnMap['size'],
                         ];
                         break;
                     case 'searchable':
-                        $this->searchColumns[] = [
+                        $this->columns[] = $this->searchColumns[] = [
                             'name' => $fieldName,
                             'type' => $columnMap['type'],
                             'size' => $columnMap['size'],
                         ];
                         break;
-
+                    case 'both': {
+                        $this->columns[] = $this->filterColumns[] = $this->searchColumns[] = [
+                            'name' => $fieldName,
+                            'type' => $columnMap['type'],
+                            'size' => $columnMap['size'],
+                        ];
+                    } break;
                     default:
-                        $this->filterColumns[] = [
+                        $this->columns[] = [
                             'name' => $fieldName,
                             'type' => $columnMap['type'],
                             'size' => $columnMap['size'],
                         ];
-                        $this->searchColumns[] = [
-                            'name' => $fieldName,
-                            'type' => $columnMap['type'],
-                            'size' => $columnMap['size'],
-                        ];
-                        break;
                 }
             }
         }
