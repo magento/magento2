@@ -539,7 +539,8 @@ class Address extends AbstractCustomer
             'entity_row_new' => $entityRowNew,
             'entity_row_update' => $entityRowUpdate,
             'attributes' => $attributes,
-            'defaults' => $defaults];
+            'defaults' => $defaults
+        ];
     }
 
     /**
