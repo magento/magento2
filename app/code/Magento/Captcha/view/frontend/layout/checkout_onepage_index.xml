@@ -13,6 +13,15 @@
                     <item name="components" xsi:type="array">
                         <item name="checkout" xsi:type="array">
                             <item name="children" xsi:type="array">
+                                <item name="authentication" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="captcha" xsi:type="array">
+                                            <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
+                                            <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                            <item name="formId" xsi:type="string">user_login</item>
+                                        </item>
+                                    </item>
+                                </item>
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
                                         <item name="shipping-step" xsi:type="array">
@@ -28,7 +37,7 @@
                                                                                 <item name="captcha" xsi:type="array">
                                                                                     <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                                                                     <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
-                                                                                    <item name="formId" xsi:type="string">user_login</item>
+                                                                                    <item name="formId" xsi:type="string">checkout_email</item>
                                                                                 </item>
                                                                             </item>
                                                                         </item>
