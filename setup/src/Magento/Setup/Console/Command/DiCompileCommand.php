@@ -40,7 +40,7 @@ class DiCompileCommand extends Command
 
     /** @var array */
     private $excludedPathsList;
-    
+
     /**
      * Constructor
      *
