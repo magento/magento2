@@ -9,6 +9,11 @@
 {"var customerName":"Customer Name",
 "var alertGrid":"Alert Data Grid"}
 @-->
+
+{{template config_path="design/email/header_template"}}
+
 Hello {{var customerName}},
 
 {{var alertGrid|raw}}
+
+{{template config_path="design/email/footer_template"}}

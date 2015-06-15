@@ -25,4 +25,8 @@ Use vars: {{var var_name}}
 "var message":"Sender Message"}
 @-->
 
+{{template config_path="design/email/header_template"}}
+
 Welcome, {{var name}}<br /><br />Please look at <a href="{{var product_url}}">{{var product_name}}</a><br /><br />Here is message: <br />{{var message}}<br /><br />
+
+{{template config_path="design/email/footer_template"}}

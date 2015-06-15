@@ -12,38 +12,13 @@
 "var message":"Wish List Message",
 "var items":"Wish List Items"}
 @-->
-<!--@styles
-body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
-@-->
 
-<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
-    <tr>
-        <td align="center" valign="top" style="padding:20px 0 20px 0">
-            <!-- [ header starts here] -->
-            <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-                <tr>
-                    <td valign="top">
-                        <a href="{{store url=""}}" style="color:#1E7EC8;"><img src="{{var logo_url}}" alt="{{var logo_alt}}" border="0"/></a>
-                    </td>
-                </tr>
-                <!-- [ middle starts here] -->
-                <tr>
-                    <td valign="top">
+{{template config_path="design/email/header_template"}}
+
                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">{{var message}}</p>
                         {{var items|raw}}
                         <br/>
                         <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;text-align: center;"><strong><a href="{{var viewOnSiteLink}}" style="color:#1E7EC8;">View all Wish List items</a></strong></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you, <strong>{{var customerName}}</strong></p></center></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-</div>
-</body>
+
+{{template config_path="design/email/footer_template"}}
