@@ -174,7 +174,7 @@ class Template implements \Zend_Filter_Interface
     public function addAfterFilterCallback(callable $afterFilterCallback)
     {
         // Only add callback if it doesn't already exist
-        if (in_array($afterFilterCallback, array_values($this->afterFilterCallbacks))) {
+        if (in_array($afterFilterCallback, $this->afterFilterCallbacks)) {
             return $this;
         }
 

@@ -9,6 +9,7 @@ namespace Magento\Email\Model\Template;
  * Core Email Template Filter Model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Framework\Filter\Template
@@ -789,7 +790,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param [] $files
      * @return string
-     * @throws \LogicException
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function getCssFilesContent(array $files)
     {
@@ -798,7 +799,9 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $designParams = $this->getDesignParams();
         if (!count($designParams)) {
-            throw new \LogicException(__('Design params must be set before calling this method'));
+            throw new \Magento\Framework\Exception\MailException(
+                __('Design params must be set before calling this method')
+            );
         }
         $css = '';
         foreach ($files as $file) {
@@ -814,6 +817,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $html
      * @return string
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function applyInlineCss($html)
     {
@@ -828,7 +832,9 @@ class Filter extends \Magento\Framework\Filter\Template
                 if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
-                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
+                    throw new \Magento\Framework\Exception\MailException(
+                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                    );
                 }
 
                 $emogrifier = $this->emogrifier;
