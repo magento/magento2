@@ -7,6 +7,7 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
@@ -99,12 +100,10 @@ class FormTabs extends Form
     /**
      * Fill fields which weren't found on filled tabs
      *
-     * @param array $tabs
      * @throws \Exception
-     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function fillMissedFields(array $tabs)
+    protected function fillMissedFields()
     {
         foreach ($this->tabs as $tabName => $tabData) {
             $tab = $this->getTab($tabName);

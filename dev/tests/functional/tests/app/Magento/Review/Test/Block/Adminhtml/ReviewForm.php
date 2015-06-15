@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Block\Adminhtml;
 
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
