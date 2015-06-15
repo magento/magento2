@@ -19,15 +19,15 @@
 
 {{template config_path="design/email/header_template"}}
 
-                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Dear {{var billing.getName()}},</h1>
-                    <p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">
+                    <h1>Dear {{var billing.getName()}},</h1>
+                    <p>
                         Your order # {{var order.increment_id}} has been <br/>
                         <strong>{{var order.getStatusLabel()}}</strong>.
                     </p>
-                    <p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">{{var comment}}</p>
-                    <p style="font-size:12px; line-height:16px; margin:0;">
+                    <p>{{var comment}}</p>
+                    <p>
                         If you have any questions, please feel free to contact us at
-                        <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a>
+                        <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a>
                         or by phone at {{config path='general/store_information/phone'}}.
                     </p>
 

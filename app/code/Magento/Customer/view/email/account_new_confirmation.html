@@ -18,15 +18,15 @@
 
 {{template config_path="design/email/header_template"}}
 
-                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Dear {{var customer.name}},</h1>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Your e-mail {{var customer.email}} must be confirmed before using it to log in to our store.</p>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;">To confirm the e-mail and instantly log in, please, use <a href="{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}" style="color:#1E7EC8;">this confirmation link</a>. This link is valid only once.</p>
-                            <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0 0 16px 0; padding:13px 18px; background:#f9f9f9;">
+                            <h1>Dear {{var customer.name}},</h1>
+                            <p>Your e-mail {{var customer.email}} must be confirmed before using it to log in to our store.</p>
+                            <p>To confirm the e-mail and instantly log in, please, use <a href="{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}" >this confirmation link</a>. This link is valid only once.</p>
+                            <p>
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail:</strong> {{var customer.email}}<br/>
                                 <strong>Password:</strong> Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()|escape}})<br/>
                                 Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createPassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.
                             </p>
-                            <p style="font-size:12px; line-height:16px; margin:0;">If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
+                            <p>If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
 
 {{template config_path="design/email/footer_template"}}
