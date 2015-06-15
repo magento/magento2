@@ -125,7 +125,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $mockedMethods Methods to mock
+     * @param array|null $mockedMethods Methods to mock
      * @return \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModel($mockedMethods = null)
@@ -160,8 +160,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransDirective($value, $expected, array $variables = [])
     {
-        $this->filter->setVariables($variables);
-        $this->assertEquals($expected, $this->filter->filter($value));
+        $filter = $this->getModel()->setVariables($variables);
+        $this->assertEquals($expected, $filter->filter($value));
     }
 
     /**
@@ -236,7 +236,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @dataProvider applyInlineCssDataProvider
      */
     public function testApplyInlineCss($html, $css, $expectedResults){
-        /* @var $filter \Magento\Email\Model\Template\Filter */
         $filter = $this->getModel(['getCssFilesContent']);
 
         $filter->expects($this->exactly(count($expectedResults)))
