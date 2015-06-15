@@ -117,7 +117,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Filter\FilterManager $filterManager,
         array $data = []
     ) {
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, null, null, $data);
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->_filter = $filter;

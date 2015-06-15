@@ -190,7 +190,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $this->_viewFileSystem = $viewFileSystem;
         $this->_emailFilterFactory = $emailFilterFactory;
         $this->_emailConfig = $emailConfig;
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, null, null, $data);
     }
 
     /**
