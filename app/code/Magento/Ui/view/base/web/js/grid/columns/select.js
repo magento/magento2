@@ -8,16 +8,25 @@ define([
     'use strict';
 
     return Column.extend({
-        getLabel: function (data) {
+        /**
+         * Retrieves label associated with a provided value.
+         *
+         * @param {(String|Number)} value - Value of the option.
+         * @returns {String}
+         */
+        getLabel: function (value) {
             var options = this.options || [],
                 label = '';
-            data = data || '';
 
+            value = value || '';
+
+            /*eslint-disable eqeqeq*/
             options.some(function (item) {
                 label = item.label;
 
-                return item.value == data;
+                return item.value == value;
             });
+            /*eslint-enable eqeqeq*/
 
             return label;
         }
