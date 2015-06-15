@@ -8,6 +8,7 @@ namespace Magento\Indexer\Model\Action;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
@@ -47,7 +48,11 @@ class Base implements ActionInterface
      */
     protected $data;
 
-
+    protected $columnTypesMap = [
+        'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
+        'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
+        'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
+    ];
     /**
      * @var array
      */
@@ -116,6 +121,7 @@ class Base implements ActionInterface
      */
     public function executeFull()
     {
+        $this->prepareFields();
         $this->prepareSchema();
         $this->connection->query($this->prepareQuery());
     }
@@ -142,13 +148,10 @@ class Base implements ActionInterface
 
     protected function prepareQuery()
     {
-        $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
-        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
-        $this->prepareFields();
         $select = $this->createResultSelect();
         return $this->connection->insertFromSelect(
             $select,
-            'index_' . $this->sources[$this->data['primary']]->getMainTable()
+            'index_' . $this->getPrimaryResource()->getMainTable()
         );
     }
 
@@ -164,23 +167,55 @@ class Base implements ActionInterface
 
     protected function prepareSchema()
     {
-        $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
-        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
-        $this->prepareFields();
         $this->prepareColumns();
         $newTableName = 'index_' . $this->getPrimaryResource()->getMainTable();
         $table = $this->connection->newTable($newTableName)
             ->setComment($this->string->upperCaseWords($newTableName, '_', ' '));
-        foreach ($this->filterColumns as $column) {
-            $table->addColumn($column['name'], $column['type']);
+
+        $table->addColumn(
+            $this->getPrimaryResource()->getIdFieldName(),
+            Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'nullable' => false, 'primary' => true]
+        );
+
+        $columns = array_merge($this->filterColumns, $this->searchColumns);
+        foreach ($columns as $column) {
+            $table->addColumn($column['name'], $column['type'], $column['size']);
         }
         $this->connection->createTable($table);
+    }
+
+    protected function prepareIndexes()
+    {
+        $tableName = 'index_' . $this->getPrimaryResource()->getMainTable();
+
+        foreach ($this->filterColumns as $column) {
+            $this->connection->addIndex(
+                $tableName,
+                $this->connection->getIndexName($tableName, $column['name']),
+                $column['name']
+            );
+        }
+
+        $fullTextIndex = [];
+        foreach ($this->searchColumns as $column) {
+            $fullTextIndex[] = $column['name'];
+        }
+
+        $this->connection->addIndex(
+            $tableName,
+            $this->connection->getIndexName($tableName, $fullTextIndex, AdapterInterface::INDEX_TYPE_FULLTEXT),
+            $fullTextIndex,
+            AdapterInterface::INDEX_TYPE_FULLTEXT
+
+        );
     }
 
     protected function createResultSelect()
     {
         $select = $this->connection->select();
-        $select->from($this->getPrimaryResource()->getMainTable());
+        $select->from($this->getPrimaryResource()->getMainTable(), $this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             if (isset($fieldset['reference']['from']) && isset($fieldset['reference']['to'])) {
                 $source = $fieldset['source'];
@@ -210,21 +245,35 @@ class Base implements ActionInterface
     {
         foreach ($this->data['fieldsets'] as $fieldset) {
             foreach ($fieldset['fields'] as $fieldName => $field) {
+                $columnMap = isset($this->columnTypesMap[$field['dataType']])
+                    ? $this->columnTypesMap[$field['dataType']]
+                    : ['type' => Table::TYPE_TEXT, 'size' => Table::DEFAULT_TEXT_SIZE];
                 switch ($field['type']) {
                     case 'filterable':
                         $this->filterColumns[] = [
                             'name' => $fieldName,
-                            'type' => $field['dataType'],
+                            'type' => $columnMap['type'],
+                            'size' => $columnMap['size'],
                         ];
                         break;
+                    case 'searchable':
+                        $this->searchColumns[] = [
+                            'name' => $fieldName,
+                            'type' => $columnMap['type'],
+                            'size' => $columnMap['size'],
+                        ];
+                        break;
+
                     default:
                         $this->filterColumns[] = [
                             'name' => $fieldName,
-                            'type' => $field['dataType'],
+                            'type' => $columnMap['type'],
+                            'size' => $columnMap['size'],
                         ];
                         $this->searchColumns[] = [
                             'name' => $fieldName,
-                            'type' => $field['dataType'],
+                            'type' => $columnMap['type'],
+                            'size' => $columnMap['size'],
                         ];
                         break;
                 }
@@ -234,6 +283,9 @@ class Base implements ActionInterface
 
     protected function prepareFields()
     {
+        $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
+        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
+
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             $defaultHandler = $this->handlers['defaultHandler'];
@@ -252,9 +304,7 @@ class Base implements ActionInterface
                             ? $this->data['fieldsets'][$fieldsetName]['handler']
                             : $defaultHandler;
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
-                    isset($this->sources[$field['dataType']])
-                        ? $this->sources[$field['dataType']]
-                        : 'varchar';
+                    isset($field['dataType']) ? $field['dataType'] : 'varchar';
             }
         }
     }
