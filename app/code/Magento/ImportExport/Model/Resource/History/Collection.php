@@ -42,7 +42,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             ['link_table' => $this->_linkTable],
             'link_table.user_id = main_table.user_id',
             ['username']
-        );
+        )->where('execution_time != ?', History::IMPORT_VALIDATION);
 
         return $this;
     }

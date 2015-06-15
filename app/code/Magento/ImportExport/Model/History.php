@@ -105,32 +105,30 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         if ($import->isReportEntityType()) {
             $this->load($this->getLastItemId());
-            $this->setExecutionTime(self::IMPORT_IN_PROCESS);
-
+            $executionResult = self::IMPORT_IN_PROCESS;
             if ($updateSummary) {
-                $executionTime = $this->reportHelper->getExecutionTime($this->getStartedAt());
+                $executionResult = $this->reportHelper->getExecutionTime($this->getStartedAt());
                 $summary = $this->reportHelper->getSummaryStats($import);
-                $this->setExecutionTime($executionTime);
                 $this->setSummary($summary);
             }
+            $this->setExecutionTime($executionResult);
             $this->save();
         }
         return $this;
     }
 
     /**
-     * Scheduled check for failed import processes
+     * Mark history report as invalid
      *
+     * @param Import $import
      * @return $this
      */
-    public function scheduledCheckFailedImport()
+    public function invalidateReport(Import $import)
     {
-        /** @var \Magento\ImportExport\Model\History $report */
-        foreach ($this->_resourceCollection->getImportInProcess() as $report) {
-            if ($this->reportHelper->isFailed($report->getStartedAt())) {
-                $report->setExecutionTime(self::IMPORT_FAILED);
-                $report->save();
-            }
+        if ($import->isReportEntityType()) {
+            $this->load($this->getLastItemId());
+             $this->setExecutionTime(self::IMPORT_FAILED);
+            $this->save();
         }
         return $this;
     }
@@ -278,6 +276,6 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function getLastItemId()
     {
-        return $this->_resourceCollection->getLastItem()->getId();
+        return $this->_resource->getLastInsertedId($this->getAdminId());
     }
 }

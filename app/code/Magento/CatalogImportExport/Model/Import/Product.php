@@ -801,6 +801,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
             if ($idToDelete) {
+                $this->countItemsDeleted += count($idToDelete);
                 $this->transactionManager->start($this->_connection);
                 try {
                     $this->objectRelationProcessor->delete(
@@ -1189,6 +1190,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _saveProductEntity(array $entityRowsIn, array $entityRowsUp)
     {
         static $entityTable = null;
+        $this->countItemsCreated += count($entityRowsIn);
+        $this->countItemsUpdated += count($entityRowsUp);
 
         if (!$entityTable) {
             $entityTable = $this->_resourceFactory->create()->getEntityTable();
