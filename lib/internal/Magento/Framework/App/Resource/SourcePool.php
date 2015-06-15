@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model;
+namespace Magento\Framework\App\Resource;
 
 class SourcePool
 {
@@ -25,14 +25,14 @@ class SourcePool
      *
      * @param string $className
      * @throws \InvalidArgumentException
-     * @return SourceInterface
+     * @return SourceProviderInterface
      */
     public function get($className)
     {
         $source = $this->objectManager->get($className);
-        if (!$source instanceof SourceInterface) {
+        if (!$source instanceof SourceProviderInterface) {
             throw new \InvalidArgumentException(
-                $className . ' doesn\'t implement \Magento\Indexer\Model\SourceInterface'
+                $className . ' doesn\'t implement \Magento\Framework\App\Resource\SourceProviderInterface'
             );
         }
 

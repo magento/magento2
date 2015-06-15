@@ -12,7 +12,7 @@ use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
-use Magento\Indexer\Model\SourcePool;
+use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -83,7 +83,7 @@ class Base implements ActionInterface
 
     /**
      * @param AppResource $resource
-     * @param Source $sourceProcessor
+     * @param SourcePool $sourcePool
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
      * @param String $string
