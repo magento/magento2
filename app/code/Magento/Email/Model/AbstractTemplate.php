@@ -14,6 +14,8 @@ use Magento\Store\Model\ScopeInterface;
  * Template model class
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {
@@ -56,13 +58,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @var \Magento\Framework\Object
      */
     protected $_designConfig;
-
-    /**
-     * List of CSS files that should be inlined on this template
-     *
-     * @var array
-     */
-    private $inlineCssFiles = array();
 
     /**
      * Whether template is child of another template
@@ -168,11 +163,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -184,8 +182,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        Template\Config $emailConfig,
+        TemplateFactory $templateFactory,
         array $data = []
     ) {
         $this->_design = $design;
@@ -338,14 +336,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $processor = $this->getTemplateFilter()
             ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
-            ->setIsChildTemplate($this->getIsChildTemplate())
-            ->setTemplateProcessor([$this, 'getTemplateContent'])
-            ->setTemplateModel($this);
+            ->setIsChildTemplate($this->isChildTemplate())
+            ->setTemplateProcessor([$this, 'getTemplateContent']);
 
         $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         $isDesignApplied = $this->applyDesignConfig();
+
+        // Set design params so that CSS will be loaded from the proper theme
+        $processor->setDesignParams($this->getDesignParams());
 
         if (isset($variables['subscriber'])) {
             $storeId = $variables['subscriber']->getStoreId();
@@ -359,15 +359,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $processor->setVariables($variables);
 
         try {
-            // Filter the template text so that all HTML content will be present
             $result = $processor->filter($this->getTemplateText());
-
-            if (!$this->isPlain()) {
-                // Now that all HTML has been assembled, run email through CSS inlining process
-                $processedResult = $this->applyInlineCss($result);
-            } else {
-                $processedResult = $result;
-            }
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
@@ -375,100 +367,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($isDesignApplied) {
             $this->cancelDesignConfig();
         }
-        return $processedResult;
-    }
-
-    /**
-     * Add filename of CSS file to inline
-     *
-     * @param string $file
-     * @return $this
-     */
-    public function addInlineCssFile($file)
-    {
-        $this->inlineCssFiles[] = $file;
-        return $this;
-    }
-
-    /**
-     * Get filename of CSS file to inline
-     *
-     * @return array
-     */
-    public function getInlineCssFiles()
-    {
-        return $this->inlineCssFiles;
-    }
-
-    /**
-     * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
-     * in order to support all email clients.
-     *
-     * @param string $html
-     * @return string
-     */
-    protected function applyInlineCss($html)
-    {
-        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
-        $cssToInline = $this->getCssFilesContent(
-            $this->getInlineCssFiles()
-        );
-        // Only run Emogrify if HTML and CSS contain content
-        if ($html && $cssToInline) {
-            try {
-                // Don't try to compile CSS that has LESS compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
-                    !== false
-                ) {
-                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
-                }
-
-                $emogrifier = new \Pelago\Emogrifier();
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
-
-                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
-
-                $processedHtml = $emogrifier->emogrify();
-            } catch (\Exception $e) {
-                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
-                        . PHP_EOL
-                        . $html;
-                } else {
-                    $processedHtml = $html;
-                }
-                $this->_logger->error($e);
-            }
-        } else {
-            $processedHtml = $html;
-        }
-        return $processedHtml;
-    }
-
-    /**
-     * Loads CSS file from materialized static view directory
-     *
-     * @param string|array $files
-     * @return string
-     */
-    public function getCssFilesContent($files)
-    {
-        if (!is_array($files)) {
-            $files = [$files];
-        }
-
-        // Remove duplicate files
-        $files = array_unique($files);
-
-        $designParams = $this->getDesignParams();
-        $css = '';
-        foreach ($files as $file) {
-            $asset = $this->assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
-        }
-        return $css;
+        return $result;
     }
 
     /**
@@ -537,6 +436,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param array $variables
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function addEmailVariables($variables, $storeId)
     {
@@ -601,14 +503,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function applyDesignConfig()
     {
-        if ($this->getIsChildTemplate() || $this->hasDesignBeenApplied) {
+        if ($this->isChildTemplate() || $this->hasDesignBeenApplied) {
             return false;
         }
         $this->hasDesignBeenApplied = true;
 
         $designConfig = $this->getDesignConfig();
-        $store = $designConfig->getStore();
-        $storeId = is_object($store) ? $store->getId() : $store;
+        $storeId = $designConfig->getStore();
         $area = $designConfig->getArea();
         if ($storeId !== null) {
             // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
@@ -637,14 +538,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getDesignParams()
     {
-        return array(
+        return [
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
             'theme' => $this->_design->getDesignTheme()->getCode(),
             'themeModel' => $this->_design->getDesignTheme(),
             'locale' => $this->_design->getLocale(),
-        );
+        ];
     }
 
     /**
@@ -685,17 +586,17 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Gets whether template is child of another template
+     * Check whether template is child of another template
      *
      * @return bool
      */
-    public function getIsChildTemplate()
+    public function isChildTemplate()
     {
         return $this->isChildTemplate;
     }
 
     /**
-     * Sets whether template is child of another template
+     * Set whether template is child of another template
      *
      * @param bool $isChildTemplate
      * @return $this

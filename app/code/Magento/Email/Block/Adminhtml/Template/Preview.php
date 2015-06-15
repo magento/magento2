@@ -68,13 +68,11 @@ class Preview extends \Magento\Backend\Block\Widget
         $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
 
         \Magento\Framework\Profiler::start("email_template_proccessing");
-        $vars = [];
 
         $template->emulateDesign($storeId);
-        $templateProcessed = $this->getAppState()->emulateAreaCode(
-            \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
-            [$template, 'getProcessedTemplate'],
-            [$vars]
+        $templateProcessed = $this->_appState->emulateAreaCode(
+            \Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA,
+            [$template, 'getProcessedTemplate']
         );
         $template->revertDesign();
 
@@ -85,16 +83,6 @@ class Preview extends \Magento\Backend\Block\Widget
         \Magento\Framework\Profiler::stop("email_template_proccessing");
 
         return $templateProcessed;
-    }
-
-    /**
-     * Allows for test mocking
-     *
-     * @return \Magento\Framework\App\State
-     */
-    public function getAppState()
-    {
-        return $this->_appState;
     }
 
     /**

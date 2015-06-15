@@ -25,13 +25,13 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\Config $emailConfig
-     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
      *
@@ -43,32 +43,32 @@ class BackendTemplate extends Template
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
+        $this->_structure = $structure;
         parent::__construct(
             $context,
             $design,
             $registry,
             $appEmulation,
             $storeManager,
-            $filesystem,
             $assetRepo,
+            $filesystem,
             $scopeConfig,
             $objectManager,
             $emailConfig,
-            $filterFactory,
             $templateFactory,
+            $filterFactory,
             $data
         );
-        $this->_structure = $structure;
     }
 
     /**

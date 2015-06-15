@@ -28,6 +28,13 @@ class Template implements \Zend_Filter_Interface
     /**#@-*/
 
     /**
+     * Callbacks that will be applied after filtering
+     *
+     * @var array
+     */
+    private $afterFilterCallbacks = [];
+
+    /**
      * Assigned template variables
      *
      * @var array
@@ -76,7 +83,7 @@ class Template implements \Zend_Filter_Interface
      * @param callable $callback it must return string
      * @return $this
      */
-    public function setTemplateProcessor(array $callback)
+    public function setTemplateProcessor(callable $callback)
     {
         $this->_templateProcessor = $callback;
         return $this;
@@ -138,7 +145,41 @@ class Template implements \Zend_Filter_Interface
                 $value = str_replace($construction[0], $replacedValue, $value);
             }
         }
+
+        $value = $this->afterFilter($value);
         return $value;
+    }
+
+    /**
+     * Runs callbacks that have been added to filter content after directive processing is finished.
+     *
+     * @param $value
+     * @return string
+     */
+    protected function afterFilter($value)
+    {
+        foreach ($this->afterFilterCallbacks as $callback) {
+            $value = call_user_func($callback, $value);
+        }
+        return $value;
+    }
+
+    /**
+     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
+     * a string of the processed value.
+     *
+     * @param callable $afterFilterCallback
+     * @return $this
+     */
+    public function addAfterFilterCallback(callable $afterFilterCallback)
+    {
+        // Only add callback if it doesn't already exist
+        if (in_array($afterFilterCallback, array_values($this->afterFilterCallbacks))) {
+            return $this;
+        }
+
+        $this->afterFilterCallbacks[] = $afterFilterCallback;
+        return $this;
     }
 
     /**
@@ -157,9 +198,14 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * This directive allows templates to be included inside other email templates using the following syntax:
-     * {{template config_path="<PATH>"}}, where <PATH> equals the XPATH to the system configuration value that contains
-     * the value of the template. This directive is useful to include things like a global header/footer.
+     * Allows templates to be included inside other templates
+     *
+     * Usage:
+     *
+     *     {{template config_path="<PATH>"}}
+     *
+     * <PATH> equals the XPATH to the system configuration value that contains the value of the template.
+     * This directive is useful to include things like a global header/footer.
      *
      * @param string[] $construction
      * @return mixed
@@ -227,7 +273,7 @@ class Template implements \Zend_Filter_Interface
      */
     protected function _getParameters($value)
     {
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Parameter();
+        $tokenizer = new Template\Tokenizer\Parameter();
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
@@ -249,7 +295,7 @@ class Template implements \Zend_Filter_Interface
     protected function _getVariable($value, $default = '{no_value_defined}')
     {
         \Magento\Framework\Profiler::start('email_template_processing_variables');
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Variable();
+        $tokenizer = new Template\Tokenizer\Variable();
         $tokenizer->setString($value);
         $stackVars = $tokenizer->tokenize();
         $result = $default;

@@ -93,10 +93,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetRepo = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
@@ -108,11 +108,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
-            ->setMethods(['create'])
+        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
+        $this->filterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -134,13 +134,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->registry,
                     $this->appEmulation,
                     $this->storeManager,
-                    $this->filesystem,
                     $this->assetRepo,
+                    $this->filesystem,
                     $this->scopeConfig,
                     $this->objectManager,
                     $this->emailConfig,
-                    $this->filterFactory,
-                    $this->templateFactory
+                    $this->templateFactory,
+                    $this->filterFactory
                 ]
             )
             ->getMock();
@@ -699,13 +699,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Registry', [], [], '', false),
                 $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false),
                 $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false),
-                $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
                 $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false),
+                $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
                 $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 $emailConfig,
-                $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
                 $this->getMock('Magento\Email\Model\TemplateFactory', [], [], '', false),
+                $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
                 ['template_id' => 10],
             ]
         )->getMock();

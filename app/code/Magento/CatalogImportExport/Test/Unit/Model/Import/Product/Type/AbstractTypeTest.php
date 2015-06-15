@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +7,12 @@
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as AbstractType;
 
 /**
  * Test class for import product AbstractType class
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +30,11 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerHelper
      */
     protected $objectManagerHelper;
+
+    /**
+     * @var AbstractType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $abstractType;
 
     protected function setUp()
     {
@@ -122,6 +131,45 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 'params' => [$this->entityModel, 'simple'],
             ]
         );
+
+        $this->abstractType = $this->getMockBuilder(
+            '\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+        )
+        ->disableOriginalConstructor()
+        ->getMockForAbstractClass();
+    }
+
+    /**
+     * @dataProvider addAttributeOptionDataProvider
+     */
+    public function testAddAttributeOption($code, $optionKey, $optionValue, $initAttributes, $resultAttributes)
+    {
+        $this->setPropertyValue($this->abstractType, '_attributes', $initAttributes);
+
+        $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
+
+        $this->assertEquals($resultAttributes, $this->getPropertyValue($this->abstractType, '_attributes'));
+    }
+
+    public function testAddAttributeOptionReturn()
+    {
+        $code = 'attr set name value key';
+        $optionKey = 'option key';
+        $optionValue = 'option value';
+
+        $result = $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
+
+        $this->assertEquals($result, $this->abstractType);
+    }
+
+    public function testGetCustomFieldsMapping()
+    {
+        $expectedResult = ['value'];
+        $this->setPropertyValue($this->abstractType, '_customFieldsMapping', $expectedResult);
+
+        $result = $this->abstractType->getCustomFieldsMapping();
+
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testIsRowValidSuccess()
@@ -146,5 +194,72 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturnSelf();
         $this->assertFalse($this->simpleType->isRowValid($rowData, $rowNum));
+    }
+
+    public function addAttributeOptionDataProvider()
+    {
+        return [
+            [
+                '$code' => 'attr set name value key',
+                '$optionKey' => 'option key',
+                '$optionValue' => 'option value',
+                '$initAttributes' => [
+                    'attr set name' => [
+                        'attr set name value key' => [],
+                    ],
+                ],
+                '$resultAttributes' => [
+                    'attr set name' => [
+                        'attr set name value key' => [
+                            'options' => [
+                                'option key' => 'option value'
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+            [
+                '$code' => 'attr set name value key',
+                '$optionKey' => 'option key',
+                '$optionValue' => 'option value',
+                '$initAttributes' => [
+                    'attr set name' => [
+                        'not equal to code value' => [],
+                    ],
+                ],
+                '$resultAttributes' => [
+                    'attr set name' => [
+                        'not equal to code value' => [],
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
     }
 }
