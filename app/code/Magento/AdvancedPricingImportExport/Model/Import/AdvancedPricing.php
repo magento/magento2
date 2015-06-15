@@ -356,6 +356,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
             if ($priceIn) {
+                $this->countItemsCreated += count($priceData);
                 $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value']);
             }
         }
@@ -380,6 +381,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 );
             }
             if ($this->_cachedSkuToDelete) {
+                $this->countItemsDeleted += count($this->_cachedSkuToDelete);
                 try {
                     $this->_connection->delete(
                         $tableName,

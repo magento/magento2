@@ -60,11 +60,10 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     public function getSummaryStats(\Magento\ImportExport\Model\Import $import)
     {
         $message = __(
-            'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-            $import->getProcessedRowsCount(),
-            $import->getProcessedEntitiesCount(),
-            $import->getInvalidRowsCount(),
-            $import->getErrorsCount()
+            'Created: %1, Updated: %2, Deleted: %3',
+            $import->getCreatedItemsCount(),
+            $import->getUpdatedItemsCount(),
+            $import->getDeletedItemsCount()
         );
         return $message;
     }

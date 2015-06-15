@@ -448,6 +448,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import source file structure to DB.
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importSource()
     {
@@ -457,7 +459,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
-        $result = $this->_getEntityAdapter()->importData();
+        try {
+            $result = $this->_getEntityAdapter()->importData();
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            $this->importHistoryModel->invalidateReport($this);
+            throw new \Magento\Framework\Exception\AlreadyExistsException(
+                __($e->getMessage())
+            );
+        }
 
         $this->addLogComment(
             [
@@ -704,5 +713,36 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->importHistoryModel->addReport($copyName);
         }
         return $this;
+    }
+
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->_getEntityAdapter()->getCreatedItemsCount();
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->_getEntityAdapter()->getUpdatedItemsCount();
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->_getEntityAdapter()->getDeletedItemsCount();
     }
 }
