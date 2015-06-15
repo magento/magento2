@@ -48,7 +48,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             $items[] = [
                 'id' => 'error',
                 'type' => __('Error'),
-                'name' => __('Access Denied'),
+                'name' => __('Access Denied.'),
                 'description' => __('You need more permissions to do this.'),
             ];
         } else {

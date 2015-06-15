@@ -147,10 +147,10 @@ class Send extends Action\Action implements IndexInterface
         } else {
             $message = nl2br(htmlspecialchars($message));
             if (empty($emails)) {
-                $error = __('Email address can\'t be empty.');
+                $error = __('Please enter an email address.');
             } else {
                 if (count($emails) > $emailsLeft) {
-                    $error = __('This wishlist can be shared %1 more times.', $emailsLeft);
+                    $error = __('This wish list can be shared %1 more times.', $emailsLeft);
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);

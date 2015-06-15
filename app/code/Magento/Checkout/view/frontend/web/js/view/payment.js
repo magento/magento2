@@ -38,7 +38,7 @@ define(
             },
             setPaymentMethod: function() {
                 if (!this.activeMethod()) {
-                    alert($t('Please specify payment method.'));
+                    alert($t('Please choose a payment method.'));
                     return;
                 }
 
