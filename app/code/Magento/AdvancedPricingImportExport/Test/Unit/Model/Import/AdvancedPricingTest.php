@@ -195,6 +195,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'getCustomerGroupId',
             'getWebSiteId',
             'deleteProductTierAndGroupPrices',
+            'getBehavior',
+            'saveAndReplaceAdvancedPrices',
         ]);
 
         $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
@@ -276,7 +278,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $advancedPricingMock->validateRow($rowData, $rowNum);
     }
 
-    public function testSaveAdvancedPricingAddRowErrorCall()
+    public function testSaveAndReplaceAdvancedPricesAddRowErrorCall()
     {
         $rowNum = 0;
         $testBunch = [
@@ -293,13 +295,24 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             ->method('addRowError')
             ->with(RowValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
 
-        $this->advancedPricing->saveAdvancedPricing();
+        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+    }
+
+    public function testSaveAdvancedPricing()
+    {
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('saveAndReplaceAdvancedPrices');
+
+        $result = $this->advancedPricing->saveAdvancedPricing();
+
+        $this->assertEquals($this->advancedPricing, $result);
     }
 
     /**
-     * @dataProvider saveAdvancedPricingDataProvider
+     * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
      */
-    public function testSaveAdvancedPricing(
+    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
         $data,
         $tierCustomerGroupId,
         $groupCustomerGroupId,
@@ -308,6 +321,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $expectedTierPrices,
         $expectedGroupPrices
     ) {
+        $this->advancedPricing
+            ->expects($this->any())
+            ->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
@@ -326,7 +343,68 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             [$expectedGroupPrices, AdvancedPricing::TABLE_GROUPED_PRICE]
         )->will($this->returnSelf());
 
-        $this->advancedPricing->saveAdvancedPricing();
+        $result = $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+
+        $this->assertEquals($this->advancedPricing, $result);
+    }
+
+    public function testSaveAndReplaceAdvancedPricesReplaceBehaviourInternalCalls()
+    {
+        $skuVal = 'sku value';
+        $data = [
+            0 => [
+                AdvancedPricing::COL_SKU => $skuVal,
+            ],
+        ];
+        $expectedTierPrices = [];
+        $expectedGroupPrices = [];
+        $listSku = [
+            $skuVal
+        ];
+        $this->advancedPricing->expects($this->any())->method('getBehavior')->willReturn(
+            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
+        );
+        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
+
+        $this->advancedPricing
+            ->expects($this->never())
+            ->method('getCustomerGroupId');
+        $this->advancedPricing
+            ->expects($this->never())
+            ->method('getWebSiteId');
+
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('deleteProductTierAndGroupPrices')
+            ->withConsecutive(
+                [
+                    $listSku,
+                    AdvancedPricing::TABLE_GROUPED_PRICE
+                ],
+                [
+                    $listSku,
+                    AdvancedPricing::TABLE_TIER_PRICE,
+                ]
+            )
+            ->willReturn(true);
+
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('saveProductPrices')
+            ->withConsecutive(
+                [
+                    $expectedTierPrices,
+                    AdvancedPricing::TABLE_TIER_PRICE
+                ],
+                [
+                    $expectedGroupPrices,
+                    AdvancedPricing::TABLE_GROUPED_PRICE,
+                ]
+            )
+            ->will($this->returnSelf());
+
+        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
 
     public function testDeleteAdvancedPricingFormListSkuToDelete()
@@ -345,10 +423,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
-        $this->advancedPricing->expects($this->exactly(2))->method('deleteProductTierAndGroupPrices')->withConsecutive(
-            [$expectedSkuList, AdvancedPricing::TABLE_GROUPED_PRICE],
-            [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-        )->will($this->returnSelf());
+        $this->advancedPricing
+            ->expects($this->exactly(2))
+            ->method('deleteProductTierAndGroupPrices')
+            ->withConsecutive(
+                [$expectedSkuList, AdvancedPricing::TABLE_GROUPED_PRICE],
+                [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
+            )->will($this->returnSelf());
 
         $this->advancedPricing->deleteAdvancedPricing();
     }
@@ -366,10 +447,16 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
     public function testReplaceAdvancedPricing()
     {
-        $this->markTestSkipped('The method replaceAdvancedPricing is empty');
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('saveAndReplaceAdvancedPrices');
+
+        $result = $this->advancedPricing->saveAdvancedPricing();
+
+        $this->assertEquals($this->advancedPricing, $result);
     }
 
-    public function saveAdvancedPricingDataProvider()
+    public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
@@ -641,6 +728,24 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setValue($object, $value);
 
         return $object;
+    }
+
+    /**
+     * Invoke any method of class AdvancedPricing.
+     *
+     * @param object $object
+     * @param string $method
+     * @param array $args
+     *
+     * @return mixed the method result.
+     */
+    private function invokeMethod($object, $method, $args = [])
+    {
+        $class = new \ReflectionClass('\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
+        $method = $class->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($this->advancedPricing, []);
     }
 
     /**
