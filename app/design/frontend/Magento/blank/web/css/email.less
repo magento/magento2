@@ -3,12 +3,12 @@
  * See COPYING.txt for license details.
  */
 
-// See comments in lib/web/css/source/_email.less for explanation of email styles
+// See comments in source/_email-base.less for explanation of email styles
 
 @import 'source/lib/_lib.less'; // Global lib
 @import 'source/_theme.less'; // Global variables override
 @import 'source/_variables.less'; // Local theme variables
-@import 'source/_email-variables.less'; // Email variables
+@import 'source/_email-variables.less'; // Theme variables for emails
 
 //
 //  Styles for emails
@@ -17,9 +17,8 @@
 // Import these file by reference so that only the styles included in the .email-non-inline() and .media-width()
 // mixins will be output. All other styles will be output via the email-inline.less file.
 
-@import (reference) 'source/_email.less';
-// Contains theme-specific adjustments to email styles
-@import (reference) 'source/_email-extend.less';
+@import (reference) 'source/_email-base.less'; // Contains primary email styles
+@import (reference) 'source/_email-extend.less'; // Contains theme-specific adjustments to email styles
 
 //
 //  Module-specific styles for emails
