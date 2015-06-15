@@ -27,7 +27,6 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation3">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34858</data>
             <data name="description" xsi:type="string">Create page with widget and system variable</data>
             <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
