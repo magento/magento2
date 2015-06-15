@@ -71,6 +71,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $configuration = [];
+        $configuration['giftMessage'] = [];
         $orderLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
