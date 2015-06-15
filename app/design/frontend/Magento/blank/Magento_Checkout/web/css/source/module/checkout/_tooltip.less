@@ -48,7 +48,6 @@
             }
             .field-tooltip-action {
                 &:before {
-                    .css(border-color, @checkout-tooltip-icon__hover__color);
                     .css(color, @checkout-tooltip-icon__hover__color);
                 }
             }
@@ -56,12 +55,12 @@
 
         .field-tooltip-action {
             .icon-font(
-                @checkout-tooltip-icon__content,
-                @_icon-font-size: @checkout-tooltip-icon__font-size,
-                @_icon-font-text-hide: true,
-                @_icon-font-color: @checkout-tooltip-icon__color,
-                @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
-                @_icon-font-color-active: false
+            @checkout-tooltip-icon__content,
+            @_icon-font-size: @checkout-tooltip-icon__font-size,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @checkout-tooltip-icon__color,
+            @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
+            @_icon-font-color-active: false
             );
             &:focus {
                 + .field-tooltip-content {
@@ -91,9 +90,9 @@
             &:before,
             &:after {
                 .arrow(
-                    @_position: left,
-                    @_size: @checkout-tooltip-icon-arrow__font-size,
-                    @_color: @checkout-tooltip-content__background-color
+                @_position: left,
+                @_size: @checkout-tooltip-icon-arrow__font-size,
+                @_color: @checkout-tooltip-content__background-color
                 );
                 .css(left, @checkout-tooltip-icon-arrow__left);
                 .css(top, @checkout-tooltip-content__padding);
