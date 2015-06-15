@@ -7,8 +7,8 @@
 <!-- ko if: isBothPricesDisplayed() -->
 <tr class="totals sub excl">
     <th class="mark" scope="row">
-        <span data-bind="$t(title)"></span>
-        <span data-bind="$t(excludingTaxMessage)"></span>
+        <span data-bind="text: $t(title)"></span>
+        <span data-bind="text: $t(excludingTaxMessage)"></span>
     </th>
     <td class="amount">
         <span class="price" data-bind="text: getValue(), attr: {'data-th': $t(excludingTaxMessage) }"></span>
@@ -16,8 +16,8 @@
 </tr>
 <tr class="totals sub incl">
     <th class="mark" scope="row">
-        <span data-bind="$t(title)"></span>
-        <span data-bind="$t(includingTaxMessage)"></span>
+        <span data-bind="text: $t(title)"></span>
+        <span data-bind="text: $t(includingTaxMessage)"></span>
     </th>
     <td class="amount">
         <span class="price" data-bind="text: getValueInclTax(), attr: {'data-th': $t(includingTaxMessage) }"></span>

@@ -43,15 +43,8 @@ define(
         $t
     ) {
         'use strict';
-
-        var rates = window.checkoutConfig.shippingRates.data;
-        var rateKey = window.checkoutConfig.shippingRates.key;
-        if (rateKey) {
-            rateRegistry.set(rateKey, rates);
-        }
-        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
-        shippingService.setShippingRates(rates);
-
+        var rates = window.checkoutConfig.shippingRates.data,
+            rateKey = window.checkoutConfig.shippingRates.key;
 
         if (addressList().length == 0) {
             var address = new newAddress({});
@@ -59,6 +52,13 @@ define(
             shippingService.setShippingRates(rates);
             selectShippingAddress(address);
         }
+
+        if (rateKey) {
+            rateRegistry.set(rateKey, rates);
+        }
+
+        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
+        shippingService.setShippingRates(rates);
 
         return Component.extend({
             defaults: {
@@ -153,6 +153,9 @@ define(
             },
 
             setShippingInformation: function () {
+                var shippingAddress,
+                    addressData;
+
                 if (!quote.shippingMethod()) {
                     alert($t('Please specify a shipping method'));
                     return false;
@@ -166,8 +169,8 @@ define(
                     ) {
                         return false;
                     }
-                    var shippingAddress = quote.shippingAddress();
-                    var addressData = addressConverter.formAddressDataToQuoteAddress(
+                    shippingAddress = quote.shippingAddress();
+                    addressData = addressConverter.formAddressDataToQuoteAddress(
                         this.source.get('shippingAddress')
                     );
 
