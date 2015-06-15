@@ -26,26 +26,26 @@
                     <h1>Hello, {{var billing.getName()}}</h1>
                     <p>
                         Thank you for your order from {{var store.getFrontendName()}}.
-                        If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
+                        If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
                     </p>
 
                     <h2>Your Invoice #{{var invoice.increment_id}} for Order #{{var order.increment_id}}</h2>
 
-                    <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <table>
                         <thead>
                         <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" >Billing Information:</th>
-                            <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" >Payment Method:</th>
+                            <th>Billing Information:</th>
+                            <th></th>
+                            <th>Payment Method:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td valign="top" >
+                            <td>
                                 {{var formattedBillingAddress|raw}}
                             </td>
                             <td>&nbsp;</td>
-                            <td valign="top" >
+                            <td>
                                 {{var payment_html|raw}}
                             </td>
                         </tr>
@@ -53,22 +53,22 @@
                     </table>
                     <br/>
                     {{depend order.getIsNotVirtual()}}
-                    <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <table>
                         <thead>
                         <tr>
-                            <th align="left" width="650" bgcolor="#EAEAEA" >Shipping Information:</th>
-                            <th width="10"></th>
-                            <th align="left" width="650" bgcolor="#EAEAEA" >Shipping Method:</th>
+                            <th>Shipping Information:</th>
+                            <th></th>
+                            <th>Shipping Method:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td valign="top" >
+                            <td>
                                 {{var formattedShippingAddress|raw}}
                                 &nbsp;
                             </td>
                             <td>&nbsp;</td>
-                            <td valign="top" >
+                            <td>
                                 {{var order.shipping_description}}
                                 &nbsp;
                             </td>
