@@ -48,10 +48,14 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
+        $objectManagerProvider->expects($this->once())
+            ->method('get')
+            ->willReturn($this->objectManager);
         $this->manager = $this->getMock('Magento\Setup\Module\Di\App\Task\Manager', [], [], '', false);
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()->getMock();
+        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $directoryList->expects($this->exactly(3))->method('getPath');
         $this->command = new DiCompileCommand(
