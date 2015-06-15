@@ -11,7 +11,7 @@ define(
     function (quote, shippingSaveProcessor) {
         'use strict';
         return function () {
-            shippingSaveProcessor.saveShippingInformation(quote.shippingAddress().getType());
+            return shippingSaveProcessor.saveShippingInformation(quote.shippingAddress().getType());
         }
     }
 );

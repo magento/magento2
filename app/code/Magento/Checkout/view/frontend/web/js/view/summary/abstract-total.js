@@ -8,9 +8,10 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Catalog/js/price-utils',
-        'Magento_Checkout/js/model/totals'
+        'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function (Component, quote, priceUtils, totals) {
+    function (Component, quote, priceUtils, totals, stepNavigator) {
         "use strict";
         return Component.extend({
             getFormattedPrice: function (price) {
@@ -19,12 +20,11 @@ define(
             getTotals: function() {
                 return totals.totals();
             },
-            getTotalsMode: function() {
-                if (!this.getTotals() || !this.getTotals()['mode']) {
-                    return null;
+            isFullMode: function() {
+                if (!this.getTotals()) {
+                    return false;
                 }
-                var mode = this.getTotals()['mode'];
-                return mode();
+                return stepNavigator.isProcessed('shipping');
             }
         });
     }

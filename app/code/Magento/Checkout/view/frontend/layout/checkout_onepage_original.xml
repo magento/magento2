@@ -26,16 +26,6 @@
                             <item name="checkout" xsi:type="array">
                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/onepage</item>
                                 <item name="children" xsi:type="array">
-                                    <item name="progress" xsi:type="array">
-                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item>
-                                        <item name="displayArea" xsi:type="string">progress</item>
-                                        <item name="children" xsi:type="array">
-                                            <item name="shipping" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/shipping_method/price</item>
-                                                <item name="displayArea" xsi:type="string">shipping</item>
-                                            </item>
-                                        </item>
-                                    </item>
                                     <item name="errors" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">0</item>
                                         <item name="component" xsi:type="string">Magento_Ui/js/view/errors</item>
