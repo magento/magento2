@@ -171,52 +171,52 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function transDirectiveDataProvider() {
         return [
-            [   // empty string
+            'empty directive' => [
                 '{{trans}}',
                 '',
             ],
 
-            [   // given empty string
+            'empty string' => [
                 '{{trans ""}}',
                 '',
             ],
 
-            [   // no padding
+            'no padding' => [
                 '{{trans"Hello cruel coder..."}}',
                 'Hello cruel coder...',
             ],
 
-            [   // excessive padding
+            'multi-line padding' => [
                 "{{trans \t\n\r'Hello cruel coder...' \t\n\r}}",
                 'Hello cruel coder...',
             ],
 
-            [   // capture escaped double-quotes inside text
+            'capture escaped double-quotes inside text' => [
                 '{{trans "Hello \"tested\" world!"}}',
                 'Hello &quot;tested&quot; world!',
             ],
 
-            [   // capture escaped single-quotes inside text
+            'capture escaped single-quotes inside text' => [
                 "{{trans 'Hello \\'tested\\' world!'|escape}}",
                 "Hello &#039;tested&#039; world!",
             ],
 
-            [   // basic var
+            'basic var' => [
                 '{{trans "Hello %adjective world!" adjective="tested"}}',
                 'Hello tested world!',
             ],
 
-            [   // auto-escaped output
+            'auto-escaped output' => [
                 '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"}}',
                 'Hello &lt;em&gt;bad&lt;/em&gt; &lt;strong&gt;world&lt;/strong&gt;!',
             ],
 
-            [   // unescaped modifier
+            'unescaped modifier' => [
                 '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"|raw}}',
                 'Hello <em>bad</em> <strong>world</strong>!',
             ],
 
-            [   // variable replacement
+            'variable replacement' => [
                 '{{trans "Hello %adjective world!" adjective="$mood"}}',
                 'Hello happy world!',
                 [
