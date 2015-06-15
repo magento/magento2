@@ -94,12 +94,19 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
 
-        // remove old index
-        $where = $adapter->quoteInto('entity_id IN(?)', $processIds);
-        $adapter->delete($this->getMainTable(), $where);
+        $adapter->beginTransaction();
+        try {
+            // remove old index
+            $where = $adapter->quoteInto('entity_id IN(?)', $processIds);
+            $adapter->delete($this->getMainTable(), $where);
 
-        // insert new index
-        $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
+            // insert new index
+            $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
+            $adapter->commit();
+        } catch (\Exception $e) {
+            $adapter->rollBack();
+            throw $e;
+        }
         return $this;
     }
 
@@ -259,10 +266,15 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     protected function _removeAttributeIndexData($attributeId)
     {
         $adapter = $this->_getWriteAdapter();
-
-        $where = $adapter->quoteInto('attribute_id = ?', $attributeId);
-        $adapter->delete($this->getMainTable(), $where);
-
+        $adapter->beginTransaction();
+        try {
+            $where = $adapter->quoteInto('attribute_id = ?', $attributeId);
+            $adapter->delete($this->getMainTable(), $where);
+            $adapter->commit();
+        } catch (\Exception $e) {
+            $adapter->rollBack();
+            throw $e;
+        }
         return $this;
     }
 
@@ -276,14 +288,19 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     protected function _synchronizeAttributeIndexData($attributeId)
     {
         $adapter = $this->_getWriteAdapter();
+        $adapter->beginTransaction();
+        try {
+            // remove index by attribute
+            $where = $adapter->quoteInto('attribute_id = ?', $attributeId);
+            $adapter->delete($this->getMainTable(), $where);
 
-        // remove index by attribute
-        $where = $adapter->quoteInto('attribute_id = ?', $attributeId);
-        $adapter->delete($this->getMainTable(), $where);
-
-        // insert new index
-        $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
-
+            // insert new index
+            $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
+            $adapter->commit();
+        } catch (\Exception $e) {
+            $adapter->rollBack();
+            throw $e;
+        }
         return $this;
     }
 }
