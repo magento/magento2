@@ -404,6 +404,7 @@
         <column name="actions" class="Magento\Cms\Ui\Component\Listing\Column\BlockActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">actions</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Action</item>
