@@ -11,8 +11,14 @@ namespace Magento\Eav\Model\Attribute;
  */
 class FrontendType
 {
+    /**
+     * @var array
+     */
     private $config;
 
+    /**
+     * @param array $config
+     */
     public function __construct($config = [])
     {
         $this->config = $config;
@@ -21,7 +27,7 @@ class FrontendType
     /**
      * Return list of input types by frontend type
      *
-     * @param $inputType
+     * @param string $inputType
      * @return string
      */
     public function getType($inputType)
