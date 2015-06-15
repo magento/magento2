@@ -19,16 +19,16 @@
 
 {{template config_path="design/email/header_template"}}
 
-                    <h1>Dear {{var billing.getName()}},</h1>
-                    <p>
-                        Your order # {{var order.increment_id}} has been <br/>
-                        <strong>{{var order.getStatusLabel()}}</strong>.
-                    </p>
-                    <p>{{var comment}}</p>
-                    <p>
-                        If you have any questions, please feel free to contact us at
-                        <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a>
-                        or by phone at {{config path='general/store_information/phone'}}.
-                    </p>
+<h1>Dear {{var billing.getName()}},</h1>
+<p>
+    Your order # {{var order.increment_id}} has been <br/>
+    <strong>{{var order.getStatusLabel()}}</strong>.
+</p>
+<p>{{var comment}}</p>
+<p>
+    If you have any questions, please feel free to contact us at
+    <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a>
+    or by phone at {{config path='general/store_information/phone'}}.
+</p>
 
 {{template config_path="design/email/footer_template"}}
