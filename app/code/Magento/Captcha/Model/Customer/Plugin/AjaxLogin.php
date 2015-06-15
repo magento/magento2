@@ -27,44 +27,56 @@ class AjaxLogin
     protected $resultJsonFactory;
 
     /**
+     * @var array
+     */
+    protected $formIds;
+
+    /**
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
      * @param JsonFactory $resultJsonFactory
+     * @param array $formIds
      */
     public function __construct(
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        array $formIds
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->formIds = $formIds;
     }
 
     /**
      * @param \Magento\Customer\Controller\Ajax\Login $subject
      * @param callable $proceed
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Zend_Json_Exception
      */
     public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {
-        $loginFormId = 'user_login';
+        $captchaFormIdField = 'captcha_form_id';
         $captchaInputName = 'captcha_string';
 
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
 
-        /** @var \Magento\Captcha\Model\ModelInterface $captchaModel */
-        $captchaModel = $this->helper->getCaptcha($loginFormId);
-
         $loginParams = \Zend_Json::decode($request->getContent());
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[$captchaInputName])
-            ? $loginParams[$captchaInputName]
-            : null;
+        $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
+        $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;
+
+        if (!in_array($loginFormId, $this->formIds)) {
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Provided form does not exist'));
+        }
+
+        /** @var \Magento\Captcha\Model\CaptchaInterface $captchaModel */
+        $captchaModel = $this->helper->getCaptcha($loginFormId);
 
         if ($captchaModel->isRequired($username)) {
             $captchaModel->logAttempt($username);
