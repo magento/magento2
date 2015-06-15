@@ -17,7 +17,8 @@ Available vars in this template:
   - sender_email    Sender email
 
 Use vars: {{var var_name}}
-*}<!--@subject Welcome, {{var name}} @-->
+*}
+<!--@subject Welcome, {{var name}} @-->
 <!--@vars
 {"var name":"Recipient Name",
 "var product_url":"Url for Product",
@@ -27,6 +28,9 @@ Use vars: {{var var_name}}
 
 {{template config_path="design/email/header_template"}}
 
-Welcome, {{var name}}<br /><br />Please look at <a href="{{var product_url}}">{{var product_name}}</a><br /><br />Here is message: <br />{{var message}}<br /><br />
+<h1>{{trans "Welcome, %name" name=$name}}</h1>
+<p>{{trans "Please look at"}} <a href="{{var product_url}}">{{var product_name}}</a></p>
+<h2>{{trans "Here is message:"}}</h2>
+<p>{{var message}}</p>
 
 {{template config_path="design/email/footer_template"}}

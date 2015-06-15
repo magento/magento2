@@ -21,73 +21,56 @@
 
 {{template config_path="design/email/header_template"}}
 
-        <h1>{{trans "Hello %customer_name," customer_name="$order.getCustomerName()"}}</h1>
-        <p>
-            {{trans "Thank you for your order from %store_name." store_name="$store.getFrontendName()"}}
-            {{trans "Once your package ships we will send an email with a link to track your order."}}
-            {{trans
-            'You can check the status of your order by <a href="%account_url">logging into your account</a>.'
+<h1>{{trans "Hello %customer_name," customer_name=$order.getCustomerName()}}</h1>
+<p>
+    {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+    {{trans "Once your package ships we will send an email with a link to track your order."}}
+    {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/'} |raw}}
+    {{trans
+        'If you have any questions about your order please contact us at <a href="mailto:%support_email">%support_email</a> or call us at %store_phone.'
 
-            account_url="$store.getUrl('customer/account/'}"
-            |raw}}
-            {{trans
-            'If you have any questions about your order please contact us at
-            <a href="mailto:%support_email">%support_email</a> or call us at
-            <span class="nobr">%store_phone</span> Monday - Friday, 8am - 5pm PST.'
+        support_email=$store.getConfig('trans_email/ident_support/email')
+        store_phone=$store.getConfig('general/store_information/phone')
+    |raw}}
+</p>
+<p>{{trans "Your order confirmation is below. Thank you again for your business."}}</p>
 
-            support_email="$store.getConfig('trans_email/ident_support/email')"
-            store_phone="$store.getConfig('general/store_information/phone')"
-            |raw}}
-        </p>
-        <p>{{trans "Your order confirmation is below. Thank you again for your business."}}</p>
+<h2>{{trans "Your Order #%increment_id (placed on %created_at)" increment_id=$order.increment_id created_at=$order.getCreatedAtFormatted(1)}}<h2>
 
-        <h2>
-            {{trans
-            "Your Order #%increment_id (placed on %created_at)"
+<table>
+    <thead>
+    <tr>
+        <th>{{trans "Billing Information:"}}</th>
+        <th>{{trans "Payment Method:"}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{var formattedBillingAddress|raw}}</td>
+        <td>{{var payment_html|raw}}</td>
+    </tr>
+    </tbody>
+</table>
+<br/>
 
-            increment_id="$order.increment_id"
-            created_at="$order.getCreatedAtFormatted(1)"
-            }}
-        </h2>
-
-        <table>
-            <thead>
-            <tr>
-                <th>{{trans "Billing Information:}}</th>
-                <th></th>
-                <th>{{trans "Payment Method:"}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{var formattedBillingAddress|raw}}</td>
-                <td>&nbsp;</td>
-                <td>{{var payment_html|raw}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <br/>
-
-        {{depend order.getIsNotVirtual()}}
-        <table>
-            <thead>
-            <tr>
-                <th>{{trans "Shipping Information:"}}</th>
-                <th></th>
-                <th>{{trans "Shipping Method:"}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{var formattedShippingAddress|raw}}</td>
-                <td>&nbsp;</td>
-                <td>{{var order.getShippingDescription()}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <br/>
-        {{/depend}}
-        {{layout handle="sales_email_order_items" order=$order area="frontend"}}
-        <p>{{var order.getEmailCustomerNote()}}</p>
+{{depend order.getIsNotVirtual()}}
+<table>
+    <thead>
+    <tr>
+        <th>{{trans "Shipping Information:"}}</th>
+        <th>{{trans "Shipping Method:"}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{var formattedShippingAddress|raw}}</td>
+        <td>{{var order.getShippingDescription()}}</td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+{{/depend}}
+{{layout handle="sales_email_order_items" order=$order area="frontend"}}
+<p>{{var order.getEmailCustomerNote()}}</p>
 
 {{template config_path="design/email/footer_template"}}
