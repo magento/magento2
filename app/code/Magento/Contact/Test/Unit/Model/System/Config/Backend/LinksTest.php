@@ -19,7 +19,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Framework\Registry', [], [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface', [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\Model\Resource\AbstractResource', [], '', false),
-            $this->getMock('\Magento\Framework\Data\Collection\Db', [], [], '', false)
+            $this->getMock('\Magento\Framework\Data\Collection\AbstractDb', [], [], '', false)
         );
     }
 
