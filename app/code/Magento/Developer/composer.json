@@ -3,12 +3,12 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "0.74.0-beta12",
-        "magento/framework": "0.74.0-beta12",
+        "magento/module-store": "0.74.0-beta13",
+        "magento/framework": "0.74.0-beta13",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta12",
+    "version": "0.74.0-beta13",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
