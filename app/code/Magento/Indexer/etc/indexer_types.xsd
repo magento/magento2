@@ -186,6 +186,7 @@
             <xs:enumeration value="float" />
             <xs:enumeration value="varchar" />
             <xs:enumeration value="text" />
+            <xs:enumeration value="mediumtext" />
         </xs:restriction>
     </xs:simpleType>
 

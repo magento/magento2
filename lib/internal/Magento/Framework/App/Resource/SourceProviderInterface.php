@@ -15,4 +15,13 @@ interface SourceProviderInterface
      * @api
      */
     public function getMainTable();
+
+    /**
+     * Get primary key field name
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return string
+     * @api
+     */
+    public function getIdFieldName();
 }
