@@ -20,13 +20,13 @@
 
                             <h1>Dear {{var customer.name}},</h1>
                             <p>Your e-mail {{var customer.email}} must be confirmed before using it to log in to our store.</p>
-                            <p>To confirm the e-mail and instantly log in, please, use <a href="{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}" >this confirmation link</a>. This link is valid only once.</p>
+                            <p>To confirm the e-mail and instantly log in, please, use <a href="{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}">this confirmation link</a>. This link is valid only once.</p>
                             <p>
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail:</strong> {{var customer.email}}<br/>
                                 <strong>Password:</strong> Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()|escape}})<br/>
                                 Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createPassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.
                             </p>
-                            <p>If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
+                            <p>If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
 
 {{template config_path="design/email/footer_template"}}
