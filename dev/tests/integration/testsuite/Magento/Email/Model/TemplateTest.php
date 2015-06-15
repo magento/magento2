@@ -5,7 +5,6 @@
  */
 namespace Magento\Email\Model;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -59,7 +58,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
                 $objectManager->get('Magento\Email\Model\TemplateFactory'),
-                $objectManager->get('Magento\Email\Model\Template\FilterFactory')
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
             ]
         )->getMock();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
@@ -129,7 +128,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplate());
@@ -228,8 +227,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOutput,
         $storeConfigPath = null,
         $mockAdminTheme = false
-    )
-    {
+    ) {
         $this->mockModel();
 
         if ($mockAdminTheme) {
@@ -272,7 +270,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function templateDirectiveDataProvider()
     {
         return [
-             'Template from module folder - adminhtml' => [
+            'Template from module folder - adminhtml' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                 '{{template config_path="design/email/footer_template"}}',
                 '<!-- End wrapper table -->',
@@ -335,7 +333,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTemplateStylesVariable($area, $expectedOutput, $unexpectedOutputs, $templateForDatabase = [])
     {
-
         if (count($templateForDatabase)) {
             $this->mockModel();
             $this->setUpThemeFallback($area);
@@ -396,7 +393,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from <!--@styles @--> comment - frontend' => [
                 \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -404,7 +401,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from "Template Styles" textarea from backend - adminhtml' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
@@ -491,7 +488,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
     }
@@ -539,7 +536,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
