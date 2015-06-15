@@ -212,7 +212,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \Magento\Framework\Exception\MailException
      */
     public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
     {

@@ -229,9 +229,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'file="css/email-3.css"',
                 'color: #333;'
             ],
-            'Missing file argument' => [
+            'Missing file parameter' => [
                 '',
-                '/* "file" argument must be specified */'
+                '/* "file" parameter must be specified */'
             ],
             'Empty or missing file' => [
                 'file="css/non-existent-file.css"',
@@ -256,10 +256,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @param string $templateText
      * @param string $expectedOutput
      * @param bool $productionMode
+     * @param bool $plainTemplateMode
+     * @param bool $isChildTemplateMode
      */
-    public function testInlinecssDirective($templateText, $expectedOutput, $productionMode = false)
-    {
+    public function testInlinecssDirective(
+        $templateText,
+        $expectedOutput,
+        $productionMode = false,
+        $plainTemplateMode = false,
+        $isChildTemplateMode = false
+    ) {
         $this->setUpDesignParams();
+
+        $this->_model->setPlainTemplateMode($plainTemplateMode);
+        $this->_model->setIsChildTemplate($isChildTemplateMode);
 
         if ($productionMode) {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
@@ -277,19 +287,32 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         return [
             'CSS from theme' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
-                '<p style="color: #111; text-align: left;">'
+                '<p style="color: #111; text-align: left;">',
             ],
             'CSS from parent theme' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-2.css"}}</html>',
-                '<p style="color: #222; text-align: left;">'
+                '<p style="color: #222; text-align: left;">',
             ],
             'CSS from grandparent theme' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-3.css"}}',
-                '<p style="color: #333; text-align: left;">'
+                '<p style="color: #333; text-align: left;">',
             ],
             'Non-existent file results in unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/non-existent-file.css"}}</html>',
                 '<html><p></p> </html>',
+            ],
+            'Plain template mode results in unmodified markup' => [
+                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                '<html><p></p> </html>',
+                false,
+                true,
+            ],
+            'Child template mode results in unmodified directive' => [
+                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                false,
+                false,
+                true,
             ],
             'Production mode - File with compilation error results in unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
@@ -300,6 +323,36 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
                 \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
                 false,
+            ],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoAppIsolation enabled
+     * @dataProvider inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider
+     *
+     * @param string $templateText
+     */
+    public function testInlinecssDirectiveThrowsExceptionWhenMissingParameter($templateText)
+    {
+        $this->setUpDesignParams();
+
+        $this->_model->filter($templateText);
+    }
+
+    /**
+     * @return array
+     */
+    public function inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider()
+    {
+        return [
+            'Missing "file" parameter' => [
+                '{{inlinecss}}',
+            ],
+            'Missing "file" parameter value' => [
+                '{{inlinecss file=""}}',
             ],
         ];
     }
