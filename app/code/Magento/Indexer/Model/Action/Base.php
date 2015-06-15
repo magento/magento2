@@ -8,6 +8,7 @@ namespace Magento\Indexer\Model\Action;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
@@ -46,6 +47,17 @@ class Base implements ActionInterface
      */
     protected $data;
 
+
+    /**
+     * @var array
+     */
+    protected $filterColumns;
+
+    /**
+     * @var array
+     */
+    protected $searchColumns;
+
     /**
      * @var Source
      */
@@ -60,12 +72,21 @@ class Base implements ActionInterface
      * @var string
      */
     protected $defaultHandler;
+    /**
+     * @var String
+     */
+
+    /**
+     * @var String
+     */
+    protected $string;
 
     /**
      * @param AppResource $resource
      * @param Source $sourceProcessor
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
+     * @param String $string
      * @param string $defaultHandler
      * @param array $data
      */
@@ -74,6 +95,7 @@ class Base implements ActionInterface
         Source $sourceProcessor,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
+        String $string,
         $defaultHandler = 'Magento\Indexer\Model\DefaultHandler',
         $data = []
     ) {
@@ -83,6 +105,7 @@ class Base implements ActionInterface
         $this->sourceProcessor = $sourceProcessor;
         $this->handlerProcessor = $handlerProcessor;
         $this->defaultHandler = $defaultHandler;
+        $this->string = $string;
     }
 
     /**
@@ -92,6 +115,7 @@ class Base implements ActionInterface
      */
     public function executeFull()
     {
+        $this->prepareSchema();
         $this->connection->query($this->prepareQuery());
     }
 
@@ -117,7 +141,7 @@ class Base implements ActionInterface
 
     protected function prepareQuery()
     {
-        $this->data['handlers']['defaultHandler'] = 'Magento\Indexer\Model\DefaultHandler';
+        $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
         $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
@@ -126,6 +150,22 @@ class Base implements ActionInterface
             $select,
             'index_' . $this->sources[$this->data['primary']]->getMainTable()
         );
+    }
+
+    protected function prepareSchema()
+    {
+        $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
+        $this->sources = $this->sourceProcessor->process($this->data['sources']);
+        $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
+        $this->prepareFields();
+        $this->prepareColumns();
+        $newTableName = 'index_' . $this->sources[$this->data['primary']]->getEntityName();
+        $table = $this->connection->newTable($newTableName)
+            ->setComment($this->string->upperCaseWords($newTableName, '_', ' '));
+        foreach ($this->filterColumns as $column) {
+            $table->addColumn($column['name'], $column['type']);
+        }
+        $this->connection->createTable($table);
     }
 
     protected function createResultSelect()
@@ -159,6 +199,33 @@ class Base implements ActionInterface
         return $select;
     }
 
+
+    protected function prepareColumns()
+    {
+        foreach ($this->data['fieldsets'] as $fieldset) {
+            foreach ($fieldset['fields'] as $fieldName => $field) {
+                switch ($field['type']) {
+                    case 'filterable':
+                        $this->filterColumns[] = [
+                            'name' => $fieldName,
+                            'type' => $field['dataType'],
+                        ];
+                        break;
+                    default:
+                        $this->filterColumns[] = [
+                            'name' => $fieldName,
+                            'type' => $field['dataType'],
+                        ];
+                        $this->searchColumns[] = [
+                            'name' => $fieldName,
+                            'type' => $field['dataType'],
+                        ];
+                        break;
+                }
+            }
+        }
+    }
+
     protected function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
@@ -182,6 +249,10 @@ class Base implements ActionInterface
                         : isset($this->data['fieldsets'][$fieldsetName]['handler'])
                             ? $this->data['fieldsets'][$fieldsetName]['handler']
                             : $defaultHandler;
+                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
+                    isset($this->sources[$field['dataType']])
+                        ? $this->sources[$field['dataType']]
+                        : 'varchar';
             }
         }
     }
