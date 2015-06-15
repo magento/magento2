@@ -1316,7 +1316,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-                    $websites[$rowSku][$this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES])] = true;
+                    $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
+                    $websites[$rowSku][$websiteId] = true;
                 }
 
                 // 3. Categories phase
@@ -1353,28 +1354,43 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 5. Media gallery phase
-                $dispertionPath = \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
-                $imageName = preg_replace('/[^a-z0-9\._-]+/i','', $rowData[self::COL_MEDIA_IMAGE]);
-                $fullDispertionPath = $dispertionPath.'/'.$imageName;
+
+                $fullDispersionPath = '';
                 $imageIsSet = null;
                 $imageFromProduct = null;
                 $imageInProductIsSet = null;
-                foreach ($this->cachedImages as $image) {
-                    if ($image['sku'] == $rowData[self::COL_SKU] && preg_replace('/_[0-9]+/', '', $image['value']) == $fullDispertionPath) {
-                        $imageInProductIsSet = true;
-                        $imageFromProduct = preg_replace('/_[0-9]+/', '', $image['value']);
-                        break;
-                    } elseif (in_array($fullDispertionPath, $image)) {
-                        $imageIsSet = true;
-                        break;
+                if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
+                    $dispersionPath =
+                        \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
+                    $imageName = preg_replace('/[^a-z0-9\._-]+/i', '', $rowData[self::COL_MEDIA_IMAGE]);
+                    $fullDispersionPath = $dispersionPath . '/' . $imageName;
+                    foreach ($this->cachedImages as $image) {
+                        if (($image['sku'] == $rowData[self::COL_SKU])
+                            && (preg_replace('/_[0-9]+/', '', $image['value']) == $fullDispersionPath)
+                        ) {
+                            $imageInProductIsSet = true;
+                            $imageFromProduct = preg_replace('/_[0-9]+/', '', $image['value']);
+                            break;
+                        } elseif (in_array($fullDispersionPath, $image)) {
+                            $imageIsSet = true;
+                            break;
+                        }
                     }
                 }
-                if (($imageInProductIsSet && $imageFromProduct != $fullDispertionPath) || (!isset($imageIsSet) && !isset($imageInProductIsSet))) {
+                if (($imageInProductIsSet && ($imageFromProduct != $fullDispersionPath))
+                    || (!isset($imageIsSet) && !isset($imageInProductIsSet))
+                ) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                        $mediaGalleryImages = explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                        $mediaGalleryLabels = isset($rowData['_media_image_label']) ? explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']) : array();
+                        $mediaGalleryImages =
+                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                        if (isset($rowData['_media_image_label'])) {
+                            $mediaGalleryLabels =
+                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
+                        } else {
+                            $mediaGalleryLabels = [];
+                        }
                         if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                             $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
                         } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
@@ -1383,9 +1399,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
 
                     foreach ($this->_imagesArrayKeys as $imageCol) {
-                        if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE) && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
+                        if (!empty($rowData[$imageCol])
+                            && ($imageCol != self::COL_MEDIA_IMAGE)
+                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
                             $mediaGalleryImages[] = $rowData[$imageCol];
-                            $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label']) ? $rowData[$imageCol . '_label'] : '';
+                            if (isset($mediaGalleryLabels)) {
+                                $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label']);
+                            } else {
+                                $mediaGalleryLabels[] = '';
+                            }
                         }
                     }
 
@@ -1418,12 +1440,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ];
                         }
                     }
-                } elseif ($imageInProductIsSet && $imageFromProduct == $fullDispertionPath) {
+                } elseif ($imageInProductIsSet && $imageFromProduct == $fullDispersionPath) {
                     $mediaGalleryImages = array();
                     $mediaGalleryLabels = array();
                     if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                        $mediaGalleryImages = explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                        $mediaGalleryLabels = isset($rowData['_media_image_label']) ? explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']) : array();
+                        $mediaGalleryImages =
+                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                        if (isset($rowData['_media_image_label'])) {
+                            $mediaGalleryLabels =
+                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
+                        } else {
+                            $mediaGalleryLabels = array();
+                        }
                         if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                             $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
                         } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
@@ -1432,9 +1460,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
 
                     foreach ($this->_imagesArrayKeys as $imageCol) {
-                        if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE) && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
+                        if (!empty($rowData[$imageCol])
+                            && ($imageCol != self::COL_MEDIA_IMAGE)
+                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
                             $mediaGalleryImages[] = $rowData[$imageCol];
-                            $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label']) ? $rowData[$imageCol . '_label'] : '';
+                            if (isset($rowData[$imageCol . '_label'])) {
+                                $mediaGalleryLabels[] = $rowData[$imageCol . '_label'];
+                            } else {
+                                $mediaGalleryLabels[] = '';
+                            }
                         }
                     }
 
@@ -1450,7 +1484,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 } else {
                     $this->addRowError(__("Image already exists for '%s'"), $rowNum, self::COL_MEDIA_IMAGE);
-
                 }
 
                 // 6. Attributes phase
@@ -1479,7 +1512,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $productTypeModel = $this->_productTypeModels[$productType];
                 if (!empty($rowData['tax_class_name'])) {
-                    $rowData['tax_class_id'] = $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
+                    $rowData['tax_class_id'] =
+                        $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
                 }
 
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND ||
@@ -1563,7 +1597,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $attributes
             );
 
-            $this->_eventManager->dispatch('catalog_product_import_bunch_save_after', ['adapter' => $this, 'bunch' => $bunch]);
+            $this->_eventManager->dispatch(
+                'catalog_product_import_bunch_save_after',
+                ['adapter' => $this, 'bunch' => $bunch]
+            );
         }
         return $this;
     }
