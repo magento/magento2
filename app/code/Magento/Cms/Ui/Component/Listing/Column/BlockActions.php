@@ -19,9 +19,7 @@ class BlockActions extends Column
      * Url path
      */
     const URL_PATH_EDIT = 'cms/block/edit';
-
     const URL_PATH_DELETE = 'cms/block/delete';
-
     const URL_PATH_DETAILS = 'cms/block/details';
 
     /**
@@ -91,10 +89,10 @@ class BlockActions extends Column
                                 ]
                             ),
                             'label' => __('Delete'),
-                            'confirm' => array(
+                            'confirm' => [
                                 'title' => __('Delete "${ $.$data.title }"'),
                                 'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
-                            )
+                            ]
                         ]
                     ];
                 }
