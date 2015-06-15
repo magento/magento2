@@ -34,7 +34,13 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         break;
                     case 'update':
                         $order->getPayment()->update();
-                        $message = __('The payment update has been made.');
+                        if ($order->getPayment()->getIsTransactionApproved()) {
+                            $message = __('Transaction has been approved.');
+                        } else if ($order->getPayment()->getIsTransactionDenied()) {
+                            $message = __('Transaction has been voided/declined.');
+                        } else {
+                            $message = __('The payment update has been made.');
+                        }
                         break;
                     default:
                         throw new \Exception(sprintf('Action "%s" is not supported.', $action));
