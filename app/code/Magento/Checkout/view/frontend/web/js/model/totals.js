@@ -19,7 +19,7 @@ define(
                 }
                 return this.totals().items;
             },
-            getTotalByCode: function(code) {
+            getSegment: function(code) {
                 if (!this.totals()) {
                     return null;
                 }
