@@ -81,7 +81,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         );
         if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = $this->isQuoteVirtual() ? false : true;
+            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
         if ($itemLevelGiftMessageConfiguration) {
@@ -125,7 +125,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      */
     protected function isQuoteVirtual()
     {
-        return $this->checkoutSession->loadCustomerQuote()->getQuote()->isVirtual();
+        return $this->checkoutSession->loadCustomerQuote()->getQuote()->getIsVirtual();
     }
 
     /**
