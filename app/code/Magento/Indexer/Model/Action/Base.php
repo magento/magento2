@@ -96,7 +96,7 @@ class Base implements ActionInterface
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
         String $string,
-        $defaultHandler = 'Magento\Indexer\Model\DefaultHandler',
+        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
         $data = []
     )
     {
