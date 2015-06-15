@@ -97,6 +97,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * Tracking number getter
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getNumber()
@@ -106,6 +108,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * Tracking number setter
+     *
+     * @codeCoverageIgnore
      *
      * @param string $number
      * @return \Magento\Framework\Object
@@ -117,6 +121,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
 
     /**
      * Declare Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
@@ -201,6 +207,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         return parent::addData($data);
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns track_number
      *
@@ -309,7 +316,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         return $this->getData(ShipmentTrackInterface::WEIGHT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */

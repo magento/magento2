@@ -78,6 +78,30 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method validateData() for delete behaviour
+     *
+     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     */
+    public function testValidateDataEmptyColumnNameForDeleteBehaviour()
+    {
+        $this->_createSourceAdapterMock(['']);
+        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->validateData();
+    }
+
+    /**
+     * Test for method validateData() for delete behaviour
+     *
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     */
+    public function testValidateDataColumnNameWithWhitespacesForDeleteBehaviour()
+    {
+        $this->_createSourceAdapterMock(['  ']);
+        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->validateData();
+    }
+
+    /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
