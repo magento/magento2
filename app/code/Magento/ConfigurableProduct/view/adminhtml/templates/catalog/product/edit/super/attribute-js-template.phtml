@@ -149,14 +149,14 @@
                     <div class="fields-group-2">
                         <div class="field field-pricing-value">
                             <div class="control">
-                                <input type="text" class="pricing-value validate-number" <?php if(!$block->getCanEditPrice()) {echo 'disabled="disabled"';}?>
+                                <input type="text" class="pricing-value validate-number" <?php if(!$block->getCanEditPrice()): ?> 'disabled="disabled"' <?php endif; ?>
                                        name="product[configurable_attributes_data][<%- data.attribute.id %>][values][<%- data.option.id %>][pricing_value]" />
                             </div>
                         </div>
                         <div class="field field-pricing-measure">
                             <div class="actions dropdown actions-select">
                                 <input type="hidden" value="0" name="product[configurable_attributes_data][<%- data.attribute.id %>][values][<%- data.option.id %>][is_percent]"/>
-                                <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}' <?php if(!$block->getCanEditPrice()) {echo 'disabled="disabled"';}?>>
+                                <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}' <?php if(!$block->getCanEditPrice()): ?> 'disabled="disabled"' <?php endif; ?>>
                                     <span><?php echo $block->getBaseCurrency()->getSymbol() ?></span>
                                 </button>
                                 <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
