@@ -7,6 +7,9 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 /**
  * Test class for import product options module
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,6 +53,13 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * Test model mock
+     *
+     * @var \Magento\CatalogImportExport\Model\Import\Product\Option
+     */
+    protected $_modelMock;
+
+    /**
      * Parent product entity
      *
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -66,7 +76,6 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         ['option_id' => 3, 'store_id' => 0, 'title' => 'Test Date and Time Title'],
         ['option_id' => 4, 'store_id' => 0, 'title' => 'Test Select'],
         ['option_id' => 5, 'store_id' => 0, 'title' => 'Test Radio'],
-        ['option_id' => 5, 'store_id' => 1, 'title' => 'Option New Store View']
     ];
 
     /**
@@ -75,6 +84,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedPrices = [
+        2 => ['option_id' => 2, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 0],
         3 => ['option_id' => 3, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 2]
     ];
 
@@ -99,9 +109,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         ['option_type_id' => 2, 'store_id' => 0, 'title' => 'Option 1'],
         ['option_type_id' => 3, 'store_id' => 0, 'title' => 'Option 2'],
         ['option_type_id' => 4, 'store_id' => 0, 'title' => 'Option 1'],
-        ['option_type_id' => 4, 'store_id' => 1, 'title' => 'Option 1 New Store View'],
         ['option_type_id' => 5, 'store_id' => 0, 'title' => 'Option 2'],
-        ['option_type_id' => 5, 'store_id' => 1, 'title' => 'Option 2 New Store View']
     ];
 
     /**
@@ -174,9 +182,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_expectedTypeValues = [
         ['option_type_id' => 2, 'sort_order' => 0, 'sku' => '3-1-select', 'option_id' => 4],
-        ['option_type_id' => 3, 'sort_order' => 0, 'sku' => '3-2-select', 'option_id' => 4],
+        ['option_type_id' => 3, 'sort_order' => 1, 'sku' => '3-2-select', 'option_id' => 4],
         ['option_type_id' => 4, 'sort_order' => 0, 'sku' => '4-1-radio', 'option_id' => 5],
-        ['option_type_id' => 5, 'sort_order' => 0, 'sku' => '4-2-radio', 'option_id' => 5]
+        ['option_type_id' => 5, 'sort_order' => 1, 'sku' => '4-2-radio', 'option_id' => 5]
     ];
 
     /**
@@ -223,7 +231,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $this->_model = new \Magento\CatalogImportExport\Model\Import\Product\Option(
+        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
+        $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
@@ -247,7 +256,16 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $scopeConfig,
             new \Magento\Framework\Stdlib\DateTime(),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
-        );
+        ];
+
+        $class = new \ReflectionClass($modelClassName);
+        $this->_model = $class->newInstanceArgs($modelClassArgs);
+        // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
+        $this->_modelMock = $this->
+            getMockBuilder($modelClassName)->
+            setConstructorArgs($modelClassArgs)->
+            setMethods(['_getMultiRowFormat'])->
+            getMock();
     }
 
     /**
@@ -355,8 +373,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                     'id' => $elementIndex,
                     'entity_id' => $elementIndex,
                     'product_id' => $elementIndex,
-                    'type' => $csvDataRow[\Magento\CatalogImportExport\Model\Import\Product\Option::COLUMN_TYPE],
-                    'title' => $csvDataRow[\Magento\CatalogImportExport\Model\Import\Product\Option::COLUMN_TITLE]
+                    'type' => $csvDataRow[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE],
+                    'title' => $csvDataRow[\Magento\CatalogImportExport\Model\Import\Product::COL_NAME]
                 ];
             }
         }
@@ -629,6 +647,22 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Set method _getMultiRowFormat for model mock
+     * Make model bypass format converting, used to pass tests' with old data.
+     * @todo should be refactored/removed when all old options are converted into the new format.
+     *
+     * @param array $rowData
+     *  old format data
+     * @return void
+     */
+    private function _bypassModelMethodGetMultiRowFormat($rowData)
+    {
+        $this->_modelMock->expects($this->any())
+                        ->method('_getMultiRowFormat')
+                        ->will($this->returnValue([$rowData]));
+    }
+
+    /**
      * Test for validation of row without custom option
      *
      * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isRowWithCustomOption
@@ -636,7 +670,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     public function testValidateRowNoCustomOption()
     {
         $rowData = include __DIR__ . '/_files/row_data_no_custom_option.php';
-        $this->assertFalse($this->_model->validateRow($rowData, 0));
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
+        $this->assertFalse($this->_modelMock->validateRow($rowData, 0));
     }
 
     /**
@@ -658,10 +693,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateRow(array $rowData, array $errors)
     {
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
+
         if (empty($errors)) {
-            $this->assertTrue($this->_model->validateRow($rowData, 0));
+            $this->assertTrue($this->_modelMock->validateRow($rowData, 0));
         } else {
-            $this->assertFalse($this->_model->validateRow($rowData, 0));
+            $this->assertFalse($this->_modelMock->validateRow($rowData, 0));
         }
         $this->assertAttributeEquals($errors, '_errors', $this->_productEntity);
     }
@@ -690,16 +727,19 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->_testStores = ['admin' => 0];
         $this->setUp();
         if ($behavior) {
-            $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
+            $this->_modelMock->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
         }
+
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
+
         for ($i = 0; $i < $numberOfValidations; $i++) {
-            $this->_model->validateRow($rowData, $i);
+            $this->_modelMock->validateRow($rowData, $i);
         }
 
         if (empty($errors)) {
-            $this->assertTrue($this->_model->validateAmbiguousData());
+            $this->assertTrue($this->_modelMock->validateAmbiguousData());
         } else {
-            $this->assertFalse($this->_model->validateAmbiguousData());
+            $this->assertFalse($this->_modelMock->validateAmbiguousData());
         }
         $this->assertAttributeEquals($errors, '_errors', $this->_productEntity);
     }
@@ -908,5 +948,48 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertTrue($model->importData());
+    }
+
+    public function testClearProductsSkuToId()
+    {
+        $this->setPropertyValue($this->_modelMock, '_productsSkuToId', 'value');
+
+        $this->_modelMock->clearProductsSkuToId();
+
+        $productsSkuToId = $this->getPropertyValue($this->_modelMock, '_productsSkuToId');
+
+        $this->assertNull($productsSkuToId);
+    }
+
+    /**
+     * Set object property.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+
+        return $object;
+    }
+
+    /**
+     * Get object property.
+     *
+     * @param object $object
+     * @param string $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
     }
 }
