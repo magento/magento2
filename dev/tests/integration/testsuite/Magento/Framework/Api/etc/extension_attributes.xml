@@ -72,4 +72,15 @@
             </join>
         </attribute>
     </extension_attributes>
+
+    <extension_attributes for="Magento\Sales\Api\Data\InvoiceInterface">
+        <attribute code="test_dummy_attribute" type="string">
+            <join reference_table="eav_attribute"
+                  reference_field="attribute_id"
+                  join_on_field="entity_id"
+                    >
+                <select_field>attribute_code</select_field>
+            </join>
+        </attribute>
+    </extension_attributes>
 </config>
