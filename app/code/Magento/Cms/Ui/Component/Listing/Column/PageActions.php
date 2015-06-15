@@ -26,10 +26,6 @@ class PageActions extends Column
     /** @var UrlInterface */
     protected $urlBuilder;
 
-    /** @var string */
-    private $url;
-
-
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
@@ -70,10 +66,10 @@ class PageActions extends Column
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
-                        'confirm' => array(
+                        'confirm' => [
                             'title' => __('Delete "${ $.$data.title }"'),
                             'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
-                        )
+                        ]
                     ];
                 }
                 if (isset($item['identifier'])) {
