@@ -20,7 +20,8 @@ define(
              */
             formAddressDataToQuoteAddress: function(formData) {
                 // clone address form data to new object
-                var addressData = $.extend(true, {}, formData);
+                var addressData = $.extend(true, {}, formData),
+                    region;
 
                 if (mageUtils.isObject(addressData.street)) {
                     addressData.street = this.objectToArray(addressData.street);
@@ -33,7 +34,7 @@ define(
                 };
 
                 if (addressData.region_id) {
-                    var region = countryData[addressData.country_id]['regions'][addressData.region_id];
+                    region = countryData[addressData.country_id]['regions'][addressData.region_id];
                     if (region) {
                         addressData.region.region_id = addressData['region_id'];
                         addressData.region.region_code = region['code'];
