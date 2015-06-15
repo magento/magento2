@@ -90,7 +90,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $this->assertEquals(['template_one', 'template_two'], $this->_model->getAvailableTemplates());
+        $this->_model->expects($this->atLeastOnce())
+            ->method('getThemeTemplates')
+            ->will($this->returnValue([]));
+
+        $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
+
+        foreach ($this->_model->getAvailableTemplates() as $templateOptions) {
+            $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
+            $expectedOptions = $expectedTemplates[$templateOptions['value']];
+
+            $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
+            $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
+        }
     }
 
     public function testGetThemeTemplates()
