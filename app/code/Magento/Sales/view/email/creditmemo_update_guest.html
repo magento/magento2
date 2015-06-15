@@ -19,16 +19,22 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>Dear {{var billing.getName()}},</h1>
+<h1>{{trans "Dear %name," name=$billing.getName()}}</h1>
 <p>
-    Your order # {{var order.increment_id}} has been <br/>
-    <strong>{{var order.getStatusLabel()}}</strong>.
+    {{trans
+        "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+        
+        increment_id="$order.increment_id"
+        order_status="$order.getStatusLabel()
+    |raw}}
 </p>
 <p>{{var comment}}</p>
 <p>
-    If you have any questions, please feel free to contact us at
-    <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a>
-    or by phone at {{config path='general/store_information/phone'}}.
+    {{trans
+        'If you have any questions, please feel free to contact us at <a href="mailto:%support_email">%support_email</a> or by phone at %support_phone.'
+        
+        support_email=$store.getConfig('trans_email/ident_support/email')
+        support_phone=$store.getConfig('general/store_information/phone')
+    |raw}}
 </p>
-
 {{template config_path="design/email/footer_template"}}

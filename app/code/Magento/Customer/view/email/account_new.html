@@ -16,23 +16,40 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>Dear {{var customer.name}},</h1>
-<p>Welcome to {{var store.getFrontendName()}}. To log in when visiting our site just click <a href="{{store url='customer/account/'}}" >Login</a> or <a href="{{store url='customer/account/'}}">My Account</a> at the top of every page, and then enter your e-mail address and password.</p>
-<p>
-    Use the following values when prompted to log in:<br/>
-    <strong>E-mail</strong>: {{var customer.email}}<br/>
-    <strong>Password</strong>: Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()}})<br/>
-    Forgot your Account password? No problems. Click <a href="{{store url='customer/account/createPassword/' _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.</p>
+<h1>{{trans "Dear %name," name=$customer.name}}</h1>
+<p>{{trans "Welcome to %store_name."}}</p>
+<p>{{trans
+        'To log in when visiting our site just click <a href="%customer_url">Login</a> or <a href="%customer_url">My Account</a> at the top of every page, and then enter your e-mail address and password.'
+
+        customer_url=$store.getUrl('customer/account/')
+    |raw}}
 </p>
-<p>When you log in to your account, you will be able to do the following:</p>
+<p>{{trans "Use the following values when prompted to log in:"}}</p><br/>
+<strong>{{trans "E-mail:"}}</strong> {{var customer.email}}<br/>
+<strong>{{trans "Password:"}}</strong> {{trans "Only you know that! (Hint: It’s the password you created at %store_name)" store_name=$store.getFrontendName()}}<br/>
+<p>
+    {{trans
+        'Forgot your Account password? No problem. Click <a href="%reset_url">here</a> to reset it.'
+        
+        reset_url=$store.getUrl('customer/account/createPassword/', ['_query_id' => $customer.id, '_query_token' => $customer.rp_token])
+    |raw}}
+</p>
+<p>{{trans "When you log in to your account, you will be able to do the following:"}}</p>
 <ul>
-    <li>Proceed through checkout faster when making a purchase</li>
-    <li>Check the status of orders</li>
-    <li>View past orders</li>
-    <li>Make changes to your account information</li>
-    <li>Change your password</li>
-    <li>Store alternative addresses (for shipping to multiple family members and friends!)</li>
+    <li>{{trans "Proceed through checkout faster when making a purchase"}}</li>
+    <li>{{trans "Check the status of orders"}}</li>
+    <li>{{trans "View past orders"}}</li>
+    <li>{{trans "Make changes to your account information"}}</li>
+    <li>{{trans "Change your password"}}</li>
+    <li>{{trans "Store alternative addresses (for shipping to multiple family members and friends!)"}}</li>
 </ul>
-<p>If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
+<p>
+    {{trans
+        'If you have any questions about your order please contact us at <a href="mailto:%support_email">%support_email</a> or call us at %store_phone.'
+
+        support_email=$store.getConfig('trans_email/ident_support/email')
+        store_phone=$store.getConfig('general/store_information/phone')
+    |raw}}
+</p>
 
 {{template config_path="design/email/footer_template"}}

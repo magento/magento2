@@ -4,10 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-{* This is a comment block
-
-Use vars: {{var var_name}}
-*}<!--@subject Payment Transaction Failed Reminder @-->
+<!--@subject Payment Transaction Failed Reminder @-->
 <!--@vars
 {"var reason":"Transaction Failed Reason",
 "var checkoutType":"Checkout Type",
@@ -24,58 +21,49 @@ Use vars: {{var var_name}}
 
 {{template config_path="design/email/header_template"}}
 
-<table>
-    <thead>
-        <tr>
-            <th>Payment transaction failed.</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <p>
-                    <b>Reason</b><br />
-                    {{var reason}}
-                </p>
-                <p>
-                    <b>Checkout Type</b><br />
-                    {{var checkoutType}}
-                </p>
-                <p>
-                    <b>Customer:</b><br />
-                    <a href="mailto:{{var customerEmail}}">{{var customer}}</a> &lt;{{var customerEmail}}&gt;
-                </p>
-                <p>
-                    <b>Items</b><br />
-                    {{var items}}
-                </p>
-                <p>
-                    <b>Total:</b><br />
-                    {{var total}}
-                </p>
-                <p>
-                    <b>Billing Address:</b><br />
-                    {{var billingAddress.format('html')|raw}}
-                </p>
-                <p>
-                    <b>Shipping Address:</b><br />
-                    {{var shippingAddress.format('html')|raw}}
-                </p>
-                <p>
-                    <b>Shipping Method:</b><br />
-                    {{var shippingMethod}}
-                </p>
-                <p>
-                    <b>Payment Method:</b><br />
-                    {{var paymentMethod}}
-                </p>
-                <p>
-                    <b>Date & Time:</b><br />
-                    {{var dateAndTime}}
-                </p>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<h1>{{trans "Payment Transaction Failed"}}</h1>
+
+<ul>
+    <li>
+        <b>{{trans "Reason"}}</b><br />
+        {{var reason}}
+    </li>
+    <li>
+        <b>{{trans "Checkout Type"}}</b><br />
+        {{var checkoutType}}
+    </li>
+    <li>
+        <b>{{trans "Customer:"}}</b><br />
+        <a href="mailto:{{var customerEmail}}">{{var customer}}</a> &lt;{{var customerEmail}}&gt;
+    </li>
+    <li>
+        <b>{{trans "Items"}}</b><br />
+        {{var items}}
+    </li>
+    <li>
+        <b>{{trans "Total:"}}</b><br />
+        {{var total}}
+    </li>
+    <li>
+        <b>{{trans "Billing Address:"}}</b><br />
+        {{var billingAddress.format('html')|raw}}
+    </li>
+    <li>
+        <b>{{trans "Shipping Address:"}}</b><br />
+        {{var shippingAddress.format('html')|raw}}
+    </li>
+    <li>
+        <b>{{trans "Shipping Method:"}}</b><br />
+        {{var shippingMethod}}
+    </li>
+    <li>
+        <b>{{trans "Payment Method:"}}</b><br />
+        {{var paymentMethod}}
+    </li>
+    <li>
+        <b>{{trans "Date &amp; Time:"}}</b><br />
+        {{var dateAndTime}}
+    </li>
+</ul>
 
 {{template config_path="design/email/footer_template"}}

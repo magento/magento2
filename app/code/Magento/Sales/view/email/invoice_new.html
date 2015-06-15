@@ -24,55 +24,48 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>Hello, {{var order.getCustomerName()}}</h1>
+<h1>{{trans "Dear %name," name=$order.getCustomerName()}}</h1>
 <p>
-    Thank you for your order from {{var store.getFrontendName()}}.
-    You can check the status of your order by <a href="{{store url="customer/account/"}}">logging into your account</a>.
-    If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}">{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
+    {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+    {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/'} |raw}}
+    {{trans
+        'If you have any questions about your order please contact us at <a href="mailto:%support_email">%support_email</a> or call us at %store_phone.'
+
+        support_email=$store.getConfig('trans_email/ident_support/email')
+        store_phone=$store.getConfig('general/store_information/phone')
+    |raw}}
 </p>
 
-<h2>Your Invoice #{{var invoice.increment_id}} for Order #{{var order.increment_id}}</h2>
+<h2>{{trans "Your Invoice #%invoice_id for Order #%order_id" invoice_id=$invoice.increment_id order_id=$order.increment_id}}</h2>
 
 <table>
     <thead>
-        <tr>
-            <th>Billing Information:</th>
-            <th></th>
-            <th>Payment Method:</th>
-        </tr>
+    <tr>
+        <th>{{trans "Billing Information:"}}</th>
+        <th>{{trans "Payment Method:"}}</th>
+    </tr>
     </thead>
     <tbody>
     <tr>
-        <td>
-            {{var formattedBillingAddress|raw}}
-        </td>
-        <td>&nbsp;</td>
-        <td>
-            {{var payment_html|raw}}
-        </td>
+        <td>{{var formattedBillingAddress|raw}}</td>
+        <td>{{var payment_html|raw}}</td>
     </tr>
     </tbody>
 </table>
 <br/>
+
 {{depend order.getIsNotVirtual()}}
 <table>
     <thead>
     <tr>
-        <th>Shipping Information:</th>
-        <th></th>
-        <th>Shipping Method:</th>
+        <th>{{trans "Shipping Information:"}}</th>
+        <th>{{trans "Shipping Method:"}}</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>
-            {{var formattedShippingAddress|raw}}
-            &nbsp;
-        </td>
-        <td>&nbsp;</td>
-        <td>
-            {{var order.shipping_description}}&nbsp;
-        </td>
+        <td>{{var formattedShippingAddress|raw}}</td>
+        <td>{{var order.getShippingDescription()}}</td>
     </tr>
     </tbody>
 </table>

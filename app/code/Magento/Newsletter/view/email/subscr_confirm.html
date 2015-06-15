@@ -15,8 +15,8 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>Thank you for subscribing to our newsletter.</h1>
-<p>To begin receiving the newsletter, you must first confirm your subscription by clicking on the following link:<br />
-<a href="{{var subscriber.getConfirmationLink()}}">{{var subscriber.getConfirmationLink()}}</a><p>
+<h1>{{trans "Thank you for subscribing to our newsletter."}}</h1>
+<p>{{trans "To begin receiving the newsletter, you must first confirm your subscription by clicking on the following link:"}}</p>
+<p><a href="{{var subscriber.getConfirmationLink()}}">{{var subscriber.getConfirmationLink()}}</a></p>
 
 {{template config_path="design/email/footer_template"}}

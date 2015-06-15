@@ -15,10 +15,11 @@
 
 {{template config_path="design/email/header_template"}}
 
-<p>Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
+<h1>{{trans "Hey,"}}</h1>
+<p>{{trans "Take a look at my Wish List from %store_name." store_name=$store.getFrontendName()}}</p>
 <p>{{var message}}</p>
 {{var items|raw}}
 <br/>
-<p><strong><a href="{{var viewOnSiteLink}}">View all Wish List items</a></strong></p>
+<p><a href="{{var viewOnSiteLink}}">{{trans "View all Wish List items"}}</a></p>
 
 {{template config_path="design/email/footer_template"}}
