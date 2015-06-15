@@ -180,10 +180,13 @@ class File extends AbstractIo
         /**
          * Security enhancement for CSV data processing by Excel-like applications.
          * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
+         *
+         * @var $value string|\Magento\Framework\Phrase
          */
         foreach ($row as $key => $value) {
-            /** @var $value string|\Magento\Framework\Phrase */
-            $value = (string)$value;
+            if (!is_string($value)) {
+                $value = (string)$value;
+            }
             if (isset($value[0]) && $value[0] === '=') {
                 $row[$key] = ' ' . $value;
             }
