@@ -14,9 +14,12 @@
 //  Styles for emails
 //  ---------------------------------------------
 
-// Import this file by reference so that only the styles included in the .email-non-inline() and .media-width()
+// Import these file by reference so that only the styles included in the .email-non-inline() and .media-width()
 // mixins will be output. All other styles will be output via the email-inline.less file.
+
 @import (reference) 'source/_email.less';
+// Contains theme-specific adjustments to email styles
+@import (reference) 'source/_email-extend.less';
 
 //
 //  Module-specific styles for emails
