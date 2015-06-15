@@ -202,6 +202,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
     }
 
+    /**
+     * Test getter for entity type code.
+     */
     public function testGetEntityTypeCode()
     {
         $result = $this->advancedPricing->getEntityTypeCode();
@@ -211,6 +214,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test method validateRow against its result.
+     *
      * @dataProvider validateRowResultDataProvider
      */
     public function testValidateRowResult($rowData, $validatedRows, $invalidRows, $behavior, $expectedResult)
@@ -234,6 +239,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test method validateRow whether AddRowError is called.
+     *
      * @dataProvider validateRowAddRowErrorCallDataProvider
      */
     public function testValidateRowAddRowErrorCall($rowData, $validatedRows, $invalidRows, $behavior, $error)
@@ -256,6 +263,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $advancedPricingMock->validateRow($rowData, $rowNum);
     }
 
+    /**
+     * Test method validateRow whether internal validator is called.
+     */
     public function testValidateRowValidatorCall()
     {
         $rowNum = 0;
@@ -278,6 +288,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $advancedPricingMock->validateRow($rowData, $rowNum);
     }
 
+    /**
+     * Test method saveAndReplaceAdvancedPrices whether AddRowError is called.
+     */
     public function testSaveAndReplaceAdvancedPricesAddRowErrorCall()
     {
         $rowNum = 0;
@@ -298,6 +311,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
 
+    /**
+     * Test method saveAdvancedPricing.
+     */
     public function testSaveAdvancedPricing()
     {
         $this->advancedPricing
@@ -310,6 +326,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test method saveAndReplaceAdvancedPrices with append import behaviour.
+     * Take into consideration different data and check relative internal calls.
+     *
      * @dataProvider saveAndReplaceAdvancedPricesAppendBehaviourDataProvider
      */
     public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCalls(
@@ -348,6 +367,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->advancedPricing, $result);
     }
 
+    /**
+     * Test method saveAndReplaceAdvancedPrices with replace import behaviour.
+     */
     public function testSaveAndReplaceAdvancedPricesReplaceBehaviourInternalCalls()
     {
         $skuVal = 'sku value';
@@ -407,6 +429,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
 
+    /**
+     * Test method deleteAdvancedPricing() whether correct $listSku is formed.
+     */
     public function testDeleteAdvancedPricingFormListSkuToDelete()
     {
         $skuOne = 'sku value';
@@ -434,6 +459,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->deleteAdvancedPricing();
     }
 
+    /**
+     * Test method deleteAdvancedPricing() whether _cachedSkuToDelete property is set to null.
+     */
     public function testDeleteAdvancedPricingResetCachedSkuToDelete()
     {
         $this->setPropertyValue($this->advancedPricing, '_cachedSkuToDelete', 'some value');
@@ -445,6 +473,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($cachedSkuToDelete);
     }
 
+    /**
+     * Test method replaceAdvancedPricing().
+     */
     public function testReplaceAdvancedPricing()
     {
         $this->advancedPricing
@@ -456,6 +487,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->advancedPricing, $result);
     }
 
+    /**
+     * Data provider for testSaveAndReplaceAdvancedPricesAppendBehaviour().
+     *
+     * @return array
+     */
     public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider()
     {
         // @codingStandardsIgnoreStart
@@ -609,6 +645,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         // @codingStandardsIgnoreEnd
     }
 
+    /**
+     * Data provider for testValidateRowResult().
+     *
+     * @return array
+     */
     public function validateRowResultDataProvider()
     {
         return [
@@ -670,6 +711,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Data provider for testValidateRowAddRowErrorCall().
+     *
+     * @return array
+     */
     public function validateRowAddRowErrorCallDataProvider()
     {
         return [
