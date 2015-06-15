@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     $this->_dataStorage,
                     $this->_moduleReader,
-                    $this->emailTemplateFileSystem
+                    $this->emailTemplateFileSystem,
                 ]
             )
             ->setMethods(['getThemeTemplates'])
@@ -77,19 +77,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $this->_model->expects($this->atLeastOnce())
-            ->method('getThemeTemplates')
-            ->will($this->returnValue([]));
-
-        $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
-
-        foreach ($this->_model->getAvailableTemplates() as $templateOptions) {
-            $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
-            $expectedOptions = $expectedTemplates[$templateOptions['value']];
-
-            $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
-            $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
-        }
+        $this->assertEquals(['template_one', 'template_two'], $this->_model->getAvailableTemplates());
     }
 
     public function testGetTemplateLabel()
@@ -168,8 +156,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedException,
         array $fixtureFields = [],
         $argument = null
-    )
-    {
+    ) {
         $this->setExpectedException('UnexpectedValueException', $expectedException);
         $dataStorage = $this->getMock('Magento\Email\Model\Template\Config\Data', ['get'], [], '', false);
         $dataStorage->expects(
@@ -211,7 +198,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 "Field 'file' is not defined for email template 'fixture'.",
                 ['module' => 'Fixture_Module'],
                 $this->designParams,
-            ]
+            ],
         ];
     }
 }
