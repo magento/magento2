@@ -532,11 +532,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['entity_id' => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
 
-//        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->_connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-//        $select->expects($this->any())->method('from')->will($this->returnSelf());
-//        $select->expects($this->any())->method('where')->will($this->returnSelf());
-//        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->will($this->returnValue([
             ['attribute_id' => 131, 'product_id' => 1, 'value_index' => 1, 'product_super_attribute_id' => 131],
 
