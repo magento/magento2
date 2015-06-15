@@ -21,6 +21,7 @@ define(
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/model/new-customer-address',
+        'Magento_Checkout/js/model/step-navigator',
         'mage/translate'
     ],
     function(
@@ -38,8 +39,9 @@ define(
         shippingService,
         selectShippingMethodAction,
         rateRegistry,
-        setShippingInformation,
+        setShippingInformationAction,
         newAddress,
+        stepNavigator,
         $t
     ) {
         'use strict';
@@ -62,9 +64,9 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/shipping',
-                visible: true
+                template: 'Magento_Checkout/shipping'
             },
+            visible: ko.observable(!quote.isVirtual()),
             isCustomerLoggedIn: customer.isLoggedIn,
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
@@ -89,6 +91,8 @@ define(
                 if (rates.length == 1) {
                     selectShippingMethodAction(rates[0])
                 }
+
+                stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
                 return this;
             },
 
@@ -97,18 +101,6 @@ define(
                 if (this.isFormInline && element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
-            },
-
-            /** Initialize observable properties */
-            initObservable: function () {
-                this._super()
-                    .observe('visible');
-                return this;
-            },
-
-            /** Check if component is active */
-            isActive: function() {
-                return !quote.isVirtual();
             },
 
             /** Show address form popup */
@@ -185,7 +177,11 @@ define(
                     }
                     selectShippingAddress(shippingAddress);
                 }
-                setShippingInformation();
+                setShippingInformationAction().done(
+                    function() {
+                        stepNavigator.next();
+                    }
+                );
             }
         });
     }

@@ -27,7 +27,7 @@ define(
                 return 'excluding' == this.displayMode;
             },
             getIncludingValue: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return this.notCalculatedMessage;
                 }
                 var price = 0;
@@ -39,7 +39,7 @@ define(
                 return this.getFormattedPrice(price);
             },
             getExcludingValue: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return this.notCalculatedMessage;
                 }
                 var price = 0;

@@ -19,13 +19,13 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             totals: quote.getTotals(),
             getShippingMethodTitle: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return '';
                 }
                 return shippingService.getTitleByCode(quote.shippingMethod())
             },
             getValue: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return this.notCalculatedMessage;
                 }
                 var price = 0;

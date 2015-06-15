@@ -17,6 +17,7 @@
 @checkout-status-bar-item__margin: @indent__s;
 @checkout-status-bar-item__width: 185px;
 @checkout-status-bar-item__active__background-color: @color-orange-red1;
+@checkout-status-bar-item__complete__color: @link__color;
 
 @checkout-status-bar-item-circle__height: @checkout-status-bar-item-circle__width;
 @checkout-status-bar-item-circle__width: 38px;
@@ -74,6 +75,16 @@
         &:last-child {
             &:before {
                 .css(border-radius, 0 @checkout-status-bar-item__border-radius @checkout-status-bar-item__border-radius 0);
+            }
+        }
+
+        &._complete {
+            > span {
+                .css(color, @checkout-status-bar-item__color);
+                &:after {
+                    .css(font-family, @icons__font-name);
+                    .css(content, @checkout-status-bar-item-circle-inner__active__content);
+                }
             }
         }
 

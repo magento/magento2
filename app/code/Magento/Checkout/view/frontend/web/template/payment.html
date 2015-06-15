@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" role="presentation">
+<li id="opc-payment" role="presentation" data-bind="fadeVisible: isVisible">
     <div class="step-title" data-role="title">
         <h2 data-bind="text: $t(title)"></h2>
     </div>
@@ -12,8 +12,7 @@
          class="step-content"
          data-role="content"
          role="tabpanel"
-         aria-hidden="false"
-         data-bind="fadeVisible: isVisible">
+         aria-hidden="false">
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">

@@ -37,7 +37,7 @@ define(
                 return true;
             },
             ifShowDetails: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return false;
                 }
                 return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
@@ -56,7 +56,7 @@ define(
                 var amount = 0;
                 if (this.totals()) {
                     var taxTotal = totals.getTotalByCode('tax');
-                    if (this.getTotalsMode() != 'initial' && taxTotal) {
+                    if (this.isFullMode() && taxTotal) {
                         amount = taxTotal.value;
                     } else {
                         return this.notCalculatedMessage;
