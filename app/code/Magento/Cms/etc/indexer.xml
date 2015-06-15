@@ -10,7 +10,7 @@
         <title translate="true">CMS Page Grid</title>
         <description translate="true">Rebuild CMS Page Grid index</description>
 
-        <fieldset name="cms_page" source="cms_page">
+        <fieldset name="cms_page" resource="Magento\Cms\Model\Resource\Page">
             <field name="title" />
             <field name="meta_keywords" />
             <field name="meta_description" />
@@ -18,7 +18,5 @@
             <field name="content_heading" />
             <field name="content" />
         </fieldset>
-
-        <source name="cms_page" class="Magento\Cms\Model\Indexer\PageSource" />
     </indexer>
 </config>
