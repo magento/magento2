@@ -8,6 +8,7 @@ namespace Magento\Indexer\Model\Action;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
@@ -117,7 +118,11 @@ class Base implements ActionInterface
     public function executeFull()
     {
         $this->prepareSchema();
-        $this->connection->query($this->prepareQuery());
+        $this->connection->query(
+            $this->prepareQuery(
+                $this->prepareSelect()
+            )
+        );
     }
 
     /**
@@ -128,6 +133,13 @@ class Base implements ActionInterface
      */
     public function executeList(array $ids)
     {
+        $this->prepareFields();
+        $this->prepareSchema();
+        $this->connection->query(
+            $this->prepareQuery(
+                $this->prepareSelect($ids)
+            )
+        );
     }
 
     /**
@@ -138,14 +150,43 @@ class Base implements ActionInterface
      */
     public function executeRow($id)
     {
+        $this->prepareFields();
+        $this->prepareSchema();
+        $this->connection->query(
+            $this->prepareQuery(
+                $this->prepareSelect($id)
+            )
+        );
     }
 
-    protected function prepareQuery()
+    /**
+     * Prepare select query
+     *
+     * @param array|int|null $ids
+     * @return Select
+     */
+    protected function prepareSelect($ids = null)
+    {
+        $select = $this->createResultSelect();
+        if (is_array($ids)) {
+            $select->where($this->getPrimaryResource()->getIdFieldname() . ' IN (?)', $ids);
+        } else if (is_int($ids)) {
+            $select->where($this->getPrimaryResource()->getIdFieldname() . ' = ?', $ids);
+        }
+        return $select;
+    }
+
+    /**
+     * Prepare insert query
+     *
+     * @param Select $select
+     * @return string
+     */
+    protected function prepareQuery(Select $select)
     {
         $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
-        $select = $this->createResultSelect();
         return $this->connection->insertFromSelect(
             $select,
             'index_' . $this->sources[$this->data['primary']]->getMainTable()
@@ -177,6 +218,11 @@ class Base implements ActionInterface
         $this->connection->createTable($table);
     }
 
+    /**
+     * Create select from indexer configuration
+     *
+     * @return Select
+     */
     protected function createResultSelect()
     {
         $select = $this->connection->select();
@@ -205,7 +251,9 @@ class Base implements ActionInterface
         return $select;
     }
 
-
+    /**
+     * Prepare columns by xsi:type
+     */
     protected function prepareColumns()
     {
         foreach ($this->data['fieldsets'] as $fieldset) {
@@ -232,6 +280,9 @@ class Base implements ActionInterface
         }
     }
 
+    /**
+     * Prepare configuration data
+     */
     protected function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
