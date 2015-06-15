@@ -31,7 +31,7 @@ class GettersTest extends \Magento\Webapi\Routing\BaseService
         $this->_restResourcePath = "/{$this->_version}/TestModule5/";
     }
 
-    public function testGetList()
+    public function testGetters()
     {
         $itemId = 1;
         $serviceInfo = [
