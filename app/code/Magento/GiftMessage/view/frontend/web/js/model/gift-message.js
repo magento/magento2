@@ -22,9 +22,15 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                     var message = false;
 
                     if (this.itemId == 'orderLevel') {
-                        message = window.giftOptionsConfig.giftMessage[this.itemId];
+                        message = window.giftOptionsConfig.giftMessage.hasOwnProperty(this.itemId)
+                            ? window.giftOptionsConfig.giftMessage[this.itemId]
+                            : null;
                     } else {
-                        message = window.giftOptionsConfig.giftMessage['itemLevel'][this.itemId];
+                        message =
+                            window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel')
+                            && window.giftOptionsConfig.giftMessage['itemLevel'].hasOwnProperty(this.itemId)
+                            ? window.giftOptionsConfig.giftMessage['itemLevel'][this.itemId]
+                            : null;
                     }
                     if (_.isObject(message)) {
                         this.getObservable('recipient')(message.recipient);
