@@ -8,6 +8,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -56,7 +57,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         $rid = $this->getRequest()->getParam('role_id', false);
         $resource = $this->getRequest()->getParam('resource', false);

@@ -6,6 +6,8 @@
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Delete extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types
 {
     /**
@@ -29,7 +31,7 @@ class Delete extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);
     }
 }

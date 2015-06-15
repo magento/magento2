@@ -6,11 +6,12 @@
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\Framework\Controller\ResultFactory;
 
 class PriceAll extends UnsubscribeController
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -27,8 +28,8 @@ class PriceAll extends UnsubscribeController
             $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('customer/account/');
     }
 }

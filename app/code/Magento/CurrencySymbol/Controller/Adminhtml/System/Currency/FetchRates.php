@@ -7,6 +7,7 @@
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
 
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
@@ -51,7 +52,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*/');
     }
 }

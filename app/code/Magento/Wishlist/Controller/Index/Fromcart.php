@@ -7,6 +7,7 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
@@ -51,7 +52,7 @@ class Fromcart extends Action\Action implements IndexInterface
         try {
             $item = $cart->getQuote()->getItemById($itemId);
             if (!$item) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The requested cart item doesn\'t exist.')
                 );
             }
@@ -71,7 +72,7 @@ class Fromcart extends Action\Action implements IndexInterface
                 ->escapeHtml($wishlist->getName());
             $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
             $wishlist->save();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t move the item to the wish list.'));

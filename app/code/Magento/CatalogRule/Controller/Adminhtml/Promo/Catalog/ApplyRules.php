@@ -7,6 +7,7 @@
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\CatalogRule\Model\Rule\Job;
+use Magento\Framework\Controller\ResultFactory;
 
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
@@ -35,7 +36,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('catalog_rule/*');
     }
 }

@@ -6,6 +6,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
@@ -18,7 +20,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $model->load($itemId);
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$model) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));

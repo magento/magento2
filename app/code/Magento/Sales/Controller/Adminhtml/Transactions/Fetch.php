@@ -8,6 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
 
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
@@ -19,8 +20,8 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
     public function execute()
     {
         $txn = $this->_initTransaction();
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$txn) {
             return $resultRedirect->setPath('sales/*/');
         }

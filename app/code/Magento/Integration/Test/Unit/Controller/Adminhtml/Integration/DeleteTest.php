@@ -33,8 +33,9 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->resultRedirectFactory->expects($this->any())
+        $this->resultFactory->expects($this->any())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
     }
 

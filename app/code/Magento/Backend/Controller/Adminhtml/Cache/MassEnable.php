@@ -7,6 +7,7 @@
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
 
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -41,7 +42,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*');
     }
 }

@@ -6,6 +6,8 @@
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types
 {
     /**
@@ -70,7 +72,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);
     }
 }

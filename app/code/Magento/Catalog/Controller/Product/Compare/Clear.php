@@ -6,6 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Clear extends \Magento\Catalog\Controller\Product\Compare
 {
     /**
@@ -36,8 +38,8 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
             $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setRefererOrBaseUrl();
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Controller\ResultFactory;
 
 class Delete extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -28,7 +29,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('customer/index');
     }
 }
