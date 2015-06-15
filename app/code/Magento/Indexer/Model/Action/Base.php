@@ -5,13 +5,13 @@
  */
 namespace Magento\Indexer\Model\Action;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
 use Magento\Indexer\Model\Processor\Source;
-use Magento\Indexer\Model\SourceInterface;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -27,12 +27,12 @@ class Base implements ActionInterface
     protected $connection;
 
     /**
-     * @var SourceInterface[]
+     * @var SourceProviderInterface[]
      */
     protected $sources;
 
     /**
-     * @var SourceInterface
+     * @var SourceProviderInterface
      */
     protected $primarySource;
 
@@ -62,7 +62,7 @@ class Base implements ActionInterface
     protected $defaultHandler;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param AppResource $resource
      * @param Source $sourceProcessor
      * @param Handler $handlerProcessor
      * @param FieldsetPool $fieldsetPool
@@ -70,7 +70,7 @@ class Base implements ActionInterface
      * @param array $data
      */
     public function __construct(
-        Resource $resource,
+        AppResource $resource,
         Source $sourceProcessor,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
@@ -103,7 +103,6 @@ class Base implements ActionInterface
      */
     public function executeList(array $ids)
     {
-        throw new \Exception('Not implemented yet');
     }
 
     /**
@@ -114,7 +113,6 @@ class Base implements ActionInterface
      */
     public function executeRow($id)
     {
-        throw new \Exception('Not implemented yet');
     }
 
     protected function prepareQuery()
@@ -126,7 +124,7 @@ class Base implements ActionInterface
         $select = $this->createResultSelect();
         return $this->connection->insertFromSelect(
             $select,
-            'index_' . $this->sources[$this->data['primary']]->getEntityName()
+            'index_' . $this->sources[$this->data['primary']]->getMainTable()
         );
     }
 
@@ -134,17 +132,17 @@ class Base implements ActionInterface
     {
         $select = $this->connection->select();
         $this->primarySource = $this->sources[$this->data['primary']];
-        $select->from($this->primarySource->getEntityName());
+        $select->from($this->primarySource->getMainTable());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 if (isset($field['reference']['from']) && isset($field['reference']['to'])) {
                     $source = $field['source'];
-                    /** @var SourceInterface $source */
-                    $currentEntityName = $source->getEntityName();
+                    /** @var SourceProviderInterface $source */
+                    $currentEntityName = $source->getMainTable();
                     $select->joinInner(
                         $currentEntityName,
                         new \Zend_Db_Expr(
-                            $this->primarySource->getEntityName() . '.' . $field['reference']['from']
+                            $this->primarySource->getMainTable() . '.' . $field['reference']['from']
                             . '=' . $currentEntityName . '.' . $field['reference']['to']
                         ),
                         null
@@ -153,7 +151,7 @@ class Base implements ActionInterface
                 $handler = $field['handler'];
                 $source = $field['source'];
                 /** @var HandlerInterface $handler */
-                /** @var SourceInterface $source */
+                /** @var SourceProviderInterface $source */
                 $handler->prepareSql($select, $source, $field);
             }
         }

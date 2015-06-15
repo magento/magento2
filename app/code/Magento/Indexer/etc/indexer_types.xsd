@@ -36,7 +36,6 @@
                     <xs:field xpath="@name"/>
                 </xs:unique>
             </xs:element>
-            <xs:element name="source" type="sourceType"/>
             <xs:element name="handler" type="handlerType"/>
         </xs:choice>
     </xs:group>
@@ -122,19 +121,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="name" type="nameType" use="required"/>
-        <xs:attribute name="source" type="nameType" use="optional"/>
         <xs:attribute name="handler" type="nameType" use="optional"/>
         <xs:attribute name="origin" type="originType" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="sourceType">
-        <xs:annotation>
-            <xs:documentation>
-                Source of field declaration.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="class" type="classType" use="required"/>
-        <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="handlerType">
@@ -153,10 +141,11 @@
                 Fieldset of field declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
+        <xs:choice>
+            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="1" />
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="source" type="sourceType" use="required"/>
+        </xs:choice>
+        <xs:attribute name="resource" type="classType" use="required"/>
         <xs:attribute name="class" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
@@ -166,7 +155,6 @@
             <xs:extension base="fieldTypeAbstract">
                 <xs:choice>
                     <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
-                    <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="1" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
