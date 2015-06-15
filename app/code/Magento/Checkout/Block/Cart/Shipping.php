@@ -5,7 +5,12 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Api\Data\EstimateAddressInterfaceFactory;
+use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Model\QuoteRepository;
 
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -44,12 +49,42 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $priceCurrency;
 
     /**
+     * @var EstimateAddressInterfaceFactory
+     */
+    protected $estimatedAddressFactory;
+
+    /**
+     * @var ShippingMethodManagementInterface
+     */
+    protected $shippingMethodManager;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param PriceCurrencyInterface $priceCurrency
+     * @param EstimateAddressInterfaceFactory $estimatedAddressFactory
+     * @param ShippingMethodManagementInterface $shippingMethodManager
+     * @param AddressRepositoryInterface $addressRepository
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param QuoteRepository $quoteRepository
      * @param array $data
      */
     public function __construct(
@@ -59,11 +94,21 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Directory\Block\Data $directoryBlock,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         PriceCurrencyInterface $priceCurrency,
+        EstimateAddressInterfaceFactory $estimatedAddressFactory,
+        ShippingMethodManagementInterface $shippingMethodManager,
+        AddressRepositoryInterface $addressRepository,
+        CustomerRepositoryInterface $customerRepository,
+        QuoteRepository $quoteRepository,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_directoryBlock = $directoryBlock;
         $this->_carrierFactory = $carrierFactory;
+        $this->estimatedAddressFactory = $estimatedAddressFactory;
+        $this->shippingMethodManager = $shippingMethodManager;
+        $this->addressRepository = $addressRepository;
+        $this->customerRepository = $customerRepository;
+        $this->quoteRepository = $quoteRepository;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
     }
@@ -308,5 +353,35 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         $block = $this->getLayout()->getBlock('checkout.shipping.price');
         $block->setShippingRate($shippingRate);
         return $block->toHtml();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _beforeToHtml()
+    {
+        if ($customerId = $this->_customerSession->getCustomerId()) {
+            $customer = $this->customerRepository->getById($customerId);
+            if ($defaultShipping = $customer->getDefaultShipping()) {
+                $address = $this->addressRepository->getById($defaultShipping);
+                if ($address &&
+                    ($address->getCountryId()
+                        || $address->getPostcode()
+                        || $address->getRegion()
+                        || $address->getRegionId()
+                    )
+                ) {
+                    /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
+                    $estimatedAddress = $this->estimatedAddressFactory->create();
+                    $estimatedAddress->setCountryId($address->getCountryId());
+                    $estimatedAddress->setPostcode($address->getPostcode());
+                    $estimatedAddress->setRegion($address->getRegion());
+                    $estimatedAddress->setRegionId($address->getRegionId());
+                    $this->shippingMethodManager->estimateByAddress($this->getQuote()->getId(), $estimatedAddress);
+                    $this->quoteRepository->save($this->getQuote());
+                }
+            }
+        }
+        return parent::_beforeToHtml();
     }
 }
