@@ -19,6 +19,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  Data */
