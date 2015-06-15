@@ -16,23 +16,23 @@
 
 {{template config_path="design/email/header_template"}}
 
-                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Dear {{var customer.name}},</h1>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Welcome to {{var store.getFrontendName()}}. To log in when visiting our site just click <a href="{{store url='customer/account/'}}" style="color:#1E7EC8;">Login</a> or <a href="{{store url='customer/account/'}}" style="color:#1E7EC8;">My Account</a> at the top of every page, and then enter your e-mail address and password.</p>
-                            <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0; padding:13px 18px; background:#f9f9f9;">
+                            <h1>Dear {{var customer.name}},</h1>
+                            <p>Welcome to {{var store.getFrontendName()}}. To log in when visiting our site just click <a href="{{store url='customer/account/'}}" >Login</a> or <a href="{{store url='customer/account/'}}" >My Account</a> at the top of every page, and then enter your e-mail address and password.</p>
+                            <p>
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail</strong>: {{var customer.email}}<br/>
                                 <strong>Password</strong>: Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()}})<br/>
                                 Forgot your Account password? No problems. Click <a href="{{store url='customer/account/createPassword/' _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.</p>
                             </p>
-                            <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;">When you log in to your account, you will be able to do the following:</p>
-                            <ul style="font-size:12px; line-height:16px; margin:0 0 16px 0; padding:0;">
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Proceed through checkout faster when making a purchase</li>
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Check the status of orders</li>
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; View past orders</li>
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Make changes to your account information</li>
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Change your password</li>
-                                <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Store alternative addresses (for shipping to multiple family members and friends!)</li>
+                            <p>When you log in to your account, you will be able to do the following:</p>
+                            <ul>
+                                <li>&ndash; Proceed through checkout faster when making a purchase</li>
+                                <li>&ndash; Check the status of orders</li>
+                                <li>&ndash; View past orders</li>
+                                <li>&ndash; Make changes to your account information</li>
+                                <li>&ndash; Change your password</li>
+                                <li>&ndash; Store alternative addresses (for shipping to multiple family members and friends!)</li>
                             </ul>
-                            <p style="font-size:12px; line-height:16px; margin:0;">If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
+                            <p>If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
 
 {{template config_path="design/email/footer_template"}}

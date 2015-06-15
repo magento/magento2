@@ -24,30 +24,30 @@
 
 {{template config_path="design/email/header_template"}}
 
-                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Hello, {{var order.getCustomerName()}}</h1>
+                    <h1>Hello, {{var order.getCustomerName()}}</h1>
                     <p>
                         Thank you for your order from {{var store.getFrontendName()}}.
-                        You can check the status of your order by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.
-                        If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
+                        You can check the status of your order by <a href="{{store url="customer/account/"}}" >logging into your account</a>.
+                        If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" >{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
                     </p>
 
-                    <h2 style="font-size:18px; font-weight:normal; margin:0;">Your Credit Memo #{{var creditmemo.increment_id}} for Order #{{var order.increment_id}}</h2>
+                    <h2>Your Credit Memo #{{var creditmemo.increment_id}} for Order #{{var order.increment_id}}</h2>
 
                     <table cellspacing="0" cellpadding="0" border="0" width="650">
                         <thead>
                         <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Billing Information:</th>
+                            <th align="left" width="325" bgcolor="#EAEAEA" >Billing Information:</th>
                             <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Payment Method:</th>
+                            <th align="left" width="325" bgcolor="#EAEAEA" >Payment Method:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <td valign="top" >
                                 {{var formattedBillingAddress|raw}}
                             </td>
                             <td>&nbsp;</td>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <td valign="top" >
                                 {{var payment_html|raw}}
                             </td>
                         </tr>
@@ -58,19 +58,19 @@
                     <table cellspacing="0" cellpadding="0" border="0" width="650">
                         <thead>
                         <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Shipping Information:</th>
+                            <th align="left" width="325" bgcolor="#EAEAEA" >Shipping Information:</th>
                             <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Shipping Method:</th>
+                            <th align="left" width="325" bgcolor="#EAEAEA" >Shipping Method:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <td valign="top" >
                                 {{var formattedShippingAddress|raw}}
                                 &nbsp;
                             </td>
                             <td>&nbsp;</td>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <td valign="top" >
                                 {{var order.shipping_description}}
                                 &nbsp;
                             </td>
@@ -80,6 +80,6 @@
                     <br/>
                     {{/depend}}
                     {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
-                    <p style="font-size:12px; margin:0 10px 10px 0">{{var comment}}</p>
+                    <p>{{var comment}}</p>
 
 {{template config_path="design/email/footer_template"}}
