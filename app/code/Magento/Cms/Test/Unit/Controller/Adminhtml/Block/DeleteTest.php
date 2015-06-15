@@ -101,7 +101,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->contextMock = $this->getMock(
             '\Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResultRedirectFactory', 'getMessageManager', 'getObjectManager'],
+            [],
             [],
             '',
             false
@@ -148,7 +148,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
     }
 
     public function testDeleteActionNoId()
@@ -168,7 +168,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
     }
 
     public function testDeleteActionThrowsException()
@@ -195,6 +195,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/edit', ['block_id' => $this->blockId])
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirectMock, $this->deleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->deleteController->execute());
     }
 }
