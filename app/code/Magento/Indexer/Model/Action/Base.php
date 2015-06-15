@@ -12,7 +12,7 @@ use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\Processor\Handler;
-use Magento\Indexer\Model\Processor\Source;
+use Magento\Indexer\Model\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
 
 class Base implements ActionInterface
@@ -59,9 +59,9 @@ class Base implements ActionInterface
     protected $searchColumns;
 
     /**
-     * @var Source
+     * @var SourcePool
      */
-    protected $sourceProcessor;
+    protected $sourcePool;
 
     /**
      * @var Handler
@@ -92,17 +92,18 @@ class Base implements ActionInterface
      */
     public function __construct(
         AppResource $resource,
-        Source $sourceProcessor,
+        SourcePool $sourcePool,
         Handler $handlerProcessor,
         FieldsetPool $fieldsetPool,
         String $string,
         $defaultHandler = 'Magento\Indexer\Model\DefaultHandler',
         $data = []
-    ) {
+    )
+    {
         $this->connection = $resource->getConnection('write');
         $this->fieldsetPool = $fieldsetPool;
         $this->data = $data;
-        $this->sourceProcessor = $sourceProcessor;
+        $this->sourcePool = $sourcePool;
         $this->handlerProcessor = $handlerProcessor;
         $this->defaultHandler = $defaultHandler;
         $this->string = $string;
@@ -142,7 +143,6 @@ class Base implements ActionInterface
     protected function prepareQuery()
     {
         $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
-        $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $select = $this->createResultSelect();
@@ -152,14 +152,23 @@ class Base implements ActionInterface
         );
     }
 
+    /**
+     * Return primary source provider
+     *
+     * @return SourceProviderInterface
+     */
+    protected function getPrimaryResource()
+    {
+        return $this->data['fieldsets'][$this->data['primary']]['source'];
+    }
+
     protected function prepareSchema()
     {
         $this->data['handlers']['defaultHandler'] = $this->defaultHandler;
-        $this->sources = $this->sourceProcessor->process($this->data['sources']);
         $this->handlers = $this->handlerProcessor->process($this->data['handlers']);
         $this->prepareFields();
         $this->prepareColumns();
-        $newTableName = 'index_' . $this->sources[$this->data['primary']]->getEntityName();
+        $newTableName = 'index_' . $this->getPrimaryResource()->getMainTable();
         $table = $this->connection->newTable($newTableName)
             ->setComment($this->string->upperCaseWords($newTableName, '_', ' '));
         foreach ($this->filterColumns as $column) {
@@ -171,28 +180,25 @@ class Base implements ActionInterface
     protected function createResultSelect()
     {
         $select = $this->connection->select();
-        $this->primarySource = $this->sources[$this->data['primary']];
-        $select->from($this->primarySource->getMainTable());
+        $select->from($this->getPrimaryResource()->getMainTable());
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            foreach ($fieldset['fields'] as $fieldName => $field) {
-                if (isset($field['reference']['from']) && isset($field['reference']['to'])) {
-                    $source = $field['source'];
-                    /** @var SourceProviderInterface $source */
-                    $currentEntityName = $source->getMainTable();
-                    $select->joinInner(
-                        $currentEntityName,
-                        new \Zend_Db_Expr(
-                            $this->primarySource->getMainTable() . '.' . $field['reference']['from']
-                            . '=' . $currentEntityName . '.' . $field['reference']['to']
-                        ),
-                        null
-                    );
-                }
-                $handler = $field['handler'];
-                $source = $field['source'];
-                /** @var HandlerInterface $handler */
+            if (isset($fieldset['reference']['from']) && isset($fieldset['reference']['to'])) {
+                $source = $fieldset['source'];
                 /** @var SourceProviderInterface $source */
-                $handler->prepareSql($select, $source, $field);
+                $currentEntityName = $source->getMainTable();
+                $select->joinInner(
+                    $currentEntityName,
+                    new \Zend_Db_Expr(
+                        $this->getPrimaryResource()->getMainTable() . '.' . $fieldset['reference']['from']
+                        . '=' . $currentEntityName . '.' . $fieldset['reference']['to']
+                    ),
+                    null
+                );
+            }
+            foreach ($fieldset['fields'] as $fieldName => $field) {
+                $handler = $field['handler'];
+                /** @var HandlerInterface $handler */
+                $handler->prepareSql($select, $fieldset['source'], $field);
             }
         }
 
@@ -229,7 +235,7 @@ class Base implements ActionInterface
     protected function prepareFields()
     {
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
-            $this->data['fieldsets'][$fieldsetName]['source'] = $this->sources[$fieldset['source']];
+            $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             $defaultHandler = $this->handlers['defaultHandler'];
             if (isset($fieldset['class'])) {
                 $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
@@ -239,10 +245,6 @@ class Base implements ActionInterface
                 $defaultHandler = $this->handlerProcessor->process([$defaultHandlerClass])[0];
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
-                $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['source'] =
-                    isset($this->sources[$field['source']])
-                        ? $this->sources[$field['source']]
-                        : $this->data['fieldsets'][$fieldsetName]['source'];
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     isset($this->handlers[$field['handler']])
                         ? $this->handlers[$field['handler']]

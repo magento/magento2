@@ -145,7 +145,7 @@
             <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="1" />
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:choice>
-        <xs:attribute name="resource" type="classType" use="required"/>
+        <xs:attribute name="source" type="classType" use="required"/>
         <xs:attribute name="class" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
