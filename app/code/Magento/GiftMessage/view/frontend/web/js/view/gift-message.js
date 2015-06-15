@@ -8,9 +8,10 @@ define(['uiComponent', '../model/gift-message', '../model/gift-options', '../act
         "use strict";
         return Component.extend({
             formBlockVisibility: null,
-            resultBlockVisibility: false,
+            resultBlockVisibility: null,
             model: {},
             initialize: function() {
+                var self = this;
                 this._super()
                     .observe('formBlockVisibility')
                     .observe({'resultBlockVisibility': false});
@@ -19,14 +20,24 @@ define(['uiComponent', '../model/gift-message', '../model/gift-options', '../act
                 var model = new giftMessage(this.itemId);
                 giftOptions.addOption(model);
                 this.model = model;
-                if (this.model.getObservable('alreadyAdded')()) {
-                    this.resultBlockVisibility(true);
-                }
-                var self = this;
+
                 this.model.getObservable('isClear').subscribe(function(value) {
                     if (value == true) {
                         self.formBlockVisibility(false);
                         self.model.getObservable('alreadyAdded')(true);
+                    }
+                });
+
+                this.isResultBlockVisible();
+            },
+            isResultBlockVisible: function() {
+                var self = this;
+                if (this.model.getObservable('alreadyAdded')()) {
+                    this.resultBlockVisibility(true);
+                }
+                this.model.getObservable('additionalOptionsApplied').subscribe(function(value) {
+                    if (value == true) {
+                        self.resultBlockVisibility(true);
                     }
                 });
             },
