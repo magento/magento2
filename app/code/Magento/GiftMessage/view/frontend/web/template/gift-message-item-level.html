@@ -13,7 +13,6 @@
         ">
     <span  data-bind="text: $t('Gift options')"></span>
 </a>
-
 <div class="gift-content" data-bind="css: {active: formBlockVisibility() || resultBlockVisibility()}"> <!-- add class "active" to display the content -->
     <!-- ko ifnot: resultBlockVisibility() -->
         <div class="gift-options">
@@ -29,10 +28,12 @@
                 <!--ko template: appliedTemplate --><!-- /ko -->
             <!-- /ko -->
 
-            <div class="gift-message-summary">
-                <span data-bind="text: $t('Message') + ':'"></span>
-                <!-- ko text: getObservable('message') --><!-- /ko -->
-            </div>
+            <!-- ko if: getObservable('message') -->
+                <div class="gift-message-summary">
+                    <span style="font-weight: bolder"  data-bind="text: $t('Message') + ':'"></span>
+                    <!-- ko text: getObservable('message') --><!-- /ko -->
+                </div>
+            <!-- /ko -->
 
             <div class="actions-toolbar">
                 <div class="secondary">

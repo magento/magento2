@@ -27,10 +27,12 @@
                          <!--ko template: appliedTemplate --><!-- /ko -->
                     <!-- /ko -->
 
-                    <div class="gift-message-summary">
-                        <span data-bind="text: $t('Message') + ':'"></span>
-                        <!-- ko text: getObservable('message') --><!-- /ko -->
-                    </div>
+                    <!-- ko if: getObservable('message') -->
+                        <div class="gift-message-summary">
+                            <span style="font-weight: bolder" data-bind="text: $t('Message') + ':'"></span>
+                            <!-- ko text: getObservable('message') --><!-- /ko -->
+                        </div>
+                    <!-- /ko -->
                     <div class="actions-toolbar">
                         <div class="secondary">
                             <button type="submit"
