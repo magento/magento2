@@ -5,29 +5,29 @@
  */
 namespace Magento\Indexer\Model\Handler;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\SourceInterface;
 
 class DefaultHandler implements HandlerInterface
 {
     /**
      * @param \Zend_Db_Select $select
-     * @param SourceInterface $source
+     * @param SourceProviderInterface $source
      * @param array $fieldInfo
      * @return void
      */
-    public function prepareSql(\Zend_Db_Select $select, SourceInterface $source, $fieldInfo)
+    public function prepareSql(\Zend_Db_Select $select, SourceProviderInterface $source, $fieldInfo)
     {
         $select->columns([$fieldInfo['name'] => $fieldInfo['origin']], $source->getEntityName());
     }
 
     /**
      * @param \Zend_Db_Select $select
-     * @param SourceInterface $source
+     * @param SourceProviderInterface $source
      * @param array $fieldInfo
      * @return void
      */
-    public function prepareData(\Zend_Db_Select $select, SourceInterface $source, $fieldInfo)
+    public function prepareData(\Zend_Db_Select $select, SourceProviderInterface $source, $fieldInfo)
     {
         new \Exception('Not implemented yet');
     }

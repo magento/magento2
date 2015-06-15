@@ -18,5 +18,8 @@
             <field name="content_heading" />
             <field name="content" />
         </fieldset>
+        <fieldset name="cms_page_store" source="Magento\Cms\Model\Resource\Page">
+            <reference from="page_id" to="page_id" />
+        </fieldset>
     </indexer>
 </config>
