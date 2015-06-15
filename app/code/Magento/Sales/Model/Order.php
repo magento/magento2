@@ -1085,6 +1085,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool $graceful
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
