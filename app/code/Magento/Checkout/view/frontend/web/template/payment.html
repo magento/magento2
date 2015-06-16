@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" role="presentation" data-bind="fadeVisible: isVisible">
+<li id="opc-payment" role="presentation">
     <div class="step-title" data-role="title">
         <h2 data-bind="text: $t(title)"></h2>
     </div>
@@ -15,24 +15,21 @@
          aria-hidden="false">
         <!-- ko if: (quoteIsVirtual) -->
             <!-- ko foreach: getRegion('customer-email') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         <!--/ko-->
-        <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
-            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
-            <fieldset class="fieldset">
-                <!-- ko foreach: getRegion('beforeMethods') -->
+        <fieldset class="fieldset">
+            <!-- ko foreach: getRegion('beforeMethods') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+            <div id="checkout-payment-method-load" class="opc-payment">
+                <!-- ko foreach: getRegion('payment-methods-list') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
-                <div id="checkout-payment-method-load" class="opc-payment">
-                    <!-- ko foreach: getRegion('payment-methods-list') -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-                    <!-- /ko -->
-                </div>
-                <!-- ko foreach: getRegion('afterMethods') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
-            </fieldset>
-        </form>
+            </div>
+            <!-- ko foreach: getRegion('afterMethods') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </fieldset>
     </div>
 </li>

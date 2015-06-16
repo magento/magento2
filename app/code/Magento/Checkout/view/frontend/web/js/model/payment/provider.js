@@ -5,17 +5,10 @@
 /*global define*/
 define(
     [
+        'ko'
     ],
-    function() {
+    function(ko) {
         "use strict";
-        var rendererList = [];
-        return {
-            registerRenderer: function(renderer) {
-                rendererList.push(renderer);
-            },
-            getRenderer: function () {
-                return rendererList;
-            }
-        }
+        return ko.observableArray([]);
     }
 );

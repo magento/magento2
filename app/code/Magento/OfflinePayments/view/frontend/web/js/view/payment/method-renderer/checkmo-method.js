@@ -12,8 +12,7 @@ define(
     function (Component, placeOrderAction) {
         return Component.extend({
             defaults: {
-                template: 'Magento_OfflinePayments/payment/checkmo',
-                type: 'checkmo'
+                template: 'Magento_OfflinePayments/payment/checkmo'
             },
             placeOrder: function() {
                 var data = {
