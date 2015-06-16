@@ -9,7 +9,7 @@
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest">
         <variation name="CreateCmsPageEntityTestVariation1">
             <data name="description" xsi:type="string">MAGETWO-12399: Create CMS Content Page</data>
-            <data name="fixtureType" xsi:type="string">cms</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
             <data name="data/store_id" xsi:type="string">All Store Views</data>
@@ -21,7 +21,7 @@
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2">
             <data name="description" xsi:type="string">Create page for default store view</data>
-            <data name="fixtureType" xsi:type="string">cms</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
@@ -30,7 +30,7 @@
         </variation>
         <variation name="CreateCmsPageEntityTestVariation3">
             <data name="description" xsi:type="string">Create page with widget and system variable</data>
-            <data name="fixtureType" xsi:type="string">cms</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
@@ -43,7 +43,7 @@
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4">
             <data name="description" xsi:type="string">Create disabled page</data>
-            <data name="fixtureType" xsi:type="string">cms</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="data/is_active" xsi:type="string">Disabled</data>
