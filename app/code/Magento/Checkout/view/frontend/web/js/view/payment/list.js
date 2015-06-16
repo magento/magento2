@@ -67,7 +67,7 @@ define([
             if (renderer) {
                 templateData = {
                     parentName: this.name,
-                    name: paymentMethodData.method
+                    name: paymentMethodData.code
                 };
                 rendererTemplate = {
                     parent: '${ $.$data.parentName }',
