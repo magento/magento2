@@ -9,16 +9,26 @@ define(
         'ko',
         'jquery',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/payment/method-list'
+        'Magento_Checkout/js/model/payment/method-list',
+        'Magento_Checkout/js/action/select-payment-method'
     ],
-    function (ko, $, quote, methodList) {
+    function (ko, $, quote, methodList, selectPaymentMethod) {
         'use strict';
         return {
             availablePaymentMethods: ko.observableArray([]),
-            selectedPaymentData: ko.observableArray(),
             selectedPaymentInfo: ko.observableArray([]),
             isFreeAvailable: false,
             setPaymentMethods: function(methods) {
+                if(quote.paymentMethod()) {
+                    var methodIsAvailable = methods.some(function (item) {
+                        return (item.code == quote.paymentMethod().method);
+                    });
+                    //Unset selected payment method if not available
+                    if (!methodIsAvailable) {
+                        selectPaymentMethod(null);
+                    }
+                }
+
                 $.each(methods, function (key, method) {
                     if (method['code'] == 'free') {
                         this.isFreeAvailable = true;
@@ -42,12 +52,6 @@ define(
             },
             isFreeMethodActive: function () {
                 return this.isFreeAvailable;
-            },
-            setSelectedPaymentData: function(data) {
-                this.selectedPaymentData(data);
-            },
-            getSelectedPaymentData: function () {
-                return this.selectedPaymentData();
             },
             setSelectedPaymentInfo: function(data) {
                 this.selectedPaymentInfo(data);
