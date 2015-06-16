@@ -333,15 +333,11 @@ class Template implements \Zend_Filter_Interface
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {
                     // Calling of object method
-                    if (method_exists(
-                        $stackVars[$i - 1]['variable'],
-                        $stackVars[$i]['name']
-                    ) || substr(
-                        $stackVars[$i]['name'],
-                        0,
-                        3
-                    ) == 'get'
+                    if (
+                            method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
+                            || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
+                        $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
                         $stackVars[$i]['variable'] = call_user_func_array(
                             [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
                             $stackVars[$i]['args']
@@ -358,5 +354,22 @@ class Template implements \Zend_Filter_Interface
         }
         \Magento\Framework\Profiler::stop('email_template_processing_variables');
         return $result;
+    }
+
+    /**
+     * Loops over a set of stack args to process variables into array argument values
+     *
+     * @param $stack
+     * @return mixed
+     */
+    private function getStackArgs($stack) {
+        foreach ($stack as $i => $value) {
+            if (is_array($value)) {
+                $stack[$i] = $this->getStackArgs($value);
+            } elseif (substr($value, 0, 1) === '$') {
+                $stack[$i] = $this->_getVariable(substr($value, 1), null);
+            }
+        }
+        return $stack;
     }
 }
