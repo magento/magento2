@@ -5,10 +5,7 @@
 /*global define,alert*/
 define(
     [
-        '../model/quote',
-        '../model/url-builder',
-        'Magento_Checkout/js/model/shipping-service',
-        'mage/translate'
+        '../model/quote'
     ],
     function (quote) {
         "use strict";
