@@ -15,7 +15,9 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/cells/actions',
             actions: [],
-            templates: {},
+            templates: {
+                actions: {}
+            },
             rowsProvider: '${ $.parentName }',
             imports: {
                 rows: '${ $.rowsProvider }:rows'
@@ -42,7 +44,7 @@ define([
          * or all action objects associated with it.
          *
          * @param {Number} rowIndex - Index of a row.
-         * @param {String} [actionIndex]
+         * @param {String} [actionIndex] - Action identifier.
          * @returns {Array|Object}
          */
         getAction: function (rowIndex, actionIndex) {
@@ -107,9 +109,9 @@ define([
          * @returns {Array}
          */
         _formatActions: function (row, rowIndex) {
-            var rowActions      = row[this.index],
+            var rowActions      = row[this.index] || {},
                 recordId        = row[this.indexField],
-                customActions   = this.templates.customActions;
+                customActions   = this.templates.actions;
 
             /**
              * Actions iterator.
