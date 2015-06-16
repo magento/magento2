@@ -25,7 +25,7 @@
 <p>
     {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
     {{trans "Once your package ships we will send an email with a link to track your order."}}
-    {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/'} |raw}}
+    {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}
     {{trans
         'If you have any questions about your order please contact us at <a href="mailto:%support_email">%support_email</a> or call us at %store_phone.'
 
