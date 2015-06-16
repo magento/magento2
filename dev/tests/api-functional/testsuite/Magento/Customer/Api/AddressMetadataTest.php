@@ -76,7 +76,7 @@ class AddressMetadataTest extends WebapiAbstract
                     AttributeMetadata::NOTE => '',
                     AttributeMetadata::SYSTEM => true,
                     AttributeMetadata::USER_DEFINED => false,
-                    AttributeMetadata::BACKEND_TYPE => 'varchar',
+                    AttributeMetadata::BACKEND_TYPE => 'static',
                     AttributeMetadata::SORT_ORDER => 110
                 ],
             ]
