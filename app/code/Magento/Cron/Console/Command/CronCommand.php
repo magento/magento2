@@ -59,8 +59,7 @@ class CronCommand extends Command
                 self::INPUT_KEY_GROUP,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Run jobs only from specified group',
-                'default'
+                'Run jobs only from specified group'
             ),
             new InputOption(
                 Cli::INPUT_KEY_BOOTSTRAP,
