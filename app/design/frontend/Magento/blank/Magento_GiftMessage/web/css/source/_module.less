@@ -74,6 +74,7 @@
         }
 
         .action-gift {
+            &:extend(.cart.table-wrapper .actions-toolbar > .action all);
             .button-icon(
             @icon-down,
             @_icon-font-size: 32px,
@@ -128,6 +129,11 @@
             display: none;
             padding: @indent__s @indent__s @indent__base;
             position: relative;
+        }
+        &.active {
+            .content {
+                display: block;
+            }
         }
     }
 
@@ -225,9 +231,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .cart.table-wrapper {
-        .action-gift {
-            width: 100%;
-        }
         .gift-content {
             border-bottom: @border-width__base solid @border-color__base;
             margin-bottom: @indent__base;
