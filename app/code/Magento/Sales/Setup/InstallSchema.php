@@ -1893,7 +1893,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'cc_last_4',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            4,
+            100,
             [],
             'Cc Last 4'
         )->addColumn(
