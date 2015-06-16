@@ -69,6 +69,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveTypeSpecificData()
     {
