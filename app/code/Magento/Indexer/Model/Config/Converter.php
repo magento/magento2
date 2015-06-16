@@ -101,9 +101,9 @@ class Converter implements ConverterInterface
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
-            'source' => $this->getAttributeValue($node, 'source'),
-            'class' => $this->getAttributeValue($node, 'class'),
-            'fields' => [],
+            'source'   => $this->getAttributeValue($node, 'source'),
+            'provider' => $this->getAttributeValue($node, 'provider'),
+            'fields'   => [],
         ];
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
