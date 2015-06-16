@@ -83,7 +83,6 @@ class Grid extends DataGrid
         if ($rowItem->isVisible()) {
             $rowItem->find('.action-select')->click();
             $rowItem->find(sprintf($this->previewCmsPage, $itemName), Locator::SELECTOR_XPATH)->click();
-            $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
         }
