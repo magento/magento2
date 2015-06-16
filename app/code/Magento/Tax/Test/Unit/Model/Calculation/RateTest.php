@@ -49,7 +49,10 @@ class RateTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Model\Calculation\Rate',
             ['resource' => $this->resourceMock]
         );
-        $rate->setData($data)->beforeSave();
+        foreach ($data as $key => $value) {
+            $rate->setData($key, $value);
+        }
+        $rate->beforeSave();
     }
 
     /**
