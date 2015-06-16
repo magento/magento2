@@ -8,9 +8,9 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Factory class for @see
- * \Magento\Framework\Api\ExtensionAttribute\JoinData
+ * \Magento\Framework\Api\ExtensionAttribute\JoinDataInterface
  */
-class JoinDataFactory
+class JoinDataInterfaceFactory
 {
     /**
      * Object Manager instance

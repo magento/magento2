@@ -12,7 +12,7 @@
                   reference_field="entity_id"
                   join_on_field="parent_id"
                     >
-                <select_field>group_id</select_field>
+                <field>group_id</field>
             </join>
         </attribute>
     </extension_attributes>

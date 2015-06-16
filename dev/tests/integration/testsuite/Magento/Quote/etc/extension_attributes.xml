@@ -6,16 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
         <attribute code="quoteTestAttribute" type="Magento\User\Model\UserInterface">
             <join reference_table="admin_user"
                   join_on_field="store_id"
                   reference_field="user_id"
                     >
-                <select_field>firstname</select_field>
-                <select_field>lastname</select_field>
-                <select_field>email</select_field>
+                <field>firstname</field>
+                <field>lastname</field>
+                <field>email</field>
             </join>
         </attribute>
     </extension_attributes>
@@ -25,9 +25,9 @@
                   join_on_field="store_id"
                   reference_field="user_id"
                     >
-                <select_field>firstname</select_field>
-                <select_field>lastname</select_field>
-                <select_field>email</select_field>
+                <field>firstname</field>
+                <field>lastname</field>
+                <field>email</field>
             </join>
         </attribute>
     </extension_attributes>

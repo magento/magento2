@@ -8,7 +8,7 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
 use Magento\Framework\Api\ExtensionAttribute\JoinData;
-use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\App\Resource as AppResource;
 
@@ -24,7 +24,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var JoinDataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinDataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $extensionAttributeJoinDataFactory;
 
@@ -44,11 +44,11 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributeJoinDataFactory = $this
-            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataFactory')
+            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributeJoinDataFactory = $this
-            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataFactory')
+            ->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessor = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
@@ -103,9 +103,9 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'external_alias' => 'review_id',
-                    'internal_alias' => 'extension_attribute_review_id_review_id',
-                    'with_db_prefix' => 'extension_attribute_review_id.review_id',
-                    'setter' => 'serReviewId',
+                    'internal_alias' => 'extension_attribute_review_id_db_review_id',
+                    'with_db_prefix' => 'extension_attribute_review_id.db_review_id',
+                    'setter' => 'setReviewId',
                 ]
             ],
             $extensionAttributeJoinData->getSelectFields()
@@ -122,13 +122,13 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
                         Converter::JOIN_REFERENCE_FIELD => "product_id",
-                        Converter::JOIN_SELECT_FIELDS => [
+                        Converter::JOIN_FIELDS => [
                             [
-                                Converter::JOIN_SELECT_FIELD => "review_id",
-                                Converter::JOIN_SELECT_FIELD_SETTER => "serReviewId",
+                                Converter::JOIN_FIELD => "review_id",
+                                Converter::JOIN_FIELD_COLUMN => "db_review_id",
                             ],
                         ],
-                        Converter::JOIN_JOIN_ON_FIELD => "id",
+                        Converter::JOIN_ON_FIELD => "id",
                     ],
                 ],
             ],
@@ -138,13 +138,13 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "library_account",
-                        Converter::JOIN_SELECT_FIELDS => [
+                        Converter::JOIN_FIELDS => [
                             [
-                                Converter::JOIN_SELECT_FIELD => "library_card_id",
-                                Converter::JOIN_SELECT_FIELD_SETTER => "",
+                                Converter::JOIN_FIELD => "library_card_id",
+                                Converter::JOIN_FIELD_COLUMN => "",
                             ],
                         ],
-                        Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                        Converter::JOIN_ON_FIELD => "customer_id",
                     ],
                 ],
                 'reviews' => [
@@ -152,17 +152,17 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
-                        Converter::JOIN_SELECT_FIELDS => [
+                        Converter::JOIN_FIELDS => [
                             [
-                                Converter::JOIN_SELECT_FIELD => "comment",
-                                Converter::JOIN_SELECT_FIELD_SETTER => "",
+                                Converter::JOIN_FIELD => "comment",
+                                Converter::JOIN_FIELD_COLUMN => "",
                             ],
                             [
-                                Converter::JOIN_SELECT_FIELD => "rating",
-                                Converter::JOIN_SELECT_FIELD_SETTER => "",
+                                Converter::JOIN_FIELD => "rating",
+                                Converter::JOIN_FIELD_COLUMN => "",
                             ],
                         ],
-                        Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                        Converter::JOIN_ON_FIELD => "customer_id",
                     ],
                 ],
             ],
