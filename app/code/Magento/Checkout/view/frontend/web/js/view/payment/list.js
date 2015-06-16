@@ -14,9 +14,6 @@ define([
 ], function (_, ko, utils, Component, paymentMethods, rendererList, layout) {
     'use strict';
 
-    var cm = null;
-
-
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/payment-methods/list',
@@ -35,7 +32,7 @@ define([
                             self.createRenderer(change.value);
                         } else if (change.status === 'deleted') {
                             console.log(('deleted ' + change.value.code));
-                            self.removeRenderer(change.value);
+                            self.removeRenderer(change.value.code);
                         }
                     });
                 },
@@ -67,25 +64,40 @@ define([
                 };
                 var rendererComponent = utils.template(rendererTemplate, templateData);
                 utils.extend(rendererComponent, {item: item});
-                cm = rendererComponent;
                 layout([rendererComponent]);
             } else {
                 console.log('There is no registered render for Payment Method: ' + item.code);
             }
         },
 
-        getRendererByType: function(code) {
-            var output = null;
-            rendererList().forEach(function(item) { //todo refactor this code
-                if (item.type == code) {
-                    output = item;
+        /**
+         * Get renderer for payment method type.
+         *
+         * @param {String} paymentMethodCode
+         * @returns {Object}
+         */
+        getRendererByType: function (paymentMethodCode) {
+            var compatibleRenderer;
+            _.each(rendererList(), function (renderer) {
+                if (renderer.type === paymentMethodCode) {
+                    compatibleRenderer = renderer;
                 }
             });
-            return output;
+
+            return compatibleRenderer;
         },
 
-        removeRenderer: function (paymentMethod) {
-            this.removeChild(cm);
+        /**
+         * Remove view renderer.
+         *
+         * @param {String} paymentMethodCode
+         */
+        removeRenderer: function (paymentMethodCode) {
+            _.each(this.elems(), function (value) {
+                if (value.item.code === paymentMethodCode) {
+                    this.removeChild(value);
+                }
+            }, this);
         }
     });
 });
