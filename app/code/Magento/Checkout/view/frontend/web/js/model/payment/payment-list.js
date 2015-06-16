@@ -9,7 +9,11 @@ define(
     ],
     function (ko, defaultProvider) {
         'use strict';
-
-        return ko.observableArray(defaultProvider.getAvailablePaymentMethods());
+        var data = ko.observableArray(defaultProvider.paymentMethods());
+        defaultProvider.paymentMethods.subscribe(function () {
+                data(defaultProvider.paymentMethods())
+            }
+        );
+        return data;
     }
 );

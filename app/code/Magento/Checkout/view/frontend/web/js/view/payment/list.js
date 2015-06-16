@@ -8,8 +8,10 @@ define([
     'mageUtils',
     'uiComponent',
     'Magento_Ui/js/core/renderer/layout',
-    'Magento_Checkout/js/model/payment/payment-list'
-], function (_, ko, utils, Component, layout, paymentMethods) {
+    'Magento_Checkout/js/model/payment/payment-list',
+    'Magento_Checkout/js/model/payment/provider'
+
+], function (_, ko, utils, Component, layout, paymentMethods, renderer) {
     'use strict';
 
     return Component.extend({
@@ -41,7 +43,7 @@ define([
 
         initProperties: function () {
             this._super();
-            this.processors = {};
+            this.renderers = renderer.getRenderer();
 
             return this;
         },
@@ -51,11 +53,19 @@ define([
             return this;
         },
 
-        registerRenderer: function(type, renderer) {
-            this.processors[type] = renderer;
-        },
+        //registerRenderer: function(type, renderer) {
+        //    this.renderers[type] = renderer;
+        //},
 
         addRenderer: function (paymentMethod) {
+            renderers.forEach(function(renderer){
+               if(renderer.type == paymentMethod.code)
+               {
+
+               }
+            });
+
+
             return;
             //var code = paymentMethod.code;
             //renderer[code].render;
