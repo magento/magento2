@@ -44,12 +44,12 @@ define([
                     labels.push(attribute.frontend_label);
                 }
             });
-            this.selectedAttributes(labels.join(', '))
+            this.selectedAttributes(labels.join(', '));
         },
         force: function (wizard) {
-            wizard.data.attributes = this.selected;
+            wizard.data.attributes = this.multiselect().selected;
 
-            if (!wizard.data.attributes || wizard.data.attributes.length === 0) {
+            if (!wizard.data.attributes() || wizard.data.attributes().length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
         },
