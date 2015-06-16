@@ -24,6 +24,8 @@ class Placeholder implements RendererInterface
 
         if ($arguments) {
             $placeholders = [];
+            /** @see https://github.com/magento/magento2/issues/1374 */
+            krsort($arguments);
             foreach (array_keys($arguments) as $key) {
                 $placeholders[] = '%' . (is_int($key) ? strval($key + 1) : $key);
             }
