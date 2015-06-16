@@ -228,13 +228,19 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             if (in_array($attribute->getAttributeCode(), $this->_disabledAttrs)) {
                 if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP])) {
                     if ($attribute->getAttributeCode() == ImportAdvancedPricing::COL_TIER_PRICE
-                        && in_array($attribute->getId(),
-                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP])) {
+                        && in_array(
+                            $attribute->getId(),
+                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]
+                        )
+                    ) {
                         $this->_passTierPrice = 1;
                     }
                     if ($attribute->getAttributeCode() == ImportAdvancedPricing::COL_GROUP_PRICE
-                        && in_array($attribute->getId(),
-                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP])) {
+                        && in_array(
+                            $attribute->getId(),
+                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]
+                        )
+                    ) {
                         $this->_passGroupPrice = 1;
                     }
                 }
@@ -261,12 +267,16 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $productIds = array_keys($rawData);
             if (isset($productIds)) {
                 if (!$this->_passGroupPrice) {
-                    $exportData = array_merge($exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_GROUPED_PRICE));
+                    $exportData = array_merge(
+                        $exportData,
+                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_GROUPED_PRICE)
+                    );
                 }
                 if (!$this->_passTierPrice) {
-                    $exportData = array_merge($exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE));
+                    $exportData = array_merge(
+                        $exportData,
+                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
+                    );
                 }
             }
             if ($exportData) {
@@ -285,11 +295,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param $exportData
      * @return array
      */
-    protected function correctExportData($exportData) {
+    protected function correctExportData($exportData)
+    {
         $customExportData = [];
-        foreach($exportData as $key => $row) {
+        foreach ($exportData as $key => $row) {
             $exportRow = $this->templateExportData;
-            foreach($exportRow as $keyTemplate => $valueTemplate) {
+            foreach ($exportRow as $keyTemplate => $valueTemplate) {
                 if (isset($row[$keyTemplate])) {
                     if (in_array($keyTemplate, $this->_priceWebsite)) {
                         $exportRow[$keyTemplate] = $this->_getWebsiteCode(
@@ -353,7 +364,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         if ($listSku) {
             try {
                 $select = $this->_connection->select()
-                    ->from(['cpe' => $this->_connection->getTableName('catalog_product_entity')],
+                    ->from(
+                        ['cpe' => $this->_connection->getTableName('catalog_product_entity')],
                         $selectFields
                     )
                     ->joinInner(
