@@ -264,7 +264,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     public function testExecuteTrackIdFail()
     {
         $trackId = null;
-        $errors = ['error' => true, 'message' => 'Cannot load track with retrieving identifier.'];
+        $errors = ['error' => true, 'message' => 'We can\'t load track with retrieving identifier right now.'];
 
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')

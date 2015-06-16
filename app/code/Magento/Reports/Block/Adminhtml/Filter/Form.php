@@ -127,7 +127,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'report_type',
             'select',
-            ['name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Match Period To')]
+            ['name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Date Used')]
         );
 
         $fieldset->addField(

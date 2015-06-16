@@ -31,7 +31,7 @@ class MassDelete extends ProductController
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('An error occurred while deleting record(s).'));
+                $this->messageManager->addException($e, __('Something went wrong while deleting record(s).'));
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
