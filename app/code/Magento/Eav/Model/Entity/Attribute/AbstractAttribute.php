@@ -339,6 +339,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Change Attribute Fronted input type
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function changeFrontendType($value)
+    {
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getAttributeSetId()

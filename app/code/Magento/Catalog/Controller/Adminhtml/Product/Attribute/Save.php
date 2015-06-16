@@ -167,6 +167,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
+                if (isset($data['frontend_input'])) {
+                    $model->changeFrontendType($data['frontend_input']);
+                }
                 $data['frontend_input'] = $model->getFrontendInput();
             } else {
                 /**
