@@ -57,6 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fieldsets
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -104,7 +105,34 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'label' => __('Import Behavior'),
                     'required' => true,
                     'disabled' => true,
-                    'values' => $this->_behaviorFactory->create($behaviorClass)->toOptionArray()
+                    'values' => $this->_behaviorFactory->create($behaviorClass)->toOptionArray(),
+                    'class' => $behaviorCode,
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_SEPARATOR,
+                    'label' => __('Field separator'),
+                    'title' => __('Field separator'),
+                    'required' => true,
+                    'disabled' => true,
+                    'class' => $behaviorCode,
+                    'value' => ',',
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+                'text',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR,
+                    'label' => __('Multiple value separator'),
+                    'title' => __('Multiple value separator'),
+                    'required' => true,
+                    'disabled' => true,
+                    'class' => $behaviorCode,
+                    'value' => ',',
                 ]
             );
         }
@@ -123,6 +151,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Select File to Import'),
                 'required' => true,
                 'class' => 'input-file'
+            ]
+        );
+        $fieldsets['upload']->addField(
+            \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+            'text',
+            [
+                'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR,
+                'label' => __('Images File Directory'),
+                'title' => __('Images File Directory'),
+                'required' => false,
+                'class' => 'input-text',
+                'note' => __(
+                    'For Type "Local Server" use relative path to Magento installation,
+                                e.g. var/export, var/import, var/export/some/dir'
+                ),
             ]
         );
 

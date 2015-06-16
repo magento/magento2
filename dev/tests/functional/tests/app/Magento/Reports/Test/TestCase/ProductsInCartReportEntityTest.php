@@ -10,8 +10,6 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -45,25 +43,11 @@ class ProductsInCartReportEntityTest extends Injectable
     protected $cmsIndex;
 
     /**
-     * Customer login page
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
      * Product view page
      *
      * @var CatalogProductView
      */
     protected $catalogProductView;
-
-    /**
-     * Customer logout page
-     *
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
 
     /**
      * Prepare data
@@ -82,20 +66,14 @@ class ProductsInCartReportEntityTest extends Injectable
      * Injection data
      *
      * @param CmsIndex $cmsIndex
-     * @param CustomerAccountLogin $customerAccountLogin
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param CatalogProductView $catalogProductView
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
-        CustomerAccountLogin $customerAccountLogin,
-        CustomerAccountLogout $customerAccountLogout,
         CatalogProductView $catalogProductView
     ) {
         $this->cmsIndex = $cmsIndex;
-        $this->customerAccountLogin = $customerAccountLogin;
-        $this->customerAccountLogout = $customerAccountLogout;
         $this->catalogProductView = $catalogProductView;
     }
 
@@ -118,8 +96,10 @@ class ProductsInCartReportEntityTest extends Injectable
         $product->persist();
 
         //Steps
-        $this->cmsIndex->open()->getLinksBlock()->openLink("Log In");
-        $this->customerAccountLogin->getLoginBlock()->login($customer);
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
         $productUrl = $_ENV['app_frontend_url'] . $product->getUrlKey() . '.html';
         $browser->open($productUrl);
         $this->catalogProductView->getViewBlock()->addToCart($product);
@@ -137,6 +117,6 @@ class ProductsInCartReportEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
     }
 }

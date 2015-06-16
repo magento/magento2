@@ -35,7 +35,7 @@ class OperationFactory
     /**
      * Service data attributes generator
      */
-    const DATA_ATTRIBUTES_GENERATOR = 'service_data_attributes_generator';
+    const DATA_ATTRIBUTES_GENERATOR = 'extension_attributes_generator';
 
     /**
      * Application code generator

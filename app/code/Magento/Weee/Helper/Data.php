@@ -301,15 +301,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
-        /**
-         * if order item data is old enough then weee_tax_applied cab be
-         * not valid serialized data
-         */
+        // if order item data is old enough then weee_tax_applied might not be valid
         $data = $item->getWeeeTaxApplied();
         if (empty($data)) {
             return [];
         }
-        return unserialize($item->getWeeeTaxApplied());
+        return \Zend_Json::decode($item->getWeeeTaxApplied());
     }
 
     /**
@@ -321,7 +318,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function setApplied($item, $value)
     {
-        $item->setWeeeTaxApplied(serialize($value));
+        $item->setWeeeTaxApplied(\Zend_Json::encode($value));
         return $this;
     }
 

@@ -32,6 +32,13 @@ class Configure extends AbstractConfigureBlock
     protected $customOptionsSelector = '#product_composite_configure_fields_options';
 
     /**
+     * Product quantity selector.
+     *
+     * @var string
+     */
+    protected $qty = '[name="qty"]';
+
+    /**
      * Selector for "Ok" button.
      *
      * @var string
@@ -53,7 +60,7 @@ class Configure extends AbstractConfigureBlock
      */
     public function setQty($qty)
     {
-        $this->_fill($this->dataMapping(['qty' => $qty]));
+        $this->_rootElement->find($this->qty)->setValue($qty);
     }
 
     /**
@@ -96,7 +103,7 @@ class Configure extends AbstractConfigureBlock
     {
         $context = $this->_rootElement;
         $selector = $this->configureForm;
-        return $this->browser->waitUntil(
+        $this->browser->waitUntil(
             function () use ($context, $selector) {
                 return $context->find($selector)->isVisible() ? true : null;
             }
@@ -112,7 +119,7 @@ class Configure extends AbstractConfigureBlock
     {
         $context = $this->_rootElement;
         $selector = $this->configureForm;
-        return $this->browser->waitUntil(
+        $this->browser->waitUntil(
             function () use ($context, $selector) {
                 return $context->find($selector)->isVisible() ? null : true;
             }

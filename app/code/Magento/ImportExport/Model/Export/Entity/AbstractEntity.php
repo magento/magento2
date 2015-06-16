@@ -190,9 +190,10 @@ abstract class AbstractEntity
     /**
      * Get entity collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @param bool $resetCollection
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    abstract protected function _getEntityCollection();
+    abstract protected function _getEntityCollection($resetCollection = false);
 
     /**
      * Get attributes codes which are appropriate for export.

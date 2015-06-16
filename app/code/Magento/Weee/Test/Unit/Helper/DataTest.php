@@ -60,7 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $orderItem->setData(
             'weee_tax_applied',
-            serialize(
+            \Zend_Json::encode(
                 [
                     [
                         WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,

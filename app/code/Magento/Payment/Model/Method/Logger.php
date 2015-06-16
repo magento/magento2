@@ -14,6 +14,7 @@ use Psr\Log\LoggerInterface;
  */
 class Logger
 {
+    const DEBUG_KEYS_MASK = '****';
     /**
      * @var LoggerInterface
      */
@@ -30,15 +31,40 @@ class Logger
     /**
      * Logs payment related information used for debug
      *
-     * @param mixed $logData
-     * @param ConfigInterface $config
-     *
+     * @param array $debugData
+     * @param array $debugReplaceKeys
+     * @param bool $debugFlag
      * @return void
      */
-    public function debug($logData, ConfigInterface $config)
+    public function debug(array $debugData, array $debugReplaceKeys, $debugFlag)
     {
-        if ($config->getConfigValue('debug')) {
-            $this->logger->debug(var_export($logData, true));
+        if ($debugFlag == true && !empty($debugData) && !empty($debugReplaceKeys)) {
+                $debugData = $this->filterDebugData(
+                    $debugData,
+                    $debugReplaceKeys
+                );
+            $this->logger->debug(var_export($debugData, true));
         }
+    }
+
+    /**
+     * Recursive filter data by private conventions
+     *
+     * @param array $debugData
+     * @param array $debugReplacePrivateDataKeys
+     * @return array
+     */
+    protected function filterDebugData(array $debugData, array $debugReplacePrivateDataKeys)
+    {
+        $debugReplacePrivateDataKeys = array_map('strtolower', $debugReplacePrivateDataKeys);
+
+        foreach (array_keys($debugData) as $key) {
+            if (in_array(strtolower($key), $debugReplacePrivateDataKeys)) {
+                $debugData[$key] = self::DEBUG_KEYS_MASK;
+            } elseif (is_array($debugData[$key])) {
+                $debugData[$key] = $this->filterDebugData($debugData[$key], $debugReplacePrivateDataKeys);
+            }
+        }
+        return $debugData;
     }
 }
