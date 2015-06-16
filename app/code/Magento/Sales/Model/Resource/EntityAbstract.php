@@ -5,8 +5,9 @@
  */
 namespace Magento\Sales\Model\Resource;
 
-use Magento\Framework\Model\Resource\Db\AbstractDb;
-use Magento\Sales\Model\EntityInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\SalesSequence\Model\Manager;
 
 /**
@@ -47,46 +48,33 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected $attribute;
 
-
     /**
      * @var Manager
      */
     protected $sequenceManager;
 
     /**
-     * @var EntitySnapshot
-     */
-    protected $entitySnapshot;
-
-    /**
-     * @var EntityRelationComposite
-     */
-    protected $entityRelationComposite;
-
-    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param EntityRelationComposite $entityRelationComposite
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        EntityRelationComposite $entityRelationComposite,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         $resourcePrefix = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
-        $this->entitySnapshot = $entitySnapshot;
-        $this->entityRelationComposite = $entityRelationComposite;
         if ($resourcePrefix === null) {
             $resourcePrefix = 'sales';
         }
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($entitySnapshot, $entityRelationComposite, $context, $resourcePrefix);
     }
 
     /**
@@ -179,75 +167,6 @@ abstract class EntityAbstract extends AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
-        return $this;
-    }
-
-    /**
-     * Perform actions after object load, mark loaded data as data without changes
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->entitySnapshot->registerSnapshot($object);
-        return $this;
-    }
-
-    /**
-     * Save entity
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     * @throws \Exception
-     */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-        if (!$this->entitySnapshot->isModified($object)) {
-            $this->entityRelationComposite->processRelations($object);
-            return $this;
-        }
-        $this->beginTransaction();
-
-        try {
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
-                    $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-                    $data = $this->_prepareDataForSave($object);
-                    unset($data[$this->getIdFieldName()]);
-                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                } else {
-                    $bind = $this->_prepareDataForSave($object);
-                    unset($bind[$this->getIdFieldName()]);
-                    $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-                    $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
-                    if ($this->_useIsObjectNew) {
-                        $object->isObjectNew(false);
-                    }
-                }
-                $this->unserializeFields($object);
-                $this->_afterSave($object);
-                $this->entitySnapshot->registerSnapshot($object);
-                $object->afterSave();
-                $this->entityRelationComposite->processRelations($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
         return $this;
     }
 }
