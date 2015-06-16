@@ -6,58 +6,41 @@
 namespace Magento\AdvancedSearch\Block;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Search\Model\QueryResult;
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
+use Magento\Solr\Model\DataProvider\Suggestions as SuggestionsDataProvider;
+use Magento\Framework\View\LayoutInterface;
 
 /**
- * Test for \Magento\AdvancedSearch\Block\Suggestions
+ * @magentoAppArea frontend
  */
 class SuggestionsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\AdvancedSearch\Block\SearchData
-     */
+    /** @var Suggestions */
     protected $block;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
-        parent::setUp();
+        $suggestions = $this->getMock(SuggestedQueriesInterface::CLASS);
+        $suggestions->expects($this->any())->method('getItems')->willReturn([
+            new QueryResult('test item', 1),
+            new QueryResult("<script>alert('Test');</script>", 1)
+        ]);
 
-        Bootstrap::getObjectManager()->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        Bootstrap::getObjectManager()->configure(
-            [
-                'Magento\AdvancedSearch\Block\Suggestions' => [
-                    'arguments' => [
-                        'title' => 'Search Data Title',
-                    ]
-                ],
-                'preferences' => [
-                    'Magento\Solr\Model\DataProvider\Suggestions' =>
-                        'Magento\AdvancedSearch\Block\SuggestedQueriesMock',
-                ]
-            ]
-        );
-        $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
-        $this->block = $layout->createBlock('Magento\AdvancedSearch\Block\Suggestions');
+        Bootstrap::getObjectManager()->removeSharedInstance(SuggestionsDataProvider::CLASS);
+        Bootstrap::getObjectManager()->addSharedInstance($suggestions, SuggestionsDataProvider::CLASS);
+
+        $this->block = Bootstrap::getObjectManager()->get(LayoutInterface::CLASS)->createBlock(Suggestions::CLASS);
         $this->block->setNameInLayout('suggestions');
     }
 
-    /**
-     * @return void
-     */
+    protected function tearDown()
+    {
+        Bootstrap::getObjectManager()->removeSharedInstance(SuggestionsDataProvider::CLASS);
+    }
+
     public function testRenderEscaping()
     {
-        /** @var \Magento\AdvancedSearch\Block\SuggestedQueriesMock $dataProvider */
-        $dataProvider = Bootstrap::getObjectManager()->get('Magento\Solr\Model\DataProvider\Suggestions');
-
-        $dataProvider->setItems(
-            [
-                'test item',
-                "<script>alert('Test');</script>"
-            ]
-        );
-
         $html = $this->block->getBlockHtml('suggestions');
 
         $this->assertContains('test+item', $html);
