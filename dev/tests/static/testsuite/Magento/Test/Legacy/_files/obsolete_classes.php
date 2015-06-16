@@ -3656,5 +3656,6 @@ return [
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsInvalidCcTest'],
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsValidCcTest'],
     ['Magento\Centinel\CreateOrderTest'],
-    ['Magento\Payment\Model\Checks\PaymentMethodChecksInterface', 'Magento\Payment\Model\MethodInterface']
+    ['Magento\Payment\Model\Checks\PaymentMethodChecksInterface', 'Magento\Payment\Model\MethodInterface'],
+    ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
 ];

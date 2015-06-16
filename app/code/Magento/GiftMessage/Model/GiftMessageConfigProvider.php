@@ -7,6 +7,9 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Framework\UrlInterface;
 
 /**
  * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
@@ -34,21 +37,32 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param HttpContext $httpContext
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository,
         \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        HttpContext $httpContext,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->scopeConfiguration = $context->getScopeConfig();
         $this->cartRepository = $cartRepository;
         $this->itemRepository = $itemRepository;
         $this->checkoutSession = $checkoutSession;
+        $this->httpContext = $httpContext;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -57,6 +71,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $configuration = [];
+        $configuration['giftMessage'] = [];
         $orderLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -67,7 +82,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         );
         if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = true;
+            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
         if ($itemLevelGiftMessageConfiguration) {
@@ -75,7 +90,43 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $configuration['isItemLevelGiftOptionsEnabled'] = true;
             $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
         }
+        $configuration['storeCode'] = $this->getStoreCode();
+        $configuration['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
+        $store = $this->storeManager->getStore();
+        $configuration['baseUrl'] = $store->isFrontUrlSecure()
+                ? $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)
+                : $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, false);
         return $configuration;
+    }
+
+    /**
+     * Check if customer is logged in
+     *
+     * @return bool
+     */
+    private function isCustomerLoggedIn()
+    {
+        return (bool)$this->httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+    }
+
+    /**
+     * Retrieve store code
+     *
+     * @return string
+     */
+    protected function getStoreCode()
+    {
+        return $this->checkoutSession->getQuote()->getStore()->getCode();
+    }
+
+    /**
+     * Check if quote is virtual
+     *
+     * @return bool
+     */
+    protected function isQuoteVirtual()
+    {
+        return $this->checkoutSession->loadCustomerQuote()->getQuote()->getIsVirtual();
     }
 
     /**
