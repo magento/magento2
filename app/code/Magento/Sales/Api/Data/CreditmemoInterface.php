@@ -186,21 +186,21 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      */
     const UPDATED_AT = 'updated_at';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
-     * Shipping hidden tax amount.
+     * Shipping discount tax compensation amount.
      */
-    const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
+    const SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'shipping_discount_tax_compensation_amount';
     /*
-     * Base shipping hidden tax amount.
+     * Base shipping discount tax compensation amount.
      */
-    const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
+    const BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT = 'base_shipping_discount_tax_compensation_amnt';
     /*
      * Shipping including tax.
      */
@@ -302,11 +302,11 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getBaseGrandTotal();
 
     /**
-     * Gets the credit memo base hidden tax amount.
+     * Gets the credit memo base discount tax compensation amount.
      *
-     * @return float|null Credit memo base hidden tax amount.
+     * @return float Credit memo base discount tax compensation amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the credit memo base shipping amount.
@@ -316,11 +316,11 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getBaseShippingAmount();
 
     /**
-     * Gets the credit memo base shipping hidden tax amount.
+     * Gets the credit memo base shipping discount tax compensation amount.
      *
-     * @return float|null Credit memo base shipping hidden tax amount.
+     * @return float Credit memo base shipping discount tax compensation amount.
      */
-    public function getBaseShippingHiddenTaxAmnt();
+    public function getBaseShippingDiscountTaxCompensationAmnt();
 
     /**
      * Gets the credit memo base shipping including tax.
@@ -451,11 +451,11 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getGrandTotal();
 
     /**
-     * Gets the credit memo hidden tax amount.
+     * Gets the credit memo discount tax compensation amount.
      *
-     * @return float|null Credit memo hidden tax amount.
+     * @return float Credit memo discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the credit memo increment ID.
@@ -499,11 +499,11 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getShippingAmount();
 
     /**
-     * Gets the credit memo shipping hidden tax amount.
+     * Gets the credit memo shipping discount tax compensation amount.
      *
-     * @return float|null Credit memo shipping hidden tax amount.
+     * @return float Credit memo shipping discount tax compensation amount.
      */
-    public function getShippingHiddenTaxAmount();
+    public function getShippingDiscountTaxCompensationAmount();
 
     /**
      * Gets the credit memo shipping including tax.
@@ -916,36 +916,36 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function setUpdatedAt($timestamp);
 
     /**
-     * Sets the credit memo hidden tax amount.
+     * Sets the credit memo discount tax compensation amount.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the credit memo base hidden tax amount.
+     * Sets the credit memo base discount tax compensation amount.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the credit memo shipping hidden tax amount.
+     * Sets the credit memo shipping discount tax compensation amount.
      *
      * @param float $amount
      * @return $this
      */
-    public function setShippingHiddenTaxAmount($amount);
+    public function setShippingDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the credit memo base shipping hidden tax amount.
+     * Sets the credit memo base shipping discount tax compensation amount.
      *
      * @param float $amnt
      * @return $this
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt);
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt);
 
     /**
      * Sets the credit memo shipping including tax.

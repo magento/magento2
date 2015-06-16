@@ -47,6 +47,7 @@
     <preference for="Magento\Framework\Config\CacheInterface" type="Magento\Framework\App\Cache\Type\Config" />
     <preference for="Magento\Framework\Config\ValidationStateInterface" type="Magento\Framework\App\Arguments\ValidationState" />
     <preference for="Magento\Framework\Module\ModuleListInterface" type="Magento\Framework\Module\ModuleList" />
+    <preference for="Magento\Framework\Module\ModuleRegistryInterface" type="Magento\Framework\Module\Registrar" />
     <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
     <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
     <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList" />
@@ -1082,6 +1083,11 @@
             <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Collector\Library</argument>
             <argument name="baseFiles" xsi:type="object">lessFileSourceBaseSorted</argument>
             <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\ModuleList\Loader">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Module\Setup\MigrationData">
