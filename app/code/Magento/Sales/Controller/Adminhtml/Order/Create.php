@@ -373,7 +373,7 @@ class Create extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Sales::actions');
+        return $this->_authorization->isAllowed($this->_getAclResource());
     }
 
     /**
