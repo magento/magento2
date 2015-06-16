@@ -16,8 +16,11 @@
 @checkout-status-bar-item__color: @primary__color;
 @checkout-status-bar-item__margin: @indent__s;
 @checkout-status-bar-item__width: 185px;
+
 @checkout-status-bar-item__active__background-color: @color-orange-red1;
 @checkout-status-bar-item__complete__color: @link__color;
+@checkout-status-bar-item__complete__transition: background .3s;
+@checkout-status-bar-item__hover__background-color: darken(@checkout-status-bar-item__background-color, 5%);
 
 @checkout-status-bar-item-circle__height: @checkout-status-bar-item-circle__width;
 @checkout-status-bar-item-circle__width: 38px;
@@ -89,6 +92,21 @@
         }
 
         &._complete {
+            cursor: pointer;
+
+            &:hover {
+                &:before {
+                    .css(background, @checkout-status-bar-item__hover__background-color);
+                    .css(transition, @checkout-status-bar-item__complete__transition);
+                }
+                > span {
+                    &:before {
+                        .css(background, @checkout-status-bar-item__hover__background-color);
+                        .css(transition, @checkout-status-bar-item__complete__transition);
+                    }
+                }
+            }
+
             > span {
                 .css(color, @checkout-status-bar-item__complete__color);
                 &:after {

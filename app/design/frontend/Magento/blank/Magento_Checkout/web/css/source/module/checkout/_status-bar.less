@@ -79,11 +79,14 @@
         }
 
         &._complete {
+            cursor: pointer;
             > span {
                 .css(color, @checkout-status-bar-item__color);
                 &:after {
-                    .css(font-family, @icons__font-name);
                     .css(content, @checkout-status-bar-item-circle-inner__active__content);
+                    .css(font-family, @icons__font-name);
+                    .css(line-height, @checkout-status-bar-item-circle-inner__active__line-height);
+                    .font-size(@checkout-status-bar-item-circle-inner__active__font-size);
                 }
             }
         }
