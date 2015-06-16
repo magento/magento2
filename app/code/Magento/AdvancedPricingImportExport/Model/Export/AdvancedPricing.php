@@ -47,11 +47,21 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_passGroupPrice = 0;
 
+    /**
+     * List of items websites
+     *
+     * @var array
+     */
     protected $_priceWebsite = [
         ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE,
         ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE,
     ];
 
+    /**
+     * List of items customer groups
+     *
+     * @var array
+     */
     protected $_priceCustomerGroup = [
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
         ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP,
