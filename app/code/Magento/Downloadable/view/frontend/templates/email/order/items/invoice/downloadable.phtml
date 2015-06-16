@@ -11,32 +11,32 @@
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
-    <td align="left" valign="top" style="padding:3px 9px">
+    <td>
         <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
+        <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
             <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
+            <dd><?php echo $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
-        <dl style="margin:0; padding:0;">
+        <dl>
             <dt><strong><em><?php echo $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
-                <dd style="margin:0; padding:0 0 0 9px;">
+                <dd>
                     <?php echo $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
-                    (<a href="<?php echo $block->getPurchasedLinkUrl($link) ?>" style="color:#1E7EC8;"><?php echo __('download') ?></a>)
+                    (<a href="<?php echo $block->getPurchasedLinkUrl($link) ?>"><?php echo __('download') ?></a>)
                 </dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getQty()*1 ?></td>
-    <td align="right" valign="top" style="padding:3px 9px">
+    <td><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
+    <td><?php echo $_item->getQty()*1 ?></td>
+    <td>
         <?php echo $block->getItemPrice($_item); ?>
     </td>
 </tr>
