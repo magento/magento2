@@ -67,7 +67,7 @@ class Grid extends DataGrid
      * @var string
      */
     protected $previewCmsPage = ".//a[contains(@class, 'action-menu-item') and text() = '%s']";
-
+    
     /**
      * Search item and open it on Frontend.
      *
@@ -87,5 +87,26 @@ class Grid extends DataGrid
         } else {
             throw new \Exception('Searched item was not found.');
         }
+    }
+
+    /**
+     * Wait loader.
+     *
+     * @return void
+     */
+    protected function waitLoader()
+    {
+        try {
+            $browser = $this->browser;
+            $selector = $this->loader;
+            $browser->waitUntil(
+                function () use ($browser, $selector) {
+                    return $browser->find($selector)->isVisible() == true ? true : null;
+                }
+            );
+        } catch (\Exception $e) {
+        }
+
+        parent::waitLoader();
     }
 }
