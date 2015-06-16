@@ -260,8 +260,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
         }
         if ($listSku) {
-            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
-                ->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
+            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE);
+            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
         }
         return $this;
     }
