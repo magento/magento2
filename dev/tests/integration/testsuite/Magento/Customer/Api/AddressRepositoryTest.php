@@ -315,7 +315,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchResults = $this->repository->getList($searchBuilder->create());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
-        $expectedCustomerGroupId = 1;
 
         /** @var \Magento\Customer\Api\Data\AddressInterface $item */
         foreach ($searchResults->getItems() as $item) {
@@ -331,8 +330,6 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 $expectedResult[$item->getId()]['firstname'],
                 $item->getFirstname()
             );
-            $this->assertNotNull($item->getExtensionAttributes(), "Extension attributes not available");
-            $this->assertEquals($expectedCustomerGroupId, $item->getExtensionAttributes()->getTestCustomerGroupId());
             unset($expectedResult[$item->getId()]);
         }
     }
