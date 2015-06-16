@@ -9,7 +9,7 @@ define([
     'uiComponent',
     'Magento_Checkout/js/model/payment/payment-list',
     'Magento_Ui/js/core/renderer/layout',
-    'Magento_Checkout/js/model/payment/provider'
+    'Magento_Checkout/js/model/payment/renderer-list'
 
 ], function (_, ko, utils, Component, paymentMethods, layout, rendererList) {
     'use strict';
