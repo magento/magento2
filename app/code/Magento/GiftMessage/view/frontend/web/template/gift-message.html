@@ -12,7 +12,7 @@
         <div class="title" data-role="title" data-bind="click: $data.toggleFormBlockVisibility.bind($data)">
             <span data-bind="text: $t('Gift options')"></span>
         </div>
-        <div class="" data-role="content" data-bind="visible: formBlockVisibility() || resultBlockVisibility()"> <!-- from class content should be deleted style display none -->
+        <div data-role="content" data-bind="visible: formBlockVisibility() || resultBlockVisibility()">
             <!-- ko ifnot: resultBlockVisibility() -->
             <div class="gift-options">
                 <!-- ko foreach: getRegion('additionalOptions') -->

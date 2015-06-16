@@ -85,7 +85,10 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                     var params = {},
                         self = this;
                     _.each(this.submitParams, function(key) {
-                        params[key] = provider[self.getUniqueKey(self.id, key)]();
+                        var observable = provider[self.getUniqueKey(self.id, key)];
+                        if (_.isFunction(observable)) {
+                            params[key] = observable();
+                        }
                     });
 
                     if(this.additionalOptions.length) {
