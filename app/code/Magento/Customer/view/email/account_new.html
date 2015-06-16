@@ -31,7 +31,7 @@
     {{trans
         'Forgot your Account password? No problem. Click <a href="%reset_url">here</a> to reset it.'
         
-        reset_url=$store.getUrl('customer/account/createPassword/', ['_query_id' => $customer.id, '_query_token' => $customer.rp_token])
+        reset_url=$store.getUrl('customer/account/createPassword/', [_query_id:$customer.id, _query_token:$customer.rp_token])
     |raw}}
 </p>
 <p>{{trans "When you log in to your account, you will be able to do the following:"}}</p>
