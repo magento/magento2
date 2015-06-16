@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Abstract items renderer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractItems extends \Magento\Backend\Block\Template
 {
