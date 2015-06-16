@@ -146,6 +146,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    public function testSetAndGetIsChildTemplate()
+    {
+        $model = $this->getModelMock();
+        $model->setIsChildTemplate(true);
+        $this->assertSame(true, $model->isChildTemplate());
+
+        $model->setIsChildTemplate(false);
+        $this->assertSame(false, $model->isChildTemplate());
+    }
+
     public function testSetAndGetTemplateFilter()
     {
         $model = $this->getModelMock();
@@ -291,11 +301,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'styles' => [
                 'templateType' => 'html',
-                'templateText' => '<!--@vars {"store url=\"\"":"Store Url"} @-->Some Other Text',
+                'templateText' => '<!--@styles p { color: #000; } @-->Some Other Text',
                 'parsedTemplateText' => 'Some Other Text',
                 'expectedTemplateSubject' => null,
-                'expectedOrigTemplateVariables' => '{"store url=\"\"":"Store Url"}',
-                'expectedTemplateStyles' => null,
+                'expectedOrigTemplateVariables' => null,
+                'expectedTemplateStyles' => 'p { color: #000; }',
             ],
         ];
     }
@@ -649,6 +659,26 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => 'expected result',
             ],
         ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\MailException
+     */
+    public function testProcessTemplateThrowsExceptionNonExistentTemplate()
+    {
+        $model = $this->getModelMock([
+            'loadDefault',
+            'applyDesignConfig',
+        ]);
+        $model->expects($this->once())
+            ->method('loadDefault')
+            ->will($this->returnValue(true));
+
+        $model->expects($this->once())
+            ->method('applyDesignConfig')
+            ->will($this->returnValue(true));
+
+        $model->processTemplate();
     }
 
     public function testGetSubject()

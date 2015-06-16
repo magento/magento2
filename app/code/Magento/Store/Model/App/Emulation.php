@@ -11,7 +11,6 @@
  */
 namespace Magento\Store\Model\App;
 
-use Magento\Framework\Object;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
 class Emulation extends \Magento\Framework\Object
@@ -76,6 +75,7 @@ class Emulation extends \Magento\Framework\Object
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

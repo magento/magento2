@@ -2109,33 +2109,33 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
-     * Returns base_hidden_tax_invoiced
+     * Returns base_discount_tax_compensation_invoiced
      *
      * @return float
      */
-    public function getBaseHiddenTaxInvoiced()
+    public function getBaseDiscountTaxCompensationInvoiced()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED);
     }
 
     /**
-     * Returns base_hidden_tax_refunded
+     * Returns base_discount_tax_compensation_refunded
      *
      * @return float
      */
-    public function getBaseHiddenTaxRefunded()
+    public function getBaseDiscountTaxCompensationRefunded()
     {
-        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED);
     }
 
     /**
@@ -2169,13 +2169,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Returns base_shipping_discount_tax_compensation_amnt
      *
      * @return float
      */
-    public function getBaseShippingHiddenTaxAmnt()
+    public function getBaseShippingDiscountTaxCompensationAmnt()
     {
-        return $this->getData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT);
     }
 
     /**
@@ -2737,33 +2737,33 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
-     * Returns hidden_tax_invoiced
+     * Returns discount_tax_compensation_invoiced
      *
      * @return float
      */
-    public function getHiddenTaxInvoiced()
+    public function getDiscountTaxCompensationInvoiced()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_INVOICED);
     }
 
     /**
-     * Returns hidden_tax_refunded
+     * Returns discount_tax_compensation_refunded
      *
      * @return float
      */
-    public function getHiddenTaxRefunded()
+    public function getDiscountTaxCompensationRefunded()
     {
-        return $this->getData(OrderInterface::HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED);
     }
 
     /**
@@ -2967,13 +2967,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Returns shipping_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getShippingHiddenTaxAmount()
+    public function getShippingDiscountTaxCompensationAmount()
     {
-        return $this->getData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -4275,65 +4275,74 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setShippingHiddenTaxAmount($amount)
+    public function setShippingDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(OrderInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt)
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
-        return $this->setData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+        return $this->setData(OrderInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT, $amnt);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxInvoiced($hiddenTaxInvoiced)
+    public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_INVOICED, $hiddenTaxInvoiced);
+        return $this->setData(OrderInterface::DISCOUNT_TAX_COMPENSATION_INVOICED, $discountTaxCompensationInvoiced);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced)
+    public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_INVOICED, $baseHiddenTaxInvoiced);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED,
+            $baseDiscountTaxCompensationInvoiced
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxRefunded($hiddenTaxRefunded)
+    public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::HIDDEN_TAX_REFUNDED, $hiddenTaxRefunded);
+        return $this->setData(
+            OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $discountTaxCompensationRefunded
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded)
+    public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED, $baseHiddenTaxRefunded);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $baseDiscountTaxCompensationRefunded
+        );
     }
 
     /**
