@@ -3,16 +3,16 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/framework": "0.74.0-beta11",
-        "magento/module-search": "0.74.0-beta11",
-        "magento/module-backend": "0.74.0-beta11",
-        "magento/module-store": "0.74.0-beta11",
-        "magento/module-catalog": "0.74.0-beta11",
-        "magento/module-catalog-search": "0.74.0-beta11",
+        "magento/framework": "0.74.0-beta13",
+        "magento/module-search": "0.74.0-beta13",
+        "magento/module-backend": "0.74.0-beta13",
+        "magento/module-store": "0.74.0-beta13",
+        "magento/module-catalog": "0.74.0-beta13",
+        "magento/module-catalog-search": "0.74.0-beta13",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta11",
+    "version": "0.74.0-beta13",
     "license": [
         "proprietary"
     ],
