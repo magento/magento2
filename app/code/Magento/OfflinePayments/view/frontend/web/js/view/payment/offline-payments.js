@@ -2,6 +2,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+/*browser:true*/
+/*global define*/
 define(
     [
         'uiComponent',
@@ -20,6 +22,10 @@ define(
             {
                 type: 'banktransfer',
                 component: 'Magento_OfflinePayments/js/view/payment/method-renderer/banktransfer'
+            },
+            {
+                type: 'cashondelivery',
+                component: 'Magento_OfflinePayments/js/view/payment/method-renderer/cashondelivery-method'
             }
         );
         /** Add view logic here if needed */

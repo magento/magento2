@@ -232,7 +232,7 @@
                                                                 <item name="displayArea" xsi:type="string">payment-methods-list</item>
 
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renderers</item>
+                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
                                                                 </item>
                                                                 <item name="children" xsi:type="array">
 

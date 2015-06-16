@@ -10,10 +10,9 @@ define(
     ],
     function (Component) {
         'use strict';
-
         return Component.extend({
             defaults: {
-                template: 'Magento_OfflinePayments/payment/checkmo',
+                template: 'Magento_OfflinePayments/payment/cashondelivery',
                 isChecked: false
             },
 
@@ -24,14 +23,9 @@ define(
                 return this;
             },
 
-            /** Returns send check to info */
-            getMailingAddress: function() {
-                return window.checkoutConfig.payment.checkmo.mailingAddress;
-            },
-
-            /** Returns payable to info */
-            getPayableTo: function() {
-                return window.checkoutConfig.payment.checkmo.payableTo;
+            /** Returns payment method instructions */
+            getInstructions: function() {
+                return window.checkoutConfig.payment.instructions[this.item.code];
             }
         });
     }
