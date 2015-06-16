@@ -15,6 +15,7 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/cells/actions',
             actions: [],
+            rows: [],
             templates: {
                 actions: {}
             },
@@ -172,11 +173,11 @@ define([
             var args = [action.index, action.recordId, action],
                 callback = action.callback;
 
-            if (_.isObject(callback)) {
+            if (utils.isObject(callback)) {
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
-            } else if (!_.isFunction(callback)) {
+            } else if (typeof callback != 'function') {
                 callback = this.defaultCallback.bind(this);
             }
 
