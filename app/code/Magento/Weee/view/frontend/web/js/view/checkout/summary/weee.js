@@ -23,7 +23,7 @@ define(
                 return this.getFormattedPrice(this.totals()['weee_tax_applied_amount']);
             },
             isDisplayed: function() {
-                return this.getTotalsMode() != 'initial' && this.isIncludedInSubtotal &&
+                return this.isFullMode() && this.isIncludedInSubtotal &&
                     this.totals()['weee_tax_applied_amount'] > 0;
             }
         });

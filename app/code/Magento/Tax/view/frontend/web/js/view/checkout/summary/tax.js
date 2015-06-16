@@ -28,7 +28,7 @@ define(
                 if (!isTaxDisplayedInGrandTotal) {
                     return false;
                 }
-                if (!this.totals() || null == totals.getTotalByCode('tax')) {
+                if (!this.totals() || null == totals.getSegment('tax')) {
                     return true;
                 }
                 if (this.getPureValue() == 0) {
@@ -37,7 +37,7 @@ define(
                 return true;
             },
             ifShowDetails: function() {
-                if (this.getTotalsMode() == 'initial') {
+                if (!this.isFullMode()) {
                     return false;
                 }
                 return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
@@ -45,7 +45,7 @@ define(
             getPureValue: function() {
                 var amount = 0;
                 if (this.totals()) {
-                    var taxTotal = totals.getTotalByCode('tax');
+                    var taxTotal = totals.getSegment('tax');
                     if (taxTotal) {
                         amount = taxTotal.value;
                     }
@@ -55,8 +55,8 @@ define(
             getValue: function() {
                 var amount = 0;
                 if (this.totals()) {
-                    var taxTotal = totals.getTotalByCode('tax');
-                    if (this.getTotalsMode() != 'initial' && taxTotal) {
+                    var taxTotal = totals.getSegment('tax');
+                    if (this.isFullMode() && taxTotal) {
                         amount = taxTotal.value;
                     } else {
                         return this.notCalculatedMessage;

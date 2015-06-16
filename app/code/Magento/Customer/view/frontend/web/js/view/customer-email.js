@@ -85,15 +85,15 @@ define(
                 return Boolean(validationResult);
             },
             login: function(loginForm) {
-                var loginData = {};
-                var formDataArray = $(loginForm).serializeArray();
-                var loginFormSelector = 'form[data-role=login]';
+                var loginData = {},
+                    formDataArray = $(loginForm).serializeArray();
+
                 formDataArray.forEach(function (entry) {
                     loginData[entry.name] = entry.value;
                 });
                 if (this.isPasswordVisible()
-                    && $(loginFormSelector).validation()
-                    && $(loginFormSelector).validation('isValid')
+                    && $(loginForm).validation()
+                    && $(loginForm).validation('isValid')
                 ) {
                     login(loginData);
                 }

@@ -76,9 +76,9 @@
                     <user_forgotpassword>
                         <label>Forgot password</label>
                     </user_forgotpassword>
-                    <guest_checkout>
-                        <label>Checkout as Guest</label>
-                    </guest_checkout>
+                    <checkout_email>
+                        <label>Guest email with possible registration</label>
+                    </checkout_email>
                     <register_during_checkout>
                         <label>Register during Checkout</label>
                     </register_during_checkout>

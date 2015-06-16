@@ -7,30 +7,43 @@ define(
     [
         'jquery',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist',
-        'Magento_Customer/js/model/customer'
+        'Magento_Ui/js/model/errorlist'
     ],
-    function($, storage, errorlist, customer) {
-        "use strict";
-        return function(loginData, redirectUrl) {
-            return storage.post(
-                'customer/ajax/login',
-                JSON.stringify(loginData)
-            ).done(function (response) {
-                if (response.errors) {
-                    customer.increaseFailedLoginAttempt();
-                    errorlist.add(response);
-                } else {
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
+    function($, storage, errorlist) {
+        'use strict';
+        var callbacks = [],
+            action = function(loginData, redirectUrl) {
+                return storage.post(
+                    'customer/ajax/login',
+                    JSON.stringify(loginData)
+                ).done(function (response) {
+                    if (response.errors) {
+                        errorlist.add(response);
+                        callbacks.forEach(function(callback) {
+                            callback(loginData);
+                        });
                     } else {
-                        location.reload();
+                        callbacks.forEach(function(callback) {
+                            callback(loginData);
+                        });
+                        if (redirectUrl) {
+                            window.location.href = redirectUrl;
+                        } else {
+                            location.reload();
+                        }
                     }
-                }
-            }).fail(function () {
-                customer.increaseFailedLoginAttempt();
-                errorlist.add({'message': 'Could not authenticate. Please try again later'});
-            });
+                }).fail(function () {
+                    errorlist.add({'message': 'Could not authenticate. Please try again later'});
+                    callbacks.forEach(function(callback) {
+                        callback(loginData);
+                    });
+                });
+            };
+
+        action.registerLoginCallback = function(callback) {
+            callbacks.push(callback);
         };
+
+        return action;
     }
 );

@@ -14,7 +14,6 @@ define(
     function($, ko, _, storage, addressList) {
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
-            failedLoginAttempts = ko.observable(0),
             customerData = {};
 
         if (isLoggedIn()) {
@@ -29,13 +28,6 @@ define(
             isLoggedIn: isLoggedIn,
             setIsLoggedIn: function (flag) {
                 isLoggedIn(flag);
-            },
-            getFailedLoginAttempts: function() {
-                return failedLoginAttempts;
-            },
-            increaseFailedLoginAttempt: function() {
-                var oldAttempts = failedLoginAttempts();
-                failedLoginAttempts(++oldAttempts);
             },
             getBillingAddressList: function () {
                 return addressList();

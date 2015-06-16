@@ -4,17 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko foreach: getRegion('authentication') -->
+<!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->
 
-<!-- Temp MAGETWO-36025 markup -->
-<ul class="opc-status-bar">
-    <li class="opc-status-bar-item _active">
-        <span data-bind="text: $t('Shipping')"></span>
-    </li>
-    <li class="opc-status-bar-item">
-        <span data-bind="text: $t('Review & Payments')"></span>
-    </li>
-</ul>
-<!-- /Temp MAGETWO-36025 markup -->
+<!-- ko foreach: getRegion('progressBar') -->
+<!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->
 
 <!-- Temp MAGETWO-36025 markup -->
 <div class="opc-estimated-wrapper">
