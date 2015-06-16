@@ -76,7 +76,7 @@
                                                                 <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
                                                                 <item name="tooltip" xsi:type="array">
-                                                                    <item name="description" xsi:type="string">(You can create an account to track your order after checkout)</item>
+                                                                    <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
                                                                 </item>
                                                                 <item name="children" xsi:type="array">
                                                                     <item name="before-login-form" xsi:type="array">
