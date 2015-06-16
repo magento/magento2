@@ -72,6 +72,29 @@
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="customer-email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="displayArea" xsi:type="string">customer-email</item>
+                                                                <item name="tooltip" xsi:type="array">
+                                                                    <item name="description" xsi:type="string">(You can create an account to track your order after checkout)</item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-login-form" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-login-form</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- before login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                    <item name="additional-login-form-fields" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- additional login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <item name="before-form" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-form</item>
@@ -165,6 +188,29 @@
                                                             <item name="title" xsi:type="string">Payment</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="customer-email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="displayArea" xsi:type="string">customer-email</item>
+                                                                <item name="tooltip" xsi:type="array">
+                                                                    <item name="description" xsi:type="string">(You can create an account to track your order after checkout)</item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-login-form" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-login-form</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- before login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                    <item name="additional-login-form-fields" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- additional login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <!-- TODO: add billing address form -->
                                                             <item name="beforeMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>

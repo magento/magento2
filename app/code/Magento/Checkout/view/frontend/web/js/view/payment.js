@@ -24,6 +24,7 @@ define(
             },
             isVisible: ko.observable(quote.isVirtual()),
             paymentForm: '#co-payment-form',
+            quoteIsVirtual: quote.isVirtual(),
 
             initialize: function () {
                 this._super();

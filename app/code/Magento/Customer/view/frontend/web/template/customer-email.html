@@ -5,13 +5,14 @@
  */
 -->
 <!-- ko ifnot: isCustomerLoggedIn() -->
+
 <!-- ko foreach: getRegion('before-login-form') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
-<form class="form form-login" data-role="login"
+<form class="form form-login" data-role="email-with-possible-login"
       data-bind="submit:login"
       method="post">
-    <fieldset id="customer-email" class="fieldset" data-bind="blockLoader: isLoading">
+    <fieldset id="customer-email-fieldset" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field required">
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email Address')"></span>
@@ -50,7 +51,6 @@
             </div>
         </fieldset>
         <!--Hidden fields -->
-
     </fieldset>
 </form>
 <!-- /ko -->
