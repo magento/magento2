@@ -11,9 +11,16 @@ define([
     'use strict';
 
     var sidebarInitialized = false;
+    var minicart = $("[data-block='minicart']");
+
+    minicart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
 
     function initSidebar() {
-        var minicart = $("[data-block='minicart']");
+        if (!$('[data-role=product-item]').length) {
+            return false;
+        }
         minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
@@ -59,9 +66,10 @@ define([
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
                 sidebarInitialized = false;
+                initSidebar();
             });
         },
-        initSidebar: ko.observable(initSidebar),
+        initSidebar: initSidebar,
         closeSidebar: function(element) {
             var minicart = $('[data-block="minicart"]');
             minicart.on('click', '[data-action="close"]', function(event) {

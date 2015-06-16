@@ -130,7 +130,7 @@ define([
 
     /** Events listener **/
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        if (settings.type.match(/post/i)) {
+        if (settings.type.match(/post|put/i)) {
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.invalidate(sections);
@@ -139,7 +139,7 @@ define([
         }
     });
     $(document).on('submit', function (event) {
-        if (event.target.method.match(/post/i)) {
+        if (event.target.method.match(/post|put/i)) {
             var sections = sectionConfig.getAffectedSections(event.target.action);
             if (sections) {
                 customerData.invalidate(sections);
