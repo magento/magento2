@@ -7,13 +7,10 @@
 namespace Magento\Wishlist\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -31,6 +28,8 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Wishlist_(CS)
  * @ZephyrId MAGETWO-23394
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShareWishlistEntityTest extends Injectable
 {
@@ -45,20 +44,6 @@ class ShareWishlistEntityTest extends Injectable
      * @var CmsIndex
      */
     protected $cmsIndex;
-
-    /**
-     * Customer account index page.
-     *
-     * @var CustomerAccountIndex
-     */
-    protected $customerAccountIndex;
-
-    /**
-     * Product view page.
-     *
-     * @var CatalogProductView
-     */
-    protected $catalogProductView;
 
     /**
      * Wishlist index page.
@@ -81,10 +66,8 @@ class ShareWishlistEntityTest extends Injectable
      * @param CatalogProductSimple $product
      * @return array
      */
-    public function __prepare(
-        Customer $customer,
-        CatalogProductSimple $product
-    ) {
+    public function __prepare(Customer $customer, CatalogProductSimple $product)
+    {
         $customer->persist();
         $product->persist();
 
@@ -98,22 +81,16 @@ class ShareWishlistEntityTest extends Injectable
      * Inject pages.
      *
      * @param CmsIndex $cmsIndex
-     * @param CustomerAccountIndex $customerAccountIndex
-     * @param CatalogProductView $catalogProductView
      * @param WishlistIndex $wishlistIndex
      * @param WishlistShare $wishlistShare
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
-        CustomerAccountIndex $customerAccountIndex,
-        CatalogProductView $catalogProductView,
         WishlistIndex $wishlistIndex,
         WishlistShare $wishlistShare
     ) {
         $this->cmsIndex = $cmsIndex;
-        $this->customerAccountIndex = $customerAccountIndex;
-        $this->catalogProductView = $catalogProductView;
         $this->wishlistIndex = $wishlistIndex;
         $this->wishlistShare = $wishlistShare;
     }
@@ -121,40 +98,29 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Share wish list.
      *
-     * @param BrowserInterface $browser
      * @param Customer $customer
      * @param CatalogProductSimple $product
      * @param array $sharingInfo
      * @return void
      */
     public function test(
-        BrowserInterface $browser,
         Customer $customer,
         CatalogProductSimple $product,
         array $sharingInfo
     ) {
         //Steps
-        $this->loginCustomer($customer);
-        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $this->catalogProductView->getViewBlock()->clickAddToWishlist();
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
+        $this->objectManager->create(
+            'Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep',
+            ['products' => [$product]]
+        )->run();
         $this->wishlistIndex->getMessagesBlock()->waitSuccessMessage();
         $this->wishlistIndex->getWishlistBlock()->clickShareWishList();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->wishlistShare->getSharingInfoForm()->fillForm($sharingInfo);
         $this->wishlistShare->getSharingInfoForm()->shareWishlist();
-    }
-
-    /**
-     * Login customer.
-     *
-     * @param Customer $customer
-     * @return void
-     */
-    protected function loginCustomer(Customer $customer)
-    {
-        $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
-            ['customer' => $customer]
-        )->run();
     }
 }
