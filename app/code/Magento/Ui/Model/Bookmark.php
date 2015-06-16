@@ -62,6 +62,16 @@ class Bookmark extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     }
 
     /**
+     * Initialize bookmark model
+     *
+     * @return void
+     */
+    public function _construct()
+    {
+        $this->_init('Magento\Ui\Model\Resource\Bookmark');
+    }
+
+    /**
      * Get Id
      *
      * @return int
