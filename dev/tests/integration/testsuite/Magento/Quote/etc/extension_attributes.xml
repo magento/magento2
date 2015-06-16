@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
-        <attribute code="quoteTestAttribute" type="Magento\User\Model\UserInterface">
+        <attribute code="quoteTestAttribute" type="Magento\User\Api\Data\UserInterface">
             <join reference_table="admin_user"
                   join_on_field="store_id"
                   reference_field="user_id"
@@ -20,7 +20,7 @@
         </attribute>
     </extension_attributes>
     <extension_attributes for="Magento\Quote\Api\Data\CartItemInterface">
-        <attribute code="quoteItemTestAttribute" type="Magento\User\Model\UserInterface">
+        <attribute code="quoteItemTestAttribute" type="Magento\User\Api\Data\UserInterface">
             <join reference_table="admin_user"
                   join_on_field="store_id"
                   reference_field="user_id"

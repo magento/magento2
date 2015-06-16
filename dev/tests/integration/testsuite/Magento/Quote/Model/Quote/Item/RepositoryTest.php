@@ -31,7 +31,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Api\Data\CartItemInterface $actualQuoteItem */
         $actualQuoteItem = array_pop($quoteItems);
         $this->assertInstanceOf('Magento\Quote\Api\Data\CartItemInterface', $actualQuoteItem);
-        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         $testAttribute = $actualQuoteItem->getExtensionAttributes()->getQuoteItemTestAttribute();
         $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
         $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());

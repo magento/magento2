@@ -31,7 +31,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $actualQuote = array_pop($items);
         $this->assertInstanceOf('Magento\Quote\Api\Data\CartInterface', $actualQuote);
         $this->assertEquals('test01', $actualQuote->getReservedOrderId());
-        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         $testAttribute = $actualQuote->getExtensionAttributes()->getQuoteTestAttribute();
         $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
         $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
