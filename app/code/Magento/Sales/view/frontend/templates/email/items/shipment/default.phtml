@@ -9,13 +9,13 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <tr>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;">
+    <td>
         <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
+        <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
             <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd style="margin:0; padding:0 0 0 9px;"><?php echo nl2br($option['value']) ?></dd>
+            <dd><?php echo nl2br($option['value']) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
@@ -25,6 +25,6 @@
         <?php endif; ?>
         <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="font-size:11px; padding:3px 9px;"><?php echo $_item->getQty()*1 ?></td>
+    <td><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
+    <td><?php echo $_item->getQty()*1 ?></td>
 </tr>
