@@ -12,7 +12,7 @@ define(
     ],
     function(urlBuilder, storage, errorList, url) {
         "use strict";
-        var result = function(giftMessage) {
+        return function(giftMessage, remove) {
             url.setBaseUrl(giftMessage.getConfigValue('baseUrl'));
             var quoteId = giftMessage.getConfigValue('quoteId');
             var serviceUrl;
@@ -35,7 +35,7 @@ define(
             storage.post(
                 serviceUrl,
                 JSON.stringify({
-                    gift_message: giftMessage.getSubmitParams()
+                    gift_message: giftMessage.getSubmitParams(remove)
                 })
             ).done(
                 function(result) {
@@ -53,6 +53,5 @@ define(
                 }
             );
         };
-        return result;
     }
 );
