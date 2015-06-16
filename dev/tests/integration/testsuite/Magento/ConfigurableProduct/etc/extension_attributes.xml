@@ -13,7 +13,7 @@
                   reference_field="attribute_id"
                   join_on_field="product_super_attribute_id"
                     >
-                <select_field>attribute_code</select_field>
+                <field>attribute_code</field>
             </join>
         </attribute>
     </extension_attributes>

@@ -16,8 +16,8 @@
                   join_on_field="entity_id"
                   reference_field="product_id"
                     >
-                <select_field>qty</select_field>
-                <select_field>item_id</select_field>
+                <field>qty</field>
+                <field>item_id</field>
             </join>
         </attribute>
         <attribute code="test_stock_item_qty" type="string">
@@ -28,7 +28,7 @@
                   join_on_field="entity_id"
                   reference_field="product_id"
                     >
-                <select_field>qty</select_field>
+                <field>qty</field>
             </join>
         </attribute>
     </extension_attributes>
@@ -39,7 +39,7 @@
                   join_on_field="group_id"
                   reference_field="customer_group_id"
                     >
-                <select_field>customer_group_code</select_field>
+                <field>customer_group_code</field>
             </join>
         </attribute>
         <attribute code="test_group" type="Magento\Customer\Api\Data\GroupInterface">
@@ -47,8 +47,8 @@
                   join_on_field="group_id"
                   reference_field="customer_group_id"
                     >
-                <select_field>tax_class_id</select_field>
-                <select_field setter_name="setCode">customer_group_code</select_field>
+                <field>tax_class_id</field>
+                <field column="customer_group_code">code</field>
             </join>
         </attribute>
     </extension_attributes>
@@ -59,7 +59,7 @@
                   reference_field="attribute_id"
                   join_on_field="customer_group_id"
                     >
-                <select_field>attribute_code</select_field>
+                <field>attribute_code</field>
             </join>
         </attribute>
         <attribute code="test_complex_dummy_attribute" type="Magento\Catalog\Api\Data\ProductAttributeInterface">
@@ -67,8 +67,8 @@
                   reference_field="user_id"
                   join_on_field="customer_group_id"
                     >
-                <select_field setter_name="setAttributeCode">username</select_field>
-                <select_field setter_name="setFrontendLabel">firstname</select_field>
+                <field column="username">attribute_code</field>
+                <field column="firstname">frontend_label</field>
             </join>
         </attribute>
     </extension_attributes>
@@ -79,7 +79,7 @@
                   reference_field="attribute_id"
                   join_on_field="entity_id"
                     >
-                <select_field>attribute_code</select_field>
+                <field>attribute_code</field>
             </join>
         </attribute>
     </extension_attributes>

@@ -10,7 +10,7 @@ use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
-use Magento\Framework\Api\ExtensionAttribute\JoinDataFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -34,7 +34,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     private $config;
 
     /**
-     * @var JoinDataFactory
+     * @var JoinDataInterfaceFactory
      */
     private $extensionAttributeJoinDataFactory;
 
@@ -53,14 +53,14 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Config $config
-     * @param JoinDataFactory $extensionAttributeJoinDataFactory
+     * @param JoinDataInterfaceFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Config $config,
-        JoinDataFactory $extensionAttributeJoinDataFactory,
+        JoinDataInterfaceFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor,
         ExtensionAttributesFactory $extensionAttributesFactory
     ) {
@@ -85,9 +85,9 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                 ->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
                 ->setReferenceTableAlias($this->getReferenceTableAlias($attributeCode))
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
-                ->setJoinField($directive[Converter::JOIN_JOIN_ON_FIELD]);
+                ->setJoinField($directive[Converter::JOIN_ON_FIELD]);
             $joinData->setSelectFields(
-                $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_SELECT_FIELDS])
+                $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS])
             );
             $collection->joinExtensionAttribute($joinData, $this);
         }
@@ -106,26 +106,16 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $useFieldInAlias = (count($selectFields) > 1);
         $selectFieldsAliases = [];
         foreach ($selectFields as $selectField) {
-            $externalFieldName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                ? substr(
-                    SimpleDataObjectConverter::camelCaseToSnakeCase($selectField[Converter::JOIN_SELECT_FIELD_SETTER]),
-                    strlen('set_')
-                )
-                : $selectField[Converter::JOIN_SELECT_FIELD];
-            $setterName = $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                ? $selectField[Converter::JOIN_SELECT_FIELD_SETTER]
-                :'set' . ucfirst(
-                    SimpleDataObjectConverter::snakeCaseToCamelCase(
-                        $selectField[Converter::JOIN_SELECT_FIELD]
-                    )
-                );
+            $internalFieldName = $selectField[Converter::JOIN_FIELD_COLUMN]
+                ? $selectField[Converter::JOIN_FIELD_COLUMN]
+                : $selectField[Converter::JOIN_FIELD];
+            $setterName = 'set'
+                . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($selectField[Converter::JOIN_FIELD]));
             $selectFieldsAliases[] = [
                 JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS => $attributeCode
-                    . ($useFieldInAlias ? '.' . $externalFieldName : ''),
-                JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS => $referenceTableAlias
-                    . '_' . $selectField[Converter::JOIN_SELECT_FIELD],
-                JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX => $referenceTableAlias
-                    . '.' . $selectField[Converter::JOIN_SELECT_FIELD],
+                    . ($useFieldInAlias ? '.' . $selectField[Converter::JOIN_FIELD] : ''),
+                JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS => $referenceTableAlias . '_' . $internalFieldName,
+                JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX => $referenceTableAlias . '.' . $internalFieldName,
                 JoinDataInterface::SELECT_FIELD_SETTER => $setterName
             ];
         }
@@ -189,7 +179,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $extensibleEntityClass
     ) {
         $attributeType = $directive[Converter::DATA_TYPE];
-        $selectFields = $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_SELECT_FIELDS]);
+        $selectFields = $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS]);
         foreach ($selectFields as $selectField) {
             $internalAlias = $selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS];
             if (isset($data[$internalAlias])) {
