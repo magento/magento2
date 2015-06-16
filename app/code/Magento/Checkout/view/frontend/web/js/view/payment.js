@@ -9,9 +9,14 @@ define(
         'uiComponent',
         'ko',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/model/payment-service'
     ],
-    function (Component, ko, quote, stepNavigator) {
+    function (Component, ko, quote, stepNavigator, paymentService) {
+
+        /** Set payment methods to collection */
+        paymentService.setPaymentMethods(window.checkoutConfig.paymentMethods);
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',

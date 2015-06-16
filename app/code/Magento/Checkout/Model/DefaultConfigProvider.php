@@ -165,6 +165,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $storeManager;
 
     /**
+     * @var \Magento\Quote\Api\PaymentMethodManagementInterface
+     */
+    protected $paymentMethodManagement;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -191,6 +196,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingMethodConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -219,7 +225,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory,
         ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingMethodConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -247,6 +254,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->scopeConfig = $scopeConfig;
         $this->shippingMethodConfig = $shippingMethodConfig;
         $this->storeManager = $storeManager;
+        $this->paymentMethodManagement = $paymentMethodManagement;
     }
 
     /**
@@ -294,6 +302,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ],
             'activeCarriers' => $this->getActiveCarriers(),
             'originCountryCode' => $this->getOriginCountryCode(),
+            'paymentMethods' => $this->getPaymentMethods()
         ];
     }
 
@@ -627,5 +636,24 @@ class DefaultConfigProvider implements ConfigProviderInterface
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()
         );
+    }
+
+    /**
+     * Returns array of payment methods
+     * @return array
+     */
+    private function getPaymentMethods()
+    {
+        $paymentMethods = [];
+        $quote = $this->checkoutSession->getQuote();
+        if ($quote->getIsVirtual()) {
+            foreach ($this->paymentMethodManagement->getList($quote->getId()) as $paymentMethod) {
+                $paymentMethods[] = [
+                    'code' => $paymentMethod->getCode(),
+                    'title' => $paymentMethod->getTitle()
+                ];
+            }
+        }
+        return $paymentMethods;
     }
 }
