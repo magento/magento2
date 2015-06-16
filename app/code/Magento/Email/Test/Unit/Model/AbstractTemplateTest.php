@@ -11,6 +11,9 @@
  */
 namespace Magento\Email\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**

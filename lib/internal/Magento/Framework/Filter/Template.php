@@ -153,7 +153,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Runs callbacks that have been added to filter content after directive processing is finished.
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     protected function afterFilter($value)
