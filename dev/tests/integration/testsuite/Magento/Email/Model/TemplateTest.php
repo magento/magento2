@@ -7,6 +7,9 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
