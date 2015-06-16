@@ -159,15 +159,17 @@ define(
                 var shippingAddress,
                     addressData,
                     loginFormSelector = 'form[data-role=email-with-possible-login]',
-                    emailValidationResult;
+                    emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
                     alert($t('Please specify a shipping method'));
                     return false;
                 }
 
-                $(loginFormSelector).validation();
-                emailValidationResult = $(loginFormSelector + ' input[name=username]').valid();
+                if (!customer.isLoggedIn()) {
+                    $(loginFormSelector).validation();
+                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
+                }
 
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
@@ -175,7 +177,7 @@ define(
                     if (this.source.get('params.invalid')
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code
-                        || !Boolean(emailValidationResult)
+                        || !emailValidationResult
                     ) {
                         return false;
                     }
