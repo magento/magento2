@@ -124,11 +124,11 @@ define([
             var callback = action.callback,
                 args     = [action, selections];
 
-            if (_.isObject(callback)) {
+            if (utils.isObject(callback)) {
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
-            } else if (!_.isFunction(callback)) {
+            } else if (typeof callback != 'function') {
                 callback = this.defaultCallback.bind(this);
             }
 
