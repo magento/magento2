@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+    <container name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="is_filterable">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">is_filterable</item>
+                        <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.listing_filters.is_comparable</item>
+                    </item>
+                </argument>
+            </filterSelect>
+        </filters>
+    </container>
+    <columns name="product_attributes_columns">
+        <column name="is_filterable">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
+                    <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.is_comparable</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

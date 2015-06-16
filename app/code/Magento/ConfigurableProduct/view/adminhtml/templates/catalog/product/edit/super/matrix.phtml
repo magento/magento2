@@ -68,16 +68,12 @@ $productByUsedAttributes = $block->getAssociatedProducts();
 
                     $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
                     $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
-
-                    if (isset($variation[$attribute->getId()]['price'])) {
-                        $priceInfo = $variation[$attribute->getId()]['price'];
-                        $price += ($priceInfo['is_percent'] ? $productPrice / 100.0 : 1.0) * $priceInfo['pricing_value'];
-                    }
                 }
                 $attributeLabels = $block->escapeHtml($attributeLabels);
                 $key = implode('-', $attributeValues);
                 if (isset($productByUsedAttributes[$key])) {
                     $product = $productByUsedAttributes[$key];
+                    $price = $originPrice = $product->getPrice();
                     ?>
 
                 <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
