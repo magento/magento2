@@ -24,7 +24,7 @@
     {{trans
         'To confirm the e-mail and instantly log in, please, use <a href="%confirm_url">this confirmation link</a>. This link is valid only once.'
 
-        confirm_url=$store.getUrl('customer/account/confirm/', [_query_id:$customer.id, _query_key:$customer.confirmation, _query_back_url:$back_url])
+        confirm_url="$store.getUrl('customer/account/confirm/', [_query_id:$customer.id, _query_key:$customer.confirmation, _query_back_url:$back_url])"
     |raw}}
 </p>
 
@@ -35,7 +35,7 @@
     {{trans
         'Forgot your Account password? No problem. Click <a href="%reset_url">here</a> to reset it.'
         
-        reset_url=$store.getUrl('customer/account/createPassword/', [_query_id:$customer.id, _query_token:$customer.rp_token])
+        reset_url="$store.getUrl('customer/account/createPassword/', [_query_id:$customer.id, _query_token:$customer.rp_token])"
     |raw}}
 </p>
 
