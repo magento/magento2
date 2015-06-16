@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" role="presentation" data-bind="fadeVisible: isVisible">
+<li id="opc-payment" class="checkout-payment-method" role="presentation" data-bind="fadeVisible: isVisible">
     <div class="step-title" data-role="title">
         <h2 data-bind="text: $t(title)"></h2>
     </div>
@@ -13,7 +13,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false">
-        <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
+        <form id="co-payment-form" class="form form-payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
                 <!-- ko foreach: getRegion('beforeMethods') -->
@@ -27,16 +27,19 @@
                                 <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
                             </dt>
 
-                            <!-- ko if: $data.formTemplate --><dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'><!-- ko template: formTemplate --><!--/ko--></dd><!-- /ko -->
+                            <!-- ko if: $data.formTemplate -->
+                                <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'>
+                                    <!-- ko template: formTemplate --><!--/ko-->
 
-                            <!-- ko: if: $data.isBillingAddressRequired -->
-                                <div data-bind="visible: $parent.isMethodActive(getCode())">
-                                    <!-- ko foreach: $data.getRegion('billing-address') -->
-                                    <!-- ko template: getTemplate() --><!-- /ko -->
+                                    <!-- ko: if: $data.isBillingAddressRequired -->
+                                    <div data-bind="visible: $parent.isMethodActive(getCode())">
+                                        <!-- ko foreach: $data.getRegion('billing-address') -->
+                                        <!-- ko template: getTemplate() --><!-- /ko -->
+                                        <!-- /ko -->
+                                    </div>
                                     <!-- /ko -->
-                                </div>
+                                </dd>
                             <!-- /ko -->
-
                         <!-- /ko -->
 
                         <!-- ko ifnot: getAvailableViews().length > 0 --><dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt><!-- /ko -->

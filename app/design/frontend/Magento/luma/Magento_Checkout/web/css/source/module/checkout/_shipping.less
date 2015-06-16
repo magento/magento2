@@ -33,6 +33,9 @@
 @checkout-shipping-item-before__border-color: @color-gray80;
 @checkout-shipping-item-before__height: calc(~"100% - 20px");
 
+@checkout-shipping-method__border: @checkout-step-title__border;
+@checkout-shipping-method__padding: @indent__base;
+
 //
 //  Common
 //  _____________________________________________
@@ -164,9 +167,9 @@
         }
         tbody {
             td {
-                .css(border-top, @checkout-step-title__border);
-                .css(padding-bottom, @indent__base);
-                .css(padding-top, @indent__base);
+                .css(border-top, @checkout-shipping-method__border);
+                .css(padding-bottom, @checkout-shipping-method__padding);
+                .css(padding-top, @checkout-shipping-method__padding);
                 &:first-child {
                     padding-left: 0;
                     padding-right: 0;
