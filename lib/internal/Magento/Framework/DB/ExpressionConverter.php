@@ -101,7 +101,7 @@ class ExpressionConverter
             if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
                 $hash = md5($tableName);
                 if (strlen($prefix . $hash) > self::MYSQL_IDENTIFIER_LEN) {
-                    $tableName = self::_minusSuperfluous($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
+                    $tableName = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
                 } else {
                     $tableName = $prefix . $hash;
                 }
@@ -113,14 +113,14 @@ class ExpressionConverter
     }
 
     /**
-     * Minus superfluous characters from hash.
+     * Remove superfluous characters from hash.
      *
      * @param  string $hash
      * @param  string $prefix
      * @param  int $maxCharacters
      * @return string
      */
-    protected static function _minusSuperfluous($hash, $prefix, $maxCharacters)
+    private static function trimHash($hash, $prefix, $maxCharacters)
     {
         $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
         $superfluous = $diff / 2;

@@ -16,9 +16,10 @@ class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testShortenEntityName($in, $prefix, $expectedOut)
     {
+        $resultEntityName = ExpressionConverter::shortenEntityName($in, $prefix);
         $this->assertTrue(
-            strpos(ExpressionConverter::shortenEntityName($in, $prefix), $expectedOut) === 0,
-            'Entity name did not start with expected prefix'
+            strpos($resultEntityName, $expectedOut) === 0,
+            "Entity name '$resultEntityName' did not begin with expected value '$expectedOut'"
         );
     }
 

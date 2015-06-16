@@ -557,9 +557,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIndexName($name, $fields, $indexType, $expectedName)
     {
+        $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
         $this->assertTrue(
-            strpos($this->_mockAdapter->getIndexName($name, $fields, $indexType), $expectedName) === 0,
-            'Index name did not start with expected prefix'
+            strpos($resultIndexName, $expectedName) === 0,
+            "Index name '$resultIndexName' did not begin with expected value '$expectedName'"
         );
     }
 

@@ -85,6 +85,7 @@ class Resource
      *
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @codeCoverageIgnore
      */
     public function getConnection($resourceName)
     {
@@ -153,11 +154,26 @@ class Resource
     }
 
     /**
+     * Build a trigger name
+     *
+     * @param string $tableName  The table that is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTriggerName($tableName, $time, $event)
+    {
+        return $this->getConnectionByName(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+    }
+
+    /**
      * Set mapped table name
      *
      * @param string $tableName
      * @param string $mappedName
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setMappedTableName($tableName, $mappedName)
     {
@@ -193,13 +209,12 @@ class Resource
         $fields,
         $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        return $this->getConnection(
-            self::DEFAULT_READ_RESOURCE
-        )->getIndexName(
-            $this->getTableName($tableName),
-            $fields,
-            $indexType
-        );
+        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+            ->getIndexName(
+                $this->getTableName($tableName),
+                $fields,
+                $indexType
+            );
     }
 
     /**
