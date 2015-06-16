@@ -29,7 +29,8 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
      */
-    public function testGetItems() {
+    public function testGetItems()
+    {
         $this->product = $this->objectManager->get('Magento\Catalog\Model\Product');
         $this->product->load(3);
         /**
