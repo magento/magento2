@@ -63,17 +63,12 @@ class GlobalsearchElement extends SimpleElement
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-
         $this->waitInitElement();
-
         if (!$this->find($this->searchInput)->isVisible()) {
             $this->find($this->searchIcon)->click();
         }
-//        $this->selectWindow();
         $this->clear();
         $this->find($this->searchInput)->setValue($value);
-//        $this->selectWindow();
-
         $this->waitResult();
     }
 
@@ -88,16 +83,6 @@ class GlobalsearchElement extends SimpleElement
         while ('' != $element->getValue()) {
             $element->setValue([self::BACKSPACE]);
         }
-    }
-
-    /**
-     * Select to last window.
-     *
-     * @return void
-     */
-    protected function selectWindow()
-    {
-        $this->driver->selectWindow();
     }
 
     /**
@@ -130,12 +115,7 @@ class GlobalsearchElement extends SimpleElement
 
         $this->driver->waitUntil(
             function () use ($browser, $selector) {
-                if ($browser->find($selector)->isVisible()) {
-                    return true;
-                } else {
-//                    $browser->selectWindow();
-                    return null;
-                }
+                return $browser->find($selector)->isVisible() ? true : null;
             }
         );
     }
