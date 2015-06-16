@@ -93,7 +93,9 @@ define(
                     selectShippingMethodAction(rates[0])
                 }
 
-                stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
+                if (!quote.isVirtual()) {
+                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
+                }
                 return this;
             },
 

@@ -241,10 +241,10 @@
 
                                                                 </item>
                                                             </item>
-                                                            <item name="renderers" xsi:type="array">
+                                                            <item name="renders" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="children" xsi:type="array">
-                                                                    <!-- merge payment method renderers here -->
+                                                                    <!-- merge payment method renders here -->
                                                                 </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
