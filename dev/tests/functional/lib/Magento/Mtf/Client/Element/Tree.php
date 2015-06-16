@@ -99,7 +99,7 @@ abstract class Tree extends SimpleElement
     {
         $this->eventManager->dispatchEvent(['set_value'], [(string)$this->getAbsoluteSelector()]);
         $elementSelector = $this->prepareElementSelector($path);
-        $elements = $this->getElements($elementSelector . $this->input, Locator::SELECTOR_XPATH);
+        $elements = $this->getElements('.' . $elementSelector . $this->input, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
             $element->click();
         }
