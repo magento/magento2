@@ -52,16 +52,14 @@ define(
                 }
                 return amount;
             },
+            isCalculated: function() {
+                return this.totals() && this.isFullMode() && null != totals.getSegment('tax');
+            },
             getValue: function() {
-                var amount = 0;
-                if (this.totals()) {
-                    var taxTotal = totals.getSegment('tax');
-                    if (this.isFullMode() && taxTotal) {
-                        amount = taxTotal.value;
-                    } else {
-                        return this.notCalculatedMessage;
-                    }
+                if (!this.isCalculated()) {
+                    return this.notCalculatedMessage;
                 }
+                var amount = totals.getSegment('tax').value;
                 return this.getFormattedPrice(amount);
             },
             formatPrice: function(amount) {

@@ -26,28 +26,21 @@ define(
             isExcludingDisplayed: function() {
                 return 'excluding' == this.displayMode;
             },
+            isCalculated: function() {
+                return this.totals() && this.isFullMode() && null != quote.shippingMethod();
+            },
             getIncludingValue: function() {
-                if (!this.isFullMode()) {
+                if (!this.isCalculated()) {
                     return this.notCalculatedMessage;
                 }
-                var price = 0;
-                if (this.totals() && quote.shippingMethod()) {
-                    price =  this.totals().shipping_incl_tax;
-                } else {
-                    return this.notCalculatedMessage;
-                }
+                var price =  this.totals().shipping_incl_tax;
                 return this.getFormattedPrice(price);
             },
             getExcludingValue: function() {
-                if (!this.isFullMode()) {
+                if (!this.isCalculated()) {
                     return this.notCalculatedMessage;
                 }
-                var price = 0;
-                if (this.totals() && quote.shippingMethod()) {
-                    price =  this.totals().shipping_amount;
-                } else {
-                    return this.notCalculatedMessage;
-                }
+                var price =  this.totals().shipping_amount;
                 return this.getFormattedPrice(price);
             }
         });

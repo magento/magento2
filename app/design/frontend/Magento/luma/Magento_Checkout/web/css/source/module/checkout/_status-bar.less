@@ -94,21 +94,28 @@
         &._complete {
             cursor: pointer;
 
+            &:before {
+                .css(transition, @checkout-status-bar-item__complete__transition);
+            }
+
             &:hover {
                 &:before {
                     .css(background, @checkout-status-bar-item__hover__background-color);
-                    .css(transition, @checkout-status-bar-item__complete__transition);
                 }
                 > span {
                     &:before {
                         .css(background, @checkout-status-bar-item__hover__background-color);
-                        .css(transition, @checkout-status-bar-item__complete__transition);
                     }
                 }
             }
 
             > span {
                 .css(color, @checkout-status-bar-item__complete__color);
+
+                &:before {
+                    .css(transition, @checkout-status-bar-item__complete__transition);
+                }
+
                 &:after {
                     .css(font-family, @icons__font-name);
                     .css(content, @checkout-status-bar-item-circle-inner__active__content);

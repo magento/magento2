@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" class="checkout-payment-method" role="presentation" data-bind="fadeVisible: isVisible">
+<li id="opc-payment" role="presentation" class="checkout-payment-method">
     <div class="step-title" data-role="title">
         <h2 data-bind="text: $t(title)"></h2>
     </div>
@@ -13,42 +13,23 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false">
-        <form id="co-payment-form" class="form form-payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
-            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
-            <fieldset class="fieldset">
-                <!-- ko foreach: getRegion('beforeMethods') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- ko if: (quoteIsVirtual) -->
+        <!-- ko foreach: getRegion('customer-email') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <!--/ko-->
+        <fieldset class="fieldset">
+            <!-- ko foreach: getRegion('beforeMethods') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+            <div id="checkout-payment-method-load" class="opc-payment">
+                <!-- ko foreach: getRegion('payment-methods-list') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
-                <div id="checkout-payment-method-load" class="opc-payment">
-                    <dl class="items methods-payment">
-                        <!-- ko foreach: getAvailableViews() -->
-                            <dt data-bind='attr: {class: "item-title " + getCode()}'>
-                                <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle(), class: "radio" + $parent.getMethodControlAdditionalClass()}, checked: $parent.activeMethod, enable: isEnabled' type="radio" name="payment[method]"/>
-                                <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
-                            </dt>
-
-                            <!-- ko if: $data.formTemplate -->
-                                <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'>
-                                    <!-- ko template: formTemplate --><!--/ko-->
-
-                                    <!-- ko: if: $data.isBillingAddressRequired -->
-                                    <div data-bind="visible: $parent.isMethodActive(getCode())">
-                                        <!-- ko foreach: $data.getRegion('billing-address') -->
-                                        <!-- ko template: getTemplate() --><!-- /ko -->
-                                        <!-- /ko -->
-                                    </div>
-                                    <!-- /ko -->
-                                </dd>
-                            <!-- /ko -->
-                        <!-- /ko -->
-
-                        <!-- ko ifnot: getAvailableViews().length > 0 --><dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt><!-- /ko -->
-                    </dl>
-                </div>
-                <!-- ko foreach: getRegion('afterMethods') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
-            </fieldset>
-        </form>
+            </div>
+            <!-- ko foreach: getRegion('afterMethods') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        </fieldset>
     </div>
 </li>

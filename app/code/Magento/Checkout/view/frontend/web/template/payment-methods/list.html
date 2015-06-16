@@ -1,0 +1,7 @@
+<h3>Payment methods list:</h3>
+<dl class="items methods-payment">
+    <!-- ko foreach: { data: elems, as: 'element' } -->
+        <!-- ko template: element.getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</dl>
+<!-- ko ifnot: elems().length > 0 --><dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt><!-- /ko -->

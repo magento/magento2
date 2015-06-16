@@ -72,6 +72,7 @@ define(
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
             saveInAddressBook: true,
+            quoteIsVirtual: quote.isVirtual(),
 
             initialize: function () {
                 this._super();
@@ -145,19 +146,38 @@ define(
             },
 
             setShippingInformation: function () {
+                if (this.validateShippingInformation()) {
+                    setShippingInformationAction().done(
+                        function() {
+                            stepNavigator.next();
+                        }
+                    );
+                }
+            },
+
+            validateShippingInformation: function() {
                 var shippingAddress,
-                    addressData;
+                    addressData,
+                    loginFormSelector = 'form[data-role=email-with-possible-login]',
+                    emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
                     alert($t('Please specify a shipping method'));
                     return false;
                 }
+
+                if (!customer.isLoggedIn()) {
+                    $(loginFormSelector).validation();
+                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
+                }
+
                 if (this.isFormInline) {
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
                     if (this.source.get('params.invalid')
                         || !quote.shippingMethod().method_code
                         || !quote.shippingMethod().carrier_code
+                        || !emailValidationResult
                     ) {
                         return false;
                     }
@@ -177,11 +197,7 @@ define(
                     }
                     selectShippingAddress(shippingAddress);
                 }
-                setShippingInformationAction().done(
-                    function() {
-                        stepNavigator.next();
-                    }
-                );
+                return true;
             }
         });
     }

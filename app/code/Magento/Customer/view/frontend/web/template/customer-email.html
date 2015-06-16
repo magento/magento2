@@ -5,20 +5,21 @@
  */
 -->
 <!-- ko ifnot: isCustomerLoggedIn() -->
+
 <!-- ko foreach: getRegion('before-login-form') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
-<form class="form form-login" data-role="login"
+<form class="form form-login" data-role="email-with-possible-login"
       data-bind="submit:login"
       method="post">
-    <fieldset id="customer-email" class="fieldset" data-bind="blockLoader: isLoading">
+    <fieldset id="customer-email-fieldset" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field required">
             <label class="label" for="customer-email">
                 <span data-bind="text: $t('Email Address')"></span>
             </label>
             <div class="control _with-tooltip">
                 <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
-                <span class="note"><!-- ko text: $t("Here we'll send your order confirmation.")--><!-- /ko --></span>
+                <span class="note"><!-- ko text: $t("(You can create an account after checkout)")--><!-- /ko --></span>
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
         </div>
@@ -50,7 +51,6 @@
             </div>
         </fieldset>
         <!--Hidden fields -->
-
     </fieldset>
 </form>
 <!-- /ko -->
