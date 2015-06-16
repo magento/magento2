@@ -24,8 +24,8 @@
     {{trans
         "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
         
-        increment_id="$order.increment_id"
-        order_status="$order.getStatusLabel()
+        increment_id=$order.increment_id
+        order_status=$order.getStatusLabel()
     |raw}}
 </p>
 <p>{{var comment}}</p>
