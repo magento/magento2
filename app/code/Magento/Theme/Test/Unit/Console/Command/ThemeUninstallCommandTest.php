@@ -272,7 +272,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->tester->execute(['theme' => ['frontend/Magento/a']]);
         $this->assertEquals(
             'Unable to uninstall. Please fix the following issues:' . PHP_EOL
-            . 'frontend/Magento/a is in use in default config' . PHP_EOL, $this->tester->getDisplay());
+            . 'frontend/Magento/a is in use in default config' . PHP_EOL,
+            $this->tester->getDisplay()
+        );
     }
 
     /**
