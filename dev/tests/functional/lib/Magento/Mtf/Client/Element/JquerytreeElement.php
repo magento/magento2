@@ -33,7 +33,7 @@ class JquerytreeElement extends Tree
      *
      * @var string
      */
-    protected $pattern = '//li[contains(@class, "jstree") and a[text() = "%s"]]';
+    protected $pattern = '/ul/li[contains(@class, "jstree") and a[text() = "%s"]]';
 
     /**
      * Pattern for child open node.
