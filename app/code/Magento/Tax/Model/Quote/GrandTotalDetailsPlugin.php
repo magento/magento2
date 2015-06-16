@@ -6,6 +6,8 @@
 namespace Magento\Tax\Model\Quote;
 
 use Magento\Quote\Model\Cart\CartTotalRepository;
+use Magento\Quote\Api\Data\TotalsExtensionFactory;
+
 
 class GrandTotalDetailsPlugin
 {
@@ -20,7 +22,7 @@ class GrandTotalDetailsPlugin
     protected $ratesFactory;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @var TotalsExtensionFactory
      */
     protected $extensionFactory;
 
@@ -42,7 +44,7 @@ class GrandTotalDetailsPlugin
     /**
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param TotalsExtensionFactory $extensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -50,7 +52,7 @@ class GrandTotalDetailsPlugin
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        TotalsExtensionFactory $extensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -119,10 +121,13 @@ class GrandTotalDetailsPlugin
             $finalData[] = $taxDetails;
             $detailsId++;
         }
-        $taxInfo = $this->extensionFactory->create('\\Magento\\Quote\\Model\\Cart\\Totals', []);
-        $taxInfo->setTaxGrandtotalDetails($finalData);
+        $attributes = $result->getExtensionAttributes();
+        if ($attributes === null) {
+            $attributes = $this->extensionFactory->create();
+        }
+        $attributes->setTaxGrandtotalDetails($finalData);
         /** @var $result \Magento\Quote\Model\Cart\Totals */
-        $result->setExtensionAttributes($taxInfo);
+        $result->setExtensionAttributes($attributes);
         return $result;
     }
 }
