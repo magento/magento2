@@ -360,22 +360,16 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     protected function _beforeToHtml()
     {
-        if ($customerId = $this->_customerSession->getCustomerId()) {
-            $customer = $this->customerRepository->getById($customerId);
+        if ($this->_customerSession->isLoggedIn()) {
+            $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
             if ($defaultShipping = $customer->getDefaultShipping()) {
                 $address = $this->addressRepository->getById($defaultShipping);
-                if ($address &&
-                    ($address->getCountryId()
-                        || $address->getPostcode()
-                        || $address->getRegion()
-                        || $address->getRegionId()
-                    )
-                ) {
+                if ($address) {
                     /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
                     $estimatedAddress = $this->estimatedAddressFactory->create();
                     $estimatedAddress->setCountryId($address->getCountryId());
                     $estimatedAddress->setPostcode($address->getPostcode());
-                    $estimatedAddress->setRegion($address->getRegion());
+                    $estimatedAddress->setRegion((string)$address->getRegion()->getRegion());
                     $estimatedAddress->setRegionId($address->getRegionId());
                     $this->shippingMethodManager->estimateByAddress($this->getQuote()->getId(), $estimatedAddress);
                     $this->quoteRepository->save($this->getQuote());
