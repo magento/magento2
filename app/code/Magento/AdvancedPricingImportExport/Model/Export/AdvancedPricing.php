@@ -297,8 +297,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         );
                     } elseif (in_array($keyTemplate, $this->_priceCustomerGroup)) {
                         $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
-                            $row[$keyTemplate]
+                            $row[$keyTemplate],
+                            isset($row[ImportAdvancedPricing::VALUE_ALL_GROUPS])
+                            ? $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
+                            : null
                         );
+                        unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
                     } else {
                         $exportRow[$keyTemplate] = $row[$keyTemplate];
                     }
@@ -337,6 +341,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $selectFields = [
                 ImportAdvancedPricing::COL_SKU => 'cpe.sku',
                 ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => 'ap.website_id',
+                ImportAdvancedPricing::VALUE_ALL_GROUPS => 'ap.all_groups',
                 ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'ap.customer_group_id',
                 ImportAdvancedPricing::COL_TIER_PRICE_QTY => 'ap.qty',
                 ImportAdvancedPricing::COL_TIER_PRICE => 'ap.value',
@@ -397,11 +402,16 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Get Customer Group By Id
      *
      * @param $customerGroupId
+     * @param null $allGroups
      * @return string
      */
-    protected function _getCustomerGroupById($customerGroupId)
+    protected function _getCustomerGroupById($customerGroupId, $allGroups = null)
     {
-        return $this->_groupRepository->getById($customerGroupId)->getCode();
+        if ($allGroups) {
+            return ImportAdvancedPricing::VALUE_ALL_GROUPS;
+        } else {
+            return $this->_groupRepository->getById($customerGroupId)->getCode();
+        }
     }
 
     /**
