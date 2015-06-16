@@ -7,25 +7,48 @@
 namespace Magento\Ui\Model\Resource;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Ui\Api\BookmarkRepositoryInterface;
+use Magento\Ui\Api\Data\BookmarkInterface;
 
 class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var BookmarkRepository
+     * @var BookmarkRepositoryInterface
      */
     protected $bookmarkRepository;
 
+    /**
+     * @var \Magento\Ui\Model\BookmarkFactory
+     */
+    protected $bookmarkFactory;
+
+    /**
+     * @var BookmarkInterface
+     */
+    protected $bookmark;
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
     protected function setUp()
     {
         $this->bookmarkRepository = Bootstrap::getObjectManager()
             ->create('Magento\Ui\Model\Resource\BookmarkRepository');
+        $this->bookmarkFactory = Bootstrap::getObjectManager()->create('Magento\Ui\Model\BookmarkFactory');
+        $this->bookmark = $this->bookmarkFactory->create()->setUserId(1)->setTitle('test');
+        $this->bookmark = $this->bookmarkRepository->save($this->bookmark);
     }
 
-    public function testGetListEmpty()
+    protected function tearDown()
+    {
+        $this->bookmarkRepository->delete($this->bookmark);
+    }
+
+    public function testGetList()
     {
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\SearchCriteriaBuilder');
-        $searchResults = $this->bookmarkRepository->getList($searchBuilder->create());
-        $this->assertEquals(0, $searchResults->getTotalCount());
+        $searchResult = $this->bookmarkRepository->getList($searchBuilder->create());
+        $this->assertTrue($searchResult->getTotalCount() > 0);
     }
 }
