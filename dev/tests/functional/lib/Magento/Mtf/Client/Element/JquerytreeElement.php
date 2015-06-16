@@ -116,9 +116,9 @@ class JquerytreeElement extends Tree
     public function getStructure($level = null)
     {
         $nodesSelector = $this->getNodesSelector($level);
-        $Nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
+        $nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
 
-        return $this->prepareValues($Nodes);
+        return $this->prepareValues($nodes);
     }
 
     /**
