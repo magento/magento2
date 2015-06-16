@@ -15,6 +15,13 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Configure extends \Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure
 {
     /**
+     * Option selector
+     *
+     * @var string
+     */
+    protected $option = '//label[contains(.,"%option_name%")]//following-sibling::*//%selector%';
+
+    /**
      * Fill options for the product
      *
      * @param FixtureInterface $product
@@ -36,8 +43,6 @@ class Configure extends \Magento\Catalog\Test\Block\Adminhtml\Product\Composite\
     {
         $productOptions = [];
         $checkoutData = $fields['checkout_data']['options'];
-        $optionLocator = '//fieldset[contains(@class,"composite-bundle")]//label[.="%option_name%"]'
-            . '//following-sibling::*//%selector%';
 
         if (!empty($checkoutData['bundle_options'])) {
             foreach ($checkoutData['bundle_options'] as $key => $option) {
@@ -47,7 +52,7 @@ class Configure extends \Magento\Catalog\Test\Block\Adminhtml\Product\Composite\
                 $optionMapping[$type]['selector'] = str_replace(
                     '%selector%',
                     str_replace('%product_name%', $option['value']['name'], $optionMapping[$type]['selector']),
-                    str_replace('%option_name%', $option['title'], $optionLocator)
+                    str_replace('%option_name%', $option['title'], $this->option)
                 );
 
                 $optionMapping[$type]['value'] = ($type == 'checkbox' || $type == 'radiobutton')
