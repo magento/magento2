@@ -9,6 +9,7 @@ namespace Magento\Email\Model\Template;
  * Core Email Template Filter Model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Framework\Filter\Template
@@ -756,24 +757,22 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $params = $this->_getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
-        if ($file) {
-            $css = $this->getCssFilesContent([$params['file']]);
-
-            if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
-                !== false
-            ) {
-                // Return LESS compilation error wrapped in CSS comment
-                return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
-            } elseif (!empty($css)) {
-                return $css;
-            } else {
-                // Return CSS comment for debugging purposes
-                return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
-            }
+        if (!$file) {
+            // Return CSS comment for debugging purposes
+            return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        // Return CSS comment for debugging purposes
-        return '/* ' . __('"file" argument must be specified') . ' */';
+        $css = $this->getCssFilesContent([$params['file']]);
+
+        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
+            // Return LESS compilation error wrapped in CSS comment
+            return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
+        } elseif (!empty($css)) {
+            return $css;
+        } else {
+            // Return CSS comment for debugging purposes
+            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+        }
     }
 
     /**
@@ -791,6 +790,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function inlinecssDirective($construction)
     {
@@ -806,14 +806,16 @@ class Filter extends \Magento\Framework\Filter\Template
         }
 
         $params = $this->_getParameters($construction[2]);
-        if (isset($params['file'])) {
-            $this->addInlineCssFile($params['file']);
-
-            // CSS should be applied after entire template has been filtered, so add as after filter callback
-            $this->addAfterFilterCallback([$this, 'applyInlineCss']);
-        } else {
-            throw new \LogicException(__('"file" argument must be specified'));
+        if (!isset($params['file']) || !$params['file']) {
+            throw new \Magento\Framework\Exception\MailException(
+                __('"file" parameter must be specified and must not be empty')
+            );
         }
+
+        $this->addInlineCssFile($params['file']);
+
+        // CSS should be applied after entire template has been filtered, so add as after filter callback
+        $this->addAfterFilterCallback([$this, 'applyInlineCss']);
         return '';
     }
 
@@ -844,7 +846,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param [] $files
      * @return string
-     * @throws \LogicException
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function getCssFilesContent(array $files)
     {
@@ -853,7 +855,9 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $designParams = $this->getDesignParams();
         if (!count($designParams)) {
-            throw new \LogicException(__('Design params must be set before calling this method'));
+            throw new \Magento\Framework\Exception\MailException(
+                __('Design params must be set before calling this method')
+            );
         }
         $css = '';
         foreach ($files as $file) {
@@ -869,6 +873,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $html
      * @return string
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function applyInlineCss($html)
     {
@@ -883,7 +888,9 @@ class Filter extends \Magento\Framework\Filter\Template
                 if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
-                    throw new \LogicException('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>');
+                    throw new \Magento\Framework\Exception\MailException(
+                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                    );
                 }
 
                 $emogrifier = $this->emogrifier;
