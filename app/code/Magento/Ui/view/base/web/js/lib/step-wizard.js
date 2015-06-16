@@ -93,17 +93,21 @@ define([
             this._super(index, event);
         },
         _handlerStep: function (event, ui) {
-            var index = this.tabs.index(ui.newTab[0]);
-            var tab = this.panels.eq(index);
-            var steps =  uiRegistry.async(this.options.stepRegistryComponent);
+            try {
+                var index = this.tabs.index(ui.newTab[0]);
+                var tab = this.panels.eq(index);
+                var steps =  uiRegistry.async(this.options.stepRegistryComponent);
 
-            steps(function(component) {
-                if (this.wizard === undefined) {
-                    this.wizard = new Wizard(this.options.steps, tab);
-                    stepComponents = component.steps;
-                }
-                this.wizard.move(index);
-            }.bind(this));
+                steps(function(component) {
+                    if (this.wizard === undefined) {
+                        this.wizard = new Wizard(this.options.steps, tab);
+                        stepComponents = component.steps;
+                    }
+                    this.wizard.move(index);
+                }.bind(this));
+            } catch (e) {
+                return false;
+            }
         },
         _way: function (index) {
             return this.options.selected > index ? 'back' : 'force';
