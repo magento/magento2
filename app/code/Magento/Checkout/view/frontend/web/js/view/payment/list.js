@@ -10,7 +10,6 @@ define([
     'Magento_Checkout/js/model/payment/method-list',
     'Magento_Checkout/js/model/payment/renderer-list',
     'Magento_Ui/js/core/renderer/layout'
-
 ], function (_, ko, utils, Component, paymentMethods, rendererList, layout) {
     'use strict';
 
@@ -19,54 +18,67 @@ define([
             template: 'Magento_Checkout/payment-methods/list',
             visible: paymentMethods().length > 0
         },
-        initialize: function () {
-            this._super()
-                .initChildren();
 
+        /**
+         * Initialize view.
+         *
+         * @returns {Component} Chainable.
+         */
+        initialize: function () {
+            this._super().initChildren();
             paymentMethods.subscribe(
                 function (changes) {
-                    var self = this;
-                    changes.forEach(function(change) {
+                    _.each(changes, function (change) {
                         if (change.status === 'added') {
-                            console.log(('added ' + change.value.code));
-                            self.createRenderer(change.value);
+                            this.createRenderer(change.value);
                         } else if (change.status === 'deleted') {
-                            console.log(('deleted ' + change.value.code));
-                            self.removeRenderer(change.value.code);
+                            this.removeRenderer(change.value.code);
                         }
-                    });
-                },
-                this,
-                'arrayChange'
-            );
+                    }, this);
+                }, this, 'arrayChange');
+
             return this;
         },
 
+        /**
+         * Create renderers for child payment methods.
+         *
+         * @returns {Component} Chainable.
+         */
         initChildren: function () {
-            var self = this;
-            paymentMethods().forEach(function (item ) {
-                self.createRenderer(item);
+            _.each(paymentMethods(), function (paymentMethodData) {
+                this.createRenderer(paymentMethodData);
             });
+
             return this;
         },
 
-        createRenderer: function(item) {
-            var renderer = this.getRendererByType(item.code);
+        /**
+         * Create renderer.
+         *
+         * @param {Object} paymentMethodData
+         */
+        createRenderer: function (paymentMethodData) {
+            var renderer = this.getRendererByType(paymentMethodData.code),
+                rendererTemplate,
+                rendererComponent,
+                templateData;
+
             if (renderer) {
-                var templateData = {
+                templateData = {
                     parentName: this.name,
-                    name: item.method
+                    name: paymentMethodData.code
                 };
-                var rendererTemplate = {
+                rendererTemplate = {
                     parent: '${ $.$data.parentName }',
                     name: '${ $.$data.name }',
                     component: renderer.component
                 };
-                var rendererComponent = utils.template(rendererTemplate, templateData);
-                utils.extend(rendererComponent, {item: item});
+                rendererComponent = utils.template(rendererTemplate, templateData);
+                utils.extend(rendererComponent, {
+                    item: paymentMethodData
+                });
                 layout([rendererComponent]);
-            } else {
-                console.log('There is no registered render for Payment Method: ' + item.code);
             }
         },
 
@@ -78,7 +90,7 @@ define([
          */
         getRendererByType: function (paymentMethodCode) {
             var compatibleRenderer;
-            _.each(rendererList(), function (renderer) {
+            _.find(rendererList(), function (renderer) {
                 if (renderer.type === paymentMethodCode) {
                     compatibleRenderer = renderer;
                 }
@@ -93,7 +105,7 @@ define([
          * @param {String} paymentMethodCode
          */
         removeRenderer: function (paymentMethodCode) {
-            _.each(this.elems(), function (value) {
+            _.find(this.elems(), function (value) {
                 if (value.item.code === paymentMethodCode) {
                     this.removeChild(value);
                 }
