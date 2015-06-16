@@ -11,6 +11,9 @@
  */
 namespace Magento\Email\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -159,7 +162,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'objectManager' => $this->objectManager,
                     'emailConfig' => $this->emailConfig,
                     'filterFactory' => $this->filterFactory,
-                    'templateFactory' => $this->templateFactory
+                    'templateFactory' => $this->templateFactory,
                 ]
             ),
             '',
@@ -376,7 +379,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                 'Magento\Email\Model\AbstractTemplate',
                 [
                     'design' => $designMock,
-                    'storeManager' => $storeManagerMock
+                    'storeManager' => $storeManagerMock,
                 ]
             )
         );
