@@ -104,7 +104,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation7">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Update category</data>
             <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/presets" xsi:type="string">default</data>

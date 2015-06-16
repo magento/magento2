@@ -105,18 +105,17 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      */
     const NAME = 'name';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /**
      * Invoice
      */
     const INVOICE = 'invoice';
-
     /**
      * Gets the additional data for the invoice item.
      *
@@ -139,11 +138,11 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getBaseDiscountAmount();
 
     /**
-     * Gets the base hidden tax amount for the invoice item.
+     * Gets the base discount tax compensation amount for the invoice item.
      *
-     * @return float|null Base hidden tax amount.
+     * @return float Base discount tax compensation amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base price for the invoice item.
@@ -210,11 +209,11 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setEntityId($entityId);
 
     /**
-     * Gets the hidden tax amount for the invoice item.
+     * Gets the discount tax compensation amount for the invoice item.
      *
-     * @return float|null Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the name for the invoice item.
@@ -462,20 +461,20 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setName($name);
 
     /**
-     * Sets the hidden tax amount for the invoice item.
+     * Sets the discount tax compensation amount for the invoice item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for the invoice item.
+     * Sets the base discount tax compensation amount for the invoice item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

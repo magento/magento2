@@ -316,7 +316,7 @@ class Form extends FormInterface
     public function isTaxRateAvailable($value)
     {
         /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRate */
-        $taxRate = $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+        $taxRate = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         return $taxRate->isValueVisible($value);
     }
 }

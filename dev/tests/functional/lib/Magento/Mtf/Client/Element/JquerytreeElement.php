@@ -33,7 +33,7 @@ class JquerytreeElement extends Tree
      *
      * @var string
      */
-    protected $pattern = '//li[contains(@class, "jstree") and a[text() = "%s"]]';
+    protected $pattern = '/ul/li[contains(@class, "jstree") and a[text() = "%s"]]';
 
     /**
      * Pattern for child open node.
@@ -116,9 +116,9 @@ class JquerytreeElement extends Tree
     public function getStructure($level = null)
     {
         $nodesSelector = $this->getNodesSelector($level);
-        $Nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
+        $nodes = $this->getElements($nodesSelector, Locator::SELECTOR_XPATH);
 
-        return $this->prepareValues($Nodes);
+        return $this->prepareValues($nodes);
     }
 
     /**
