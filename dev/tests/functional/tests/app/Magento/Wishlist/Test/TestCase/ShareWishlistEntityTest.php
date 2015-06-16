@@ -11,7 +11,6 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -99,14 +98,12 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Share wish list.
      *
-     * @param BrowserInterface $browser
      * @param Customer $customer
      * @param CatalogProductSimple $product
      * @param array $sharingInfo
      * @return void
      */
     public function test(
-        BrowserInterface $browser,
         Customer $customer,
         CatalogProductSimple $product,
         array $sharingInfo
