@@ -67,7 +67,15 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             $this->mockObjects[] = [$mockObjectName, $mockObject];
         }
 
-        $adapterInterfaceMock = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface', [], '', true, true, true, []);
+        $adapterInterfaceMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            '',
+            true,
+            true,
+            true,
+            []
+        );
         $adapterInterfaceMock->expects($this->exactly(14))
             ->method('getTableName')
             ->willReturn('table_name');
