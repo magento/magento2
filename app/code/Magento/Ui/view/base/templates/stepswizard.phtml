@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Ui\Block\Component\StepsWizard */
+?>
+<button data-action="open-steps-wizard" title="Create Product Configurations" class="action-default primary">
+    <span><?= __('Create Configurations') ?></span>
+</button>
+<div data-role="step-wizard-dialog" style="display: none">
+    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
+        "steps": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getStepComponents()) ?>,
+        "stepRegistryComponent": "<?= $block->getComponentName()?>"}}'>
+        <div data-role="messages"></div>
+        <ul class="nav-bar">
+            <?php foreach ($block->getSteps() as $step) { ?>
+            <li data-role="collapsible">
+                <a href="#<?= $step->getComponentName() ?>">
+                    <?= $step->getCaption() ?>
+                </a>
+            </li>
+            <?php } ?>
+        </ul>
+        <div class="nav-bar-outer-actions">
+            <div>
+                <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next" data-role="step-wizard-next">
+                    <button type="button" class="btn btn-prime"><?= __('Next') ?></button>
+                </div>
+                <div class="btn-wrap btn-wrap-triangle-right"  data-role="step-wizard-final">
+                    <button type="button" class="btn btn-prime"><?= __('Create Selected Products') ?></button>
+                </div>
+                <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="step-wizard-prev">
+                    <button type="button" class="btn btn-prime disabled"><?= __('Back') ?></button>
+                </div>
+                <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="closeBtn">
+                    <a><?= __('Cancel') ?></a>
+                </div>
+            </div>
+        </div>
+        <?php foreach ($block->getSteps() as $step) { ?>
+        <div class="content" id="<?= $step->getComponentName() ?>" data-role="content">
+            <?= $step->getContent() ?>
+        </div>
+        <?php } ?>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                        "<?= $block->getComponentName()?>": {
+                            "component": "Magento_Ui/js/lib/step-registry"
+                        }
+                    }
+                }
+            }
+    }
+</script>

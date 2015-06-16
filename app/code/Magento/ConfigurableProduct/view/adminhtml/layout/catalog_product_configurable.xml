@@ -8,6 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Magento_ConfigurableProduct::css/configurable-product.css"/>
+        <css src="Magento_Ui::stepswizard/styles.css"/>
     </head>
     <update handle="catalog_product_superconfig_config"/>
     <body>
@@ -24,5 +25,16 @@
                 <argument name="block" xsi:type="string">admin.product.edit.tab.super.config.grid.container</argument>
             </action>
         </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                    <uiComponent name="product_attributes_listing"/>
+                </block>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3"
+                       template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>

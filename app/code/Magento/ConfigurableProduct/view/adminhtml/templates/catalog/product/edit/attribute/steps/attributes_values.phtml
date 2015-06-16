@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
+?>
+<div data-bind="scope: '<?= $block->getComponentName()?>'">
+    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Attribute Values') ?></h1>
+    <div style="padding-bottom: 10px">
+        <span><?= __('Choose options from each attribute to create unique products.') ?></span>
+    </div>
+    <div data-bind="foreach: attributes, sortableList: attributes">
+        <div style="padding-bottom: 30px;">
+            <input style="float: left; border: 0px" data-bind="value: label"/>
+            <div style="float: right; font-size: smaller;">
+                <a style="text-decoration: underline;" href="#"
+                   data-bind="click: $parent.removeAttribute.bind($parent)">
+                    <?= __('Remove Attribute') ?>
+                </a>
+                <span style="cursor: pointer; padding: 10px;" data-bind="click: $parent.toggleOpened">
+                    <span data-bind="if: opened">&mdash;</span>
+                    <span data-bind="ifnot: opened">&#10010;</span>
+                </span>
+            </div>
+            <div data-bind="style: {'border-bottom': !opened() && '1px solid gray'}" style="clear: both;"></div>
+            <fieldset style="background-color: white;" data-bind="visible: opened">
+                <div style="
+                    float: left;
+                    background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
+                    width: 8px;
+                    height: 14px;
+                    cursor: ns-resize;" data-role="draggable" title="Sort Variations">#</div>
+                <span style="clear: both;" data-bind="text: $data.options().length"></span>
+                <span><?= __('Options') ?></span>
+                <a href="#" data-bind="click: $parent.selectAllAttributes" style="
+                    float: right;
+                    font-size: smaller;
+                "><?= __('Select All') ?></a>
+                <ul data-bind="foreach: options" style="
+                    list-style-type: none;
+                    text-transform: capitalize;
+                ">
+                    <li>
+                        <input
+                            type="checkbox"
+                            data-bind="checkedValue: value, checked: !value || $parent.chosenOptions"
+                        />
+                        <span data-bind="text: label, visible: label"></span>
+                        <input data-bind="value: label, visible: !label" type="text">
+                        <a href="#" data-bind="visible: !label, click: $parents[1].saveOption.bind($parent)">-></a>
+                        <a href="#" data-bind="visible: !label, click: $parents[1].removeOption.bind($parent)
+                        ">X</a>
+                    </li>
+                </ul>
+                <a data-action="addOption" href="#" data-bind="click: $parent.createOption">
+                    <?= __('Create New Value') ?>
+                </a>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= $block->getComponentName()?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
+                        "appendTo": "<?= $block->getParentComponentName()?>",
+                        "options_url": "<?= $block->getUrl('catalog/product_attribute/getAttributes')?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

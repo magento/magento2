@@ -8,14 +8,14 @@ namespace Magento\Ui\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
- * Class EavValidationRul
+ * Class EavValidationRule
  */
-class EavValidationRul
+class EavValidationRule
 {
     /**
      * @var array
      */
-    protected $validationRul = [
+    protected $validationRule = [
         'input_validation' => [
             'email' => ['validate-email' => true],
             'date' => ['validate-date' => true],
@@ -40,8 +40,8 @@ class EavValidationRul
             foreach ($validation as $type => $ruleName) {
                 switch ($type) {
                     case 'input_validation':
-                        if (isset($this->validationRul[$type][$ruleName])) {
-                            $rules = array_merge($rules, $this->validationRul[$type][$ruleName]);
+                        if (isset($this->validationRule[$type][$ruleName])) {
+                            $rules = array_merge($rules, $this->validationRule[$type][$ruleName]);
                         }
                         break;
                     case 'min_text_length':
