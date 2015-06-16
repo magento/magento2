@@ -129,7 +129,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -147,7 +147,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
@@ -443,8 +443,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
         $order->setBaseTaxRefunded($order->getBaseTaxRefunded() + $this->getBaseTaxAmount());
         $order->setTaxRefunded($order->getTaxRefunded() + $this->getTaxAmount());
-        $order->setBaseHiddenTaxRefunded($order->getBaseHiddenTaxRefunded() + $this->getBaseHiddenTaxAmount());
-        $order->setHiddenTaxRefunded($order->getHiddenTaxRefunded() + $this->getHiddenTaxAmount());
+        $order->setBaseDiscountTaxCompensationRefunded($order->getBaseDiscountTaxCompensationRefunded() + $this->getBaseDiscountTaxCompensationAmount());
+        $order->setDiscountTaxCompensationRefunded($order->getDiscountTaxCompensationRefunded() + $this->getDiscountTaxCompensationAmount());
 
         $order->setBaseShippingRefunded($order->getBaseShippingRefunded() + $this->getBaseShippingAmount());
         $order->setShippingRefunded($order->getShippingRefunded() + $this->getShippingAmount());
@@ -768,16 +768,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns discount_description
-     *
-     * @return string
-     */
-    public function getDiscountDescription()
-    {
-        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
-    }
-
-    /**
      * Return creditmemo items
      *
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[]
@@ -791,6 +781,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             );
         }
         return $this->getData(CreditmemoInterface::ITEMS);
+    }
+
+    /**
+     * Return creditmemo comments
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
+     */
+    public function getComments()
+    {
+        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
+            $this->setData(
+                CreditmemoInterface::COMMENTS,
+                $this->getCommentsCollection()->getItems()
+            );
+        }
+        return $this->getData(CreditmemoInterface::COMMENTS);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * Returns discount_description
+     *
+     * @return string
+     */
+    public function getDiscountDescription()
+    {
+        return $this->getData(CreditmemoInterface::DISCOUNT_DESCRIPTION);
     }
 
     /**
@@ -914,13 +931,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(CreditmemoInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(CreditmemoInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -934,13 +951,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Returns base_shipping_discount_tax_compensation_amnt
      *
      * @return float
      */
-    public function getBaseShippingHiddenTaxAmnt()
+    public function getBaseShippingDiscountTaxCompensationAmnt()
     {
-        return $this->getData(CreditmemoInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
+        return $this->getData(CreditmemoInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT);
     }
 
     /**
@@ -1092,13 +1109,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(CreditmemoInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(CreditmemoInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -1152,13 +1169,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Returns shipping_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getShippingHiddenTaxAmount()
+    public function getShippingDiscountTaxCompensationAmount()
     {
-        return $this->getData(CreditmemoInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
+        return $this->getData(CreditmemoInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -1293,22 +1310,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
-     * Return creditmemo comments
-     *
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
-     */
-    public function getComments()
-    {
-        if ($this->getData(CreditmemoInterface::COMMENTS) == null) {
-            $this->setData(
-                CreditmemoInterface::COMMENTS,
-                $this->getCommentsCollection()->getItems()
-            );
-        }
-        return $this->getData(CreditmemoInterface::COMMENTS);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setComments($comments)
@@ -1316,7 +1317,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         return $this->setData(CreditmemoInterface::COMMENTS, $comments);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
@@ -1584,33 +1584,33 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(CreditmemoInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(CreditmemoInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(CreditmemoInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(CreditmemoInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setShippingHiddenTaxAmount($amount)
+    public function setShippingDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(CreditmemoInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(CreditmemoInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt)
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt)
     {
-        return $this->setData(CreditmemoInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+        return $this->setData(CreditmemoInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT, $amnt);
     }
 
     /**

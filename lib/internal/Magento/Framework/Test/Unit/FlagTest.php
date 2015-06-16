@@ -61,7 +61,9 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('addCommitCallback')
             ->will($this->returnSelf());
 
-        $resourceCollection = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false, false);
+        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->flag = new \Magento\Framework\Flag(
             $context,
