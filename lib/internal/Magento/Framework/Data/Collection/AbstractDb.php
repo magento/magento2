@@ -586,7 +586,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * @inheritdoc
+     * Let do something before add loaded item in collection
+     *
+     * @param \Magento\Framework\Object $item
+     * @return \Magento\Framework\Object
      */
     protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
     {
