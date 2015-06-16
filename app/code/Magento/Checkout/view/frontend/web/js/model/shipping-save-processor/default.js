@@ -30,7 +30,6 @@ define(
                 ).done(
                     function (response) {
                         paymentService.setPaymentMethods(response.payment_methods);
-                        response.totals['mode'] = ko.observable('full');
                         quote.setTotals(response.totals)
                     }
                 ).fail(

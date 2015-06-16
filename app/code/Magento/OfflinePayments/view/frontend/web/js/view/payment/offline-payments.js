@@ -7,18 +7,19 @@
 define(
     [
         'uiComponent',
-        'Magento_Checkout/js/model/payment/provider',
-        'Magento_OfflinePayments/js/view/payment/method-renderer/checkmo-method'
+        'Magento_Checkout/js/model/payment/provider'
     ],
     function (
         Component,
-        paymentList,
-        checkmoRenderer
+        rendererList
     ) {
         'use strict';
-        //Register gift registry rate processor
-        paymentList.registerRenderer(checkmoRenderer);
-
+        rendererList.push(
+            {
+                type: 'checkmo',
+                component: 'Magento_OfflinePayments/js/view/payment/method-renderer/checkmo-method'
+            }
+        );
         /** Add view logic here if needed */
         return Component.extend({});
     }
