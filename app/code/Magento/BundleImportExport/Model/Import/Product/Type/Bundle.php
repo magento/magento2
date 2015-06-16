@@ -292,6 +292,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $productId = $selection['product_id'];
         }
         $populatedSelection = [
+            'selection_id' => null,
             'option_id' => (int)$optionId,
             'parent_product_id' => (int)$parentId,
             'product_id' => (int)$productId,
@@ -591,6 +592,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $selectionTable,
                 $selections,
                 [
+                    'selection_id',
                     'product_id',
                     'position',
                     'is_default',
