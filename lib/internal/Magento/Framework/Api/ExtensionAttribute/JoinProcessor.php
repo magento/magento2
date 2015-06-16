@@ -18,6 +18,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Join processor allows to join extension attributes during collections loading.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
 {

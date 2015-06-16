@@ -852,4 +852,26 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         return $this;
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
