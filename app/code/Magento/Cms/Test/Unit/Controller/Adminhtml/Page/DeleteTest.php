@@ -16,7 +16,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirectFactoryMock;
 
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
