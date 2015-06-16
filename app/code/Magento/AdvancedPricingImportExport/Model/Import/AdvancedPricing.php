@@ -129,7 +129,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param ImportProduct\StoreResolver $storeResolver
+     * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
      * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
@@ -277,6 +277,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         return $this;
     }
 
+    /**
+     * Save and replace advanced prices
+     *
+     * @return $this
+     */
     protected function saveAndReplaceAdvancedPrices()
     {
         $behavior = $this->getBehavior();
@@ -320,6 +325,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
             if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
                 if ($listSku) {
+                    $this->processCountNewPrices($tierPrices, $groupPrices);
                     if ($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
                         && $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
                         $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
@@ -327,6 +333,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     }
                 }
             } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $behavior) {
+                $this->processCountExistingPrices($tierPrices, self::TABLE_TIER_PRICE)
+                    ->processcountExistingPrices($groupPrices, self::TABLE_GROUPED_PRICE)
+                    ->processCountNewPrices($tierPrices, $groupPrices);
                 $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
                     ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
             }
@@ -356,7 +365,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
             if ($priceIn) {
-                $this->countItemsCreated += count($priceData);
                 $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value']);
             }
         }
@@ -367,7 +375,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes tier prices and group prices.
      *
      * @param array $listSku
-     * @param $tableName
+     * @param string $tableName
      * @return bool
      */
     protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
@@ -381,9 +389,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 );
             }
             if ($this->_cachedSkuToDelete) {
-                $this->countItemsDeleted += count($this->_cachedSkuToDelete);
                 try {
-                    $this->_connection->delete(
+                    $this->countItemsDeleted += $this->_connection->delete(
                         $tableName,
                         $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
                     );
@@ -439,5 +446,69 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             )
         );
         return $oldSkus;
+    }
+
+    /**
+     * Count existing prices
+     *
+     * @param array $prices
+     * @param string $table
+     * @return $this
+     */
+    protected function processCountExistingPrices($prices, $table)
+    {
+        $existingPrices = $this->_connection->fetchAssoc(
+            $this->_connection->select()->from(
+                $this->_connection->getTableName($table),
+                ['value_id', 'entity_id', 'all_groups', 'customer_group_id']
+            )
+        );
+        foreach ($existingPrices as $existingPrice) {
+            foreach ($this->_oldSkus as $sku => $productId) {
+                if ($existingPrice['entity_id'] == $productId && isset($prices[$sku])) {
+                    $this->incrementCounterUpdated($prices[$sku], $existingPrice);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Increment counter of updated items
+     *
+     * @param array $prices
+     * @param array $existingPrice
+     * @return void
+     */
+    protected function incrementCounterUpdated($prices, $existingPrice)
+    {
+        foreach ($prices as $price) {
+            if ($existingPrice['all_groups'] == $price['all_groups'] &&
+                $existingPrice['customer_group_id'] == $price['customer_group_id']
+            ) {
+                $this->countItemsUpdated++;
+            }
+        }
+    }
+
+    /**
+     * Count new prices
+     *
+     * @param array $tierPrices
+     * @param array $groupPrices
+     * @return $this
+     */
+    protected function processCountNewPrices(array $tierPrices, array $groupPrices)
+    {
+        foreach ($tierPrices as $productPrices) {
+            $this->countItemsCreated += count($productPrices);
+        }
+        foreach ($groupPrices as $productPrices) {
+            $this->countItemsCreated += count($productPrices);
+        }
+        $this->countItemsCreated -= $this->countItemsUpdated;
+
+        return $this;
     }
 }
