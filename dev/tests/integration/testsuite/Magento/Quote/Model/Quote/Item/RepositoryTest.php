@@ -24,7 +24,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $quoteItemRepository = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Item\Repository');
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
-        $quoteId = $quote->load('test01','reserved_order_id')->getId();
+        $quoteId = $quote->load('test01', 'reserved_order_id')->getId();
 
         /** @var \Magento\Quote\Api\Data\CartItemInterface[] $quoteItems */
         $quoteItems = $quoteItemRepository->getList($quoteId);
