@@ -53,7 +53,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $extensionAttributesJoinProcessorMock;
 
     /**
-    /**
      * @return void
      */
     protected function setUp()
