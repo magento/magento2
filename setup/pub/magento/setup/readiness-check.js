@@ -105,6 +105,7 @@ angular.module('readiness-check', [])
 
         $scope.isCompleted = function() {
             return $scope.version.processed
+                && $scope.settings.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed;
         };
