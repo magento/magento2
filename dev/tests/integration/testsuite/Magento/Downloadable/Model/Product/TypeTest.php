@@ -140,7 +140,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $links);
         /** @var \Magento\Downloadable\Model\Link $link */
         $link = reset($links);
-        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         $testAttribute = $link->getExtensionAttributes()->getTestAttribute();
         $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
         $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
@@ -167,7 +167,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $samples->count());
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $samples->getFirstItem()->getData();
-        /** @var \Magento\User\Model\UserInterface $testAttribute */
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
         $testAttribute = $sample['extension_attributes']->getTestAttribute();
         $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
         $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
