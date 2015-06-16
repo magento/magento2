@@ -15,7 +15,14 @@ define(
              * Place order.
              */
             placeOrder: function () {
-                var data = {
+                placeOrderAction(this.getData());
+            },
+
+            /**
+             * Get payment method data
+             */
+            getData: function() {
+                return {
                     "method": this.item.code,
                     "po_number": null,
                     "cc_owner": null,
@@ -25,8 +32,8 @@ define(
                     "cc_exp_month": null,
                     "additional_data": null
                 };
-                placeOrderAction(data);
             },
+
             /**
              * Get payment method type.
              */

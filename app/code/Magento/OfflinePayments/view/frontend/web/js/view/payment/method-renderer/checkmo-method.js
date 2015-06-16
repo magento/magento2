@@ -4,7 +4,7 @@
  */
 define(
     [
-        './default'
+        'Magento_Checkout/js/view/payment/default'
     ],
     function (Component) {
         'use strict';
