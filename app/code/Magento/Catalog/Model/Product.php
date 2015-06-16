@@ -1418,7 +1418,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 foreach ($collection as $item) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
                     $productLink = $this->productLinkFactory->create();
-                    $productLink->setProductSku($this->getSku())
+                    $productLink->setSku($this->getSku())
                         ->setLinkType($linkTypeName)
                         ->setLinkedProductSku($item['sku'])
                         ->setLinkedProductType($item['type'])

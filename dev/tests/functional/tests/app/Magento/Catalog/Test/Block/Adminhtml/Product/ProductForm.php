@@ -18,6 +18,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search;
 
 /**
  * Product form on backend product page.
@@ -248,11 +249,22 @@ class ProductForm extends FormTabs
      */
     public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
     {
+        $this->waitPageToLoad();
+        return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
+    }
+
+    /**
+     * Get attributes search form.
+     *
+     * @return Search
+     */
+    protected function getAttributesSearchForm()
+    {
         return $this->_rootElement->find(
             $this->attributeSearch,
             Locator::SELECTOR_CSS,
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
-        )->isExistAttributeInSearchResult($productAttribute);
+        );
     }
 
     /**
@@ -338,7 +350,6 @@ class ProductForm extends FormTabs
      */
     public function getAttributeForm()
     {
-        /** @var AttributeForm $attributeForm */
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
             ['element' => $this->browser->find('body')]
