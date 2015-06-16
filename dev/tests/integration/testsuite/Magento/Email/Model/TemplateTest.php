@@ -5,9 +5,11 @@
  */
 namespace Magento\Email\Model;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -59,7 +61,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
                 $objectManager->get('Magento\Email\Model\TemplateFactory'),
-                $objectManager->get('Magento\Email\Model\Template\FilterFactory')
+                $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
             ]
         )->getMock();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
@@ -88,9 +90,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'root' => DirectoryList::ROOT,
                 'config' => [
                     DirectoryList::MODULES => [
-                        DirectoryList::PATH => realpath(__DIR__) . '/_files/code'
+                        DirectoryList::PATH => realpath(__DIR__) . '/_files/code',
                     ],
-                ]
+                ],
             ]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -163,7 +165,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->_model->getProcessedTemplate());
@@ -300,7 +302,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from <!--@styles @--> comment - frontend' => [
                 \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -308,7 +310,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from "Template Styles" textarea from backend - adminhtml' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
@@ -372,7 +374,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
     }
@@ -420,7 +422,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject([]));

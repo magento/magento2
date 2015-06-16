@@ -5,6 +5,9 @@
  */
 namespace Magento\Email\Test\Unit\Model\Template;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -149,7 +152,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 $this->appState,
                 $this->backendUrlBuilder,
                 $this->emogrifier,
-                []
+                [],
             ])
             ->setMethods($mockedMethods)
             ->getMock();
@@ -164,7 +167,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider applyInlineCssDataProvider
      */
-    public function testApplyInlineCss($html, $css, $expectedResults){
+    public function testApplyInlineCss($html, $css, $expectedResults)
+    {
         /* @var $filter \Magento\Email\Model\Template\Filter */
         $filter = $this->getModel(['getCssFilesContent']);
 
@@ -206,7 +210,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 [
                     '<head><style type="text/css">div { color: #111; }</style></head>',
                     '<p style="color: #000;"></p>',
-                ]
+                ],
             ],
         ];
     }
