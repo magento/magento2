@@ -50,11 +50,8 @@ class  TestRepository implements TestRepositoryInterface
     {
         $searchData = $this->searchResultsDataFactory->create();
         $searchData->setSearchCriteria($searchCriteria);
-
-//        $this->extensionAttributesJoinProcessor->process($this->quoteCollection);
-
+        $this->extensionAttributesJoinProcessor->process($this->quoteCollection);
         $searchData->setItems($this->quoteCollection->getItems());
-
         return $searchData;
     }
 }
