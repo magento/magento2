@@ -224,7 +224,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')],
+                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
             ],
             [
                 ['title' => __('Title')],
@@ -233,7 +233,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
                 ['title' => 'Group_3_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')],
+                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
             ],
         ];
         $this->assertEquals($expected, $actual);
