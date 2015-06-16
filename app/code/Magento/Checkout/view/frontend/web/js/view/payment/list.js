@@ -7,12 +7,11 @@ define([
     'ko',
     'mageUtils',
     'uiComponent',
-    'Magento_Checkout/js/model/payment/payment-list',
-    'Magento_Ui/js/core/renderer/layout',
-    'uiRegistry',
-    'Magento_Checkout/js/model/payment/renderer-list'
+    'Magento_Checkout/js/model/payment/method-list',
+    'Magento_Checkout/js/model/payment/renderer-list',
+    'Magento_Ui/js/core/renderer/layout'
 
-], function (_, ko, utils, Component, paymentMethods, layout, registry, rendererList) {
+], function (_, ko, utils, Component, paymentMethods, rendererList, layout) {
     'use strict';
 
     var createRenderer = function(item) {
