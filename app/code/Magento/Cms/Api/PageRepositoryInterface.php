@@ -16,17 +16,17 @@ interface PageRepositoryInterface
     /**
      * Save page.
      *
-     * @param Data\PageInterface $page
-     * @return Data\PageInterface
+     * @param \Magento\Cms\Api\Data\PageInterface $page
+     * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(Data\PageInterface $page);
+    public function save(\Magento\Cms\Api\Data\PageInterface $page);
 
     /**
      * Retrieve page.
      *
      * @param int $pageId
-     * @return Data\PageInterface
+     * @return \Magento\Cms\Api\Data\PageInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($pageId);
@@ -34,20 +34,20 @@ interface PageRepositoryInterface
     /**
      * Retrieve pages matching the specified criteria.
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Cms\Api\Data\PageSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete page.
      *
-     * @param Data\PageInterface $page
+     * @param \Magento\Cms\Api\Data\PageInterface $page
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete(Data\PageInterface $page);
+    public function delete(\Magento\Cms\Api\Data\PageInterface $page);
 
     /**
      * Delete page by ID.

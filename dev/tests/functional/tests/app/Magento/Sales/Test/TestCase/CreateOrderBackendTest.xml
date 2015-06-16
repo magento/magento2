@@ -29,7 +29,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
         <variation name="CreateOrderBackendTestVariation2">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36210</data>
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Check/Money Order payment method</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataSet" xsi:type="string">customer_UK</data>

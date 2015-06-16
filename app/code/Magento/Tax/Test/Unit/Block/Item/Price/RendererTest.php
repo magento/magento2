@@ -366,14 +366,22 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $rowTotal = 100;
         $taxAmount = 10;
-        $hiddenTaxAmount = 2;
+        $discountTaxCompensationAmount = 2;
         $discountAmount = 20;
 
-        $expectedValue = $rowTotal + $taxAmount + $hiddenTaxAmount - $discountAmount;
+        $expectedValue = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount;
 
         $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getRowTotal', 'getTaxAmount', 'getHiddenTaxAmount', 'getDiscountAmount', '__wakeup'])
+            ->setMethods(
+                [
+                'getRowTotal',
+                'getTaxAmount',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                '__wakeup'
+                ]
+            )
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -385,8 +393,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($taxAmount));
 
         $itemMock->expects($this->once())
-            ->method('getHiddenTaxAmount')
-            ->will($this->returnValue($hiddenTaxAmount));
+            ->method('getDiscountTaxCompensationAmount')
+            ->will($this->returnValue($discountTaxCompensationAmount));
 
         $itemMock->expects($this->once())
             ->method('getDiscountAmount')
@@ -399,7 +407,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $baseRowTotal = 100;
         $baseTaxAmount = 10;
-        $baseHiddenTaxAmount = 2;
+        $baseDiscountTaxCompensationAmount = 2;
         $baseDiscountAmount = 20;
 
         $expectedValue = 92;
@@ -407,7 +415,13 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
             ->setMethods(
-                ['getBaseRowTotal', 'getBaseTaxAmount', 'getBaseHiddenTaxAmount', 'getBaseDiscountAmount', '__wakeup']
+                [
+                    'getBaseRowTotal',
+                    'getBaseTaxAmount',
+                    'getBaseDiscountTaxCompensationAmount',
+                    'getBaseDiscountAmount',
+                    '__wakeup'
+                ]
             )
             ->getMock();
 
@@ -420,8 +434,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($baseTaxAmount));
 
         $itemMock->expects($this->once())
-            ->method('getBaseHiddenTaxAmount')
-            ->will($this->returnValue($baseHiddenTaxAmount));
+            ->method('getBaseDiscountTaxCompensationAmount')
+            ->will($this->returnValue($baseDiscountTaxCompensationAmount));
 
         $itemMock->expects($this->once())
             ->method('getBaseDiscountAmount')

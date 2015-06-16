@@ -19,7 +19,7 @@
         <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
     </scenario>
     <scenario name="CreateOrderFromCustomerPageTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="openCustomerOnBackend"/>
+        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend"/>
         <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress"/>
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest">

@@ -183,4 +183,28 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    /**
+     * @dataProvider providerForTestGetSavePercent
+     */
+    public function testGetSavePercent($baseAmount, $savePercent)
+    {
+        $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
+
+        $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
+    }
+
+    /**
+     * @return array
+     */
+    public function providerForTestGetSavePercent()
+    {
+        return [
+            'no fraction' => [10.0000, 10],
+            'lower half'  => [10.1234, 10],
+            'half way'    => [10.5000, 11],
+            'upper half'  => [10.6789, 11],
+        ];
+    }
 }
