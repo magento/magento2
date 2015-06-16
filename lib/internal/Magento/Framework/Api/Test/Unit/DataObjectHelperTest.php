@@ -44,6 +44,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
     protected $attributeValueFactoryMock;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionFactoryMock;
+
+    /**
      * @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $methodsMapProcessor;
@@ -52,25 +57,33 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\ObjectFactory')
+        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\Api\ObjectFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectProcessorMock = $this->getMockBuilder('\Magento\Framework\Reflection\DataObjectProcessor')
+        $this->objectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->methodsMapProcessor = $this->getMockBuilder('\Magento\Framework\Reflection\MethodsMap')
+        $this->methodsMapProcessor = $this->getMockBuilder('Magento\Framework\Reflection\MethodsMap')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeValueFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValueFactory')
+        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeProcessor = $this->objectManager->getObject('\Magento\Framework\Reflection\TypeProcessor');
+        $this->extensionFactoryMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->setMethods(['extractExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->extensionFactoryMock->expects($this->any())
+            ->method('extractExtensionAttributes')
+            ->willReturnArgument(1);
+        $this->typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
         $this->dataObjectHelper = $this->objectManager->getObject(
             'Magento\Framework\Api\DataObjectHelper',
             [
                 'objectFactory' => $this->objectFactoryMock,
                 'typeProcessor' => $this->typeProcessor,
                 'objectProcessor' => $this->objectProcessorMock,
+                'extensionFactory' => $this->extensionFactoryMock,
                 'methodsMapProcessor' => $this->methodsMapProcessor,
             ]
         );

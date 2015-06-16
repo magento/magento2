@@ -135,7 +135,29 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
         $this->productMock->expects($this->once())->method('setProductLinks')->with($links);
-        $this->assertTrue($this->model->setProductLinks($productSku, $linkType, $links));
+        $this->assertTrue($this->model->setProductLinks($productSku, $links));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage linkType is a required field.
+     */
+    public function testSetProductLinksWithoutLinkTypeInLink()
+    {
+        $productSku = 'Simple Product 1';
+
+        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink->setProductSku($productSku);
+        $inputRelatedLink->setData("sku", "Simple Product 1");
+        $inputRelatedLink->setPosition(0);
+        $links = [$inputRelatedLink];
+
+        $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+        $this->linkTypeProviderMock->expects($this->once())
+            ->method('getLinkTypes')
+            ->willReturn($linkTypes);
+
+        $this->assertTrue($this->model->setProductLinks($productSku, $links));
     }
 
     /**
@@ -162,7 +184,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getLinkTypes')
             ->willReturn($linkTypes);
 
-        $this->assertTrue($this->model->setProductLinks('', $linkType, $links));
+        $this->assertTrue($this->model->setProductLinks('', $links));
     }
 
     /**
@@ -191,7 +213,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->throwException(
                 new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
-        $this->model->setProductLinks($productSku, $linkType, $links);
+        $this->model->setProductLinks($productSku, $links);
     }
 
     /**
@@ -221,6 +243,6 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
 
         $this->productRepositoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
-        $this->model->setProductLinks($productSku, $linkType, $links);
+        $this->model->setProductLinks($productSku, $links);
     }
 }

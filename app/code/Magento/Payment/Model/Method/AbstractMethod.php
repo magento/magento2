@@ -219,7 +219,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Logger $logger
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -232,7 +232,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
