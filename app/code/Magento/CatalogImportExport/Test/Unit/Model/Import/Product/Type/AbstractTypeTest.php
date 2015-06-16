@@ -90,7 +90,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $attrCollection = $this->getMock(
             '\Magento\Eav\Model\Resource\Entity\Attribute\Collection',
-            [],
+            [
+                'addFieldToFilter',
+            ],
             [],
             '',
             false
@@ -116,6 +118,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $entityAttributes = [
+            'attribute_id' => 'attributeSetName'
+        ];
+
         $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
         $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
         $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
@@ -136,7 +142,16 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getDefaultValue')->willReturn('default_value');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
-
+        $attrCollection
+            ->expects($this->any())
+            ->method('addFieldToFilter')
+            ->with(
+                'main_table.attribute_id',
+                ['in' => [
+                    key($entityAttributes)
+                ]]
+            )
+            ->willReturn([$attribute]);
 
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -175,7 +190,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([]));
+        $this->connection
+            ->expects($this->any())
+            ->method('fetchPairs')
+            ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
