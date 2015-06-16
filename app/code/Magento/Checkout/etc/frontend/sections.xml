@@ -37,4 +37,10 @@
     <action name="checkout/sidebar/updateItemQty">
         <section name="cart"/>
     </action>
+    <action name="rest/*/V1/carts/*/order">
+        <section name="cart"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/order">
+        <section name="cart"/>
+    </action>
 </config>
