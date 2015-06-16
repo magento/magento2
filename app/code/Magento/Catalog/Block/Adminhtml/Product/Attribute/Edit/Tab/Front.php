@@ -224,9 +224,9 @@ class Front extends Generic
             )
         );
 
+        $this->setForm($form);
         $form->setValues($attributeObject->getData());
         $this->propertyLocker->lock($form);
-        $this->setForm($form);
         return parent::_prepareForm();
     }
 }
