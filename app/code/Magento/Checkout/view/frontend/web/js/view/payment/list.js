@@ -14,35 +14,8 @@ define([
 ], function (_, ko, utils, Component, paymentMethods, rendererList, layout) {
     'use strict';
 
-    var createRenderer = function(item) {
-        var renderer = getRendererByType(item.method);
-        if (renderer) {
-            var templateData = {
-                parentName: this.name,
-                name: item.method
-            };
-            var rendererTemplate = {
-                parent: '${ $.$data.parentName }',
-                name: '${ $.$data.name }',
-                component: renderer.component
-            };
-            var rendererComponent = utils.template(rendererTemplate, templateData);
-            utils.extend(rendererComponent, {item: item});
-            layout([rendererComponent]);
-        } else {
-            console.log('There is no registered render for Payment Method: ' + item.method);
-        }
-    };
+    var cm = null;
 
-    var getRendererByType = function(code) {
-        var output = null;
-        rendererList().forEach(function(item) { //todo refactor this code
-            if (item.type == code) {
-                output = item;
-            }
-        });
-        return output;
-    };
 
     return Component.extend({
         defaults: {
@@ -59,7 +32,7 @@ define([
                     changes.forEach(function(change) {
                         if (change.status === 'added') {
                             console.log(('added ' + change.value.method));
-                            createRenderer(change.value);
+                            self.createRenderer(change.value);
                         } else if (change.status === 'deleted') {
                             console.log(('deleted ' + change.value.method));
                             self.removeRenderer(change.value);
@@ -73,10 +46,42 @@ define([
         },
 
         initChildren: function () {
+            var self = this;
             paymentMethods().forEach(function (item ) {
-                createRenderer(item);
+                self.createRenderer(item);
             });
             return this;
+        },
+
+        createRenderer: function(item) {
+            var renderer = this.getRendererByType(item.method);
+            if (renderer) {
+                var templateData = {
+                    parentName: this.name,
+                    name: item.method
+                };
+                var rendererTemplate = {
+                    parent: '${ $.$data.parentName }',
+                    name: '${ $.$data.name }',
+                    component: renderer.component
+                };
+                var rendererComponent = utils.template(rendererTemplate, templateData);
+                utils.extend(rendererComponent, {item: item});
+                cm = rendererComponent;
+                layout([rendererComponent]);
+            } else {
+                console.log('There is no registered render for Payment Method: ' + item.method);
+            }
+        },
+
+        getRendererByType: function(code) {
+            var output = null;
+            rendererList().forEach(function(item) { //todo refactor this code
+                if (item.type == code) {
+                    output = item;
+                }
+            });
+            return output;
         },
 
         add: function() {
@@ -99,7 +104,7 @@ define([
 
         removeRenderer: function (paymentMethod) {
             console.info('remove renderer');
-            registry.remove([paymentMethod.method]);
+            this.removeChild(cm);
         }
     });
 });
