@@ -46,6 +46,7 @@ class FileSystem
      */
     public function getEmailTemplateFileName($filePath, $module, $designParams)
     {
+        $this->_assetRepo->updateDesignParams($designParams);
         return $this->_resolver->resolve(
             $this->getFallbackType(),
             $filePath,
@@ -63,5 +64,4 @@ class FileSystem
     {
         return \Magento\Framework\View\Design\Fallback\RulePool::TYPE_EMAIL_TEMPLATE;
     }
-
 }
