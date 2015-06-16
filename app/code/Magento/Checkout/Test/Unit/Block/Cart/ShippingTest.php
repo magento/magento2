@@ -468,5 +468,5 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             [1, false],
             [2, true],
         ];
-    }    
+    }
 }
