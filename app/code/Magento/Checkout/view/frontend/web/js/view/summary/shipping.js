@@ -19,21 +19,19 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             totals: quote.getTotals(),
             getShippingMethodTitle: function() {
-                if (!this.isFullMode()) {
+                if (!this.isCalculated()) {
                     return '';
                 }
                 return shippingService.getTitleByCode(quote.shippingMethod())
             },
+            isCalculated: function() {
+                return this.totals() && this.isFullMode() && null != quote.shippingMethod();
+            },
             getValue: function() {
-                if (!this.isFullMode()) {
+                if (!this.isCalculated()) {
                     return this.notCalculatedMessage;
                 }
-                var price = 0;
-                if (this.totals() && quote.shippingMethod()) {
-                    price =  this.totals().shipping_amount;
-                } else {
-                    return this.notCalculatedMessage;
-                }
+                var price =  this.totals().shipping_amount;
                 return this.getFormattedPrice(price);
             }
         });

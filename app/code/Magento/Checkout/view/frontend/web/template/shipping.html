@@ -19,6 +19,12 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
+        <!-- ko if: (!quoteIsVirtual) -->
+            <!-- ko foreach: getRegion('customer-email') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        <!--/ko-->
+
         <!-- ko foreach: getRegion('before-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->

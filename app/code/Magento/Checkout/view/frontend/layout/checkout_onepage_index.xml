@@ -75,6 +75,29 @@
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="customer-email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="displayArea" xsi:type="string">customer-email</item>
+                                                                <item name="tooltip" xsi:type="array">
+                                                                    <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-login-form" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-login-form</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- before login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                    <item name="additional-login-form-fields" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- additional login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <item name="before-form" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-form</item>
@@ -168,6 +191,29 @@
                                                             <item name="title" xsi:type="string">Payment</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="customer-email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="displayArea" xsi:type="string">customer-email</item>
+                                                                <item name="tooltip" xsi:type="array">
+                                                                    <item name="description" xsi:type="string">(You can create an account to track your order after checkout)</item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-login-form" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-login-form</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- before login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                    <item name="additional-login-form-fields" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                                        <item name="children" xsi:type="array">
+                                                                            <!-- additional login form fields -->
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <!-- TODO: add billing address form -->
                                                             <item name="beforeMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
@@ -182,6 +228,23 @@
                                                                 <item name="filterBy" xsi:type="array">
                                                                     <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
                                                                     <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="payments-list" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
+                                                                <item name="displayArea" xsi:type="string">payment-methods-list</item>
+
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renderers</item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+
+                                                                </item>
+                                                            </item>
+                                                            <item name="renderers" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge payment method renderers here -->
                                                                 </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->

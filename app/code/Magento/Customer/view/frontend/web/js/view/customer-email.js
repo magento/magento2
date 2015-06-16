@@ -15,21 +15,22 @@ define(
         'Magento_Checkout/js/model/quote',
         'mage/validation'
     ],
-    function ($, Component, ko, customer, checkEmailAvailability, login, quote) {
+    function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote) {
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Customer/customer-email'
+                template: 'Magento_Customer/customer-email',
+                email: '',
+                isLoading: false,
+                isPasswordVisible: false
             },
             checkDelay: 2000,
-            email: ko.observable(null),
             checkRequest: null,
             isEmailCheckComplete: null,
-            isPasswordVisible: ko.observable(false),
             isCustomerLoggedIn: customer.isLoggedIn,
             forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
             emailCheckTimeout: 0,
-            isLoading: ko.observable(false),
+
             initialize: function() {
                 this._super();
                 var self = this;
@@ -37,6 +38,14 @@ define(
                     self.emailHasChanged();
                 });
             },
+
+            /** Initialize observable properties */
+            initObservable: function () {
+                this._super()
+                    .observe(['email', 'isLoading', 'isPasswordVisible']);
+                return this;
+            },
+
             emailHasChanged: function () {
                 var self = this;
                 clearTimeout(this.emailCheckTimeout);
@@ -50,6 +59,7 @@ define(
                 }, self.checkDelay);
 
             },
+
             checkEmailAvailability: function() {
                 var self = this;
                 this.validateRequest();
@@ -65,6 +75,7 @@ define(
                     self.isLoading(false);
                 });
             },
+
             validateRequest: function() {
                 /*
                  * If request has been sent -> abort it.
@@ -78,12 +89,14 @@ define(
                     this.checkRequest = null;
                 }
             },
+
             validateEmail: function() {
-                var loginFormSelector = 'form[data-role=login]';
+                var loginFormSelector = 'form[data-role=email-with-possible-login]';
                 $(loginFormSelector).validation();
-                var validationResult = $('input[name=username]').valid();
+                var validationResult = $(loginFormSelector + ' input[name=username]').valid();
                 return Boolean(validationResult);
             },
+
             login: function(loginForm) {
                 var loginData = {},
                     formDataArray = $(loginForm).serializeArray();
@@ -95,7 +108,7 @@ define(
                     && $(loginForm).validation()
                     && $(loginForm).validation('isValid')
                 ) {
-                    login(loginData);
+                    loginAction(loginData);
                 }
             }
         });

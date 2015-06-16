@@ -29,14 +29,16 @@ define(
                     cartId: quote.getQuoteId(),
                     email: quote.guestEmail,
                     paymentMethod: paymentData,
-                    billingAddress: quote.billingAddress()
+                    //billingAddress: quote.billingAddress()
+                    billingAddress: quote.shippingAddress()
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
                 payload = {
                     cartId: quote.getQuoteId(),
                     paymentMethod: paymentData,
-                    billingAddress: quote.billingAddress()
+                    //billingAddress: quote.billingAddress()
+                    billingAddress: quote.shippingAddress()
                 };
             }
             storage.post(
