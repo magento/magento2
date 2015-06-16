@@ -11,17 +11,17 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 /**
  * Model TestRepository
  */
-class  TestRepository implements TestRepositoryInterface
+class TestRepository implements TestRepositoryInterface
 {
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Collection
+     * @var \Magento\Quote\Model\Resource\Quote\CollectionFactory
      */
-    protected $quoteCollection;
+    private $quoteCollectionFactory;
 
     /**
      * @var \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory
      */
-    protected $searchResultsDataFactory;
+    private $searchResultsDataFactory;
 
     /**
      * @var JoinProcessorInterface
@@ -29,17 +29,17 @@ class  TestRepository implements TestRepositoryInterface
     private $extensionAttributesJoinProcessor;
 
     /**
-     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
+     * @param \Magento\Quote\Model\Resource\Quote\CollectionFactory $quoteCollectionFactory
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
-        \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
+        \Magento\Quote\Model\Resource\Quote\CollectionFactory $quoteCollectionFactory,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
+        $this->quoteCollectionFactory = $quoteCollectionFactory;
         $this->searchResultsDataFactory = $searchResultsDataFactory;
-        $this->quoteCollection = $quoteCollection;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
@@ -48,10 +48,11 @@ class  TestRepository implements TestRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
+        $quoteCollection = $this->quoteCollectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($quoteCollection);
         $searchData = $this->searchResultsDataFactory->create();
         $searchData->setSearchCriteria($searchCriteria);
-        $this->extensionAttributesJoinProcessor->process($this->quoteCollection);
-        $searchData->setItems($this->quoteCollection->getItems());
+        $searchData->setItems($quoteCollection->getItems());
         return $searchData;
     }
 }
