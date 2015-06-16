@@ -71,20 +71,21 @@ class AjaxLogin
         $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
         $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;
 
-        if (!in_array($loginFormId, $this->formIds)) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Provided form does not exist'));
-        }
-
-        /** @var \Magento\Captcha\Model\CaptchaInterface $captchaModel */
-        $captchaModel = $this->helper->getCaptcha($loginFormId);
-
-        if ($captchaModel->isRequired($username)) {
-            $captchaModel->logAttempt($username);
-            if (!$captchaModel->isCorrect($captchaString)) {
-                $this->sessionManager->setUsername($username);
-                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        foreach ($this->formIds as $formId) {
+            $captchaModel = $this->helper->getCaptcha($formId);
+            if ($captchaModel->isRequired($username) && !in_array($loginFormId, $this->formIds)) {
                 $resultJson = $this->resultJsonFactory->create();
-                return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+                return $resultJson->setData(['errors' => true, 'message' => __('Provided form does not exist')]);
+            }
+
+            if ($formId == $loginFormId) {
+                $captchaModel->logAttempt($username);
+                if (!$captchaModel->isCorrect($captchaString)) {
+                    $this->sessionManager->setUsername($username);
+                    /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                    $resultJson = $this->resultJsonFactory->create();
+                    return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+                }
             }
         }
         return $proceed();
