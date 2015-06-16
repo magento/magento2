@@ -16,7 +16,7 @@ define(
              */
             placeOrder: function () {
                 var data = {
-                    "method": this.index,
+                    "method": this.item.code,
                     "po_number": null,
                     "cc_owner": null,
                     "cc_number": null,
@@ -31,7 +31,14 @@ define(
              * Get payment method type.
              */
             getTitle: function () {
-                return this.item.method;
+                return this.item.title;
+            },
+
+            /**
+             * Get payment method code.
+             */
+            getCode: function () {
+                return this.item.code;
             }
         });
     }

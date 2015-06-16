@@ -31,10 +31,10 @@ define([
                     var self = this;
                     changes.forEach(function(change) {
                         if (change.status === 'added') {
-                            console.log(('added ' + change.value.method));
+                            console.log(('added ' + change.value.code));
                             self.createRenderer(change.value);
                         } else if (change.status === 'deleted') {
-                            console.log(('deleted ' + change.value.method));
+                            console.log(('deleted ' + change.value.code));
                             self.removeRenderer(change.value);
                         }
                     });
@@ -54,7 +54,7 @@ define([
         },
 
         createRenderer: function(item) {
-            var renderer = this.getRendererByType(item.method);
+            var renderer = this.getRendererByType(item.code);
             if (renderer) {
                 var templateData = {
                     parentName: this.name,
@@ -70,7 +70,7 @@ define([
                 cm = rendererComponent;
                 layout([rendererComponent]);
             } else {
-                console.log('There is no registered render for Payment Method: ' + item.method);
+                console.log('There is no registered render for Payment Method: ' + item.code);
             }
         },
 
@@ -84,26 +84,7 @@ define([
             return output;
         },
 
-        add: function() {
-            var method = {
-                "method": 'checkmo',
-                "po_number": null,
-                "cc_owner": null,
-                "cc_number": null,
-                "cc_type": null,
-                "cc_exp_year": null,
-                "cc_exp_month": null,
-                "additional_data": null
-            };
-            paymentMethods([method]);
-        },
-
-        remove: function() {
-            paymentMethods([]);
-        },
-
         removeRenderer: function (paymentMethod) {
-            console.info('remove renderer');
             this.removeChild(cm);
         }
     });
