@@ -48,6 +48,7 @@
                             <argument name="header" xsi:type="string" translate="true">Imported File</argument>
                             <argument name="index" xsi:type="string">type</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="filter" xsi:type="boolean">0</argument>
                             <argument name="align" xsi:type="string">center</argument>
                             <argument name="type" xsi:type="string">action</argument>
                             <argument name="renderer" xsi:type="string">Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download</argument>
