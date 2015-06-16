@@ -120,10 +120,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
-            ->with(
-                $this->isInstanceOf('Magento\CheckoutAgreements\Model\Resource\Agreement\Collection'),
-                '\Magento\CheckoutAgreements\Api\Data\AgreementInterface'
-            );
+            ->with($this->isInstanceOf('Magento\CheckoutAgreements\Model\Resource\Agreement\Collection'));
 
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
