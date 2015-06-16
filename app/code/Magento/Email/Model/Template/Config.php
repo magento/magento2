@@ -7,7 +7,7 @@
  */
 namespace Magento\Email\Model\Template;
 
-class Config
+class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Data
