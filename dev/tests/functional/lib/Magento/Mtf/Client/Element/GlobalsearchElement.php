@@ -69,10 +69,10 @@ class GlobalsearchElement extends SimpleElement
         if (!$this->find($this->searchInput)->isVisible()) {
             $this->find($this->searchIcon)->click();
         }
-        $this->selectWindow();
+//        $this->selectWindow();
         $this->clear();
         $this->find($this->searchInput)->setValue($value);
-        $this->selectWindow();
+//        $this->selectWindow();
 
         $this->waitResult();
     }
@@ -133,7 +133,7 @@ class GlobalsearchElement extends SimpleElement
                 if ($browser->find($selector)->isVisible()) {
                     return true;
                 } else {
-                    $browser->selectWindow();
+//                    $browser->selectWindow();
                     return null;
                 }
             }
