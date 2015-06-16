@@ -64,9 +64,9 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             ['payment']['children']
         )) {
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-            ['payment']['children'] = $this->processPaymentConfiguration(
+            ['payment']['children']['renders']['children'] = $this->processPaymentConfiguration(
                 $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-                ['payment']['children'],
+                ['payment']['children']['renders']['children'],
                 $elements
             );
         }
@@ -94,79 +94,84 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $elements attributes that must be displayed in address form
      * @return array
      */
-    private function processPaymentConfiguration(array $configuration, array $elements) {
-        foreach ($configuration as $paymentCode => $paymentComponent) {
-            if (empty($paymentComponent['isBillingAddressRequired'])) {
-                continue;
-            }
-            $configuration[$paymentCode]['children'] = isset($configuration[$paymentCode]['children'])
-                ? $configuration[$paymentCode]['children']
-                : [];
-            $configuration[$paymentCode]['children']['billing-address'] = [
-                'component' => 'Magento_Checkout/js/view/billing-address',
-                'displayArea' => 'billing-address',
-                'provider' => 'checkoutProvider',
-                'dataScopePrefix' => 'billingAddress' . $paymentCode,
-                'sortOrder' => 1,
-                'children' => [
-                    'form-fields' => [
-                        'component' => 'uiComponent',
-                        'displayArea' => 'additional-fieldsets',
-                        'children' => $this->merger->merge(
-                            $elements,
-                            'checkoutProvider',
-                            'billingAddress' . $paymentCode,
-                            [
-                                'country_id' => [
-                                    'sortOrder' => 115,
-                                ],
-                                'region' => [
-                                    'visible' => false,
-                                ],
-                                'region_id' => [
-                                    'component' => 'Magento_Ui/js/form/element/region',
-                                    'config' => [
-                                        'template' => 'ui/form/field',
-                                        'elementTmpl' => 'ui/form/element/select',
-                                        'customEntry' => 'billingAddress' . $paymentCode . '.region',
+    private function processPaymentConfiguration(array $configuration, array $elements)
+    {
+        foreach ($configuration as $paymentGroup => $groupConfig) {
+            foreach ($groupConfig['methods'] as $paymentCode => $paymentComponent) {
+                if (empty($paymentComponent['isBillingAddressRequired'])) {
+                    continue;
+                }
+                $configuration[$paymentGroup]['children'] = isset($configuration[$paymentCode]['children'])
+                    ? $configuration[$paymentGroup]['children']
+                    : [];
+                $configuration[$paymentGroup]['children'][$paymentCode . '-form'] = [
+                    'component' => 'Magento_Checkout/js/view/billing-address',
+                    'displayArea' => 'billing-address',
+                    'provider' => 'checkoutProvider',
+                    'dataScopePrefix' => 'billingAddress' . $paymentCode,
+                    'sortOrder' => 1,
+                    'children' => [
+                        'form-fields' => [
+                            'component' => 'uiComponent',
+                            'displayArea' => 'additional-fieldsets',
+                            'children' => $this->merger->merge(
+                                $elements,
+                                'checkoutProvider',
+                                'billingAddress' . $paymentCode,
+                                [
+                                    'country_id' => [
+                                        'sortOrder' => 115,
                                     ],
-                                    'validation' => [
-                                        'validate-select' => true,
+                                    'region' => [
+                                        'visible' => false,
                                     ],
-                                    'filterBy' => [
-                                        'target' => '${ $.provider }:${ $.parentScope }.country_id',
-                                        'field' => 'country_id',
-                                    ],
-                                ],
-                                'postcode' => [
-                                    'component' => 'Magento_Ui/js/form/element/post-code',
-                                    'validation' => [
-                                        'required-entry' => true,
-                                    ],
-                                ],
-                                'company' => [
-                                    'validation' => [
-                                        'min_text_length' => 0,
-                                    ],
-                                ],
-                                'fax' => [
-                                    'validation' => [
-                                        'min_text_length' => 0,
-                                    ],
-                                ],
-                                'telephone' => [
-                                    'config' => [
-                                        'tooltip' => [
-                                            'description' => 'For delivery Questions',
+                                    'region_id' => [
+                                        'component' => 'Magento_Ui/js/form/element/region',
+                                        'config' => [
+                                            'template' => 'ui/form/field',
+                                            'elementTmpl' => 'ui/form/element/select',
+                                            'customEntry' => 'billingAddress' . $paymentCode . '.region',
+                                        ],
+                                        'validation' => [
+                                            'validate-select' => true,
+                                        ],
+                                        'filterBy' => [
+                                            'target' => '${ $.provider }:${ $.parentScope }.country_id',
+                                            'field' => 'country_id',
                                         ],
                                     ],
-                                ],
-                            ]
-                        ),
+                                    'postcode' => [
+                                        'component' => 'Magento_Ui/js/form/element/post-code',
+                                        'validation' => [
+                                            'required-entry' => true,
+                                        ],
+                                    ],
+                                    'company' => [
+                                        'validation' => [
+                                            'min_text_length' => 0,
+                                        ],
+                                    ],
+                                    'fax' => [
+                                        'validation' => [
+                                            'min_text_length' => 0,
+                                        ],
+                                    ],
+                                    'telephone' => [
+                                        'config' => [
+                                            'tooltip' => [
+                                                'description' => 'For delivery Questions',
+                                            ],
+                                        ],
+                                    ],
+                                ]
+                            ),
+                        ],
                     ],
-                ],
-            ];
+                ];
+            }
+            unset($configuration[$paymentGroup]['methods']);
         }
+
         return $configuration;
     }
 }

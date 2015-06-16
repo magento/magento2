@@ -26,6 +26,11 @@
                                                             <item name="children" xsi:type="array">
                                                                 <item name="offline-payments" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Magento_OfflinePayments/js/view/payment/offline-payments</item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="checkmo" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>

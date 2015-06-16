@@ -41,7 +41,7 @@ define([
         },
 
         /**
-         * Create renderers for child payment methods.
+         * Create renders for child payment methods.
          *
          * @returns {Component} Chainable.
          */
@@ -49,6 +49,11 @@ define([
             _.each(paymentMethods(), function (paymentMethodData) {
                 this.createRenderer(paymentMethodData);
             });
+
+            //_.find(this.elems(), function (value) {
+            //    var t = value;
+            //    debugger;
+            //});
 
             return this;
         },
