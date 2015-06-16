@@ -361,7 +361,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/products/:sku/links/:type" method="POST">
+    <route url="/V1/products/:sku/links" method="POST">
         <service class="Magento\Catalog\Api\ProductLinkManagementInterface" method="setProductLinks"/>
         <resources>
             <resource ref="Magento_Catalog::catalog"/>
@@ -373,7 +373,7 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
-    <route url="/V1/products/:sku/links/:link_type" method="PUT">
+    <route url="/V1/products/:sku/links" method="PUT">
         <service class="Magento\Catalog\Api\ProductLinkRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Catalog::catalog"/>
