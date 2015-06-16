@@ -22,34 +22,33 @@
             <!-- ko template: formTemplate --><!--/ko-->
         </div>
     <!-- /ko -->
-    <div class="gift-summary">
-        <!-- ko if: resultBlockVisibility() -->
-            <!-- ko foreach: getRegion('additionalOptions') -->
-                <!--ko template: appliedTemplate --><!-- /ko -->
-            <!-- /ko -->
+    <!-- ko if: resultBlockVisibility() -->
+        <div class="gift-summary">
+                <!-- ko foreach: getRegion('additionalOptions') -->
+                    <!--ko template: appliedTemplate --><!-- /ko -->
+                <!-- /ko -->
 
-            <!-- ko if: getObservable('message') -->
-                <div class="gift-message-summary">
-                    <span style="font-weight: bolder"  data-bind="text: $t('Message') + ':'"></span>
-                    <!-- ko text: getObservable('message') --><!-- /ko -->
+                <!-- ko if: getObservable('message') -->
+                    <div class="gift-message-summary">
+                        <span style="font-weight: bolder"  data-bind="text: $t('Message') + ':'"></span>
+                        <!-- ko text: getObservable('message') --><!-- /ko -->
+                    </div>
+                <!-- /ko -->
+                <div class="actions-toolbar">
+                    <div class="secondary">
+                        <button type="submit" class="action action-edit" data-bind="
+                            click: $data.editOptions.bind($data),
+                            attr: {title: $t('Edit')">
+                            <span data-bind="text: $t('Edit')"></span>
+                        </button>
+                        <button class="action action-delete" data-bind="
+                            click: $data.deleteOptions.bind($data),
+                            attr: {title: $t('Delete')">
+                            <span data-bind="text: $t('Delete')"></span>
+                        </button>
+                    </div>
                 </div>
-            <!-- /ko -->
-
-            <div class="actions-toolbar">
-                <div class="secondary">
-                    <button type="submit" class="action action-edit" data-bind="
-                        click: $data.editOptions.bind($data),
-                        attr: {title: $t('Edit')">
-                        <span data-bind="text: $t('Edit')"></span>
-                    </button>
-                    <button class="action action-delete" data-bind="
-                        click: $data.deleteOptions.bind($data),
-                        attr: {title: $t('Delete')">
-                        <span data-bind="text: $t('Delete')"></span>
-                    </button>
-                </div>
-            </div>
-        <!-- /ko -->
-    </div>
+        </div>
+    <!-- /ko -->
 </div>
 <!-- /ko -->
