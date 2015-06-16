@@ -8,7 +8,8 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\FixtureModel;
 
-class FixtureModelTest extends \PHPUnit_Framework_TestCase {
+class FixtureModelTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @var \Magento\Setup\Fixtures\FixtureModel
@@ -17,7 +18,13 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $reindexCommandMock = $this->getMock('\Magento\Indexer\Console\Command\IndexerReindexCommand', [], [], '', false);
+        $reindexCommandMock = $this->getMock(
+            '\Magento\Indexer\Console\Command\IndexerReindexCommand',
+            [],
+            [],
+            '',
+            false
+        );
         $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', [], [], '', false);
 
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
@@ -71,7 +78,13 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase {
 
     public function testLoadConfig()
     {
-        $reindexCommandMock = $this->getMock('\Magento\Indexer\Console\Command\IndexerReindexCommand', [], [], '', false);
+        $reindexCommandMock = $this->getMock(
+            '\Magento\Indexer\Console\Command\IndexerReindexCommand',
+            [],
+            [],
+            '',
+            false
+        );
 
         $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', [], [], '', false);
         $fileParserMock->expects($this->once())
