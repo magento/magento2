@@ -5,7 +5,9 @@
  */
 namespace Magento\Indexer\Model\Config;
 
-class Converter implements \Magento\Framework\Config\ConverterInterface
+use Magento\Framework\Config\ConverterInterface;
+
+class Converter implements ConverterInterface
 {
     /**
      * Convert dom node tree to array
@@ -66,7 +68,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function convertChild(\DOMElement $childNode, $data)
     {
-        $data['handlers']  = isset($data['handlers']) ? $data['handlers'] : [];
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
         switch ($childNode->nodeName) {
             case 'title':
@@ -75,12 +76,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             case 'description':
                 $data['description'] = $this->getTranslatedNodeValue($childNode);
                 break;
+            case 'saveHandler':
+                $data['saveHandler'] = $this->getAttributeValue($childNode, 'class');
+                break;
+            case 'structure':
+                $data['structure'] = $this->getAttributeValue($childNode, 'class');
+                break;
             case 'fieldset':
                 $data = $this->convertFieldset($childNode, $data);
-                break;
-            case 'handler':
-                $data['handlers'][$this->getAttributeValue($childNode, 'name')]
-                    = $this->getAttributeValue($childNode, 'class');
                 break;
         }
         return $data;
@@ -115,8 +118,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     break;
                 case 'reference':
                     $data['fieldsets'][$this->getAttributeValue($node, 'name')]['reference'] = [
-                        'from' => $this->getAttributeValue($childNode, 'from'),
-                        'to' => $this->getAttributeValue($childNode, 'to'),
+                        'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
+                        'from'     => $this->getAttributeValue($childNode, 'from'),
+                        'to'       => $this->getAttributeValue($childNode, 'to'),
                     ];
                     break;
             }
