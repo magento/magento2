@@ -25,6 +25,10 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  Shipping */
@@ -310,6 +314,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      * @param int $regionId
      * @param int $quoteId
      * @dataProvider dataProviderBeforeToHtml
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testBeforeToHtml(
         $customerId,
@@ -429,5 +434,4 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             [1, 1, 1, '12345', 'California', 1, 1],
         ];
     }
-
 }

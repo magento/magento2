@@ -12,6 +12,9 @@ use Magento\Quote\Api\Data\EstimateAddressInterfaceFactory;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteRepository;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
@@ -86,6 +89,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param CustomerRepositoryInterface $customerRepository
      * @param QuoteRepository $quoteRepository
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
