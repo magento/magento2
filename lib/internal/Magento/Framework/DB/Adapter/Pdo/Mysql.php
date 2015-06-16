@@ -3131,15 +3131,19 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Returns a compressed version of the trigger name if it is too long
+     * Build a trigger name based on table name and trigger details
      *
-     * @param string $triggerName
+     * @param string $tableName  The table which is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      * @codeCoverageIgnore Covered by tests on ExpressionConverter
      */
-    public function getTriggerName($triggerName)
+
+    public function getTriggerName($tableName, $time, $event)
     {
-        return ExpressionConverter::shortenEntityName($triggerName, Subscription::TRIGGER_NAME_QUALIFIER);
+        $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;
+        return ExpressionConverter::shortenEntityName($triggerName, 'trg_');
     }
 
     /**
