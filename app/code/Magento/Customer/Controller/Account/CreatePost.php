@@ -249,7 +249,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
                 // @codingStandardsIgnoreStart
                 $this->messageManager->addSuccess(
                     __(
-                        'Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%1">click here</a>.',
+                        'Account confirmation is required. Please check your email for the confirmation link. To resend the confirmation email please <a href="%1">click here</a>.',
                         $email
                     )
                 );

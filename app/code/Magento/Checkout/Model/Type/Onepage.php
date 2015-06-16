@@ -907,7 +907,7 @@ class Onepage
             $this->messageManager->addSuccess(
                 // @codingStandardsIgnoreStart
                 __(
-                    'Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.',
+                    'Account confirmation is required. Please check your email for confirmation link. To resend confirmation email please <a href="%1">click here</a>.',
                     $url
                 )
                 // @codingStandardsIgnoreEnd

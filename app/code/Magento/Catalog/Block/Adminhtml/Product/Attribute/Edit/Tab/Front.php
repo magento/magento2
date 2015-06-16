@@ -72,7 +72,7 @@ class Front extends Generic
 
         $fieldset = $form->addFieldset(
             'front_fieldset',
-            ['legend' => __('Frontend Properties'), 'collapsable' => $this->getRequest()->has('popup')]
+            ['legend' => __('Storefront Properties'), 'collapsable' => $this->getRequest()->has('popup')]
         );
 
         $fieldset->addField(
