@@ -79,6 +79,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->collectShippingRates();
         /** @var \Magento\Quote\Model\Quote\Address\Rate $shippingRate */
         $shippingRate = $shippingAddress->getShippingRateByCode($shippingMethod);
+        if (!$shippingRate) {
+            return null;
+        }
         return $this->converter->modelToDataObject($shippingRate, $quote->getQuoteCurrencyCode());
     }
 

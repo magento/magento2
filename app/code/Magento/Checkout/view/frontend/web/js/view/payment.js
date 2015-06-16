@@ -8,20 +8,29 @@ define(
     [
         'jquery',
         'uiComponent',
-        '../model/quote',
-        '../action/select-payment-method',
+        'ko',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/model/step-navigator',
         'mage/translate',
         'mageUtils'
     ],
-    function ($, Component, quote, selectPaymentMethod, paymentService, $t, utils) {
+    function ($, Component, ko, quote, selectPaymentMethod, paymentService, stepNavigator,  $t, utils) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
                 activeMethod: ''
             },
-            isVisible: true,
+            isVisible: ko.observable(quote.isVirtual()),
             paymentForm: '#co-payment-form',
+
+            initialize: function () {
+                this._super();
+                stepNavigator.registerStep('billing', 'Review & Payments', this.isVisible, 20);
+                return this;
+            },
+
             initObservable: function () {
                 this._super()
                     .observe('activeMethod');

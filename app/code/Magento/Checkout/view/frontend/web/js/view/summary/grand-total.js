@@ -15,7 +15,7 @@ define(
                 template: 'Magento_Checkout/summary/grand-total'
             },
             isDisplayed: function() {
-                return this.getTotalsMode() != 'initial';
+                return this.isFullMode();
             },
             getPureValue: function() {
                 var totals = quote.getTotals()();
