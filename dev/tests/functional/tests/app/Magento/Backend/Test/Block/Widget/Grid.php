@@ -105,13 +105,6 @@ abstract class Grid extends Block
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Selector of element to wait for. If set by child will wait for element after action
-     *
-     * @var string
-     */
-    protected $waitForSelector;
-
-    /**
      * Locator type of waitForSelector
      *
      * @var Locator
@@ -249,7 +242,6 @@ abstract class Grid extends Block
         $rowItem = $this->_rootElement->find($this->rowItem, Locator::SELECTOR_CSS);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink, Locator::SELECTOR_CSS)->click();
-            $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
         }
@@ -271,20 +263,6 @@ abstract class Grid extends Block
             }
         );
         $this->getTemplateBlock()->waitLoader();
-    }
-
-    /**
-     * Method that waits for the configured selector using class attributes.
-     */
-    protected function waitForElement()
-    {
-        if (!empty($this->waitForSelector)) {
-            if ($this->waitForSelectorVisible) {
-                $this->getTemplateBlock()->waitForElementVisible($this->waitForSelector, $this->waitForSelectorType);
-            } else {
-                $this->getTemplateBlock()->waitForElementNotVisible($this->waitForSelector, $this->waitForSelectorType);
-            }
-        }
     }
 
     /**
