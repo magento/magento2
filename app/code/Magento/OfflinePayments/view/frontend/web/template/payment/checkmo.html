@@ -5,5 +5,13 @@
  */
 -->
 <div style="border: 1px solid red; width: 100%;">
-    <input type="radio"><!-- ko text: getTitle() --><!-- /ko -->
+    <!-- ko text: getCode() --><!-- /ko --> : <!-- ko text: getTitle() --><!-- /ko --><br/>
+
+    <div class="actions-toolbar" id="review-buttons-container">
+        <div class="primary">
+            <button data-role="review-save" type="submit"
+                    data-bind="click: placeOrder, attr: {title: $t('Place Order')}"
+                    class="button action primary checkout"><span data-bind="text: $t('Place Order')"></span></button>
+        </div>
+    </div>
 </div>
