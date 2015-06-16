@@ -35,41 +35,23 @@
     </xs:complexType>
 
     <xs:element name="indexer" type="indexerType">
-        <xs:unique name="handlerKey">
+        <xs:unique name="fieldsetKey">
             <xs:annotation>
                 <xs:documentation>
-                    Handler name must be unique.
+                    Fieldset name must be unique.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath=".//handler"/>
+            <xs:selector xpath=".//fieldset"/>
             <xs:field xpath="@name"/>
         </xs:unique>
-        <xs:keyref name="handlerReference" refer="handlerKey">
+        <xs:keyref name="fieldsetReference" refer="fieldsetKey">
             <xs:annotation>
                 <xs:documentation>
-                    Field handler key must exists.
+                    Field fieldset key must exists.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath=".//fieldset/field"/>
-            <xs:field xpath="@handler"/>
-        </xs:keyref>
-        <xs:unique name="sourceKey">
-            <xs:annotation>
-                <xs:documentation>
-                    Source name must be unique.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath=".//source"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:keyref name="sourceReference" refer="sourceKey">
-            <xs:annotation>
-                <xs:documentation>
-                    Field source key must exists.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath=".//fieldset/field"/>
-            <xs:field xpath="@source"/>
+            <xs:selector xpath=".//fieldset/reference"/>
+            <xs:field xpath="@fieldset"/>
         </xs:keyref>
     </xs:element>
 </xs:schema>

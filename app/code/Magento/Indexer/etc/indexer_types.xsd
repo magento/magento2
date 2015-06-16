@@ -15,6 +15,8 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="title" type="translatableType" />
             <xs:element name="description" type="translatableType" />
+            <xs:element name="saveHandler" type="saveHandlerType" />
+            <xs:element name="structure" type="structureType" />
             <xs:group ref="fieldset"/>
         </xs:choice>
         <xs:attribute name="id" type="xs:string" use="required" />
@@ -36,7 +38,6 @@
                     <xs:field xpath="@name"/>
                 </xs:unique>
             </xs:element>
-            <xs:element name="handler" type="handlerType"/>
         </xs:choice>
     </xs:group>
 
@@ -121,18 +122,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="name" type="nameType" use="required"/>
-        <xs:attribute name="handler" type="nameType" use="optional"/>
+        <xs:attribute name="handler" type="classType" use="optional"/>
         <xs:attribute name="origin" type="originType" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="handlerType">
-        <xs:annotation>
-            <xs:documentation>
-                Handler of field declaration.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="class" type="classType" use="required"/>
-        <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="fieldsetType" mixed="true">
@@ -146,7 +137,7 @@
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:choice>
         <xs:attribute name="source" type="classType" use="required"/>
-        <xs:attribute name="class" type="classType" use="optional"/>
+        <xs:attribute name="provider" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
@@ -170,12 +161,31 @@
         <xs:attribute name="class" type="classType" use="required"/>
     </xs:complexType>
 
+    <xs:complexType name="structureType">
+        <xs:annotation>
+            <xs:documentation>
+                Structure type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="saveHandlerType">
+        <xs:annotation>
+            <xs:documentation>
+                SaveHandler type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="referenceType">
         <xs:annotation>
             <xs:documentation>
                 Index field reference.
             </xs:documentation>
         </xs:annotation>
+        <xs:attribute name="fieldset" type="nameType" use="required"/>
         <xs:attribute name="from" type="fromType" use="required"/>
         <xs:attribute name="to" type="toType" use="required"/>
     </xs:complexType>
@@ -197,12 +207,6 @@
     </xs:complexType>
 
     <xs:complexType name="filterable">
-        <xs:complexContent>
-            <xs:extension base="fieldType"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="both">
         <xs:complexContent>
             <xs:extension base="fieldType"/>
         </xs:complexContent>
