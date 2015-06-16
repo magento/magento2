@@ -42,11 +42,6 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue('website_id'));
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $storeManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnValue([$websiteMock]));
-
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
             '\Magento\Framework\Model\Resource\Db\AbstractDb',
@@ -60,6 +55,11 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
+
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->will($this->returnValue([$websiteMock]));
 
         $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $categoryMock->expects($this->once())
