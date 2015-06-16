@@ -46,7 +46,8 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $categoryMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('category_name'));

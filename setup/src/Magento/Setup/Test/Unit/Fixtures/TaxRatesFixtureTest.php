@@ -39,7 +39,13 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturn([1]);
         $valueMap[] = ['Magento\Tax\Model\Resource\Calculation\Rate\Collection', $collectionMock];
 
-        $csvImportHandlerMock = $this->getMock('Magento\TaxImportExport\Model\Rate\CsvImportHandler', [], [], '', false);
+        $csvImportHandlerMock = $this->getMock(
+            'Magento\TaxImportExport\Model\Rate\CsvImportHandler',
+            [],
+            [],
+            '',
+            false
+        );
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

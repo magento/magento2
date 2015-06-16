@@ -48,7 +48,15 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$websiteMock]));
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
-        $abstractDbMock = $this->getMockForAbstractClass('\Magento\Framework\Model\Resource\Db\AbstractDb', [$contextMock], '', true, true, true, ['getAllChildren']);
+        $abstractDbMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            [$contextMock],
+            '',
+            true,
+            true,
+            true,
+            ['getAllChildren']
+        );
         $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
