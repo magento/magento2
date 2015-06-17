@@ -24,7 +24,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -34,7 +34,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
         AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;

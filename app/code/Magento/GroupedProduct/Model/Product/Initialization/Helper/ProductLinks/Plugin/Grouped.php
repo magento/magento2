@@ -25,8 +25,8 @@ class Grouped
         array $links
     ) {
         if ($product->getTypeId() == TypeGrouped::TYPE_CODE && !$product->getGroupedReadonly()) {
-            $links = isset($links['associated']) ? $links['associated'] : [];
-            $product->setGroupedLinkData($links);
+            $links = isset($links['associated']) ? $links['associated'] : $product->getGroupedLinkData();
+            $product->setGroupedLinkData((array)$links);
         }
     }
 }
