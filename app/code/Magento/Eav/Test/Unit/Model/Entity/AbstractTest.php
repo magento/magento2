@@ -216,7 +216,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             false
         );
         $object->setEntityTypeId(1);
-        $object->setData($productData);
+        foreach ($productData as $key => $value) {
+            $object->setData($key, $value);
+        }
         $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
 
         $entityType = new \Magento\Framework\Object();

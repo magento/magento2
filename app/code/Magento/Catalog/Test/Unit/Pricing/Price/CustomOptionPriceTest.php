@@ -6,8 +6,10 @@
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
 use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Model\Product\Option;
 
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Catalog\Model\Product\Option\Value;
 
 /**
  * Class OptionPriceTest
@@ -95,46 +97,198 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function setupOptions(array $optionsData)
+    {
+        $options = [];
+        foreach ($optionsData as $optionData) {
+            $optionValueMax = $this->getOptionValueMock($optionData['max_option_price']);
+            $optionValueMin = $this->getOptionValueMock($optionData['min_option_price']);
+
+            $optionItemMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+                ->disableOriginalConstructor()
+                ->setMethods(['getValues', '__wakeup', 'getIsRequire', 'getId', 'getType'])
+                ->getMock();
+            $optionItemMock->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($optionData['id']));
+            $optionItemMock->expects($this->any())
+                ->method('getType')
+                ->will($this->returnValue($optionData['type']));
+            $optionItemMock->expects($this->any())
+                ->method('getIsRequire')
+                ->will($this->returnValue($optionData['is_require']));
+            $optionItemMock->expects($this->any())
+                ->method('getValues')
+                ->will($this->returnValue([$optionValueMax, $optionValueMin]));
+            $options[] = $optionItemMock;
+        }
+        return $options;
+    }
+
+    protected function setupSingleValueOptions($optionsData)
+    {
+        $options = [];
+        foreach ($optionsData as $optionData) {
+            $optionItemMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+                ->disableOriginalConstructor()
+                ->setMethods([
+                    'getValues',
+                    '__wakeup',
+                    'getIsRequire',
+                    'getId',
+                    'getType',
+                    'getPriceType',
+                    'getPrice',
+                ])
+                ->getMock();
+            $optionItemMock->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($optionData['id']));
+            $optionItemMock->expects($this->any())
+                ->method('getType')
+                ->will($this->returnValue($optionData['type']));
+            $optionItemMock->expects($this->any())
+                ->method('getIsRequire')
+                ->will($this->returnValue($optionData['is_require']));
+            $optionItemMock->expects($this->any())
+                ->method('getValues')
+                ->will($this->returnValue(null));
+            $optionItemMock->expects($this->any())
+                ->method('getPriceType')
+                ->willReturn($optionData['price_type']);
+            $optionItemMock->expects($this->any())
+                ->method('getPrice')
+                ->with($optionData['price_type'] == Value::TYPE_PERCENT)
+                ->willReturn($optionData['price']);
+            $options[] = $optionItemMock;
+        }
+        return $options;
+    }
+
     /**
      * Test getValue()
      */
     public function testGetValue()
     {
-        $price = 100;
-        $minPrice = 10;
-        $optionId = 1;
-        $type = 'select';
+        $option1Id = 1;
+        $option1MaxPrice = 100;
+        $option1MinPrice = 10;
+        $option1Type = 'select';
 
-        $optionValueMax = $this->getOptionValueMock($price);
-        $optionValueMin = $this->getOptionValueMock($minPrice);
+        $option2Id = 2;
+        $option2MaxPrice = 200;
+        $option2MinPrice = 20;
+        $option2Type = Option::OPTION_TYPE_CHECKBOX;
 
-        $optionItemMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
-            ->disableOriginalConstructor()
-            ->setMethods(['getValues', '__wakeup', 'getIsRequire', 'getId', 'getType'])
-            ->getMock();
-        $optionItemMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($optionId));
-        $optionItemMock->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($type));
-        $optionItemMock->expects($this->once())
-            ->method('getIsRequire')
-            ->will($this->returnValue(true));
-        $optionItemMock->expects($this->any())
-            ->method('getValues')
-            ->will($this->returnValue([$optionValueMax, $optionValueMin]));
-        $options = [$optionItemMock];
+        $optionsData = [
+            [
+                'id' => $option1Id,
+                'type' => $option1Type,
+                'max_option_price' => $option1MaxPrice,
+                'min_option_price' => $option1MinPrice,
+                'is_require' => true,
+            ],
+            [
+                'id' => $option2Id,
+                'type' => $option2Type,
+                'max_option_price' => $option2MaxPrice,
+                'min_option_price' => $option2MinPrice,
+                'is_require' => false,
+            ]
+        ];
+
+        $singleValueOptionId = 3;
+        $singleValueOptionPrice = '50';
+        $singleValueOptionType = 'text';
+
+        $singleValueOptions = $this->setupSingleValueOptions(
+            [
+                [
+                    'id' => $singleValueOptionId,
+                    'type' => $singleValueOptionType,
+                    'price' => $singleValueOptionPrice,
+                    'price_type' => 'fixed',
+                    'is_require' => true,
+                ],
+            ]
+        );
+
+        $options = $this->setupOptions($optionsData);
+        $options[] = $singleValueOptions[0];
         $this->product->expects($this->once())
             ->method('getOptions')
             ->will($this->returnValue($options));
 
+        $expectedResult = [
+            [
+                'option_id' => $option1Id,
+                'type' => $option1Type,
+                'min' => $option1MinPrice,
+                'max' => $option1MaxPrice,
+            ],
+            [
+                'option_id' => $option2Id,
+                'type' => $option2Type,
+                'min' => 0.,
+                'max' => $option2MaxPrice + $option2MinPrice,
+            ],
+            [
+                'option_id' => $singleValueOptionId,
+                'type' => $singleValueOptionType,
+                'min' => $singleValueOptionPrice,
+                'max' => $singleValueOptionPrice,
+            ]
+        ];
         $result = $this->object->getValue();
-        $this->assertCount(1, $result);
-        $this->assertArrayHasKey('option_id', $result[0]);
-        $this->assertArrayHasKey('type', $result[0]);
-        $this->assertArrayHasKey('min', $result[0]);
-        $this->assertEquals($minPrice, $result[0]['min']);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testGetCustomOptionRange()
+    {
+        $option1Id = 1;
+        $option1MaxPrice = 100;
+        $option1MinPrice = 10;
+        $option1Type = 'select';
+
+        $option2Id = '2';
+        $option2MaxPrice = 200;
+        $option2MinPrice = 20;
+        $option2Type = 'choice';
+
+        $optionsData = [
+            [
+                'id' => $option1Id,
+                'type' => $option1Type,
+                'max_option_price' => $option1MaxPrice,
+                'min_option_price' => $option1MinPrice,
+                'is_require' => true,
+            ],
+            [
+                'id' => $option2Id,
+                'type' => $option2Type,
+                'max_option_price' => $option2MaxPrice,
+                'min_option_price' => $option2MinPrice,
+                'is_require' => false,
+            ]
+        ];
+        $options = $this->setupOptions($optionsData);
+
+        $this->product->expects($this->any())
+            ->method('getOptions')
+            ->will($this->returnValue($options));
+
+        $convertMinValue = $option1MinPrice / 2;
+        $convertedMaxValue = ($option2MaxPrice + $option1MaxPrice) / 2;
+        $this->priceCurrencyMock->expects($this->at(0))
+            ->method('convertAndRound')
+            ->with($option1MinPrice)
+            ->willReturn($convertMinValue);
+        $this->priceCurrencyMock->expects($this->at(1))
+            ->method('convertAndRound')
+            ->with($option2MaxPrice + $option1MaxPrice)
+            ->willReturn($convertedMaxValue);
+        $this->assertEquals($option1MinPrice / 2, $this->object->getCustomOptionRange(true));
+        $this->assertEquals($convertedMaxValue, $this->object->getCustomOptionRange(false));
     }
 
     /**
@@ -147,10 +301,10 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getPriceType', 'getPrice', 'getId', '__wakeup'])
             ->getMock();
-        $optionValueMock->expects($this->once())
+        $optionValueMock->expects($this->any())
             ->method('getPriceType')
             ->will($this->returnValue('percent'));
-        $optionValueMock->expects($this->once())
+        $optionValueMock->expects($this->any())
             ->method('getPrice')
             ->with($this->equalTo(true))
             ->will($this->returnValue($price));

@@ -281,17 +281,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $customer = $this->customerRepository->getById($customerId);
 
         try {
-            $this->quoteRepository->getActiveForCustomer($customerId);
-            throw new CouldNotSaveException(__('Cannot create quote'));
+            $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $quote = $this->quoteRepository->create();
+            $quote->setStoreId($storeId);
+            $quote->setCustomer($customer);
+            $quote->setCustomerIsGuest(0);
         }
-
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->create();
-        $quote->setStoreId($storeId);
-        $quote->setCustomer($customer);
-        $quote->setCustomerIsGuest(0);
         return $quote;
     }
 
@@ -375,15 +372,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected function resolveItems(QuoteEntity $quote)
     {
         $quoteItems = $quote->getAllItems();
-        for ($i = 0; $i < count($quoteItems) - 1; $i++) {
-            for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
-                if ($quoteItems[$i]->getParentItemId() == $quoteItems[$j]->getId()) {
-                    $tempItem = $quoteItems[$i];
-                    $quoteItems[$i] = $quoteItems[$j];
-                    $quoteItems[$j] = $tempItem;
-                }
-            }
-        }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?

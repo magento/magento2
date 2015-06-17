@@ -27,8 +27,8 @@ abstract class AbstractSetupCommand extends Command
             null,
             InputOption::VALUE_REQUIRED,
             'Add to any command to customize Magento initialization parameters' . PHP_EOL .
-            "For example: 'MAGE_MODE=developer&MAGE_DIRS[base][path]" .
-            "=/var/www/example.com&MAGE_DIRS[cache][path]=/var/tmp/cache'"
+            'For example: "MAGE_MODE=developer&MAGE_DIRS[base][path]' .
+            '=/var/www/example.com&MAGE_DIRS[cache][path]=/var/tmp/cache"'
         );
     }
 }

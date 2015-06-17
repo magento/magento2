@@ -33,7 +33,7 @@ class Image extends \Magento\Framework\App\Config\Value
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -43,7 +43,7 @@ class Image extends \Magento\Framework\App\Config\Value
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;

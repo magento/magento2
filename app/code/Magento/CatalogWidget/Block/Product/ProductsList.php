@@ -106,7 +106,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -206,13 +205,10 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $collection = $this->productCollectionFactory->create();
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
-        $collection = $this->_addProductAttributesAndPrices(
-            $collection
-        )->addStoreFilter()->setPageSize(
-            $this->getProductsPerPage()
-        )->setCurPage(
-            $this->getRequest()->getParam(self::PAGE_VAR_NAME, 1)
-        );
+        $collection = $this->_addProductAttributesAndPrices($collection)
+            ->addStoreFilter()
+            ->setPageSize($this->getPageSize())
+            ->setCurPage($this->getRequest()->getParam(self::PAGE_VAR_NAME, 1));
 
         $conditions = $this->getConditions();
         $conditions->collectValidatedAttributes($collection);
@@ -239,7 +235,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Retrieve how much products should be displayed
+     * Retrieve how many products should be displayed
      *
      * @return int
      */
@@ -257,7 +253,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     }
 
     /**
-     * Retrieve how much products should be displayed
+     * Retrieve how many products should be displayed
      *
      * @return int
      */
@@ -280,6 +276,16 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $this->setData('show_pager', self::DEFAULT_SHOW_PAGER);
         }
         return (bool)$this->getData('show_pager');
+    }
+
+    /**
+     * Retrieve how many products should be displayed on page
+     *
+     * @return int
+     */
+    protected function getPageSize()
+    {
+        return $this->showPager() ? $this->getProductsPerPage() : $this->getProductsCount();
     }
 
     /**
