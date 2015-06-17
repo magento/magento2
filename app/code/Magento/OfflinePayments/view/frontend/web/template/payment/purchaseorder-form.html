@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form id="purchaseorder" class="form payments">
+    <input type="radio" class ="radio" name="payment"  data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" /><span data-bind="text: getTitle()"></span>
+
+    <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko text: getTitle() --><!--/ko--></label>
+<fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}'>
+    <div class="field field-number required">
+        <label for="po_number" class="label"><span><!-- ko text: $t('Purchase Order Number')--><!-- /ko --></span></label>
+        <div class="control">
+            <input type="text"
+                   id="po_number"
+                   name="payment[po_number]"
+                   data-validate="{required:true}"
+                   data-bind='
+                        attr: {title: $t("Purchase Order Number")},
+                        value: purchaseOrderNumber'
+                   class="input-text"/>
+        </div>
+    </div>
+    <div class="actions-toolbar" id="review-buttons-container">
+        <div class="primary">
+            <button data-role="review-save" type="submit"
+                    data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: isEnabled(item.code)"
+                    class="button action primary checkout"><span data-bind="text: $t('Place Order')"></span></button>
+        </div>
+    </div>
+</fieldset>
+</form>
