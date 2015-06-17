@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 
 /**
@@ -35,7 +36,11 @@ class Engine extends AbstractDb implements EngineInterface
      *
      * @var \Magento\CatalogSearch\Helper\Data
      */
-    protected $_catalogSearchData = null;
+    protected $_catalogSearchData;
+    /**
+     * @var \Magento\Search\Model\IndexScopeResolver
+     */
+    private $indexScopeResolver;
 
     /**
      * Construct
@@ -44,18 +49,19 @@ class Engine extends AbstractDb implements EngineInterface
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
+     * @param \Magento\Search\Model\IndexScopeResolver $indexScopeResolver
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
+        \Magento\Search\Model\IndexScopeResolver $indexScopeResolver,
         $resourcePrefix = null
     ) {
         $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
+        $this->indexScopeResolver = $indexScopeResolver;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -66,7 +72,7 @@ class Engine extends AbstractDb implements EngineInterface
      */
     protected function _construct()
     {
-        $this->_init('catalogsearch_fulltext_index_default', 'product_id');
+        $this->_init('catalogsearch_fulltext', 'product_id');
     }
 
     /**
@@ -83,8 +89,8 @@ class Engine extends AbstractDb implements EngineInterface
     {
         $this->_getWriteAdapter()
             ->insert(
-                $this->getMainTable(),
-                ['product_id' => $entityId, 'store_id' => $storeId, 'data_index' => $index]
+                $this->getMainTable($storeId),
+                ['product_id' => $entityId, 'data_index' => $index]
             );
 
         return $this;
@@ -107,14 +113,13 @@ class Engine extends AbstractDb implements EngineInterface
                 $data[] = [
                     'product_id' => (int)$entityId,
                     'attribute_id' =>(int)$attributeId,
-                    'store_id' => (int)$storeId,
                     'data_index' => $indexValue
                 ];
             }
         }
 
         if ($data) {
-            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $data, ['data_index']);
+            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable($storeId), $data, ['data_index']);
         }
 
         return $this;
@@ -181,6 +186,21 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
+     * @param int|null $storeId
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getMainTable($storeId = null)
+    {
+        if (empty($this->_mainTable)) {
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
+        }
+
+        return $this->indexScopeResolver->resolve($this->_mainTable, $storeId);
+    }
+
+
+    /**
      * Remove entity data from fulltext search table
      *
      * @param int $storeId
@@ -199,7 +219,7 @@ class Engine extends AbstractDb implements EngineInterface
         }
 
         $this->_getWriteAdapter()
-            ->delete($this->getMainTable(), $where);
+            ->delete($this->getMainTable($storeId), $where);
 
         return $this;
     }
