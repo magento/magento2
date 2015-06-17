@@ -71,7 +71,7 @@ try {
     if (!$application->isInstalled()) {
         $application->install();
     }
-    $application->initialize();
+    $application->initialize([], true);
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
