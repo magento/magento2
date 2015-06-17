@@ -9,11 +9,11 @@
    class="action action-gift"
    data-bind="
    click: $data.toggleFormBlockVisibility.bind($data),
-   css: {active: formBlockVisibility() || resultBlockVisibility()}
+   css: {_active: formBlockVisibility() || resultBlockVisibility()}
    ">
     <span data-bind="text: $t('Gift options')"></span>
 </a>
-<div class="gift-content" data-bind="css: {active: formBlockVisibility() || resultBlockVisibility()}"> <!-- add class "active" to display the content -->
+<div class="gift-content" data-bind="css: {_active: formBlockVisibility() || resultBlockVisibility()}"> <!-- add class "active" to display the content -->
     <!-- ko ifnot: resultBlockVisibility() -->
         <div class="gift-options">
             <!-- ko foreach: getRegion('additionalOptions') -->
