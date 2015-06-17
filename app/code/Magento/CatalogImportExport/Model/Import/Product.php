@@ -1320,6 +1320,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // 3. Categories phase
                 $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
+                $this->categoriesCache[$rowSku] = [];
                 if (!empty($categoriesString)) {
                     foreach ($this->categoryProcessor->upsertCategories($categoriesString) as $categoryId) {
                         $this->categoriesCache[$rowSku][$categoryId] = true;
