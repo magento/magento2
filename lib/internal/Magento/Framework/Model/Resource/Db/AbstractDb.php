@@ -403,13 +403,14 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             return $this->delete($object);
         }
 
-        if (!$this->isModified($object)) {
-            return $this->processNotModifiedSave($object);
-        }
-
         $this->beginTransaction();
 
         try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                return $this;
+            }
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
