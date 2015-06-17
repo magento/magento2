@@ -45,7 +45,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     );
                 }
                 if ($theme && !$theme->isEditable()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Theme isn\'t editable.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('This theme is not editable.'));
                 }
                 $theme->addData($themeData);
                 if (isset($themeData['preview']['delete'])) {

@@ -21,38 +21,11 @@ class Object implements \ArrayAccess
     protected $_data = [];
 
     /**
-     * Data changes flag (true after setData|unsetData call)
-     * @var $_hasDataChange bool
-     */
-    protected $_hasDataChanges = false;
-
-    /**
-     * Original data that was loaded
-     *
-     * @var array
-     */
-    protected $_origData;
-
-    /**
-     * Name of object id field
-     *
-     * @var string
-     */
-    protected $_idFieldName = 'id';
-
-    /**
      * Setter/Getter underscore transformation cache
      *
      * @var array
      */
     protected static $_underscoreCache = [];
-
-    /**
-     * Object delete flag
-     *
-     * @var bool
-     */
-    protected $_isDeleted = false;
 
     /**
      * Constructor
@@ -65,78 +38,6 @@ class Object implements \ArrayAccess
     public function __construct(array $data = [])
     {
         $this->_data = $data;
-    }
-
-    /**
-     * Set _isDeleted flag value (if $isDeleted parameter is defined) and return current flag value
-     *
-     * @param boolean $isDeleted
-     * @return bool
-     */
-    public function isDeleted($isDeleted = null)
-    {
-        $result = $this->_isDeleted;
-        if ($isDeleted !== null) {
-            $this->_isDeleted = $isDeleted;
-        }
-        return $result;
-    }
-
-    /**
-     * Check if initial object data was changed.
-     *
-     * Initial data is coming to object constructor.
-     * Flag value should be set up to true after any external data changes
-     *
-     * @return bool
-     */
-    public function hasDataChanges()
-    {
-        return $this->_hasDataChanges;
-    }
-
-    /**
-     * Id field name setter
-     *
-     * @param  string $name
-     * @return $this
-     */
-    public function setIdFieldName($name)
-    {
-        $this->_idFieldName = $name;
-        return $this;
-    }
-
-    /**
-     * Id field name getter
-     *
-     * @return string
-     */
-    public function getIdFieldName()
-    {
-        return $this->_idFieldName;
-    }
-
-    /**
-     * Identifier getter
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->_getData($this->_idFieldName);
-    }
-
-    /**
-     * Identifier setter
-     *
-     * @param mixed $value
-     * @return $this
-     */
-    public function setId($value)
-    {
-        $this->setData($this->_idFieldName, $value);
-        return $this;
     }
 
     /**
@@ -170,14 +71,8 @@ class Object implements \ArrayAccess
     public function setData($key, $value = null)
     {
         if ($key === (array)$key) {
-            if ($this->_data !== $key) {
-                $this->_hasDataChanges = true;
-            }
             $this->_data = $key;
         } else {
-            if (!array_key_exists($key, $this->_data) || $this->_data[$key] !== $value) {
-                $this->_hasDataChanges = true;
-            }
             $this->_data[$key] = $value;
         }
         return $this;
@@ -195,7 +90,6 @@ class Object implements \ArrayAccess
             $this->setData([]);
         } elseif (is_string($key)) {
             if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
-                $this->_hasDataChanges = true;
                 unset($this->_data[$key]);
             }
         } elseif ($key === (array)$key) {
@@ -325,21 +219,6 @@ class Object implements \ArrayAccess
     {
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
         return $this->{$method}($args);
-    }
-
-    /**
-     * Fast get data or set default if value is not available
-     *
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getDataSetDefault($key, $default)
-    {
-        if (!array_key_exists($key, $this->_data)) {
-            $this->_data[$key] = $default;
-        }
-        return $this->_data[$key];
     }
 
     /**
@@ -576,67 +455,6 @@ class Object implements \ArrayAccess
         }
         $res = implode($fieldSeparator, $data);
         return $res;
-    }
-
-    /**
-     * Initialize object original data
-     *
-     * @FIXME changing original data can't be available as public interface
-     *
-     * @param string $key
-     * @param mixed $data
-     * @return $this
-     */
-    public function setOrigData($key = null, $data = null)
-    {
-        if ($key === null) {
-            $this->_origData = $this->_data;
-        } else {
-            $this->_origData[$key] = $data;
-        }
-        return $this;
-    }
-
-    /**
-     * Get object original data
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getOrigData($key = null)
-    {
-        if ($key === null) {
-            return $this->_origData;
-        }
-        if (isset($this->_origData[$key])) {
-            return $this->_origData[$key];
-        }
-        return null;
-    }
-
-    /**
-     * Compare object data with original data
-     *
-     * @param string $field
-     * @return bool
-     */
-    public function dataHasChangedFor($field)
-    {
-        $newData = $this->getData($field);
-        $origData = $this->getOrigData($field);
-        return $newData != $origData;
-    }
-
-    /**
-     * Clears data changes status
-     *
-     * @param bool $value
-     * @return $this
-     */
-    public function setDataChanges($value)
-    {
-        $this->_hasDataChanges = (bool)$value;
-        return $this;
     }
 
     /**

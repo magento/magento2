@@ -66,50 +66,14 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->installCustomerForms();
 
-        // Add reset password link token attribute
-        $customerSetup->addAttribute(
-            'customer',
-            'rp_token',
-            ['type' => 'varchar', 'input' => 'hidden', 'visible' => false, 'required' => false]
-        );
-
-        // Add reset password link token creation date attribute
-        $customerSetup->addAttribute(
-            'customer',
-            'rp_token_created_at',
-            [
-                'type' => 'datetime',
-                'input' => 'date',
-                'validate_rules' => 'a:1:{s:16:"input_validation";s:4:"date";}',
-                'visible' => false,
-                'required' => false
-            ]
-        );
-
-        // Add VAT attributes to customer address
-        $disableAGCAttributeCode = 'disable_auto_group_change';
-
-        $customerSetup->addAttribute(
-            'customer',
-            $disableAGCAttributeCode,
-            [
-                'type' => 'static',
-                'label' => 'Disable Automatic Group Change Based on VAT ID',
-                'input' => 'boolean',
-                'backend' => 'Magento\Customer\Model\Attribute\Backend\Data\Boolean',
-                'position' => 28,
-                'required' => false
-            ]
-        );
-
-        $disableAGCAttribute = $customerSetup->getEavConfig()->getAttribute('customer', $disableAGCAttributeCode);
+        $disableAGCAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'disable_auto_group_change');
         $disableAGCAttribute->setData('used_in_forms', ['adminhtml_customer']);
         $disableAGCAttribute->save();
 
         $attributesInfo = [
             'vat_id' => [
                 'label' => 'VAT number',
-                'type' => 'varchar',
+                'type' => 'static',
                 'input' => 'text',
                 'position' => 140,
                 'visible' => true,
@@ -119,17 +83,17 @@ class InstallData implements InstallDataInterface
                 'label' => 'VAT number validity',
                 'visible' => false,
                 'required' => false,
-                'type' => 'int',
+                'type' => 'static',
             ],
             'vat_request_id' => [
                 'label' => 'VAT number validation request ID',
-                'type' => 'varchar',
+                'type' => 'static',
                 'visible' => false,
                 'required' => false,
             ],
             'vat_request_date' => [
                 'label' => 'VAT number validation request date',
-                'type' => 'varchar',
+                'type' => 'static',
                 'visible' => false,
                 'required' => false,
             ],
@@ -137,7 +101,7 @@ class InstallData implements InstallDataInterface
                 'label' => 'VAT number validation request success',
                 'visible' => false,
                 'required' => false,
-                'type' => 'int',
+                'type' => 'static',
             ],
         ];
 
