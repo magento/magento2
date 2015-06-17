@@ -40,8 +40,7 @@ class UpgradeCommand extends AbstractSetupCommand
     {
         $this->setName('setup:upgrade')
             ->setDescription(
-                'Upgrades installed application after the code base has changed, '
-                . 'including DB schema and data'
+                'Upgrades the Magento application, DB data, and schema'
             );
         parent::configure();
     }
