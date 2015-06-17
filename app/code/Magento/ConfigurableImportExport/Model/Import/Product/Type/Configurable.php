@@ -817,6 +817,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
 
         while ($bunch = $this->_entityModel->getNextBunch()) {
+            if (!$this->configurableInBunch($bunch)) {
+                continue;
+            }
+
             $this->_superAttributesData = [
                 'attributes' => [],
                 'labels' => [],
@@ -858,6 +862,24 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_insertData();
         }
         return $this;
+    }
+
+    /**
+     * @param $bunch
+     * @return bool
+     */
+    protected function configurableInBunch($bunch)
+    {
+        $newSku = $this->_entityModel->getNewSku();
+        foreach ($bunch as $rowNum => $rowData) {
+            $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+            if (($this->_type == $productData['type_id']) &&
+                ($rowData == $this->_entityModel->isRowAllowedToImport($rowData, $rowNum))
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
