@@ -128,7 +128,6 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -306,7 +305,6 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
