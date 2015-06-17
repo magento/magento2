@@ -75,11 +75,11 @@
 
 <!--Shipping method template-->
 <li id="opc-shipping_method" data-bind="fadeVisible: visible(), blockLoader: isLoading" role="presentation">
-    <div class="shippingMethod ">
+    <div class="checkout-shipping-method">
         <div class="step-title" data-role="title">
             <h2 data-bind="text: $t('Shipping Method')"></h2>
         </div>
-        <!-- ko foreach: getRegion('beforeSelect') -->
+        <!-- ko foreach: getRegion('before-shipping-method-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
         <div id="checkout-step-shipping_method"
