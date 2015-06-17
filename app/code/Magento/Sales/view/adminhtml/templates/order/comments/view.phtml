@@ -63,7 +63,7 @@
                         <span class="note-list-customer-not-notified"><?php echo __('Not Notified') ?></span>
                     <?php endif; ?>
                 </span>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u']) ?></div>
+                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>

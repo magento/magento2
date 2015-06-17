@@ -356,7 +356,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -394,7 +394,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->quoteValidator = $quoteValidator;
@@ -2100,6 +2100,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets flag, whether this quote has some error associated with it.
      *
+     * @codeCoverageIgnore
+     *
      * @param bool $flag
      * @return $this
      */
@@ -2495,6 +2497,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets the payment method that is used to process the cart.
      *
+     * @codeCoverageIgnore
+     *
      * @param string $checkoutMethod
      * @return $this
      */
@@ -2506,6 +2510,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Prevent quote from saving
      *
+     * @codeCoverageIgnore
+     *
      * @return $this
      */
     public function preventSaving()
@@ -2516,6 +2522,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
     /**
      * Check if model can be saved
+     *
+     * @codeCoverageIgnore
      *
      * @return bool
      */
