@@ -220,6 +220,7 @@ class Base implements ActionInterface
      * Prepare schema
      *
      * @throws \Zend_Db_Exception
+     * @return void
      */
     protected function prepareSchema()
     {
