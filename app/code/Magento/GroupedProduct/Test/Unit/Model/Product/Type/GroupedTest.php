@@ -516,8 +516,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $associatedPrepareResult = [$this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false)];
-        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+        $associatedPrepareResult = $this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false);
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn([$associatedPrepareResult]);
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
@@ -553,8 +553,12 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $associatedPrepareResult = [$this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false)];
-        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+        $associatedPrepareResult = $this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false);
+//        $associatedPrepareResult = $this->getMockBuilder('Magento\Catalog\Model\Product')
+//            ->setMockClassName(['resultProduct'])
+//            ->disableOriginalConstructor()
+//            ->getMock();
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn([$associatedPrepareResult]);
 
         $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
 
@@ -571,8 +575,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue([$associatedProduct]));
 
+        $associatedPrepareResult->expects($this->at(1))->method('addCustomOption')->with('product_type', 'grouped', $this->product);
         $this->assertEquals(
-            $associatedPrepareResult,
+            [$associatedPrepareResult],
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
     }
