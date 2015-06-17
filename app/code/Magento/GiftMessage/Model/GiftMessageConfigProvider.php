@@ -15,7 +15,7 @@ use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class GiftMessageConfigProvider implements ConfigProviderInterface
 {
