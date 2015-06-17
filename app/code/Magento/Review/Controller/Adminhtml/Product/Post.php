@@ -59,7 +59,7 @@ class Post extends ProductController
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('An error occurred while saving review.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving review.'));
             }
         }
         $resultRedirect->setPath('review/*/');

@@ -19,7 +19,7 @@ class Index extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         }
 
         $this->_initAction()->_addBreadcrumb(__('Catalog'), __('Catalog'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Catalog Price Rules'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Catalog Price Rule'));
         $this->_view->renderLayout();
     }
 }

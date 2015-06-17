@@ -94,7 +94,7 @@ class Catalog extends Action
     public function getDirtyRulesNoticeMessage()
     {
         $defaultMessage = __(
-            'There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.'
+            'We found updated rules that are not applied. Please click "Apply Rules" to update your catalog.'
         );
         return $this->_dirtyRulesNoticeMessage ? $this->_dirtyRulesNoticeMessage : $defaultMessage;
     }

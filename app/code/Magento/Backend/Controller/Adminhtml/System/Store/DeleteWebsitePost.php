@@ -22,7 +22,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $redirectResult = $this->resultRedirectFactory->create();
 
         if (!$model) {
-            $this->messageManager->addError(__('Unable to proceed. Please, try again'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
@@ -35,7 +35,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         }
 
         $model->delete();
-        $this->messageManager->addSuccess(__('The website has been deleted.'));
+        $this->messageManager->addSuccess(__('You deleted the website.'));
         return $redirectResult->setPath('adminhtml/*/');
     }
 }
