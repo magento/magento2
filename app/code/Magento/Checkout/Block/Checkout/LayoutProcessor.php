@@ -64,7 +64,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             ['payment']['children']
         )) {
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-            ['payment']['children']['renders']['children'] = $this->processPaymentConfiguration(
+            ['payment']['children']['payments-list']['children'] = $this->processPaymentConfiguration(
                 $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
                 ['payment']['children']['renders']['children'],
                 $elements
@@ -94,19 +94,17 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param array $elements attributes that must be displayed in address form
      * @return array
      */
-    private function processPaymentConfiguration(array $configuration, array $elements)
+    private function processPaymentConfiguration(array &$configuration, array $elements)
     {
+        $output = [];
         foreach ($configuration as $paymentGroup => $groupConfig) {
             foreach ($groupConfig['methods'] as $paymentCode => $paymentComponent) {
                 if (empty($paymentComponent['isBillingAddressRequired'])) {
                     continue;
                 }
-                $configuration[$paymentGroup]['children'] = isset($configuration[$paymentCode]['children'])
-                    ? $configuration[$paymentGroup]['children']
-                    : [];
-                $configuration[$paymentGroup]['children'][$paymentCode . '-form'] = [
+                $output[$paymentCode . '-form'] = [
                     'component' => 'Magento_Checkout/js/view/billing-address',
-                    'displayArea' => 'billing-address',
+                    'displayArea' => 'billing-address-form-' . $paymentCode,
                     'provider' => 'checkoutProvider',
                     'dataScopePrefix' => 'billingAddress' . $paymentCode,
                     'sortOrder' => 1,
@@ -172,6 +170,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             unset($configuration[$paymentGroup]['methods']);
         }
 
-        return $configuration;
+        return $output;
     }
 }

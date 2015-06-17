@@ -15,7 +15,7 @@ define(
     function (quote, urlBuilder, storage, url, errorList, customer, _) {
         'use strict';
 
-        return function (paymentData, callback) {
+        return function (paymentData) {
             var serviceUrl, payload;
 
             /**
@@ -29,16 +29,14 @@ define(
                     cartId: quote.getQuoteId(),
                     email: quote.guestEmail,
                     paymentMethod: paymentData,
-                    //billingAddress: quote.billingAddress()
-                    billingAddress: quote.shippingAddress()
+                    billingAddress: quote.billingAddress()
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
                 payload = {
                     cartId: quote.getQuoteId(),
                     paymentMethod: paymentData,
-                    //billingAddress: quote.billingAddress()
-                    billingAddress: quote.shippingAddress()
+                    billingAddress: quote.billingAddress()
                 };
             }
             storage.post(

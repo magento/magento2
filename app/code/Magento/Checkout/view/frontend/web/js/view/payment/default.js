@@ -14,6 +14,25 @@ define(
         'use strict';
         return Component.extend({
             /**
+             * Initialize view.
+             *
+             * @returns {Component} Chainable.
+             */
+            initialize: function () {
+                this._super().initChildren();
+                return this;
+            },
+
+            /**
+             * Initialize child elements
+             *
+             * @returns {Component} Chainable.
+             */
+            initChildren: function () {
+                return this;
+            },
+
+            /**
              * Place order.
              */
             placeOrder: function () {
@@ -21,16 +40,19 @@ define(
                     placeOrderAction(this.getData());
                 }
             },
+
             selectPaymentMethod: function() {
                 var self = this;
                 selectPaymentMethodAction(self.getData());
                 return true;
             },
+
             isEnabled: function(code) {
                 return quote.paymentMethod()
                     ? quote.paymentMethod().method == code
                     : null;
             },
+
             isChecked: ko.computed(function () {
                     return quote.paymentMethod()
                         ? quote.paymentMethod().method
@@ -67,8 +89,13 @@ define(
             getCode: function () {
                 return this.item.code;
             },
+
             validate: function () {
                 return true;
+            },
+
+            getBillingAddressFormName: function() {
+                return 'billing-address-form-' + this.item.code;
             }
         });
     }
