@@ -9,6 +9,7 @@ use Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\SalesSequence\Model\Manager;
+use Magento\Sales\Model\EntityInterface;
 
 /**
  * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject
