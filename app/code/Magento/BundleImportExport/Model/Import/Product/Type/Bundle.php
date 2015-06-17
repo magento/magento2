@@ -238,6 +238,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function populateOptionTemplate($option, $entityId, $index = null)
     {
         $populatedOption = [
+            'option_id' => null,
             'parent_id' => $entityId,
             'required' => isset($option['required']) ? $option['required'] : 1,
             'position' => ($index === null ? 0 : $index),
