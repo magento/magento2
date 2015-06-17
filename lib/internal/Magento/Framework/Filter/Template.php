@@ -39,14 +39,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @var array
      */
-    protected $_templateVars = [];
+    protected $templateVars = [];
 
     /**
      * Template processor
      *
      * @var callable|null
      */
-    protected $_templateProcessor = null;
+    protected $templateProcessor = null;
 
     /**
      * @var \Magento\Framework\Stdlib\String
@@ -72,7 +72,7 @@ class Template implements \Zend_Filter_Interface
     public function setVariables(array $variables)
     {
         foreach ($variables as $name => $value) {
-            $this->_templateVars[$name] = $value;
+            $this->templateVars[$name] = $value;
         }
         return $this;
     }
@@ -85,7 +85,7 @@ class Template implements \Zend_Filter_Interface
      */
     public function setTemplateProcessor(callable $callback)
     {
-        $this->_templateProcessor = $callback;
+        $this->templateProcessor = $callback;
         return $this;
     }
 
@@ -96,7 +96,7 @@ class Template implements \Zend_Filter_Interface
      */
     public function getTemplateProcessor()
     {
-        return is_callable($this->_templateProcessor) ? $this->_templateProcessor : null;
+        return is_callable($this->templateProcessor) ? $this->templateProcessor : null;
     }
 
     /**
@@ -202,12 +202,12 @@ class Template implements \Zend_Filter_Interface
      */
     public function varDirective($construction)
     {
-        if (count($this->_templateVars) == 0) {
+        if (count($this->templateVars) == 0) {
             // If template prepossessing
             return $construction[0];
         }
 
-        $replacedValue = $this->_getVariable($construction[2], '');
+        $replacedValue = $this->getVariable($construction[2], '');
         return $replacedValue;
     }
 
@@ -227,7 +227,7 @@ class Template implements \Zend_Filter_Interface
     public function templateDirective($construction)
     {
         // Processing of {template config_path=... [...]} statement
-        $templateParameters = $this->_getParameters($construction[2]);
+        $templateParameters = $this->getParameters($construction[2]);
         if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
             $replacedValue = '{Error in template processing}';
@@ -235,7 +235,7 @@ class Template implements \Zend_Filter_Interface
             // Including of template
             $configPath = $templateParameters['config_path'];
             unset($templateParameters['config_path']);
-            $templateParameters = array_merge_recursive($templateParameters, $this->_templateVars);
+            $templateParameters = array_merge_recursive($templateParameters, $this->templateVars);
             $replacedValue = call_user_func($this->getTemplateProcessor(), $configPath, $templateParameters);
         }
         return $replacedValue;
@@ -247,12 +247,12 @@ class Template implements \Zend_Filter_Interface
      */
     public function dependDirective($construction)
     {
-        if (count($this->_templateVars) == 0) {
+        if (count($this->templateVars) == 0) {
             // If template processing
             return $construction[0];
         }
 
-        if ($this->_getVariable($construction[1], '') == '') {
+        if ($this->getVariable($construction[1], '') == '') {
             return '';
         } else {
             return $construction[2];
@@ -265,11 +265,11 @@ class Template implements \Zend_Filter_Interface
      */
     public function ifDirective($construction)
     {
-        if (count($this->_templateVars) == 0) {
+        if (count($this->templateVars) == 0) {
             return $construction[0];
         }
 
-        if ($this->_getVariable($construction[1], '') == '') {
+        if ($this->getVariable($construction[1], '') == '') {
             if (isset($construction[3]) && isset($construction[4])) {
                 return $construction[4];
             }
@@ -285,14 +285,14 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @return array
      */
-    protected function _getParameters($value)
+    protected function getParameters($value)
     {
         $tokenizer = new Template\Tokenizer\Parameter();
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
             if (substr($value, 0, 1) === '$') {
-                $params[$key] = $this->_getVariable(substr($value, 1), null);
+                $params[$key] = $this->getVariable(substr($value, 1), null);
             }
         }
         return $params;
@@ -306,7 +306,7 @@ class Template implements \Zend_Filter_Interface
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _getVariable($value, $default = '{no_value_defined}')
+    protected function getVariable($value, $default = '{no_value_defined}')
     {
         \Magento\Framework\Profiler::start('email_template_processing_variables');
         $tokenizer = new Template\Tokenizer\Variable();
@@ -315,9 +315,9 @@ class Template implements \Zend_Filter_Interface
         $result = $default;
         $last = 0;
         for ($i = 0; $i < count($stackVars); $i++) {
-            if ($i == 0 && isset($this->_templateVars[$stackVars[$i]['name']])) {
+            if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
-                $stackVars[$i]['variable'] = & $this->_templateVars[$stackVars[$i]['name']];
+                $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
             } elseif (
                     isset($stackVars[$i - 1]['variable'])
                     && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\Object
@@ -367,7 +367,7 @@ class Template implements \Zend_Filter_Interface
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value);
             } elseif (substr($value, 0, 1) === '$') {
-                $stack[$i] = $this->_getVariable(substr($value, 1), null);
+                $stack[$i] = $this->getVariable(substr($value, 1), null);
             }
         }
         return $stack;
