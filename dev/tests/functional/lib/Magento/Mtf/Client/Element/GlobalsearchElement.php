@@ -15,11 +15,6 @@ use Magento\Mtf\Client\ElementInterface;
 class GlobalsearchElement extends SimpleElement
 {
     /**
-     * "Backspace" key code.
-     */
-    const BACKSPACE = "\xEE\x80\x83";
-
-    /**
      * Search icon selector.
      *
      * @var string
@@ -67,22 +62,8 @@ class GlobalsearchElement extends SimpleElement
         if (!$this->find($this->searchInput)->isVisible()) {
             $this->find($this->searchIcon)->click();
         }
-        $this->clear();
-        $this->find($this->searchInput)->setValue($value);
+        $this->find($this->searchInput)->keys(str_split($value));
         $this->waitResult();
-    }
-
-    /**
-     * Clear value of element.
-     *
-     * @return void
-     */
-    protected function clear()
-    {
-        $element = $this->find($this->searchInput);
-        while ('' != $element->getValue()) {
-            $element->setValue([self::BACKSPACE]);
-        }
     }
 
     /**
