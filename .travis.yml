@@ -23,7 +23,7 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
-  - sh -c "if [ -x $HOME/.cache/bin/composer ]; then $HOME/.cache/bin/composer self-update; echo ''; else  mkdir -p $HOME/.cache/bin; curl -sS 'https://getcomposer.org/installer' | php -- --install-dir $HOME/.cache/bin/ --filename composer; fi"
+  - sh -c "if [ -x $HOME/.cache/bin/composer ]; then $HOME/.cache/bin/composer self-update; echo ''; else  mkdir -p $HOME/.cache/bin; curl --connect-timeout 30 -sS 'https://getcomposer.org/installer' | php -- --install-dir $HOME/.cache/bin/ --filename composer; fi"
   - $HOME/.cache/bin/composer --version
 before_script:
   # Mock mail
