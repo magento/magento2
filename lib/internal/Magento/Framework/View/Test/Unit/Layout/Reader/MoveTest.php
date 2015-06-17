@@ -64,7 +64,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructureMock->expects($this->any())
             ->method('setElementToMove')
             ->with(
-                (string)$currentElement->getAttribute('element'),
+                (string)$currentElement->getAttribute('name'),
                 [$destination, $siblingName, $isAfter, $alias]
             );
         $this->move->interpret($this->contextMock, $currentElement, $parentElement);
@@ -78,7 +78,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
         return [
             'move_before' => [
                 'element' => new \Magento\Framework\View\Layout\Element('
-                    <move element="product" destination="product.info" before="before.block" as="as.product.info"/>
+                    <move name="product" destination="product.info" before="before.block" as="as.product.info"/>
                 '),
                 'destination' => 'product.info',
                 'siblingName' => 'before.block',
@@ -88,7 +88,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ],
             'move_after' => [
                 'element' => new \Magento\Framework\View\Layout\Element('
-                    <move element="product" destination="product.info" after="after.block" as="as.product.info"/>
+                    <move name="product" destination="product.info" after="after.block" as="as.product.info"/>
                 '),
                 'destination' => 'product.info',
                 'siblingName' => 'after.block',
@@ -104,7 +104,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessInvalidData()
     {
-        $invalidElement = new \Magento\Framework\View\Layout\Element('<move element="product" into="product.info"/>');
+        $invalidElement = new \Magento\Framework\View\Layout\Element('<move name="product" into="product.info"/>');
         $this->move->interpret($this->contextMock, $invalidElement, $invalidElement);
     }
 }

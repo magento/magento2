@@ -23,13 +23,13 @@
             <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="page-header-actions col-l-4 col-m-6"/>
         </referenceContainer>
 
-        <move element="page.menu" destination="menu.wrapper" />
-        <move element="logo" before="-" destination="menu.wrapper" />
+        <move name="page.menu" destination="menu.wrapper" />
+        <move name="logo" before="-" destination="menu.wrapper" />
 
-        <move element="page.title" before="-" destination="header.inner.left" />
-        <move element="user" before="-" destination="header.inner.right" />
-        <move element="notification.messages" after="user" destination="header.inner.right" />
-        <move element="global.search" destination="header.inner.right" />
+        <move name="page.title" before="-" destination="header.inner.left" />
+        <move name="user" before="-" destination="header.inner.right" />
+        <move name="notification.messages" after="user" destination="header.inner.right" />
+        <move name="global.search" destination="header.inner.right" />
 
     </body>
 </page>

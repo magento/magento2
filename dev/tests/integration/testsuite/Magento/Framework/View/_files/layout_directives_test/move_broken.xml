@@ -7,6 +7,6 @@
 -->
 <layout>
     <container name="container1" label="Container 1"/>
-    <move element="no_name3"/>
+    <move name="no_name3"/>
     <block class="Magento\Framework\View\Element\Text" name="no_name3"/>
 </layout>

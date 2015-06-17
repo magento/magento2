@@ -20,9 +20,9 @@
                 <argument name="show_part" xsi:type="string">welcome</argument>
             </arguments>
         </block>
-        <move element="header" destination="header.links" before="-"/>
-        <move element="register-link" destination="header.links"/>
-        <move element="top.links" destination="customer"/>
-        <move element="authorization-link" destination="top.links" after="-"/>
+        <move name="header" destination="header.links" before="-"/>
+        <move name="register-link" destination="header.links"/>
+        <move name="top.links" destination="customer"/>
+        <move name="authorization-link" destination="top.links" after="-"/>
     </body>
 </page>

@@ -38,9 +38,9 @@
         <referenceBlock name="product.info.form.options">
             <container name="bundle.product.options.wrapper" htmlTag="div" htmlClass="bundle-options-wrapper"/>
         </referenceBlock> 
-        <move element="product.info.options.wrapper" destination="bundle.product.options.wrapper" before="-" />
-        <move element="product.info.options.wrapper.bottom" destination="bundle.product.options.wrapper" after="product.info.options.wrapper" />
-        <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
+        <move name="product.info.options.wrapper" destination="bundle.product.options.wrapper" before="-" />
+        <move name="product.info.options.wrapper.bottom" destination="bundle.product.options.wrapper" after="product.info.options.wrapper" />
+        <move name="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
         <referenceBlock name="product.info.options.wrapper.bottom">
             <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
             <action method="unsetChild">
@@ -63,6 +63,6 @@
         <referenceContainer name="product.info.main">
             <block class="Magento\Catalog\Block\Product\View" name="customize.button" as="customize_button" template="Magento_Bundle::catalog/product/view/customize.phtml" after="product.info.price" />
         </referenceContainer>
-        <move element="product.info" destination="bundle.options.container" before="-"/>
+        <move name="product.info" destination="bundle.options.container" before="-"/>
     </body>
 </page>

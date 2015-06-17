@@ -7,6 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <move element="checkout.cart.giftcardaccount" destination="cart.discount" after="-"/>
+        <move name="checkout.cart.giftcardaccount" destination="cart.discount" after="-"/>
     </body>
 </page>

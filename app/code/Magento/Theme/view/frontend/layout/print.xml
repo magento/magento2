@@ -11,8 +11,8 @@
         <referenceContainer name="header.container" remove="true"/>
         <referenceBlock name="catalog.topnav" remove="true"/>
         <referenceContainer name="footer-container" remove="true"/>
-        <move element="logo" destination="main.content" before="-" />
-        <move element="copyright" destination="main.content" after="-" />
+        <move name="logo" destination="main.content" before="-" />
+        <move name="copyright" destination="main.content" after="-" />
         <referenceContainer name="before.body.end">
             <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml" />
         </referenceContainer>

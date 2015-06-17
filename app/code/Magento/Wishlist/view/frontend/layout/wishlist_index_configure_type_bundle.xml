@@ -39,7 +39,7 @@
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox"/>
             </block>
         </referenceBlock>
-        <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
+        <move name="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
         <referenceBlock name="product.info.options.wrapper.bottom">
             <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
             <action method="unsetChild">
@@ -62,6 +62,6 @@
         <referenceContainer name="product.info.main">
             <block class="Magento\Catalog\Block\Product\View" name="customize.button" as="customize_button" template="Magento_Bundle::catalog/product/view/customize.phtml" after="product.info.price" />
         </referenceContainer>
-        <move element="product.info" destination="bundle.options.container" before="-"/>
+        <move name="product.info" destination="bundle.options.container" before="-"/>
     </body>
 </page>

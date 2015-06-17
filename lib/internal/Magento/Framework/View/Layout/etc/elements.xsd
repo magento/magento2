@@ -296,7 +296,7 @@
                 Move Element directive.
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute type="elementNameType" name="element" use="required"/>
+        <xs:attribute type="elementNameType" name="name" use="required"/>
         <xs:attribute type="elementNameType" name="destination" use="required"/>
         <xs:attribute type="elementAliasType" name="as" use="optional"/>
         <xs:attribute type="elementPositionType" name="after" use="optional"/>

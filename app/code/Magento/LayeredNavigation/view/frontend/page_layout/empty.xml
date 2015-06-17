@@ -6,5 +6,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
-    <move element="catalog.leftnav" destination="category.product.list.additional" before="-"/>
+    <move name="catalog.leftnav" destination="category.product.list.additional" before="-"/>
 </layout>
