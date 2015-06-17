@@ -132,7 +132,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->getCreditmemo()->getEmailSent()) {
             $emailSent = __('The credit memo email was sent.');
         } else {
-            $emailSent = __('The credit memo email was not sent.');
+            $emailSent = __('The credit memo email wasn\'t sent.');
         }
         return __(
             'Credit Memo #%1 | %3 | %2 (%4)',

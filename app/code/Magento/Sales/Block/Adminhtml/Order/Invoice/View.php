@@ -191,7 +191,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->getInvoice()->getEmailSent()) {
             $emailSent = __('The invoice email was sent.');
         } else {
-            $emailSent = __('The invoice email was not sent.');
+            $emailSent = __('The invoice email wasn\'t sent.');
         }
         return __(
             'Invoice #%1 | %2 | %4 (%3)',
