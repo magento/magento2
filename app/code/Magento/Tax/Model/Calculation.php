@@ -14,6 +14,9 @@ use Magento\Customer\Api\GroupManagementInterface as CustomerGroupManagement;
 use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Config;
 
@@ -166,6 +169,27 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $priceCurrency;
 
     /**
+     * Filter Builder
+     *
+     * @var FilterBuilder
+     */
+    protected $filterBuilder;
+
+    /**
+     * Search Criteria Builder
+     *
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * Tax Class Repository
+     *
+     * @var TaxClassRepositoryInterface
+     */
+    protected $taxClassRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -180,6 +204,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param CustomerGroupRepository $customerGroupRepository
      * @param CustomerRepository $customerRepository
      * @param PriceCurrencyInterface $priceCurrency
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param TaxClassRepositoryInterface $taxClassRepository
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -199,6 +226,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         CustomerGroupRepository $customerGroupRepository,
         CustomerRepository $customerRepository,
         PriceCurrencyInterface $priceCurrency,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
+        TaxClassRepositoryInterface $taxClassRepository,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -213,6 +243,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->customerGroupRepository = $customerGroupRepository;
         $this->customerRepository = $customerRepository;
         $this->priceCurrency = $priceCurrency;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
+        $this->taxClassRepository = $taxClassRepository;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -361,7 +394,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         } elseif (is_numeric($store)) {
             $key = $store . '|';
         }
-
         $key .= $request->getProductClassId() . '|'
             . $request->getCustomerClassId() . '|'
             . $request->getCountryId() . '|'
@@ -646,5 +678,40 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     public function round($price)
     {
         return $this->priceCurrency->round($price);
+    }
+
+    /**
+     * @param array $billingAddress
+     * @param array $shippingAddress
+     * @param int $customerTaxClassId
+     * @return array
+     */
+    public function getTaxRates($billingAddress, $shippingAddress, $customerTaxClassId)
+    {
+        $billingAddressObj = null;
+        $shippingAddressObj = null;
+        if (!empty($billingAddress)) {
+            $billingAddressObj = new \Magento\Framework\Object($billingAddress);
+        }
+        if (!empty($shippingAddress)) {
+            $shippingAddressObj = new \Magento\Framework\Object($shippingAddress);
+        }
+        $rateRequest = $this->getRateRequest($shippingAddressObj, $billingAddressObj, $customerTaxClassId);
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            [$this->filterBuilder->setField(ClassModel::KEY_TYPE)
+                 ->setValue(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_PRODUCT)
+                 ->create()]
+        )->create();
+        $ids = $this->taxClassRepository->getList($searchCriteria)->getItems();
+
+        $productRates = [];
+        $idKeys = array_keys($ids);
+        foreach ($idKeys as $idKey) {
+            $rateRequest->setProductClassId($idKey);
+            $rate = $this->getRate($rateRequest);
+            $productRates[$idKey] = $rate;
+        }
+        return $productRates;
     }
 }
