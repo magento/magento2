@@ -362,7 +362,7 @@ class Template implements \Zend_Filter_Interface
      * @param $stack
      * @return mixed
      */
-    private function getStackArgs($stack) {
+    protected function getStackArgs($stack) {
         foreach ($stack as $i => $value) {
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value);
