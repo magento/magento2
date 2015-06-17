@@ -54,8 +54,7 @@ define(['uiComponent', '../model/gift-message', '../model/gift-options', '../act
                 this.formBlockVisibility(true);
             },
             deleteOptions: function() {
-                this.model.reset();
-                giftOptionsService(this.model);
+                giftOptionsService(this.model, true);
             },
             hideFormBlock: function() {
                 this.formBlockVisibility(false);

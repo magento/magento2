@@ -81,13 +81,13 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                     });
                     return callbacks;
                 },
-                getSubmitParams: function() {
+                getSubmitParams: function(remove) {
                     var params = {},
                         self = this;
                     _.each(this.submitParams, function(key) {
                         var observable = provider[self.getUniqueKey(self.id, key)];
                         if (_.isFunction(observable)) {
-                            params[key] = observable();
+                            params[key] = remove ? null : observable();
                         }
                     });
 
@@ -98,7 +98,7 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                         if (_.isFunction(option.getSubmitParams)) {
                             params['extension_attributes'] = _.extend(
                                 params['extension_attributes'],
-                                option.getSubmitParams(self.itemId)
+                                option.getSubmitParams(remove)
                             );
                         }
                     });
