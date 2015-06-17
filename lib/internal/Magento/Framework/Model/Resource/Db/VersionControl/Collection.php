@@ -56,7 +56,6 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
      */
     protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
     {
-        $item = parent::beforeAddLoadedItem($item);
         $this->entitySnapshot->registerSnapshot($item);
         return $item;
     }
