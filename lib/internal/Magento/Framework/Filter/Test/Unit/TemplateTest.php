@@ -140,14 +140,15 @@ EXPECTED_RESULT;
 
     public function varDirectiveDataProvider()
     {
-        /* @var $stub \Magento\Framework\Object|PHPUnit_Framework_MockObject_MockObject */
+        /* @var $stub \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
         $stub = $this->getMockBuilder('\Magento\Framework\Object')
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
             ->setMethods(['bar'])
             ->getMock();
 
-        $stub->method('bar')
+        $stub->expects($this->once())
+            ->method('bar')
             ->will($this->returnCallback(function($arg) {
                 return serialize($arg);
             }));
