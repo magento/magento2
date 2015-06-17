@@ -103,6 +103,15 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Fixtures;
 
+/**
+ * Overriding the built-in PHP function since it cannot be mocked->
+ *
+ * The method is used in FixtureModel. loadConfig in an if statement. By overriding this method we are able to test
+ * both of the possible cases based on the return value of is_readable.
+ *
+ * @param $filename
+ * @return bool
+ */
 function is_readable($filename)
 {
     if (strpos($filename, 'exception') !== false) {
