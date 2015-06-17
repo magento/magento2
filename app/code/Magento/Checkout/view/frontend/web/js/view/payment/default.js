@@ -27,9 +27,9 @@ define(
                 return true;
             },
             isEnabled: function(code) {
-              return quote.paymentMethod()
-                  ? quote.paymentMethod().method == code
-                  : null;
+                return quote.paymentMethod()
+                    ? quote.paymentMethod().method == code
+                    : null;
             },
             isChecked: ko.computed(function () {
                     return quote.paymentMethod()
