@@ -61,11 +61,11 @@ class RemoveTrack extends \Magento\Backend\App\Action
                 } else {
                     $response = [
                         'error' => true,
-                        'message' => __('Cannot initialize shipment for delete tracking number.'),
+                        'message' => __('We can\'t initialize shipment for delete tracking number.'),
                     ];
                 }
             } catch (\Exception $e) {
-                $response = ['error' => true, 'message' => __('Cannot delete tracking number.')];
+                $response = ['error' => true, 'message' => __('We can\'t delete tracking number.')];
             }
         } else {
             $response = [
