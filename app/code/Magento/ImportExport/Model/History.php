@@ -34,11 +34,6 @@ class History extends \Magento\Framework\Model\AbstractModel
     const IMPORT_FAILED = 'Failed';
 
     /**
-     * Maximum execution time for import process in seconds
-     */
-    const MAX_IMPORT_EXECUTION_TIME = 21600;
-
-    /**
      * @var \Magento\ImportExport\Helper\Report
      */
     protected $reportHelper;

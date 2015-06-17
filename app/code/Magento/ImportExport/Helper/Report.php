@@ -17,22 +17,23 @@ use Magento\ImportExport\Model\Import;
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\TimeZone
      */
-    protected $dateTime;
+    protected $timeZone;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimeZone $timeZone
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimeZone $timeZone,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->dateTime = $dateTime;
+        $this->timeZone = $timeZone;
         $this->filesystem = $filesystem;
         $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         parent::__construct($context);
@@ -46,8 +47,8 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getExecutionTime($time)
     {
-        $reportTime = new \DateTime($this->dateTime->date($time));
-        $timeDiff = $reportTime->diff(new \DateTime($this->dateTime->date()));
+        $reportTime = $this->timeZone->date($time, $this->timeZone->getConfigTimezone());
+        $timeDiff = $reportTime->diff($this->timeZone->date());
         return $timeDiff->format('%H:%M:%S');
     }
 
@@ -66,32 +67,6 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
             $import->getDeletedItemsCount()
         );
         return $message;
-    }
-
-    /**
-     * Check if import process failed is failed by maximum execution time
-     *
-     * @param string $time
-     * @return bool
-     */
-    public function isFailed($time)
-    {
-        $isFailed = false;
-        if ($this->getTimeDiff($time) > History::MAX_IMPORT_EXECUTION_TIME) {
-            $isFailed = true;
-        }
-        return $isFailed;
-    }
-
-    /**
-     * Get time difference
-     *
-     * @param string $time
-     * @return int
-     */
-    protected function getTimeDiff($time)
-    {
-        return $this->dateTime->timestamp($time) - $this->dateTime->timestamp();
     }
 
     /**
