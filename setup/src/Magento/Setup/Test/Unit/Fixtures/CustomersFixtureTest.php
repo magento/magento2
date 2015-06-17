@@ -30,11 +30,6 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
-        $valueMap[] = [
-            'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'customer_composite', 'behavior' => 'append']],
-            $importMock
-        ];
 
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->once())
@@ -53,7 +48,15 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
+
+        $valueMap = [
+            [
+                'Magento\ImportExport\Model\Import',
+                ['data' => ['entity' => 'customer_composite', 'behavior' => 'append']],
+                $importMock
+            ],
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

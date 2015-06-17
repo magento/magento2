@@ -81,7 +81,6 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('setIsActive')
             ->willReturnSelf();
-        $valueMap[] = ['Magento\Catalog\Model\Category', [], $categoryMock];
 
         $groupMock = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
         $groupMock->expects($this->once())
@@ -92,15 +91,22 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getGroups')
             ->will($this->returnValue([$groupMock]));
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
+
+        $objectValueMock = [
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
+            ['Magento\Catalog\Model\Category', [], $categoryMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap($valueMap));
+            ->will($this->returnValueMap($objectValueMock));
 
-        $valueMap[] = ['categories', 0, 1];
-        $valueMap[] = ['categories_nesting_level', 3, 3];
+        $valueMap = [
+            ['categories', 0, 1],
+            ['categories_nesting_level', 3, 3]
+        ];
+
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')

@@ -71,13 +71,16 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue('category_id'));
-        $valueMap[] = ['Magento\Catalog\Model\Category', $categoryMock];
 
         $modelMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
         $modelMock->expects($this->once())
             ->method('getIdFieldName')
             ->will($this->returnValue('Field Id Name'));
-        $valueMap[] = ['Magento\CatalogRule\Model\Rule', $modelMock];
+
+        $valueMap = [
+            ['Magento\CatalogRule\Model\Rule', $modelMock],
+            ['Magento\Catalog\Model\Category', $categoryMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())

@@ -30,11 +30,6 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
-        $valueMap[] = [
-            'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']],
-            $importMock
-        ];
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
@@ -81,7 +76,15 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
+
+        $valueMap = [
+            [
+                'Magento\ImportExport\Model\Import',
+                ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']],
+                $importMock
+            ],
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

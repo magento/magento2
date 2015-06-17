@@ -31,13 +31,11 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $rateMock = $this->getMock('Magento\Tax\Model\Calculation\Rate', ['setId', 'delete'], [], '', false);
-        $valueMap[] = ['Magento\Tax\Model\Calculation\Rate', $rateMock];
 
         $collectionMock = $this->getMock('Magento\Tax\Model\Resource\Calculation\Rate\Collection', [], [], '', false);
         $collectionMock->expects($this->once())
             ->method('getAllIds')
             ->willReturn([1]);
-        $valueMap[] = ['Magento\Tax\Model\Resource\Calculation\Rate\Collection', $collectionMock];
 
         $csvImportHandlerMock = $this->getMock(
             'Magento\TaxImportExport\Model\Rate\CsvImportHandler',
@@ -46,6 +44,11 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $valueMap = [
+            ['Magento\Tax\Model\Calculation\Rate', $rateMock],
+            ['Magento\Tax\Model\Resource\Calculation\Rate\Collection', $collectionMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

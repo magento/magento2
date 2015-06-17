@@ -71,13 +71,16 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue('category_id'));
-        $valueMap[] = ['Magento\Catalog\Model\Category', $categoryMock,];
 
         $modelMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
         $modelMock->expects($this->once())
             ->method('getIdFieldName')
             ->will($this->returnValue('Field Id Name'));
-        $valueMap[] = ['Magento\SalesRule\Model\Rule', $modelMock];
+
+        $objectValueMap = [
+            ['Magento\SalesRule\Model\Rule', $modelMock],
+            ['Magento\Catalog\Model\Category', $categoryMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
@@ -85,10 +88,13 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeManagerMock));
         $objectManagerMock->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->will($this->returnValueMap($objectValueMap));
 
-        $valueMap[] = ['cart_price_rules', 0, 1];
-        $valueMap[] = ['cart_price_rules_floor', 3, 3];
+        $valueMap = [
+            ['cart_price_rules', 0, 1],
+            ['cart_price_rules_floor', 3, 3]
+        ];
+
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
