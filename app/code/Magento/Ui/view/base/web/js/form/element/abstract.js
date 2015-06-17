@@ -30,8 +30,8 @@ define([
             listens: {
                 value: 'onUpdate',
                 visible: 'setPreview',
-                '<%= provider %>:data.reset': 'reset',
-                '<%= provider %>:<% if (customScope !== "") { %><%= customScope %>.<% } %>data.validate': 'validate'
+                '${ $.provider }:data.reset': 'reset',
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
 
             links: {

@@ -1,3 +1,141 @@
+0.74.0-beta13
+=============
+* Framework improvements:
+    * Created Join Directive, Join Process for Tables, XML Config support to define a performance join for search services
+    * Added support of field weighting for MySQL Search Engine
+    * Modified indexer declaration to support field declaration
+    * Model related methods and properties are removed from Magento Object
+* Various improvements:
+    * Added supporting of lost product types for Product Import/Export
+    * Improved performance of Product Import/Export
+    * Implemented Payment\Gateway infrastructure as a new design for payment methods
+    * Fixed messages in Setup CLI
+    * JS Smart fixed scroll
+    * Improved sub-menu animation and sub-menu links mouse event effects
+    * Automated UI Documentation build process with Grunt.js
+    * Updated composer dependency to newer version
+    * Implemented direct web link on Magento order transactions records
+* Tests:
+    * Reduced Travis CI integration test time
+    * Increased test coverage for the Integration module
+    * Re-structured unit tests for the updater app to follow the convention used by the rest of Magento code
+* Fixed Bugs:
+    * Fixed Help links in Install Wizard
+    * Fixed an issue where composer install failed since ext-xsl was not available
+    * Fixed web installer on HHVM
+    * Fixed broken links to static assets when error occurs
+    * Fixed failed integration tests on Travis CI builds
+    * Fixed an issue where menu with one sub-menu item not being displayed
+    * Fixed an issue where IPN messages did not show relevant info about transaction
+    * Fixed an issue where Magento\Framework\Data\Form did not accept data-mage-init parameter
+    * Fixed an issue where not all specified "Multiple Select" Bundle options were added to Shopping Cart
+    * Fixed ConfigureProductInCustomerWishlistOnBackendTest functional test
+    * Fixed an issue with all mandatory fields in the Sales data interfaces
+    * Fixed an issue where billing and shipping sections did not contain address information on order print from Guest
+    * Fixed an issue where orders placed in different store views had duplicated IDs
+    * Fixed an issue where Shopping Cart Price Rules were not applying properly for Bundled products
+    * Fixed an issue where column coupon_rule_name was not filled in the sales_order table when you create the order
+    * Fixed an issue where customer registration or login on frontend created an empty cart
+    * Fixed an issue where Product Model sometimes values change in getters methods
+    * Fixed an issue where deleting option through API service for configurable product did not unlink variations
+    * Fixed an issue where there was no ability to place order using multishipping if cart contained virtual product
+    * Fixed an issue where "Terms and Conditions" was absent on order review step
+    * Fixed an issue where grid actions for "Shopping Cart Items" grid was absent in Customer Account (Backend)
+    * Fixed XSS vulnerability in Magento "Add to cart" link
+    * Fixed UI issues on view order info frontend pages for guest customer
+    * Fixed an issue where "Currency Rates" backend form was displayed broken
+    * Fixed an issue where padding was missed for Custom Price Checkbox on "Create Order" Backend page
+    * Fixed an issue where "Choose Variation" buttons lost alignment on "Create Configurable Product" Backend page
+    * Fixed an issue where "Date & Time" Custom option was displayed broken on "Create Order" Backend page
+    * Fixed an issue where colon was displayed before every Product Attribute label on Frontend
+    * Fixed an issue where record from url_rewrite table was not removed when CMS page deleted
+    * Fixed an issue where widget option "Number of Products to Display" did not work
+    * Fixed validation message issues for CMS pages
+    * Fixed an issue where "Click for Price" link was displayed in widgets for product with "Display Actual Price" != "On Gesture" MAP setting
+    * Fixed an issue where Form_key cookie was not listed in privacy page
+    * Fixed an issue where merchant wasn’t redirected to correspondent option when trying to enable Dashboard charts
+    * Fixed an issue where wrong message was displayed after exceeding maximum failed login attempts
+* GitHub issues:
+    * [#1292](https://github.com/magento/magento2/pull/1292) Admin menu with 1 submenu item does not show the subitem
+    * [#1133](https://github.com/magento/magento2/pull/1133) Getter methods shouldn't change values
+    * [#1263](https://github.com/magento/magento2/issues/1263) "We don't have as many "product name" as you requested" not showing in mini cart
+    * [#1284](https://github.com/magento/magento2/issues/1284) Order tracking link redirected to dashboard in admin
+
+0.74.0-beta12
+=============
+* MTF Improvements:
+    * Functional tests maintenance
+* Framework improvements:
+    * Customer entity table was transformed from EAV into a flat model to minimize DB operations
+    * Improved admin authentication and removed bypass
+    * Exposed CMS api's as web API
+* Fixed bugs:
+    * Fixed an issue where "Add Item To Return" button became disabled after required item fields were filled on Frontend
+    * Fixed an issue with fatal error during place order with non default time zone
+    * Fixed an issue where it was not possible to filter backups on name
+    * Fixed an issue where routeIdType did not allow numbers
+    * Fixed an issue with discounted prices for fixed bundle product
+    * Fixed an issue with catalog prices not including custom option prices
+    * Fixed an issue with tier prices being displayed 4 characters
+    * Fixed an issue with extra FPT labels in mini shopping cart
+    * Fixed an issue where it was not possible to place orders for products with FPT and catalog prices including tax
+    * Fixed an issue with FPT attribute being required when creating product
+    * Fixed an issue where final price was not recalculated after selecting product options
+    * Fixed an issue where tax labels were not displayed for Bundle options on 'multi-select' and 'dropdown' controls
+    * Fixed an issue where filters were not shown on product reviews report grid
+    * Fixed an issue where second customer address was not deleted from customer account
+    * Fixed an issue where custom options pop-up was still displayed after submit
+    * Fixed an issue where Second Product was not added to Shopping Cart from Wishlist at first atempt
+    * Fixed an issue where customer invalid email message was not displayed
+    * Fixed an issue where All Access Tokens for Customer without Tokens could not be revoked
+    * Fixed an issue where it was impossible to add Product to Shopping Cart from shared Wishlist
+    * Magento_Sendfriend module should have upper case 'F'
+    * Fixed set of issues with Ui module
+    * Fixed JavaScript error on Invoice creation page
+* Various improvements:
+    * Hide payment credentials in debug log
+    * Simplification of Payment Configuration
+    * Introduced new Dialog widget
+* Github issues:
+    * [#1330](https://github.com/magento/magento2/pull/1330) -- Removing unused memory limit in htaccess
+    * [#1307](https://github.com/magento/magento2/pull/1307) -- Corrected a sentence by removing a word
+
+0.74.0-beta11
+=============
+* Framework improvements:
+    * Improved component Bookmarks component in scope of Enhanced Data Grids on CMS
+    * Improved component Advanced Filtering component in scope of Enhanced Data Grids on CMS
+* Fixed bugs:
+    * Fixed an issue where incorrect keys in REST request body allowed the request to go through successfully
+    * Fixed an issue where interceptors were Generated with Invalid __wakeup() 
+    * Fixed an issue where redirect on the current page was not working in certain conditions
+    * Fixed an issue where first store could not be selected on frontend
+    * Fixed an issue with performance toolkit category creation
+    * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
+    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
+    * Fixed an issue where email was not required during Guest Checkout 
+    * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
+    * Fixed an issue where `bin/magento indexer:reindex` command failed after `bin/magento setup:di:compile` was run
+    * Fixed bug with broken JS i18n
+    * Fixed an issue with wrong value at created_at updated_at fields after quote* save
+    * Fixed an issue where customer could not be created in backend after adding Image type attribute
+    * Fixed Sales InvoiceItem and Order data interfaces implementation
+    * Fixed an issue with performance toolkit medium profile
+    * Fixed an issue where Excel Formula Injection via CSV/XML export
+    * Fixed an issue where it was not possible to open the Customers page in backend
+    * Fixed an issue with internal server error after clicking Continue on Billing information
+    * Fixed an issue where it was not possible to place order with Fedex shipping method
+* Various changes:
+    * Magento Centinel Removal
+    * Removed ability to have multi-statement queries
+* Test coverage:
+    * Unit tests coverage
+    * Covered php code by unit tests after new checkout implementation
+* Github issues:
+    * [#424](https://github.com/magento/magento2/issues/424) -- Combine tier pricing messages into block sentences
+    * [#1300](https://github.com/magento/magento2/issues/1300), [#1311](https://github.com/magento/magento2/issues/1311), [#1313](https://github.com/magento/magento2/issues/1313) -- Creating product error with startdate
+
 0.74.0-beta10
 =============
 * Framework improvements:
@@ -2514,7 +2652,7 @@
   * Canadian provincial sales taxes
   * Fixed issues with bundle product price inconsistency across the system
   * Added warnings if invalid tax configuration is created in the Admin panel
-  * Fixed issues with regards to hidden tax
+  * Fixed issues with regards to discount tax compensation
 * Fixed bugs:
   * Fixed an issue where grouped price was not applied for grouped products
   * Fixed an issue where a fatal error occurred when opening a grouped product page without assigned products on the frontend

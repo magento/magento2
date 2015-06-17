@@ -16,6 +16,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Framework\Api\ExtensibleDataObjectConverter')
             ->toFlatArray($entity);
     }
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
@@ -275,6 +276,44 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 "'{$field}' value in quote shipping address is invalid."
             );
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     */
+    public function testAddProductUpdateItem()
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+        $quote->load('test01', 'reserved_order_id');
+
+        $productStockQty = 100;
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+        $product->load(2);
+        $quote->addProduct($product, 50);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(50, $quote->getItemsQty());
+        $quote->addProduct($product, 50);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(100, $quote->getItemsQty());
+        $params = [
+            'related_product' => '',
+            'product' => $product->getId(),
+            'qty' => 1,
+            'id' => 0
+        ];
+        $updateParams = new \Magento\Framework\Object($params);
+        $quote->updateItem($updateParams['id'], $updateParams);
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->assertEquals(1, $quote->getItemsQty());
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\LocalizedException',
+            'We don\'t have as many "Simple Product" as you requested.'
+        );
+        $updateParams['qty'] = $productStockQty + 1;
+        $quote->updateItem($updateParams['id'], $updateParams);
     }
 
     /**

@@ -414,7 +414,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         $totalAmount = $item->getRowTotal()
             - $item->getDiscountAmount()
             + $item->getTaxAmount()
-            + $item->getHiddenTaxAmount()
+            + $item->getDiscountTaxCompensationAmount()
             + $this->weeeHelper->getRowWeeeTaxInclTax($item);
 
         return $totalAmount;
@@ -431,7 +431,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         $totalAmount = $item->getBaseRowTotal()
             - $item->getBaseDiscountAmount()
             + $item->getBaseTaxAmount()
-            + $item->getBaseHiddenTaxAmount()
+            + $item->getBaseDiscountTaxCompensationAmount()
             + $this->weeeHelper->getBaseRowWeeeTaxInclTax($item);
 
         return $totalAmount;
