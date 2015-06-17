@@ -13,25 +13,6 @@ namespace Magento\ImportExport\Block\Adminhtml;
 class History extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * @var \Magento\User\Model\Resource\User
-     */
-    protected $_resourceModel;
-
-    /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\ImportExport\Model\Resource\History $resourceModel
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\ImportExport\Model\Resource\History $resourceModel,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->_resourceModel = $resourceModel;
-    }
-
-    /**
      * Class constructor
      *
      * @return void

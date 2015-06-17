@@ -17,30 +17,18 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Backup\Factory $backupFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
-     * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Backup\Factory $backupFactory,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Backup\Model\BackupFactory $backupModelFactory,
-        \Magento\Framework\App\MaintenanceMode $maintenanceMode,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         parent::__construct(
             $context
         );
-        $this->_coreRegistry = $coreRegistry;
-        $this->_backupFactory = $backupFactory;
-        $this->_fileFactory = $fileFactory;
-        $this->_backupModelFactory = $backupModelFactory;
-        $this->maintenanceMode = $maintenanceMode;
+        $this->fileFactory = $fileFactory;
         $this->resultRawFactory = $resultRawFactory;
     }
 
@@ -63,7 +51,7 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History
             return $resultRedirect;
         }
 
-        $this->_fileFactory->create(
+        $this->fileFactory->create(
             $fileName,
             null,
             DirectoryList::VAR_DIR,
