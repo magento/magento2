@@ -162,7 +162,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'objectManager' => $this->objectManager,
                     'emailConfig' => $this->emailConfig,
                     'filterFactory' => $this->filterFactory,
-                    'templateFactory' => $this->templateFactory
+                    'templateFactory' => $this->templateFactory,
                 ]
             ),
             '',
@@ -274,7 +274,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'logo_alt' => 'frontendName',
                     'store' => null,
                     'logo_width' => null,
-                    'logo_height' => null,
                     'store_phone' => null,
                     'store_hours' => null,
                     'store_email' => null,
@@ -293,7 +292,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'logo_alt' => 'Logo Alt',
                     'store' => null,
                     'logo_width' => null,
-                    'logo_height' => null,
                     'store_phone' => null,
                     'store_hours' => null,
                     'store_email' => null,
@@ -379,7 +377,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                 'Magento\Email\Model\AbstractTemplate',
                 [
                     'design' => $designMock,
-                    'storeManager' => $storeManagerMock
+                    'storeManager' => $storeManagerMock,
                 ]
             )
         );
