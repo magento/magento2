@@ -98,7 +98,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         $response = $curl->read();
         $curl->close();
         // After caching My Account page we cannot check by success message
-        if (!strpos($response, 'customer/account/logout')) {
+        if (!strpos($response, 'block-dashboard-info')) {
             throw new \Exception("Customer entity creating  by curl handler was not successful! Response: $response");
         }
 
