@@ -472,7 +472,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = glob(
-            $this->_globalConfigDir . '/{di.xml}',
+            $this->_globalConfigDir . '/{di.xml,vendor_path.php}',
             GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
