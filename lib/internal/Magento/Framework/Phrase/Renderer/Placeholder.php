@@ -23,13 +23,14 @@ class Placeholder implements RendererInterface
         $text = end($source);
 
         if ($arguments) {
-            $placeholders = [];
-            /** @see https://github.com/magento/magento2/issues/1374 */
-            krsort($arguments);
-            foreach (array_keys($arguments) as $key) {
-                $placeholders[] = '%' . (is_int($key) ? strval($key + 1) : $key);
-            }
-            $text = str_replace($placeholders, $arguments, $text);
+            $placeholders = array_map(
+                function ($key) {
+                    return '%' . (is_int($key) ? strval($key + 1) : $key);
+                },
+                array_keys($arguments)
+            );
+            $pairs = array_combine($placeholders, $arguments);
+            $text = strtr($text, $pairs);
         }
 
         return $text;
