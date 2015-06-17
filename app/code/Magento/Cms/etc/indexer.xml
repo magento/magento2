@@ -18,5 +18,8 @@
             <field name="content_heading" dataType="varchar" xsi:type="searchable"/>
             <field name="content" dataType="mediumtext" xsi:type="searchable"/>
         </fieldset>
+
+        <saveHandler class="Magento\Indexer\Model\SaveHandler" />
+        <structure class="Magento\Indexer\Model\Structure" />
     </indexer>
 </config>
