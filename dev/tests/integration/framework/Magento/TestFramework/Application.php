@@ -267,9 +267,10 @@ class Application
      * Initialize application
      *
      * @param array $overriddenParams
+     * @param bool $loadTestExtensionAttributes
      * @return void
      */
-    public function initialize($overriddenParams = [])
+    public function initialize($overriddenParams = [], $loadTestExtensionAttributes = false)
     {
         $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
         $overriddenParams = $this->_customizeParams($overriddenParams);
@@ -323,21 +324,27 @@ class Application
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
-        $objectManager->configure(
-            [
-                'preferences' => [
-                    'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
-                    'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
-                    'Magento\Framework\Mail\Template\TransportBuilder'
-                        => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
-                ],
-                'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
-                    'arguments' => [
-                        'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
-                    ],
-                ],
+        $objectManagerConfiguration = [
+            'preferences' => [
+                'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
+                'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
+                'Magento\Framework\Mail\Template\TransportBuilder'
+                => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
             ]
-        );
+        ];
+        if ($loadTestExtensionAttributes) {
+            array_merge(
+                $objectManagerConfiguration,
+                [
+                    'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
+                        'arguments' => [
+                            'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
+                        ],
+                    ],
+                ]
+            );
+        }
+        $objectManager->configure($objectManagerConfiguration);
 
         /** Register event observer of Integration Framework */
         /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
@@ -375,7 +382,7 @@ class Application
     public function reinitialize(array $overriddenParams = [])
     {
         $this->_resetApp();
-        $this->initialize($overriddenParams);
+        $this->initialize($overriddenParams, true);
     }
 
     /**
