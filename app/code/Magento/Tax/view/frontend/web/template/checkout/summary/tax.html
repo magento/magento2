@@ -8,7 +8,14 @@
 <tr class="totals-tax">
     <th data-bind="text: $t(title)" class="mark" scope="row"></th>
     <td data-bind="attr: {'data-th': $t(title) }" class="amount">
-        <span class="price" data-bind="text: $t(getValue())"></span>
+        <!-- ko if: isCalculated() -->
+            <span class="price"
+                  data-bind="text: $t(getValue())"></span>
+        <!-- /ko -->
+        <!-- ko ifnot: isCalculated() -->
+            <span class="not-calculated"
+                  data-bind="text: $t(getValue())"></span>
+        <!-- /ko -->
     </td>
 </tr>
 <!-- /ko -->
@@ -17,7 +24,14 @@
         data-bind="mageInit: {'toggleAdvanced':{'selectorsToggleClass': 'shown', 'baseToggleClass': 'expanded', 'toggleContainers': '.totals-tax-details'}}">
         <th data-bind="text: $t(title)" class="mark" scope="row"></th>
         <td data-bind="attr: {'data-th': $t(title) }" class="amount">
-            <span class="price" data-bind="text: $t(getValue())"></span>
+            <!-- ko if: isCalculated() -->
+            <span class="price"
+                  data-bind="text: $t(getValue())"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: isCalculated() -->
+            <span class="not-calculated"
+                  data-bind="text: $t(getValue())"></span>
+            <!-- /ko -->
         </td>
     </tr>
     <!-- ko foreach: getDetails() -->
@@ -31,8 +45,14 @@
             <!-- /ko -->
             <!-- ko if: $index() == 0 -->
                 <td class="amount">
+                    <!-- ko if: isCalculated() -->
                     <span class="price"
                           data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: isCalculated() -->
+                    <span class="not-calculated"
+                          data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'rowspan': $parents[0].rates.length }"></span>
+                    <!-- /ko -->
                 </td>
             <!-- /ko -->
         </tr>
