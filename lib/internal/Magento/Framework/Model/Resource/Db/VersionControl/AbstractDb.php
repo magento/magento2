@@ -56,20 +56,20 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\Db\AbstractD
         $this->entityRelationComposite->processRelations($object);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!$this->entitySnapshot->isModified($object)) {
-            $this->beginTransaction();
-            try {
-                $this->entityRelationComposite->processRelations($object);
-            } catch (\Exception $e) {
-                $this->rollBack();
-                $object->setHasDataChanges(true);
-                throw $e;
-            }
-            $this->commit();
-            return false;
-        }
-        return true;
+        return $this->entitySnapshot->isModified($object);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->entityRelationComposite->processRelations($object);
+        return $this;
     }
 }

@@ -402,13 +402,14 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-        if (!$this->isModified($object)) {
-            return $this;
-        }
 
         $this->beginTransaction();
 
         try {
+            if (!$this->isModified($object)) {
+                return $this->processNotModifiedSave($object);
+            }
+
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
@@ -849,5 +850,16 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {
         return $object->hasDataChanges();
+    }
+
+    /**
+     * Process object which was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $this;
     }
 }
