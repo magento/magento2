@@ -38,11 +38,11 @@ class Relation implements EntityRelationInterface
     /**
      * Process relations for CreditMemo
      *
-     * @param \Magento\Sales\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @throws \Exception
      * @return void
      */
-    public function processRelation(\Magento\Sales\Model\AbstractModel $object)
+    public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Creditmemo $object */
         if (null !== $object->getItems()) {

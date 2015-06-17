@@ -59,11 +59,11 @@ class Relation implements EntityRelationInterface
     /**
      * Save relations for Order
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
      */
-    public function processRelation(AbstractModel $object)
+    public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
         $this->addressHandler->removeEmptyAddresses($object);
