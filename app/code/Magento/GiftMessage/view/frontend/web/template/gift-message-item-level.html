@@ -22,8 +22,8 @@
             <!-- ko template: formTemplate --><!--/ko-->
         </div>
     <!-- /ko -->
-    <div class="gift-summary">
-        <!-- ko if: resultBlockVisibility() -->
+    <!-- ko if: resultBlockVisibility() -->
+        <div class="gift-summary">
             <!-- ko foreach: getRegion('additionalOptions') -->
                 <!--ko template: appliedTemplate --><!-- /ko -->
             <!-- /ko -->
@@ -34,22 +34,23 @@
                     <!-- ko text: getObservable('message') --><!-- /ko -->
                 </div>
             <!-- /ko -->
-
+            
             <div class="actions-toolbar">
                 <div class="secondary">
                     <button type="submit" class="action action-edit" data-bind="
-                        click: $data.editOptions.bind($data),
-                        attr: {title: $t('Edit')">
+                            click: $data.editOptions.bind($data),
+                            attr: {title: $t('Edit')">
                         <span data-bind="text: $t('Edit')"></span>
                     </button>
                     <button class="action action-delete" data-bind="
-                        click: $data.deleteOptions.bind($data),
-                        attr: {title: $t('Delete')">
+                            click: $data.deleteOptions.bind($data),
+                            attr: {title: $t('Delete')">
                         <span data-bind="text: $t('Delete')"></span>
                     </button>
                 </div>
             </div>
         <!-- /ko -->
-    </div>
+        </div>
+    <!-- /ko -->
 </div>
 <!-- /ko -->
