@@ -22,11 +22,6 @@ class Source extends AbstractEav
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Eav\Model\Attribute\FrontendType
-     */
-    protected $frontendType;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
@@ -41,11 +36,9 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Eav\Model\Attribute\FrontendType $frontendType,
         $resourcePrefix = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        $this->frontendType = $frontendType;
         parent::__construct($context, $eavConfig, $eventManager, $resourcePrefix);
     }
 
@@ -79,11 +72,9 @@ class Source extends AbstractEav
         );
 
         if ($multiSelect == true) {
-            $select->where('ea.backend_type = ?', 'varchar')
-                ->where('ea.frontend_input in (?)', $this->frontendType->getInputs('multiselect'));
+            $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
         } else {
-            $select->where('ea.backend_type = ?', 'int')
-                ->where('ea.frontend_input in (?)', $this->frontendType->getInputs('select'));
+            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input = ?', 'select');
         }
 
         return $this->_getReadAdapter()->fetchCol($select);
