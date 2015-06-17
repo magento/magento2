@@ -97,5 +97,23 @@
                 </arguments>
             </block>
         </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.giftcard.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.giftcard.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="types" xsi:type="array"/>
+                        <item name="components" xsi:type="array">
+                            <item name="giftOptionsCartItem" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-message</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_GiftMessage/gift-message-item-level</item>
+                                    <item name="formTemplate" xsi:type="string">Magento_GiftMessage/gift-message-form</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceBlock>
     </body>
 </page>
