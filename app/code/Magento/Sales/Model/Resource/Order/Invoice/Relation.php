@@ -6,14 +6,14 @@
 
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
-use Magento\Sales\Model\Resource\EntityRelationInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\Resource\Order\Invoice\Item as InvoiceItemResource;
 use Magento\Sales\Model\Resource\Order\Invoice\Comment as InvoiceCommentResource;
 
 /**
  * Class Relation
  */
-class Relation implements EntityRelationInterface
+class Relation implements RelationInterface
 {
     /**
      * @var InvoiceItemResource

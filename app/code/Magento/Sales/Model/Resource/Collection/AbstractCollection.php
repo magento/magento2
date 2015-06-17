@@ -17,7 +17,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     protected $_countSelect;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot
      */
     protected $entitySnapshot;
 
@@ -26,7 +26,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param string|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @throws \Zend_Exception
@@ -36,7 +36,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {

@@ -50,12 +50,12 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $adapterMock;
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntityRelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $relationCompositeMock;
 
@@ -97,14 +97,14 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Model\Sequence', [], [], '', false);
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntityRelationComposite',
+            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
             [],
             [],
             '',

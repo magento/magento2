@@ -6,9 +6,8 @@
 
 namespace Magento\Sales\Model\Resource\Order;
 
-use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
-use Magento\Sales\Model\Resource\EntityRelationInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\Resource\Order\Item as OrderItemResource;
 use Magento\Sales\Model\Resource\Order\Payment as OrderPaymentResource;
 use Magento\Sales\Model\Resource\Order\Status\History as OrderStatusHistoryResource;
@@ -16,7 +15,7 @@ use Magento\Sales\Model\Resource\Order\Status\History as OrderStatusHistoryResou
 /**
  * Class Relation
  */
-class Relation implements EntityRelationInterface
+class Relation implements RelationInterface
 {
     /**
      * @var AddressHandler
