@@ -388,7 +388,9 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     public function testResetItemsDataChanged()
     {
         for ($i = 0; $i < 3; $i++) {
-            $this->uut->addItem((new MagentoObject())->setDataChanges(true));
+            /** @var \Magento\Framework\Model\AbstractModel $item */
+            $item = $this->getMockForAbstractClass('Magento\Framework\Model\AbstractModel', [], '', false);
+            $this->uut->addItem($item->setDataChanges(true));
         }
 
         $this->assertTrue($this->uut->resetItemsDataChanged() instanceof Uut);
