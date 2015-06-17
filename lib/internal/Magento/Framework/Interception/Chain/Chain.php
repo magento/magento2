@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\Interception\Chain;
 
-use Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace\Interceptor;
+use Magento\Framework\Interception\InterceptorInterface;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\Interception\PluginListInterface;
 
@@ -31,12 +31,17 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
      * @param string $type
      * @param string $method
      * @param string $previousPluginCode
-     * @param Interceptor $subject
+     * @param InterceptorInterface $subject
      * @param array $arguments
      * @return mixed|void
      */
-    public function invokeNext($type, $method, $subject, array $arguments, $previousPluginCode = null)
-    {
+    public function invokeNext(
+        $type,
+        $method,
+        InterceptorInterface $subject,
+        array $arguments,
+        $previousPluginCode = null
+    ) {
         $pluginInfo = $this->pluginList->getNext($type, $method, $previousPluginCode);
         $capMethod = ucfirst($method);
         $result = null;
