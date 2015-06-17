@@ -243,37 +243,37 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
-     * Hidden tax invoiced.
+     * Discount tax compensation invoiced.
      */
-    const HIDDEN_TAX_INVOICED = 'hidden_tax_invoiced';
+    const DISCOUNT_TAX_COMPENSATION_INVOICED = 'discount_tax_compensation_invoiced';
     /*
-     * Base hidden tax invoiced.
+     * Base discount tax compensation invoiced.
      */
-    const BASE_HIDDEN_TAX_INVOICED = 'base_hidden_tax_invoiced';
+    const BASE_DISCOUNT_TAX_COMPENSATION_INVOICED = 'base_discount_tax_compensation_invoiced';
     /*
-     * Hidden tax refunded.
+     * Discount tax compensation refunded.
      */
-    const HIDDEN_TAX_REFUNDED = 'hidden_tax_refunded';
+    const DISCOUNT_TAX_COMPENSATION_REFUNDED = 'discount_tax_compensation_refunded';
     /*
-     * Base hidden tax refunded.
+     * Base discount tax compensation refunded.
      */
-    const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
+    const BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED = 'base_discount_tax_compensation_refunded';
     /*
      * Tax canceled flag
      */
     const TAX_CANCELED = 'tax_canceled';
     /*
-     * Hidden-tax-canceled flag.
+     * Discount-tax-compensation-canceled flag.
      */
-    const HIDDEN_TAX_CANCELED = 'hidden_tax_canceled';
+    const DISCOUNT_TAX_COMPENSATION_CANCELED = 'discount_tax_compensation_canceled';
     /*
      * Tax refunded.
      */
@@ -400,182 +400,182 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the additional data for the order item.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
     /**
      * Gets the amount refunded for the order item.
      *
-     * @return float Amount refunded.
+     * @return float|null Amount refunded.
      */
     public function getAmountRefunded();
 
     /**
      * Gets the applied rule IDs for the order item.
      *
-     * @return string Applied rule IDs.
+     * @return string|null Applied rule IDs.
      */
     public function getAppliedRuleIds();
 
     /**
      * Gets the base amount refunded for the order item.
      *
-     * @return float Base amount refunded.
+     * @return float|null Base amount refunded.
      */
     public function getBaseAmountRefunded();
 
     /**
      * Gets the base cost for the order item.
      *
-     * @return float Base cost.
+     * @return float|null Base cost.
      */
     public function getBaseCost();
 
     /**
      * Gets the base discount amount for the order item.
      *
-     * @return float Base discount amount.
+     * @return float|null Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base discount invoiced for the order item.
      *
-     * @return float Base discount invoiced.
+     * @return float|null Base discount invoiced.
      */
     public function getBaseDiscountInvoiced();
 
     /**
      * Gets the base discount refunded for the order item.
      *
-     * @return float Base discount refunded.
+     * @return float|null Base discount refunded.
      */
     public function getBaseDiscountRefunded();
 
     /**
-     * Gets the base hidden tax amount for the order item.
+     * Gets the base discount tax compensation amount for the order item.
      *
-     * @return float Base hidden tax amount.
+     * @return float Base discount tax compensation amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
-     * Gets the base hidden tax invoiced for the order item.
+     * Gets the base discount tax compensation invoiced for the order item.
      *
-     * @return float Base hidden tax invoiced.
+     * @return float Base discount tax compensation invoiced.
      */
-    public function getBaseHiddenTaxInvoiced();
+    public function getBaseDiscountTaxCompensationInvoiced();
 
     /**
-     * Gets the base hidden tax refunded for the order item.
+     * Gets the base discount tax compensation refunded for the order item.
      *
-     * @return float Base hidden tax refunded.
+     * @return float Base discount tax compensation refunded.
      */
-    public function getBaseHiddenTaxRefunded();
+    public function getBaseDiscountTaxCompensationRefunded();
 
     /**
      * Gets the base original price for the order item.
      *
-     * @return float Base original price.
+     * @return float|null Base original price.
      */
     public function getBaseOriginalPrice();
 
     /**
      * Gets the base price for the order item.
      *
-     * @return float Base price.
+     * @return float|null Base price.
      */
     public function getBasePrice();
 
     /**
      * Gets the base price including tax for the order item.
      *
-     * @return float Base price including tax.
+     * @return float|null Base price including tax.
      */
     public function getBasePriceInclTax();
 
     /**
      * Gets the base row invoiced for the order item.
      *
-     * @return float Base row invoiced.
+     * @return float|null Base row invoiced.
      */
     public function getBaseRowInvoiced();
 
     /**
      * Gets the base row total for the order item.
      *
-     * @return float Base row total.
+     * @return float|null Base row total.
      */
     public function getBaseRowTotal();
 
     /**
      * Gets the base row total including tax for the order item.
      *
-     * @return float Base row total including tax.
+     * @return float|null Base row total including tax.
      */
     public function getBaseRowTotalInclTax();
 
     /**
      * Gets the base tax amount for the order item.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the base tax before discount for the order item.
      *
-     * @return float Base tax before discount.
+     * @return float|null Base tax before discount.
      */
     public function getBaseTaxBeforeDiscount();
 
     /**
      * Gets the base tax invoiced for the order item.
      *
-     * @return float Base tax invoiced.
+     * @return float|null Base tax invoiced.
      */
     public function getBaseTaxInvoiced();
 
     /**
      * Gets the base tax refunded for the order item.
      *
-     * @return float Base tax refunded.
+     * @return float|null Base tax refunded.
      */
     public function getBaseTaxRefunded();
 
     /**
      * Gets the base WEEE tax applied amount for the order item.
      *
-     * @return float Base WEEE tax applied amount.
+     * @return float|null Base WEEE tax applied amount.
      */
     public function getBaseWeeeTaxAppliedAmount();
 
     /**
      * Gets the base WEEE tax applied row amount for the order item.
      *
-     * @return float Base WEEE tax applied row amount.
+     * @return float|null Base WEEE tax applied row amount.
      */
     public function getBaseWeeeTaxAppliedRowAmnt();
 
     /**
      * Gets the base WEEE tax disposition for the order item.
      *
-     * @return float Base WEEE tax disposition.
+     * @return float|null Base WEEE tax disposition.
      */
     public function getBaseWeeeTaxDisposition();
 
     /**
      * Gets the base WEEE tax row disposition for the order item.
      *
-     * @return float Base WEEE tax row disposition.
+     * @return float|null Base WEEE tax row disposition.
      */
     public function getBaseWeeeTaxRowDisposition();
 
     /**
      * Gets the created-at timestamp for the order item.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -590,266 +590,266 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the description for the order item.
      *
-     * @return string Description.
+     * @return string|null Description.
      */
     public function getDescription();
 
     /**
      * Gets the discount amount for the order item.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
     /**
      * Gets the discount invoiced for the order item.
      *
-     * @return float Discount invoiced.
+     * @return float|null Discount invoiced.
      */
     public function getDiscountInvoiced();
 
     /**
      * Gets the discount percent for the order item.
      *
-     * @return float Discount percent.
+     * @return float|null Discount percent.
      */
     public function getDiscountPercent();
 
     /**
      * Gets the discount refunded for the order item.
      *
-     * @return float Discount refunded.
+     * @return float|null Discount refunded.
      */
     public function getDiscountRefunded();
 
     /**
      * Gets the event ID for the order item.
      *
-     * @return int Event ID.
+     * @return int|null Event ID.
      */
     public function getEventId();
 
     /**
      * Gets the external order item ID for the order item.
      *
-     * @return string External order item ID.
+     * @return string|null External order item ID.
      */
     public function getExtOrderItemId();
 
     /**
      * Gets the free-shipping flag value for the order item.
      *
-     * @return int Free-shipping flag value.
+     * @return int|null Free-shipping flag value.
      */
     public function getFreeShipping();
 
     /**
      * Gets the GW base price for the order item.
      *
-     * @return float GW base price.
+     * @return float|null GW base price.
      */
     public function getGwBasePrice();
 
     /**
      * Gets the GW base price invoiced for the order item.
      *
-     * @return float GW base price invoiced.
+     * @return float|null GW base price invoiced.
      */
     public function getGwBasePriceInvoiced();
 
     /**
      * Gets the GW base price refunded for the order item.
      *
-     * @return float GW base price refunded.
+     * @return float|null GW base price refunded.
      */
     public function getGwBasePriceRefunded();
 
     /**
      * Gets the GW base tax amount for the order item.
      *
-     * @return float GW base tax amount.
+     * @return float|null GW base tax amount.
      */
     public function getGwBaseTaxAmount();
 
     /**
      * Gets the GW base tax amount invoiced for the order item.
      *
-     * @return float GW base tax amount invoiced.
+     * @return float|null GW base tax amount invoiced.
      */
     public function getGwBaseTaxAmountInvoiced();
 
     /**
      * Gets the GW base tax amount refunded for the order item.
      *
-     * @return float GW base tax amount refunded.
+     * @return float|null GW base tax amount refunded.
      */
     public function getGwBaseTaxAmountRefunded();
 
     /**
      * Gets the GW ID for the order item.
      *
-     * @return int GW ID.
+     * @return int|null GW ID.
      */
     public function getGwId();
 
     /**
      * Gets the GW price for the order item.
      *
-     * @return float GW price.
+     * @return float|null GW price.
      */
     public function getGwPrice();
 
     /**
      * Gets the GW price invoiced for the order item.
      *
-     * @return float GW price invoiced.
+     * @return float|null GW price invoiced.
      */
     public function getGwPriceInvoiced();
 
     /**
      * Gets the GW price refunded for the order item.
      *
-     * @return float GW price refunded.
+     * @return float|null GW price refunded.
      */
     public function getGwPriceRefunded();
 
     /**
      * Gets the GW tax amount for the order item.
      *
-     * @return float GW tax amount.
+     * @return float|null GW tax amount.
      */
     public function getGwTaxAmount();
 
     /**
      * Gets the GW tax amount invoiced for the order item.
      *
-     * @return float GW tax amount invoiced.
+     * @return float|null GW tax amount invoiced.
      */
     public function getGwTaxAmountInvoiced();
 
     /**
      * Gets the GW tax amount refunded for the order item.
      *
-     * @return float GW tax amount refunded.
+     * @return float|null GW tax amount refunded.
      */
     public function getGwTaxAmountRefunded();
 
     /**
-     * Gets the hidden tax amount for the order item.
+     * Gets the discount tax compensation amount for the order item.
      *
-     * @return float Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
-     * Gets the hidden tax canceled for the order item.
+     * Gets the discount tax compensation canceled for the order item.
      *
-     * @return float Hidden tax canceled.
+     * @return float Discount tax compensation canceled.
      */
-    public function getHiddenTaxCanceled();
+    public function getDiscountTaxCompensationCanceled();
 
     /**
-     * Gets the hidden tax invoiced for the order item.
+     * Gets the discount tax compensation invoiced for the order item.
      *
-     * @return float Hidden tax invoiced.
+     * @return float Discount tax compensation invoiced.
      */
-    public function getHiddenTaxInvoiced();
+    public function getDiscountTaxCompensationInvoiced();
 
     /**
-     * Gets the hidden tax refunded for the order item.
+     * Gets the discount tax compensation refunded for the order item.
      *
-     * @return float Hidden tax refunded.
+     * @return float Discount tax compensation refunded.
      */
-    public function getHiddenTaxRefunded();
+    public function getDiscountTaxCompensationRefunded();
 
     /**
      * Gets the is-quantity-decimal flag value for the order item.
      *
-     * @return int Is-quantity-decimal flag value.
+     * @return int|null Is-quantity-decimal flag value.
      */
     public function getIsQtyDecimal();
 
     /**
      * Gets the is-virtual flag value for the order item.
      *
-     * @return int Is-virtual flag value.
+     * @return int|null Is-virtual flag value.
      */
     public function getIsVirtual();
 
     /**
      * Gets the item ID for the order item.
      *
-     * @return int Item ID.
+     * @return int|null Item ID.
      */
     public function getItemId();
 
     /**
      * Gets the locked DO invoice flag value for the order item.
      *
-     * @return int Locked DO invoice flag value.
+     * @return int|null Locked DO invoice flag value.
      */
     public function getLockedDoInvoice();
 
     /**
      * Gets the locked DO ship flag value for the order item.
      *
-     * @return int Locked DO ship flag value.
+     * @return int|null Locked DO ship flag value.
      */
     public function getLockedDoShip();
 
     /**
      * Gets the name for the order item.
      *
-     * @return string Name.
+     * @return string|null Name.
      */
     public function getName();
 
     /**
      * Gets the no discount flag value for the order item.
      *
-     * @return int No-discount flag value.
+     * @return int|null No-discount flag value.
      */
     public function getNoDiscount();
 
     /**
      * Gets the order ID for the order item.
      *
-     * @return int Order ID.
+     * @return int|null Order ID.
      */
     public function getOrderId();
 
     /**
      * Gets the original price for the order item.
      *
-     * @return float Original price.
+     * @return float|null Original price.
      */
     public function getOriginalPrice();
 
     /**
      * Gets the parent item ID for the order item.
      *
-     * @return int Parent item ID.
+     * @return int|null Parent item ID.
      */
     public function getParentItemId();
 
     /**
      * Gets the price for the order item.
      *
-     * @return float Price.
+     * @return float|null Price.
      */
     public function getPrice();
 
     /**
      * Gets the price including tax for the order item.
      *
-     * @return float Price including tax.
+     * @return float|null Price including tax.
      */
     public function getPriceInclTax();
 
     /**
      * Gets the product ID for the order item.
      *
-     * @return int Product ID.
+     * @return int|null Product ID.
      */
     public function getProductId();
 
@@ -871,91 +871,91 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the product type for the order item.
      *
-     * @return string Product type.
+     * @return string|null Product type.
      */
     public function getProductType();
 
     /**
      * Gets the quantity backordered for the order item.
      *
-     * @return float Quantity backordered.
+     * @return float|null Quantity backordered.
      */
     public function getQtyBackordered();
 
     /**
      * Gets the quantity canceled for the order item.
      *
-     * @return float Quantity canceled.
+     * @return float|null Quantity canceled.
      */
     public function getQtyCanceled();
 
     /**
      * Gets the quantity invoiced for the order item.
      *
-     * @return float Quantity invoiced.
+     * @return float|null Quantity invoiced.
      */
     public function getQtyInvoiced();
 
     /**
      * Gets the quantity ordered for the order item.
      *
-     * @return float Quantity ordered.
+     * @return float|null Quantity ordered.
      */
     public function getQtyOrdered();
 
     /**
      * Gets the quantity refunded for the order item.
      *
-     * @return float Quantity refunded.
+     * @return float|null Quantity refunded.
      */
     public function getQtyRefunded();
 
     /**
      * Gets the quantity returned for the order item.
      *
-     * @return float Quantity returned.
+     * @return float|null Quantity returned.
      */
     public function getQtyReturned();
 
     /**
      * Gets the quantity shipped for the order item.
      *
-     * @return float Quantity shipped.
+     * @return float|null Quantity shipped.
      */
     public function getQtyShipped();
 
     /**
      * Gets the quote item ID for the order item.
      *
-     * @return int Quote item ID.
+     * @return int|null Quote item ID.
      */
     public function getQuoteItemId();
 
     /**
      * Gets the row invoiced for the order item.
      *
-     * @return float Row invoiced.
+     * @return float|null Row invoiced.
      */
     public function getRowInvoiced();
 
     /**
      * Gets the row total for the order item.
      *
-     * @return float Row total.
+     * @return float|null Row total.
      */
     public function getRowTotal();
 
     /**
      * Gets the row total including tax for the order item.
      *
-     * @return float Row total including tax.
+     * @return float|null Row total including tax.
      */
     public function getRowTotalInclTax();
 
     /**
      * Gets the row weight for the order item.
      *
-     * @return float Row weight.
+     * @return float|null Row weight.
      */
     public function getRowWeight();
 
@@ -969,98 +969,98 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the store ID for the order item.
      *
-     * @return int Store ID.
+     * @return int|null Store ID.
      */
     public function getStoreId();
 
     /**
      * Gets the tax amount for the order item.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
     /**
      * Gets the tax before discount for the order item.
      *
-     * @return float Tax before discount.
+     * @return float|null Tax before discount.
      */
     public function getTaxBeforeDiscount();
 
     /**
      * Gets the tax canceled for the order item.
      *
-     * @return float Tax canceled.
+     * @return float|null Tax canceled.
      */
     public function getTaxCanceled();
 
     /**
      * Gets the tax invoiced for the order item.
      *
-     * @return float Tax invoiced.
+     * @return float|null Tax invoiced.
      */
     public function getTaxInvoiced();
 
     /**
      * Gets the tax percent for the order item.
      *
-     * @return float Tax percent.
+     * @return float|null Tax percent.
      */
     public function getTaxPercent();
 
     /**
      * Gets the tax refunded for the order item.
      *
-     * @return float Tax refunded.
+     * @return float|null Tax refunded.
      */
     public function getTaxRefunded();
 
     /**
      * Gets the updated-at timestamp for the order item.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
      * Gets the WEEE tax applied for the order item.
      *
-     * @return string WEEE tax applied.
+     * @return string|null WEEE tax applied.
      */
     public function getWeeeTaxApplied();
 
     /**
      * Gets the WEEE tax applied amount for the order item.
      *
-     * @return float WEEE tax applied amount.
+     * @return float|null WEEE tax applied amount.
      */
     public function getWeeeTaxAppliedAmount();
 
     /**
      * Gets the WEEE tax applied row amount for the order item.
      *
-     * @return float WEEE tax applied row amount.
+     * @return float|null WEEE tax applied row amount.
      */
     public function getWeeeTaxAppliedRowAmount();
 
     /**
      * Gets the WEEE tax disposition for the order item.
      *
-     * @return float WEEE tax disposition.
+     * @return float|null WEEE tax disposition.
      */
     public function getWeeeTaxDisposition();
 
     /**
      * Gets the WEEE tax row disposition for the order item.
      *
-     * @return float WEEE tax row disposition.
+     * @return float|null WEEE tax row disposition.
      */
     public function getWeeeTaxRowDisposition();
 
     /**
      * Gets the weight for the order item.
      *
-     * @return float Weight.
+     * @return float|null Weight.
      */
     public function getWeight();
 
@@ -1512,52 +1512,52 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function setBaseRowTotalInclTax($amount);
 
     /**
-     * Sets the hidden tax amount for the order item.
+     * Sets the discount tax compensation amount for the order item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for the order item.
+     * Sets the base discount tax compensation amount for the order item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the hidden tax invoiced for the order item.
+     * Sets the discount tax compensation invoiced for the order item.
      *
-     * @param float $hiddenTaxInvoiced
+     * @param float $discountTaxCompensationInvoiced
      * @return $this
      */
-    public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
+    public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced);
 
     /**
-     * Sets the base hidden tax invoiced for the order item.
+     * Sets the base discount tax compensation invoiced for the order item.
      *
-     * @param float $baseHiddenTaxInvoiced
+     * @param float $baseDiscountTaxCompensationInvoiced
      * @return $this
      */
-    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
+    public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced);
 
     /**
-     * Sets the hidden tax refunded for the order item.
+     * Sets the discount tax compensation refunded for the order item.
      *
-     * @param float $hiddenTaxRefunded
+     * @param float $discountTaxCompensationRefunded
      * @return $this
      */
-    public function setHiddenTaxRefunded($hiddenTaxRefunded);
+    public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded);
 
     /**
-     * Sets the base hidden tax refunded for the order item.
+     * Sets the base discount tax compensation refunded for the order item.
      *
-     * @param float $baseHiddenTaxRefunded
+     * @param float $baseDiscountTaxCompensationRefunded
      * @return $this
      */
-    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
+    public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded);
 
     /**
      * Sets the tax canceled for the order item.
@@ -1568,12 +1568,12 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function setTaxCanceled($taxCanceled);
 
     /**
-     * Sets the hidden tax canceled for the order item.
+     * Sets the discount tax compensation canceled for the order item.
      *
-     * @param float $hiddenTaxCanceled
+     * @param float $discountTaxCompensationCanceled
      * @return $this
      */
-    public function setHiddenTaxCanceled($hiddenTaxCanceled);
+    public function setDiscountTaxCompensationCanceled($discountTaxCompensationCanceled);
 
     /**
      * Sets the tax refunded for the order item.

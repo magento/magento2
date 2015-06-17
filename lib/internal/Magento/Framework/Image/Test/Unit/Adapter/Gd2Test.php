@@ -103,4 +103,39 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
             'no_limit' => [$bigFile, false, '-1'],
         ];
     }
+
+    /**
+     * Test if open() method resets cached fileType
+     *
+     */
+    public function testOpenDifferentTypes()
+    {
+        self::$imageData = [
+            0 => 480,
+            1 => 320,
+            2 => 2,
+            3 => 'width="480" height="320"',
+            'bits' => 8,
+            'channels' => 3,
+            'mime' => 'image/jpeg',
+        ];
+
+        $this->adapter->open('file');
+        $type1 = $this->adapter->getImageType();
+
+        self::$imageData = [
+            0 => 480,
+            1 => 320,
+            2 => 3,
+            3 => 'width="480" height="320"',
+            'bits' => 8,
+            'channels' => 3,
+            'mime' => 'image/png',
+        ];
+
+        $this->adapter->open('file');
+        $type2 = $this->adapter->getImageType();
+
+        $this->assertNotEquals($type1, $type2);
+    }
 }
