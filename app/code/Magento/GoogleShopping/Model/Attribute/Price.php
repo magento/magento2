@@ -77,7 +77,7 @@ class Price extends DefaultAttribute
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -96,7 +96,7 @@ class Price extends DefaultAttribute
         \Magento\Catalog\Helper\Data $catalogData,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->groupManagement = $groupManagement;

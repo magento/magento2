@@ -3,12 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\ImportExport\Test\Unit\Model\Resource;
+
+use \Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Test class for \Magento\ImportExport\Model\Resource\CollectionByPagesIterator
  */
-namespace Magento\ImportExport\Test\Unit\Model\Resource;
-
 class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,12 +45,11 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        /** @var $collectionMock \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject */
-        $collectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            ['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'],
-            [$entityFactory, $logger, $fetchStrategy]
-        );
+        /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
+        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
+            ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
+            ->getMockForAbstractClass();
 
         $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($select));
 
