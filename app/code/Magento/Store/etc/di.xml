@@ -296,4 +296,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
+    </type>
+
 </config>
