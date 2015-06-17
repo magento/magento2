@@ -4,8 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<div style="border: 1px dashed magenta; width:100%">
-    <div style="padding: 5px">
+<div class="ants">
+    <div>
+        <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+    </div>
+    <div>
         <input type="radio" name="payment" style="margin-right: 20px" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" /><span data-bind="text: getTitle()"></span>
         <p data-bind="text: getInstructions()" style="margin-left: 35px"></p>
         <div class="primary" style="margin-left: 35px">
