@@ -47,8 +47,25 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->getMock();
+        $this->requestMock = $this->getMock(
+            'Magento\Framework\App\RequestInterface',
+            [
+                'getRouteName',
+                'getControllerName',
+                'getModuleName',
+                'getActionName',
+                'getParam',
+                'setParams',
+                'getParams',
+                'setModuleName',
+                'isSecure',
+                'setActionName',
+                'getCookie'
+            ],
+            [],
+            '',
+            false
+        );
         $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,6 +113,15 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('isSecure')
             ->willReturn($isSecure);
+        $this->requestMock->expects($this->once())
+            ->method('getRouteName')
+            ->will($this->returnValue('route'));
+        $this->requestMock->expects($this->once())
+            ->method('getControllerName')
+            ->will($this->returnValue('controller'));
+        $this->requestMock->expects($this->once())
+            ->method('getActionName')
+            ->will($this->returnValue('action'));
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
@@ -118,6 +144,61 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
                 'url' => 'https://some-name.com/page_cache/block/render',
                 'expectedResult' => '~https:\\\\/\\\\/some-name\\.com.+\\["some","handles","here"\\]~'
             ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\PageCache\Block\Javascript::getScriptOptions
+     * @param string $url
+     * @param string $route
+     * @param string $controller
+     * @param string $action
+     * @param string $expectedResult
+     * @dataProvider getScriptOptionsPrivateContentDataProvider
+     */
+    public function testGetScriptOptionsPrivateContent($url, $route, $controller, $action, $expectedResult)
+    {
+        $handles = [
+            'some',
+            'handles',
+            'here'
+        ];
+        $this->requestMock->expects($this->once())
+            ->method('isSecure')
+            ->willReturn(false);
+
+        $this->requestMock->expects($this->once())
+            ->method('getRouteName')
+            ->will($this->returnValue($route));
+
+        $this->requestMock->expects($this->once())
+            ->method('getControllerName')
+            ->will($this->returnValue($controller));
+
+        $this->requestMock->expects($this->once())
+            ->method('getActionName')
+            ->will($this->returnValue($action));
+
+        $this->urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->willReturn($url);
+
+        $this->layoutUpdateMock->expects($this->once())
+            ->method('getHandles')
+            ->willReturn($handles);
+        $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
+    }
+
+    public function getScriptOptionsPrivateContentDataProvider()
+    {
+        return [
+            'http' => [
+                'url' => 'http://some-name.com/page_cache/block/render',
+                'route' => 'route',
+                'controller' => 'controller',
+                'action' => 'action',
+                'expectedResult' => '~"originalRequest":{"route":"route","controller":"controller","action":"action"}~'
+            ],
         ];
     }
 }

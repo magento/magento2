@@ -645,10 +645,16 @@ class File implements DriverInterface
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
         /**
-        * Security enhancement for CSV data processing by Excel-like applications.
-        * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
-        */
+         * Security enhancement for CSV data processing by Excel-like applications.
+         * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
+         *
+         * @var $value string|\Magento\Framework\Phrase
+         */
         foreach ($data as $key => $value) {
+
+            if (!is_string($value)) {
+                $value = (string)$value;
+            }
             if (isset($value[0]) && $value[0] === '=') {
                 $data[$key] = ' ' . $value;
             }
