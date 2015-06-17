@@ -15,16 +15,3 @@
     clip: rect(0, 0, 0, 0);
     position: absolute;
 }
-
-//
-//  Effects
-//  ---------------------------------------------
-
-.effect-hover-opacity (
-    @opacity: .85,
-    @transition: opacity .2s linear) {
-    transition: @transition;
-    &:hover {
-        opacity: @opacity;
-    }
-}

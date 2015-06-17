@@ -37,8 +37,11 @@
 }
 
 .form-legend-expand {
-    .effect-hover-opacity();
     cursor: pointer;
+    transition: opacity .2s linear;
+    &:hover {
+        opacity: .85;
+    }
     &.expanded {
         &:after {
             content: @icon-collapse__content;
