@@ -416,10 +416,10 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                if ($this->isObjectNew($object)) {
-                    $this->saveNewObject($object);
-                } else {
+                if ($this->isObjectNotNew($object)) {
                     $this->updateObject($object);
+                } else {
+                    $this->saveNewObject($object);
                 }
                 $this->unserializeFields($object);
                 $this->processAfterSaves($object);
@@ -765,7 +765,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
      */
-    protected function isObjectNew(\Magento\Framework\Model\AbstractModel $object)
+    protected function isObjectNotNew(\Magento\Framework\Model\AbstractModel $object)
     {
         return $object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew());
     }
