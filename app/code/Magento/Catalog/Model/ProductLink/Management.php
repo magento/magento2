@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Api\Data;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 
 class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 {
@@ -62,14 +63,23 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function setProductLinks($sku, $type, array $items)
+    public function setProductLinks($sku, array $items)
     {
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
 
-        if (!isset($linkTypes[$type])) {
-            throw new NoSuchEntityException(
-                __('Provided link type "%1" does not exist', $type)
-            );
+        // Check if product link type is set and correct
+        if (!empty($items)) {
+            foreach ($items as $newLink) {
+                $type = $newLink->getLinkType();
+                if ($type == null) {
+                    throw InputException::requiredField("linkType");
+                }
+                if (!isset($linkTypes[$type])) {
+                    throw new NoSuchEntityException(
+                        __('Provided link type "%1" does not exist', $type)
+                    );
+                }
+            }
         }
 
         $product = $this->productRepository->get($sku);
