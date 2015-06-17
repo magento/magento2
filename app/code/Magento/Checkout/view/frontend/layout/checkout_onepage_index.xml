@@ -191,6 +191,12 @@
                                                             <item name="title" xsi:type="string">Payment</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="renders" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge payment method renders here -->
+                                                                </item>
+                                                            </item>
                                                             <item name="customer-email" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
@@ -233,19 +239,6 @@
                                                             <item name="payments-list" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
                                                                 <item name="displayArea" xsi:type="string">payment-methods-list</item>
-
-                                                                <item name="config" xsi:type="array">
-                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renderers</item>
-                                                                </item>
-                                                                <item name="children" xsi:type="array">
-
-                                                                </item>
-                                                            </item>
-                                                            <item name="renders" xsi:type="array">
-                                                                <item name="component" xsi:type="string">uiComponent</item>
-                                                                <item name="children" xsi:type="array">
-                                                                    <!-- merge payment method renders here -->
-                                                                </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
                                                             <item name="afterMethods" xsi:type="array">
