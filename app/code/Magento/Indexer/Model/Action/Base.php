@@ -17,6 +17,9 @@ use Magento\Indexer\Model\HandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Base implements ActionInterface
 {
     /**
@@ -49,6 +52,9 @@ class Base implements ActionInterface
      */
     protected $data;
 
+    /**
+     * @var array
+     */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
         'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
@@ -210,6 +216,11 @@ class Base implements ActionInterface
         return $this->data['fieldsets'][$this->data['primary']]['source'];
     }
 
+    /**
+     * Prepare schema
+     *
+     * @throws \Zend_Db_Exception
+     */
     protected function prepareSchema()
     {
         $this->prepareColumns();
@@ -232,6 +243,8 @@ class Base implements ActionInterface
 
     /**
      * Prepare indexes
+     *
+     * @return void
      */
     protected function prepareIndexes()
     {
@@ -255,7 +268,6 @@ class Base implements ActionInterface
             $this->connection->getIndexName($tableName, $fullTextIndex, AdapterInterface::INDEX_TYPE_FULLTEXT),
             $fullTextIndex,
             AdapterInterface::INDEX_TYPE_FULLTEXT
-
         );
     }
 
@@ -268,7 +280,7 @@ class Base implements ActionInterface
     {
         $select = $this->connection->select();
         $select->from($this->getPrimaryResource()->getMainTable(), $this->getPrimaryResource()->getIdFieldName());
-        foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
+        foreach ($this->data['fieldsets'] as $fieldset) {
             if (isset($fieldset['reference']['from'])
                 && isset($fieldset['reference']['to'])
                 && isset($fieldset['reference']['fieldset'])
@@ -287,7 +299,7 @@ class Base implements ActionInterface
                     null
                 );
             }
-            foreach ($fieldset['fields'] as $fieldName => $field) {
+            foreach ($fieldset['fields'] as $field) {
                 $handler = $field['handler'];
                 /** @var HandlerInterface $handler */
                 $handler->prepareSql($select, $fieldset['source'], $field);
@@ -299,6 +311,8 @@ class Base implements ActionInterface
 
     /**
      * Prepare columns by xsi:type
+     *
+     * @return void
      */
     protected function prepareColumns()
     {
@@ -335,6 +349,8 @@ class Base implements ActionInterface
 
     /**
      * Prepare configuration data
+     *
+     * @return void
      */
     protected function prepareFields()
     {
