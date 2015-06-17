@@ -5,11 +5,13 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Product status functionality model
  */
 class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource implements
-    \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface
+    \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface, OptionSourceInterface
 {
     /**#@+
      * Product Status values

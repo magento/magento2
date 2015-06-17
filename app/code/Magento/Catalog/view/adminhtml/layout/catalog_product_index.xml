@@ -25,6 +25,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="content">
+            <uiComponent name="product_listing"/>
             <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
         </referenceContainer>
         <referenceContainer name="product.grid">
