@@ -1373,13 +1373,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $dispersionPath =
                         \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
                     $imageName = preg_replace('/[^a-z0-9\._-]+/i', '', $rowData[self::COL_MEDIA_IMAGE]);
-                    $fullDispersionPath = $dispersionPath . '/' . $imageName;
+                    $fullDispersionPath = strtolower($dispersionPath . '/' . $imageName);
                     foreach ($this->cachedImages as $image) {
                         if (($image['sku'] == $rowData[self::COL_SKU])
-                            && (preg_replace('/_[0-9]+/', '', $image['value']) == $fullDispersionPath)
+                            && ($image['value'] == $fullDispersionPath)
                         ) {
                             $imageInProductIsSet = true;
-                            $imageFromProduct = preg_replace('/_[0-9]+/', '', $image['value']);
+                            $imageFromProduct = $image['value'];
+                            break;
+                        } elseif (($image['sku'] == $rowData[self::COL_SKU])
+                            && (preg_replace('/_[0-9]?\./', '.', $image['value']) == $fullDispersionPath)
+                        ) {
+                            $imageInProductIsSet = true;
+                            $imageFromProduct = preg_replace('/_[0-9]?\./', '.', $image['value']);
                             break;
                         } elseif (in_array($fullDispersionPath, $image)) {
                             $imageIsSet = true;
@@ -1772,7 +1778,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $fileName
      * @return string
      */
-    protected function _uploadMediaFiles($fileName, $renameFileOff=false)
+    protected function _uploadMediaFiles($fileName, $renameFileOff = false)
     {
         try {
             $res = $this->_getUploader()->move($fileName, $renameFileOff);
