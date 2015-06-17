@@ -7,10 +7,10 @@ namespace Magento\Version\Controller\Index;
 
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    public function testExecute()
+    public function testIndexAction()
     {
         // Execute controller to get version response
-        $this->dispatch('magento_version');
+        $this->dispatch('magento_version/index/index');
         $body = $this->getResponse()->getBody();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
