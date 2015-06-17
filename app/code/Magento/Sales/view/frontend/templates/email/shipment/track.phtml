@@ -13,15 +13,15 @@
 <table>
     <thead>
         <tr>
-            <th><?php echo __('Shipped By') ?></th>
-            <th><?php echo __('Tracking Number') ?></th>
+            <th><?= __('Shipped By') ?></th>
+            <th><?= __('Tracking Number') ?></th>
         </tr>
     </thead>
     <tbody>
     <?php $i = 0; foreach ($_shipment->getAllTracks() as $_item): $i++ ?>
-        <tr <?php echo $i%2 ? ' ' : '' ?>>
-            <td><?php echo $block->escapeHtml($_item->getTitle()) ?></td>
-            <td><?php echo $block->escapeHtml($_item->getNumber()) ?></td>
+        <tr <?= $i%2 ? ' ' : '' ?>>
+            <td><?= $block->escapeHtml($_item->getTitle()) ?></td>
+            <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>

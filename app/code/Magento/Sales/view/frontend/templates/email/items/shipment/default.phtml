@@ -10,21 +10,21 @@
 <?php $_item = $block->getItem() ?>
 <tr>
     <td>
-        <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <strong><?= $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd><?php echo nl2br($option['value']) ?></dd>
+            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+            <dd><?= nl2br($option['value']) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
-            <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml(); ?>
+            <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td><?php echo $_item->getQty()*1 ?></td>
+    <td><?= $block->escapeHtml($block->getSku($_item)) ?></td>
+    <td><?= $_item->getQty()*1 ?></td>
 </tr>
