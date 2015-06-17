@@ -20,24 +20,14 @@
             <xs:group ref="fieldset"/>
         </xs:choice>
         <xs:attribute name="id" type="xs:string" use="required" />
-        <xs:attribute name="primary" type="fieldsetType" use="optional" />
+        <xs:attribute name="primary" type="nameType" use="optional" />
         <xs:attribute name="view_id" type="viewIdType" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
     </xs:complexType>
 
     <xs:group name="fieldset">
         <xs:choice>
-            <xs:element name="fieldset" type="fieldsetType">
-                <xs:unique name="uniqueField">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Field name must be unique.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:selector xpath=".//field"/>
-                    <xs:field xpath="@name"/>
-                </xs:unique>
-            </xs:element>
+            <xs:element name="fieldset" type="fieldsetType"/>
         </xs:choice>
     </xs:group>
 
