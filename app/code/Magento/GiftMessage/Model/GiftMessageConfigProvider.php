@@ -13,7 +13,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
 /**
- * Configuration provider for GiftMessage rendering on "Shipping Method" step of checkout.
+ * Configuration provider for GiftMessage rendering on "Checkout cart" page.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class GiftMessageConfigProvider implements ConfigProviderInterface
 {
