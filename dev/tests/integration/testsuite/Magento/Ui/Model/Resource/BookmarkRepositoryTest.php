@@ -10,6 +10,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Ui\Api\Data\BookmarkInterface;
 
+/**
+ * @magentoDataFixture Magento/Customer/_files/customer.php
+ */
 class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,15 +30,16 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $bookmark;
 
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
     protected function setUp()
     {
         $this->bookmarkRepository = Bootstrap::getObjectManager()
             ->create('Magento\Ui\Model\Resource\BookmarkRepository');
         $this->bookmarkFactory = Bootstrap::getObjectManager()->create('Magento\Ui\Model\BookmarkFactory');
-        $this->bookmark = $this->bookmarkFactory->create()->setUserId(1)->setTitle('test');
+        /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
+        $customerRepository = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerId = $customerRepository->get('customer@example.com')->getId();
+        $this->bookmark = $this->bookmarkFactory->create()->setUserId($customerId)->setTitle('test');
         $this->bookmark = $this->bookmarkRepository->save($this->bookmark);
     }
 
