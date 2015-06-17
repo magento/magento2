@@ -56,7 +56,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             if ($password !== '') {
                 $user->sendPasswordResetNotificationEmail();
             }
-            $this->messageManager->addSuccess(__('The account has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the account.'));
         } catch (\Magento\Framework\Validator\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {

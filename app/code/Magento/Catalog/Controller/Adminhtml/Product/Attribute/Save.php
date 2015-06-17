@@ -106,13 +106,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addError(__('Attribute Set with name \'%1\' already exists.', $name));
+                    $this->messageManager->addError(__('Product Template named \'%1\' already exists.', $name));
                     $this->messageManager->setAttributeData($data);
                     return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong saving the attribute.'));
+                    $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
                 }
             }
 
@@ -160,7 +160,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                    $this->messageManager->addError(__('You can\'t update your attribute.'));
+                    $this->messageManager->addError(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
                     return $resultRedirect->setPath('catalog/*/');
                 }

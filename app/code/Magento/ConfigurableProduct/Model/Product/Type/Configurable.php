@@ -791,7 +791,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
 
                     if (!isset($_result[0])) {
-                        return __('Cannot add the item to shopping cart')->render();
+                        return __('You can\'t add the item to shopping cart.')->render();
                     }
 
                     /**
@@ -864,7 +864,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify the product\'s option(s).');
+        return __('You need to choose options for your item.');
     }
 
     /**

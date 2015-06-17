@@ -91,7 +91,7 @@ class CreateExistingCustomerFrontendEntity extends Injectable
     {
         //Steps
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Register');
+        $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 

@@ -819,7 +819,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                     }
                     if (!$wishlist) {
                         throw new \Magento\Framework\Exception\LocalizedException(
-                            __('We couldn\'t find this wish list.')
+                            __('We can\'t find this wish list.')
                         );
                     }
                     $wishlist->setStore(

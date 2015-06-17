@@ -156,7 +156,7 @@ class AttributeSetManagementTest extends WebapiAbstract
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'Default';
-        $expectedMessage = 'An attribute set named "Default" already exists.';
+        $expectedMessage = 'Product template named "Default" already exists.';
 
         $arguments = [
             'attributeSet' => [
