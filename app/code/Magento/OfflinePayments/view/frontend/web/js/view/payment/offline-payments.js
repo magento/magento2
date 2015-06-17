@@ -26,6 +26,10 @@ define(
             {
                 type: 'cashondelivery',
                 component: 'Magento_OfflinePayments/js/view/payment/method-renderer/cashondelivery-method'
+            },
+            {
+                type: 'purchaseorder',
+                component: 'Magento_OfflinePayments/js/view/payment/method-renderer/purchaseorder-method'
             }
         );
         /** Add view logic here if needed */

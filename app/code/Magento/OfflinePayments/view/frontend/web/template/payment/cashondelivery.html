@@ -6,10 +6,10 @@
 -->
 <div style="border: 1px dashed magenta; width:100%">
     <div style="padding: 5px">
-        <input type="radio" name="payment" style="margin-right: 20px" data-bind="checked: isChecked"><span data-bind="text: getTitle()"></span>
+        <input type="radio" name="payment" style="margin-right: 20px" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" /><span data-bind="text: getTitle()"></span>
         <p data-bind="text: getInstructions()" style="margin-left: 35px"></p>
         <div class="primary" style="margin-left: 35px">
-            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isChecked" class="button action primary checkout" disabled></button>
+            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isEnabled(item.code)" class="button action primary checkout" disabled></button>
         </div>
     </div>
 </div>
