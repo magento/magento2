@@ -88,10 +88,10 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @method \Magento\Quote\Model\Quote\Item setBaseWeeeTaxDisposition(float $value)
  * @method float getBaseWeeeTaxRowDisposition()
  * @method \Magento\Quote\Model\Quote\Item setBaseWeeeTaxRowDisposition(float $value)
- * @method float getHiddenTaxAmount()
- * @method \Magento\Quote\Model\Quote\Item setHiddenTaxAmount(float $value)
- * @method float getBaseHiddenTaxAmount()
- * @method \Magento\Quote\Model\Quote\Item setBaseHiddenTaxAmount(float $value)
+ * @method float getDiscountTaxCompensationAmount()
+ * @method \Magento\Quote\Model\Quote\Item setDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseDiscountTaxCompensationAmount()
+ * @method \Magento\Quote\Model\Quote\Item setBaseDiscountTaxCompensationAmount(float $value)
  * @method null|bool getHasConfigurationUnavailableError()
  * @method \Magento\Quote\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Quote\Model\Quote\Item unsHasConfigurationUnavailableError()
@@ -288,6 +288,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Retrieve quote model object
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
@@ -316,16 +318,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function addQty($qty)
     {
-        $oldQty = $this->getQty();
-        $qty = $this->_prepareQty($qty);
-
         /**
          * We can't modify quantity of existing items which have parent
          * This qty declared just once during add process and is not editable
          */
         if (!$this->getParentItem() || !$this->getId()) {
+            $qty = $this->_prepareQty($qty);
             $this->setQtyToAdd($qty);
-            $this->setQty($oldQty + $qty);
+            $this->setQty($this->getQty() + $qty);
         }
         return $this;
     }
@@ -394,6 +394,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Set option product with Qty
+     *
+     * @codeCoverageIgnore
      *
      * @param array $qtyOptions
      * @return $this
@@ -528,6 +530,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Return real product type of item
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getRealProductType()
@@ -569,6 +573,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Get all item options
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Quote\Model\Quote\Item\Option[]
      */
     public function getOptions()
@@ -578,6 +584,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Get all item options as array with codes in array key
+     *
+     * @codeCoverageIgnore
      *
      * @return array
      */
@@ -741,6 +749,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Mar option save requirement
      *
+     * @codeCoverageIgnore
+     *
      * @param bool $flag
      * @return void
      */
@@ -751,6 +761,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * Were options saved
+     *
+     * @codeCoverageIgnore
      *
      * @return bool
      */

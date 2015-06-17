@@ -113,7 +113,7 @@ class Creditmemo extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstr
         // draw Total (inc)
         $subtotal = $item->getRowTotal() +
             $item->getTaxAmount() +
-            $item->getHiddenTaxAmount() -
+            $item->getDiscountTaxCompensationAmount() -
             $item->getDiscountAmount();
         $lines[0][] = [
             'text' => $order->formatPriceTxt($subtotal),

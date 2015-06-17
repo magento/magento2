@@ -1337,8 +1337,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
-                $items[] = $item;
+                $items[$item->getId()] = $item;
             }
         }
         return $items;
@@ -2099,6 +2100,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets flag, whether this quote has some error associated with it.
      *
+     * @codeCoverageIgnore
+     *
      * @param bool $flag
      * @return $this
      */
@@ -2494,6 +2497,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Sets the payment method that is used to process the cart.
      *
+     * @codeCoverageIgnore
+     *
      * @param string $checkoutMethod
      * @return $this
      */
@@ -2505,6 +2510,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Prevent quote from saving
      *
+     * @codeCoverageIgnore
+     *
      * @return $this
      */
     public function preventSaving()
@@ -2515,6 +2522,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
     /**
      * Check if model can be saved
+     *
+     * @codeCoverageIgnore
      *
      * @return bool
      */
