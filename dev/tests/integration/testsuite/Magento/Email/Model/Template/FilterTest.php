@@ -7,6 +7,7 @@ namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Phrase;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,16 +17,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $_model = null;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\TestFramework\ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->_model = $this->_objectManager->create(
             'Magento\Email\Model\Template\Filter'
         );
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
@@ -162,6 +164,54 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         return $result;
+    }
+
+    /**
+     * @param $directive
+     * @param $translations
+     * @param $expectedResult
+     * @internal param $translatorData
+     * @dataProvider transDirectiveDataProvider
+     */
+    public function testTransDirective($directive, $translations, $expectedResult)
+    {
+        $renderer = Phrase::getRenderer();
+
+        $translator = $this->getMockBuilder('\Magento\Framework\Translate')
+            ->disableOriginalConstructor()
+            ->setMethods(['getData'])
+            ->getMock();
+
+        $translator->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($translations));
+
+        $this->_objectManager->addSharedInstance($translator, 'Magento\Framework\Translate');
+        $this->_objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');
+        Phrase::setRenderer($this->_objectManager->create('Magento\Framework\Phrase\RendererInterface'));
+
+        $this->assertEquals($expectedResult, $this->_model->filter($directive));
+
+        Phrase::setRenderer($renderer);
+    }
+
+    /**
+     * @return array
+     */
+    public function transDirectiveDataProvider()
+    {
+        return [
+            [
+                '{{trans "foobar"}}',
+                [],
+                'foobar',
+            ],
+            [
+                '{{trans "foobar"}}',
+                ['foobar' => 'barfoo'],
+                'barfoo',
+            ]
+        ];
     }
 
     /**
