@@ -31,15 +31,18 @@ class Index extends Action
     }
 
     /**
-     * Sets the response body with ProductName/Version (Edition). E.g.: Magento/0.42.0-beta3 (Community)
+     * Sets the response body to ProductName/Major.MinorVersion (Edition). E.g.: Magento/0.42 (Community). Omits patch
+     * version from response
      *
      * @return void
      */
     public function execute()
     {
+        $fullVersion = explode('.', $this->productMetadata->getVersion());
+        $majorMinorVersion = $fullVersion[0] . '.' . $fullVersion[1];
         $this->getResponse()->setBody(
             $this->productMetadata->getName() . '/' .
-            $this->productMetadata->getVersion() . ' (' .
+            $majorMinorVersion . ' (' .
             $this->productMetadata->getEdition() . ')'
         );
     }
