@@ -7,13 +7,12 @@
 define(
     [
         'underscore',
-        'uiComponent',
+        'Magento_Checkout/js/view/payment/default',
         'mage/translate'
     ],
-    function (_, component, $t) {
-        return component.extend({
+    function (_, Component, $t) {
+        return Component.extend({
             defaults: {
-                template: 'Magento_Payment/payment/cc-form',
                 creditCardType: '',
                 creditCardExpYear: '',
                 creditCardExpMonth: '',
@@ -40,6 +39,7 @@ define(
             },
             getData: function() {
                 return {
+                    'method': this.item.code,
                     'cc_type': this.creditCardType(),
                     'cc_exp_year': this.creditCardExpYear(),
                     'cc_exp_month': this.creditCardExpMonth(),
