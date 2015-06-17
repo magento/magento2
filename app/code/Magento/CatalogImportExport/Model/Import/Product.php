@@ -1221,13 +1221,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _prepareAllMediaFiles()
     {
+        static $productEntityTableName = null;
+        static $productMediaGalleryTableName = null;
+        static $resource = null;
+        if (!$resource) {
+            $resource = $this->_resourceFactory->create();
+        }
+        if (!$productEntityTableName) {
+            $productEntityTableName = $resource->getTable('catalog_product_entity');
+        }
+        if (!$productMediaGalleryTableName) {
+            $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
+        }
         if(empty($this->cachedImages)) {
             $allMedia = $this->_connection->fetchAll($this->_connection->select()
                 ->from(
-                    ["entity" => $this->_connection->getTableName('catalog_product_entity')],
+                    ["entity" => $productEntityTableName],
                     ['sku']
                 )->joinLeft(
-                    ["media_gallery" => $this->_connection->getTableName('catalog_product_entity_media_gallery')],
+                    ["media_gallery" => $productMediaGalleryTableName],
                     "entity.entity_id = media_gallery.entity_id",
                     ['value']
                 )
