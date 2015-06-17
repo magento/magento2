@@ -777,6 +777,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws LocalizedException
+     * @return void
      */
     protected function saveNewObject(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -798,6 +799,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws LocalizedException
+     * @return void
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -835,6 +837,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * Sequences of after save call
      *
      * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
      */
     protected function processAfterSaves(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -858,6 +861,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
     {

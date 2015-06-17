@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 use \Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -55,7 +56,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $entitySnapshotMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $relationCompositeMock;
 
