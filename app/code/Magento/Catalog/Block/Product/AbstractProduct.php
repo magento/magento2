@@ -607,11 +607,12 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
     {
-        $renderer = $this
-            ->getDetailsRenderer($product->getTypeId())
-            ->setProduct($product);
-
-        return $renderer->toHtml();
+        $renderer = $this->getDetailsRenderer($product->getTypeId());
+        if ($renderer) {
+            $renderer->setProduct($product);
+            return $renderer->toHtml();
+        }
+        return '';
     }
 
     /**
@@ -624,10 +625,10 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             $type = 'default';
         }
         $rendererList = $this->getDetailsRendererList();
-        if (!$rendererList) {
-            throw new \RuntimeException('Details renderer list for block "' . $this->getNameInLayout() . '" is not defined');
+        if ($rendererList) {
+            return $rendererList->getRenderer($type, 'default');
         }
-        return $rendererList->getRenderer($type, 'default');
+        return null;
     }
 
     /**
