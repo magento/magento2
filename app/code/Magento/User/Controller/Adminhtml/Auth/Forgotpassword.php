@@ -57,7 +57,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                 $this->messageManager->addError(__('Please correct this email address:'));
             }
         } elseif (!empty($params)) {
-            $this->messageManager->addError(__('The email address is empty.'));
+            $this->messageManager->addError(__('Please enter an email address.'));
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();

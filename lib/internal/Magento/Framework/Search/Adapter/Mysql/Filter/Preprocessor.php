@@ -6,6 +6,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Filter;
 
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 
 class Preprocessor implements PreprocessorInterface
@@ -26,7 +27,7 @@ class Preprocessor implements PreprocessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(FilterInterface $filter, $isNegation, $query)
+    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
     {
         return $query;
     }

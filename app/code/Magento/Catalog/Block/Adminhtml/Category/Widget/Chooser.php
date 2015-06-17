@@ -172,6 +172,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @param bool|null $expanded
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getLoadTreeUrl($expanded = null)
     {

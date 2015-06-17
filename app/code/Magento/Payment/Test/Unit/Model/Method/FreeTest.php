@@ -39,6 +39,10 @@ class FreeTest extends \PHPUnit_Framework_TestCase
         );
         $customAttributeFactory = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
 
+        $loggerMock = $this->getMockBuilder('\Magento\Payment\Model\Method\Logger')
+            ->setConstructorArgs([$this->getMockForAbstractClass('Psr\Log\LoggerInterface')])
+            ->getMock();
+
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
             $context,
             $registry,
@@ -46,6 +50,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
             $customAttributeFactory,
             $paymentData,
             $this->scopeConfig,
+            $loggerMock,
             $this->currencyPrice
         );
     }
