@@ -11,9 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DB\Ddl\Table;
 
-class Visibility extends \Magento\Framework\Object
+class Visibility extends \Magento\Framework\Object implements OptionSourceInterface
 {
     const VISIBILITY_NOT_VISIBLE = 1;
 
@@ -246,5 +247,13 @@ class Visibility extends \Magento\Framework\Object
 
         $collection->getSelect()->order($valueExpr . ' ' . $dir);
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toOptionArray()
+    {
+        return $this->getAllOptions();
     }
 }
