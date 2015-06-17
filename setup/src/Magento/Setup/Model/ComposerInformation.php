@@ -127,6 +127,7 @@ class ComposerInformation
     private function isMagentoRoot()
     {
         $rootPackage = $this->composer->getPackage();
-        return ('magento/magento2ce' == $rootPackage->getName() || 'magento/magento2ee' == $rootPackage->getName());
+
+        return preg_match('/magento\/magento2.e/', $rootPackage->getName());
     }
 }
