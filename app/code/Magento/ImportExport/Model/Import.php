@@ -320,7 +320,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getAttributeType(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
-        if ($attribute->usesSource() && in_array($attribute->getFrontendInput(), array('select', 'multiselect'))) {
+        if ($attribute->usesSource() && in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
             return $attribute->getFrontendInput() == 'multiselect' ? 'multiselect' : 'select';
         } elseif ($attribute->isStatic()) {
             return $attribute->getFrontendInput() == 'date' ? 'datetime' : 'varchar';
@@ -547,7 +547,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             }
         }
         $this->_removeBom($sourceFile);
-        $this->createHistoryReport($entity, $extension, $sourceFileRelative);
+        $this->createHistoryReport($entity, $extension, $sourceFileRelative, $result);
         // trying to create source adapter for file and catch possible exception to be convinced in its adequacy
         try {
             $this->_getSourceAdapter($sourceFile);
@@ -697,13 +697,18 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param string $entity
      * @param string $extension
      * @param string $sourceFileRelative
+     * @param array $result
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function createHistoryReport($entity, $extension, $sourceFileRelative)
+    protected function createHistoryReport($entity, $extension, $sourceFileRelative, $result)
     {
         if ($this->isReportEntityType($entity)) {
-            $copyName = $entity . '_' . $this->localeDate->gmtTimestamp() . '.' . $extension;
+            $fileName = $entity . $extension;
+            if (isset($result['name'])) {
+                $fileName = $result['name'];
+            }
+            $copyName = $this->localeDate->gmtTimestamp() . '_' . $fileName;
             $copyFile = self::IMPORT_HISTORY_DIR . $copyName;
             try {
                 $this->_varDirectory->copyFile($sourceFileRelative, $copyFile);

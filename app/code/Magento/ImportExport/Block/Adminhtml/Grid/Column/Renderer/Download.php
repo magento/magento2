@@ -13,20 +13,6 @@ use Magento\ImportExport\Model\Import;
 class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Backend\Model\Url $urlModel
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Backend\Model\Url $urlModel,
-        array $data = []
-    ) {
-        $this->urlModel = $urlModel;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Renders grid column
      *
      * @param \Magento\Framework\Object $row
