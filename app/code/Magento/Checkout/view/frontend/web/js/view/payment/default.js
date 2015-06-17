@@ -4,19 +4,39 @@
  */
 define(
     [
+        'ko',
         'uiComponent',
-        'Magento_Checkout/js/action/place-order'
+        'Magento_Checkout/js/action/place-order',
+        'Magento_Checkout/js/action/select-payment-method',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (Component, placeOrderAction) {
+    function (ko, Component, placeOrderAction, selectPaymentMethodAction, quote) {
         'use strict';
-
         return Component.extend({
             /**
              * Place order.
              */
             placeOrder: function () {
-                placeOrderAction(this.getData());
+                if (this.validate()) {
+                    placeOrderAction(this.getData());
+                }
             },
+            selectPaymentMethod: function() {
+                var self = this;
+                selectPaymentMethodAction(self.getData());
+                return true;
+            },
+            isEnabled: function(code) {
+              return quote.paymentMethod()
+                  ? quote.paymentMethod().method == code
+                  : null;
+            },
+            isChecked: ko.computed(function () {
+                    return quote.paymentMethod()
+                        ? quote.paymentMethod().method
+                        : null;
+                }
+            ),
 
             /**
              * Get payment method data
@@ -46,6 +66,9 @@ define(
              */
             getCode: function () {
                 return this.item.code;
+            },
+            validate: function () {
+                return true;
             }
         });
     }

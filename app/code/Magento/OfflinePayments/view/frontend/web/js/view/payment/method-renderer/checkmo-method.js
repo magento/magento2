@@ -13,15 +13,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Magento_OfflinePayments/payment/checkmo',
-                isChecked: false
-            },
-
-            /** Initialize observable properties */
-            initObservable: function () {
-                this._super()
-                    .observe('isChecked');
-                return this;
+                template: 'Magento_OfflinePayments/payment/checkmo'
             },
 
             /** Returns send check to info */

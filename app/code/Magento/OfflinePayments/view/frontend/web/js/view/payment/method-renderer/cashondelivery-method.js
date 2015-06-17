@@ -12,15 +12,7 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'Magento_OfflinePayments/payment/cashondelivery',
-                isChecked: false
-            },
-
-            /** Initialize observable properties */
-            initObservable: function () {
-                this._super()
-                    .observe('isChecked');
-                return this;
+                template: 'Magento_OfflinePayments/payment/cashondelivery'
             },
 
             /** Returns payment method instructions */

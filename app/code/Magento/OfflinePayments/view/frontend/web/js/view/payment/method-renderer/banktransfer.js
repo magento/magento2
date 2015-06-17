@@ -14,12 +14,11 @@ define(
             defaults: {
                 template: 'Magento_OfflinePayments/payment/banktransfer'
             },
-            isChecked: ko.observable(false),
             /**
              * Get value of instruction field.
              * @returns {String}
              */
-            getInstruction: function () {
+            getInstructions: function () {
                 return window.checkoutConfig.payment.instructions[this.item.code];
             }
         });
