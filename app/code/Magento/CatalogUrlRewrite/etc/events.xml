@@ -12,4 +12,10 @@
     <event name="catalog_category_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Model\Category\Observer" method="processUrlRewriteSaving"/>
     </event>
+    <event name="catalog_product_import_bunch_save_after">
+        <observer name="catalog_product_import_rewrites_generation" instance="Magento\CatalogUrlRewrite\Model\Product\Plugin\Import" method="afterImportData"/>
+    </event>
+    <event name="catalog_product_import_bunch_delete_after">
+        <observer name="catalog_product_import_rewrites_delete" instance="Magento\CatalogUrlRewrite\Model\Product\Plugin\Import" method="clearProductUrls"/>
+    </event>
 </config>

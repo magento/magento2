@@ -372,7 +372,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $quoteAddressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
-            ['getSubtotal', 'getTaxAmount','getHiddenTaxAmount','getDiscountAmount'],
+            ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount'],
             [],
             '',
             false
@@ -399,8 +399,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($orderData['taxAmount']));
 
         $quoteAddressMock->expects($this->any())
-            ->method('getHiddenTaxAmount')
-            ->will($this->returnValue($orderData['hiddenTaxAmount']));
+            ->method('getDiscountTaxCompensationAmount')
+            ->will($this->returnValue($orderData['discountTaxCompensationAmount']));
 
         $quoteAddressMock->expects($this->once())
             ->method('getDiscountAmount')
@@ -419,7 +419,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             'orderData' => [
                 'subTotal' => 32.59,
                 'taxAmount' => 8.2,
-                'hiddenTaxAmount' => 1.72,
+                'discountTaxCompensationAmount' => 1.72,
                 'discountAmount' => -10.24
             ],
             'displayTotalsIncludeTax'=> true,
@@ -429,7 +429,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             'orderData' => [
                 'subTotal' => 66.67,
                 'taxAmount' => 20,
-                'hiddenTaxAmount' => 8,
+                'discountTaxCompensationAmount' => 8,
                 'discountAmount' => -34.67
             ],
             'displayTotalsIncludeTax'=> false,

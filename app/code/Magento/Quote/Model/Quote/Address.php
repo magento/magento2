@@ -72,14 +72,14 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setBaseSubtotalTotalInclTax(float $value)
  * @method int getGiftMessageId()
  * @method Address setGiftMessageId(int $value)
- * @method float getHiddenTaxAmount()
- * @method Address setHiddenTaxAmount(float $value)
- * @method float getBaseHiddenTaxAmount()
- * @method Address setBaseHiddenTaxAmount(float $value)
- * @method float getShippingHiddenTaxAmount()
- * @method Address setShippingHiddenTaxAmount(float $value)
- * @method float getBaseShippingHiddenTaxAmnt()
- * @method Address setBaseShippingHiddenTaxAmnt(float $value)
+ * @method float getDiscountTaxCompensationAmount()
+ * @method Address setDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseDiscountTaxCompensationAmount()
+ * @method Address setBaseDiscountTaxCompensationAmount(float $value)
+ * @method float getShippingDiscountTaxCompensationAmount()
+ * @method Address setShippingDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseShippingDiscountTaxCompensationAmnt()
+ * @method Address setBaseShippingDiscountTaxCompensationAmnt(float $value)
  * @method float getShippingInclTax()
  * @method Address setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
@@ -1294,6 +1294,27 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Get subtotal amount with applied discount in base currency
+     *
+     * @return float
+     */
+    public function getBaseSubtotalWithDiscount()
+    {
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+    }
+
+    /**
+     * Get subtotal amount with applied discount
+     *
+     * @return float
+     */
+    public function getSubtotalWithDiscount()
+    {
+        return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Get all total amount values
      *
      * @return array
@@ -1314,26 +1335,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Get subtotal amount with applied discount in base currency
-     *
-     * @return float
-     */
-    public function getBaseSubtotalWithDiscount()
-    {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
-    }
-
-    /**
-     * Get subtotal amount with applied discount
-     *
-     * @return float
-     */
-    public function getSubtotalWithDiscount()
-    {
-        return $this->getSubtotal() + $this->getDiscountAmount();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function _getValidationRulesBeforeSave()
@@ -1343,7 +1344,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnoreStart
      */
     public function getCountryId()
     {

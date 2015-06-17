@@ -50,59 +50,6 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests \Magento\Framework\Object->isDeleted()
-     */
-    public function testIsDeleted()
-    {
-        $this->assertFalse($this->_object->isDeleted());
-        $this->_object->isDeleted();
-        $this->assertFalse($this->_object->isDeleted());
-        $this->_object->isDeleted(true);
-        $this->assertTrue($this->_object->isDeleted());
-    }
-
-    /**
-     * Tests \Magento\Framework\Object->hasDataChanges()
-     */
-    public function testHasDataChanges()
-    {
-        $this->assertFalse($this->_object->hasDataChanges());
-        $this->_object->setData('key', 'value');
-        $this->assertTrue($this->_object->hasDataChanges(), 'Data changed');
-
-        $object = new \Magento\Framework\Object(['key' => 'value']);
-        $object->setData('key', 'value');
-        $this->assertFalse($object->hasDataChanges(), 'Data not changed');
-
-        $object->setData(['key' => 'value']);
-        $this->assertFalse($object->hasDataChanges(), 'Data not changed (array)');
-
-        $object = new \Magento\Framework\Object();
-        $object->unsetData();
-        $this->assertFalse($object->hasDataChanges(), 'Unset data');
-
-        $object = new \Magento\Framework\Object(['key' => null]);
-        $object->setData('key', null);
-        $this->assertFalse($object->hasDataChanges(), 'Null data');
-    }
-
-    /**
-     * Tests \Magento\Framework\Object->getId()
-     */
-    public function testSetGetId()
-    {
-        $this->_object->setId('test');
-        $this->assertEquals('test', $this->_object->getId());
-    }
-
-    public function testSetGetIdFieldName()
-    {
-        $name = 'entity_id_custom';
-        $this->_object->setIdFieldName($name);
-        $this->assertEquals($name, $this->_object->getIdFieldName());
-    }
-
-    /**
      * Tests \Magento\Framework\Object->addData()
      */
     public function testAddData()
@@ -221,18 +168,6 @@ string',
 
         $mock->setDataUsingMethod('test_data', 'data');
         $mock->getDataUsingMethod('test_data');
-    }
-
-    /**
-     * Tests \Magento\Framework\Object->getDataSetDefault()
-     */
-    public function testGetDataSetDefault()
-    {
-        $this->_object->setData('key1', 'value1');
-        $this->_object->setData('key2', null);
-        $this->assertEquals('value1', $this->_object->getDataSetDefault('key1', 'default'));
-        $this->assertEquals(null, $this->_object->getDataSetDefault('key2', 'default'));
-        $this->assertEquals('default', $this->_object->getDataSetDefault('key3', 'default'));
     }
 
     /**
@@ -385,34 +320,6 @@ string',
             'key1:\'value1\'_key2:\'value2\'',
             $this->_object->serialize(['key', 'key1', 'key2'], ':', '_', '\'')
         );
-    }
-
-    /**
-     * Tests \Magento\Framework\Object->setOrigData()
-     */
-    public function testOrigData()
-    {
-        $data = ['key1' => 'value1', 'key2' => 'value2'];
-        foreach ($data as $key => $value) {
-            $this->_object->setData($key, $value);
-        }
-        $this->_object->setOrigData();
-        $this->_object->setData('key1', 'test');
-        $this->assertTrue($this->_object->dataHasChangedFor('key1'));
-        $this->assertEquals($data, $this->_object->getOrigData());
-
-        $this->_object->setOrigData('key1', 'test');
-        $this->assertEquals('test', $this->_object->getOrigData('key1'));
-    }
-
-    /**
-     * Tests \Magento\Framework\Object->setDataChanges()
-     */
-    public function testSetDataChanges()
-    {
-        $this->assertFalse($this->_object->hasDataChanges());
-        $this->_object->setDataChanges(true);
-        $this->assertTrue($this->_object->hasDataChanges());
     }
 
     /**
