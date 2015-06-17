@@ -80,7 +80,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\ImportExport\Model\Import',
-                ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']],
+                ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']],
                 $importMock
             ],
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock]

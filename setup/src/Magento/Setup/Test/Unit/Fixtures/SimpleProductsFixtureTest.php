@@ -70,10 +70,10 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('getPath')
             ->willReturn('path/to/category');
-        $categoryMock->expects($this->exactly(4))
+        $categoryMock->expects($this->exactly(5))
             ->method('load')
             ->willReturnSelf();
-        $categoryMock->expects($this->exactly(2))
+        $categoryMock->expects($this->exactly(3))
             ->method('getName')
             ->willReturn('category_name');
 
