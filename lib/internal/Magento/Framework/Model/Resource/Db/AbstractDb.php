@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
 {
