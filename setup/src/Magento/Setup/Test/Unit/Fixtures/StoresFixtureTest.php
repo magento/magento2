@@ -71,7 +71,6 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
         $categoryMock = $this->getMock(
             'Magento\Catalog\Model\Category',
@@ -114,7 +113,11 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('getId')
             ->willReturn('category_id');
-        $valueMap[] = ['Magento\Catalog\Model\Category', [], $categoryMock];
+
+        $valueMap = [
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
+            ['Magento\Catalog\Model\Category', [], $categoryMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

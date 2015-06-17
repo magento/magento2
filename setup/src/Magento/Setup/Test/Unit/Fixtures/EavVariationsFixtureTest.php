@@ -47,7 +47,6 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())
             ->method('setAttributeGroupId')
             ->willReturnSelf();
-        $valueMap[] = ['Magento\Catalog\Model\Resource\Eav\Attribute', [], $attributeMock];
 
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
@@ -55,16 +54,20 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getStores')
             ->will($this->returnValue([$storeMock]));
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
         $setMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false);
         $setMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->will($this->returnValue(2));
-        $valueMap[] = ['Magento\Eav\Model\Entity\Attribute\Set', $setMock];
 
         $cacheMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
-        $valueMap[] = ['Magento\Framework\App\CacheInterface', $cacheMock];
+
+        $valueMap = [
+            ['Magento\Catalog\Model\Resource\Eav\Attribute', [], $attributeMock],
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
+            ['Magento\Eav\Model\Entity\Attribute\Set', $setMock],
+            ['Magento\Framework\App\CacheInterface', $cacheMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))

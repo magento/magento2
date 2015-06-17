@@ -131,7 +131,6 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getStores')
             ->willReturn([$storeMock]);
-        $this->mockObjects[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
@@ -160,7 +159,6 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->exactly(5))
             ->method('load')
             ->willReturnSelf();
-        $this->mockObjects[] = ['Magento\Catalog\Model\Category', $categoryMock];
 
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', ['load', 'getSku', 'getName'], [], '', false);
         $productMock->expects($this->exactly(2))
@@ -172,8 +170,6 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn('product_name');
-        $this->mockObjects[] = ['Magento\Catalog\Model\Product', $productMock];
-        $this->mockObjects[] = ['Magento\Framework\App\Resource', $resourceMock];
 
         $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
@@ -184,7 +180,15 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())
             ->method('getAllIds')
             ->willReturn([1, 1]);
-        $this->mockObjects[] = ['Magento\Catalog\Model\Resource\Product\Collection', [], $collectionMock];
+
+        array_push(
+            $this->mockObjects,
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
+            ['Magento\Catalog\Model\Category', $categoryMock],
+            ['Magento\Catalog\Model\Product', $productMock],
+            ['Magento\Framework\App\Resource', $resourceMock],
+            ['Magento\Catalog\Model\Resource\Product\Collection', [], $collectionMock]
+        );
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(32))

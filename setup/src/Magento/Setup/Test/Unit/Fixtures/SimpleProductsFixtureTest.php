@@ -46,14 +46,8 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$websiteMock]);
-        $valueMap[] = ['Magento\Store\Model\StoreManager', [], $storeManagerMock];
 
         $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
-        $valueMap[] = [
-            'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']],
-            $importMock
-        ];
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
@@ -82,6 +76,15 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->exactly(2))
             ->method('getName')
             ->willReturn('category_name');
+
+        $valueMap = [
+            [
+                'Magento\ImportExport\Model\Import',
+                ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']],
+                $importMock
+            ],
+            ['Magento\Store\Model\StoreManager', [], $storeManagerMock]
+        ];
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
