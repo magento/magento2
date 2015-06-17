@@ -20,6 +20,7 @@
 @nav-bar-bullet-wrap__border-top-color: @color-gray75;
 
 @nav-bar-dot__size: 2.2rem;
+@nav-bar-dot__border-width: .1rem;
 @nav-bar-items__indent-bottom: 1.7rem;
 @nav-bar-item__color: @color-gray65;
 
@@ -93,7 +94,7 @@
         border-bottom: 1px solid @nav-bar-bullet-wrap__border-bottom-color;
         border-top: 1px solid @nav-bar-bullet-wrap__border-top-color;
         content: '';
-        height: .8rem;
+        height: 1rem;
         left: @nav-bar-step__width / 2;
         position: absolute;
         right: @nav-bar-step__width / 2;
@@ -198,7 +199,7 @@
             color: @color-white;
             content: counter(i);
             counter-increment: i;
-            height: @nav-bar-point__size;
+            height: @nav-bar-point__size + @nav-bar-point__border-width * 2;
             left: 50%;
             line-height: .6;
             margin-left: -@nav-bar-point__size - .1;
@@ -206,7 +207,7 @@
             right: auto;
             text-align: center;
             top: @nav-bar-dot__size / 2 - (@nav-bar-point__size / 2) - @nav-bar-point__border-width + .05;
-            width: @nav-bar-point__size;
+            width: @nav-bar-point__size + @nav-bar-point__border-width * 2;
         }
 
         //  Visited step link bullet wrap
@@ -217,13 +218,13 @@
             border-radius: 100%;
             border-top-color: @nav-bar-bullet-wrap__border-top-color;
             content: '';
-            height: @nav-bar-dot__size - .1;
+            height: @nav-bar-dot__size + @nav-bar-dot__border-width * 2 - @nav-bar-dot__border-width;
             left: 50%;
             line-height: 1;
-            margin-left: -(@nav-bar-dot__size / 2) - .1;
+            margin-left: -(@nav-bar-dot__size / 2) - @nav-bar-dot__border-width;
             position: absolute;
             top: 0;
-            width: @nav-bar-dot__size - .1;
+            width: @nav-bar-dot__size + @nav-bar-dot__border-width * 2 - @nav-bar-dot__border-width;
         }
     }
 }
