@@ -7,7 +7,85 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 ?>
 <div data-bind="scope: '<?= $block->getComponentName()?>'">
-    <ul data-bind="foreach: { data: attributesValues, as: 'attribute' }">
+    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Bulk Images, Pricing, and Inventory') ?></h1>
+    <div style="padding-bottom: 10px">
+        <span><?= __('Based on your selections 24 new products will be created. Use this step to customize images
+        and pricing for your new products.') ?></span>
+    </div>
+    <div>
+        <div style="float: left; border: 0px"><?= __('Images') ?></div>
+        <div style="border-bottom: 1px solid gray; clear: both;"></div>
+        <ul style="list-style-type: none; margin-top: 10px;">
+            <li>
+                <label>
+                    <input type="radio" data-name="single" name="images">
+                    <span><?= __('Apply single set of images to all SKUs') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="all" name="images">
+                    <span><?= __('Apply unique images by attribute to each SKU') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="none" checked name="images">
+                    <span><?= __('Skip image uploading at this time') ?></span>
+                </label>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div style="float: left; border: 0px"><?= __('Pricing') ?></div>
+        <div style="border-bottom: 1px solid gray; clear: both;"></div>
+        <ul style="list-style-type: none; margin-top: 10px;">
+            <li>
+                <label>
+                    <input type="radio" data-name="single" name="pricing">
+                    <span><?= __('Apply single price to all SKUs') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="all" name="pricing">
+                    <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="none" checked name="pricing">
+                    <span><?= __('Skip pricing at this time') ?></span>
+                </label>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div style="float: left; border: 0px"><?= __('Inventory') ?></div>
+        <div style="border-bottom: 1px solid gray; clear: both;"></div>
+        <ul style="list-style-type: none; margin-top: 10px;">
+            <li>
+                <label>
+                    <input type="radio" data-name="single" name="inventory">
+                    <span><?= __('Apply single inventory to all SKUs') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="all" name="inventory">
+                    <span><?= __('Apply unique inventory by attribute to each SKU') ?></span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" data-name="none" checked name="inventory">
+                    <span><?= __('Skip inventory at this time') ?></span>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <ul style="display: none" data-bind="foreach: { data: attributesValues, as: 'attribute' }">
         <li>
             <span data-bind="text: attribute.label"></span>
             <ul data-bind="foreach: { data: attribute.options, as: 'option' }">
