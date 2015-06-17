@@ -19,23 +19,23 @@
             <?php $_product = $item->getProduct(); ?>
             <td class="col product">
                 <p>
-                    <a href="<?php echo $block->getProductUrl($_product) ?>">
-                        <img src="<?php echo $block->getSmallImageUrl($_product); ?>" height="<?php echo $block->getSmallImageSize() ?>" alt=""/>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <img src="<?= $block->getSmallImageUrl($_product) ?>" height="<?= $block->getSmallImageSize() ?>" alt=""/>
                     </a>
                 </p>
 
                 <p>
-                    <a href="<?php echo $block->getProductUrl($_product) ?>">
-                        <strong><?php echo $block->escapeHtml($_product->getName()) ?></strong>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
                     </a>
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
-                    <p><?php echo __('Comment') ?>:
-                    <br/><?php echo $block->getEscapedDescription($item) ?></p>
+                    <p><?= __('Comment') ?>:
+                    <br/><?= $block->getEscapedDescription($item) ?></p>
                 <?php endif; ?>
                 <p>
-                    <a href="<?php echo $block->getProductUrl($_product) ?>">
-                        <?php echo __('View Product') ?>
+                    <a href="<?= $block->getProductUrl($_product) ?>">
+                        <?= __('View Product') ?>
                     </a>
                 </p>
             </td>
