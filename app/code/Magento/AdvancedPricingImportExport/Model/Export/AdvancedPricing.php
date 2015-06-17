@@ -38,6 +38,11 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_entityTypeCode;
 
     /**
+     * @var
+     */
+    protected $_resource;
+
+    /**
      * @var int
      */
     protected $_passTierPrice = 0;
@@ -122,6 +127,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ) {
         $this->_storeResolver = $storeResolver;
         $this->_groupRepository = $groupRepository;
+        $this->_resource = $resource;
         parent::__construct(
             $localeDate,
             $config,
@@ -364,37 +370,37 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         if ($listSku) {
             if (isset($exportFilter) && !empty($exportFilter)) {
                 $date = $exportFilter[\Magento\Catalog\Model\Category::KEY_UPDATED_AT];
-                if ($date[0]) {
-                    $updatedAtFrom = date( 'Y-m-d H:i:s', strtotime($date[0]));
+                if (isset($date[0]) && !empty($date[0])) {
+                    $updatedAtFrom = date('Y-m-d H:i:s', strtotime($date[0]));
                 }
-                if ($date[1]) {
-                    $updatedAtTo = date( 'Y-m-d H:i:s', strtotime($date[1]));
+                if (isset($date[1]) && !empty($date[1])) {
+                    $updatedAtTo = date('Y-m-d H:i:s', strtotime($date[1]));
                 }
             }
             try {
                 $select = $this->_connection->select()
                     ->from(
-                        ['cpe' => $this->_connection->getTableName('catalog_product_entity')],
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
                         $selectFields
                     )
                     ->joinInner(
-                        ['ap' => $this->_connection->getTableName($table)],
+                        ['ap' => $this->_resource->getTableName($table)],
                         'ap.entity_id = cpe.entity_id',
                         []
                     )
                     ->where('cpe.entity_id IN (?)', $listSku);
 
                 if (isset($price[0]) && !empty($price[0])) {
-                    $select->where('ap.value >=? ', $price[0]);
+                    $select->where('ap.value >= ?', $price[0]);
                 }
                 if (isset($price[1]) && !empty($price[1])) {
-                    $select->where('ap.value <=? ', $price[1]);
+                    $select->where('ap.value <= ?', $price[1]);
                 }
                 if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
                     $select->where('cpe.updated_at >= ?', $updatedAtFrom);
                 }
                 if (isset($updatedAtTo) && !empty($updatedAtTo)) {
-                    $select->where('cpe.updated_at <=? ', $updatedAtTo);
+                    $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);
             } catch (\Exception $e) {
