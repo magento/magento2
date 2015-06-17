@@ -13,7 +13,6 @@
         "magento/module-sales": "0.74.0-beta13",
         "magento/module-checkout": "0.74.0-beta13",
         "magento/module-directory": "0.74.0-beta13",
-        "magento/module-wishlist": "0.74.0-beta13",
         "magento/module-gift-message": "0.74.0-beta13",
         "magento/module-catalog-inventory": "0.74.0-beta13",
         "magento/module-msrp": "0.74.0-beta13",
