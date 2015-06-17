@@ -58,6 +58,10 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\Db\AbstractD
 
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {
-        return $this->entitySnapshot->isModified($object);
+        if (!$this->entitySnapshot->isModified($object)) {
+            $this->entityRelationComposite->processRelations($object);
+            return false;
+        }
+        return true;
     }
 }
