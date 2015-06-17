@@ -38,6 +38,6 @@
                 </block>
             </block>
         </referenceContainer>
-        <move element="page.main.title" destination="content.top" before="-"/>
+        <move name="page.main.title" destination="content.top" before="-"/>
     </body>
 </page>

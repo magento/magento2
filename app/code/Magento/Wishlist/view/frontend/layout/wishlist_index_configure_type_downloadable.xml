@@ -41,7 +41,7 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <move element="product.info" destination="content" after="product.info.media" />
-        <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
+        <move name="product.info" destination="content" after="product.info.media" />
+        <move name="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
     </body>
 </page>

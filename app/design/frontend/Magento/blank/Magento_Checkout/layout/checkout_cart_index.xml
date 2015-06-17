@@ -23,12 +23,12 @@
                 </container>
             </container>
         </referenceContainer>
-        <move element="checkout.cart.form.before" destination="checkout.cart.container" before="cart.summary"/>
-        <move element="checkout.cart.form" destination="checkout.cart.container" after="cart.summary"/>
-        <move element="checkout.cart.widget" destination="checkout.cart.container" after="checkout.cart.form"/>
-        <move element="checkout.cart.shipping" destination="cart.summary" after="checkout.cart.summary.title"/>
-        <move element="checkout.cart.coupon" destination="cart.summary"/>
-        <move element="checkout.cart.totals.container" destination="cart.summary"/>
-        <move element="checkout.cart.methods.bottom" destination="cart.summary"/>
+        <move name="checkout.cart.form.before" destination="checkout.cart.container" before="cart.summary"/>
+        <move name="checkout.cart.form" destination="checkout.cart.container" after="cart.summary"/>
+        <move name="checkout.cart.widget" destination="checkout.cart.container" after="checkout.cart.form"/>
+        <move name="checkout.cart.shipping" destination="cart.summary" after="checkout.cart.summary.title"/>
+        <move name="checkout.cart.coupon" destination="cart.summary"/>
+        <move name="checkout.cart.totals.container" destination="cart.summary"/>
+        <move name="checkout.cart.methods.bottom" destination="cart.summary"/>
     </body>
 </page>
