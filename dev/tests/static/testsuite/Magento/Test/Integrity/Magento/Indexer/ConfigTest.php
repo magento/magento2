@@ -13,6 +13,16 @@ namespace Magento\Test\Integrity\Magento\Indexer;
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
     /**
+     * Set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->markTestSkipped('In Progress');
+    }
+
+    /**
      * Returns the name of the XSD file to be used to validate the XML
      *
      * @return string
