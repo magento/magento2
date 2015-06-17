@@ -50,11 +50,6 @@ define([
                 this.createRenderer(paymentMethodData);
             });
 
-            //_.find(this.elems(), function (value) {
-            //    var t = value;
-            //    debugger;
-            //});
-
             return this;
         },
 
@@ -77,6 +72,7 @@ define([
                 rendererTemplate = {
                     parent: '${ $.$data.parentName }',
                     name: '${ $.$data.name }',
+                    displayArea: 'payment-method-items',
                     component: renderer.component
                 };
                 rendererComponent = utils.template(rendererTemplate, templateData);
@@ -110,7 +106,8 @@ define([
          * @param {String} paymentMethodCode
          */
         removeRenderer: function (paymentMethodCode) {
-            _.find(this.elems(), function (value) {
+            var items = this.getRegion('payment-method-items');
+            _.find(items(), function (value) {
                 if (value.item.code === paymentMethodCode) {
                     this.removeChild(value);
                 }
