@@ -150,7 +150,8 @@
                 </field>
                 <field id="logo_width" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Width</label>
-                    <comment>Only necessary if image has been uploaded above. Enter number of pixels, without appending "px". Logo height will be automatically determined by email clients.</comment>
+                    <comment>Only required if image has been uploaded above. Logo height will be automatically determined by email clients.</comment>
+                    <frontend_class>validate-digits</frontend_class>
                 </field>
                 <field id="header_template" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Template</label>
