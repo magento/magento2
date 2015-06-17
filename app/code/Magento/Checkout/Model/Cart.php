@@ -501,9 +501,7 @@ class Cart extends Object implements CartInterface
             if ($qty > 0) {
                 $item->setQty($qty);
 
-                $itemInQuote = $this->getQuote()->getItemById($item->getId());
-
-                if (!$itemInQuote && $item->getHasError()) {
+                if ($item->getHasError()) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
@@ -527,6 +525,7 @@ class Cart extends Object implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
+
         return $this;
     }
 
