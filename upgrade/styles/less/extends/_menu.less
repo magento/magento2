@@ -1,0 +1,29 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Menu
+//  _____________________________________________
+
+.admin__menu {
+    .level-0 {
+        > a {
+            &:before {
+                &:extend(.abs-icon all);
+            }
+        }
+    }
+    .item-home {
+        > a {
+            &:before {
+                @_menu-item-success__size: 1.8rem;
+
+                content: @icon-success__content;
+                font-size: @_menu-item-success__size;
+                padding-top: @menu-item-icon__height - @_menu-item-success__size;
+            }
+        }
+    }
+}

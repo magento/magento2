@@ -12,32 +12,29 @@
 @import '/lib/web/css/source/lib/_lib.less';
 
 //
-//  Local lib
+//  Inherit Backend Lib
 //  _____________________________________________
 
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_reset.less';
-@import 'lib/_reset.less';
-@import 'lib/_variables.less';
-@import 'lib/_utilities.less';
-@import 'lib/_extends.less';
-@import 'lib/_classes.less';
-@import 'lib/_typography.less';
-@import 'lib/_icons.less';
-@import 'lib/_lists.less';
-@import 'lib/_buttons.less';
-@import 'lib/_forms.less';
-@import 'lib/_pseudo-tables.less';
+@import '../../../app/design/adminhtml/Magento/backend/web/css/source/_grid.less';
+
+//
+//  Local lib
+//  _____________________________________________
+
+@import 'lib/_lib.less';
+
+//
+//  Inherit Backend Components
+//  _____________________________________________
 
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/components/_messages.less';
-@import 'lib/_messages.less';
-
-@import 'lib/_structures.less';
-@import 'lib/_grid.less';
 
 //
 //  Components
 //  _____________________________________________
 
+@import 'components/_messages.less';
 @import 'components/_navigation-bar.less';
 @import 'components/_tooltips.less';
 @import 'components/_progress-bars.less';

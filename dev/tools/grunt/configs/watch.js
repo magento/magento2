@@ -13,21 +13,28 @@ var themeOptions = {};
 
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
-        "files": [
-            "<%= combo.autopath(\""+name+"\", path.pub) %>/**/*.less"
+        'files': [
+            '<%= combo.autopath(\''+name+'\', path.pub) %>/**/*.less'
         ],
-        "tasks": "less:" + name
+        'tasks': 'less:' + name
     };
 });
 
 var watchOptions = {
-    "setup": {
-        "files": "<%= path.less.setup %>/**/*.less",
-        "tasks": "less:setup"
+    'setup': {
+        'files': '<%= path.less.setup %>/**/*.less',
+        'tasks': 'less:setup'
     },
-    "reload": {
-        "files": "<%= path.pub %>/**/*.css",
-        "options": {
+    'upgrade': {
+        'options': {
+            livereload: true
+        },
+        'files': '<%= path.less.upgrade %>/**/*.less',
+        'tasks': 'less:upgrade'
+    },
+    'reload': {
+        'files': '<%= path.pub %>/**/*.css',
+        'options': {
             livereload: true
         }
     }

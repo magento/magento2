@@ -39,6 +39,14 @@ module.exports = {
             src: '<%= path.css.setup %>/*.css'
         }
     },
+    upgrade: {
+        options: {
+            banner: printCopyright('css')
+        },
+        files: {
+            src: '<%= path.css.upgrade %>/*.css'
+        }
+    },
     documentationCss: {
         options: {
             banner: printCopyright('css')

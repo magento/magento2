@@ -7,5 +7,10 @@
         "files": {
             "<%= path.css.setup %>/setup.css": "<%= path.css.setup %>/setup.css"
         }
+    },
+    "upgrade": {
+        "files": {
+            "<%= path.css.upgrade %>/upgrade.css": "<%= path.css.upgrade %>/upgrade.css"
+        }
     }
 }

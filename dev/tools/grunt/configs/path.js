@@ -14,10 +14,12 @@ module.exports = {
     tmpSource: 'var/view_preprocessed/source/',
     tmp: 'var',
     css: {
-        setup: 'setup/pub/styles'
+        setup: 'setup/pub/styles',
+        upgrade: 'upgrade/styles/css'
     },
     less: {
-        setup: 'setup/view/styles'
+        setup: 'setup/view/styles',
+        upgrade: 'upgrade/styles/less'
     },
     uglify: {
         legacy: 'lib/web/legacy-build.min.js'
