@@ -33,6 +33,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\Db\AbstractD
         $resourcePrefix = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
+        $this->entityRelationComposite = $entityRelationComposite;
         parent::__construct($context, $resourcePrefix);
     }
 
