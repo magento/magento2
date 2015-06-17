@@ -141,7 +141,7 @@
                 <label>Emails</label>
                 <field id="logo" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image</label>
-                    <comment>Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 2x normal size and then specify 1x dimensions in width/height fields below.</comment>
+                    <comment>Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in width/height fields below.</comment>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Logo</backend_model>
                     <base_url type="media" scope_info="1">email/logo</base_url>
                 </field>
@@ -155,7 +155,8 @@
                 </field>
                 <field id="logo_height" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Height</label>
-                    <comment>Only necessary if image has been uploaded above. Enter number of pixels, without appending "px".</comment>
+                    <comment>Only necessary if image has been uploaded above.</comment>
+                    <frontend_class>validate-digits</frontend_class>
                 </field>
                 <field id="header_template" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Template</label>
