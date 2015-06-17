@@ -4,17 +4,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="ants">
-    <div>
-        <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
+<div class="payment-method">
+    <div class="payment-method-title">
+        <input type="radio" name="payment" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" />
+        <span data-bind="text: getTitle()"></span>
     </div>
-    <div>
-        <input type="radio" name="payment" style="margin-right: 20px" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" /><span data-bind="text: getTitle()"></span>
-        <p data-bind="text: getInstructions()" style="margin-left: 35px"></p>
-        <div class="primary" style="margin-left: 35px">
-            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isEnabled(item.code)" class="button action primary checkout" disabled></button>
+    <div class="payment-method-content">
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <p data-bind="text: getInstructions()"></p>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isEnabled(item.code)" class="button action primary checkout" disabled></button>
+            </div>
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div data-bind="if: isAddressDetailsVisible() && currentBillingAddress()">
+<div class="billing-address-details" data-bind="if: isAddressDetailsVisible() && currentBillingAddress()">
     <!-- ko text: currentBillingAddress().firstname --><!-- /ko --> <!-- ko text: currentBillingAddress().lastname --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().street --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>

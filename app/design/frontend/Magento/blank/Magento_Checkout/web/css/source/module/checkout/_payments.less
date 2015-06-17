@@ -12,6 +12,7 @@
 @checkout-payment-method-title-mobile__padding: 15px;
 
 @checkout-payment-method-content__padding__xl: 35px;
+@checkout-billing-address-details__line-height: @checkout-shipping-item__line-height;
 
 //
 //  Common
@@ -32,14 +33,44 @@
                     }
                 }
             }
+
             .payment-method-title {
                 .css(border-top, @checkout-payment-method-title__border);
                 .css(padding, @checkout-payment-method-title__padding 0);
                 margin: 0;
             }
+
             .payment-method-content {
                 .css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
                 margin: 0;
+
+                .control {
+                    .css(margin, 0 0 @indent__base);
+                }
+            }
+
+            .billing-address-same-as-shipping-block {
+                .css(margin, 0 0 @indent__s);
+            }
+
+            .payment-method-billing-address {
+                .css(margin, 0 0 @indent__base);
+
+                .actions-toolbar {
+                    .css(border-bottom, @checkout-payment-method-title__border);
+                    .css(padding-bottom, @indent__base);
+                }
+
+                .action-update {
+                    margin-right: 0;
+                }
+                .action-cancel {
+                    &:extend(.abs-action-button-as-link all);
+                }
+
+                .billing-address-details {
+                    .css(line-height, @checkout-billing-address-details__line-height);
+                }
             }
         }
     }
