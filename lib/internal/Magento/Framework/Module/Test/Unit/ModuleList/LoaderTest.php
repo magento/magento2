@@ -122,15 +122,16 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['c', null, null, self::$sampleXml],
             ['d', null, null, self::$sampleXml],
         ]));
+        $this->registry->expects($this->once())
+            ->method('getModulePaths')
+            ->willReturn([]);
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
         $this->converter->expects($this->at(3))->method('convert')->willReturn(['d' => $fixture['d']]);
-        $this->parser->expects($this->once())->method('initErrorHandler');
         $this->parser->expects($this->atLeastOnce())->method('loadXML');
         $this->parser->expects($this->atLeastOnce())->method('getDom');
-        $object = new Loader($this->filesystem, $this->converter, $this->parser);
-        $result = $object->load(['d']);
+        $result = $this->loader->load(['d']);
         $this->assertSame(['a', 'c', 'b'], array_keys($result));
         $this->assertSame($fixture['a'], $result['a']);
         $this->assertSame($fixture['b'], $result['b']);
