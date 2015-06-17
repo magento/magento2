@@ -103,7 +103,6 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -226,7 +225,6 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
