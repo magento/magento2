@@ -171,21 +171,48 @@
             affects only original "out of the box" Magento modules.
         </p>
 
-        <div class="row">
-            <div class="col-xs-4">
-                <label class="form-label required" for="storeTimezone">Choose a version</label>
-                <label class="form-select-label" for="storeTimezone">
-                    <select
-                        id="storeTimezone"
-                        class="form-el-select">
-                        <option value="203">Version 2.0.3 (latest)</option>
-                        <option value="202">Version 2.0.2</option>
-                        <option value="201">Version 2.0.1</option>
-                        <option value="200">Version 2.0.0</option>
-                    </select>
-                </label>
+        <div class="form-wrap">
+            <div class="row">
+                <div class="col-m-4">
+                    <label class="form-label form-el-label-horizontal required" for="storeTimezone">Choose a version</label>
+                    <label class="form-select-label" for="storeTimezone">
+                        <select
+                            id="storeTimezone"
+                            class="form-el-select">
+                            <option value="203">Version 2.0.3 (latest)</option>
+                            <option value="202">Version 2.0.2</option>
+                            <option value="201">Version 2.0.1</option>
+                            <option value="200">Version 2.0.0</option>
+                        </select>
+                    </label>
+                </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-m-8">
+                <h2 class="list-title">What’s New in version 2.0.3</h2>
+                <ul class="list list-dot">
+                    <li class="list-item">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </li>
+                    <li class="list-item">
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                    </li>
+                    <li class="list-item">
+                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                    </li>
+                    <li class="list-item">
+                        culpa qui officia deserunt mollit anim id est laborum.
+                        <a href="#">... More</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <button
+            class="btn btn-large btn-prime"
+            type="button">Continue</button>
 
     </main>
 </div>
