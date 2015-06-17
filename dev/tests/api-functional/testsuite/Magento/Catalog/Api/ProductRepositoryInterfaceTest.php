@@ -140,7 +140,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->saveProduct($productData);
 
-        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "related",
+        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "related",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => []];
         $productWithRelatedData =  [
@@ -164,7 +164,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
-        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "upsell",
+        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "upsell",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => []];
         $productWithUpsellData =  [

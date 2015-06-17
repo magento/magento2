@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-
 /**
  * Import entity abstract product type model
  *
@@ -58,6 +56,13 @@ abstract class AbstractType
      * @var string[]
      */
     protected $_specialAttributes = [];
+
+    /**
+     * Custom entity type fields mapping.
+     *
+     * @var string[]
+     */
+    protected $_customFieldsMapping = [];
 
     /**
      * Product entity object.
@@ -197,6 +202,26 @@ abstract class AbstractType
     }
 
     /**
+     * In case we've dynamically added new attribute option during import we need
+     * to add it to our cache in order to keep it up to date.
+     *
+     * @param string $code
+     * @param string $optionKey
+     * @param string $optionValue
+     *
+     * @return $this
+     */
+    public function addAttributeOption($code, $optionKey, $optionValue)
+    {
+        foreach ($this->_attributes as $attrSetName => $attrSetValue) {
+            if (isset($attrSetValue[$code])) {
+                $this->_attributes[$attrSetName][$code]['options'][$optionKey] = $optionValue;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Have we check attribute for is_required? Used as last chance to disable this type of check.
      *
      * @param string $attrCode
@@ -243,6 +268,16 @@ abstract class AbstractType
     }
 
     /**
+     * Return entity custom Fields mapping.
+     *
+     * @return string[]
+     */
+    public function getCustomFieldsMapping()
+    {
+        return $this->_customFieldsMapping;
+    }
+
+    /**
      * Validate row attributes. Pass VALID row data ONLY as argument.
      *
      * @param array $rowData
@@ -272,7 +307,9 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
-                            RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
+                            // @codingStandardsIgnoreStart
+                            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
+                            // @codingStandardsIgnoreEnd
                             $rowNum,
                             $attrCode
                         );

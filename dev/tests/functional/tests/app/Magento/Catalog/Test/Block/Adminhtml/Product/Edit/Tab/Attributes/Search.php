@@ -16,6 +16,13 @@ use Magento\Mtf\Client\Locator;
 class Search extends SuggestElement
 {
     /**
+     * Selector for top page.
+     *
+     * @var string
+     */
+    protected $topPage = './ancestor::body//header[contains(@class, "page-header")]/div[1]';
+
+    /**
      * Attributes locator.
      *
      * @var string
@@ -73,11 +80,28 @@ class Search extends SuggestElement
      */
     public function isExistAttributeInSearchResult($productAttribute)
     {
+        $this->find($this->topPage, Locator::SELECTOR_XPATH)->click();
         $this->find($this->actionToggle)->click();
-        $this->find($this->suggest)->setValue($productAttribute->getFrontendLabel());
+
+        return $this->isExistValueInSearchResult($productAttribute->getFrontendLabel());
+    }
+
+    /**
+     * Send keys.
+     *
+     * @param array $keys
+     * @return void
+     */
+    public function keys(array $keys)
+    {
+        $input = $this->find($this->suggest);
+        if (!$input->isVisible()) {
+            $this->find($this->actionToggle)->click();
+        }
+        $input->click();
+        $input->keys($keys);
+        $input->click();
         $this->waitResult();
-        $attributeSelector = sprintf($this->searchArrtibute, $productAttribute->getFrontendLabel());
-        return $this->find($this->searchResult)->find($attributeSelector, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
@@ -87,12 +111,9 @@ class Search extends SuggestElement
      */
     public function waitResult()
     {
-        $browser = $this;
-        $selector = $this->searchResult;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() ? true : null;
+        $this->waitUntil(
+            function () {
+                return $this->find($this->searchResult)->isVisible() ? true : null;
             }
         );
     }

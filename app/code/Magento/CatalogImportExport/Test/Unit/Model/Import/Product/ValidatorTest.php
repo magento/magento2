@@ -20,29 +20,29 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected $validators = [];
 
     /** @var Validator\Media|\PHPUnit_Framework_MockObject_MockObject */
-    protected $validator1;
+    protected $validatorOne;
 
-    /** @var Validator\Category|\PHPUnit_Framework_MockObject_MockObject */
-    protected $validator2;
+    /** @var Validator\Website|\PHPUnit_Framework_MockObject_MockObject */
+    protected $validatorTwo;
 
     protected function setUp()
     {
-        $this->validator1 = $this->getMock(
+        $this->validatorOne = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
             [],
             [],
             '',
             false
         );
-        $this->validator2 = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator\Category',
+        $this->validatorTwo = $this->getMock(
+            'Magento\CatalogImportExport\Model\Import\Product\Validator\Website',
             [],
             [],
             '',
             false
         );
 
-        $this->validators = [$this->validator1, $this->validator2];
+        $this->validators = [$this->validatorOne, $this->validatorTwo];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
             'Magento\CatalogImportExport\Model\Import\Product\Validator',
@@ -53,8 +53,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidCorrect()
     {
         $value = 'val';
-        $this->validator1->expects($this->once())->method('isValid')->with($value)->willReturn(true);
-        $this->validator2->expects($this->once())->method('isValid')->with($value)->willReturn(true);
+        $this->validatorOne->expects($this->once())->method('isValid')->with($value)->willReturn(true);
+        $this->validatorTwo->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $result = $this->validator->isValid($value);
         $this->assertTrue($result);
     }
@@ -62,10 +62,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidIncorrect()
     {
         $value = 'val';
-        $this->validator1->expects($this->once())->method('isValid')->with($value)->willReturn(true);
-        $this->validator2->expects($this->once())->method('isValid')->with($value)->willReturn(false);
+        $this->validatorOne->expects($this->once())->method('isValid')->with($value)->willReturn(true);
+        $this->validatorTwo->expects($this->once())->method('isValid')->with($value)->willReturn(false);
         $messages = ['errorMessage'];
-        $this->validator2->expects($this->once())->method('getMessages')->willReturn($messages);
+        $this->validatorTwo->expects($this->once())->method('getMessages')->willReturn($messages);
         $result = $this->validator->isValid($value);
         $this->assertFalse($result);
         $this->assertEquals($messages, $this->validator->getMessages());
@@ -73,8 +73,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $this->validator1->expects($this->once())->method('init');
-        $this->validator2->expects($this->once())->method('init');
+        $this->validatorOne->expects($this->once())->method('init');
+        $this->validatorTwo->expects($this->once())->method('init');
         $this->validator->init();
     }
 }

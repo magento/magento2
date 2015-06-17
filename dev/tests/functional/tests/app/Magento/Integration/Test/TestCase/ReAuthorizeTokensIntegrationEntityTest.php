@@ -12,20 +12,16 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Reauthorize tokens for the Integration Entity.
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create Integration
- * 2. Activate Integration
+ * 1. Create Integration.
+ * 2. Activate Integration.
  *
  * Steps:
- * 1. Go to Integration page on backend
- * 2. Click on the "Reauthorize" link on the Integration grid
+ * 1. Go to Integration page on backend.
+ * 2. Click on the "Reauthorize" link on the Integration grid.
  * 3. Click on the "Reauthorize" button.
- * 4. Click Done
- * 5. Perform assertions
+ * 4. Click Done.
+ * 5. Perform assertions.
  *
  * @group Integrations_(PS)
  * @ZephyrId MAGETWO-29648
