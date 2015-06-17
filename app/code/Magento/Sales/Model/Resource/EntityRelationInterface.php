@@ -6,16 +6,12 @@
 
 namespace Magento\Sales\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
+
 /**
  * Interface EntityRelationInterface
  */
-interface EntityRelationInterface
+interface EntityRelationInterface extends RelationInterface
 {
-    /**
-     * Process object relations
-     *
-     * @param \Magento\Sales\Model\AbstractModel $object
-     * @return void
-     */
-    public function processRelation(\Magento\Sales\Model\AbstractModel $object);
+
 }

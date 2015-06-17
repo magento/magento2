@@ -5,33 +5,12 @@
  */
 namespace Magento\Sales\Model\Resource;
 
-use Magento\Sales\Model\AbstractModel;
+use Magento\Framework\Model\Resource\Db\VersionControl\Metadata;
 
 /**
  * Class EntityMetadata represents a list of entity fields that are applicable for persistence operations
  */
-class EntityMetadata
+class EntityMetadata extends Metadata
 {
-    /**
-     * @var array
-     */
-    protected $metadataInfo = [];
 
-    /**
-     * Returns list of entity fields that are applicable for persistence operations
-     *
-     * @param AbstractModel $entity
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getFields(AbstractModel $entity)
-    {
-        if (!isset($this->metadataInfo[get_class($entity)])) {
-            $this->metadataInfo[get_class($entity)] =
-                $entity->getResource()->getReadConnection()->describeTable(
-                    $entity->getResource()->getMainTable()
-                );
-        }
-        return $this->metadataInfo[get_class($entity)];
-    }
 }

@@ -159,6 +159,31 @@ abstract class EntityAbstract extends AbstractDb
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $data = $this->_prepareDataForSave($object);
+        unset($data[$this->getIdFieldName()]);
+        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function saveNewObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $bind = $this->_prepareDataForSave($object);
+        unset($bind[$this->getIdFieldName()]);
+        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
+        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+        if ($this->_useIsObjectNew) {
+            $object->isObjectNew(false);
+        }
+    }
+
+    /**
      * Perform actions after object delete
      *
      * @param \Magento\Framework\Model\AbstractModel $object
