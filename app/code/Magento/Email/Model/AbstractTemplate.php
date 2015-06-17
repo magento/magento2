@@ -46,13 +46,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
 
     /**
-     * Email logo height
-     *
-     * @var string
-     */
-    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
-
-    /**
      * Configuration of design package for template
      *
      * @var \Magento\Framework\Object
@@ -231,7 +224,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         return $this->templateFactory->create([
             // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
-            'filesystem' => $this->filesystem
+            'filesystem' => $this->filesystem,
         ]);
     }
 
@@ -455,13 +448,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if (!isset($variables['logo_width'])) {
             $variables['logo_width'] = $this->_scopeConfig->getValue(
                 self::XML_PATH_DESIGN_EMAIL_LOGO_WIDTH,
-                ScopeInterface::SCOPE_STORE,
-                $store
-            );
-        }
-        if (!isset($variables['logo_height'])) {
-            $variables['logo_height'] = $this->_scopeConfig->getValue(
-                self::XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
