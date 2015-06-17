@@ -120,6 +120,13 @@
                                                                     <!-- address-list-additional-addresses -->
                                                                 </item>
                                                               </item>
+                                                            <item name="before-shipping-method-form" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="displayArea" xsi:type="string">before-shipping-method-form</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- address-list-additional-addresses -->
+                                                                </item>
+                                                            </item>
                                                             <item name="shipping-address-fieldset" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">additional-fieldsets</item>
