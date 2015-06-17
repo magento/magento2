@@ -63,7 +63,11 @@ T: 760-663-5876
 
 EXPECTED_RESULT;
 
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($template), 'Template was processed incorrectly');
+        $this->assertEquals(
+            $expectedResult,
+            $this->templateFilter->filter($template),
+            'Template was processed incorrectly'
+        );
     }
 
     /**
