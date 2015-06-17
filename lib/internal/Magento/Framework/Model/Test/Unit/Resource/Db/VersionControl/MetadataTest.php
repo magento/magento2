@@ -63,7 +63,9 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         );
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
         $this->resource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
-        $this->entityMetadata = $objectManager->getObject('Magento\Framework\Model\Resource\Db\VersionControl\Metadata');
+        $this->entityMetadata = $objectManager->getObject(
+            'Magento\Framework\Model\Resource\Db\VersionControl\Metadata'
+        );
     }
 
     public function testGetFields()

@@ -35,7 +35,12 @@ abstract class Collection extends \Magento\Framework\Model\Resource\Db\Collectio
     ) {
         $this->entitySnapshot = $entitySnapshot;
         parent::__construct(
-            $entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $connection,
+            $resource
         );
     }
 
