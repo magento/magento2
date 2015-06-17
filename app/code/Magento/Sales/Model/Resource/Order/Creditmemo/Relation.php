@@ -6,12 +6,12 @@
 
 namespace Magento\Sales\Model\Resource\Order\Creditmemo;
 
-use Magento\Sales\Model\Resource\EntityRelationInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
 
 /**
  * Class Relation
  */
-class Relation implements EntityRelationInterface
+class Relation implements RelationInterface
 {
     /**
      * @var Item
