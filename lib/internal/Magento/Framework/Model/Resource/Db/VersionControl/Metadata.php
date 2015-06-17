@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\Resource\Db\VersionControl;
 
-use Magento\Sales\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
