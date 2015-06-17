@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -146,7 +150,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
+        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
 
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->any())->method('query')->will($this->returnValue($this->db));
