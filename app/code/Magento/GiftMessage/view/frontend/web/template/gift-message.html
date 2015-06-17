@@ -8,7 +8,7 @@
 <div class="cart-gift-item">
     <div class="gift-item-block block"
          data-collapsible="true"
-         data-bind="css: {active: formBlockVisibility() || resultBlockVisibility()}">
+         data-bind="css: {_active: formBlockVisibility() || resultBlockVisibility()}">
         <div class="title" data-role="title" data-bind="click: $data.toggleFormBlockVisibility.bind($data)">
             <span data-bind="text: $t('Gift options')"></span>
         </div>

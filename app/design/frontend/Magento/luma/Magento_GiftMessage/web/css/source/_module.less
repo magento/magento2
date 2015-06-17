@@ -42,7 +42,7 @@
 
     .cart.table-wrapper {
         .item-gift {
-            &.active {
+            &._active {
                 .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
             }
             .action {
@@ -117,7 +117,7 @@
             margin-right: -100%;
             padding: @indent__base 0;
             width: 100%;
-            &.active {
+            &._active {
                 display: block;
             }
         }
@@ -130,7 +130,7 @@
     .gift-item-block {
         .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
         margin: 0;
-        &.active {
+        &._active {
             .title {
                 &:after {
                     .css(content, @gift-item-block-title-icon__active__content);
@@ -162,7 +162,7 @@
             padding: @indent__s 0 @indent__base;
             position: relative;
         }
-        &.active {
+        &._active {
             .content {
                 display: block;
             }
@@ -268,7 +268,7 @@
             @_icon-font-color-active: @minicart-icons-color,
             @_icon-font-position: after
             );
-            &.active {
+            &._active {
                 border: @border-width__base solid @color-gray-light5;
                 border-bottom-color: @color-white;
                 margin: -@indent__xs 14px -1px -15px;
@@ -354,7 +354,7 @@
             @_icon-font-margin: 0 0 0 @indent__s,
             @_icon-font-position: after
             );
-            &.active {
+            &._active {
                 &:after {
                     content: @icon-up;
                 }
