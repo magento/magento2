@@ -362,6 +362,15 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
         }
         if ($listSku) {
+            if (isset($exportFilter) && !empty($exportFilter)) {
+                $date = $exportFilter[\Magento\Catalog\Model\Category::KEY_UPDATED_AT];
+                if ($date[0]) {
+                    $updatedAtFrom = date( 'Y-m-d H:i:s', strtotime($date[0]));
+                }
+                if ($date[1]) {
+                    $updatedAtTo = date( 'Y-m-d H:i:s', strtotime($date[1]));
+                }
+            }
             try {
                 $select = $this->_connection->select()
                     ->from(
@@ -376,10 +385,16 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     ->where('cpe.entity_id IN (?)', $listSku);
 
                 if (isset($price[0]) && !empty($price[0])) {
-                    $select->where('ap.value>=?', $price[0]);
+                    $select->where('ap.value >=? ', $price[0]);
                 }
                 if (isset($price[1]) && !empty($price[1])) {
-                    $select->where('ap.value<=?', $price[1]);
+                    $select->where('ap.value <=? ', $price[1]);
+                }
+                if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
+                    $select->where('cpe.updated_at >= ?', $updatedAtFrom);
+                }
+                if (isset($updatedAtTo) && !empty($updatedAtTo)) {
+                    $select->where('cpe.updated_at <=? ', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);
             } catch (\Exception $e) {
