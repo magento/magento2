@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class GuestCartRepositoryTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'giftMessageCartRepositoryV1';
+    const SERVICE_NAME = 'giftMessageGuestCartRepositoryV1';
     const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
