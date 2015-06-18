@@ -30,7 +30,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetWithException()
     {
         $notActionInterfaceMock = $this->getMock('NotAction', [], [], '', false);
-        $this->objectManagerMock->expects($this->once() )
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('NotAction', [])
             ->willReturn($notActionInterfaceMock);
