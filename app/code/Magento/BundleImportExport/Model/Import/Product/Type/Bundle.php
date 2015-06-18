@@ -144,14 +144,14 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param array $params
      * @param \Magento\Framework\App\Resource $resource
+     * @param array $params
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        array $params,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\Resource $resource,
+        array $params
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_resource = $resource;

@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Product\Plugin;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -99,7 +100,7 @@ class Import
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
-     * @throws \Magento\Framework\Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
