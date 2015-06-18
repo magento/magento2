@@ -198,15 +198,16 @@ class Full
     }
 
     /**
-     * Rebuild whole fulltext index
+     * Rebuild whole fulltext index for all stores
      *
      * @return void
      */
     public function reindexAll()
     {
+        $this->cleanIndex();
         $storeIds = array_keys($this->storeManager->getStores());
         foreach ($storeIds as $storeId) {
-            $this->cleanIndex($storeId);
+
             $this->rebuildStoreIndex($storeId);
         }
         $this->searchRequestConfig->reset();
@@ -414,13 +415,12 @@ class Full
     /**
      * Clean search index data for store
      *
-     * @param int $storeId Store View Id
      * @return void
      */
-    protected function cleanIndex($storeId = null)
+    protected function cleanIndex()
     {
         if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->cleanIndex($storeId);
+            $this->engineProvider->get()->cleanIndex();
         }
     }
 
@@ -428,7 +428,7 @@ class Full
      * Delete search index data for store
      *
      * @param int $storeId Store View Id
-     * @param array $productId Product Entity Id
+     * @param array $productIds Product Entity Id
      * @return void
      */
     protected function deleteIndex($storeId = null, $productIds = null)
@@ -762,6 +762,7 @@ class Full
     protected function saveProductIndexes($storeId, $productIndexes)
     {
         if ($this->engineProvider->get()) {
+            $productIndexes['store_id'] = $storeId;
             $this->engineProvider->get()->saveIndex($storeId, $productIndexes);
         }
 
