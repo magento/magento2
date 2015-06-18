@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method" data-bind="css: {'_active': isEnabled(item.code)}">
+<div class="payment-method" data-bind="css: {'_active': (item.code == isEnabled())}">
     <form id="purchaseorder-form" class="form form-purchase-order">
 
         <div class="payment-method-title field choice">
@@ -44,7 +44,7 @@
                     <div class="primary">
                         <button class="action primary checkout"
                                 type="submit"
-                                data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: isEnabled(item.code)"
+                                data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: (item.code == isEnabled())"
                                 data-role="review-save">
                             <span data-bind="text: $t('Place Order')"></span>
                         </button>
