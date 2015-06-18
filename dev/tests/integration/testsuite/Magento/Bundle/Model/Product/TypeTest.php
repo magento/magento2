@@ -56,7 +56,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexAll();
 
-        $select = $this->adapter->select()->from($this->resource->getTableName('catalogsearch_fulltext'))
+        $select = $this->adapter->select()->from($this->resource->getTableName('catalogsearch_fulltext_index_default'))
             ->where('`data_index` LIKE ?', '%' . 'Bundle Product Items' . '%');
 
         $result = $this->adapter->fetchAll($select);

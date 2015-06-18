@@ -10,7 +10,7 @@ use Magento\Search\Model\Resource\Query\CollectionFactory as QueryCollectionFact
 use Magento\Search\Model\SearchCollectionInterface as Collection;
 use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\Db;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Framework\Registry;
@@ -100,9 +100,9 @@ class Query extends AbstractModel implements QueryInterface
      * @param QueryCollectionFactory $queryCollectionFactory
      * @param CollectionFactory $searchCollectionFactory
      * @param StoreManagerInterface $storeManager
-     * @param Config $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param Db $resourceCollection
+     * @param DbCollection $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -113,7 +113,7 @@ class Query extends AbstractModel implements QueryInterface
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AbstractResource $resource = null,
-        Db $resourceCollection = null,
+        DbCollection $resourceCollection = null,
         array $data = []
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;

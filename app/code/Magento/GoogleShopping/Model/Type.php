@@ -62,7 +62,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Model\Resource\Type $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -75,7 +75,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Model\Resource\Type $resource,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;

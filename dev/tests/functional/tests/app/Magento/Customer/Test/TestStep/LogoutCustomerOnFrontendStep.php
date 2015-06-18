@@ -52,19 +52,12 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
      */
     public function run()
     {
-        /* @TODO: MAGETWO-37391
-         * $this->cmsIndex->open();
-         * $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-         * if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
-         * $this->cmsIndex->getLinksBlock()->openLink("Log Out");
-         * $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
-         * $this->cmsIndex->getCmsPageBlock()->waitPageInit();
-         * }
-         */
-        $this->customerAccountLogout->open();
-        if (self::LOGOUT_PAGE_TITLE == $this->cmsIndex->getCmsPageBlock()->getPageTitle()) {
-            $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
-        }
+        $this->cmsIndex->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
+        if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
+            $this->cmsIndex->getLinksBlock()->openLink("Log Out");
+            $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
+            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
+        }
     }
 }
