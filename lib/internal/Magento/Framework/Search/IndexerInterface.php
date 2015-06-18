@@ -14,28 +14,25 @@ interface IndexerInterface
     /**
      * Add entities data to index
      *
-     * @param int $storeId
      * @param array $entityIndexes
      * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
      */
-    public function saveIndex($storeId, $entityIndexes);
+    public function saveIndex(array $entityIndexes);
 
     /**
      * Remove entities data from index
      *
-     * @param int $storeId
      * @param array $entityIndexes
      * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
      */
-    public function deleteIndex($storeId, $entityIndexes);
+    public function deleteIndex(array $entityIndexes);
 
     /**
      * Remove all data from index
      *
-     * @param int $storeId
      * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
      */
-    public function cleanIndex($storeId = null);
+    public function cleanIndex();
 
     /**
      * Define if engine is available

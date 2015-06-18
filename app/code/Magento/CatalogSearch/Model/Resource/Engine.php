@@ -72,15 +72,18 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex($storeId, $entityIndexes)
+    public function saveIndex(array $entityIndexes)
     {
         $data = [];
         foreach ($entityIndexes as $entityId => $productAttributes) {
+            if ($entityId == 'store_id') {
+                continue;
+            }
             foreach ($productAttributes as $attributeId => $indexValue) {
                 $data[] = [
                     'product_id' => (int)$entityId,
                     'attribute_id' =>(int)$attributeId,
-                    'store_id' => (int)$storeId,
+                    'store_id' => (int)$entityIndexes['store_id'],
                     'data_index' => $indexValue
                 ];
             }
@@ -156,7 +159,7 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function deleteIndex($storeId = null, $entityIndexes = null)
+    public function deleteIndex(array $entityIndexes = null)
     {
         $where = [];
 
@@ -174,14 +177,8 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function cleanIndex($storeId = null)
+    public function cleanIndex()
     {
-        if ($storeId === null ) {
-            $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
-        }
-
-        $where[] = $this->_getWriteAdapter()
-            ->quoteInto('store_id IN (?)', $storeId);
         $this->_getWriteAdapter()->delete($this->getMainTable());
         return $this;
     }
