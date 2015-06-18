@@ -205,4 +205,35 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(404);
         $this->assertSame($this->responseMock, $this->model->launch());
     }
+
+    /**
+     * @param bool $isDeveloper
+     * @param int $setBodyCalls
+     *
+     * @dataProvider catchExceptionDataProvider
+     */
+    public function testCatchException($isDeveloper, $setBodyCalls)
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $exception = $this->getMock('Exception', [], [], '', false);
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(404);
+        $bootstrap->expects($this->once())
+            ->method('isDeveloperMode')
+            ->will($this->returnValue($isDeveloper));
+        $this->responseMock->expects($this->exactly($setBodyCalls))
+            ->method('setBody');
+        $this->responseMock->expects($this->once())
+            ->method('sendResponse');
+        $this->model->catchException($bootstrap, $exception);
+    }
+
+    public function catchExceptionDataProvider()
+    {
+        return [
+            'default mode' => [false, 0],
+            'developer mode' => [true, 1],
+        ];
+    }
 }

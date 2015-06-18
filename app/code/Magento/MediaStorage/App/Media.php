@@ -140,7 +140,11 @@ class Media implements AppInterface
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {
         $this->response->setHttpResponseCode(404);
-        $this->response->sendHeaders();
+        if ($bootstrap->isDeveloperMode()) {
+            $this->response->setHeader('Content-Type', 'text/plain');
+            $this->response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+        }
+        $this->response->sendResponse();
         return true;
     }
 }
