@@ -56,18 +56,18 @@ abstract class EntityAbstract extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param Attribute $attribute
-     * @param Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
+     * @param Attribute $attribute
+     * @param Manager $sequenceManager
      * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Sales\Model\Resource\Attribute $attribute,
-        Manager $sequenceManager,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        Manager $sequenceManager,
         $resourcePrefix = null
     ) {
         $this->attribute = $attribute;
