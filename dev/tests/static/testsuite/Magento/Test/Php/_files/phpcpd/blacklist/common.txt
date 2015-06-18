@@ -32,7 +32,6 @@ Magento/Checkout/Model/Type
 Magento/Catalog/Model/Template
 Magento/Cms/Model
 Magento/GiftMessage/Model
-Magento/GoogleShopping/Model/Attribute
 Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 Magento/Sales/Block/Order
 Magento/Sales/Controller/Adminhtml/Order
