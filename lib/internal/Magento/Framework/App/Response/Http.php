@@ -59,7 +59,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @param string $value
      * @return void
-     * @codeCoverageIgnore
      */
     public function setXFrameOptions($value)
     {

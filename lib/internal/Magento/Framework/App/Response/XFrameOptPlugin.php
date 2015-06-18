@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Response;
 
 /**
  * Adds an X-FRAME-OPTIONS header to HTTP responses to safeguard against click-jacking.
- * @codeCoverageIgnore
  */
 class XFrameOptPlugin
 {
@@ -35,6 +34,7 @@ class XFrameOptPlugin
     /**
      * @param \Magento\Framework\App\Response\Http $subject
      * @return void
+     * @codeCoverageIgnore
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {
