@@ -60,6 +60,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testCreateCustomerAccessToken()
     {
