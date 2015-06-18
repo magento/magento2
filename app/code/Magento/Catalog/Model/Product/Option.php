@@ -851,7 +851,6 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->_values = $values;
         return $this;
     }
-    //@codeCoverageIgnoreEnd
 
     /**
      * {@inheritdoc}
@@ -874,4 +873,5 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+    //@codeCoverageIgnoreEnd
 }

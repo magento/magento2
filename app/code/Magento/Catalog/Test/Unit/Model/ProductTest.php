@@ -1277,7 +1277,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptions()
     {
-        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+        $optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $joinProcessorMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1286,6 +1289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product',
             [
                 'catalogProductOption' => $optionInstanceMock,
+                'joinProcessor' => $joinProcessorMock
             ]
         );
         $productModel->setHasOptions(true);
@@ -1324,6 +1328,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getProductOptionCollection')
             ->with($productModel)
             ->willReturn($optionColl);
+
+        $joinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->isInstanceOf('Magento\Catalog\Model\Resource\Product\Option\Collection'));
 
         $expectedOptions = [
             $option1Id => $optionMock1,
