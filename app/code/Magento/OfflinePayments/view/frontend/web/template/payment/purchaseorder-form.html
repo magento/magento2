@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method">
+<div class="payment-method" data-bind="css: {'_active': isEnabled(item.code)}">
     <form id="purchaseorder" class="form form-purchase-order">
 
         <div class="payment-method-title">
