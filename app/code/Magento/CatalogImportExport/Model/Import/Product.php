@@ -1324,10 +1324,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
+                $this->websitesCache[$rowSku] = [];
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-                    $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
-                    $this->websitesCache[$rowSku][$websiteId] = true;
+                    $websiteIds = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
+                    foreach ($websiteIds as $websiteId) {
+                        $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
+                        $this->websitesCache[$rowSku][$websiteId] = true;
+                    }
                 }
 
                 // 3. Categories phase
