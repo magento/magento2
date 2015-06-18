@@ -7,23 +7,22 @@ namespace Magento\Ui\Api\Data;
 
 /**
  * Bookmark page interface.
- *
  * @api
  */
-interface BookmarkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface BookmarkInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const BOOKMARK_ID = 'bookmark_id';
-    const USER_ID = 'user_id';
-    const BOOKMARKSPACE = 'namespace';
-    const IDENTIFIER = 'identifier';
-    const TITLE = 'title';
-    const CONFIG = 'config';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const CURRENT = 'current';
+    const BOOKMARK_ID      = 'bookmark_id';
+    const USER_ID          = 'user_id';
+    const BOOKMARKSPACE    = 'namespace';
+    const IDENTIFIER       = 'identifier';
+    const TITLE            = 'title';
+    const CONFIG           = 'config';
+    const CREATED_AT       = 'created_at';
+    const UPDATED_AT       = 'updated_at';
+    const CURRENT          = 'current';
     /**#@-*/
 
     /**
@@ -160,19 +159,4 @@ interface BookmarkInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return \Magento\Ui\Api\Data\BookmarkInterface
      */
     public function setCurrent($isCurrent);
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes);
 }

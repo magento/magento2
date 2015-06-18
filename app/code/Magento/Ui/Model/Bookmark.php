@@ -5,16 +5,19 @@
  */
 namespace Magento\Ui\Model;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Json\Decoder;
 use Magento\Framework\Json\Encoder;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use Magento\Ui\Api\Data\BookmarkInterface;
+use Magento\Ui\Model\Resource\Bookmark\Collection;
 use Magento\Ui\Model\Resource\Bookmark as ResourceBookmark;
 
 /**
  * Domain class Bookmark
  */
-class Bookmark extends \Magento\Framework\Model\AbstractExtensibleModel implements BookmarkInterface
+class Bookmark extends AbstractModel implements BookmarkInterface
 {
     /**
      * @var Encoder
@@ -27,48 +30,26 @@ class Bookmark extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     protected $jsonDecoder;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param AttributeValueFactory $customAttributeFactory
      * @param Encoder $jsonEncoder
      * @param Decoder $jsonDecoder
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ResourceBookmark $resource
+     * @param Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        AttributeValueFactory $customAttributeFactory,
+        Context $context,
+        Registry $registry,
+        ResourceBookmark $resource,
+        Collection $resourceCollection,
         Encoder $jsonEncoder,
         Decoder $jsonDecoder,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
-        parent::__construct(
-            $context,
-            $registry,
-            $extensionFactory,
-            $customAttributeFactory,
-            $resource,
-            $resourceCollection,
-            $data
-        );
-    }
-
-    /**
-     * Initialize bookmark model
-     *
-     * @return void
-     */
-    public function _construct()
-    {
-        $this->_init('Magento\Ui\Model\Resource\Bookmark');
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -258,26 +239,5 @@ class Bookmark extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes)
-    {
-        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
