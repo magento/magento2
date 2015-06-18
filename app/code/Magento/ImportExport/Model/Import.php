@@ -77,6 +77,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     const IMPORT_HISTORY_DIR = 'import_history/';
 
+    const IMPORT_DIR = 'import/';
+
     /**#@-*/
 
     /**
@@ -547,7 +549,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             }
         }
         $this->_removeBom($sourceFile);
-        $this->createHistoryReport($entity, $extension, $sourceFileRelative, $result);
+        $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
         // trying to create source adapter for file and catch possible exception to be convinced in its adequacy
         try {
             $this->_getSourceAdapter($sourceFile);
@@ -701,12 +703,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function createHistoryReport($entity, $extension, $sourceFileRelative, $result)
+    protected function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
     {
         if ($this->isReportEntityType($entity)) {
-            $fileName = $entity . $extension;
-            if (isset($result['name'])) {
+            if (is_array($sourceFileRelative)) {
+                $fileName = $sourceFileRelative['file_name'];
+                $sourceFileRelative = $this->_varDirectory->getRelativePath(self::IMPORT_DIR . $fileName);
+            } elseif (isset($result['name'])) {
                 $fileName = $result['name'];
+            } elseif (!is_null($extension)) {
+                $fileName = $entity . $extension;
             }
             $copyName = $this->localeDate->gmtTimestamp() . '_' . $fileName;
             $copyFile = self::IMPORT_HISTORY_DIR . $copyName;
