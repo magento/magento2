@@ -25,7 +25,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $processorMock->expects($this->any())->method('markIndexerAsInvalid');
         $processorMock->expects($this->any())->method('isIndexerScheduled')->willReturn(false);
 
-        $someData = null;
+        $someData = [1, 2, 3];
 
         $model = new \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import($processorMock);
         $this->assertEquals($someData, $model->afterImportSource($subjectMock, $someData));

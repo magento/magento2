@@ -170,4 +170,28 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ['dob', ['type' => 'datetime'], ['dob' => '02/29/2012 11:12:67'], 1, false]
         ];
     }
+
+    /**
+     * Test getCreatedItemsCount()
+     */
+    public function testGetCreatedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getCreatedItemsCount());
+    }
+
+    /**
+     * Test getUpdatedItemsCount()
+     */
+    public function testGetUpdatedItemsCount()
+    {
+        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+    }
+
+    /**
+     * Test getDeletedItemsCount()
+     */
+    public function testGetDeletedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getDeletedItemsCount());
+    }
 }
