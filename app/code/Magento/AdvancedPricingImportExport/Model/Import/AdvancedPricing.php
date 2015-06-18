@@ -296,8 +296,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $behavior = $this->getBehavior();
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
             $this->_cachedSkuToDelete = null;
-            $listSku = [];
         }
+        $listSku = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $tierPrices = [];
             $groupPrices = [];
