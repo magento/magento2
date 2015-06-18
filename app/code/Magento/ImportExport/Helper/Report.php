@@ -8,7 +8,6 @@ namespace Magento\ImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -16,26 +15,26 @@ use Magento\ImportExport\Model\Import;
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimeZone
-     */
+    /** @var \Magento\Framework\Stdlib\DateTime\TimeZone */
     protected $timeZone;
+
+    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    protected $varDirectory;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\TimeZone $timeZone
+     * @param \Magento\Framework\Stdlib\DateTime\Timezone $timeZone
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Stdlib\DateTime\TimeZone $timeZone,
+        \Magento\Framework\Stdlib\DateTime\Timezone $timeZone,
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->timeZone = $timeZone;
-        $this->filesystem = $filesystem;
-        $this->varDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         parent::__construct($context);
     }
 
