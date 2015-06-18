@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method">
+<div class="payment-method" data-bind="css: {'_active': isEnabled(item.code)}">
     <div class="payment-method-title">
         <input type="radio" name="payment" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" />
         <span data-bind="text: getTitle()"></span>
