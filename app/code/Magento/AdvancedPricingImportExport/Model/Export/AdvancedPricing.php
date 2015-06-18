@@ -38,7 +38,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_entityTypeCode;
 
     /**
-     * @var
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -72,6 +72,11 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP,
     ];
 
+    /**
+     * Template array for export data
+     *
+     * @var array
+     */
     protected $templateExportData = [
         ImportAdvancedPricing::COL_SKU => '',
         ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => '',
@@ -298,7 +303,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     }
 
     /**
-     * @param $exportData
+     * @param array $exportData
      * @return array
      */
     protected function correctExportData($exportData)
@@ -336,7 +341,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * Get Tier and Group Pricing
      *
      * @param array $listSku
-     * @param $table
+     * @param string $table
      * @return array|bool
      */
     protected function getTierAndGroupPrices(array $listSku, $table)
@@ -413,7 +418,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Get Website code
      *
-     * @param $websiteId
+     * @param int $websiteId
      * @return string
      */
     protected function _getWebsiteCode($websiteId)
@@ -434,7 +439,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Get Customer Group By Id
      *
-     * @param $customerGroupId
+     * @param int $customerGroupId
      * @param null $allGroups
      * @return string
      */

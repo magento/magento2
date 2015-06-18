@@ -307,9 +307,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                     continue;
                 }
                 $rowSku = $rowData[self::COL_SKU];
-                //if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
-                    $listSku[] = $rowSku;
-                //}
+                $listSku[] = $rowSku;
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
                     $tierPrices[$rowSku][] = [
                         'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS,
@@ -425,15 +423,17 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * Set updated_at for product
      *
-     * @param $listSku
+     * @param array $listSku
+     * @return $this
      */
-    protected function setUpdatedAt($listSku)
+    protected function setUpdatedAt(array $listSku)
     {
         $this->_connection->update(
             $this->_catalogProductEntity,
             [\Magento\Catalog\Model\Category::KEY_UPDATED_AT => date('Y-m-d H:i:s')],
             $this->_connection->quoteInto('sku IN (?)', $listSku)
         );
+        return $this;
     }
 
     /**
