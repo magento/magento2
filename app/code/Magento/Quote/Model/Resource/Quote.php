@@ -35,7 +35,7 @@ class Quote extends AbstractDb
         RelationComposite $entityRelationComposite,
         $resourcePrefix = null
     ) {
-        parent::__construct($entitySnapshot, $entityRelationComposite, $context, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
         $this->sequenceManager = $sequenceManager;
     }
 
