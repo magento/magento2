@@ -23,6 +23,11 @@ use Magento\Indexer\Model\HandlerInterface;
 class Base implements ActionInterface
 {
     /**
+     * Prefix
+     */
+    const PREFIX = 'index';
+
+    /**
      * @var FieldsetPool
      */
     protected $fieldsetPool;
@@ -132,6 +137,7 @@ class Base implements ActionInterface
         $this->prepareFields();
         $this->prepareSchema();
         $this->prepareIndexes();
+        $this->deleteItems();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect()
@@ -150,6 +156,7 @@ class Base implements ActionInterface
         $this->prepareFields();
         $this->prepareSchema();
         $this->prepareIndexes();
+        $this->deleteItems($ids);
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect($ids)
@@ -168,11 +175,31 @@ class Base implements ActionInterface
         $this->prepareFields();
         $this->prepareSchema();
         $this->prepareIndexes();
+        $this->deleteItems($id);
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect($id)
             )
         );
+    }
+
+    /**
+     * Delete items
+     *
+     * @param null|int|array $ids
+     */
+    protected function deleteItems($ids = null)
+    {
+        $ids = is_array($ids) ? $ids : [$ids];
+        if (empty($ids)) {
+            $this->connection->truncateTable($this->getTableName());
+        } else {
+            $this->connection->delete(
+                $this->getTableName(),
+                $this->getPrimaryResource()->getMainTable() . '.' . $this->getPrimaryResource()->getIdFieldName()
+                    . ' IN (' . $this->connection->quote($ids) . ')'
+            );
+        }
     }
 
     /**
@@ -190,6 +217,16 @@ class Base implements ActionInterface
             $select->where($this->getPrimaryResource()->getIdFieldname() . ' = ?', $ids);
         }
         return $select;
+    }
+
+    /**
+     * Return index table name
+     *
+     * @return string
+     */
+    protected function getTableName()
+    {
+        return self::PREFIX . $this->getPrimaryResource()->getMainTable();
     }
 
     /**
