@@ -43,9 +43,7 @@ define(
             },
 
             selectPaymentMethod: function(data, event) {
-                var self = this;
-                selectPaymentMethodAction(self.getData());
-                self.expandPaymentMethod(event);
+                selectPaymentMethodAction(this.getData());
                 return true;
             },
 
@@ -59,11 +57,13 @@ define(
                 currentTarget.parents('.payment-method').addClass(activeClass);
             },
 
-            isEnabled: function(code) {
-                return quote.paymentMethod()
-                    ? quote.paymentMethod().method == code
-                    : null;
-            },
+            isEnabled: ko.computed(function () {
+                    var self = this;
+                    return quote.paymentMethod()
+                        ? quote.paymentMethod().method
+                        : null;
+                }
+            ),
 
             isChecked: ko.computed(function () {
                     return quote.paymentMethod()

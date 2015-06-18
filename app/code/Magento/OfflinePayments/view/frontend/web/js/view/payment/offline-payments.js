@@ -21,7 +21,7 @@ define(
             },
             {
                 type: 'banktransfer',
-                component: 'Magento_OfflinePayments/js/view/payment/method-renderer/banktransfer'
+                component: 'Magento_OfflinePayments/js/view/payment/method-renderer/banktransfer-method'
             },
             {
                 type: 'cashondelivery',
