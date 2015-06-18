@@ -63,8 +63,8 @@ class IndexBuilder implements IndexBuilderInterface
         $this->resource = $resource;
         $this->config = $config;
         $this->storeManager = $storeManager;
-        $this->scopeResolver = $scopeResolver;
         $this->conditionManager = $conditionManager;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -192,8 +192,7 @@ class IndexBuilder implements IndexBuilderInterface
                 break;
             }
         }
-        $this->scopeResolver->resolve($request->getIndex(), $storeId);
-        $tableName = $this->resource->getTableName([$request->getIndex(), 'index_' . $storeId]);
+        $tableName = $this->scopeResolver->resolve($request->getIndex(), $storeId);
         return $tableName;
     }
 }
