@@ -29,6 +29,7 @@ class UrlRewriteForm extends Form
         SimpleElement $element = null,
         array $replace = []
     ) {
+        $context = ($element === null) ? $this->_rootElement : $element;
         $data = $fixture->getData();
         if (empty($data['entity_type']) && empty($this->getData()['target_path']) && !isset($data['target_path'])) {
             $entity = $fixture->getDataFieldConfig('target_path')['source']->getEntity();
@@ -44,7 +45,12 @@ class UrlRewriteForm extends Form
         }
 
         $mapping = $this->dataMapping($data);
-        $this->_fill($mapping, $element);
+        foreach ($mapping as $name => $field) {
+            $element = $this->getElement($context, $field);
+            if ($element->isVisible() && !$element->isDisabled()) {
+                $element->setValue($field['value']);
+            }
+        }
 
         return $this;
     }
