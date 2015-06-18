@@ -12,7 +12,7 @@
         <div class="title" data-role="title" data-bind="click: $data.toggleFormBlockVisibility.bind($data)">
             <span data-bind="text: $t('Gift options')"></span>
         </div>
-        <div data-role="content" data-bind="visible: formBlockVisibility() || resultBlockVisibility()">
+        <div class="content" data-role="content" data-bind="visible: formBlockVisibility() || resultBlockVisibility()">
             <!-- ko ifnot: resultBlockVisibility() -->
             <div class="gift-options">
                 <!-- ko foreach: getRegion('additionalOptions') -->
@@ -29,7 +29,7 @@
 
                     <!-- ko if: getObservable('message') -->
                         <div class="gift-message-summary">
-                            <span style="font-weight: bolder" data-bind="text: $t('Message') + ':'"></span>
+                            <span data-bind="text: $t('Message') + ':'"></span>
                             <!-- ko text: getObservable('message') --><!-- /ko -->
                         </div>
                     <!-- /ko -->
