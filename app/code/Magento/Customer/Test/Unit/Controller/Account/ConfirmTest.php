@@ -129,15 +129,16 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
 
-        $redirectFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
+        $resultFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\ResultFactory',
             ['create'],
             [],
             '',
             false
         );
-        $redirectFactoryMock->expects($this->once())
+        $resultFactoryMock->expects($this->once())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
@@ -158,8 +159,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($redirectFactoryMock);
+            ->method('getResultFactory')
+            ->willReturn($resultFactoryMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -192,30 +193,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
 
-    public function testGetDefaultRedirect()
-    {
-        $testUrl = 'http://example.com';
-        $this->urlMock->expects($this->once())
-            ->method('getUrl')
-            ->with('*/*/index', ['_secure' => true])
-            ->willReturn($testUrl);
-
-        $this->redirectMock->expects($this->once())
-            ->method('error')
-            ->with($testUrl)
-            ->willReturn($testUrl);
-
-        $this->redirectResultMock->expects($this->once())
-            ->method('setUrl')
-            ->with($testUrl)
-            ->willReturnSelf();
-
-        $this->model->getDefaultResult();
-    }
-
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Bad request.
      * @dataProvider getParametersDataProvider
      */
     public function testNoCustomerIdInRequest($customerId, $key)
@@ -232,6 +210,27 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('key'), false)
             ->will($this->returnValue($key));
+
+        $exception = new \Exception('Bad request.');
+        $this->messageManagerMock->expects($this->once())
+            ->method('addException')
+            ->with($this->equalTo($exception), $this->equalTo('There was an error confirming the account'));
+
+        $testUrl = 'http://example.com';
+        $this->urlMock->expects($this->once())
+            ->method('getUrl')
+            ->with($this->equalTo('*/*/index'), ['_secure' => true])
+            ->will($this->returnValue($testUrl));
+
+        $this->redirectMock->expects($this->once())
+            ->method('error')
+            ->with($this->equalTo($testUrl))
+            ->will($this->returnValue($testUrl));
+
+        $this->redirectResultMock->expects($this->once())
+            ->method('setUrl')
+            ->with($this->equalTo($testUrl))
+            ->willReturnSelf();
 
         $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
@@ -317,9 +316,9 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
     public function getSuccessMessageDataProvider()
     {
         return [
-            [1, 1, false, null, 'Thank you for registering with'],
-            [1, 1, true, Address::TYPE_BILLING, 'enter your billing address for proper VAT calculation'],
-            [1, 1, true, Address::TYPE_SHIPPING, 'enter your shipping address for proper VAT calculation'],
+            [1, 1, false, null, __('Thank you for registering with')],
+            [1, 1, true, Address::TYPE_BILLING, __('enter your billing address for proper VAT calculation')],
+            [1, 1, true, Address::TYPE_SHIPPING, __('enter your shipping address for proper VAT calculation')],
         ];
     }
 
@@ -392,12 +391,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
             ->will($this->returnValue($successUrl));
 
-        $this->redirectMock->expects($this->once())
+        $this->redirectMock->expects($this->never())
             ->method('success')
             ->with($this->equalTo($resultUrl))
             ->willReturn($resultUrl);
 
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock->expects($this->never())
             ->method('isSetFlag')
             ->with(
                 Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
@@ -421,7 +420,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 null,
                 'http://example.com/back',
                 true,
-                'Thank you for registering with',
+                __('Thank you for registering with'),
             ],
             [
                 1,
@@ -430,7 +429,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 true,
-                'Thank you for registering with',
+                __('Thank you for registering with'),
             ],
             [
                 1,
@@ -439,7 +438,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 false,
-                'Thank you for registering with',
+                __('Thank you for registering with'),
             ],
         ];
     }

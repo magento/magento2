@@ -6,20 +6,21 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * Delete store view post action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
         $itemId = $this->getRequest()->getParam('item_id');
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
@@ -33,11 +34,18 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
             return $redirectResult->setPath('*/*/editStore', ['store_id' => $itemId]);
         }
 
-        $model->delete();
+        try {
+            $model->delete();
 
-        $this->_eventManager->dispatch('store_delete', ['store' => $model]);
+            $this->_eventManager->dispatch('store_delete', ['store' => $model]);
 
-        $this->messageManager->addSuccess(__('You deleted the store view.'));
-        return $redirectResult->setPath('adminhtml/*/');
+            $this->messageManager->addSuccess(__('You deleted the store view.'));
+            return $redirectResult->setPath('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to delete store view. Please, try again later.'));
+        }
+        return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
     }
 }
