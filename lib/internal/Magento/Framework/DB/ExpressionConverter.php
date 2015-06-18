@@ -15,7 +15,7 @@ class ExpressionConverter
     const MYSQL_IDENTIFIER_LEN = 64;
 
     /**
-     * Dictionary for generate short name
+     * Dictionary maps common words in identifiers to abbreviations
      *
      * @var array
      */
@@ -67,7 +67,7 @@ class ExpressionConverter
     ];
 
     /**
-     * Convert name using dictionary
+     * Shorten name by abbreviating words
      *
      * @param string $name
      * @return string
@@ -78,7 +78,7 @@ class ExpressionConverter
     }
 
     /**
-     * Add or replace translate to dictionary
+     * Add an abbreviation to the dictionary, or replace if it already exists
      *
      * @param string $from
      * @param string $to
@@ -90,30 +90,33 @@ class ExpressionConverter
     }
 
     /**
-     * @param string $tableName
+     * Shorten the name of a MySql identifier, by abbreviating common words and hashing if necessary. Prepends the
+     * given prefix to clarify what kind of entity the identifier represents, in case hashing is used.
+     *
+     * @param string $entityName
      * @param string $prefix
      * @return string
      */
-    public static function shortenEntityName($tableName, $prefix)
+    public static function shortenEntityName($entityName, $prefix)
     {
-        if (strlen($tableName) > self::MYSQL_IDENTIFIER_LEN) {
-            $shortName = ExpressionConverter::shortName($tableName);
+        if (strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
+            $shortName = ExpressionConverter::shortName($entityName);
             if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
-                $hash = md5($tableName);
+                $hash = md5($entityName);
                 if (strlen($prefix . $hash) > self::MYSQL_IDENTIFIER_LEN) {
-                    $tableName = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
+                    $entityName = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
                 } else {
-                    $tableName = $prefix . $hash;
+                    $entityName = $prefix . $hash;
                 }
             } else {
-                $tableName = $shortName;
+                $entityName = $shortName;
             }
         }
-        return $tableName;
+        return $entityName;
     }
 
     /**
-     * Remove superfluous characters from hash.
+     * Remove superfluous characters from hash
      *
      * @param  string $hash
      * @param  string $prefix

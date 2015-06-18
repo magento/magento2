@@ -10,7 +10,6 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Ddl\Trigger;
-use Magento\Framework\DB\ExpressionConverter;
 
 class Subscription implements SubscriptionInterface
 {
@@ -22,7 +21,7 @@ class Subscription implements SubscriptionInterface
     protected $write;
 
     /**
-     * @var Trigger
+     * @var \Magento\Framework\DB\Ddl\TriggerFactory
      */
     protected $triggerFactory;
 
