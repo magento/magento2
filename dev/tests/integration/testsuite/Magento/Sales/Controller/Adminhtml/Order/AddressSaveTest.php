@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class AddressSaveTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class AddressSaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

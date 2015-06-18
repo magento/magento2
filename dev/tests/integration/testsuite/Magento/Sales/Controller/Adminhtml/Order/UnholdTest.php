@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class UnholdTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class UnholdTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

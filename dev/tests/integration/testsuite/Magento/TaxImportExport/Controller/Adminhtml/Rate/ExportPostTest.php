@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Controller\Adminhtml\Transactions;
+namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-class FetchTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class ExportPostTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class ReviewPaymentTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class ReviewPaymentTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class CancelTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class CancelTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class AddCommentTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class AddCommentTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

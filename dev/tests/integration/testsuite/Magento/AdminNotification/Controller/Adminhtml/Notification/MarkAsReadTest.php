@@ -5,7 +5,7 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class MarkAsReadTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class MarkAsReadTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class EmailTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

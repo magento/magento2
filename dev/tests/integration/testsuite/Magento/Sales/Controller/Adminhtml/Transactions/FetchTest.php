@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
-class ImportPostTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+use Magento\TestFramework\TestCase\AbstractBackendController;
+
+class FetchTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

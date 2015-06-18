@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class HoldTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class HoldTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {

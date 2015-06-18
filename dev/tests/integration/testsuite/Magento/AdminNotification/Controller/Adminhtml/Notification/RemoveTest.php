@@ -5,7 +5,7 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-class RemoveTest extends \Magento\Backend\Utility\BackendAclAbstractTest
+class RemoveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {
