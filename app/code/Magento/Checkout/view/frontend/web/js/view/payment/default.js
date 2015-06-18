@@ -5,12 +5,13 @@
 define(
     [
         'ko',
+        'jquery',
         'uiComponent',
         'Magento_Checkout/js/action/place-order',
         'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/quote'
     ],
-    function (ko, Component, placeOrderAction, selectPaymentMethodAction, quote) {
+    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote) {
         'use strict';
         return Component.extend({
             /**
@@ -41,10 +42,21 @@ define(
                 }
             },
 
-            selectPaymentMethod: function() {
+            selectPaymentMethod: function(data, event) {
                 var self = this;
                 selectPaymentMethodAction(self.getData());
+                self.expandPaymentMethod(event);
                 return true;
+            },
+
+            expandPaymentMethod: function(event) {
+                var currentTarget =  $(event.currentTarget),
+                    container = $('.payment-methods'),
+                    payments = container.find('.payment-method'),
+                    activeClass = '_active';
+
+                payments.removeClass(activeClass);
+                currentTarget.parents('.payment-method').addClass(activeClass);
             },
 
             isEnabled: function(code) {

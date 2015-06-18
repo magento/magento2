@@ -32,6 +32,11 @@
                         border-top: 0;
                     }
                 }
+                &._active {
+                    .payment-method-content {
+                        display: block;
+                    }
+                }
             }
 
             .payment-method-title {
@@ -41,9 +46,9 @@
             }
 
             .payment-method-content {
+                &:extend(.abs-no-display all);
                 .css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
                 margin: 0;
-
                 .control {
                     .css(margin, 0 0 @indent__base);
                 }
