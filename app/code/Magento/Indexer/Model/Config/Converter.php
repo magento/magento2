@@ -116,16 +116,44 @@ class Converter implements ConverterInterface
                         $data['fieldsets'][$this->getAttributeValue($node, 'name')]
                     );
                     break;
-                case 'reference':
+                case 'reference': {
                     $data['fieldsets'][$this->getAttributeValue($node, 'name')]['reference'] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
                         'from'     => $this->getAttributeValue($childNode, 'from'),
                         'to'       => $this->getAttributeValue($childNode, 'to'),
                     ];
-                    break;
+                    $this->addVirtualField(
+                        $this->getAttributeValue($childNode, 'fieldset'),
+                        $this->getAttributeValue($childNode, 'to'),
+                        $data
+                    );
+                    $this->addVirtualField(
+                        $this->getAttributeValue($node, 'name'),
+                        $this->getAttributeValue($childNode, 'from'),
+                        $data
+                    );
+                } break;
             }
         }
         return $data;
+    }
+
+    /**
+     * Add virtual field
+     *
+     * @param string $fieldset
+     * @param string $field
+     * @param array $data
+     * @return void
+     */
+    protected function addVirtualField($fieldset, $field, $data)
+    {
+        if (!isset($data['fieldsets'][$fieldset]['fields'][$field])) {
+            $data['fieldsets'][$fieldset]['fields'][$field] = [
+                'type' => 'virtual',
+                'name' => $field,
+            ];
+        }
     }
 
     /**
