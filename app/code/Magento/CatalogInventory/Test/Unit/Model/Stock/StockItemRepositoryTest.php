@@ -118,11 +118,13 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->stockItemFactoryMock = $this->getMockBuilder(
             'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
         )
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemCollectionMock = $this->getMockBuilder(
             'Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory'
         )
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\ProductFactory')
@@ -138,6 +140,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->productMock);
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder('Magento\Framework\DB\QueryBuilderFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mapperMock = $this->getMockBuilder('Magento\Framework\DB\MapperFactory')
