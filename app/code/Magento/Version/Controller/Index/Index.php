@@ -35,7 +35,6 @@ class Index extends Action
      * Sets the response body to ProductName/Major.MinorVersion (Edition). E.g.: Magento/0.42 (Community). Omits patch
      * version from response
      *
-     * @throws StateException
      * @return void
      */
     public function execute()
