@@ -5,21 +5,29 @@
  */
 -->
 <div class="payment-method" data-bind="css: {'_active': isEnabled(item.code)}">
-    <div class="payment-method-title">
-        <input type="radio" name="payment" data-bind="id: item.code, value: item.code, checked: isChecked, click:selectPaymentMethod" />
-        <span data-bind="text: getTitle()"></span>
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment"
+               class="radio"
+               data-bind="attr: {'id': item.code}, value: item.code, checked: isChecked, click: selectPaymentMethod"/>
+        <label data-bind="attr: {'for': item.code}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
+
     <div class="payment-method-content">
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-
         <p data-bind="text: getInstructions()"></p>
         <div class="actions-toolbar">
             <div class="primary">
-                <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isEnabled(item.code)" class="button action primary checkout" disabled></button>
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: isEnabled(item.code)"
+                        disabled>
+                    <span data-bind="text: $t('Place Order')"></span>
+                </button>
             </div>
         </div>
     </div>
