@@ -19,6 +19,7 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
