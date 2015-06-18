@@ -94,14 +94,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())->method('create')->willReturn($resultRedirect);
+        $resultFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->willReturn($resultRedirect);
 
         $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
@@ -111,7 +114,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helperMock);
         $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->_messagesMock);
         $contextMock->expects($this->any())->method('getTranslator')->willReturn($this->_translatorMock);
-        $contextMock->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
+        $contextMock->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $args = ['context' => $contextMock];
 

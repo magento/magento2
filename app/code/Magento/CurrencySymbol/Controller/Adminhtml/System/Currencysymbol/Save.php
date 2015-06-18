@@ -12,7 +12,6 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
      * Save custom Currency symbol
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -25,9 +24,13 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
             }
         }
 
-        $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')
-            ->setCurrencySymbolsData($symbolsDataArray);
-        $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
+        try {
+            $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')
+                ->setCurrencySymbolsData($symbolsDataArray);
+            $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+        }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
