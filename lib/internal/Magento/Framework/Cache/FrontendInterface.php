@@ -24,6 +24,7 @@ interface FrontendInterface
      *
      * @param string $identifier
      * @return string|bool
+     * @api
      */
     public function load($identifier);
 
@@ -35,6 +36,7 @@ interface FrontendInterface
      * @param array $tags
      * @param int|bool|null $lifeTime
      * @return bool
+     * @api
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null);
 
@@ -43,6 +45,7 @@ interface FrontendInterface
      *
      * @param string $identifier
      * @return bool
+     * @api
      */
     public function remove($identifier);
 
@@ -52,6 +55,7 @@ interface FrontendInterface
      * @param string $mode
      * @param array $tags
      * @return bool
+     * @api
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = []);
 
