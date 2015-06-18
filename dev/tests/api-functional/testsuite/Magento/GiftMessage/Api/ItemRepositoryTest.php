@@ -27,6 +27,8 @@ class ItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_item_message.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGet()
     {

@@ -27,6 +27,8 @@ class CartRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_message.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGet()
     {
