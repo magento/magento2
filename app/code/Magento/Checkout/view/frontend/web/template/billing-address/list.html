@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="control" data-bind="if: (addressOptions.length > 1)">
-    <select name="billing_address_id" data-bind="
+<div class="field field-select-billing">
+    <label class="label"><span data-bind="text: $t('My billing and shipping address are the same')"></span></label>
+    <div class="control" data-bind="if: (addressOptions.length > 1)">
+        <select class="select" name="billing_address_id" data-bind="
         options: addressOptions,
         optionsText: addressOptionsText,
         value: selectedAddress,
         event: {change: onAddressChange(selectedAddress())};
     "></select>
+    </div>
 </div>
