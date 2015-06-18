@@ -34,5 +34,6 @@ class Import
         if (!$this->_stockndexerProcessor->isIndexerScheduled()) {
             $this->_stockndexerProcessor->markIndexerAsInvalid();
         }
+        return $import;
     }
 }
