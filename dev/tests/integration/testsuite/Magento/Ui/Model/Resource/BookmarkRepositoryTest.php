@@ -31,39 +31,24 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $bookmark;
 
-    /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
     protected function setUp()
     {
         $this->bookmarkRepository = Bootstrap::getObjectManager()
             ->create('Magento\Ui\Model\Resource\BookmarkRepository');
         $this->bookmarkFactory = Bootstrap::getObjectManager()->create('Magento\Ui\Model\BookmarkFactory');
 
-        /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
-        $this->customerRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $newCustomerEntity = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\Data\CustomerInterfaceFactory')
-            ->create()
-            ->setStoreId(1)
-            ->setWebsiteId(1)
-            ->setEmail('bookmark_user@example.com')
-            ->setFirstname('TestFn')
-            ->setLastname('TestLn')
-            ->setGroupId(1);
-        $newCustomerEntity = $this->customerRepository->save($newCustomerEntity);
+        /** @var $adminUser \Magento\User\Model\User */
+        $adminUser = Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+        $defaultAdminUserName = 'user';
+        $adminUser->load($defaultAdminUserName, 'username');
 
-        $this->bookmark = $this->bookmarkFactory->create()->setUserId($newCustomerEntity->getId())->setTitle('test');
+        $this->bookmark = $this->bookmarkFactory->create()->setUserId($adminUser->getId())->setTitle('test');
         $this->bookmark = $this->bookmarkRepository->save($this->bookmark);
     }
 
     protected function tearDown()
     {
         $this->bookmarkRepository->delete($this->bookmark);
-        $this->customerRepository->delete($this->customerRepository->get('bookmark_user@example.com'));
     }
 
     public function testGetList()
