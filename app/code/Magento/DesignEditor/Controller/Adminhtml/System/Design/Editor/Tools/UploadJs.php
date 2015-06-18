@@ -36,7 +36,7 @@ class UploadJs extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\
             $response = ['error' => true, 'message' => $e->getMessage()];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         } catch (\Exception $e) {
-            $response = ['error' => true, 'message' => __('We cannot upload the JS file.')];
+            $response = ['error' => true, 'message' => __('We can\'t upload the JS file right now.')];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(

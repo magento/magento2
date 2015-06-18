@@ -10,11 +10,13 @@
     <update handle="sales_order_item_price"/>
     <update handle="sales_order_guest_info_links"/>
     <body>
-        <referenceContainer name="page.main.title">
+       <referenceContainer name="page.main.title">
             <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
             <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
             <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
-                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false">
+                    <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+                </block>
             </container>
         </referenceContainer>
         <referenceContainer name="content">
@@ -30,10 +32,7 @@
                     </block>
                 </block>
             </block>
-            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info"/>
-        </referenceContainer>
-        <referenceContainer name="sales.order.info.buttons">
-            <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" />
         </referenceContainer>
     </body>
 </page>

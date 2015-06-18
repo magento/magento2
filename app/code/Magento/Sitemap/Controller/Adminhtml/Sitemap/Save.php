@@ -74,7 +74,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                 // save the data
                 $model->save();
                 // display success message
-                $this->messageManager->addSuccess(__('The sitemap has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the sitemap.'));
                 // clear previously saved data from session
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
