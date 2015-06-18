@@ -19,7 +19,10 @@ define(
             selectedPaymentInfo: ko.observableArray([]),
             isFreeAvailable: false,
             setPaymentMethods: function(methods) {
-                if(quote.paymentMethod()) {
+                if (methods.length == 1) {
+                    selectPaymentMethod(methods[0])
+                }
+                else if(quote.paymentMethod()) {
                     var methodIsAvailable = methods.some(function (item) {
                         return (item.code == quote.paymentMethod().method);
                     });

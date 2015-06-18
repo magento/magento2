@@ -27,7 +27,7 @@
         </dl>
         <!-- /ko -->
         <div class="primary" style="margin-left: 35px">
-            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: isEnabled(item.code)" class="button action primary checkout" disabled></button>
+            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: (item.code == isEnabled)" class="button action primary checkout" disabled></button>
         </div>
     </div>
 </div>

@@ -42,16 +42,17 @@ define(
             },
 
             selectPaymentMethod: function() {
-                var self = this;
-                selectPaymentMethodAction(self.getData());
+                selectPaymentMethodAction(this.getData());
                 return true;
             },
 
-            isEnabled: function(code) {
-                return quote.paymentMethod()
-                    ? quote.paymentMethod().method == code
-                    : null;
-            },
+            isEnabled: ko.computed(function () {
+                    var self = this;
+                    return quote.paymentMethod()
+                        ? quote.paymentMethod().method
+                        : null;
+                }
+            ),
 
             isChecked: ko.computed(function () {
                     return quote.paymentMethod()
