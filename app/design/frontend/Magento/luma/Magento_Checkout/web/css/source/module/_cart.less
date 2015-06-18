@@ -304,12 +304,13 @@
 
             .actions-toolbar {
                 &:extend(.abs-add-clearfix all);
+                min-height: 20px;
                 padding-bottom: 15px;
                 position: relative;
                 > .action-edit,
                 > .action-delete {
                     position: absolute;
-                    right: 10px;
+                    right: 16px;
                     top: 0;
                     .icon-font(
                     @icon-edit,
@@ -360,6 +361,7 @@
                     content: ':';
                 }
             }
+
             //  Product options
             .item-options {
                 margin-bottom: 0;
