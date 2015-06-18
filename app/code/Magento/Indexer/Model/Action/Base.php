@@ -25,7 +25,7 @@ class Base implements ActionInterface
     /**
      * Prefix
      */
-    const PREFIX = 'index';
+    const PREFIX = 'index_';
 
     /**
      * @var FieldsetPool
@@ -240,7 +240,7 @@ class Base implements ActionInterface
     {
         return $this->connection->insertFromSelect(
             $select,
-            'index_' . $this->getPrimaryResource()->getMainTable()
+            $this->getTableName()
         );
     }
 
@@ -263,9 +263,8 @@ class Base implements ActionInterface
     protected function prepareSchema()
     {
         $this->prepareColumns();
-        $newTableName = 'index_' . $this->getPrimaryResource()->getMainTable();
-        $table = $this->connection->newTable($newTableName)
-            ->setComment($this->string->upperCaseWords($newTableName, '_', ' '));
+        $table = $this->connection->newTable($this->getTableName())
+            ->setComment($this->string->upperCaseWords($this->getTableName(), '_', ' '));
 
         $table->addColumn(
             $this->getPrimaryResource()->getIdFieldName(),
@@ -287,12 +286,10 @@ class Base implements ActionInterface
      */
     protected function prepareIndexes()
     {
-        $tableName = 'index_' . $this->getPrimaryResource()->getMainTable();
-
         foreach ($this->filterColumns as $column) {
             $this->connection->addIndex(
-                $tableName,
-                $this->connection->getIndexName($tableName, $column['name']),
+                $this->getTableName(),
+                $this->connection->getIndexName($this->getTableName(), $column['name']),
                 $column['name']
             );
         }
@@ -303,8 +300,12 @@ class Base implements ActionInterface
         }
 
         $this->connection->addIndex(
-            $tableName,
-            $this->connection->getIndexName($tableName, $fullTextIndex, AdapterInterface::INDEX_TYPE_FULLTEXT),
+            $this->getTableName(),
+            $this->connection->getIndexName(
+                $this->getTableName(),
+                $fullTextIndex,
+                AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
             $fullTextIndex,
             AdapterInterface::INDEX_TYPE_FULLTEXT
         );
