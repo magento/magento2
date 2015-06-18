@@ -27,9 +27,9 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\Db\AbstractD
      * @param string $resourcePrefix
      */
     public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
-        \Magento\Framework\Model\Resource\Db\Context $context,
         $resourcePrefix = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
