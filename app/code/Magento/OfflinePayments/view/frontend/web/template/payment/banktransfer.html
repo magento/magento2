@@ -14,7 +14,7 @@
         <input type="radio" name="payment" style="margin-right: 20px" data-bind="value: item.code, id: item.code, checked: isChecked, click:selectPaymentMethod" /><span data-bind="text: getTitle()"></span>
         <p data-bind="text: getInstructions()" style="margin-left: 35px"></p>
         <div class="primary" style="margin-left: 35px">
-            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: (item.code == isEnabled)" class="button action primary checkout" disabled></button>
+            <button data-bind="click: placeOrder, text: $t('Place Order'), enable: (item.code == isEnabled())" class="button action primary checkout" disabled></button>
         </div>
     </div>
 </div>

@@ -47,8 +47,7 @@ define(
             },
 
             isEnabled: ko.computed(function () {
-                    var self = this;
-                    return quote.paymentMethod()
+                return quote.paymentMethod()
                         ? quote.paymentMethod().method
                         : null;
                 }
