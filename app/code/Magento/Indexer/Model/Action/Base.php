@@ -187,6 +187,7 @@ class Base implements ActionInterface
      * Delete items
      *
      * @param null|int|array $ids
+     * @return void
      */
     protected function deleteItems($ids = null)
     {
@@ -197,7 +198,7 @@ class Base implements ActionInterface
             $this->connection->delete(
                 $this->getTableName(),
                 $this->getPrimaryResource()->getMainTable() . '.' . $this->getPrimaryResource()->getIdFieldName()
-                    . ' IN (' . $this->connection->quote($ids) . ')'
+                . ' IN (' . $this->connection->quote($ids) . ')'
             );
         }
     }
