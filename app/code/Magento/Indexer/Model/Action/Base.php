@@ -191,10 +191,10 @@ class Base implements ActionInterface
      */
     protected function deleteItems($ids = null)
     {
-        $ids = is_array($ids) ? $ids : [$ids];
-        if (empty($ids)) {
+        if ($ids === null) {
             $this->connection->truncateTable($this->getTableName());
         } else {
+            $ids = is_array($ids) ? $ids : [$ids];
             $this->connection->delete(
                 $this->getTableName(),
                 $this->getPrimaryResource()->getMainTable() . '.' . $this->getPrimaryResource()->getIdFieldName()
