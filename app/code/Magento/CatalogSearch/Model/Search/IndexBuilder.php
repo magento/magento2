@@ -20,6 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Build base Query for Index
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilder implements IndexBuilderInterface
 {
