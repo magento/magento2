@@ -62,9 +62,9 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider saveEntityIndexesDataProvider
+     * @dataProvider saveDataProvider
      */
-    public function testSaveEntityIndexes($storeId, $entityIndexes, $expected)
+    public function testSave($storeId, $entityIndexes, $expected)
     {
         if ($expected) {
             $this->connection->expects($this->once())
@@ -72,10 +72,10 @@ class EngineTest extends \PHPUnit_Framework_TestCase
                 ->with(null, $expected, ['data_index'])
                 ->willReturnSelf();
         }
-        $this->target->saveEntityIndexes($storeId, $entityIndexes);
+        $this->target->saveIndex($storeId, $entityIndexes);
     }
 
-    public function saveEntityIndexesDataProvider()
+    public function saveDataProvider()
     {
         return [
             'empty' => [
