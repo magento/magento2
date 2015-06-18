@@ -282,6 +282,120 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '1'],
             'Is Active'
+        )->addColumn(
+            'city',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'City'
+        )->addColumn(
+            'company',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Company'
+        )->addColumn(
+            'country_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Country'
+        )->addColumn(
+            'fax',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Fax'
+        )->addColumn(
+            'firstname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'First Name'
+        )->addColumn(
+            'lastname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Last Name'
+        )->addColumn(
+            'middlename',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Middle Name'
+        )->addColumn(
+            'postcode',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Zip/Postal Code'
+        )->addColumn(
+            'prefix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Prefix'
+        )->addColumn(
+            'region',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'State/Province'
+        )->addColumn(
+            'region_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'State/Province'
+        )->addColumn(
+            'street',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            null,
+            ['nullable' => false],
+            'Street Address'
+        )->addColumn(
+            'suffix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            ['nullable' => true, 'default' => null],
+            'Suffix'
+        )->addColumn(
+            'telephone',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Phone Number'
+        )->addColumn(
+            'vat_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number'
+        )->addColumn(
+            'vat_is_valid',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'VAT number validity'
+        )->addColumn(
+            'vat_request_date',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number validation request date'
+        )->addColumn(
+            'vat_request_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'VAT number validation request ID'
+        )->addColumn(
+            'vat_request_success',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
+            'VAT number validation request success'
         )->addIndex(
             $installer->getIdxName('customer_address_entity', ['parent_id']),
             ['parent_id']
