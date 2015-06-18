@@ -6,7 +6,7 @@
 namespace Magento\Quote\Test\Unit\Model\Resource\Quote;
 
 use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
-use \Magento\Quote\Model\Resource\Quote\Address\Item;
+use Magento\Quote\Model\Resource\Quote\Address\Item;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
