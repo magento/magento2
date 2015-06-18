@@ -25,14 +25,16 @@ class Quote extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param Snapshot $entitySnapshot,
+     * @param RelationComposite $entityRelationComposite,
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        Manager $sequenceManager,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
+        Manager $sequenceManager,
         $resourcePrefix = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
