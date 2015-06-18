@@ -1,22 +1,17 @@
-No,No
-Discount,Discount
-"Credit Card Type","Credit Card Type"
-"Credit Card Number","Credit Card Number"
-"Expiration Date","Expiration Date"
-"Card Verification Number","Card Verification Number"
-"--Please Select--","--Please Select--"
-"Card Verification Number Visual Reference","Card Verification Number Visual Reference"
-"What is this?","What is this?"
-Shipping,Shipping
-Yes,Yes
-N/A,N/A
+"We cannot retrieve the payment method model object.","We cannot retrieve the payment method model object."
 Month,Month
 Year,Year
-"Start Date","Start Date"
-"We cannot retrieve the payment method model object.","We cannot retrieve the payment method model object."
 "We cannot retrieve the payment info model object.","We cannot retrieve the payment info model object."
+N/A,N/A
+"Credit Card Type","Credit Card Type"
+"Credit Card Number","Credit Card Number"
 "Switch/Solo/Maestro Issue Number","Switch/Solo/Maestro Issue Number"
 "Switch/Solo/Maestro Start Date","Switch/Solo/Maestro Start Date"
+"We cannot retrieve the transparent payment method model object.","We cannot retrieve the transparent payment method model object."
+"Command %1 does not exist.","Command %1 does not exist."
+"Validator for field %1 does not exist.","Validator for field %1 does not exist."
+Discount,Discount
+Shipping,Shipping
 "All Allowed Countries","All Allowed Countries"
 "Specific Countries","Specific Countries"
 "The payment method you requested is not available.","The payment method you requested is not available."
@@ -35,7 +30,18 @@ Year,Year
 "Credit card type is not allowed for this payment method.","Credit card type is not allowed for this payment method."
 "Please enter a valid credit card verification number.","Please enter a valid credit card verification number."
 "We found an incorrect credit card expiration date.","We found an incorrect credit card expiration date."
+"%1 class doesn't implement \Magento\Payment\Model\MethodInterface","%1 class doesn't implement \Magento\Payment\Model\MethodInterface"
+Yes,Yes
+No,No
+"Expiration Date","Expiration Date"
+"Card Verification Number","Card Verification Number"
 "Switch/Solo/Maestro Only","Switch/Solo/Maestro Only"
 "Issue Number","Issue Number"
+"Start Date","Start Date"
 "%1 is not available. You still can process offline actions.","%1 is not available. You still can process offline actions."
+"--Please Select--","--Please Select--"
+"You'll be asked for your payment details before placing an order.","You'll be asked for your payment details before placing an order."
+"Card Verification Number Visual Reference","Card Verification Number Visual Reference"
+"What is this?","What is this?"
+"Credit Card Information","Credit Card Information"
 "Payment Methods","Payment Methods"

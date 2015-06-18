@@ -1,7 +1,3 @@
-None,None
-"Sort Order","Sort Order"
-Title,Title
-Password,Password
 "This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.","This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges."
 "Wrong Content Type","Wrong Content Type"
 Pounds,Pounds
@@ -55,12 +51,14 @@ Documents,Documents
 "Unable to retrieve tracking","Unable to retrieve tracking"
 "Response is in the wrong format","Response is in the wrong format"
 "No packages for request","No packages for request"
+"Unable to retrieve shipping label","Unable to retrieve shipping label"
 "Non documents","Non documents"
-Size,Size
-Debug,Debug
-"Gateway URL","Gateway URL"
+None,None
 "Enabled for Checkout","Enabled for Checkout"
+"Gateway URL","Gateway URL"
+Title,Title
 "Access ID","Access ID"
+Password,Password
 "Account Number","Account Number"
 "Content Type","Content Type"
 "Calculate Handling Fee","Calculate Handling Fee"
@@ -70,6 +68,7 @@ Debug,Debug
 "Divide Order Weight","Divide Order Weight"
 "This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.","This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges."
 "Weight Unit","Weight Unit"
+Size,Size
 "Allowed Methods","Allowed Methods"
 "Displayed Error Message","Displayed Error Message"
 "Free Method","Free Method"
@@ -77,3 +76,5 @@ Debug,Debug
 "Ship to Applicable Countries","Ship to Applicable Countries"
 "Ship to Specific Countries","Ship to Specific Countries"
 "Show Method if Not Applicable","Show Method if Not Applicable"
+"Sort Order","Sort Order"
+Debug,Debug
