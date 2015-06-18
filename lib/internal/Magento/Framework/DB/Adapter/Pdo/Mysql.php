@@ -3123,7 +3123,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $tableName
      * @return string
-     * @codeCoverageIgnore Covered by tests on ExpressionConverter
+     * @codeCoverageIgnore
      */
     public function getTableName($tableName)
     {
@@ -3137,7 +3137,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $time  Either "before" or "after"
      * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
-     * @codeCoverageIgnore Covered by tests on ExpressionConverter
+     * @codeCoverageIgnore
      */
 
     public function getTriggerName($tableName, $time, $event)
@@ -3184,6 +3184,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @return string
+     * @codeCoverageIgnore
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
