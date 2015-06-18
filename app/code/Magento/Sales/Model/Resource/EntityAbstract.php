@@ -75,7 +75,7 @@ abstract class EntityAbstract extends AbstractDb
         if ($resourcePrefix === null) {
             $resourcePrefix = 'sales';
         }
-        parent::__construct($entitySnapshot, $entityRelationComposite, $context, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
     }
 
     /**
