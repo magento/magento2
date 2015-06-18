@@ -41,14 +41,13 @@ define(
                 }
             },
 
-            selectPaymentMethod: function(data, event) {
+            selectPaymentMethod: function() {
                 selectPaymentMethodAction(this.getData());
                 return true;
             },
 
             isEnabled: ko.computed(function () {
-                    var self = this;
-                    return quote.paymentMethod()
+                return quote.paymentMethod()
                         ? quote.paymentMethod().method
                         : null;
                 }
