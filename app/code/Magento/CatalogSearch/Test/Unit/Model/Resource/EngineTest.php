@@ -72,7 +72,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
                 ->with(null, $expected, ['data_index'])
                 ->willReturnSelf();
         }
-        $this->target->saveIndex($storeId, $entityIndexes);
+        $this->target->saveIndex($entityIndexes);
     }
 
     public function saveDataProvider()

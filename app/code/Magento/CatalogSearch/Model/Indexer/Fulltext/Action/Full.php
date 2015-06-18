@@ -763,7 +763,7 @@ class Full
     {
         if ($this->engineProvider->get()) {
             $productIndexes['store_id'] = $storeId;
-            $this->engineProvider->get()->saveIndex($storeId, $productIndexes);
+            $this->engineProvider->get()->saveIndex($productIndexes);
         }
 
         return $this;
