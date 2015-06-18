@@ -55,7 +55,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -64,7 +64,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_linkCollectionFactory = $linkCollectionFactory;

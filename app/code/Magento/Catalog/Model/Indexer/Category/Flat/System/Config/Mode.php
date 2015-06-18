@@ -23,7 +23,7 @@ class Mode extends \Magento\Framework\App\Config\Value
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Indexer\Model\Indexer\State $indexerState
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -33,7 +33,7 @@ class Mode extends \Magento\Framework\App\Config\Value
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Indexer\Model\Indexer\State $indexerState,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
