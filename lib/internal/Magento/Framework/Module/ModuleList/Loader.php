@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Loader
 {
