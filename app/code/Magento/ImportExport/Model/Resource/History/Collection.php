@@ -38,7 +38,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->getSelect()->join(
+        $this->getSelect()->joinLeft(
             ['link_table' => $this->_linkTable],
             'link_table.user_id = main_table.user_id',
             ['username']
