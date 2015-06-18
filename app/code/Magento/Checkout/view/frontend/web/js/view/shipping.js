@@ -112,7 +112,7 @@ define(
             },
 
             initElement: function(element) {
-                if (element.index == 'shipping-address-fieldset') {
+                if (this.isFormInline && element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
             },
