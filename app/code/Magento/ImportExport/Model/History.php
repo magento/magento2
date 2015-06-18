@@ -33,6 +33,8 @@ class History extends \Magento\Framework\Model\AbstractModel
 
     const IMPORT_FAILED = 'Failed';
 
+    const IMPORT_SCHEDULED_USER = 0;
+
     /**
      * @var \Magento\ImportExport\Helper\Report
      */
@@ -261,7 +263,11 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function getAdminId()
     {
-        return $this->session->getUser()->getId();
+        $userId = self::IMPORT_SCHEDULED_USER;
+        if ($this->session->isLoggedIn()) {
+            $userId = $this->session->getUser()->getId();
+        }
+        return $userId;
     }
 
     /**
