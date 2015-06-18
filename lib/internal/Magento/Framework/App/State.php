@@ -128,12 +128,13 @@ class State
      * Set area code
      *
      * @param string $code
+     * @param bool $force
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setAreaCode($code)
+    public function setAreaCode($code, $force = false)
     {
-        if (isset($this->_areaCode)) {
+        if (isset($this->_areaCode) && !$force) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase('Area code is already set')
             );
