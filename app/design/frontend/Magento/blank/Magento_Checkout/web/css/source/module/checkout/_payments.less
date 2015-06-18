@@ -11,8 +11,9 @@
 @checkout-payment-method-title__padding: @checkout-shipping-method__padding;
 @checkout-payment-method-title-mobile__padding: 15px;
 
-@checkout-payment-method-content__padding__xl: 35px;
-@checkout-billing-address-details__line-height: @checkout-shipping-item__line-height;
+@checkout-payment-method-content__padding__xl: 22px;
+@checkout-billing-address-details__line-height: 27px;
+@checkout-billing-address-details__padding: 0 0 0 23px;
 
 //
 //  Common
@@ -26,7 +27,7 @@
             }
         }
         .payment-methods {
-            .css(margin, 0 0 @intent__base);
+            .css(margin, 0 0 @indent__base);
 
             .payment-method {
                 &:first-child {
@@ -77,6 +78,7 @@
 
                 .billing-address-details {
                     .css(line-height, @checkout-billing-address-details__line-height);
+                    .css(padding, @checkout-billing-address-details__padding);
                 }
             }
         }
