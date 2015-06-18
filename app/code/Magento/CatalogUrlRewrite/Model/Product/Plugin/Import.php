@@ -182,7 +182,9 @@ class Import
                 $this->websitesToStoreIds[$websiteId] = $this->storeManager->getWebsite($websiteId)->getStoreIds();
             }
         }
-        if ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE])) {
+        if (!empty($rowData[ImportProduct::COL_STORE])
+            && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
+        ) {
             $product->setStoreId($storeId);
         }
         if ($this->isGlobalScope($product->getStoreId())) {
