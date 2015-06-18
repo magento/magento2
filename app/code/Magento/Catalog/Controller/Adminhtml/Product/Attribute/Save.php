@@ -106,7 +106,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addError(__('Product Template named \'%1\' already exists.', $name));
+                    $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $name));
                     $this->messageManager->setAttributeData($data);
                     return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
