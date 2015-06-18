@@ -77,7 +77,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
                 $setName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($setName);
-                $this->messageManager->addError(__('Product Template named \'%1\' already exists.', $setName));
+                $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $setName));
 
                 $layout = $this->layoutFactory->create();
                 $layout->initMessages();
