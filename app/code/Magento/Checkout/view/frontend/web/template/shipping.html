@@ -33,34 +33,9 @@
         <!-- ko if: (!isFormInline) -->
         <button type="button"
                 data-bind="click: showFormPopUp, visible: !isNewAddressAdded()"
-                data-open-modal="opc-new-shipping-address"
                 class="action action-show-popup">
             <span data-bind="text: $t('New Address')"></span></button>
-        <div id="opc-new-shipping-address"
-             data-bind="mageInit: {
-                'Magento_Ui/js/modal/modal': {
-                    type:'popup',
-                    responsive: true,
-                    innerScroll: true,
-                    title: $t('Shipping Address'),
-                    trigger:'opc-new-shipping-address',
-                    buttons: [{
-                        text: $t('Save Address'),
-                        class: 'action primary action-save-address',
-                        click: function() {
-                            saveNewAddress();
-                            this.closeModal();
-                            }
-                        },
-                        {
-                            text: $t('Cancel'),
-                            class: 'action secondary action-hide-popup',
-                            click: function() {
-                                hideFormPopUp();
-                                this.closeModal()
-                                }
-                        }]
-                }}">
+        <div id="opc-new-shipping-address" data-bind="visible: isFormPopUpVisible()">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
         </div>
         <!-- /ko -->
