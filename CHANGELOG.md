@@ -2652,7 +2652,7 @@
   * Canadian provincial sales taxes
   * Fixed issues with bundle product price inconsistency across the system
   * Added warnings if invalid tax configuration is created in the Admin panel
-  * Fixed issues with regards to hidden tax
+  * Fixed issues with regards to discount tax compensation
 * Fixed bugs:
   * Fixed an issue where grouped price was not applied for grouped products
   * Fixed an issue where a fatal error occurred when opening a grouped product page without assigned products on the frontend
