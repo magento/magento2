@@ -356,7 +356,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->_directiveParams = $this->_getParameters($construction[2]);
         if (!isset($this->_directiveParams['area'])) {
-            $this->_directiveParams['area'] = 'frontend';
+            $this->_directiveParams['area'] = \Magento\Framework\App\Area::AREA_FRONTEND;
         }
         if ($this->_directiveParams['area'] != $this->_appState->getAreaCode()) {
             return $this->_appState->emulateAreaCode(
