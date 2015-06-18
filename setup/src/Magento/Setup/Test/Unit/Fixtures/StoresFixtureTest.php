@@ -136,7 +136,7 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
-    public function testExecuteEarlyReturn()
+    public function testNoFixtureConfigValue()
     {
         $this->fixtureModelMock
             ->expects($this->exactly(3))

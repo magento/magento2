@@ -50,7 +50,7 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
-    public function testExecuteEarlyReturn()
+    public function testNoFixtureConfigValue()
     {
         $this->fixtureModelMock
             ->expects($this->once())
