@@ -10,7 +10,7 @@ interface GuestPaymentInformationManagementInterface
     /**
      * Set payment information and place order for a specified cart.
      *
-     * @param int $cartId
+     * @param string $cartId
      * @param string $email
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
