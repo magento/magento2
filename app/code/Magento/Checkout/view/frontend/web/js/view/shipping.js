@@ -133,6 +133,10 @@ define(
                             click: self.hideFormPopUp.bind(self)
                         }
                     ];
+                    this.popUpForm.options.modalCloseBtnCallback = {
+                        callback: self.hideFormPopUp.bind(self),
+                        context: self
+                    };
                     popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
                 }
                 return popUp;
