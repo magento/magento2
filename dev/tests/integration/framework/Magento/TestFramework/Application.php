@@ -329,11 +329,11 @@ class Application
                 'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
                 'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
                 'Magento\Framework\Mail\Template\TransportBuilder'
-                => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
+                    => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
             ]
         ];
         if ($loadTestExtensionAttributes) {
-            array_merge(
+            $objectManagerConfiguration = array_merge(
                 $objectManagerConfiguration,
                 [
                     'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
