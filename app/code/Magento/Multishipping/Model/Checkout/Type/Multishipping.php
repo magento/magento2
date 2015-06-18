@@ -464,14 +464,13 @@ class Multishipping extends \Magento\Framework\Object
         $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
         //$qty       = $qty > 0 ? $qty : 1;
         $addressId = isset($data['address']) ? $data['address'] : false;
-
-        if (!$this->isAddressIdApplicable($addressId)) {
-            throw new LocalizedException(__('Please check shipping address information.'));
-        }
-
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {
+            if (!$this->isAddressIdApplicable($addressId)) {
+                throw new LocalizedException(__('Please check shipping address information.'));
+            }
+
             /**
              * Skip item processing if qty 0
              */

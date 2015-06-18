@@ -5,7 +5,9 @@
  */
 namespace Magento\Indexer\Model\Config;
 
-class Converter implements \Magento\Framework\Config\ConverterInterface
+use Magento\Framework\Config\ConverterInterface;
+
+class Converter implements ConverterInterface
 {
     /**
      * Convert dom node tree to array
@@ -66,8 +68,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function convertChild(\DOMElement $childNode, $data)
     {
-        $data['sources']   = isset($data['sources']) ? $data['sources'] : [];
-        $data['handlers']  = isset($data['handlers']) ? $data['handlers'] : [];
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
         switch ($childNode->nodeName) {
             case 'title':
@@ -76,16 +76,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             case 'description':
                 $data['description'] = $this->getTranslatedNodeValue($childNode);
                 break;
+            case 'saveHandler':
+                $data['saveHandler'] = $this->getAttributeValue($childNode, 'class');
+                break;
+            case 'structure':
+                $data['structure'] = $this->getAttributeValue($childNode, 'class');
+                break;
             case 'fieldset':
                 $data = $this->convertFieldset($childNode, $data);
-                break;
-            case 'source':
-                $data['sources'][$this->getAttributeValue($childNode, 'name')]
-                    = $this->getAttributeValue($childNode, 'class');
-                break;
-            case 'handler':
-                $data['handlers'][$this->getAttributeValue($childNode, 'name')]
-                    = $this->getAttributeValue($childNode, 'class');
                 break;
         }
         return $data;
@@ -103,18 +101,29 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
-            'source' => $this->getAttributeValue($node, 'source'),
-            'class' => $this->getAttributeValue($node, 'class'),
-            'fields' => [],
+            'source'   => $this->getAttributeValue($node, 'source'),
+            'provider' => $this->getAttributeValue($node, 'provider'),
+            'fields'   => [],
         ];
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
-            $data['fieldsets'][$this->getAttributeValue($node, 'name')] = $this->convertField(
-                $childNode,
-                $data['fieldsets'][$this->getAttributeValue($node, 'name')]
-            );
+            switch ($childNode->nodeName) {
+                case 'field':
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')] = $this->convertField(
+                        $childNode,
+                        $data['fieldsets'][$this->getAttributeValue($node, 'name')]
+                    );
+                    break;
+                case 'reference':
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['reference'] = [
+                        'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
+                        'from'     => $this->getAttributeValue($childNode, 'from'),
+                        'to'       => $this->getAttributeValue($childNode, 'to'),
+                    ];
+                    break;
+            }
         }
         return $data;
     }
@@ -130,7 +139,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $data['fields'][$this->getAttributeValue($node, 'name')] = [
             'name'     => $this->getAttributeValue($node, 'name'),
-            'source'   => $this->getAttributeValue($node, 'source'),
             'handler'  => $this->getAttributeValue($node, 'handler'),
             'origin'   => $this->getAttributeValue($node, 'origin') ?: $this->getAttributeValue($node, 'name'),
             'dataType' => $this->getAttributeValue($node, 'dataType'),
@@ -144,18 +152,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
-            switch ($childNode->nodeName){
-                case 'filter':
-                    $data['fields'][$this->getAttributeValue($node, 'name')]['filters'][]
-                        = $this->getAttributeValue($childNode, 'class');
-                    break;
-                case 'reference':
-                    $data['fields'][$this->getAttributeValue($node, 'name')]['reference'] = [
-                        'from' => $this->getAttributeValue($childNode, 'from'),
-                        'to' => $this->getAttributeValue($childNode, 'to'),
-                    ];
-                    break;
-            }
+            $data['fields'][$this->getAttributeValue($node, 'name')]['filters'][]
+                = $this->getAttributeValue($childNode, 'class');
         }
         return $data;
     }

@@ -35,23 +35,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param Attribute $attribute
-     * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param string|null $resourcePrefix
-     */
-    public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
-        Attribute $attribute,
-        Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        $resourcePrefix = null
-    ) {
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
-    }
-
-    /**
      * Perform actions before object save
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
@@ -66,33 +49,5 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
         }
 
         return parent::_beforeSave($object);
-    }
-
-    /**
-     * Perform actions before object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
-     * @return $this
-     */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
-    {
-        /** @var \Magento\Sales\Model\Order\Invoice $object */
-        if (null !== $object->getItems()) {
-            /**
-             * Save invoice items
-             */
-            foreach ($object->getItems() as $item) {
-                $item->setParentId($object->getId());
-                $item->setOrderItem($item->getOrderItem());
-                $item->save();
-            }
-        }
-
-        if (null !== $object->getComments()) {
-            foreach ($object->getComments() as $comment) {
-                $comment->save();
-            }
-        }
-        return parent::processRelations($object);
     }
 }

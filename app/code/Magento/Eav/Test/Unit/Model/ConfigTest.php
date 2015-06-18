@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn([]);
         $entityAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
-            ->setMethods(['dummy'])
+            ->setMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMock();
         $factoryCalls = [
@@ -133,7 +133,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($factoryCalls));
 
         $entityType = $this->getMockBuilder('\Magento\Eav\Model\Entity\Type')
-            ->setMethods(['getEntity'])
+            ->setMethods(['getEntity', 'setData', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -35,22 +35,22 @@
     </xs:complexType>
 
     <xs:element name="indexer" type="indexerType">
-        <xs:unique name="uniqueSourceField">
+        <xs:unique name="uniqueFieldset">
             <xs:annotation>
                 <xs:documentation>
-                    Field source must be unique.
+                    Fieldset name must be unique.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath=".//source"/>
+            <xs:selector xpath=".//fieldset"/>
             <xs:field xpath="@name"/>
         </xs:unique>
-        <xs:unique name="uniqueHandler">
+        <xs:unique name="uniqueField">
             <xs:annotation>
                 <xs:documentation>
-                    Field handler must be unique.
+                    Field name must be unique in one fieldset.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath=".//handler"/>
+            <xs:selector xpath=".//fieldset/field"/>
             <xs:field xpath="@name"/>
         </xs:unique>
     </xs:element>
