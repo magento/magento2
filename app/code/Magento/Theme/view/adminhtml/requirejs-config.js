@@ -12,7 +12,7 @@ var config = {
             "extjs/ext-tree",
             "extjs/defaults"
         ],
-        "jquery/editableMultiselect/js/jquery.editable":[
+        "jquery/editableMultiselect/js/jquery.editable": [
             "jquery"
         ]
     },
