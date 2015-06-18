@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\App\Cache;
 
+/**
+ * @api
+ */
 interface StateInterface
 {
     /**
