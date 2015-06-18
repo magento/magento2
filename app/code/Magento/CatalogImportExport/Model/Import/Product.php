@@ -1415,7 +1415,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
                             $mediaGalleryImages[] = $rowData[$imageCol];
                             if (isset($mediaGalleryLabels)) {
-                                $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label']);
+                                $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label'])
+                                ? $rowData[$imageCol . '_label']
+                                : '';
                             } else {
                                 $mediaGalleryLabels[] = '';
                             }
