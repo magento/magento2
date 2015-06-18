@@ -276,6 +276,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->mapper->buildQuery($this->request);
     }
 
+    /**
+     * @return MockObject
+     */
     private function createMatchQuery()
     {
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Match')
@@ -288,15 +291,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\Search\Request\Dimension|MockObject
+     * @return MockObject
      */
-    private function createDimension()
-    {
-        return $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     private function createFilterQuery()
     {
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Filter')

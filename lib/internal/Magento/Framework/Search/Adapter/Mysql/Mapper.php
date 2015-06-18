@@ -35,11 +35,6 @@ class Mapper
     private $filterBuilder;
 
     /**
-     * @var Dimensions
-     */
-    private $dimensionsBuilder;
-
-    /**
      * @var ConditionManager
      */
     private $conditionManager;
@@ -67,7 +62,6 @@ class Mapper
     /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Builder $filterBuilder
-     * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
      * @param Resource|Resource $resource
      * @param EntityMetadata $entityMetadata
@@ -77,7 +71,6 @@ class Mapper
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
         Builder $filterBuilder,
-        Dimensions $dimensionsBuilder,
         ConditionManager $conditionManager,
         Resource $resource,
         EntityMetadata $entityMetadata,
@@ -86,7 +79,6 @@ class Mapper
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
         $this->filterBuilder = $filterBuilder;
-        $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
         $this->resource = $resource;
         $this->entityMetadata = $entityMetadata;
