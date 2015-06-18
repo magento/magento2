@@ -550,7 +550,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             'Simple Product',
-            $this->_model->getQuote()->getAllItems()[0]->getData('name'),
+            $this->_model->getQuote()->getItemByProduct($product)->getData('name'),
             'Precondition failed: Quote items data is invalid in create order model'
         );
         $this->assertEquals(
