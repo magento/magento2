@@ -41,20 +41,20 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Manager $sequenceManager,
         Snapshot $entitySnapshot,
         \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
             $resourcePrefix
         );
     }

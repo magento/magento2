@@ -62,20 +62,20 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        Attribute $attribute,
-        Manager $sequenceManager,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
+        Attribute $attribute,
+        Manager $sequenceManager,
         StateHandler $stateHandler,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
             $resourcePrefix
         );
     }

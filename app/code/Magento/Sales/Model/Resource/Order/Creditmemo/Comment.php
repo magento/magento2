@@ -41,20 +41,20 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Manager $sequenceManager,
         Snapshot $entitySnapshot,
         \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
             $resourcePrefix
         );
     }

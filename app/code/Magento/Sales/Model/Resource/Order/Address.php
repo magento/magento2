@@ -43,10 +43,10 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Manager $sequenceManager,
         Snapshot $entitySnapshot,
         \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
         $resourcePrefix = null
@@ -55,10 +55,10 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         $this->gridPool = $gridPool;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
             $resourcePrefix
         );
     }
