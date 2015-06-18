@@ -34,7 +34,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      *
      * @var string
      */
-    protected $uri;
+    protected $uri = null;
 
     protected function setUp()
     {
@@ -88,12 +88,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
 
     public function testAclHasAccess()
     {
-        if ($this->resource === null) {
-            $this->markTestIncomplete('Acl test is not complete');
+        if ($this->uri === null) {
+            $this->markTestIncomplete('AclHasAccess test is not complete');
         }
-        $this->_objectManager->get('Magento\Framework\Acl\Builder')
-            ->getAcl()
-            ->allow(null, $this->resource);
         $this->dispatch($this->uri);
         $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
     }
