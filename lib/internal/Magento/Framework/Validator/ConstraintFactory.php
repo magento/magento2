@@ -44,6 +44,7 @@ class ConstraintFactory
      *
      * @param array $data
      * @return \Magento\Framework\Validator\Constraint
+     * @api
      */
     public function create(array $data = [])
     {
