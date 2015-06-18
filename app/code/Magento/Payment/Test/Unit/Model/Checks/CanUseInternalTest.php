@@ -30,7 +30,7 @@ class CanUseInternalTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $paymentMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\PaymentMethodChecksInterface'
+            '\Magento\Payment\Model\MethodInterface'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseInternal')->will(
             $this->returnValue($expectation)

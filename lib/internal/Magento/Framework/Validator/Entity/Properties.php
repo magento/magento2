@@ -8,6 +8,7 @@
 namespace Magento\Framework\Validator\Entity;
 
 use Magento\Framework\Object;
+use Magento\Framework\Model\AbstractModel;
 
 class Properties extends \Magento\Framework\Validator\AbstractValidator
 {
@@ -28,19 +29,19 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
-     * Successful if $value is \Magento\Framework\Object an all condition are fulfilled.
+     * Successful if $value is \Magento\Framework\Model\AbstractModel an all condition are fulfilled.
      *
      * If read-only properties are set than $value mustn't have changes in them.
      *
-     * @param Object $value
+     * @param AbstractModel $value
      * @return bool
      * @throws \InvalidArgumentException when $value is not instanceof \Magento\Framework\Object
      */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!$value instanceof Object) {
-            throw new \InvalidArgumentException('Instance of \Magento\Framework\Object is expected.');
+        if (!$value instanceof AbstractModel) {
+            throw new \InvalidArgumentException('Instance of \Magento\Framework\Model\AbstractModel is expected.');
         }
         if ($this->_readOnlyProperties) {
             if (!$value->hasDataChanges()) {
