@@ -23,4 +23,9 @@ try {
 HTML;
     exit(1);
 }
+
+// For Setup Wizard we are using our customized error handler
+$handler = new \Magento\Framework\App\ErrorHandler();
+set_error_handler([$handler, 'handler']);
+
 \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
