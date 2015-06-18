@@ -43,7 +43,16 @@ class Snapshot
      */
     public function registerSnapshot(AbstractModel $entity)
     {
-        $data = array_intersect_key($entity->getData(), $this->metadata->getFields($entity));
+        $data = [];
+
+        foreach($this->metadata->getFields($entity) as $field => $value) {
+            if ($entity->hasData($field)) {
+                $data[$field] = $entity->getData($field);
+            } else {
+                $data[$field] = null;
+            }
+        }
+
         $this->snapshotData[get_class($entity)][$entity->getId()] = $data;
     }
 
