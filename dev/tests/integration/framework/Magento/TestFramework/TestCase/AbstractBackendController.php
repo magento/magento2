@@ -93,6 +93,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         }
         $this->dispatch($this->uri);
         $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
+        $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
     }
 
     public function testAclNoAccess()
