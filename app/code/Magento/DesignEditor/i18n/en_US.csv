@@ -1,28 +1,10 @@
-Remove,Remove
-Cancel,Cancel
 Back,Back
-No,No
-Edit,Edit
-"Delete File","Delete File"
-Delete,Delete
-Save,Save
-Yes,Yes
-Error,Error
-title,title
-"Magento Admin Panel","Magento Admin Panel"
-"Please wait...","Please wait..."
-Loading...,Loading...
-OK,OK
-"Collapse All","Collapse All"
-"Expand All","Expand All"
-"Delete Folder","Delete Folder"
-"New Folder Name:","New Folder Name:"
-"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
-"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
-Folder,Folder
 "Store Designer","Store Designer"
 "Element ""%1"" is not found in ""%2"".","Element ""%1"" is not found in ""%2""."
+"Renderer factory was not set","Renderer factory was not set"
+"Form elements factory was not set","Form elements factory was not set"
 "Component of the type ""%1"" is not found between elements of ""%2""","Component of the type ""%1"" is not found between elements of ""%2"""
+Edit,Edit
 "Restore last saved version of theme","Restore last saved version of theme"
 "Restore theme defaults","Restore theme defaults"
 "Do you want to restore the version saved at %1?","Do you want to restore the version saved at %1?"
@@ -30,6 +12,7 @@ Folder,Folder
 "Do you want to restore the theme defaults?","Do you want to restore the theme defaults?"
 "Restore Theme Defaults","Restore Theme Defaults"
 Assign,Assign
+Save,Save
 "Save & Assign","Save & Assign"
 "You changed the design of your live store. Are you sure you want to do that?","You changed the design of your live store. Are you sure you want to do that?"
 "Are you sure you want to change the theme of your live store?","Are you sure you want to change the theme of your live store?"
@@ -54,6 +37,9 @@ Update,Update
 "Are you sure you want to delete this JavaScript file?' ' The changes to your theme will not be reversible.","Are you sure you want to delete this JavaScript file?' ' The changes to your theme will not be reversible."
 "Custom javascript files","Custom javascript files"
 "CSS Editor ","CSS Editor "
+"New Folder Name:","New Folder Name:"
+"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
+"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
 Header,Header
 Backgrounds,Backgrounds
 "Buttons & Icons","Buttons & Icons"
@@ -68,44 +54,55 @@ Duplicate,Duplicate
 "Themes Assigned to Store Views","Themes Assigned to Store Views"
 "Available Themes","Available Themes"
 "Themes Not Assigned to Store Views","Themes Not Assigned to Store Views"
+Remove,Remove
 "Are you sure you want to delete this theme?","Are you sure you want to delete this theme?"
 "Delete %1 Theme","Delete %1 Theme"
 "My Customizations","My Customizations"
-"Sorry, but we can't load the theme list.","Sorry, but we can't load the theme list."
-"Sorry, there was an unknown error.","Sorry, there was an unknown error."
+"We can't find this theme.","We can't find this theme."
+"We can't load the list of themes.","We can't load the list of themes."
 "You assigned a new theme to your store view.","You assigned a new theme to your store view."
 "You assigned a theme to your live store.","You assigned a theme to your live store."
 "This theme is not assigned.","This theme is not assigned."
 "Sorry, but you can't edit theme ""%1"".","Sorry, but you can't edit theme ""%1""."
-"This theme is not saved.","This theme is not saved."
-"You updated your live store.","You updated your live store."
-"You saved updates to this theme.","You saved updates to this theme."
 "Copy of [%1]","Copy of [%1]"
 "You saved a duplicate copy of this theme in ""My Customizations.""","You saved a duplicate copy of this theme in ""My Customizations."""
 "You cannot duplicate this theme.","You cannot duplicate this theme."
+"Sorry, something went wrong.","Sorry, something went wrong."
+"Sorry, but we can't load the theme list.","Sorry, but we can't load the theme list."
+"This theme is not saved.","This theme is not saved."
 "Theme ""%1"" is not editable.","Theme ""%1"" is not editable."
 "Theme ""%1"" reverted to last saved state","Theme ""%1"" reverted to last saved state"
 "Theme ""%1"" reverted to last default state","Theme ""%1"" reverted to last default state"
+"Invalid revert mode ""%1""","Invalid revert mode ""%1"""
 "Unknown error","Unknown error"
-"We can't find this theme.","We can't find this theme."
-"We can't load the list of themes.","We can't load the list of themes."
-"You updated the custom.css file.","You updated the custom.css file."
-"We cannot upload the CSS file.","We cannot upload the CSS file."
-"You updated the %1 file.","You updated the %1 file."
-"We can't save the custom css file.","We can't save the custom css file."
-"We cannot upload the JS file.","We cannot upload the JS file."
-"We saved the image sizes.","We saved the image sizes."
-"We can't save image sizes.","We can't save image sizes."
+"You updated your live store.","You updated your live store."
+"You saved updates to this theme.","You saved updates to this theme."
 "Something went wrong uploading the image.' ' Please check the file format and try again (JPEG, GIF, or PNG).","Something went wrong uploading the image.' ' Please check the file format and try again (JPEG, GIF, or PNG)."
 "The file can't be found or edited.","The file can't be found or edited."
 "This theme is not assigned to a store view #%1.","This theme is not assigned to a store view #%1."
+"We can't upload the CSS file right now.","We can't upload the CSS file right now."
+"You updated the %1 file.","You updated the %1 file."
+"We can't save the custom css file.","We can't save the custom css file."
+"We saved the image sizes.","We saved the image sizes."
+"We can't save image sizes.","We can't save image sizes."
+"You updated the custom.css file.","You updated the custom.css file."
+"We can't upload the JS file right now.","We can't upload the JS file right now."
+"Unknown control: ""%1","Unknown control: ""%1"
+"Unknown control: ""%1""","Unknown control: ""%1"""
+"Unknown control configuration type: ""%1""","Unknown control configuration type: ""%1"""
 "Sorry, but you cannot edit these theme styles.","Sorry, but you cannot edit these theme styles."
+title,title
+"No renderer registered for elements of class ""%1""","No renderer registered for elements of class ""%1"""
+"Cannot upload file.","Cannot upload file."
 "We can't find theme ""%1"".","We can't find theme ""%1""."
 "Wrong theme type set as editable","Wrong theme type set as editable"
 "Theme has not been set","Theme has not been set"
+Loading...,Loading...
+"Please wait...","Please wait..."
 "Upload an Image","Upload an Image"
 "Please assign this theme to a store view and upload your store logo.","Please assign this theme to a store view and upload your store logo."
 "Upload a Logo","Upload a Logo"
+"Magento Admin Panel","Magento Admin Panel"
 "Close Panel","Close Panel"
 "Page Text","Page Text"
 "Variable Text","Variable Text"
@@ -117,6 +114,7 @@ Duplicate,Duplicate
 "Update the CSS code to overwrite the default styles or upload your own CSS file.","Update the CSS code to overwrite the default styles or upload your own CSS file."
 "Upload File","Upload File"
 "Upload Custom CSS","Upload Custom CSS"
+"Delete File","Delete File"
 "Download File","Download File"
 "Image Assets","Image Assets"
 "Font Assets","Font Assets"
@@ -129,21 +127,31 @@ Duplicate,Duplicate
 "Browse Files","Browse Files"
 "Upload Files","Upload Files"
 "Create Folder","Create Folder"
+"Delete Folder","Delete Folder"
+"Collapse All","Collapse All"
+"Expand All","Expand All"
 "Edit Theme Name","Edit Theme Name"
 "Assigned to: ","Assigned to: "
 "There are no customized themes.","There are no customized themes."
 "Choose the store views you want to update.","Choose the store views you want to update."
 "Edit Theme","Edit Theme"
 "When you edit a theme, we save it as a unique version in ""My Customizations.""","When you edit a theme, we save it as a unique version in ""My Customizations."""
-"Something went wrong while loading the theme.","Something went wrong while loading the theme."
+"We could not detect a size.","We could not detect a size."
 "We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
+Cancel,Cancel
+"We can't load the theme right now.","We can't load the theme right now."
+"We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
+Error,Error
 "No stores were reassigned.","No stores were reassigned."
 "Assign theme to your live store-view:","Assign theme to your live store-view:"
 "Default title","Default title"
 "The URL to assign stores is not defined.","The URL to assign stores is not defined."
-"Some problem with revert action","Some problem with revert action"
+No,No
+Yes,Yes
+OK,OK
+"We can't revert right now.","We can't revert right now."
 "Error: unknown error.","Error: unknown error."
-"Some problem with save action","Some problem with save action"
+"We can't save right now.","We can't save right now."
+Delete,Delete
+Folder,Folder
 "Are you sure you want to delete the folder named","Are you sure you want to delete the folder named"
-"We could not detect a size.","We could not detect a size."
-"We don't recognize or support this file extension type.","We don't recognize or support this file extension type."

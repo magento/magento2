@@ -67,6 +67,7 @@ City,City
 "<pre>' '</pre>","<pre>' '</pre>"
 "CSS inlining error:","CSS inlining error:"
 "Error filtering template: %s","Error filtering template: %s"
+"We're sorry, an error has occurred while generating this email.","We're sorry, an error has occurred while generating this email."
 "Invalid sender data","Invalid sender data"
 Title,Title
 "Load default template","Load default template"

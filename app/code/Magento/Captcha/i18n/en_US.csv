@@ -1,10 +1,11 @@
+"Provided form does not exist","Provided form does not exist"
+"Incorrect CAPTCHA","Incorrect CAPTCHA"
 Always,Always
 "After number of attempts to login","After number of attempts to login"
-"Incorrect CAPTCHA","Incorrect CAPTCHA"
 "Incorrect CAPTCHA.","Incorrect CAPTCHA."
-"Please enter the letters from the image:","Please enter the letters from the image:"
-"Reload captcha","Reload captcha"
+"Please enter the letters from the image","Please enter the letters from the image"
 "<strong>Attention</strong>: Captcha is case sensitive.","<strong>Attention</strong>: Captcha is case sensitive."
+"Reload captcha","Reload captcha"
 "Please type the letters below","Please type the letters below"
 CAPTCHA,CAPTCHA
 "Enable CAPTCHA in Admin","Enable CAPTCHA in Admin"
