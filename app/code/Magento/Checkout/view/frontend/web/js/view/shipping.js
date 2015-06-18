@@ -22,6 +22,7 @@ define(
         'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/model/new-customer-address',
         'Magento_Checkout/js/model/step-navigator',
+        'Magento_Ui/js/modal/modal',
         'mage/translate'
     ],
     function(
@@ -42,12 +43,13 @@ define(
         setShippingInformationAction,
         newAddress,
         stepNavigator,
+        modal,
         $t
     ) {
         'use strict';
         var rates = window.checkoutConfig.shippingRates.data,
             rateKey = window.checkoutConfig.shippingRates.key;
-
+        var popUp = null;
         if (addressList().length == 0) {
             var address = new newAddress({});
             rateRegistry.set(address.getCacheKey(), rates);
@@ -75,6 +77,7 @@ define(
             quoteIsVirtual: quote.isVirtual(),
 
             initialize: function () {
+                var self = this;
                 this._super();
                 var shippingAddress = quote.shippingAddress();
                 if (!shippingAddress) {
@@ -96,14 +99,47 @@ define(
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
                 }
+
+                this.isFormPopUpVisible.subscribe(function(value) {
+                    if (value) {
+                        self.getPopUp().openModal();
+                    } else {
+                        self.getPopUp().closeModal();
+                    }
+                });
+
                 return this;
             },
 
             initElement: function(element) {
-                //@todo refactor this condition
                 if (this.isFormInline && element.index == 'shipping-address-fieldset') {
                     shippingRatesValidator.bindChangeHandlers(element.elems());
                 }
+            },
+
+            getPopUp: function() {
+                var self = this;
+                if (!popUp) {
+                    var buttons = this.popUpForm.options.buttons;
+                    this.popUpForm.options.buttons = [
+                        {
+                            text: buttons.save.text ? buttons.save.text : 'Save Address',
+                            class: buttons.save.class ? buttons.save.class : 'action primary action-save-address',
+                            click: self.saveNewAddress.bind(self)
+                        },
+                        {
+                            text: buttons.cancel.text ? buttons.cancel.text: 'Cancel',
+                            class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
+                            click: self.hideFormPopUp.bind(self)
+                        }
+                    ];
+                    this.popUpForm.options.modalCloseBtnCallback = {
+                        callback: self.hideFormPopUp.bind(self),
+                        context: self
+                    };
+                    popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
+                }
+                return popUp;
             },
 
             /** Show address form popup */

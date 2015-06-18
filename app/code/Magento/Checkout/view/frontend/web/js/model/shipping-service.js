@@ -24,7 +24,10 @@ define(
                 shippingRates(ratesData);
                 shippingRates.valueHasMutated();
 
-                if(quote.shippingMethod()) {
+                if (ratesData.length == 1) {
+                    //set shipping rate if we have only one available shipping rate
+                    selectShippingMethodAction(ratesData[0]);
+                } else if(quote.shippingMethod()) {
                     var rateIsAvailable = ratesData.some(function (rate) {
                         if (rate.carrier_code == quote.shippingMethod().carrier_code
                             && rate.method_code == quote.shippingMethod().method_code) {
