@@ -31,7 +31,7 @@
         <div class="actions-toolbar" id="review-buttons-container">
             <div class="primary">
                 <button data-role="review-save" type="submit"
-                        data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: isEnabled(item.code)"
+                        data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: (item.code == isEnabled)"
                         class="button action primary checkout"><span data-bind="text: $t('Place Order')"></span></button>
             </div>
         </div>
