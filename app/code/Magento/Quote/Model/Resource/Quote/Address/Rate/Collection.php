@@ -33,8 +33,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
