@@ -70,36 +70,9 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Add entity data to fulltext search table
-     *
-     * @param int $entityId
-     * @param int $storeId
-     * @param array $index
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
-    {
-        $this->_getWriteAdapter()
-            ->insert(
-                $this->getMainTable(),
-                ['product_id' => $entityId, 'store_id' => $storeId, 'data_index' => $index]
-            );
-
-        return $this;
-    }
-
-    /**
-     * Multi add entities data to fulltext search table
-     *
-     * @param int $storeId
-     * @param array $entityIndexes
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
+    public function saveIndex($storeId, $entityIndexes)
     {
         $data = [];
         foreach ($entityIndexes as $entityId => $productAttributes) {
@@ -181,26 +154,35 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Remove entity data from fulltext search table
-     *
-     * @param int $storeId
-     * @param int $entityId
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
+    public function deleteIndex($storeId = null, $entityIndexes = null)
     {
         $where = [];
 
-        if ($entityId !== null) {
+        if ($entityIndexes !== null) {
             $where[] = $this->_getWriteAdapter()
-                ->quoteInto('product_id IN (?)', $entityId);
+                ->quoteInto('product_id IN (?)', $entityIndexes);
         }
 
         $this->_getWriteAdapter()
             ->delete($this->getMainTable(), $where);
 
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cleanIndex($storeId = null)
+    {
+        if ($storeId === null ) {
+            $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        }
+
+        $where[] = $this->_getWriteAdapter()
+            ->quoteInto('store_id IN (?)', $storeId);
+        $this->_getWriteAdapter()->delete($this->getMainTable());
         return $this;
     }
 
@@ -217,11 +199,9 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Define if engine is available
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function test()
+    public function isAvailable()
     {
         return true;
     }

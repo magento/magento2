@@ -204,7 +204,12 @@ class Full
      */
     public function reindexAll()
     {
-        $this->rebuildIndex();
+        $storeIds = array_keys($this->storeManager->getStores());
+        foreach ($storeIds as $storeId) {
+            $this->cleanIndex($storeId);
+            $this->rebuildStoreIndex($storeId);
+        }
+        $this->searchRequestConfig->reset();
     }
 
     /**
@@ -244,7 +249,7 @@ class Full
     }
 
     /**
-     * Regenerate search index for store(s)
+     * Regenerate search index for all stores
      *
      * @param int|array|null $productIds
      * @return void
@@ -253,6 +258,7 @@ class Full
     {
         $storeIds = array_keys($this->storeManager->getStores());
         foreach ($storeIds as $storeId) {
+            $this->deleteIndex($storeId, $productIds);
             $this->rebuildStoreIndex($storeId, $productIds);
         }
         $this->searchRequestConfig->reset();
@@ -269,8 +275,6 @@ class Full
      */
     protected function rebuildStoreIndex($storeId, $productIds = null)
     {
-        $this->cleanIndex($storeId, $productIds);
-
         // prepare searchable attributes
         $staticFields = [];
         foreach ($this->getSearchableAttributes('static') as $attribute) {
@@ -408,16 +412,29 @@ class Full
     }
 
     /**
+     * Clean search index data for store
+     *
+     * @param int $storeId Store View Id
+     * @return void
+     */
+    protected function cleanIndex($storeId = null)
+    {
+        if ($this->engineProvider->get()) {
+            $this->engineProvider->get()->cleanIndex($storeId);
+        }
+    }
+
+    /**
      * Delete search index data for store
      *
      * @param int $storeId Store View Id
-     * @param int $productId Product Entity Id
+     * @param array $productId Product Entity Id
      * @return void
      */
-    protected function cleanIndex($storeId = null, $productId = null)
+    protected function deleteIndex($storeId = null, $productIds = null)
     {
         if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->cleanIndex($storeId, $productId);
+            $this->engineProvider->get()->deleteIndex($storeId, $productIds);
         }
     }
 
@@ -745,7 +762,7 @@ class Full
     protected function saveProductIndexes($storeId, $productIndexes)
     {
         if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->saveEntityIndexes($storeId, $productIndexes);
+            $this->engineProvider->get()->saveIndex($storeId, $productIndexes);
         }
 
         return $this;
