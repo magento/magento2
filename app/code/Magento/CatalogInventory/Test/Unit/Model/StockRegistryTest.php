@@ -27,6 +27,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $criteriaFactory = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $criteriaFactory->expects($this->once())->method('create')->willReturn($this->criteria);
