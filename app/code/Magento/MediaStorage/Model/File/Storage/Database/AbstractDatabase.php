@@ -16,13 +16,6 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
     const CONNECTION_DEFAULT = 'default_setup';
 
     /**
-     * Store media base directory path
-     *
-     * @var string
-     */
-    protected $_mediaBaseDirectory = null;
-
-    /**
      * Core file storage database
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
