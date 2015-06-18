@@ -1374,7 +1374,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $dispersionPath =
                         \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
                     $imageName = preg_replace('/[^a-z0-9\._-]+/i', '', $rowData[self::COL_MEDIA_IMAGE]);
-                    $fullDispersionPath = strtolower($dispersionPath . '/' . $imageName);
+                    $fullDispersionPath = mb_strtolower($dispersionPath . '/' . $imageName);
                     foreach ($this->cachedImages as $image) {
                         if (($image['sku'] == $rowData[self::COL_SKU])
                             && ($image['value'] == $fullDispersionPath)
