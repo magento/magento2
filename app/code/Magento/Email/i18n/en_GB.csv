@@ -1,0 +1,74 @@
+Back,Back
+ID,ID
+Action,Action
+Reset,Reset
+Country,Country
+City,City
+"Zip/Postal Code","Zip/Postal Code"
+Preview,Preview
+%1,%1
+"Insert Variable...","Insert Variable..."
+Subject,Subject
+Unknown,Unknown
+Updated,Updated
+"Add New Template","Add New Template"
+"Transactional Emails","Transactional Emails"
+"Delete Template","Delete Template"
+"Convert to Plain Text","Convert to Plain Text"
+"Return Html Version","Return Html Version"
+"Preview Template","Preview Template"
+"Save Template","Save Template"
+"Load Template","Load Template"
+"Edit Email Template","Edit Email Template"
+"New Email Template","New Email Template"
+GLOBAL,GLOBAL
+"Template Information","Template Information"
+"Used Currently For","Used Currently For"
+"Used as Default For","Used as Default For"
+"Template Name","Template Name"
+"Template Subject","Template Subject"
+"Template Content","Template Content"
+"Template Styles","Template Styles"
+"Email Templates","Email Templates"
+"Edit Template","Edit Template"
+"Edit System Template","Edit System Template"
+"New Template","New Template"
+"New System Template","New System Template"
+"This email template no longer exists.","This email template no longer exists."
+"The email template has been saved.","The email template has been saved."
+"The email template has been deleted.","The email template has been deleted."
+"The email template is currently being used.","The email template is currently being used."
+"An error occurred while deleting email template data. Please review log and try again.","An error occurred while deleting email template data. Please review log and try again."
+"We can't find an email template to delete.","We can't find an email template to delete."
+"An error occurred. The email template can not be opened for preview.","An error occurred. The email template can not be opened for preview."
+"Base Unsecure URL","Base Unsecure URL"
+"Base Secure URL","Base Secure URL"
+"General Contact Name","General Contact Name"
+"General Contact Email","General Contact Email"
+"Sales Representative Contact Name","Sales Representative Contact Name"
+"Sales Representative Contact Email","Sales Representative Contact Email"
+"Custom1 Contact Name","Custom1 Contact Name"
+"Custom1 Contact Email","Custom1 Contact Email"
+"Custom2 Contact Name","Custom2 Contact Name"
+"Custom2 Contact Email","Custom2 Contact Email"
+"Store Name","Store Name"
+"Store Phone Number","Store Phone Number"
+Region/State,Region/State
+"Street Address 1","Street Address 1"
+"Street Address 2","Street Address 2"
+"Store Contact Information","Store Contact Information"
+"Template Variables","Template Variables"
+"The template Name must not be empty.","The template Name must not be empty."
+"Duplicate Of Template Name","Duplicate Of Template Name"
+"Invalid transactional email code: %1","Invalid transactional email code: %1"
+"Requested invalid store ""%1""","Requested invalid store ""%1"""
+"Invalid sender data","Invalid sender data"
+"Load default template","Load default template"
+Template,Template
+"Are you sure that you want to strip tags?","Are you sure that you want to strip tags?"
+"Are you sure that you want to delete this template?","Are you sure that you want to delete this template?"
+"Failed to load template. See error log for details.","Failed to load template. See error log for details."
+"Email Preview","Email Preview"
+"No Templates Found","No Templates Found"
+Added,Added
+"Template Type","Template Type"

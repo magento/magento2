@@ -1,0 +1,22 @@
+Action,Action
+Tax,Vat
+Website,Website
+"All Websites","All Websites"
+"Add Tax","Add Vat"
+"Delete Tax","Delete Vat"
+"We found a duplicate of website, country and state fields for a fixed product tax","We found a duplicate of website, country and County fields for a fixed product tax"
+"Including FPT only","Including FPT only"
+"Including FPT and FPT description","Including FPT and FPT description"
+"Excluding FPT, FPT description, final price","Excluding FPT, FPT description, final price"
+"Excluding FPT","Excluding FPT"
+"Fixed Product Tax","Fixed Product Tax"
+Country/State,Country/State
+"Fixed Product Taxes","Fixed Product Taxes"
+"Enable FPT","Enable FPT"
+"Display Prices In Product Lists","Display Prices In Product Lists"
+"Display Prices On Product View Page","Display Prices On Product View Page"
+"Display Prices In Sales Modules","Display Prices In Sales Modules"
+"Display Prices In Emails","Display Prices In Emails"
+"Apply Tax To FPT","Apply Tax To FPT"
+"Include FPT In Subtotal","Include FPT In Subtotal"
+"FPT","FPT"
