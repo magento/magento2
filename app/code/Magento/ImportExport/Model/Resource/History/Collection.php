@@ -46,14 +46,4 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         return $this;
     }
-
-    /**
-     * Retrieve import in process
-     *
-     * @return array
-     */
-    public function getImportInProcess()
-    {
-        return $this->getItemsByColumnValue(History::EXECUTION_TIME, History::IMPORT_IN_PROCESS);
-    }
 }
