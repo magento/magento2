@@ -87,19 +87,25 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('combineQueries')
-            ->willReturnCallback(function(array $queries, $expression) {
-                return implode(' ' . $expression . ' ', $queries);
-            });
+            ->willReturnCallback(
+                function (array $queries, $expression) {
+                    return implode(' ' . $expression . ' ', $queries);
+                }
+            );
         $this->conditionManager->expects($this->any())
             ->method('wrapBrackets')
-            ->willReturnCallback(function($expression) {
-                return '(' . $expression . ')';
-            });
+            ->willReturnCallback(
+                function ($expression) {
+                    return '(' . $expression . ')';
+                }
+            );
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->willReturnCallback(function($left, $operator, $right) {
-                return $left . $operator . $right;
-            });
+            ->willReturnCallback(
+                function ($left, $operator, $right) {
+                    return $left . $operator . $right;
+                }
+            );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -203,7 +209,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnCallback(
                     function ($index, $suffix) {
-                        return $index . '_' . ($suffix ? 'index_' . $suffix : 'index_default' );
+                        return $index . '_' . ($suffix ? 'index_' . $suffix : 'index_default');
                     }
                 )
             );
@@ -211,7 +217,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->once())
             ->method('from')
             ->with(
-                ['search_index' => $index . '_'. $tableSuffix],
+                ['search_index' => $index . '_' . $tableSuffix],
                 ['entity_id' => 'product_id']
             )
             ->will($this->returnSelf());
