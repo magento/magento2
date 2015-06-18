@@ -52,7 +52,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         );
         $this->actionFactoryMock = $this->getMock(
             'Magento\Indexer\Model\ActionFactory',
-            ['get'],
+            ['create'],
             [],
             '',
             false
@@ -228,7 +228,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->actionFactoryMock->expects(
             $this->once()
         )->method(
-            'get'
+            'create'
         )->with(
             'Some\Class\Name'
         )->will(
@@ -283,7 +283,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->actionFactoryMock->expects(
             $this->once()
         )->method(
-            'get'
+            'create'
         )->with(
             'Some\Class\Name'
         )->will(
@@ -478,7 +478,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->actionFactoryMock->expects(
             $this->once()
         )->method(
-            'get'
+            'create'
         )->will(
             $this->returnValue($actionMock)
         );
@@ -511,7 +511,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->actionFactoryMock->expects(
             $this->once()
         )->method(
-            'get'
+            'create'
         )->will(
             $this->returnValue($actionMock)
         );

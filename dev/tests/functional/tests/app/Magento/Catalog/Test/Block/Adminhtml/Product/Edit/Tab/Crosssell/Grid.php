@@ -6,13 +6,10 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell;
 
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
-
 /**
- * Class Grid
- * Cross sell products grid
+ * Cross sell products grid.
  */
-class Grid extends GridInterface
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
      * Grid fields map

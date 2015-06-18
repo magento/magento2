@@ -6,15 +6,17 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
+abstract class AbstractDb extends AbstractResource implements SourceProviderInterface
 {
     /**
      * Cached resources singleton

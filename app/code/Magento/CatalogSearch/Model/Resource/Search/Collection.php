@@ -142,7 +142,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
     /**
      * Retrieve collection of all attributes
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     protected function _getAttributesCollection()
     {
