@@ -41,35 +41,9 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
         $this->model->reindex($outputMock);
     }
 
-    public function testLoadFixtures()
-    {
-        // Necessary so that the FixtureModel has an ObjectManager instantiated otherwise this test fails.
-        $this->model->getObjectManager();
-        $this->model->loadFixtures();
-    }
-
-    public function testGetParamLabels()
-    {
-        $this->assertSame([], $this->model->getParamLabels());
-    }
-
-    public function testGetFixtures()
-    {
-        $this->assertSame([], $this->model->getFixtures());
-    }
-
-    public function testInitObjectManager()
-    {
-        $this->assertSame($this->model, $this->model->initObjectManager());
-    }
-
-    public function testResetObjectManager()
-    {
-        $this->assertSame($this->model, $this->model->resetObjectManager());
-    }
-
     /**
      * @expectedException \Exception
+     * @expectedExceptionMessage Profile configuration file `exception.file` is not readable or does not exists.
      */
     public function testLoadConfigException()
     {
