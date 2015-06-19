@@ -40,6 +40,11 @@
                         display: block;
                     }
                 }
+                .action {
+                    &.primary {
+                        &:extend(.abs-button-l all);
+                    }
+                }
             }
 
             .payment-method-title {
@@ -101,11 +106,22 @@
                     .css(padding, @checkout-billing-address-details__padding);
                 }
             }
+
+            .payment-method-note {
+                & + .payment-method-billing-address {
+                    margin-top: @indent__base;
+                }
+            }
         }
         .field-select-billing {
             > .label {
                 &:extend(.abs-visually-hidden all);
             }
+        }
+        .payment-method-iframe {
+            &:extend(.abs-no-display all);
+            background-color: transparent;
+            width: 100%;
         }
         .no-payments-block {
             .css(margin, @indent__base 0);
@@ -168,7 +184,7 @@
         }
         .actions-toolbar {
             .action-cancel {
-                margin-top: 6px;
+                margin: 6px @indent__base 0 0;
             }
         }
     }
