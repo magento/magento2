@@ -6,8 +6,9 @@
 define([
     "jquery",
     "mage/template",
+    "Magento_Checkout/js/action/set-payment-information",
     "jquery/ui"
-], function($, mageTemplate){
+], function($, mageTemplate, setPaymentInformationAction){
     "use strict";
 
     $.widget('mage.transparent', {
@@ -45,9 +46,25 @@ define([
          */
         _placeOrderHandler: function() {
             if (this.element.validation && this.element.validation('isValid')) {
-                this._orderSave();
+                this._savePaymentInformation();
             }
             return false;
+        },
+
+        /**
+         * Save quote payment information
+         * @private
+         */
+        _savePaymentInformation: function() {
+            var self = this,
+                deferred = $.Deferred();
+
+            $.when(deferred).done(function() {
+                self._orderSave();
+            }).fail( function() {
+                alert('Something goes wrong');
+            });
+            setPaymentInformationAction(deferred);
         },
 
         /**
@@ -104,6 +121,10 @@ define([
                     action: this.options.cgiUrl,
                     inputs: data
                 }
+            });
+
+            $(iframeSelector).submit(function(event) {
+                console.log(event);
             });
 
             $(tmpl).appendTo($(iframeSelector)).submit();

@@ -9,7 +9,7 @@
 
         <div class="payment-method-title field choice">
             <input type="radio"
-                   name="payment"
+                   name="payment[method]"
                    class="radio"
                    data-bind="attr: {'id': item.code}, value: item.code, checked: isChecked, click: selectPaymentMethod"/>
             <label data-bind="attr: {'for': item.code}" class="label">
