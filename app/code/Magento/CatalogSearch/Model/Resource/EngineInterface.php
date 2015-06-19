@@ -9,7 +9,7 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-interface EngineInterface extends \Magento\Framework\Search\IndexerInterface
+interface EngineInterface extends \Magento\Framework\Indexer\IndexerInterface
 {
     /**
      * Retrieve allowed visibility values for current engine

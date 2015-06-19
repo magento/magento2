@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Store\Model\Store;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
@@ -72,18 +74,16 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex(array $entityIndexes)
+    public function saveIndex(Dimension $dimension, \Iterator $entityIndexes)
     {
         $data = [];
+        $storeId = $dimension->getName() == 'store_id' ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
         foreach ($entityIndexes as $entityId => $productAttributes) {
-            if ($entityId == 'store_id') {
-                continue;
-            }
             foreach ($productAttributes as $attributeId => $indexValue) {
                 $data[] = [
                     'product_id' => (int)$entityId,
                     'attribute_id' =>(int)$attributeId,
-                    'store_id' => (int)$entityIndexes['store_id'],
+                    'store_id' => (int)$storeId,
                     'data_index' => $indexValue
                 ];
             }
@@ -159,13 +159,13 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function deleteIndex(array $entityIndexes = null)
+    public function deleteIndex(Dimension $dimension, \Iterator $entityIds)
     {
         $where = [];
-
-        if ($entityIndexes !== null) {
+        $entityIds = iterator_to_array($entityIds);
+        if ($entityIds !== null) {
             $where[] = $this->_getWriteAdapter()
-                ->quoteInto('product_id IN (?)', $entityIndexes);
+                ->quoteInto('product_id IN (?)', $entityIds);
         }
 
         $this->_getWriteAdapter()
