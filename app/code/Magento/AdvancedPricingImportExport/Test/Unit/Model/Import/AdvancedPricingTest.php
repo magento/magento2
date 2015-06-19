@@ -197,6 +197,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'deleteProductTierAndGroupPrices',
             'getBehavior',
             'saveAndReplaceAdvancedPrices',
+            'processCountExistingPrices',
+            'processCountNewPrices'
         ]);
 
         $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
@@ -361,6 +363,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             [$expectedTierPrices, AdvancedPricing::TABLE_TIER_PRICE],
             [$expectedGroupPrices, AdvancedPricing::TABLE_GROUPED_PRICE]
         )->will($this->returnSelf());
+
+        $this->advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $this->advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
 
         $result = $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
 
@@ -749,6 +754,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      *
      * @param $object
      * @param $property
+     * @return mixed
      */
     protected function getPropertyValue($object, $property)
     {
