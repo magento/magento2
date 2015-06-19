@@ -77,6 +77,11 @@ class EngineProvider
             if ($engine && $engine->isAvailable()) {
                 $this->engine = $engine;
             }
+            if ($engine && $engine->isAvailable()) {
+                throw new \LogicException(
+                    'Engine is not available: ' . $currentEngine
+                );
+            }
         }
 
         return $this->engine;
