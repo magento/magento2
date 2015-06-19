@@ -137,12 +137,6 @@ class Template extends AbstractBlock
         $this->templateContext = $this;
         $this->pageConfig = $context->getPageConfig();
         parent::__construct($context, $data);
-        $this->validator->setIsAllowSymlinks(
-            $this->_scopeConfig->isSetFlag(
-                self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
     }
 
     /**
@@ -320,22 +314,6 @@ class Template extends AbstractBlock
             $this->getTemplateFile(),
             'template' => $this->getTemplate()
         ];
-    }
-
-    /**
-     * Get is allowed symliks flag
-     *
-     * @return bool
-     */
-    protected function isAllowSymlinks()
-    {
-        if (null === $this->_allowSymlinks) {
-            $this->_allowSymlinks = $this->_scopeConfig->isSetFlag(
-                self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-        }
-        return $this->_allowSymlinks;
     }
 
     /**
