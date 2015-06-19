@@ -14,20 +14,85 @@
 @icons-upgrade__font-name: 'Icons';
 @icons-upgrade__font-name-path: '../../fonts/icons/icons';
 
-@icon-success__content: '\e601';
-@icon-failed__content: '\e604';
-@icon-collapse__content: '\e602';
-@icon-expand__content: '\e605';
-@icon-success-thick__content: '\e600';
-@icon-failed-thick__content: '\e603';
-@icon-success-messages__content: '\e62d';
-@icon-error-messages__content: '\e632';
-@icon-warning-messages__content: '\e623';
-@icon-notice-messages__content: '\e61a';
-
 .font-face(
     @family-name: @icons-upgrade__font-name,
     @font-path: @icons-upgrade__font-name-path,
     @font-weight: normal,
     @font-style: normal
 );
+
+@icon-info__content: '\e61a';
+@icon-lock__content: '\e61b';
+@icon-loop__content: '\e61c';
+@icon-plus__content: '\e61d';
+@icon-recover__content: '\e61e';
+@icon-refresh__content: '\e61f';
+@icon-remove-small__content: '\e620';
+@icon-retweet__content: '\e621';
+@icon-unlocked__content: '\e622';
+@icon-warning__content: '\e623';
+@icon-arrow-left__content: '\e624';
+@icon-arrow-right__content: '\e625';
+@icon-back-arrow__content: '\e626';
+@icon-calendar__content: '\e627';
+@icon-caret-down__content: '\e628';
+@icon-caret-left__content: '\e629';
+@icon-caret-right__content: '\e62a';
+@icon-caret-up__content: '\e62b';
+@icon-ccw__content: '\e62c';
+@icon-check-mage__content: '\e62d';
+@icon-clock__content: '\e62e';
+@icon-close-mage__content: '\e62f';
+@icon-delete__content: '\e630';
+@icon-edit__content: '\e631';
+@icon-error__content: '\e632';
+@icon-help__content: '\e633';
+@icon-history__content: '\e634';
+@icon-gripper__content: '\e617';
+@icon-forward__content: '\e618';
+@icon-backward__content: '\e619';
+@icon-expand-close__content: '\e615';
+@icon-expand-open__content: '\e616';
+@icon-system-config__content: '\e610';
+@icon-home__content: '\e611';
+@icon-lego__content: '\e612';
+@icon-tool__content: '\e613';
+@icon-upgrade__content: '\e614';
+@icon-notification-02__content: '\e607';
+@icon-product__content: '\e608';
+@icon-logo__content: '\e606';
+@icon-account__content: '\e600';
+@icon-arrowdown__content: '\e601';
+@icon-cms__content: '\e602';
+@icon-customers__content: '\e603';
+@icon-dashboard__content: '\e604';
+@icon-filter__content: '\e605';
+@icon-promotions__content: '\e609';
+@icon-reports__content: '\e60a';
+@icon-sales__content: '\e60b';
+@icon-search__content: '\e60c';
+@icon-stores__content: '\e60d';
+@icon-systems__content: '\e60e';
+@icon-views__content: '\e60f';
+
+.icon-success,
+.icon-failed {
+    &:before {
+        &:extend(.abs-icon all);
+        font-family: @icons__font-family;
+    }
+}
+
+.icon-success {
+    color: @color-success;
+    &:before {
+        content: @icon-check-mage__content;
+    }
+}
+
+.icon-failed {
+    color: @color-failed;
+    &:before {
+        content: @icon-error__content;
+    }
+}

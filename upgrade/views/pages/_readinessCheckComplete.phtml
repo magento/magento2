@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navReadinessCheckComplete.phtml') ?>
+
+<h2 class="page-sub-title">Step 1: Readiness Check</h2>
+
+<div class="message message-success">
+    <span class="message-text"><strong>Completed!</strong></span>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">PHP Version Check</h3>
+        <p class="text-stretch">
+            Your PHP version is correct (x.x.x).
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">PHP Extensions Check</h3>
+        <p class="text-stretch">
+            You meet 11 out of 11 PHP extensions requirements.
+            <a href="#show"><span>Show details</span></a>
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+
+    <span class="readiness-check-icon icon-success"></span>
+
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">File Permission Check</h3>
+        <p class="text-stretch">
+            You meet 4 out of 4 writable file permission requirements.
+            <a href="#hide"><span>Hide details</span></a>
+        </p>
+        <ul class="list">
+            <li class="list-item-success">
+                "C:/Projects/magento2/magento2ce/app/etc" writable directory permission.
+            </li>
+            <li class="list-item-success">
+                "C:/Projects/magento2/magento2ce/var" writable directory permission.
+            </li>
+            <li class="list-item-success">
+                "C:/Projects/magento2/magento2ce/pub/media" writable directory permission.
+            </li>
+            <li class="list-item-success">
+                "C:/Projects/magento2/magento2ce/pub/static" writable directory permission.
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Module and Component Dependencies Check</h3>
+        <p class="text-stretch">
+            You have no dependency conflicts
+        </p>
+    </div>
+</div>

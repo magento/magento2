@@ -46,7 +46,8 @@ dl {
 }
 
 .list-item-success,
-.list-item-failed {
+.list-item-failed,
+.list-item-warning {
     padding-left: @list-item-icon__indent-left;
     &:before {
         font-family: @icons__font-family;
@@ -68,6 +69,13 @@ dl {
     &:before {
         color: @color-failed;
         content: @icon-failed__content;
+    }
+}
+
+.list-item-warning {
+    &:before {
+        color: @color-warning;
+        content: @icon-warning__content;
     }
 }
 
