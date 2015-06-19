@@ -8,9 +8,9 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Factory class for @see
- * \Magento\Framework\Api\ExtensionAttribute\JoinData
+ * \Magento\Framework\Api\ExtensionAttribute\JoinDataInterface
  */
-class JoinDataFactory
+class JoinDataInterfaceFactory
 {
     /**
      * Object Manager instance
@@ -34,7 +34,7 @@ class JoinDataFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\Api\\ExtensionAttribute\\JoinData'
+        $instanceName = '\\Magento\\Framework\\Api\\ExtensionAttribute\\JoinDataInterface'
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
