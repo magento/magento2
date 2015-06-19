@@ -70,7 +70,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->storeMock);
 
         $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
-            ->disableOriginalConstructor()
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
