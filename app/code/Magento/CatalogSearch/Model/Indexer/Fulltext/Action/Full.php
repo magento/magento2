@@ -77,13 +77,6 @@ class Full
     protected $catalogProductType;
 
     /**
-     * Catalog search data
-     *
-     * @var \Magento\CatalogSearch\Helper\Data
-     */
-    protected $catalogSearchData;
-
-    /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
@@ -158,7 +151,6 @@ class Full
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
      * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -178,7 +170,6 @@ class Full
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -195,7 +186,6 @@ class Full
         $this->catalogProductStatus = $catalogProductStatus;
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->eventManager = $eventManager;
-        $this->catalogSearchData = $catalogSearchData;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->engineProvider = $engineProvider;
@@ -429,10 +419,8 @@ class Full
      */
     protected function cleanIndex($storeId)
     {
-        if ($this->engineProvider->get()) {
-            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
-            $this->engineProvider->get()->cleanIndex($dimension);
-        }
+        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $this->engineProvider->get()->cleanIndex($dimension);
     }
 
     /**
@@ -444,11 +432,9 @@ class Full
      */
     protected function deleteIndex($storeId = null, $productIds = null)
     {
-        if ($this->engineProvider->get()) {
-            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
-            $productIds = new \ArrayObject($productIds);
-            $this->engineProvider->get()->deleteIndex($dimension, $productIds->getIterator());
-        }
+        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $productIds = new \ArrayObject($productIds);
+        $this->engineProvider->get()->deleteIndex($dimension, $productIds->getIterator());
     }
 
     /**
@@ -726,11 +712,7 @@ class Full
             $index['options'] = $data;
         }
 
-        if ($this->engineProvider->get()) {
-            return $this->engineProvider->get()->prepareEntityIndex($index, $this->separator);
-        }
-
-        return $this->catalogSearchData->prepareIndexdata($index, $this->separator);
+        return $this->engineProvider->get()->prepareEntityIndex($index, $this->separator);
     }
 
     /**
@@ -774,11 +756,9 @@ class Full
      */
     protected function saveProductIndexes($storeId, array $productIndexes)
     {
-        if ($this->engineProvider->get()) {
-            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
-            $productIndexes = new \ArrayObject($productIndexes);
-            $this->engineProvider->get()->saveIndex($dimension, $productIndexes->getIterator());
-        }
+        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $productIndexes = new \ArrayObject($productIndexes);
+        $this->engineProvider->get()->saveIndex($dimension, $productIndexes->getIterator());
 
         return $this;
     }
