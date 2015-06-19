@@ -35,7 +35,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
-            ->disableOriginalConstructor()
             ->getMock();
 
         $this->resourceMock
