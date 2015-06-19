@@ -54,6 +54,18 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
+    <virtualType name="AddressRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Address\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\Resource\Quote\Address">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">AddressRelationsComposite</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Quote\Api\AddressDetailsManagementInterface" type="Magento\Quote\Model\AddressDetailsManagement" />
     <preference for="Magento\Quote\Api\Data\AddressDetailsInterface" type="Magento\Quote\Model\AddressDetails" />
     <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
