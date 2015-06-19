@@ -116,7 +116,7 @@ class Converter implements ConverterInterface
                         $data['fieldsets'][$this->getAttributeValue($node, 'name')]
                     );
                     break;
-                case 'reference': {
+                case 'reference':
                     $data['fieldsets'][$this->getAttributeValue($node, 'name')]['reference'] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
                         'from'     => $this->getAttributeValue($childNode, 'from'),
@@ -132,7 +132,7 @@ class Converter implements ConverterInterface
                         $this->getAttributeValue($childNode, 'from'),
                         $data
                     );
-                } break;
+                    break;
             }
         }
         return $data;
