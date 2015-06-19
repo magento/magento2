@@ -59,6 +59,11 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $rateResourceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $joinProcessorMock;
+
     public function setUp()
     {
         $this->rateConverterMock = $this->getMock(
@@ -117,6 +122,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->joinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new RateRepository(
             $this->rateConverterMock,
             $this->rateRegistryMock,
@@ -124,7 +136,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->rateFactoryMock,
             $this->countryFactoryMock,
             $this->regionFactoryMock,
-            $this->rateResourceMock
+            $this->rateResourceMock,
+            $this->joinProcessorMock
         );
     }
 
@@ -255,6 +268,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
+
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
 
         $this->model->getList($searchCriteriaMock);
     }
@@ -401,6 +416,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
+
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
 
         $this->model->getList($searchCriteriaMock);
     }
