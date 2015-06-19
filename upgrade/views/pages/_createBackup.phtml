@@ -1,0 +1,114 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navCreateBackup.phtml') ?>
+
+<section class="page-inner-wrap">
+    <h2 class="page-sub-title">Step 2: Create Backup</h2>
+
+    <div class="message message-warning">
+        <span class="message-text">
+            We'll put your store into maintenance mode to protect your shoppers during the upgrade.
+        </span>
+    </div>
+
+    <fieldset class="form-fieldset">
+
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label">
+                    Backup Options
+                </label>
+            </div>
+            <div class="col-m-4">
+                <div class="form-row">
+                    <input
+                        id="dbMedia"
+                        class="form-el-radio"
+                        name="backup"
+                        checked
+                        type="radio">
+                    <label
+                        class="form-label"
+                        for="dbMedia">Database and Media</label>
+                </div>
+                <div class="form-row">
+                    <input
+                        id="db"
+                        class="form-el-radio"
+                        name="backup"
+                        type="radio">
+                    <label
+                        class="form-label"
+                        for="db">Database</label>
+                </div>
+                <div class="form-row">
+                    <input
+                        id="system"
+                        class="form-el-radio"
+                        name="backup"
+                        type="radio">
+                    <label
+                        class="form-label"
+                        for="system">System</label>
+                </div>
+                <div class="form-row">
+                    <input
+                        id="systemExlMedia"
+                        class="form-el-radio"
+                        name="backup"
+                        type="radio">
+                    <label
+                        class="form-label"
+                        for="systemExlMedia">System (excluding media)</label>
+                </div>
+                <div class="form-row">
+                    <input
+                        id="none"
+                        class="form-el-radio"
+                        name="backup"
+                        type="radio">
+                    <label
+                        class="form-label"
+                        for="none">None - do not backup</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label" for="backupName">
+                    Backup Name
+                </label>
+            </div>
+            <div class="col-m-4">
+                <div class="form-row">
+                    <input
+                        id="backupName"
+                        class="form-el-input"
+                        type="text"
+                        value=""
+                        name="backupName">
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-row">
+            <div class="col-m-4 col-m-offset-3">
+                <div class="form-row">
+                    <button
+                        class="btn btn-large btn-prime"
+                        type="button">Create Backup</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </fieldset>
+
+</section>
