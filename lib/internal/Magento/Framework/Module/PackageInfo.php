@@ -119,6 +119,18 @@ class PackageInfo
     }
 
     /**
+     * Get package name of a module
+     *
+     * @param string $moduleName
+     * @return string
+     */
+    public function getPackageName($moduleName)
+    {
+        $this->load();
+        return array_search($moduleName, $this->packageModuleMap) ?: '';
+    }
+
+    /**
      * Convert an array of package names to module names
      *
      * @param string[] $packageNames

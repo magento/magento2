@@ -10,7 +10,6 @@ class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -22,8 +21,17 @@ class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             return;
         }
 
-        $model->delete();
-        $this->messageManager->addSuccess(__('The condition has been deleted.'));
-        $this->_redirect('checkout/*/');
+        try {
+            $model->delete();
+            $this->messageManager->addSuccess(__('The condition has been deleted.'));
+            $this->_redirect('checkout/*/');
+            return;
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));
+        }
+
+        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 }
