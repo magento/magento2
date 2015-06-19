@@ -43,6 +43,28 @@
                 <label class="form-label" for="useSampleData">
                     Use Sample Data
                 </label>
+
+                <?php if ($this->isSampleDataInstalled || $this->isSampleDataErrorInstallation): ?>
+                    <div class="customize-database-clean">
+                        <p>
+                            <?php if ($this->isSampleDataInstalled): ?>
+                                You have already installed sample data. If you want to re-install it, your database has to be cleaned up
+                            <?php endif; ?>
+                            <?php if ($this->isSampleDataErrorInstallation): ?>
+                                Your sample data is broken. If you want to re-install it, your database has to be cleaned up
+                            <?php endif; ?>
+                        </p>
+                        <input
+                            type="checkbox"
+                            ng-model="store.cleanUpDatabase"
+                            class="form-el-checkbox"
+                            id="cleanUpDatabase"
+                            >
+                        <label class="form-label" for="cleanUpDatabase">
+                            Clean up automatically
+                        </label>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

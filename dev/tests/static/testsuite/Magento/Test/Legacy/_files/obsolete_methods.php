@@ -768,6 +768,9 @@ return [
     ['postDispatchMyAccountSave'],
     ['postDispatchSystemImportExportRun'],
     ['prepareAttributesForSave', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['getAffectedEntityIds', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['getCategoryWithRoot', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
+    ['getCategory', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
     ['prepareGoogleOptimizerScripts'],
     ['prepareRedirect', 'Magento\Core\Controller\Varien\Exception'],
     ['preparePriceAlertData', 'Magento\ProductAlert\Block\Product\View'],
@@ -2242,4 +2245,5 @@ return [
     ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
 ];

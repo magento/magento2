@@ -253,7 +253,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     {
         $totalAmount = $item->getRowTotal()
             + $item->getTaxAmount()
-            + $item->getHiddenTaxAmount()
+            + $item->getDiscountTaxCompensationAmount()
             + $item->getWeeeTaxAppliedRowAmount()
             - $item->getDiscountAmount();
 
