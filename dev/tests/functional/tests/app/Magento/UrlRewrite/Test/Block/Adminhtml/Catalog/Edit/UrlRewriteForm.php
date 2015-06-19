@@ -17,6 +17,41 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class UrlRewriteForm extends Form
 {
     /**
+     * Get target path value for url rewrite fixture.
+     *
+     * @param FixtureInterface $fixture
+     * @return string|void
+     */
+    protected function getTargetPath(FixtureInterface $fixture)
+    {
+        $data = $fixture->getData();
+        if (empty($data['entity_type']) && empty($this->getData()['target_path']) && !isset($data['target_path'])) {
+            $entity = $fixture->getDataFieldConfig('target_path')['source']->getEntity();
+            return $entity->hasData('identifier')
+                ? $entity->getIdentifier()
+                : $entity->getUrlKey() . '.html';
+        }
+    }
+
+    /**
+     * Fill visible fields on the form.
+     *
+     * @param array $data
+     * @param SimpleElement $context
+     * @retun void
+     */
+    protected function fillFields(array $data, SimpleElement $context)
+    {
+        $mapping = $this->dataMapping($data);
+        foreach ($mapping as $field) {
+            $element = $this->getElement($context, $field);
+            if ($element->isVisible() && !$element->isDisabled()) {
+                $element->setValue($field['value']);
+            }
+        }
+    }
+
+    /**
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
@@ -31,12 +66,7 @@ class UrlRewriteForm extends Form
     ) {
         $context = ($element === null) ? $this->_rootElement : $element;
         $data = $fixture->getData();
-        if (empty($data['entity_type']) && empty($this->getData()['target_path']) && !isset($data['target_path'])) {
-            $entity = $fixture->getDataFieldConfig('target_path')['source']->getEntity();
-            $data['target_path'] = $entity->hasData('identifier')
-                ? $entity->getIdentifier()
-                : $entity->getUrlKey() . '.html';
-        }
+        $data['target_path'] = $this->getTargetPath($fixture);
 
         foreach ($replace as $key => $value) {
             if (isset($data[$key])) {
@@ -44,13 +74,7 @@ class UrlRewriteForm extends Form
             }
         }
 
-        $mapping = $this->dataMapping($data);
-        foreach ($mapping as $name => $field) {
-            $element = $this->getElement($context, $field);
-            if ($element->isVisible() && !$element->isDisabled()) {
-                $element->setValue($field['value']);
-            }
-        }
+        $this->fillFields($data, $context);
 
         return $this;
     }

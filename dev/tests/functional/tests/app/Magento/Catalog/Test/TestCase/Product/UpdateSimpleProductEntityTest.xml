@@ -70,7 +70,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation5">
             <data name="description" xsi:type="string">Update stock to Out of Stock</data>

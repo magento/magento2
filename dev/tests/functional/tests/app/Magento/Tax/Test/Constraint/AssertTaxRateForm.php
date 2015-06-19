@@ -54,7 +54,7 @@ class AssertTaxRateForm extends AbstractConstraint
      * @param TaxRate $initialTaxRate
      * @return array
      */
-    protected function prepareData(TaxRate $taxRate, TaxRate $initialTaxRate)
+    protected function prepareData(TaxRate $taxRate, TaxRate $initialTaxRate = null)
     {
         if ($initialTaxRate !== null) {
             $data = array_merge($initialTaxRate->getData(), $taxRate->getData());
