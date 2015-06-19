@@ -15,6 +15,7 @@ interface AdditionalInterface
     /**
      * @param array $configuration
      * @return $this
+     * @api
      */
     public function createFromConfiguration(array $configuration);
 }
