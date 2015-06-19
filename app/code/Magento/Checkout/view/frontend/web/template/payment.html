@@ -18,18 +18,21 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         <!--/ko-->
-        <fieldset class="fieldset">
-            <!-- ko foreach: getRegion('beforeMethods') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-            <div id="checkout-payment-method-load" class="opc-payment">
-                <!-- ko foreach: getRegion('payment-methods-list') -->
+        <form id="co-payment-form" class="form payments" novalidate="novalidate">
+            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
+            <fieldset class="fieldset">
+                <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
-            </div>
-            <!-- ko foreach: getRegion('afterMethods') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </fieldset>
+                <div id="checkout-payment-method-load" class="opc-payment">
+                    <!-- ko foreach: getRegion('payment-methods-list') -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
+                </div>
+                <!-- ko foreach: getRegion('afterMethods') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+            </fieldset>
+        </form>
     </div>
 </li>
