@@ -74,7 +74,7 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex(Dimension $dimension, \Iterator $entityIndexes)
+    public function saveIndex(Dimension $dimension, \Traversable $entityIndexes)
     {
         $data = [];
         $storeId = $dimension->getName() == 'store_id' ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
@@ -159,7 +159,7 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function deleteIndex(Dimension $dimension, \Iterator $entityIds)
+    public function deleteIndex(Dimension $dimension, \Traversable $entityIds)
     {
         $where = [];
         $entityIds = iterator_to_array($entityIds);
