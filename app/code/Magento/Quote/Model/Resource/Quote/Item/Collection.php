@@ -50,6 +50,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param \Magento\Quote\Model\Quote\Config $quoteConfig
      * @param \Zend_Db_Adapter_Abstract|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
