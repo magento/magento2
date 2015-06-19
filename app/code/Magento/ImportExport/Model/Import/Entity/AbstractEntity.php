@@ -224,6 +224,12 @@ abstract class AbstractEntity
      */
     protected $countItemsDeleted = 0;
 
+    /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -678,6 +684,16 @@ abstract class AbstractEntity
     public function isRowAllowedToImport(array $rowData, $rowNum)
     {
         return $this->validateRow($rowData, $rowNum) && !isset($this->_rowsToSkip[$rowNum]);
+    }
+
+    /*
+    * Is import need to log in history.
+    *
+    * @return bool
+    */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
     }
 
     /**
