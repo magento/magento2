@@ -43,16 +43,16 @@ define(
             },
 
             selectPaymentMethod: function() {
-                var self = this;
-                selectPaymentMethodAction(self.getData());
+                selectPaymentMethodAction(this.getData());
                 return true;
             },
 
-            isEnabled: function(code) {
+            isEnabled: ko.computed(function () {
                 return quote.paymentMethod()
-                    ? quote.paymentMethod().method == code
-                    : null;
-            },
+                        ? quote.paymentMethod().method
+                        : null;
+                }
+            ),
 
             isChecked: ko.computed(function () {
                     return quote.paymentMethod()

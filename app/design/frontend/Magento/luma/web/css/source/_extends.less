@@ -525,6 +525,12 @@
     }
 }
 
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .abs-add-box-sizing-desktop-m {
+        @abs-add-box-sizing();
+    }
+}
+
 //
 //  Revert field type
 //  ---------------------------------------------
@@ -1464,7 +1470,7 @@
         top: 0%;
     }
     &:before {
-        .css(border-bottom-color, @checkout-tooltip-content__border-color);
+        .css(border-bottom-color, @checkout-tooltip-content__active__border-color);
     }
     &:after {
         .css(border-bottom-color, @checkout-tooltip-content__background-color);
@@ -1472,7 +1478,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
     .abs-checkout-tooltip-content-position-top-mobile {
         .abs-checkout-tooltip-content-position-top;
     }

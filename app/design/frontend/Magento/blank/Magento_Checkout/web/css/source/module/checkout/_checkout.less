@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 @checkout-wrapper__margin: @indent__base;
-@checkout-wrapper__width: 66%;
+@checkout-wrapper__columns: 8;
 
 @checkout-step-title__border: @border-width__base solid @color-gray80;
 @checkout-step-title__font-size: 26px;
@@ -50,6 +50,7 @@
     }
 
     .checkout-onepage-index {
+        .nav-sections,
         .nav-toggle {
             &:extend(.abs-no-display all);
         }
@@ -82,7 +83,8 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-wrapper {
-        .css(width, @checkout-wrapper__width);
-        float: left;
+        &:extend(.abs-add-box-sizing-desktop-m all);
+        .layout-column(2, 1, @checkout-wrapper__columns);
+        padding-right: @indent__l;
     }
 }

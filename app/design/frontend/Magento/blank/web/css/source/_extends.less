@@ -507,6 +507,12 @@
     }
 }
 
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .abs-add-box-sizing-desktop-m {
+        @abs-add-box-sizing();
+    }
+}
+
 //
 //  Revert field type
 //  ---------------------------------------------
@@ -1122,7 +1128,7 @@
             font-weight: @font-weight__regular;
         }
     }
-    .grand:last-child {
+    .grand {
         .mark,
         .amount {
             padding-top: @indent__base;

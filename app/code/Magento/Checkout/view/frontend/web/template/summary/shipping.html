@@ -11,7 +11,14 @@
             <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
         </th>
         <td class="amount">
-            <span class="price" data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+            <!-- ko if: isCalculated() -->
+            <span class="price"
+                  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: isCalculated() -->
+            <span class="not-calculated"
+                  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+            <!-- /ko -->
         </td>
     </tr>
 <!-- /ko -->

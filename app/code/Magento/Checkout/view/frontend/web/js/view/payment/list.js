@@ -46,8 +46,9 @@ define([
          * @returns {Component} Chainable.
          */
         initChildren: function () {
+            var self = this;
             _.each(paymentMethods(), function (paymentMethodData) {
-                this.createRenderer(paymentMethodData);
+                self.createRenderer(paymentMethodData);
             });
 
             return this;
