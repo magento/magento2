@@ -61,15 +61,6 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                         : null;
                 },
                 reset: function() {
-                    var self = this;
-                    _.each(this.observables[this.id], function(key) {
-                        provider[self.getUniqueKey(self.id, key)](null);
-                    });
-                    _.each(this.additionalOptions, function(option) {
-                        if (_.isFunction(option.reset)) {
-                            option.reset();
-                        }
-                    });
                     this.getObservable('isClear')(true);
                 },
                 getAfterSubmitCallbacks: function() {
