@@ -58,6 +58,14 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         if ($storeId) {
             $this->collection->addStoreFilter($store);
             $this->collection->joinAttribute(
+                'thumbnail',
+                'catalog_product/thumbnail',
+                'entity_id',
+                null,
+                'inner',
+                $storeId
+            );
+            $this->collection->joinAttribute(
                 'name',
                 'catalog_product/name',
                 'entity_id',

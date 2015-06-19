@@ -139,12 +139,12 @@ class Image extends AbstractHelper
     /**
      * Initialize Helper to work with Image
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param $product
      * @param string $attributeName
      * @param string|null $imageFile
      * @return $this
      */
-    public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile = null)
+    public function init($product, $attributeName, $imageFile = null)
     {
         $this->_reset();
         $this->_setModel($this->_productImageFactory->create());
