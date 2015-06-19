@@ -40,6 +40,7 @@ class Snapshot
      *
      * @param AbstractModel $entity
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function registerSnapshot(AbstractModel $entity)
     {
