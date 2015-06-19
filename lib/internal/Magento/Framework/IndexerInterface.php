@@ -7,7 +7,7 @@
 /**
  * Index Engine Interface
  */
-namespace Magento\Framework\Indexer;
+namespace Magento\Framework;
 
 use Magento\Framework\Search\Request\Dimension;
 
@@ -17,19 +17,19 @@ interface IndexerInterface
      * Add entities data to index
      *
      * @param Dimension $dimension
-     * @param \Iterator $entityIndexes
+     * @param \Traversable $entityIndexes
      * @return IndexerInterface
      */
-    public function saveIndex(Dimension $dimension, \Iterator $entityIndexes);
+    public function saveIndex(Dimension $dimension, \Traversable $entityIndexes);
 
     /**
      * Remove entities data from index
      *
      * @param Dimension $dimension
-     * @param \Iterator $entityId
+     * @param \Traversable $entityId
      * @return IndexerInterface
      */
-    public function deleteIndex(Dimension $dimension, \Iterator $entityId);
+    public function deleteIndex(Dimension $dimension, \Traversable $entityId);
 
     /**
      * Remove all data from index
