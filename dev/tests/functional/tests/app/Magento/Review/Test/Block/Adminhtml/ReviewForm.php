@@ -8,36 +8,56 @@ namespace Magento\Review\Test\Block\Adminhtml;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Edit
- * Review edit form
+ * Review edit form.
  */
 class ReviewForm extends Form
 {
     /**
-     * Posted by field
+     * Posted by field.
      *
      * @var string
      */
     protected $customer = '#customer';
 
     /**
-     * Rating status
+     * Rating status.
      *
      * @var string
      */
     protected $status = '[name=status_id]';
 
     /**
-     * 'Save Review' button
+     * 'Save Review' button.
      *
      * @var string
      */
     protected $saveButton = '[data-ui-id$=save-button-button]';
 
     /**
-     * Get data from 'Posted By' field
+     * Fill the review form.
+     *
+     * @param FixtureInterface $fixture
+     * @param SimpleElement|null $element
+     * @return $this
+     */
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
+    {
+        $data = $fixture->getData();
+        if (isset($data['entity_id'])) {
+            unset($data['entity_id']);
+        }
+        $mapping = $this->dataMapping($data);
+        $this->_fill($mapping, $element);
+
+        return $this;
+    }
+
+    /**
+     * Get data from 'Posted By' field.
      *
      * @return string
      */
@@ -47,7 +67,7 @@ class ReviewForm extends Form
     }
 
     /**
-     * Get data from Status field
+     * Get data from Status field.
      *
      * @return string
      */
@@ -57,7 +77,7 @@ class ReviewForm extends Form
     }
 
     /**
-     * Set approve review
+     * Set approve review.
      *
      * @return void
      */
