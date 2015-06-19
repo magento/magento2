@@ -16,6 +16,12 @@ use \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
 
+/**
+ * Class ImportTest
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -162,6 +168,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.TooManyFields)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function setUp()
     {
         $this->importProduct = $this->getMock(
@@ -393,6 +405,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\CatalogUrlRewrite\Model\Product\Plugin\Import::isGlobalScope
      * @covers \Magento\CatalogUrlRewrite\Model\Product\Plugin\Import::populateGlobalProduct
      * @covers \Magento\CatalogUrlRewrite\Model\Product\Plugin\Import::addProductToImport
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAfterImportData()
     {
@@ -997,7 +1011,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->productUrlPathGenerator->expects($this->once())->method('getUrlPathWithSuffix')
             ->will($this->returnValue($targetPath));
-        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $this->currentUrlRewritesRegeneratorPrepareUrlRewriteMock(
             $storeId,
             $productId,

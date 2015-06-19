@@ -75,9 +75,9 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
         $categoryCollection->expects($this->exactly(3))
             ->method('addAttributeToSelect')
             ->withConsecutive(
-                array('name'),
-                array('url_key'),
-                array('url_path')
+                ['name'],
+                ['url_key'],
+                ['url_path']
             )
             ->will($this->returnSelf());
 
