@@ -13,6 +13,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Full
 {
+    const STORE_FIELD_NAME = 'store_id';
+
     /**
      * Searchable attributes cache
      *
@@ -143,6 +145,11 @@ class Full
     protected $searchRequestConfig;
 
     /**
+     * @var \Magento\Framework\Search\Request\DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -159,6 +166,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -177,7 +185,8 @@ class Full
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -195,6 +204,7 @@ class Full
         $this->localeDate = $localeDate;
         $this->fulltextResource = $fulltextResource;
         $this->priceCurrency = $priceCurrency;
+        $this->dimensionFactory = $dimensionFactory;
     }
 
     /**
@@ -434,7 +444,9 @@ class Full
     protected function deleteIndex($storeId = null, $productIds = null)
     {
         if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->deleteIndex($storeId, $productIds);
+            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+            $productIds = new \ArrayObject($productIds);
+            $this->engineProvider->get()->deleteIndex($dimension, $productIds->getIterator());
         }
     }
 
@@ -759,11 +771,12 @@ class Full
      * @param array $productIndexes
      * @return $this
      */
-    protected function saveProductIndexes($storeId, $productIndexes)
+    protected function saveProductIndexes($storeId, array $productIndexes)
     {
         if ($this->engineProvider->get()) {
-            $productIndexes['store_id'] = $storeId;
-            $this->engineProvider->get()->saveIndex($productIndexes);
+            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+            $productIndexes = new \ArrayObject($productIndexes);
+            $this->engineProvider->get()->saveIndex($dimension, $productIndexes->getIterator());
         }
 
         return $this;
