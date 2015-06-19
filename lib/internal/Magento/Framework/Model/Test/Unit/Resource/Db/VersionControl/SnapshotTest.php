@@ -35,7 +35,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->model = $this->getMock(
             'Magento\Framework\Model\AbstractModel',
-            [],
+            ['getId'],
             [],
             '',
             false
@@ -65,14 +65,16 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
             'custom_not_present_attribute' => ''
         ];
         $fields = [
-            'id',
-            'name',
-            'description'
+            'id' => [],
+            'name' => [],
+            'description' => []
         ];
-        $this->model->expects($this->once())->method('getData')->willReturn($data);
-        $this->model->expects($this->once())->method('getId')->willReturn($entityId);
-        $this->entityMetadata->expects($this->once())->method('getFields')->with($this->model)->willReturn($fields);
+        $this->assertTrue($this->entitySnapshot->isModified($this->model));
+        $this->model->setData($data);
+        $this->model->expects($this->any())->method('getId')->willReturn($entityId);
+        $this->entityMetadata->expects($this->any())->method('getFields')->with($this->model)->willReturn($fields);
         $this->entitySnapshot->registerSnapshot($this->model);
+        $this->assertFalse($this->entitySnapshot->isModified($this->model));
     }
 
     public function testIsModified()
@@ -90,15 +92,11 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
             'description' => []
         ];
         $modifiedData = array_merge($data, ['name' => 'newName']);
-        $this->model->expects($this->exactly(4))->method('getData')->willReturnOnConsecutiveCalls(
-            $data,
-            $modifiedData,
-            $modifiedData,
-            $modifiedData
-        );
         $this->model->expects($this->any())->method('getId')->willReturn($entityId);
         $this->entityMetadata->expects($this->exactly(4))->method('getFields')->with($this->model)->willReturn($fields);
+        $this->model->setData($data);
         $this->entitySnapshot->registerSnapshot($this->model);
+        $this->model->setData($modifiedData);
         $this->assertTrue($this->entitySnapshot->isModified($this->model));
         $this->entitySnapshot->registerSnapshot($this->model);
         $this->assertFalse($this->entitySnapshot->isModified($this->model));
