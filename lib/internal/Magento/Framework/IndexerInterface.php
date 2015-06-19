@@ -17,26 +17,27 @@ interface IndexerInterface
      * Add entities data to index
      *
      * @param Dimension $dimension
-     * @param \Traversable $entityIndexes
+     * @param \Traversable $documents
      * @return IndexerInterface
      */
-    public function saveIndex(Dimension $dimension, \Traversable $entityIndexes);
+    public function saveIndex(Dimension $dimension, \Traversable $documents);
 
     /**
      * Remove entities data from index
      *
      * @param Dimension $dimension
-     * @param \Traversable $entityId
+     * @param \Traversable $documents
      * @return IndexerInterface
      */
-    public function deleteIndex(Dimension $dimension, \Traversable $entityId);
+    public function deleteIndex(Dimension $dimension, \Traversable $documents);
 
     /**
      * Remove all data from index
      *
-     * @return \Magento\Framework\Indexer\IndexerInterface
+     * @param Dimension $dimension
+     * @return IndexerInterface
      */
-    public function cleanIndex();
+    public function cleanIndex(Dimension $dimension);
 
     /**
      * Define if engine is available
