@@ -23,5 +23,4 @@ class Relation implements RelationInterface
         $object->getItemsCollection()->save();
         $object->getShippingRatesCollection()->save();
     }
-
 }
