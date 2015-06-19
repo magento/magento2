@@ -11,7 +11,13 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
 {
     public function testRemove()
     {
-        $composerApp = $this->getMock('Composer\Console\Application', [], [], '', false);
+        $composerApp = $this->getMock(
+            'Composer\Console\Application',
+            ['setAutoExit', 'run', 'resetComposer'],
+            [],
+            '',
+            false
+        );
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $directoryList->expects($this->once())->method('getRoot');
         $directoryList->expects($this->once())
