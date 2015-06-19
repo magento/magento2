@@ -247,7 +247,7 @@ class Attribute extends Form
                 $attributeBlock->find($this->addOption)->click();
             }
             $mapping = $this->dataMapping($option);
-            foreach ($mapping as $name => $field) {
+            foreach ($mapping as $field) {
                 $element = $this->getElement($optionContainer, $field);
                 if ($element->isVisible() && !$element->isDisabled()) {
                     $element->setValue($field['value']);
