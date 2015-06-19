@@ -25,5 +25,4 @@ class Relation implements RelationInterface
         $object->getPaymentsCollection()->save();
         $object->getPayment()->save();
     }
-
 }

@@ -45,7 +45,7 @@ class Snapshot
     {
         $data = [];
 
-        foreach($this->metadata->getFields($entity) as $field => $value) {
+        foreach ($this->metadata->getFields($entity) as $field => $value) {
             if ($entity->hasData($field)) {
                 $data[$field] = $entity->getData($field);
             } else {
