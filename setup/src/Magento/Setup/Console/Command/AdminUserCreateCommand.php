@@ -7,7 +7,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Input\InputOption;
