@@ -11,7 +11,12 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCheckDependencies()
     {
-        $composerApp = $this->getMock('Composer\Console\Application', [], [], '', false);
+        $composerApp = $this->getMock('Composer\Console\Application',
+                ['setAutoExit', 'run', 'resetComposer'],
+                [],
+                '',
+                false
+        );
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $directoryList->expects($this->exactly(2))->method('getRoot');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
