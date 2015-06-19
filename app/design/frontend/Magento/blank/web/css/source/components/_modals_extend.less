@@ -16,6 +16,7 @@
 
 @modal-popup-title__font-size: 26px;
 @modal-popup-title-mobile__font-size: @font-size__base;
+@modal-popup-breakpoint-screen__m: @screen__m + 1;
 
 @modal-slide__first__indent-left: 25px;
 @modal-slide-mobile__background-color: @color-gray-light01;
@@ -91,7 +92,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @modal-popup-breakpoint-screen__m) {
     .modal-popup {
         &.modal-slide {
             .modal-inner-wrap[class] {
@@ -118,7 +119,7 @@
 //  Desktop
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @modal-popup-breakpoint-screen__m) {
     .modal-popup {
         &.modal-slide {
             .modal-footer {

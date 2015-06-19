@@ -33,34 +33,9 @@
         <!-- ko if: (!isFormInline) -->
         <button type="button"
                 data-bind="click: showFormPopUp, visible: !isNewAddressAdded()"
-                data-open-modal="opc-new-shipping-address"
                 class="action action-show-popup">
             <span data-bind="text: $t('New Address')"></span></button>
-        <div id="opc-new-shipping-address"
-             data-bind="mageInit: {
-                'Magento_Ui/js/modal/modal': {
-                    type:'popup',
-                    responsive: true,
-                    innerScroll: true,
-                    title: $t('Shipping Address'),
-                    trigger:'opc-new-shipping-address',
-                    buttons: [{
-                        text: $t('Save Address'),
-                        class: 'action primary action-save-address',
-                        click: function() {
-                            saveNewAddress();
-                            this.closeModal();
-                            }
-                        },
-                        {
-                            text: $t('Cancel'),
-                            class: 'action secondary action-hide-popup',
-                            click: function() {
-                                hideFormPopUp();
-                                this.closeModal()
-                                }
-                        }]
-                }}">
+        <div id="opc-new-shipping-address" data-bind="visible: isFormPopUpVisible()">
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
         </div>
         <!-- /ko -->
@@ -100,17 +75,10 @@
                             </tr>
                         </thead>
                         <tbody>
+
                         <!--ko foreach: { data: rates(), as: 'method'}-->
                         <tr>
                             <td class="col">
-                                <!-- ko if:  method.error_message -->
-                                <div class="message error">
-                                    <div data-bind="text: $t(method.error_message)"></div>
-                                </div>
-                                <span class="no-display">
-                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
-                                </span>
-                                <!-- /ko -->
                                 <!-- ko ifnot: method.error_message -->
                                 <!-- ko if: $parent.rates().length == 1 -->
                                 <input name="shipping_method"
@@ -137,6 +105,20 @@
                             <td class="col col-method" data-bind="text: $t(method.method_title)"></td>
                             <td class="col col-carrier" data-bind="text: $t(method.carrier_title)"></td>
                         </tr>
+
+                        <!-- ko if:  method.error_message -->
+                        <tr class="row row-error">
+                            <td class="col col-error" colspan="4">
+                                <div class="message error">
+                                    <div data-bind="text: $t(method.error_message)"></div>
+                                </div>
+                                <span class="no-display">
+                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+
                         <!-- /ko -->
                         </tbody>
                     </table>
@@ -156,6 +138,7 @@
                 </div>
             </form>
             <!-- /ko -->
+            <!-- ko ifnot: rates().length > 0 --><div><!-- ko text: $t('Sorry, no quotes are available for this order at this time')--><!-- /ko --></div><!-- /ko -->
         </div>
     </div>
 </li>

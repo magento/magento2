@@ -61,6 +61,10 @@
             }
         }
 
+        .not-calculated {
+            font-style: italic;
+        }
+
         //
         //  Items list
         //  ---------------------------------------------
@@ -120,11 +124,23 @@
             }
         }
         .product-item {
+            .product-item-name-block {
+                .css(margin, 0 0 @indent__xs);
+                display: table;
+                width: 100%;
+            }
+            .product-item-name {
+                .css(font-weight, @font-weight__semibold);
+                .css(padding-right, @indent__xs);
+                display: table-cell;
+                text-align: left;
+            }
+            .details-qty {
+                .css(margin-top, @indent__xs);
+            }
             .subtotal {
-                position: absolute;
-                right: 0;
+                display: table-cell;
                 text-align: right;
-                top: -6px;
             }
             .price {
                 .font-size(16);
@@ -138,9 +154,6 @@
                     }
                 }
             }
-        }
-        .product-item-name {
-            font-weight: @font-weight__semibold;
         }
     }
 }

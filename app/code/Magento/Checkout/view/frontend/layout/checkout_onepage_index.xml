@@ -7,6 +7,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="header-wrapper">
+            <block class="Magento\Framework\View\Element\Template" name="checkout.customer.signin" template="Magento_Checkout::sign-in.phtml" />
+        </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Onepage" name="checkout.root" template="onepage.phtml" cacheable="false">
                 <arguments>
@@ -67,6 +70,26 @@
                                                     <item name="shippingAddress" xsi:type="array">
                                                         <item name="config" xsi:type="array">
                                                             <item name="deps" xsi:type="string">checkout.steps.shipping-step.step-config</item>
+                                                            <item name="popUpForm" xsi:type="array">
+                                                                <item name="element" xsi:type="string">#opc-new-shipping-address</item>
+                                                                <item name="options" xsi:type="array">
+                                                                    <item name="type" xsi:type="string">popup</item>
+                                                                    <item name="responsive" xsi:type="boolean">true</item>
+                                                                    <item name="innerScroll" xsi:type="boolean">true</item>
+                                                                    <item name="title" xsi:type="string">Shipping Address</item>
+                                                                    <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
+                                                                    <item name="buttons" xsi:type="array">
+                                                                        <item name="save" xsi:type="array">
+                                                                            <item name="text" xsi:type="string">Save Address</item>
+                                                                            <item name="class" xsi:type="string">action primary action-save-address</item>
+                                                                        </item>
+                                                                        <item name="cancel" xsi:type="array">
+                                                                            <item name="text" xsi:type="string">Cancel</item>
+                                                                            <item name="class" xsi:type="string">action secondary action-hide-popup</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                         </item>
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping</item>
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
@@ -243,6 +266,9 @@
                                                             <item name="payments-list" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
                                                                 <item name="displayArea" xsi:type="string">payment-methods-list</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
+                                                                </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
                                                             <item name="afterMethods" xsi:type="array">

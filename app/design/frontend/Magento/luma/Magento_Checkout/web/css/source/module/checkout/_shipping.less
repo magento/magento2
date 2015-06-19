@@ -19,6 +19,8 @@
 @checkout-shipping-item__padding: @indent__base (@indent__l + 5px) @indent__base @indent__base;
 @checkout-shipping-item__transition: .3s border-color;
 @checkout-shipping-item__width: 100%/3;
+@checkout-shipping-item-tablet__width: 100%/2;
+@checkout-shipping-item-mobile__width: 100%;
 @checkout-shipping-item__active__border-color: @color-orange-red1;
 
 @checkout-shipping-item-icon__selected__height: 27px;
@@ -30,6 +32,9 @@
 
 @checkout-shipping-item-before__border-color: @color-gray80;
 @checkout-shipping-item-before__height: calc(~"100% - 20px");
+
+@checkout-shipping-method__border: @checkout-step-title__border;
+@checkout-shipping-method__padding: @indent__base;
 
 //
 //  Common
@@ -71,7 +76,7 @@
             .css(margin, @checkout-shipping-item__margin);
             .css(padding, @checkout-shipping-item__padding);
             .css(transition, @checkout-shipping-item__transition);
-            .css(width, @checkout-shipping-item__width);
+            .css(width, @checkout-shipping-item-tablet__width);
             display: inline-block;
             position: relative;
             vertical-align: top;
@@ -148,7 +153,7 @@
         .actions-toolbar {
             .action {
                 &.primary {
-                    margin-right: 0;
+                    .css(margin, @indent__base 0 0);
                 }
             }
         }
@@ -162,9 +167,9 @@
         }
         tbody {
             td {
-                .css(border-top, @checkout-step-title__border);
-                .css(padding-bottom, @indent__base);
-                .css(padding-top, @indent__base);
+                .css(border-top, @checkout-shipping-method__border);
+                .css(padding-bottom, @checkout-shipping-method__padding);
+                .css(padding-top, @checkout-shipping-method__padding);
                 &:first-child {
                     padding-left: 0;
                     padding-right: 0;
@@ -180,6 +185,13 @@
             }
             .col-price {
                 .css(font-weight, @font-weight__semibold);
+            }
+            .row-error {
+                td {
+                    .css(padding-bottom, @indent__s);
+                    border-top: none;
+                    padding-top: 0;
+                }
             }
         }
     }
@@ -207,7 +219,7 @@
             .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
             .css(margin, @checkout-shipping-item-mobile__margin);
             .css(padding, @checkout-shipping-item-mobile__padding);
-            width: 100%;
+            .css(width, @checkout-shipping-item-mobile__width);
             &.selected-item {
                 .css(padding, @checkout-shipping-item-mobile__active__padding);
                 border-bottom-width: 2px;
@@ -258,12 +270,16 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .checkout-shipping-method {
         .actions-toolbar {
-            .primary {
+            > .primary {
                 float: right;
+            }
+            .action {
+                &.primary {
+                    margin: 0;
+                }
             }
         }
     }
-
     .opc-wrapper {
         .form-login,
         .form-shipping-address {
@@ -274,19 +290,13 @@
             .css(border-bottom, @checkout-step-title__border);
             .css(padding-bottom, @checkout-step-title__margin-bottom);
         }
+    }
+}
 
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .opc-wrapper {
         .shipping-address-item {
-            &.selected-item {
-                &:before {
-                    &:extend(.abs-no-display-desktop all);
-                }
-
-                + .shipping-address-item {
-                    &:before {
-                        &:extend(.abs-no-display-desktop all);
-                    }
-                }
-            }
+            .css(width, @checkout-shipping-item__width);
 
             &:before {
                 .css(background, @checkout-shipping-item-before__border-color);
@@ -300,7 +310,19 @@
 
             &:nth-child(3n+1) {
                 &:before {
-                    &:extend(.abs-no-display-desktop all);
+                    display: none;
+                }
+            }
+
+            &.selected-item {
+                &:before {
+                    display: none;
+                }
+
+                + .shipping-address-item {
+                    &:before {
+                        display: none;
+                    }
                 }
             }
         }

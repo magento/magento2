@@ -1,0 +1,236 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@block-sign-in__fieldset__padding: @indent__m;
+@block-sign-in__or-label__size: 36px;
+@block-sign-in__width: ~"calc(100%/@{total-columns}*@{checkout-sidebar__columns} - @{indent__base}/2 - 2px)";
+@block-sign-in__border: 1px solid @color-gray-light3;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .action-sign-in {
+        float: right;
+        margin-top: 1.5rem;
+        max-width: 50%;
+    }
+    .block-sign-in-wrapper {
+        .action.close {
+            .button-reset();
+            .button-icon(
+                @icon-remove,
+                @_icon-font-color: @minicart-icons-color,
+                @_icon-font-size: @modal-action-close__font-size,
+                @_icon-font-line-height: @modal-action-close__font-size,
+                @_icon-font-text-hide: true
+            );
+            &:hover {
+                &:before {
+                    color: @modal-action-close__hover__color;
+                }
+            }
+            .css(right, @block-sign-in__fieldset__padding);
+            .css(top, @block-sign-in__fieldset__padding);
+            .css(z-index, @modal-slide__z-index + 1);
+            pointer-events: auto;
+            position: absolute;
+        }
+    }
+    .block-sign-in {
+        margin-bottom: 0;
+        .field {
+            .label {
+                font-weight: @font-weight__regular;
+            }
+        }
+        .actions-toolbar {
+            margin-bottom: @indent__m;
+            & > .secondary {
+                text-align: left;
+            }
+        }
+        .action.register,
+        .action.login {
+            &:extend(.abs-button-l all);
+        }
+        .fieldset {
+            .legend {
+                margin-bottom: @indent__xs;
+                margin-left: 0;
+            }
+            .field:not(choice) {
+                margin-bottom: @indent__s;
+                .label {
+                    float: none;
+                    width: auto;
+                    margin-bottom: @indent__xs;
+                }
+                .control {
+                    float: none;
+                    width: auto;
+                }
+            }
+            .css(padding, @block-sign-in__fieldset__padding);
+            margin-bottom: 0;
+            & + .fieldset {
+                border-top: 1px solid @color-gray-light5;
+                position: relative;
+                &::before {
+                    .css(height, @block-sign-in__or-label__size);
+                    .css(line-height, @block-sign-in__or-label__size - 2px);
+                    .css(margin, -(@block-sign-in__or-label__size/2 + 1px) 0 0 -(@block-sign-in__or-label__size / 2));
+                    .css(min-width, @block-sign-in__or-label__size);
+                    background: @color-white;
+                    border-radius: 50%;
+                    border: .1rem solid @color-gray-light5;
+                    box-sizing: border-box;
+                    color: @color-gray-light5;
+                    content: attr(data-label);
+                    display: inline-block;
+                    left: 50%;
+                    letter-spacing: normal;
+                    padding: 0 .2rem;
+                    position: absolute;
+                    text-align: center;
+                    text-transform: uppercase;
+                    top: 0;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    body._has-dropdown {
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        &:before {
+            .css(background-color, @modal-overlay__background-color);
+            .css(z-index, @overlay__z-index);
+            bottom: 0;
+            content: "";
+            display: block;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+        }
+    }
+    .block-sign-in-wrapper {
+        &._active {
+            .ui-dialog {
+                visibility: visible;
+            }
+            .block-sign-in {
+                transform: translateX(0);
+            }
+        }
+        .ui-dialog {
+            .css(left, @modal-slide__first__indent-left);
+            .css(z-index, @modal-slide__z-index);
+            bottom: 0;
+            display: block !important;
+            overflow: auto;
+            pointer-events: none;
+            position: fixed;
+            right: 0;
+            top: 0;
+            visibility: hidden;
+        }
+    }
+    .block-sign-in {
+        background: @color-gray-light01;
+        margin-bottom: 0;
+        min-height: 100%;
+        pointer-events: auto;
+        transform: translateX(100%);
+        transition-duration: .3s;
+        transition-property: transform, visibility;
+        transition-timing-function: ease-in-out;
+        width: auto;
+        .actions-toolbar > .secondary {
+            padding-top: 1rem;
+            text-align: left;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .block-sign-in-wrapper {
+        .ui-dialog {
+            .css(width, @block-sign-in__width);
+            .css(border, @block-sign-in__border);
+            background: @color-white;
+            box-sizing: border-box;
+            display: block !important;
+            margin-top: 4rem;
+            position: absolute;
+            right: @indent__base;
+            transform-origin: 0 0;
+            transform: scale(1,0);
+            transition: visibility 0s linear .1s, transform .1s linear 0s;
+            visibility: hidden;
+        }
+        &._active {
+            .ui-dialog {
+                .css(z-index, @dropdown-list__z-index);
+                transform: scale(1,1);
+                transition: visibility 0s linear ,transform .1s linear 0s;
+                visibility: visible;
+            }
+        }
+    }
+    .block-sign-in {
+        .fieldset {
+            & > div {
+                display: none;
+            }
+            .legend {
+                .font-size(@h2__font-size);
+                border-bottom: 0;
+                color: @link__color;
+                cursor: pointer;
+            }
+            &._active {
+                & > div {
+                    display: block;
+                }
+                .legend {
+                    color: @primary__color;
+                }
+            }
+        }
+        .actions-toolbar {
+            & > .primary {
+                display: inline;
+                float: right;
+                margin-right: 0;
+                .action {
+                    margin-right: 0;
+                }
+            }
+            & > .secondary {
+                float: left;
+                margin-right: 2rem;
+                padding-top: 1rem;
+            }
+        }
+    }
+}

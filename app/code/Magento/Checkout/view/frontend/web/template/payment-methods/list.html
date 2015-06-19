@@ -1,7 +1,6 @@
-<h3>Payment methods list:</h3>
-<dl class="items methods-payment">
+<div class="items payment-methods">
     <!-- ko foreach: { data: getRegion('payment-method-items'), as: 'element'}  -->
         <!-- ko template: element.getTemplate() --><!-- /ko -->
     <!-- /ko -->
-</dl>
-<!-- ko ifnot: getRegion('payment-method-items')().length > 0 --><dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt><!-- /ko -->
+</div>
+<!-- ko ifnot: getRegion('payment-method-items')().length > 0 --><div class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></div><!-- /ko -->

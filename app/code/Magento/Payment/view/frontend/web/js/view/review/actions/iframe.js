@@ -6,7 +6,7 @@
 /*global define*/
 define(
     [
-        'uiComponent'
+        'Magento_Payment/js/view/payment/cc-form'
     ],
     function (Component) {
         return Component.extend({
@@ -33,9 +33,6 @@ define(
             },
             getCardFieldsMap: function() {
                 return window.checkoutConfig.payment.iframe.cardFieldsMap[this.getCode()];
-            },
-            getCode: function() {
-                return this.index;
             },
             originalPlaceOrder: function(parent) {
                 return parent.placeOrder.bind(parent);
