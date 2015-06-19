@@ -12,7 +12,7 @@
                   reference_field="customer_id"
                   join_on_field="id"
                     >
-                <select_field>library_card_id</select_field>
+                <field>library_card_id</field>
             </join>
         </attribute>
         <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
@@ -20,8 +20,8 @@
                   reference_field="customer_id"
                   join_on_field="customer_id"
                     >
-                <select_field>comment</select_field>
-                <select_field>rating</select_field>
+                <field>comment</field>
+                <field>rating</field>
             </join>
         </attribute>
     </extension_attributes>
