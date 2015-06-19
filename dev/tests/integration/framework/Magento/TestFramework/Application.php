@@ -123,6 +123,13 @@ class Application
     private $globalConfigFile;
 
     /**
+     * Defines whether load test extension attributes or not
+     *
+     * @var bool
+     */
+    private $loadTestExtensionAttributes;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Shell $shell
@@ -132,6 +139,7 @@ class Application
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
+     * @param bool|null $loadTestExtensionAttributes
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -140,13 +148,15 @@ class Application
         $globalConfigFile,
         $globalConfigDir,
         $appMode,
-        AutoloaderInterface $autoloadWrapper
+        AutoloaderInterface $autoloadWrapper,
+        $loadTestExtensionAttributes = false
     ) {
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
         $this->installDir = $installDir;
+        $this->loadTestExtensionAttributes = $loadTestExtensionAttributes;
 
         $customDirs = $this->getCustomDirs();
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
@@ -267,10 +277,9 @@ class Application
      * Initialize application
      *
      * @param array $overriddenParams
-     * @param bool $loadTestExtensionAttributes
      * @return void
      */
-    public function initialize($overriddenParams = [], $loadTestExtensionAttributes = false)
+    public function initialize($overriddenParams = [])
     {
         $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
         $overriddenParams = $this->_customizeParams($overriddenParams);
@@ -332,7 +341,7 @@ class Application
                     => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
             ]
         ];
-        if ($loadTestExtensionAttributes) {
+        if ($this->loadTestExtensionAttributes) {
             $objectManagerConfiguration = array_merge(
                 $objectManagerConfiguration,
                 [
@@ -382,7 +391,7 @@ class Application
     public function reinitialize(array $overriddenParams = [])
     {
         $this->_resetApp();
-        $this->initialize($overriddenParams, true);
+        $this->initialize($overriddenParams);
     }
 
     /**
