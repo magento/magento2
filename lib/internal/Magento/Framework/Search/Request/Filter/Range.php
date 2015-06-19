@@ -57,6 +57,7 @@ class Range implements FilterInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -77,6 +78,7 @@ class Range implements FilterInterface
      * Get From
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getFrom()
     {
@@ -87,6 +89,7 @@ class Range implements FilterInterface
      * Get To
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getTo()
     {
