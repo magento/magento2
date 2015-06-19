@@ -24,8 +24,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Zend_Db_Adapter_Abstract|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
