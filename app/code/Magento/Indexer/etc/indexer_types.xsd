@@ -122,10 +122,10 @@
                 Fieldset of field declaration.
             </xs:documentation>
         </xs:annotation>
-        <xs:choice>
-            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="1" />
+        <xs:sequence>
+            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="field" type="fieldType" minOccurs="1" maxOccurs="unbounded"/>
-        </xs:choice>
+        </xs:sequence>
         <xs:attribute name="source" type="classType" use="required"/>
         <xs:attribute name="provider" type="classType" use="optional"/>
         <xs:attribute name="name" type="nameType" use="required"/>
