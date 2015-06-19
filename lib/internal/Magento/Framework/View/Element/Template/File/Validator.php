@@ -33,19 +33,38 @@ class Validator
     protected $_filesystem;
 
     /**
+     * Allow symlinks flag
+     *
      * @var bool
      */
     protected $_isAllowSymlinks = false;
 
     /**
+     * Root directory
+     *
      * @var bool
      */
     protected $directory = null;
 
+    /**
+     * Themes directory
+     *
+     * @var string
+     */
     protected $_themesDir;
 
+    /**
+     * Application directory
+     *
+     * @var string
+     */
     protected $_appDir;
 
+    /**
+     * Compiled templates directory
+     *
+     * @var string
+     */
     protected $_compiledDir;
 
     /**
@@ -67,19 +86,6 @@ class Validator
         $this->_appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
             ->getAbsolutePath();
-    }
-
-    /**
-     * Set allow symlinks for validation
-     *
-     * @param bool $flag
-     *
-     * @return $this
-     */
-    public function setIsAllowSymlinks($flag = true)
-    {
-        $this->_isAllowSymlinks = $flag;
-        return $this;
     }
 
     /**
@@ -129,7 +135,6 @@ class Validator
         if (null === $this->directory) {
             $this->directory = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT);
         }
-
         return $this->directory;
     }
 }
