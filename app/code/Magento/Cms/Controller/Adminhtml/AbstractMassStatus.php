@@ -6,6 +6,7 @@
 namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class AbstractMassStatus
@@ -53,30 +54,24 @@ class AbstractMassStatus extends \Magento\Backend\App\Action
     {
         $selected = $this->getRequest()->getParam('selected');
         $excluded = $this->getRequest()->getParam('excluded');
-
-        if (isset($excluded)) {
-            if (!empty($excluded)) {
-                $this->excludedSetStatus($excluded);
+        try {
+            if (isset($excluded)) {
+                if (!empty($excluded)) {
+                    $this->excludedSetStatus($excluded);
+                } else {
+                    $this->setStatusAll();
+                }
+            } elseif (!empty($selected)) {
+                $this->selectedSetStatus($selected);
             } else {
-                $this->setStatusAll();
+                $this->messageManager->addError(__('Please select item(s).'));
             }
-        } elseif (!empty($selected)) {
-            $this->selectedSetStatus($selected);
-        } else {
-            $this->messageManager->addError(__('Please select item(s).'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
         }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 
