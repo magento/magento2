@@ -1098,12 +1098,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\FrontController">
-        <arguments>
-            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
-            <argument name="messageManager" xsi:type="object">Magento\Framework\Message\ManagerInterface\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">
         <arguments>
             <argument name="deserializers" xsi:type="array">
