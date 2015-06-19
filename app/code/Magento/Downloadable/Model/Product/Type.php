@@ -6,6 +6,7 @@
 namespace Magento\Downloadable\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Downloadable product type model
@@ -60,6 +61,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     private $typeHandler;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -78,6 +84,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +103,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
-        \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler
+        \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
@@ -105,6 +113,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
         $this->typeHandler = $typeHandler;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -127,17 +136,18 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     public function getLinks($product)
     {
         if ($product->getDownloadableLinks() === null) {
-            $_linkCollection = $this->_linksFactory->create()->addProductToFilter(
+            /** @var \Magento\Downloadable\Model\Resource\Link\Collection $linkCollection */
+            $linkCollection = $this->_linksFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
                 $product->getStoreId()
             )->addPriceToResult(
                 $product->getStore()->getWebsiteId()
             );
+            $this->extensionAttributesJoinProcessor->process($linkCollection);
             $linksCollectionById = [];
-            foreach ($_linkCollection as $link) {
+            foreach ($linkCollection as $link) {
                 /* @var \Magento\Downloadable\Model\Link $link */
-
                 $link->setProduct($product);
                 $linksCollectionById[$link->getId()] = $link;
             }
@@ -203,12 +213,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     public function getSamples($product)
     {
         if ($product->getDownloadableSamples() === null) {
-            $_sampleCollection = $this->_samplesFactory->create()->addProductToFilter(
+            $sampleCollection = $this->_samplesFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
                 $product->getStoreId()
             );
-            $product->setDownloadableSamples($_sampleCollection);
+            $this->extensionAttributesJoinProcessor->process($sampleCollection);
+            $product->setDownloadableSamples($sampleCollection);
         }
 
         return $product->getDownloadableSamples();

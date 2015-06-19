@@ -34,6 +34,8 @@
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinDataInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinData" />
+    <preference for="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinProcessor" />
     <preference for="Magento\Framework\Locale\ConfigInterface" type="Magento\Framework\Locale\Config" />
     <preference for="Magento\Framework\Notification\NotifierInterface" type="Magento\Framework\Notification\NotifierPool" />
     <preference for="Magento\Framework\UrlInterface" type="Magento\Framework\Url" />
@@ -1101,12 +1103,6 @@
                 <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
                 <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\FrontController">
-        <arguments>
-            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
-            <argument name="messageManager" xsi:type="object">Magento\Framework\Message\ManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">
