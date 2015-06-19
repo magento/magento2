@@ -29,6 +29,10 @@ define(
                 this._super();
                 stepNavigator.registerStep('billing', 'Review & Payments', this.isVisible, 20);
                 return this;
+            },
+
+            getFormKey: function() {
+                return window.checkoutConfig.formKey;
             }
         })
     }
