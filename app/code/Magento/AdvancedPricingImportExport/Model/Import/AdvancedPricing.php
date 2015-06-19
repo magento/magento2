@@ -127,6 +127,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_catalogProductEntity;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $_localeDate;
+
+    /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -143,6 +148,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
      */
     public function __construct(
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
@@ -157,6 +163,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         AdvancedPricing\Validator\Website $websiteValidator,
         AdvancedPricing\Validator\GroupPrice $groupPriceValidator
     ) {
+        $this->_localeDate = $localeDate;
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
@@ -428,9 +435,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function setUpdatedAt(array $listSku)
     {
+        $updatedAt = $this->_localeDate->date()->format('Y-m-d H:i:s');
         $this->_connection->update(
             $this->_catalogProductEntity,
-            [\Magento\Catalog\Model\Category::KEY_UPDATED_AT => date('Y-m-d H:i:s')],
+            [\Magento\Catalog\Model\Category::KEY_UPDATED_AT => $updatedAt],
             $this->_connection->quoteInto('sku IN (?)', $listSku)
         );
         return $this;
