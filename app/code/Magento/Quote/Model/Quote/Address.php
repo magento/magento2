@@ -424,23 +424,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Save child collections
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-        if (null !== $this->_rates) {
-            $this->getShippingRatesCollection()->save();
-        }
-        return $this;
-    }
-
-    /**
      * Declare address quote model object
      *
      * @param   \Magento\Quote\Model\Quote $quote
@@ -538,7 +521,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve address items collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {
@@ -779,7 +762,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve collection of quote shipping rates
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getShippingRatesCollection()
     {
