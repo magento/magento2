@@ -2123,6 +2123,16 @@ return [
         'Magento\Customer\Controller\Account\LoginPost',
         'Magento\Customer\Model\Account\Redirect::getRedirect',
     ],
+    [
+        'process',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::process'
+    ],
+    [
+        'extractExtensionAttributes',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::extractExtensionAttributes'
+    ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],
     ['getCreateAccountUrl', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getCreateAccountUrl'],
