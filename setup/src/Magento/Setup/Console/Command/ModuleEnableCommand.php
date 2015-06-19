@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 /**
  * Command for enabling list or all of modules
  */
-class ModuleEnableCommand extends AbstractModuleCommand
+class ModuleEnableCommand extends AbstractModuleManageCommand
 {
     /**
      * {@inheritdoc}
