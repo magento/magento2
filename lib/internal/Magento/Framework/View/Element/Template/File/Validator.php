@@ -14,6 +14,11 @@ use \Magento\Framework\App\Filesystem\DirectoryList;
 class Validator
 {
     /**
+     * Config path to 'Allow Symlinks' template settings
+     */
+    const XML_PATH_TEMPLATE_ALLOW_SYMLINK = 'dev/template/allow_symlink';
+
+    /**
      * Template files map
      *
      * @var []
@@ -47,10 +52,17 @@ class Validator
      * Class constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem)
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+    ) {
         $this->_filesystem = $filesystem;
+        $this->_isAllowSymlinks = $scopeConfigInterface->getValue(
+            self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $this->_themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $this->_appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
@@ -105,16 +117,6 @@ class Validator
     protected function isPathInDirectory($path, $directory)
     {
         return 0 === strpos($path, $directory);
-    }
-
-    /**
-     * Get is allowed symlinks flag
-     *
-     * @return bool
-     */
-    protected function isAllowSymlinks()
-    {
-        return $this->_isAllowSymlinks;
     }
 
     /**
