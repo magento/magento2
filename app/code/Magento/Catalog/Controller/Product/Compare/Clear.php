@@ -6,6 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Clear extends \Magento\Catalog\Controller\Product\Compare
 {
     /**
@@ -26,10 +28,18 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
             $items->setVisitorId($this->_customerVisitor->getId());
         }
 
-        $items->clear();
-        $this->messageManager->addSuccess(__('You cleared the comparison list.'));
-        $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
+        try {
+            $items->clear();
+            $this->messageManager->addSuccess(__('You cleared the comparison list.'));
+            $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));
+        }
 
-        return $this->getDefaultResult();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setRefererOrBaseUrl();
     }
 }
