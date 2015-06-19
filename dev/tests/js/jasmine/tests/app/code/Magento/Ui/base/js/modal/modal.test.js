@@ -5,23 +5,23 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/dialog/dialog'
+    'Magento_Ui/js/modal/modal'
 ], function ($) {
     'use strict';
 
-    describe('ui/js/dialog/dialog', function () {
+    describe('ui/js/modal/modal', function () {
         var element = $('<div>some element</div>'),
-            dialog = element.dialog({}).data('mage-dialog');
+            modal = element.modal({}).data('mage-modal');
 
-        it('Check for dialog definition', function () {
-            expect(dialog).toBeDefined();
+        it('Check for modal definition', function () {
+            expect(modal).toBeDefined();
         });
         it('Show/hide function check', function () {
             expect(element.trigger('openDialog')).toBe(element);
             expect(element.trigger('closeDialog')).toBe(element);
         });
         it('Check for transition support', function () {
-            expect(dialog.whichTransitionEvent()).toBe('webkitTransitionEnd');
+            expect(modal.whichTransitionEvent()).toBe('webkitTransitionEnd');
         });
     });
 });
