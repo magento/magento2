@@ -214,10 +214,9 @@ class Full
      */
     public function reindexAll()
     {
-        $this->cleanIndex();
         $storeIds = array_keys($this->storeManager->getStores());
         foreach ($storeIds as $storeId) {
-
+            $this->cleanIndex($storeId);
             $this->rebuildStoreIndex($storeId);
         }
         $this->searchRequestConfig->reset();
@@ -425,12 +424,14 @@ class Full
     /**
      * Clean search index data for store
      *
+     * @param int $storeId
      * @return void
      */
-    protected function cleanIndex()
+    protected function cleanIndex($storeId)
     {
         if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->cleanIndex();
+            $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+            $this->engineProvider->get()->cleanIndex($dimension);
         }
     }
 

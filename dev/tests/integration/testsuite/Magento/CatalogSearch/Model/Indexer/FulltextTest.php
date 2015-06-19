@@ -61,6 +61,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     protected $productCherry;
 
+    /**
+     * @var  \Magento\Framework\Search\Request\Dimension
+     */
+    protected $dimension;
+
     protected function setUp()
     {
         /** @var \Magento\Indexer\Model\IndexerInterface indexer */
@@ -81,6 +86,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             'Magento\Search\Model\QueryFactory'
         );
 
+        $this->dimension = Bootstrap::getObjectManager()->create(
+            '\Magento\Framework\Search\Request\Dimension',
+            ['name' => 'store_id', 'value' => '0']
+        );
+
         $this->productApple = $this->getProductBySku('fulltext-1');
         $this->productBanana = $this->getProductBySku('fulltext-2');
         $this->productOrange = $this->getProductBySku('fulltext-3');
@@ -90,7 +100,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     public function testReindexAll()
     {
-        $this->engine->cleanIndex();
+        $this->engine->cleanIndex($this->dimension);
 
         $this->indexer->reindexAll();
 
