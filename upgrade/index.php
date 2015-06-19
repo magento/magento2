@@ -18,7 +18,7 @@
         <?php require_once('./views/shared/_pageHeaderActions.phtml') ?>
     </header>
     <main id="anchor-content" class="page-content">
-        <?php require_once('./views/pages/_upToDate.phtml') ?>
+        <?php require_once('./views/pages/_createBackupDone.phtml') ?>
     </main>
 </div>
 
