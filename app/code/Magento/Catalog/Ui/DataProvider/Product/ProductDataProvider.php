@@ -30,6 +30,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
      */
@@ -39,71 +40,14 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         $requestFieldName,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager,
+        \Magento\Framework\App\RequestInterface $request,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->collection = $collectionFactory->create();
         $this->storeManager = $storeManager;
-
-        $this->collection
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('attribute_set_id')
-            ->addAttributeToSelect('type_id');
-
-        $store = $this->storeManager->getStore();
-        $storeId = $store->getStoreId();
-
-        if ($storeId) {
-            $this->collection->addStoreFilter($store);
-            $this->collection->joinAttribute(
-                'thumbnail',
-                'catalog_product/thumbnail',
-                'entity_id',
-                null,
-                'inner',
-                $storeId
-            );
-            $this->collection->joinAttribute(
-                'name',
-                'catalog_product/name',
-                'entity_id',
-                null,
-                'inner',
-                Store::DEFAULT_STORE_ID
-            );
-            $this->collection->joinAttribute(
-                'custom_name',
-                'catalog_product/name',
-                'entity_id',
-                null,
-                'inner',
-                $storeId
-            );
-            $this->collection->joinAttribute(
-                'status',
-                'catalog_product/status',
-                'entity_id',
-                null,
-                'inner',
-                $storeId
-            );
-            $this->collection->joinAttribute(
-                'visibility',
-                'catalog_product/visibility',
-                'entity_id',
-                null,
-                'inner',
-                $storeId
-            );
-            $this->collection->joinAttribute('price', 'catalog_product/price', 'entity_id', null, 'left', $store->getId());
-        } else {
-            $this->collection->addAttributeToSelect('price');
-            $this->collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-            $this->collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
-        }
-        $this->collection->load();
+        $this->request = $request;
+        $this->collection = $collectionFactory->create();
     }
 
     /**
@@ -115,12 +59,26 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     }
 
     /**
+     * @return Store
+     */
+    protected function getStore()
+    {
+        $storeId = $this->request->getParam('store', 0);
+        return $this->storeManager->getStore($storeId);
+    }
+
+    /**
      * Get data
      *
      * @return array
      */
     public function getData()
     {
+        $store = $this->getStore();
+        if ($store->getId()) {
+            $this->collection->addStoreFilter($this->getStore());
+        }
+        $this->collection->load();
         $items = $this->getCollection()->toArray();
 
         return [

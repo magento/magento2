@@ -66,6 +66,9 @@ class Column extends AbstractComponent implements ColumnInterface
      */
     public function prepare()
     {
+        if ($this->getData('config/add_field')) {
+            $this->getContext()->getDataProvider()->addField($this->getName());
+        }
         $dataType = $this->getData('config/dataType');
         if ($dataType) {
             $this->wrappedComponent = $this->uiComponentFactory->create(
