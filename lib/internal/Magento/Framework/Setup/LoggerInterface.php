@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 /**
  * Interface to Log Message in Setup
