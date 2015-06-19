@@ -404,8 +404,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             if (!$this->_cachedSkuToDelete) {
                 $this->_cachedSkuToDelete = $this->_connection->fetchCol(
                     $this->_connection->select()
-                    ->from($this->_catalogProductEntity, 'entity_id')
-                    ->where('sku IN (?)', $listSku)
+                        ->from($this->_catalogProductEntity, 'entity_id')
+                        ->where('sku IN (?)', $listSku)
                 );
             }
             if ($this->_cachedSkuToDelete) {
@@ -435,7 +435,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function setUpdatedAt(array $listSku)
     {
-        $updatedAt = $this->_localeDate->date()->format('Y-m-d H:i:s');
+        $updatedAt = $this->_localeDate->date(null, null, false)->format('Y-m-d H:i:s');
         $this->_connection->update(
             $this->_catalogProductEntity,
             [\Magento\Catalog\Model\Category::KEY_UPDATED_AT => $updatedAt],
