@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navCodeUpgrade.phtml') ?>
+
+<h2 class="page-sub-title">Step 3: Code Upgrade</h2>
+
+<div class="message message-error">
+    <span class="message-text"><strong>Something went wrong</strong> Please resolve these issues to continue.</span>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Update Composer.json File</h3>
+        <p class="text-stretch">
+            Composer.json file is updated.
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Module and Component Dependencies Check</h3>
+        <p class="text-stretch">
+            You have no dependency conflicts.
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-failed"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Retrieve Component Files</h3>
+        <p class="text-stretch">
+            Retrieving files failed. You need to fix this or choose “Cancel and Revert” to cancel the upgrade and revert to your store’s original state.
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <div class="readiness-check-content">
+        <button
+            class="btn btn-medium btn-secondary"
+            type="button">Cancel and Revert
+        </button>
+    </div>
+</div>
