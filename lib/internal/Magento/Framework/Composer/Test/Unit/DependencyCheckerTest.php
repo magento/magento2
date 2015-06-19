@@ -30,6 +30,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
                 $buffer->writeln($output);
             }
         );
+        $composerApp->expects($this->atLeastOnce())->method('resetComposer');
 
         $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
         $expected = [
