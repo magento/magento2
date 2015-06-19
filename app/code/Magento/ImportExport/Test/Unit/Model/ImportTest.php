@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Test\Unit\Model;
  * Class ImportTest
  * @package Magento\ImportExport\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,6 +93,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $dateTime;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_varDirectory;
+
     public function setUp()
     {
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
@@ -133,12 +139,20 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->historyModel = $this->getMockBuilder('\Magento\ImportExport\Model\History')
             ->disableOriginalConstructor()
-            ->setMethods(['updateReport', 'invalidateReport'])
+            ->setMethods([
+                'updateReport',
+                'invalidateReport',
+                'addReport',
+            ])
             ->getMock();
         $this->historyModel->expects($this->any())->method('updateReport')->willReturnSelf();
         $this->dateTime = $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->_varDirectory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->import = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
             ->setConstructorArgs([
                 $logger,
@@ -166,8 +180,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'getErrorsCount',
                 'getEntity',
                 'getBehavior',
+                'isReportEntityType',
             ])
             ->getMock();
+
+        $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
 
         $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
             ->disableOriginalConstructor()
@@ -398,5 +415,342 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testGetUniqueEntityBehaviors()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
+    }
+
+    /**
+     * Cover isReportEntityType().
+     *
+     * @dataProvider isReportEntityTypeDataProvider
+     */
+    public function testIsReportEntityType($entity, $processedReportsEntities, $getEntityResult, $expectedResult)
+    {
+        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getEntity',
+            ])
+            ->getMock();
+
+        $this->setPropertyValue($importMock, 'processedReportsEntities', $processedReportsEntities);
+        $importMock
+            ->expects($this->any())
+            ->method('getEntity')
+            ->willReturn($getEntityResult);
+
+        $actualResult = $importMock->isReportEntityType($entity);
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * Cover createHistoryReport().
+     */
+    public function testCreateHistoryReportEmptyReportEntityType()
+    {
+        $sourceFileRelative = 'sourceFileRelative';
+        $entity = 'entity val';
+        $extension = null;
+        $result = null;
+
+        $this->import
+            ->expects($this->once())
+            ->method('isReportEntityType')
+            ->with($entity)
+            ->willReturn(false);
+        $this->_varDirectory
+            ->expects($this->never())
+            ->method('getRelativePath');
+        $this->_varDirectory
+            ->expects($this->never())
+            ->method('copyFile');
+        $this->dateTime
+            ->expects($this->never())
+            ->method('gmtTimestamp');
+        $this->historyModel
+            ->expects($this->never())
+            ->method('addReport');
+
+        $args = [
+            $sourceFileRelative,
+            $entity,
+            $extension,
+            $result
+        ];
+        $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
+        $this->assertEquals($this->import, $actualResult);
+    }
+
+    /**
+     * Cover createHistoryReport().
+     */
+    public function testCreateHistoryReportSourceFileRelativeIsArray()
+    {
+        $sourceFileRelative = [
+            'file_name' => 'sourceFileRelative value',
+        ];
+        $sourceFileRelativeNew = 'sourceFileRelative new value';
+        $entity = '';
+        $extension = null;
+        $result = '';
+        $fileName = $sourceFileRelative['file_name'];
+        $gmtTimestamp = 1234567;
+        $copyName = $gmtTimestamp . '_' . $fileName;
+        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
+
+        $this->import
+            ->expects($this->once())
+            ->method('isReportEntityType')
+            ->with($entity)
+            ->willReturn(true);
+        $this->_varDirectory
+            ->expects($this->once())
+            ->method('getRelativePath')
+            ->with(\Magento\ImportExport\Model\Import::IMPORT_DIR . $fileName)
+            ->willReturn($sourceFileRelativeNew);
+        $this->_varDirectory
+            ->expects($this->once())
+            ->method('copyFile')
+            ->with(
+                $sourceFileRelativeNew,
+                $copyFile
+            );
+        $this->dateTime
+            ->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($gmtTimestamp);
+        $this->historyModel
+            ->expects($this->once())
+            ->method('addReport')
+            ->with($copyName);
+
+        $args = [
+            $sourceFileRelative,
+            $entity,
+            $extension,
+            $result
+        ];
+        $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
+        $this->assertEquals($this->import, $actualResult);
+    }
+
+    /**
+     * Cover createHistoryReport().
+     */
+    public function testCreateHistoryReportSourceFileRelativeIsNotArrayResultIsSet()
+    {
+        $sourceFileRelative = 'not array';
+        $entity = '';
+        $extension = null;
+        $result = [
+            'name' => 'result value',
+        ];
+        $fileName = $result['name'];
+        $gmtTimestamp = 1234567;
+        $copyName = $gmtTimestamp . '_' . $fileName;
+        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
+
+        $this->import
+            ->expects($this->once())
+            ->method('isReportEntityType')
+            ->with($entity)
+            ->willReturn(true);
+        $this->_varDirectory
+            ->expects($this->never())
+            ->method('getRelativePath');
+        $this->_varDirectory
+            ->expects($this->once())
+            ->method('copyFile')
+            ->with(
+                $sourceFileRelative,
+                $copyFile
+            );
+        $this->dateTime
+            ->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($gmtTimestamp);
+        $this->historyModel
+            ->expects($this->once())
+            ->method('addReport')
+            ->with($copyName);
+
+        $args = [
+            $sourceFileRelative,
+            $entity,
+            $extension,
+            $result
+        ];
+        $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
+        $this->assertEquals($this->import, $actualResult);
+    }
+
+    /**
+     * Cover createHistoryReport().
+     */
+    public function testCreateHistoryReportExtensionIsSet()
+    {
+        $sourceFileRelative = 'not array';
+        $entity = 'entity value';
+        $extension = 'extension value';
+        $result = [];
+        $fileName = $entity . $extension;
+        $gmtTimestamp = 1234567;
+        $copyName = $gmtTimestamp . '_' . $fileName;
+        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
+
+        $this->import
+            ->expects($this->once())
+            ->method('isReportEntityType')
+            ->with($entity)
+            ->willReturn(true);
+        $this->_varDirectory
+            ->expects($this->never())
+            ->method('getRelativePath');
+        $this->_varDirectory
+            ->expects($this->once())
+            ->method('copyFile')
+            ->with(
+                $sourceFileRelative,
+                $copyFile
+            );
+        $this->dateTime
+            ->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($gmtTimestamp);
+        $this->historyModel
+            ->expects($this->once())
+            ->method('addReport')
+            ->with($copyName);
+
+        $args = [
+            $sourceFileRelative,
+            $entity,
+            $extension,
+            $result
+        ];
+        $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
+        $this->assertEquals($this->import, $actualResult);
+    }
+
+    /**
+     * Cover createHistoryReport().
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Source file coping failed
+     */
+    public function testCreateHistoryReportThrowException()
+    {
+        $sourceFileRelative = null;
+        $entity = '';
+        $extension = '';
+        $result = '';
+        $gmtTimestamp = 1234567;
+
+        $this->import
+            ->expects($this->once())
+            ->method('isReportEntityType')
+            ->with($entity)
+            ->willReturn(true);
+        $this->_varDirectory
+            ->expects($this->never())
+            ->method('getRelativePath');
+        $phrase = $this->getMock('\Magento\Framework\Phrase', [], [], '', false);
+        $this->_varDirectory
+            ->expects($this->once())
+            ->method('copyFile')
+            ->willReturnCallback(function () use ($phrase) {
+                throw new \Magento\Framework\Exception\FileSystemException($phrase);
+            });
+        $this->dateTime
+            ->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($gmtTimestamp);
+        $this->historyModel
+            ->expects($this->never())
+            ->method('addReport');
+
+        $args = [
+            $sourceFileRelative,
+            $entity,
+            $extension,
+            $result
+        ];
+        $actualResult = $this->invokeMethod($this->import, 'createHistoryReport', $args);
+        $this->assertEquals($this->import, $actualResult);
+    }
+
+    public function isReportEntityTypeDataProvider()
+    {
+        return [
+            [
+                '$entity' => null,
+                '$processedReportsEntities' => [],
+                '$getEntityResult' => null,
+                '$expectedResult' => false,
+            ],
+            [
+                '$entity' => null,
+                '$processedReportsEntities' => [
+                    'entity'
+                ],
+                '$getEntityResult' => null,
+                '$expectedResult' => false,
+            ],
+            [
+                '$entity' => null,
+                '$processedReportsEntities' => [
+                    'entity 1'
+                ],
+                '$getEntityResult' => 'entity 2',
+                '$expectedResult' => false,
+            ],
+            [
+                '$entity' => 'entity',
+                '$processedReportsEntities' => [
+                    'entity 1'
+                ],
+                '$getEntityResult' => 'entity 2',
+                '$expectedResult' => false,
+            ],
+            [
+                '$entity' => 'entity',
+                '$processedReportsEntities' => [
+                    'entity'
+                ],
+                '$getEntityResult' => null,
+                '$expectedResult' => true,
+            ],
+        ];
+    }
+
+    /**
+     * Set property for an object.
+     *
+     * @param object $object
+     * @param string $property
+     * @param mixed $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
+    }
+
+    /**
+     * Invoke any method of an object.
+     *
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
+     */
+    protected function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }
