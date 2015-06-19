@@ -72,6 +72,26 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $dataSourceModel;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeDate;
+
+    /**
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $importExportData;
+
+    /**
      * @var array
      */
     protected $cachedSkuToDelete;
@@ -95,7 +115,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_importExportData = $this->getMock(
+        $this->importExportData = $this->getMock(
             '\Magento\ImportExport\Helper\Data',
             [],
             [],
@@ -109,7 +129,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource = $this->getMock(
+        $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
             ['getConnection'],
             [],
@@ -122,7 +142,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->getMock(
             '\Magento\ImportExport\Model\Resource\Import\Data',
             [],
@@ -132,11 +152,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceFactory = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory',
-            [],
+            ['create', 'getTable'],
             [],
             '',
             false
         );
+        $this->resourceFactory->expects($this->any())->method('create')->willReturnSelf();
+        $this->resourceFactory->expects($this->any())->method('getTable')->willReturnSelf();
         $this->productModel = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [],
@@ -186,6 +208,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->localeDate = $this->getMock(
+            '\Magento\Framework\Stdlib\DateTime\Timezone',
+            ['date', 'format'],
+            [],
+            '',
+            false
+        );
+        $this->localeDate->expects($this->any())->method('date')->willReturnSelf();
 
         $this->advancedPricing = $this->getAdvancedPricingMock([
             'retrieveOldSkus',
@@ -813,11 +843,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
             $methods,
             [
+                $this->localeDate,
                 $this->jsonHelper,
-                $this->_importExportData,
+                $this->importExportData,
                 $this->resourceHelper,
                 $this->dataSourceModel,
-                $this->_resource,
+                $this->resource,
                 $this->resourceFactory,
                 $this->productModel,
                 $this->catalogData,
