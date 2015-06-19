@@ -6,42 +6,41 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
      * Mass action for cache refresh
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
-        $types = $this->getRequest()->getParam('types');
-        $updatedTypes = 0;
-        if (!is_array($types)) {
-            $types = [];
-        }
-        $this->_validateTypes($types);
-        foreach ($types as $type) {
-            $this->_cacheTypeList->cleanType($type);
-            $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => $type]);
-            $updatedTypes++;
-        }
-        if ($updatedTypes > 0) {
-            $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
+        try {
+            $types = $this->getRequest()->getParam('types');
+            $updatedTypes = 0;
+            if (!is_array($types)) {
+                $types = [];
+            }
+            $this->_validateTypes($types);
+            foreach ($types as $type) {
+                $this->_cacheTypeList->cleanType($type);
+                $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => $type]);
+                $updatedTypes++;
+            }
+            if ($updatedTypes > 0) {
+                $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
+            }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
         }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*');
     }
 }

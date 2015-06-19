@@ -6,12 +6,12 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\User\Model\UserValidationRules;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AdminUserCreateCommand extends AbstractSetupCommand
@@ -25,7 +25,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * @var UserValidationRules
      */
     private $validationRules;
-    
+
     /**
      * @param InstallerFactory $installerFactory
      * @param UserValidationRules $validationRules
@@ -112,7 +112,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
                 ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
             );
 
-        $validator = new \Magento\Framework\Validator\Object;
+        $validator = new \Magento\Framework\Validator\Object();
         $this->validationRules->addUserInfoRules($validator);
         $this->validationRules->addPasswordRules($validator);
 

@@ -6,38 +6,25 @@
 
 namespace Magento\Setup\Controller;
 
-use Composer\Json\JsonFile;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\AppInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Controller for Setup Landing page
+ */
 class Landing extends AbstractActionController
 {
-    /**
-     * @var array
-     */
-    protected $composerJson;
-
-    /**
-     * @param DirectoryList $directoryList
-     */
-    public function __construct(
-        DirectoryList $directoryList
-    ) {
-        $jsonFile = new JsonFile($directoryList->getRoot() . '/composer.json');
-        $this->composerJson = $jsonFile->read();
-    }
-
     /**
      * @return array|ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setVariable('languages', $this->serviceLocator->get('config')['languages']);
         $view->setVariable('location', 'en_US');
-        $view->setVariable('version', $this->composerJson['version']);
+        $view->setVariable('version', AppInterface::VERSION);
         return $view;
     }
 }

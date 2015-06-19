@@ -9,13 +9,13 @@ namespace Magento\Tax\Model;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\TaxRuleInterface;
-use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rule as Resource;
@@ -53,24 +53,32 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected $resource;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param TaxRuleRegistry $taxRuleRegistry
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
      * @param Resource $resource
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         TaxRuleRegistry $taxRuleRegistry,
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
         CollectionFactory $collectionFactory,
-        Resource $resource
+        Resource $resource,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
         $this->taxRuleSearchResultsFactory = $searchResultsFactory;
         $this->taxRuleModelFactory = $ruleFactory;
         $this->collectionFactory = $collectionFactory;
         $this->resource = $resource;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -133,6 +141,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
         $fields = [];
         $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
 
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {

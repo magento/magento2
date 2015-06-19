@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
-use \Magento\Framework\Module\ModuleList\Loader;
-
+use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Xml\Parser;
 
@@ -104,6 +103,38 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         foreach ($fixtures as $name => $fixture) {
             $this->assertSame($fixture, $result[$name]);
         }
+    }
+
+    public function testLoadExclude()
+    {
+        $fixture = [
+            'a' => ['name' => 'a', 'sequence' => []],    // a is on its own
+            'b' => ['name' => 'b', 'sequence' => ['c']], // b is after c
+            'c' => ['name' => 'c', 'sequence' => ['a']], // c is after a
+            'd' => ['name' => 'd', 'sequence' => ['a']], // d is after a
+            // exclude d, so expected sequence is a -> c -> b
+        ];
+        $this->dir->expects($this->once())->method('search')->willReturn(['a', 'b', 'c', 'd']);
+        $this->dir->expects($this->exactly(4))->method('readFile')->will($this->returnValueMap([
+            ['a', null, null, self::$sampleXml],
+            ['b', null, null, self::$sampleXml],
+            ['c', null, null, self::$sampleXml],
+            ['d', null, null, self::$sampleXml],
+        ]));
+        $this->registry->expects($this->once())
+            ->method('getModulePaths')
+            ->willReturn([]);
+        $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
+        $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
+        $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
+        $this->converter->expects($this->at(3))->method('convert')->willReturn(['d' => $fixture['d']]);
+        $this->parser->expects($this->atLeastOnce())->method('loadXML');
+        $this->parser->expects($this->atLeastOnce())->method('getDom');
+        $result = $this->loader->load(['d']);
+        $this->assertSame(['a', 'c', 'b'], array_keys($result));
+        $this->assertSame($fixture['a'], $result['a']);
+        $this->assertSame($fixture['b'], $result['b']);
+        $this->assertSame($fixture['c'], $result['c']);
     }
 
     /**

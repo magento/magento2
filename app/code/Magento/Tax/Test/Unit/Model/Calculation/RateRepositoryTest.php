@@ -5,12 +5,11 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\RateRepository;
-
+use Magento\Tax\Model\Calculation\RateRepository;
 use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,6 +57,11 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $rateResourceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $joinProcessorMock;
 
     public function setUp()
     {
@@ -117,6 +121,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->joinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new RateRepository(
             $this->rateConverterMock,
             $this->rateRegistryMock,
@@ -124,7 +135,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->rateFactoryMock,
             $this->countryFactoryMock,
             $this->regionFactoryMock,
-            $this->rateResourceMock
+            $this->rateResourceMock,
+            $this->joinProcessorMock
         );
     }
 
@@ -256,6 +268,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
 
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
+
         $this->model->getList($searchCriteriaMock);
     }
 
@@ -336,13 +350,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'entity_already_exists' => [
                 new AlreadyExistsException(__('Entity already exists')),
                 'Magento\Framework\Exception\AlreadyExistsException',
-                'Entity already exists'
+                'Entity already exists',
             ],
             'cannot_save_title' => [
                 new LocalizedException(__('Cannot save titles')),
                 'Magento\Framework\Exception\LocalizedException',
-                'Cannot save titles'
-            ]
+                'Cannot save titles',
+            ],
         ];
     }
 
@@ -384,7 +398,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
         $rateMock = $this->getTaxRateMock([]);
 
-
         $collectionMock->expects($this->once())->method('joinRegionTable');
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
         $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
@@ -393,14 +406,14 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
         $rateMock->expects($this->any())->method('getCollection')->will($this->returnValue($collectionMock));
 
-
-
         $this->searchResultMock->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
         $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(count($items))
             ->willReturnSelf();
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
+
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
 
         $this->model->getList($searchCriteriaMock);
     }

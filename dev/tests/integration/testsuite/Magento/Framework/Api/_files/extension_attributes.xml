@@ -16,7 +16,7 @@
                   join_on_field="id"
                   reference_field="id"
                     >
-                <select_field>qty</select_field>
+                <field>qty</field>
             </join>
         </attribute>
         <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
@@ -24,9 +24,9 @@
                   reference_field="product_id"
                   join_on_field="id"
                     >
-                <select_field>comment</select_field>
-                <select_field>rating</select_field>
-                <select_field>date</select_field>
+                <field>comment</field>
+                <field>rating</field>
+                <field>date</field>
             </join>
         </attribute>
     </extension_attributes>

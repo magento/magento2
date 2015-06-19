@@ -6,32 +6,32 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\Resource\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Shell;
-use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
-use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\State\CleanupFiles;
-use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Store\Model\Store;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -318,7 +318,7 @@ class Installer
         $currentModules = [];
         if ($this->deploymentConfig->isAvailable()) {
             $deploymentConfig = $this->deploymentConfigReader->load();
-            $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
+            $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [];
         }
         $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
         $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);

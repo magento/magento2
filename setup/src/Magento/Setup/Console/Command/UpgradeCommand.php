@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\ConsoleLogger;
 
 /**
  * Command for updating installed application after the code base has changed

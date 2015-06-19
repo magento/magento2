@@ -69,6 +69,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveTypeSpecificData()
     {
@@ -83,7 +84,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($links);
         $samples = $this->_model->getSamples($product);
         $this->assertNotEmpty($samples->getData());
-        $i=0;
+        $i = 0;
         foreach ($links as $link) {
             $i++;
             $linkData = $link->getData();
@@ -92,7 +93,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             $linkData['title'] = 'Updated downloadable link #' . $i;
             $downloadableData['link'][] = $linkData;
         }
-        $i=0;
+        $i = 0;
         foreach ($samples as $sample) {
             $i++;
             $sampleData = $sample->getData();
@@ -129,12 +130,21 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             'title' => 'Updated downloadable link #1',
             'website_price' => '15.0000',
         ];
-
-
+        $expectedExtensionAttributes = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'admin@example.com',
+        ];
         $links = $this->_model->getLinks($product);
         $this->assertNotEmpty($links);
         $this->assertCount(1, $links);
+        /** @var \Magento\Downloadable\Model\Link $link */
         $link = reset($links);
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
+        $testAttribute = $link->getExtensionAttributes()->getTestAttribute();
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
         foreach ($expectedLink as $key => $value) {
             $this->assertTrue($link->hasData($key), 'Key ' . $key . ' not exist!');
             $this->assertArrayHasKey($key, $link);
@@ -157,6 +167,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $samples->count());
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $samples->getFirstItem()->getData();
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
+        $testAttribute = $sample['extension_attributes']->getTestAttribute();
+        $this->assertEquals($expectedExtensionAttributes['firstname'], $testAttribute->getFirstName());
+        $this->assertEquals($expectedExtensionAttributes['lastname'], $testAttribute->getLastName());
+        $this->assertEquals($expectedExtensionAttributes['email'], $testAttribute->getEmail());
         foreach ($expectedSample as $key => $value) {
             $this->assertArrayHasKey($key, $sample);
             $this->assertEquals($value, $sample[$key]);

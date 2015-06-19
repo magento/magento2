@@ -5,12 +5,12 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\ConsoleLogger;
-use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\ConfigModel;
+use Magento\Setup\Model\InstallerFactory;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to install Magento application
@@ -107,7 +107,7 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Use sample data'
-            )
+            ),
         ]);
         $this->setName('setup:install')
             ->setDescription('Installs the Magento application')

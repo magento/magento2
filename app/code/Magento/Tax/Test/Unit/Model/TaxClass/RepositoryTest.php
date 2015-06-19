@@ -6,11 +6,10 @@
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-use \Magento\Tax\Model\TaxClass\Repository;
-
+use Magento\Tax\Model\TaxClass\Repository;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Api\SearchCriteria;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +45,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxClassCollectionFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesJoinProcessorMock;
 
     /**
      * @return void
@@ -85,13 +89,23 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->taxClassResourceMock = $this->getMock('\Magento\Tax\Model\Resource\TaxClass', [], [], '', false);
+
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManager->getObject(
             'Magento\Tax\Model\TaxClass\Repository',
             [
                 'classModelRegistry' => $this->classModelRegistryMock,
                 'taxClassResource' => $this->taxClassResourceMock,
                 'searchResultsFactory' => $this->searchResultFactory,
-                'taxClassCollectionFactory' => $this->taxClassCollectionFactory
+                'taxClassCollectionFactory' => $this->taxClassCollectionFactory,
+                'joinProcessor' => $this->extensionAttributesJoinProcessorMock,
             ]
         );
     }
@@ -186,6 +200,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $filter = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $collection = $this->getMock('\Magento\Tax\Model\Resource\TaxClass\Collection', [], [], '', false);
         $sortOrder = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
+
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($collection);
 
         $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
         $filterGroup->expects($this->once())->method('getFilters')->willReturn([$filter]);
@@ -338,7 +356,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [''],
-            ['ERROR']
+            ['ERROR'],
         ];
     }
 }

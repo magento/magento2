@@ -6,8 +6,10 @@
 
 namespace Magento\Customer\Model\Resource;
 
+use Magento\Customer\Api\Data\GroupExtensionInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Resource\Group\Collection;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
@@ -63,6 +65,11 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     private $taxClassRepository;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @param \Magento\Customer\Model\GroupRegistry $groupRegistry
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
@@ -70,6 +77,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         \Magento\Customer\Model\GroupRegistry $groupRegistry,
@@ -78,7 +86,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Model\Resource\Group $groupResourceModel,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
+        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;
@@ -87,6 +96,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->taxClassRepository = $taxClassRepositoryInterface;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -164,6 +174,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\Resource\Group\Collection $collection */
         $collection = $this->groupFactory->create()->getCollection();
+        $groupInterfaceName = 'Magento\Customer\Api\Data\GroupInterface';
+        $this->extensionAttributesJoinProcessor->process($collection, $groupInterfaceName);
         $collection->addTaxClass();
 
         //Add filters from root filter group to the collection
@@ -171,7 +183,6 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         /** @var \Magento\Framework\Api\SortOrder $sortOrder */
         if ($sortOrders) {
@@ -182,6 +193,11 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
                     ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
+        } else {
+            // set a default sorting order since this method is used constantly in many
+            // different blocks
+            $field = $this->translateField('id');
+            $collection->addOrder($field, 'ASC');
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
@@ -190,13 +206,22 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $groups = [];
         /** @var \Magento\Customer\Model\Group $group */
         foreach ($collection as $group) {
+            /** @var \Magento\Customer\Api\Data\GroupInterface $groupDataObject */
             $groupDataObject = $this->groupDataFactory->create()
                 ->setId($group->getId())
                 ->setCode($group->getCode())
                 ->setTaxClassId($group->getTaxClassId())
                 ->setTaxClassName($group->getTaxClassName());
+            $data = $group->getData();
+            $data = $this->extensionAttributesJoinProcessor->extractExtensionAttributes($groupInterfaceName, $data);
+            if (isset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])
+                && ($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] instanceof GroupExtensionInterface)
+            ) {
+                $groupDataObject->setExtensionAttributes($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            }
             $groups[] = $groupDataObject;
         }
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults->setItems($groups);
     }
 

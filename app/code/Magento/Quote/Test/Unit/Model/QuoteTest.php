@@ -8,10 +8,11 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Quote\Model
@@ -132,6 +133,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $objectCopyServiceMock;
 
     /**
+     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesJoinProcessorMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -147,7 +153,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote\Address',
             [
                 'isDeleted', 'getCollection', 'getId', 'getCustomerAddressId',
-                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount', 'setData'
+                '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount', 'setData',
             ],
             [],
             '',
@@ -260,6 +266,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 'Magento\Quote\Model\Quote',
@@ -280,7 +294,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                     'customerRepository' => $this->customerRepositoryMock,
-                    'objectCopyService' => $this->objectCopyServiceMock
+                    'objectCopyService' => $this->objectCopyServiceMock,
+                    'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                 ]
             );
     }
@@ -347,8 +362,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_BILLING)],
-                false
-            ]
+                false,
+            ],
         ];
     }
 
@@ -615,7 +630,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [1, true],
-            [2, false]
+            [2, false],
         ];
     }
 
@@ -656,7 +671,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [false, 1, true],
-            [false, 2, false]
+            [false, 2, false],
         ];
     }
 
@@ -798,7 +813,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $typeInstanceMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\Simple',
             [
-                'prepareForCartAdvanced'
+                'prepareForCartAdvanced',
             ],
             [],
             '',
@@ -837,7 +852,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $typeInstanceMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\Simple',
             [
-                'prepareForCartAdvanced'
+                'prepareForCartAdvanced',
             ],
             [],
             '',
@@ -849,7 +864,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             [
                 'getParentProductId',
                 'setStickWithinParent',
-                '__wakeup'
+                '__wakeup',
             ],
             [],
             '',
@@ -1090,7 +1105,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $items = [];
         foreach ($productTypes as $type) {
-            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);;
+            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
             $productMock->expects($this->any())->method('getIsVirtual')->willReturn($type);
 
             $itemMock = $this->getMock(
@@ -1123,7 +1138,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
     }
 
-
     /**
      * @return array
      */
@@ -1134,7 +1148,27 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             [[true, true], 1],
             [[false], 0],
             [[true, false], 0],
-            [[false, false], 0]
+            [[false, false], 0],
         ];
+    }
+
+    public function testGetItemsCollection()
+    {
+        $itemCollectionMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['setQuote'])
+            ->getMock();
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemCollectionMock);
+
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->isInstanceOf('Magento\Quote\Model\Resource\Quote\Collection')
+            );
+        $itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quote);
+
+        $this->quote->getItemsCollection();
     }
 }

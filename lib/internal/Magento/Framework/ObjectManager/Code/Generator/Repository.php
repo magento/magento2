@@ -57,7 +57,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                             'description' => $this->_getCollectionFactoryClassName(),
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 'name' => 'registry',
@@ -71,7 +71,20 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                             'description' => 'array',
                         ],
                     ],
-                ]
+                ],
+            ],
+            [
+                'name' => 'extensionAttributesJoinProcessor',
+                'visibility' => 'protected',
+                'docblock' => [
+                    'shortDescription' => 'Extension attributes join processor.',
+                    'tags' => [
+                        [
+                            'name' => 'var',
+                            'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                        ],
+                    ],
+                ],
             ],
         ];
         return $properties;
@@ -138,13 +151,18 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'name' => $this->_getSourceCollectionFactoryPropertyName(),
                     'type' => $this->_getCollectionFactoryClassName(),
                 ],
+                [
+                    'name' => 'extensionAttributesJoinProcessor',
+                    'type' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                ],
             ],
             'body' => "\$this->"
                 . $this->_getSourcePersistorPropertyName()
                 . " = \$" . $this->_getSourcePersistorPropertyName() . ";\n"
                 . "\$this->"
                 . $this->_getSourceCollectionFactoryPropertyName()
-                . " = \$" . $this->_getSourceCollectionFactoryPropertyName() . ";"
+                . " = \$" . $this->_getSourceCollectionFactoryPropertyName() . ";\n"
+                . "\$this->extensionAttributesJoinProcessor = \$extensionAttributesJoinProcessor;"
             ,
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
@@ -156,10 +174,15 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'param',
                         'description' => $this->_getCollectionFactoryClassName()
-                            . " \$" . $this->_getSourceCollectionFactoryPropertyName()
+                            . " \$" . $this->_getSourceCollectionFactoryPropertyName(),
+                    ],
+                    [
+                        'name' => 'param',
+                        'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface'
+                            . " \$extensionAttributesJoinProcessor",
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -211,7 +234,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => self::NO_SUCH_ENTITY_EXCEPTION,
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -244,7 +267,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->_getResultClassName(),
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -277,7 +300,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName(),
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -299,7 +322,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'docblock' => [
                 'shortDescription' => 'Perform persist operations',
                 'tags' => [],
-            ]
+            ],
         ];
     }
 
@@ -333,7 +356,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName(),
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -362,8 +385,12 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'param',
                         'description' => $this->getSourceClassName() . ' $entity',
                     ],
+                    [
+                        'name' => 'return',
+                        'description' => 'bool',
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -393,8 +420,12 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'name' => 'param',
                         'description' => 'int $id',
                     ],
+                    [
+                        'name' => 'return',
+                        'description' => 'bool',
+                    ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -423,19 +454,20 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName() . ' $entity',
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
     /**
-     * Returns find() method
+     * Returns getList() method
      *
      * @return string
      */
     protected function _getGetListMethod()
     {
         $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
-        . "foreach(\$criteria->getFilterGroups() as \$filterGroup) {\n"
+        . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
+        . "foreach (\$criteria->getFilterGroups() as \$filterGroup) {\n"
         . "    foreach (\$filterGroup->getFilters() as \$filter) {\n"
         . "        \$condition = \$filter->getConditionType() ? \$filter->getConditionType() : 'eq';\n"
         . "        \$collection->addFieldToFilter(\$filter->getField(), [\$condition => \$filter->getValue()]);\n"
@@ -465,7 +497,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName() . '[]',
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -486,7 +518,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->_getDeleteMethod(),
             $this->_getDeleteByIdMethod(),
             $this->_getFlushMethod(),
-            $this->_getSaveMethod()
+            $this->_getSaveMethod(),
         ];
     }
 

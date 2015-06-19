@@ -8,15 +8,16 @@
 
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
-use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Model\Resource\Agreement as AgreementResource;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Checkout agreement repository.
@@ -57,6 +58,11 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $agreementFactory;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
@@ -64,19 +70,22 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param ScopeConfigInterface $scopeConfig Scope config.
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AgreementResource $agreementResource,
-        AgreementFactory $agreementFactory
+        AgreementFactory $agreementFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->resourceModel = $agreementResource;
         $this->agreementFactory = $agreementFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -92,9 +101,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $storeId = $this->storeManager->getStore()->getId();
         /** @var $agreementCollection AgreementCollection */
         $agreementCollection = $this->collectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($agreementCollection);
         $agreementCollection->addStoreFilter($storeId);
         $agreementCollection->addFieldToFilter('is_active', 1);
-
         $agreementDataObjects = [];
         foreach ($agreementCollection as $agreement) {
             $agreementDataObjects[] = $agreement;
