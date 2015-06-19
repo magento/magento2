@@ -220,7 +220,7 @@ class ConfigGenerator
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
-            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'DENY');
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
         }
         return $configData;
     }

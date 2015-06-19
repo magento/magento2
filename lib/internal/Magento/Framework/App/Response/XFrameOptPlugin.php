@@ -14,8 +14,8 @@ class XFrameOptPlugin
     /** Deployment config key for frontend x-frame-options header value */
     const DEPLOYMENT_CONFIG_X_FRAME_OPT = 'x-frame-options';
 
-    /** Always send DENY in backend x-frame-options header */
-    const BACKEND_X_FRAME_OPT = 'DENY';
+    /** Always send SAMEORIGIN in backend x-frame-options header */
+    const BACKEND_X_FRAME_OPT = 'SAMEORIGIN';
 
     /**
      *The header value
