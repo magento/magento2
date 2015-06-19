@@ -38,7 +38,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_entityTypeCode;
 
     /**
-     * @var
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -72,6 +72,11 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP,
     ];
 
+    /**
+     * Export template
+     *
+     * @var array
+     */
     protected $templateExportData = [
         ImportAdvancedPricing::COL_SKU => '',
         ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => '',

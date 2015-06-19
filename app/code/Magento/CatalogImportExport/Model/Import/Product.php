@@ -183,6 +183,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = true;
+
+    /**
      * Attribute id for product images storage.
      *
      * @var array

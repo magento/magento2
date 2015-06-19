@@ -63,6 +63,13 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     ];
 
     /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = true;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory
      */
     protected $_resourceFactory;
