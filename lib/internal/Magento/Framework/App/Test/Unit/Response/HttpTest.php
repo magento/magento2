@@ -274,7 +274,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testSetXFrameOptions()
     {
-        $value = 'SAMEORIGIN';
+        $value = 'DENY';
         $this->model->setXFrameOptions($value);
         $this->assertSame($value, $this->model->getHeader(Http::HEADER_X_FRAME_OPT)->getFieldValue());
     }

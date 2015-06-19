@@ -36,6 +36,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
             ->with(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT)
             ->willReturn(null);
         $configData = $this->model->createXFrameConfig();
-        $this->assertSame('DENY', $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT]);
+        $this->assertSame('SAMEORIGIN', $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT]);
     }
 }
