@@ -316,7 +316,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
+        /** @var \Magento\Customer\Api\Data\AddressInterface $item */
         foreach ($searchResults->getItems() as $item) {
             $this->assertEquals(
                 $expectedResult[$item->getId()]['city'],
@@ -357,18 +357,18 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ],
             'Addresses with postcode of either 75477 or 47676' => [
                 [],
                 [
                     $filterBuilder->setField('postcode')->setValue('75477')->create(),
-                    $filterBuilder->setField('postcode')->setValue('47676')->create()
+                    $filterBuilder->setField('postcode')->setValue('47676')->create(),
                 ],
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ],
             'Addresses with postcode greater than 0' => [
@@ -376,9 +376,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 [
                     1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
-            ]
+            ],
         ];
     }
 

@@ -5,13 +5,18 @@
  */
 namespace Magento\Setup\Controller;
 
-use Composer\Package\LinkConstraint\VersionConstraint;
 use Composer\Package\Version\VersionParser;
+use Magento\Setup\Model\ComposerInformation;
+use Magento\Setup\Model\FilePermissions;
+use Magento\Setup\Model\PhpInformation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Magento\Setup\Model\PhpInformation;
-use Magento\Setup\Model\FilePermissions;
 
+/**
+ * Class Environment
+ *
+ * Provides information and checks about the environment.
+ */
 class Environment extends AbstractActionController
 {
     /**
@@ -34,15 +39,18 @@ class Environment extends AbstractActionController
      * @param PhpInformation $phpInformation
      * @param FilePermissions $permissions
      * @param VersionParser $versionParser
+     * @param ComposerInformation $composerInformation
      */
     public function __construct(
         PhpInformation $phpInformation,
         FilePermissions $permissions,
-        VersionParser $versionParser
+        VersionParser $versionParser,
+        ComposerInformation $composerInformation
     ) {
         $this->phpInformation = $phpInformation;
-            $this->permissions = $permissions;
+        $this->permissions = $permissions;
         $this->versionParser = $versionParser;
+        $this->composerInformation = $composerInformation;
     }
 
     /**
@@ -53,14 +61,14 @@ class Environment extends AbstractActionController
     public function phpVersionAction()
     {
         try {
-            $requiredVersion = $this->phpInformation->getRequiredPhpVersion();
+            $requiredVersion = $this->composerInformation->getRequiredPhpVersion();
         } catch (\Exception $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                     'data' => [
                         'error' => 'phpVersionError',
-                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage()
+                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage(),
                     ],
                 ]
             );
@@ -108,7 +116,7 @@ class Environment extends AbstractActionController
 
         $data = [
             'responseType' => $responseType,
-            'data' => $settings
+            'data' => $settings,
         ];
 
         return new JsonModel($data);
@@ -122,16 +130,15 @@ class Environment extends AbstractActionController
     public function phpExtensionsAction()
     {
         try {
-            $required = $this->phpInformation->getRequired();
+            $required = $this->composerInformation->getRequiredExtensions();
             $current = $this->phpInformation->getCurrent();
-
         } catch (\Exception $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                     'data' => [
                         'error' => 'phpExtensionError',
-                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage()
+                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage(),
                     ],
                 ]
             );
@@ -183,10 +190,9 @@ class Environment extends AbstractActionController
     {
         $data = [];
         $error = false;
-    
+
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
-
             $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
@@ -204,7 +210,7 @@ class Environment extends AbstractActionController
 
             $data['xdebug_max_nesting_level'] = [
                 'message' => $message,
-                'error' => $error
+                'error' => $error,
             ];
         }
 

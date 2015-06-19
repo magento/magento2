@@ -8,8 +8,8 @@
 
 namespace Magento\Framework\Api\Test\Unit;
 
-use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 
 class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,14 +44,14 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
     protected $attributeValueFactoryMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $extensionFactoryMock;
-
-    /**
      * @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $methodsMapProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $joinProcessorMock;
 
     public function setUp()
     {
@@ -69,22 +69,23 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionFactoryMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+        $this->joinProcessorMock = $this->getMockBuilder('\Magento\Framework\Api\ExtensionAttribute\JoinProcessor')
             ->setMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionFactoryMock->expects($this->any())
+        $this->joinProcessorMock->expects($this->any())
             ->method('extractExtensionAttributes')
             ->willReturnArgument(1);
         $this->typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+
         $this->dataObjectHelper = $this->objectManager->getObject(
             'Magento\Framework\Api\DataObjectHelper',
             [
                 'objectFactory' => $this->objectFactoryMock,
                 'typeProcessor' => $this->typeProcessor,
                 'objectProcessor' => $this->objectProcessorMock,
-                'extensionFactory' => $this->extensionFactoryMock,
                 'methodsMapProcessor' => $this->methodsMapProcessor,
+                'joinProcessor' => $this->joinProcessorMock,
             ]
         );
     }
@@ -377,7 +378,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '1',
                         'region' => 'TX',
-                    ]
+                    ],
                 ],
                 [
                     'id' => '2',
@@ -387,8 +388,8 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '2',
                         'region' => 'TX',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 [
@@ -397,7 +398,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '1',
                         'region' => 'TX',
-                    ]
+                    ],
                 ],
                 [
                     'id' => '2',
@@ -407,9 +408,9 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '2',
                         'region' => 'TX',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 }

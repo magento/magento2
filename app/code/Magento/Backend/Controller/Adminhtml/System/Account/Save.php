@@ -5,8 +5,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -14,7 +16,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * Saving edited user information
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -57,24 +58,19 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->sendPasswordResetNotificationEmail();
             }
             $this->messageManager->addSuccess(__('The account has been saved.'));
-        } catch (\Magento\Framework\Validator\Exception $e) {
+        } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while saving account.'));
         }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath('*/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath("*/*/");
     }
 }

@@ -14,8 +14,6 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
@@ -66,6 +64,11 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $resourceModel;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param Converter $converter
      * @param RateRegistry $rateRegistry
      * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory
@@ -73,6 +76,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param CountryFactory $countryFactory
      * @param RegionFactory $regionFactory
      * @param \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         Converter $converter,
@@ -81,7 +85,8 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         RateFactory $rateFactory,
         CountryFactory $countryFactory,
         RegionFactory $regionFactory,
-        \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
+        \Magento\Tax\Model\Resource\Calculation\Rate $rateResource,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
@@ -90,6 +95,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         $this->countryFactory = $countryFactory;
         $this->regionFactory = $regionFactory;
         $this->resourceModel = $rateResource;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -146,6 +152,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     {
         /** @var \Magento\Tax\Model\Resource\Calculation\Rate\Collection $collection */
         $collection = $this->rateFactory->create()->getCollection();
+        $this->joinProcessor->process($collection);
         $collection->joinRegionTable();
 
         //Add filters from root filter group to the collection
@@ -243,7 +250,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
                     InputException::INVALID_FIELD_VALUE,
                     [
                         'fieldName' => 'country_id',
-                        'value' => $countryCode
+                        'value' => $countryCode,
                     ]
                 )
             );

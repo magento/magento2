@@ -14,7 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \MagentoFrameworkDataCollectionAbstractDb
+     * @var \Magento\Framework\Data\Collection\AbstractDb
      */
     protected $_stores;
 
@@ -48,7 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve stores configured in system.
      *
-     * @return \MagentoFrameworkDataCollectionAbstractDb
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function getStores()
     {
@@ -80,7 +80,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             '7d' => __('Last 7 Days'),
             '1m' => __('Current Month'),
             '1y' => __('YTD'),
-            '2y' => __('2YTD')
+            '2y' => __('2YTD'),
         ];
     }
 

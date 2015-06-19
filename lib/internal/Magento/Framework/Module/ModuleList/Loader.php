@@ -8,13 +8,15 @@ namespace Magento\Framework\Module\ModuleList;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Module\Declaration\Converter\Dom;
-use Magento\Framework\Xml\Parser;
-use Magento\Framework\Module\ModuleRegistryInterface;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Module\Declaration\Converter\Dom;
+use Magento\Framework\Module\ModuleRegistryInterface;
+use Magento\Framework\Xml\Parser;
 
 /**
  * Loader of module list information from the filesystem
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Loader
 {
@@ -78,12 +80,13 @@ class Loader
     }
 
     /**
-     * Loads the full module list information
+     * Loads the full module list information. Excludes modules specified in $exclude.
      *
+     * @param array $exclude
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
-    public function load()
+    public function load(array $exclude = [])
     {
         $result = [];
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
@@ -101,7 +104,9 @@ class Loader
 
             $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
-            $result[$name] = $data[$name];
+            if (!in_array($name, $exclude)) {
+                $result[$name] = $data[$name];
+            }
         }
         return $this->sortBySequence($result);
     }

@@ -6,8 +6,8 @@
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,6 +56,11 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $storeMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesJoinProcessorMock;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -81,17 +86,28 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->agreementMock =
             $this->getMock('\Magento\CheckoutAgreements\Model\Agreement', $methods, [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
+
         $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository(
             $this->factoryMock,
             $this->storeManagerMock,
             $this->scopeConfigMock,
             $this->resourceMock,
-            $this->agrFactoryMock
+            $this->agrFactoryMock,
+            $this->extensionAttributesJoinProcessorMock
         );
     }
 
     public function testGetListReturnsEmptyListIfCheckoutAgreementsAreDisabledOnFrontend()
     {
+        $this->extensionAttributesJoinProcessorMock->expects($this->never())
+            ->method('process');
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
@@ -102,6 +118,10 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListReturnsTheListOfActiveCheckoutAgreements()
     {
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->isInstanceOf('Magento\CheckoutAgreements\Model\Resource\Agreement\Collection'));
+
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)

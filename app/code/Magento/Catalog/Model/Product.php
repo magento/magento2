@@ -6,13 +6,13 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -318,6 +318,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     ];
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -351,6 +356,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -389,6 +395,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -417,6 +424,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->joinProcessor = $joinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -1961,7 +1969,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getOptions()
     {
         if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
-            foreach ($this->getProductOptionsCollection() as $option) {
+            $collection = $this->getProductOptionsCollection();
+            $this->joinProcessor->process($collection);
+            foreach ($collection as $option) {
                 $option->setProduct($this);
                 $this->addOption($option);
             }
@@ -2612,7 +2622,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $images[] = $this->convertFromMediaGalleryInterface($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
-
         }
         return $this;
     }

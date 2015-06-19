@@ -5,10 +5,11 @@
  */
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Api\ExtensionAttribute\JoinData;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -87,11 +88,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     private $_fetchStrategy;
 
     /**
-     * Flag which determines if extension attributes were joined before the collection was loaded.
+     * Join processor is set only if extension attributes were joined before the collection was loaded.
      *
-     * @var callable|null
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|null
      */
-    protected $extensionAttributesExtractorCallback;
+    protected $extensionAttributesJoinProcessor;
 
     /**
      * @param EntityFactoryInterface $entityFactory
@@ -743,7 +744,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_setIsLoaded(false);
         $this->_items = [];
         $this->_data = null;
-        $this->extensionAttributesExtractorCallback = null;
+        $this->extensionAttributesJoinProcessor = null;
         return $this;
     }
 
@@ -756,11 +757,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     protected function _fetchAll(\Zend_Db_Select $select)
     {
         $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
-        if ($this->extensionAttributesExtractorCallback && is_callable($this->extensionAttributesExtractorCallback)) {
+        if ($this->extensionAttributesJoinProcessor) {
             foreach ($data as $key => $dataItem) {
-                $data[$key] = call_user_func_array(
-                    $this->extensionAttributesExtractorCallback,
-                    [$this->_itemObjectClass, $dataItem]
+                $data[$key] = $this->extensionAttributesJoinProcessor->extractExtensionAttributes(
+                    $this->_itemObjectClass,
+                    $dataItem
                 );
             }
         }
@@ -812,30 +813,44 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Join extension attribute.
      *
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
-     * @param callable $extensionAttributesExtractorCallback
+     * @param JoinDataInterface $join
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @return $this
      */
-    public function joinExtensionAttribute($join, $extensionAttributesExtractorCallback)
-    {
+    public function joinExtensionAttribute(
+        JoinDataInterface $join,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
+    ) {
         $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
+            $joinOn = $this->getMainTableAlias() . '.' . $join->getJoinField()
+                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField();
             $this->getSelect()->joinLeft(
                 [$join->getReferenceTableAlias() => $this->getResource()->getTable($join->getReferenceTable())],
-                $this->getMainTableAlias() . '.' . $join->getJoinField()
-                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField(),
+                $joinOn,
                 []
             );
         }
         $columns = [];
         foreach ($join->getSelectFields() as $selectField) {
-            $fieldAlias = $join->getReferenceTableAlias() . '_' . $selectField;
-            $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
+            $fieldWIthDbPrefix = $selectField[JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX];
+            $columns[$selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS]] = $fieldWIthDbPrefix;
+            $this->addFilterToMap($selectField[JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS], $fieldWIthDbPrefix);
         }
         $this->getSelect()->columns($columns);
-        $this->extensionAttributesExtractorCallback = $extensionAttributesExtractorCallback;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         return $this;
+    }
+
+    /**
+     * Get collection item object class name.
+     *
+     * @return string
+     */
+    public function getItemObjectClass()
+    {
+        return $this->_itemObjectClass;
     }
 
     /**

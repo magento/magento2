@@ -5,12 +5,11 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Autoload\AutoloaderInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Autoload\AutoloaderInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -123,6 +122,13 @@ class Application
     private $globalConfigFile;
 
     /**
+     * Defines whether load test extension attributes or not
+     *
+     * @var bool
+     */
+    private $loadTestExtensionAttributes;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Shell $shell
@@ -132,6 +138,7 @@ class Application
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
+     * @param bool|null $loadTestExtensionAttributes
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -140,23 +147,28 @@ class Application
         $globalConfigFile,
         $globalConfigDir,
         $appMode,
-        AutoloaderInterface $autoloadWrapper
+        AutoloaderInterface $autoloadWrapper,
+        $loadTestExtensionAttributes = false
     ) {
+        if (getcwd() != BP . '/dev/tests/integration') {
+            chdir(BP . '/dev/tests/integration');
+        }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
         $this->installDir = $installDir;
+        $this->loadTestExtensionAttributes = $loadTestExtensionAttributes;
 
         $customDirs = $this->getCustomDirs();
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
         \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
-            \Magento\Framework\App\State::PARAM_MODE => $appMode
+            \Magento\Framework\App\State::PARAM_MODE => $appMode,
         ];
-        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool();
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
@@ -306,39 +318,41 @@ class Application
                                 'Magento\Framework\Logger\Handler\Exception',
                                 ['filePath' => $this->installDir]
                             ),
-                            'filePath' => $this->installDir
+                            'filePath' => $this->installDir,
                         ]
                     ),
                     'debug'  => $objectManager->create(
                         'Magento\Framework\Logger\Handler\Debug',
                         ['filePath' => $this->installDir]
                     ),
-                ]
+                ],
             ]
         );
         $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
         $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
         $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
         $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
-
         Helper\Bootstrap::setObjectManager($objectManager);
-
-        $objectManager->configure(
-            [
-                'preferences' => [
-                    'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
-                    'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
-                    'Magento\Framework\Mail\Template\TransportBuilder'
-                        => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
-                ],
-                'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
-                    'arguments' => [
-                        'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
+        $objectManagerConfiguration = [
+            'preferences' => [
+                'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
+                'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
+                'Magento\Framework\Mail\Template\TransportBuilder' => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
+            ],
+        ];
+        if ($this->loadTestExtensionAttributes) {
+            $objectManagerConfiguration = array_merge(
+                $objectManagerConfiguration,
+                [
+                    'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
+                        'arguments' => [
+                            'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
+                        ],
                     ],
-                ],
-            ]
-        );
-
+                ]
+            );
+        }
+        $objectManager->configure($objectManagerConfiguration);
         /** Register event observer of Integration Framework */
         /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
         $eventConfigData = $objectManager->get('Magento\Framework\Event\Config\Data');
@@ -348,12 +362,11 @@ class Application
                     'integration_tests' => [
                         'instance' => 'Magento\TestFramework\Event\Magento',
                         'method' => 'initStoreAfter',
-                        'name' => 'integration_tests'
-                    ]
-                ]
+                        'name' => 'integration_tests',
+                    ],
+                ],
             ]
         );
-
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
@@ -472,7 +485,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = glob(
-            $this->_globalConfigDir . '/{di.xml}',
+            $this->_globalConfigDir . '/{di.xml,vendor_path.php}',
             GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {

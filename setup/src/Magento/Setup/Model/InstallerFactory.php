@@ -6,8 +6,10 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\ErrorHandler;
+use Magento\Framework\Setup\LoggerInterface;
 use Magento\Setup\Module\ResourceFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class InstallerFactory
 {
@@ -33,6 +35,9 @@ class InstallerFactory
     {
         $this->serviceLocator = $serviceLocator;
         $this->resourceFactory = $resourceFactory;
+        // For Setup Wizard we are using our customized error handler
+        $handler = new ErrorHandler();
+        set_error_handler([$handler, 'handler']);
     }
 
     /**

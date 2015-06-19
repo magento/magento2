@@ -863,49 +863,49 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testSearchGroupsDataProvider()
     {
         return [
-            ['tax_class_id', '3', []],
-            ['tax_class_id', '0', null],
+            ['tax_class_id', 3, []],
+            ['tax_class_id', 0, null],
             ['code', md5(mt_rand(0, 10000000000) . time()), null],
             [
                 'id',
-                '0',
+                0,
                 [
-                    'id' => '0',
+                    'id' => 0,
                     'code' => 'NOT LOGGED IN',
-                    'tax_class_id' => '3',
-                    'tax_class_name' => 'Retail Customer'
-                ]
+                    'tax_class_id' => 3,
+                    'tax_class_name' => 'Retail Customer',
+                ],
             ],
             [
                 'code',
                 'General',
                 [
-                    'id' => '1',
+                    'id' => 1,
                     'code' => 'General',
-                    'tax_class_id' => '3',
-                    'tax_class_name' => 'Retail Customer'
-                ]
+                    'tax_class_id' => 3,
+                    'tax_class_name' => 'Retail Customer',
+                ],
             ],
             [
                 'id',
-                '2',
+                2,
                 [
-                    'id' => '2',
+                    'id' => 2,
                     'code' => 'Wholesale',
-                    'tax_class_id' => '3',
-                    'tax_class_name' => 'Retail Customer'
-                ]
+                    'tax_class_id' => 3,
+                    'tax_class_name' => 'Retail Customer',
+                ],
             ],
             [
                 'code',
                 'Retailer',
                 [
-                    'id' => '3',
+                    'id' => 3,
                     'code' => 'Retailer',
-                    'tax_class_id' => '3',
-                    'tax_class_name' => 'Retail Customer'
-                ]
-            ]
+                    'tax_class_id' => 3,
+                    'tax_class_name' => 'Retail Customer',
+                ],
+            ],
         ];
     }
 

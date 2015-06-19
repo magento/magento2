@@ -6,13 +6,13 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Setup\Model\Installer;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
-use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -67,7 +67,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $adminFactory;
 
     /**
-     * @var \Magento\Setup\Model\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
 
@@ -150,7 +150,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
-        $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
+        $this->logger = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $this->random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
@@ -340,9 +340,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 'modules' => [
                     'Bar_Two' => 0,
                     'Foo_One' => 1,
-                    'New_Module' => 1
-                ]
-            ]
+                    'New_Module' => 1,
+                ],
+            ],
         ];
 
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
@@ -371,7 +371,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     [
                         ['ConfigOne.php', '/config/ConfigOne.php'],
-                        ['ConfigTwo.php', '/config/ConfigTwo.php']
+                        ['ConfigTwo.php', '/config/ConfigTwo.php'],
                     ]
                 )
             );
@@ -416,7 +416,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(
                 [
                     "The directory '/var' doesn't exist - skipping cleanup",
-                    "The directory '/static' doesn't exist - skipping cleanup"
+                    "The directory '/static' doesn't exist - skipping cleanup",
                 ]
             )
         );

@@ -6,21 +6,21 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\ConsoleLogger;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\InstallerFactory;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\StoreConfigurationDataMapper;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\Store;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Framework\Url\Validator;
+use Magento\Framework\Validator\Currency;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\Validator\Timezone;
-use Magento\Framework\Validator\Currency;
-use Magento\Framework\Url\Validator;
+use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Magento\Store\Model\Store;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -182,7 +182,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     if (!$url->isValid($value)) {
                         $errorMsgs = $url->getMessages();
                         $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL
-                            . '\': ' . $errorMsgs[Validator::INVALID_URL] .'</error>';
+                            . '\': ' . $errorMsgs[Validator::INVALID_URL] . '</error>';
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
@@ -231,7 +231,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                             if (!empty($errorMsgs)) {
                                 $errors[] = '<error>' . 'Command option \''
                                     . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                                    . '\': ' . $errorMsgs[Validator::INVALID_URL] .'</error>';
+                                    . '\': ' . $errorMsgs[Validator::INVALID_URL] . '</error>';
                             }
                         }
                         if (empty($errorMsgs) && strpos($value, 'https:') === false) {
@@ -239,7 +239,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                         }
                     } catch (LocalizedException $e) {
                         $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                            . '\': ' . $e->getLogMessage() .'</error>';
+                            . '\': ' . $e->getLogMessage() . '</error>';
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN:

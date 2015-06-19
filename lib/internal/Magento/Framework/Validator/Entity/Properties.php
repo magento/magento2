@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Validator\Entity;
 
-use Magento\Framework\Object;
 use Magento\Framework\Model\AbstractModel;
 
 class Properties extends \Magento\Framework\Validator\AbstractValidator
@@ -36,6 +35,7 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      * @param AbstractModel $value
      * @return bool
      * @throws \InvalidArgumentException when $value is not instanceof \Magento\Framework\Object
+     * @api
      */
     public function isValid($value)
     {
@@ -50,7 +50,7 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
             foreach ($this->_readOnlyProperties as $property) {
                 if ($this->_hasChanges($value->getData($property), $value->getOrigData($property))) {
                     $this->_messages[__CLASS__] = [
-                        (string)new \Magento\Framework\Phrase("Read-only property cannot be changed.")
+                        (string)new \Magento\Framework\Phrase("Read-only property cannot be changed."),
                     ];
                     break;
                 }
