@@ -65,7 +65,7 @@ class AddComment extends \Magento\Backend\App\Action
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please enter Comment Text.')
+                    __('Please enter a comment.')
                 );
             }
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
