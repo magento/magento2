@@ -10,7 +10,11 @@
 @action__border-color: @color-gray68;
 @action__font-size: @font-size__base;
 @action__line-height: @line-height__base;
-@action__padding-top: round(((@field-control__height - (@field-control__font-size * @field-control__line-height) - .2rem) / 2), 1);
+
+@action__padding-top: round(((@field-control__height -
+    (@field-control__font-size * @field-control__line-height) -
+    ((unit(@field-control__border-width) / @font-rem-ratio) * 2)) / 2), 1);
+
 @action__padding-bottom: @field-control__padding-top;
 @action__height: 3.3rem;
 
