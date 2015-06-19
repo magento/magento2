@@ -81,11 +81,11 @@
                     </item>
                 </item>
             </argument>
-            <filterRange name="page_id">
+            <filterRange name="price">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">page_id</item>
-                        <item name="label" xsi:type="string" translate="true">ID</item>
+                        <item name="dataScope" xsi:type="string">price</item>
+                        <item name="label" xsi:type="string" translate="true">Price</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.listing_filters</item>
                         </item>
@@ -199,12 +199,26 @@
                 </item>
             </argument>
         </column>
+        <column name="entity_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                </item>
+            </argument>
+        </column>
         <column name="thumbnail" class="Magento\Catalog\Ui\Component\Listing\Columns\Thumbnail">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/thumbnail</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="altField" xsi:type="string">name</item>
                     <item name="has_preview" xsi:type="string">1</item>
@@ -221,6 +235,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
@@ -273,6 +288,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
@@ -287,6 +303,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Visibility</item>
@@ -301,6 +318,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
