@@ -44,8 +44,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param \Magento\Eav\Model\Attribute\FrontendType $frontendType
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
