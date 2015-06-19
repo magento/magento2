@@ -4,6 +4,8 @@
   "require": {
     "php": "~5.5.0|~5.6.0",
     "magento/module-catalog": "0.74.0-beta13",
+    "magento/module-catalog-inventory": "0.74.0-beta13",
+    "magento/module-eav": "0.74.0-beta13",
     "magento/module-import-export": "0.74.0-beta13",
     "magento/module-catalog-import-export": "0.74.0-beta13",
     "magento/module-customer": "0.74.0-beta13",
