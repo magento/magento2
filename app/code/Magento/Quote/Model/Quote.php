@@ -787,33 +787,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * Save related items
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-
-        if (null !== $this->_addresses) {
-            $this->getAddressesCollection()->save();
-        }
-
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-
-        if (null !== $this->_payments) {
-            $this->getPaymentsCollection()->save();
-        }
-
-        if (null !== $this->_currentPayment) {
-            $this->getPayment()->save();
-        }
-        return $this;
-    }
-
-    /**
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
