@@ -9,7 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
-use Magento\Ui\DataProvider\EavValidationRul;
+use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -75,7 +75,7 @@ class DataProvider implements DataProviderInterface
         'sortOrder' => 'sort_order',
         'notice' => 'note',
         'default' => 'default_value',
-        'size' => 'scope_multiline_count'
+        'size' => 'multiline_count'
     ];
 
     /**
@@ -90,9 +90,9 @@ class DataProvider implements DataProviderInterface
     ];
 
     /**
-     * @var EavValidationRul
+     * @var EavValidationRules
      */
-    protected $eavValidationRul;
+    protected $eavValidationRules;
 
     /**
      * Constructor
@@ -100,7 +100,7 @@ class DataProvider implements DataProviderInterface
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param EavValidationRul $eavValidationRul
+     * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param array $meta
@@ -110,7 +110,7 @@ class DataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        EavValidationRul $eavValidationRul,
+        EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         array $meta = [],
@@ -119,7 +119,7 @@ class DataProvider implements DataProviderInterface
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->eavValidationRul = $eavValidationRul;
+        $this->eavValidationRules = $eavValidationRules;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
@@ -369,7 +369,7 @@ class DataProvider implements DataProviderInterface
                 }
             }
 
-            $rules = $this->eavValidationRul->build($attribute, $meta[$code]);
+            $rules = $this->eavValidationRules->build($attribute, $meta[$code]);
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }
