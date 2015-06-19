@@ -4,70 +4,74 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div class="block-sign-in-wrapper" data-block="sign-in">
-    <a href="#" class="action action-sign-in" data-trigger="sign-in"><?php echo __('Sign in or Sign up'); ?></a>
-    <div class="block block-sign-in"
-        data-role="dropdownDialog"
-        style="display: none"
-        data-mage-init='{
-            "dropdownDialog":{
-                "appendTo":"[data-block=sign-in]",
-                "triggerTarget":"[data-trigger=sign-in]",
-                "timeout": "2000",
-                "closeOnMouseLeave": false,
-                "closeOnEscape": true,
-                "bodyClass": "_has-dropdown",
-                "triggerClass":"_active",
-                "parentClass":"_active"},
-            "tabs":{
-                "openedState":"_active",
-                "collapsibleElement": ".fieldset",
-                "header": ".legend span"
-            }}'>
-        <fieldset class="fieldset" data-label="<?php echo __('or') ?>">
-            <legend class="legend"><span><?php echo __('Sign in') ?></span></legend><br/>
-            <div class="field required">
-                <label class="label" for="sign-in-email">
-                    <span><?php echo __('Email Address') ?></span>
-                </label>
-                <div class="control">
-                    <input class="input-text" id="sign-in-email" type="email">
-                </div>
-            </div>
-            <div class="field required">
-                <label class="label" for="sign-in-password">
-                    <span><?php echo __('Password') ?></span>
-                </label>
-                <div class="control">
-                    <input class="input-text" id="sign-in-password" type="password">
-                </div>
-            </div>
+<!-- /Temp MAGETWO-36239 markup -->
+<div class="block-authentication"
+    style="display: none"
+    data-mage-init='{
+        "Magento_Ui/js/modal/modal":{
+            "type": "popup",
+            "modalClass": "popup-authentication",
+            "responsive": true,
+            "innerScroll": true,
+            "trigger": ".proceed-to-checkout",
+            "buttons": []
+        }}'>
+    <div class="block block-new-customer"
+         data-label="<?php echo __('or')?>">
+        <div class="block-title">
+            <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php echo __('Checkout out as a new customer') ?></strong>
+        </div>
+        <div class="block-content" aria-labelledby="block-new-customer-heading">
+            <p><?php echo __('Creating an account has many benefits:') ?></p>
+            <ul>
+                <li><?php echo __('See order and shipping status') ?></li>
+                <li><?php echo __('Track order history') ?></li>
+                <li><?php echo __('Check out faster') ?></li>
+            </ul>
             <div class="actions-toolbar">
-                <div class="primary"><button type="button" class="action login secondary" name="send" id="send2"><span><?php echo __('Sign in') ?></span></button></div>
-                <div class="secondary"><a class="action remind" href="http://magento2.loc/customer/account/forgotpassword/"><span><?php echo __('Forgot Your Password?') ?></span></a></div>
-            </div>
-        </fieldset>
-        <fieldset class="fieldset" data-label="<?php echo __('or') ?>">
-            <legend class="legend"><span><?php echo __('Sign up') ?></span></legend><br/>
-            <div class="field required">
-                <label class="label" for="sign-up-email">
-                    <span><?php echo __('Email Address') ?></span>
-                </label>
-                <div class="control">
-                    <input class="input-text" id="sign-up-email" type="email">
+                <div class="primary">
+                    <a href="#" class="action action-register primary"><span><?php echo __('Create Account') ?></span></a>
                 </div>
             </div>
-            <div class="field required">
-                <label class="label" for="sign-up-password">
-                    <span><?php echo __('Password') ?></span>
-                </label>
-                <div class="control">
-                    <input class="input-text" id="sign-up-password" type="password">
+        </div>
+    </div>
+    <div class="block block-customer-login"
+         data-label="<?php echo __('or')?>">
+        <div class="block-title">
+            <strong id="block-customer-login-heading" role="heading" aria-level="2"><?php echo __('Checkout out using your account')?></strong>
+        </div>
+        <div class="block-content" aria-labelledby="block-customer-login-heading">
+            <form class="form form-login"
+                  method="post"
+                  id="login-form"
+                  data-mage-init='{"validation":{}}'>
+                <div class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
+                    <div class="field email required">
+                        <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+                        <div class="control">
+                            <input name="login[username]"
+                                   id="email"
+                                   type="email"
+                                   class="input-text"
+                                   data-validate="{required:true, 'validate-email':true}">
+                        </div>
+                    </div>
+                    <div class="field password required">
+                        <label for="pass" class="label"><span><?php echo __('Password') ?></span></label>
+                        <div class="control">
+                            <input name="login[password]"
+                                   type="password"
+                                   class="input-text"
+                                   id="pass"
+                                   data-validate="{required:true, 'validate-password':true}">
+                        </div>
+                    </div>
+                    <div class="actions-toolbar">
+                        <div class="primary"><button type="submit" class="action action-login secondary" name="send" id="send2"><span><?php echo __('Sign In') ?></span></button></div>
+                        <div class="secondary"><a class="action" href="<?php echo $block->getForgotPasswordUrl() ?>"><span><?php echo __('Forgot Your Password?') ?></span></a></div>
+                    </div>
                 </div>
-            </div>
-            <div class="actions-toolbar">
-                <div class="primary"><button type="button" class="action register primary" name="send" id="send2"><span><?php echo __('Create Account') ?></span></button></div>
-            </div>
-        </fieldset>
+            </form>
+        </div>
     </div>
 </div>

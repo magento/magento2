@@ -85,10 +85,13 @@
         }
     }
     .modal-inner-wrap {
+        box-sizing: border-box;
         .vendor-prefix-display(flex);
         .vendor-prefix-flex-direction(column);
         height: auto;
-        margin: @modal-popup__indent-vertical (100% - @modal-popup__width) / 2;
+        left: 0;
+        right: 0;
+        margin: @modal-popup__indent-vertical auto;
         position: absolute;
         transform: translateY(-200%);
         transition-duration: .2s;
@@ -100,10 +103,10 @@
 
 //
 
-._has-modal {
-    height: 100vh;
+body._has-modal {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    width: 100vw;
 }
 
 // Modals overlay

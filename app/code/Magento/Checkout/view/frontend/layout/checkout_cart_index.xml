@@ -42,6 +42,7 @@
                     <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
                 </container>
             </block>
+            <block class="Magento\Framework\View\Element\Template" name="cart.customer.signin" template="Magento_Checkout::sign-in.phtml" />
         </referenceContainer>
         <block class="Magento\Checkout\Block\Cart\Additional\Info" name="additional.product.info" template="cart/additional/info.phtml"/>
     </body>

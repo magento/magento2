@@ -4,68 +4,77 @@
  * See COPYING.txt for license details.
  */
 -->
-<style>
-    #checkout-step-authentication {
-        position: relative;
-    }
-    .login-wrapper {
-        width: 353px;
-        border: 1px solid grey;
-        position: absolute;
-        background-color: #ffffff;
-        right: 0;
-        top: 30px;
-        padding: 15px;
-        z-index: 10000;
-    }
-    .login-link {
-        float: right;
-    }
-</style>
-
-<div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="visible: isActive()">
-    <a href="#" data-bind="click: toggleForm, text: $t('Sign In')" class="login-link"></a>
-    <div class="login-wrapper" data-bind="fadeVisible: visible">
+<div class="authentication-wrapper" data-block="authentication" data-bind="visible: isActive()">
+    <a href="#"
+       data-bind="text: $t('Sign In')"
+       class="action action-sign-in"
+       data-trigger="authentication"></a>
+    <div class="block-authentication"
+         style="display: none"
+         data-bind="mageInit: {
+            'Magento_Ui/js/modal/modal':{
+                'type': 'custom',
+                'modalClass': 'authentication-dropdown',
+                'trigger': '[data-trigger=authentication]',
+                'wrapperClass': 'authentication-wrapper',
+                'parentModalClass': '_has-modal-custom _has-auth-shown',
+                'responsive': true,
+                'responsiveClass': 'custom-slide',
+                'overlayClass': 'dropdown-overlay modal-custom-overlay',
+                'buttons': []
+            }}">
         <!-- ko foreach: getRegion('before') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
-        <div class="block block-customer-login">
+        <div class="block block-customer-login"
+             data-bind="attr: {'data-label': $t('or')}">
             <div class="block-title">
-                <strong id="block-customer-login-heading" role="heading" aria-level="2" data-bind="text: $t('Sign In')"></strong>
+                <strong id="block-customer-login-heading"
+                        role="heading"
+                        aria-level="2"
+                        data-bind="text: $t('Sign In')"></strong>
             </div>
             <div class="block-content" aria-labelledby="block-customer-login-heading">
-                <form class="form login" data-role="login"
-                      data-bind="submit:login"
-                      method="post"
-                      data-mage-init='{"validation":{}}'>
-                    <fieldset class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
-                        <div class="field email required">
+                <form data-role="login"
+                      data-bind="submit:login, mageInit: {'validation':{}}"
+                      method="post">
+                    <div class="fieldset"
+                              data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
+                        <div class="field field-email required">
                             <label class="label" for="login-email"><span data-bind="text: $t('Email Address')"></span></label>
                             <div class="control">
-                                <input type="email" class="input-text" id="login-email" name="username" data-validate="{required:true, 'validate-email':true}" />
+                                <input type="email"
+                                       class="input-text"
+                                       id="login-email"
+                                       name="username"
+                                       data-validate="{required:true, 'validate-email':true}" />
                             </div>
                         </div>
-                        <div class="field password required">
+                        <div class="field field-password required">
                             <label for="login-password" class="label"><span data-bind="text: $t('Password')"></span></label>
                             <div class="control">
-                                <input type="password" class="input-text" id="login-password" name="password" data-validate="{required:true, 'validate-password':true}"/>
+                                <input type="password"
+                                       class="input-text"
+                                       id="login-password"
+                                       name="password"
+                                       data-validate="{required:true, 'validate-password':true}"/>
                             </div>
                         </div>
                         <!-- ko foreach: getRegion('additional-login-form-fields') -->
                         <!-- ko template: getTemplate() --><!-- /ko -->
                         <!-- /ko -->
-                        <div class="actions-toolbar">
-                            <input name="context" type="hidden" value="checkout" />
-                            <div class="primary">
-                                <button type="submit" class="action login primary"><span data-bind="text: $t('Sign In')"></span></button>
-                            </div>
-                            <div class="secondary">
-                                <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
-                                    <span data-bind="text: $t('Forgot Password')"></span>
-                                </a>
-                            </div>
+                    </div>
+                    <div class="actions-toolbar">
+                        <input name="context" type="hidden" value="checkout" />
+                        <div class="primary">
+                            <button type="submit" class="action action-login secondary"><span data-bind="text: $t('Sign In')"></span></button>
                         </div>
-                    </fieldset>
+                        <div class="secondary">
+                            <a class="action action-remind" data-bind="attr: { href: forgotPasswordUrl }">
+                                <span data-bind="text: $t('Forgot Password')"></span>
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
