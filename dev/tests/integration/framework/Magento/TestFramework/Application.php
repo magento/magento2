@@ -333,9 +333,7 @@ class Application
         $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
         $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
         $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
-
         Helper\Bootstrap::setObjectManager($objectManager);
-
         $objectManagerConfiguration = [
             'preferences' => [
                 'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
@@ -357,7 +355,6 @@ class Application
             );
         }
         $objectManager->configure($objectManagerConfiguration);
-
         /** Register event observer of Integration Framework */
         /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
         $eventConfigData = $objectManager->get('Magento\Framework\Event\Config\Data');
@@ -372,7 +369,6 @@ class Application
                 ]
             ]
         );
-
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
