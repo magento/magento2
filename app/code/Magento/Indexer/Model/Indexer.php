@@ -135,7 +135,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function getActionClass()
     {
-        return '\Magento\Indexer\Model\Action\Php';
+        return $this->getData('action_class');
     }
 
     /**
