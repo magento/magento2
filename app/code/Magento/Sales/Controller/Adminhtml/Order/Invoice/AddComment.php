@@ -74,7 +74,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $this->getRequest()->setParam('invoice_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new LocalizedException(__('Please enter Comment Text.'));
+                throw new LocalizedException(__('Please enter a comment.'));
             }
             $invoice = $this->getInvoice();
             if (!$invoice) {

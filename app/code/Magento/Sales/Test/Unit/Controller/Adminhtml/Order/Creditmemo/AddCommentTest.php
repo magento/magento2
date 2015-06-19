@@ -212,7 +212,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNoComment()
     {
-        $message = 'Please enter Comment Text.';
+        $message = 'Please enter a comment.';
         $response = ['error' => true, 'message' => $message];
         $data = [];
 
