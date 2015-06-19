@@ -151,6 +151,9 @@ class Application
         AutoloaderInterface $autoloadWrapper,
         $loadTestExtensionAttributes = false
     ) {
+        if (getcwd() != BP . '/dev/tests/integration') {
+            chdir(BP . '/dev/tests/integration');
+        }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
         $this->_globalConfigDir = realpath($globalConfigDir);
@@ -488,7 +491,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = glob(
-            $this->_globalConfigDir . '/{di.xml}',
+            $this->_globalConfigDir . '/{di.xml,vendor_path.php}',
             GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
