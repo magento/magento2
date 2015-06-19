@@ -64,7 +64,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider saveDataProvider
      */
-    public function testSave($storeId, $entityIndexes, $expected)
+    public function testSave($entityIndexes, $expected)
     {
         if ($expected) {
             $this->connection->expects($this->once())
@@ -79,12 +79,10 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => [
-                null,
                 [],
                 []
             ],
             'correctData' => [
-                13,
                 [
                     28 => [
                         123 => 'Value of 123',
