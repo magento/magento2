@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navReadinessCheck.phtml') ?>
+
+<section class="page-inner-wrap">
+    <h2 class="page-sub-title">Step 1: Readiness Check</h2>
+    <div class="accent-box">
+        <p class="text-stretch">You are about to upgrade your system from version x.x.x to x.x.x.</p>
+        <p class="text-stretch">Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
+        <button class="btn btn-large btn-prime" ng-click="$state.go('.progress')" type="button">Start Readiness Check
+        </button>
+    </div>
+</section>

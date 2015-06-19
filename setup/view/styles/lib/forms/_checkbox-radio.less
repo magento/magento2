@@ -7,7 +7,11 @@
 //  Variables
 //  _____________________________________________
 
+@checkbox__background-color: @color-white;
 @checkbox__border-color: @color-gray68;
+@checkbox-check__font-size: 1em;
+@checkbox-check__line-height: 1;
+@checkbox-icon__content: @icon-success-thick__content;
 @radio-bullet__color: @color-brownie;
 
 //
@@ -69,11 +73,13 @@
 .form-el-checkbox {
     + .form-label {
         &:before {
+            background-color: @checkbox__background-color;
             border-color: @checkbox__border-color;
             border-radius: @form-el__border-radius;
-            height: 1.4rem;
-            line-height: 1;
-            width: 1.4rem;
+            height: 1.6rem;
+            line-height: @checkbox-check__line-height;
+            width: 1.6rem;
+            font-size: @checkbox-check__font-size;
         }
     }
 }
@@ -84,7 +90,7 @@
     &:checked {
         + .form-label {
             &::before {
-                content: @icon-success-thick__content;
+                content: @checkbox-icon__content;
                 font-family: @icons__font-family;
             }
         }
@@ -103,8 +109,8 @@
             background-color: @color-white;
             border: 1px solid @color-gray68;
             border-radius: 100%;
-            height: 1.6rem; //  16px
-            width: 1.6rem; //  16px
+            height: 1.8rem;
+            width: 1.8rem;
         }
         &:after {
             background: transparent;

@@ -1,0 +1,46 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navReadinessCheckInProgress.phtml') ?>
+
+<h2 class="page-sub-title">Step 1: Readiness Check</h2>
+
+<div class="message message-spinner">
+    <span class="spinner">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </span>
+    <span class="message-text">We're checking your environment to make sure you're ready for the upgrade.</span>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-success"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">PHP Version Check</h3>
+        <p class="text-stretch">
+            Your PHP version is correct (5.5.15).
+        </p>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Checking PHP Extensions...</h3>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Checking File Permissions...</h3>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Checking Module and Component Dependencies...</h3>
+    </div>
+</div>

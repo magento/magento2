@@ -1,0 +1,171 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navReadinessCheckFailed.phtml') ?>
+
+<h2 class="page-sub-title">Step 1: Readiness Check</h2>
+
+<div class="message message-error">
+    <span class="message-text"><strong>Something went wrong</strong> Please resolved these issues to continue.</span>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-failed"></span>
+
+    <div class="readiness-check-side">
+        <p class="side-title">Need Help?</p>
+        <a href="#phpDoc" target="_blank">PHP Documentation</a>
+    </div>
+
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">PHP Version Check</h3>
+        <p class="text-stretch">
+            Your PHP version is x.x.x. Magento Admin, [extension name 1], [module name 2], and <a href="#">3 more components</a> require PHP version x.x.x
+            <a href="#hide">Hide Details</a>
+        </p>
+        <div>
+            <p class="text-stretch">
+                Download and install PHP version x.x.x. from <a href="www.phtml.net" target="_blank">www.phtml.net</a> using this <a href="#phpDoc" target="_blank">PHP Documentation</a>.
+            </p>
+            <p>
+                If you need more help, please call your hosting provider.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-failed"></span>
+
+    <div class="readiness-check-side">
+        <p class="side-title">Need Help?</p>
+        <a href="#phpExtHelp" target="_blank">PHP Extension Help</a>
+    </div>
+
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">PHP Extensions Check</h3>
+        <p>
+            6 missing PHP extensions.
+            <a href="#hide"><span>Hide Details</span></a>
+        </p>
+        <div>
+            <p class="text-stretch">
+                The best way to resolve this is to install the correct missing extensions. The exact fix depends on your server, your host, and other system variables. Our
+                <a href="#phpExtHelp" target="_blank">PHP Extension Help</a> can get you started.
+            </p>
+            <p>
+                If you need more help, please call your hosting provider.
+            </p>
+            <ul class="list">
+                <li class="list-item-failed">
+                    PHP Extension curl: Magento Admin & BankPayment Extension need this.
+                </li>
+                <li class="list-item-failed">
+                    PHP Extension dom: Magento Admin needs this.
+                </li>
+                <li class="list-item-success">
+                    PHP Extension gd.
+                </li>
+                <li class="list-item-failed">
+                    PHP Extension icon: Magento Admin needs this.
+                </li>
+                <li class="list-item-success">
+                    PHP Extension mcrypt.
+                </li>
+                <li class="list-item-failed">
+                    PHP Extension pdo_mysql.
+                </li>
+                <li class="list-item-success">
+                    PHP Extension name1.
+                </li>
+                <li class="list-item-failed">
+                    PHP Extension name 2: Magento Admin & <a href="#">3 more components</a> need this.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+
+    <span class="readiness-check-icon icon-failed"></span>
+
+    <div class="readiness-check-side">
+        <p class="side-title">Need Help?</p>
+        <a href="#filePermissions" target="_blank">File Permissions Help</a>
+    </div>
+
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">File Permission Check</h3>
+        <p>
+            1 file permission not met.
+            <a href="#hide"><span>Hide details</span></a>
+        </p>
+        <div>
+            <p class="text-stretch">
+                The best way to resolve this is to allow write permissions for the following Magento directories. The exact fix depends on your server, your host, and other system variables. Our File Permission Help can get you started.
+            </p>
+            <p>
+                If you need more help, please call your hosting provider.
+            </p>
+            <ul class="list">
+                <li class="list-item-failed">"app/etc" directory permission</li>
+                <li class="list-item-success">"pub/media" directory permission</li>
+                <li class="list-item-success">"pub/media/customer" directory permission</li>
+                <li class="list-item-success">"pub/media/downloadable" directory permission</li>
+                <li class="list-item-success">"pub/media/theme_customization" directory permission</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="readiness-check-item">
+    <span class="readiness-check-icon icon-failed"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Module and Component Dependencies Check</h3>
+        <p>
+            7 components are in conflict.
+            <a href="#hide">Hide Details</a>
+        </p>
+        <div>
+            <ul class="list">
+                <li class="list-item-failed">Component [name]</li>
+                <li class="list-item-failed">Component [name]</li>
+                <li class="list-item-failed">Component [name]</li>
+            </ul>
+
+            <div class="message message-icon-top message-warning">
+                <p class="message-text">
+                    <strong>Magento Required Actinos </strong>  Check “Allow” to let Magento resolve the conflict for you. You can use Component Manager to undo these actions after the upgrade.
+                </p>
+                <input
+                    id="allow"
+                    class="form-el-checkbox"
+                    type="checkbox"/>
+                <label class="form-label" for="allow">Allow</label>
+            </div>
+
+            <p>Update these module(s)</p>
+            <ul class="list">
+                <li class="list-item-warning">Module [name]</li>
+                <li class="list-item-warning">Module [name]</li>
+            </ul>
+
+            <p>Delete these module(s)</p>
+            <ul class="list">
+                <li class="list-item-warning">Module [name]</li>
+            </ul>
+
+            <p>Install these module(s)</p>
+            <ul class="list">
+                <li class="list-item-warning">Module [name]</li>
+                <li class="list-item-warning">Module [name]</li>
+                <li class="list-item-warning">Module [name]</li>
+            </ul>
+        </div>
+    </div>
+</div>

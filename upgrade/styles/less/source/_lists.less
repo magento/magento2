@@ -9,8 +9,11 @@
 
 @list-item__margin-bottom: 1.2rem;
 
+.list {
+    margin-bottom: 3rem;
+}
+
 .list-dot {
-    margin-bottom: 2.9rem;
     .list-item {
         display: list-item;
         list-style-position: inside;
@@ -24,4 +27,38 @@
     font-weight: @font-weight__bold;
     letter-spacing: @letter-spacing__small;
     margin-bottom: @list-item__margin-bottom;
+}
+
+.list-item-success,
+.list-item-failed,
+.list-item-warning {
+    &:before {
+        font-family: @icons-upgrade__font-name;
+        font-size: 1.6rem;
+        top: 0;
+    }
+}
+
+.list-item-success {
+    &:before {
+        content: @icon-check-mage__content;
+        font-size: 1.6rem;
+    }
+}
+
+.list-item-failed {
+    &:before {
+        content: @icon-error__content;
+        font-size: 1.4rem;
+        left: .1rem;
+        top: .2rem;
+    }
+}
+
+.list-item-warning {
+    &:before {
+        content: @icon-warning__content;
+        font-size: 1.3rem;
+        left: .2rem;
+    }
 }
