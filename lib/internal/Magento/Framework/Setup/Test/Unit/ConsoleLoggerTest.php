@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Setup\Test\Unit;
 
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 
 class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
     private $console;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Setup\Model\ConsoleLogger
+     * @var \PHPUnit_Framework_MockObject_MockObject|ConsoleLogger
      */
     private $consoleLoggerModel;
 
