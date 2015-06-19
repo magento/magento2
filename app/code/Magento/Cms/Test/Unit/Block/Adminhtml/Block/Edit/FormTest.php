@@ -93,11 +93,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewFileSystem;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $rootDirectory;
 
     /**
@@ -184,7 +179,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
         $this->rootDirectory = $this->getMock(
             'Magento\Framework\Filesystem\Directory\ReadInterface',
