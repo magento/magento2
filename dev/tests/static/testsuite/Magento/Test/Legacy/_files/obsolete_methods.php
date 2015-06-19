@@ -2247,4 +2247,5 @@ return [
     ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
 ];
