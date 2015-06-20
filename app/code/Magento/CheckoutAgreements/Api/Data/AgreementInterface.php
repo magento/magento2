@@ -17,6 +17,7 @@ interface AgreementInterface
     const CHECKBOX_TEXT = 'checkbox_text';
     const IS_ACTIVE = 'is_active';
     const IS_HTML = 'is_html';
+    const IS_AUTO_APPROVED = 'is_auto_approval';
     /**#@-*/
 
     /**
@@ -128,4 +129,22 @@ interface AgreementInterface
      * @return $this
      */
     public function setIsHtml($isHtml);
+
+    /**
+     * Returns the agreement consumer approval flag.
+     *
+     * @return bool
+     */
+    public function getIsAutoApproved();
+
+    /**
+     * Sets the agreement consumer approval flag.
+     * * true - Automatically approve
+     * * false - Manually approve
+     *
+     * @param bool $isAutoApproved
+     * @return $this
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function setIsAutoApproved($isAutoApproved);
 }
