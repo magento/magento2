@@ -12,14 +12,49 @@
 }
 
 table.items {
-    .table();
+    .table(@table__width, 0);
     .table-background-color();
     .table-bordered(@_table_type: horizontal);
     .css(border, @table__border-width @table__border-style @table__border-color);
+
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th {
+                padding-bottom: @indent__s;
+            }
+
+            > th,
+            > td {
+                padding-top: @indent__s;
+
+                &.message-gift {
+                    border-top: none;
+                    padding-top: none;
+                }
+            }
+        }
+    }
 }
 
 .email-non-inline() {
     table.items {
         .table-overflow();
+    }
+}
+
+.product-info {
+    dl {
+        margin-bottom: @indent__s;
+
+        dt,
+        dd {
+            margin-bottom: 0;
+        }
+
+        dd {
+            padding-left: @email-content__padding;
+        }
     }
 }
