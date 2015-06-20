@@ -1784,9 +1784,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
         }
-        if (isset($mediaGallery)) {
-            return $mediaGallery;
-        }
+        return $mediaGallery;
     }
 
     /**
