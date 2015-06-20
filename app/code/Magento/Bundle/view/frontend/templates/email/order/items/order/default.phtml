@@ -27,29 +27,29 @@
     <?php if ($_item->getParentItem()): ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
-        <tr>
-            <td class="bundle-item" colspan="3">
-                <strong><em><?php echo $attributes['option_label'] ?></em></strong>
-            </td>
-        </tr>
-        <?php $_prevOptionId = $attributes['option_id'] ?>
+            <tr>
+                <td class="bundle-item" colspan="3">
+                    <strong><em><?= $attributes['option_label'] ?></em></strong>
+                </td>
+            </tr>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr id="order-item-row-<?php echo $_item->getId() ?>">
+    <tr id="order-item-row-<?= $_item->getId() ?>">
         <?php if (!$_item->getParentItem()): ?>
             <td class="bundle-item-parent product-info">
-                <p class="product-name"><?php echo $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?php echo __('SKU'); ?>: <?php echo $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+                <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="bundle-item-parent align-center">
-                <?php echo $_item->getQtyOrdered()*1 ?>
+                <?= $_item->getQtyOrdered() * 1 ?>
             </td>
             <td class="bundle-item-parent align-right">
-                <?php echo $block->getItemPrice($_item); ?>
+                <?= $block->getItemPrice($_item); ?>
             </td>
         <?php else: ?>
             <td class="bundle-item bundle-details product-info" colspan="3">
-                <p><?php echo $block->getValueHtml($_item)?></p>
+                <p><?= $block->getValueHtml($_item)?></p>
             </td>
         <?php endif; ?>
     </tr>
@@ -59,10 +59,10 @@
 <tr>
     <td align="left" valign="top" colspan="3">
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
+        <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-                        <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
+            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                        <dd><?= $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
@@ -71,10 +71,10 @@
             <table class="message-gift">
                 <tr>
                     <td>
-                        <strong><?php echo __('Gift Message') ?></strong>
-                        <br /><?php echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><?php echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><?php echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+                        <strong><?= __('Gift Message') ?></strong>
+                        <br /><?= __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><?= __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><?= __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
                     </td>
                 </tr>
             </table>

@@ -1,16 +1,24 @@
-Action,Action
-Tax,Tax
-Website,Website
-"All Websites","All Websites"
 "Add Tax","Add Tax"
 "Delete Tax","Delete Tax"
+"All Websites","All Websites"
+FPT,FPT
+"$attributes must be an array","$attributes must be an array"
 "We found a duplicate of website, country and state fields for a fixed product tax","We found a duplicate of website, country and state fields for a fixed product tax"
 "Including FPT only","Including FPT only"
 "Including FPT and FPT description","Including FPT and FPT description"
 "Excluding FPT, FPT description, final price","Excluding FPT, FPT description, final price"
 "Excluding FPT","Excluding FPT"
 "Fixed Product Tax","Fixed Product Tax"
+"Excl. Tax","Excl. Tax"
+Total,Total
+"Incl. Tax","Incl. Tax"
+"Total incl. tax","Total incl. tax"
+Website,Website
 Country/State,Country/State
+Tax,Tax
+Action,Action
+"Final Price","Final Price"
+Price,Price
 "Fixed Product Taxes","Fixed Product Taxes"
 "Enable FPT","Enable FPT"
 "Display Prices In Product Lists","Display Prices In Product Lists"
@@ -19,4 +27,3 @@ Country/State,Country/State
 "Display Prices In Emails","Display Prices In Emails"
 "Apply Tax To FPT","Apply Tax To FPT"
 "Include FPT In Subtotal","Include FPT In Subtotal"
-"FPT","FPT"

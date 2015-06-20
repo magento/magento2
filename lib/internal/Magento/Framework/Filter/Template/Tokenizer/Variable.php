@@ -59,10 +59,11 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
     /**
      * Get string value for method args
      *
+     * @param string|null $breaks characters to break on in abscense of quote
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getString()
+    public function getString($breaks = null)
     {
         $value = '';
         if ($this->isWhiteSpace()) {
@@ -77,8 +78,15 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
             $value .= $this->char();
         }
 
+        if ($breaks) {
+            $breaks = str_split($breaks);
+        }
+
         while ($this->next()) {
-            if (!$breakSymbol && ($this->isWhiteSpace() || $this->char() == ',' || $this->char() == ')')) {
+            if (!$breakSymbol && !$breaks && ($this->isWhiteSpace() || $this->char() == ',' || $this->char() == ')')) {
+                $this->prev();
+                break;
+            } elseif (!$breakSymbol && $breaks && in_array($this->char(), $breaks)) {
                 $this->prev();
                 break;
             } elseif ($breakSymbol && $this->char() == $breakSymbol) {
@@ -91,6 +99,100 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
             }
         }
         return $value;
+    }
+
+    /**
+     * Get array member key or return false if none present
+     *
+     * @return bool|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getMemberKey()
+    {
+        $value = '';
+        if ($this->isWhiteSpace()) {
+            return $value;
+        }
+
+        $quoteStart = $this->isQuote();
+
+        if ($quoteStart) {
+            $closeQuote = $this->char();
+        } else {
+            $closeQuote = false;
+            $value .= $this->char();
+        }
+
+        while ($this->next()) {
+            if ($closeQuote) {
+                if ($this->char() == $closeQuote) {
+                    $closeQuote = false;
+                    continue;
+                }
+                $value .= $this->char();
+            } elseif ($this->char() == ':') {
+                $this->next();
+                return $value;
+            } elseif ($this->char() == ',' || $this->char() == ']') {
+                $this->prev();
+                break;
+            } else {
+                $value .= $this->char();
+            }
+        }
+
+        if ($quoteStart) {
+            $this->back(strlen($value) + 1);
+        } else {
+            $this->back(strlen($value) - 1);
+        }
+        return false;
+    }
+
+    /**
+     * Get array value for method args
+     *
+     * Parses arrays demarkated via open/closing brackets. Keys/value pairs are seperated by a
+     * single colon character. Multi-dimensional arrays are supported. Example input:
+     *
+     * [key:value, "key2":"value2", [
+     *     [123, foo],
+     * ]]
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getArray()
+    {
+        $values = [];
+        if (!$this->isArray()) {
+            return $values;
+        }
+
+        while ($this->next()) {
+            if ($this->char() == ']') {
+                break;
+            } elseif ($this->isWhiteSpace() || $this->char() == ',') {
+                continue;
+            }
+
+            $key = $this->getMemberKey();
+
+            if ($this->isNumeric()) {
+                $val = $this->getNumber();
+            } elseif ($this->isArray()) {
+                $val = $this->getArray();
+            } else {
+                $val = $this->getString(',]');
+            }
+
+            if ($key) {
+                $values[$key] = $val;
+            } else {
+                $values[] = $val;
+            }
+        }
+        return $values;
     }
 
     /**
@@ -114,6 +216,16 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
     }
 
     /**
+     * Retrun true if current char is opening boundary for an array
+     *
+     * @return bool
+     */
+    public function isArray()
+    {
+        return $this->char() == '[';
+    }
+
+    /**
      * Return array of arguments for method
      *
      * @return array
@@ -127,6 +239,8 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
                 continue;
             } elseif ($this->isNumeric()) {
                 $value[] = $this->getNumber();
+            } elseif ($this->isArray()) {
+                $value[] = $this->getArray();
             } else {
                 $value[] = $this->getString();
             }

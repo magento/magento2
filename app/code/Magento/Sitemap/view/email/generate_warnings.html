@@ -6,9 +6,12 @@
 -->
 <!--@subject Sitemap generate Warnings @-->
 <!--@vars
-{"var warnings":"Sitemap Generate Warnings"}
+{"var warnings":"Sitemap Generation Warnings"}
 @-->
-Sitemap generate warnings:
 
+{{template config_path="design/email/header_template"}}
 
+<h1>{{trans "Sitemap Generation Warnings"}}</h1>
 {{var warnings}}
+
+{{template config_path="design/email/footer_template"}}

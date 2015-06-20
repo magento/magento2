@@ -125,4 +125,60 @@ EXPECTED_RESULT;
         // Callback should *not* run as callbacks should be reset
         $this->assertEquals($value, $this->templateFilter->filter($value));
     }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::varDirective
+     * @covers \Magento\Framework\Filter\Template::getVariable
+     * @covers \Magento\Framework\Filter\Template::getStackArgs
+     * @dataProvider varDirectiveDataProvider
+     */
+    public function testVarDirective($construction, $variables, $expectedResult)
+    {
+        $this->templateFilter->setVariables($variables);
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
+    }
+
+    public function varDirectiveDataProvider()
+    {
+        /* @var $stub \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
+        $stub = $this->getMockBuilder('\Magento\Framework\Object')
+            ->disableOriginalConstructor()
+            ->disableProxyingToOriginalMethods()
+            ->setMethods(['bar'])
+            ->getMock();
+
+        $stub->expects($this->once())
+            ->method('bar')
+            ->will($this->returnCallback(function ($arg) {
+                return serialize($arg);
+            }));
+
+        return [
+            'no variables' => [
+                '{{var}}',
+                [],
+                '{{var}}',
+            ],
+            'invalid variable' => [
+                '{{var invalid}}',
+                ['foobar' => 'barfoo'],
+                '',
+            ],
+            'string variable' => [
+                '{{var foobar}}',
+                ['foobar' => 'barfoo'],
+                'barfoo',
+            ],
+            'array argument to method' => [
+                '{{var foo.bar([param_1:value_1, param_2:$value_2, param_3:[a:$b, c:$d]])}}',
+                [
+                    'foo' => $stub,
+                    'value_2' => 'lorem',
+                    'b' => 'bee',
+                    'd' => 'dee',
+                ],
+                'a:3:{s:7:"param_1";s:7:"value_1";s:7:"param_2";s:5:"lorem";s:7:"param_3";a:2:{s:1:"a";s:3:"bee";s:1:"c";s:3:"dee";}}',
+            ],
+        ];
+    }
 }

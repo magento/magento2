@@ -6,48 +6,50 @@
 -->
 <!--@subject {{var store.getFrontendName()}}: New Order # {{var order.increment_id}} @-->
 <!--@vars
-{"store url=\"\"":"Store Url",
+{
+"store url=''":"Store Url",
 "var logo_url":"Email Logo Image Url",
 "var logo_alt":"Email Logo Image Alt",
-"escapehtml var=$order.getCustomerName()":"Customer Name",
-"var store.getFrontendName()":"Store Name",
-"store url=\"customer/account/\"":"Customer Account Url",
-"var order.increment_id":"Order Id",
-"var order.getCreatedAtFormated(1)":"Order Created At (datetime)",
 "var formattedBillingAddress":"Billing Address",
 "var payment_html":"Payment Details",
 "var formattedShippingAddress":"Shipping Address",
 "var order.getShippingDescription()":"Shipping Description",
-"layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
-"var order.getEmailCustomerNote()":"Email Order Note"}
+"var order.getEmailCustomerNote()":"Email Order Note"
+"layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid"
+}
 @-->
-<!--@styles @-->
 
 {{template config_path="design/email/header_template"}}
 
 <table cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td class="intro">
-            <p>{{escapehtml var=$order.getCustomerName()}},</p>
+            <p>{{trans "Hello %customer_name," customer_name=$order.getCustomerName()}}</p>
+
             <p>
-                Thank you for your order from {{var store.getfrontendName()}}.
-                Once your package ships we will send an email with a link to track your order.
-                You can also check the status of your order by
-                <a href="{{store url="customer/account/"}}">logging into your account</a>.
+                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Once your package ships we will send an email with a link to track your order."}}
+                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}
             </p>
             <p>
-                If you have questions about your order, you can
-                {{depend store_email}}email us at <a href="mailto:{{var store_email}}">{{var store_email}}</a>{{/depend}}{{depend store_phone}}or call us at <a href="tel:{{var store_phone}}">{{var store_phone}}</a>{{/depend}}.
+                {{trans
+                    'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>'
+
+                    store_email=$store_email
+                |raw}}{{depend store_phone}}
+                    {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
+                {{/depend}}.
+
                 {{depend store_hours}}
-                    Our store hours are: <span class="no-link">{{var store_hours}}</span>.
+                    {{trans 'Our store hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
                 {{/depend}}
             </p>
         </td>
     </tr>
     <tr class="order-details">
         <td>
-            <h1>Your Order <span class="no-link">#{{var order.increment_id}}</span></h1>
-            <p>Placed on {{var order.getCreatedAtFormated(1)}}</p>
+            <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
+            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
         </td>
     </tr>
     <tr class="order-information">
@@ -64,20 +66,20 @@
             <table class="order-information" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                     <td class="address-details">
-                        <h3>Bill To:</h3>
-                        <p>{{var formattedBillingAddress }}</p>
+                        <h3>{{trans "Billing Information:"}}</h3>
+                        <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="address-details">
-                        <h3>Ship To:</h3>
-                        <p>{{var formattedShippingAddress }}</p>
+                        <h3>{{trans "Shipping Information:"}}</h3>
+                        <p>{{var formattedShippingAddress|raw}}</p>
                     </td>
                     {{/depend}}
                 </tr>
                 <tr>
                     <td class="method-info">
                         <h3>Payment Method:</h3>
-                        {{var payment_html}}
+                        {{var payment_html|raw}}
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="method-info">

@@ -598,7 +598,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             self::STATE_PAYMENT_REVIEW,
             self::STATE_COMPLETE,
             self::STATE_CLOSED,
-            self::STATE_HOLDED
+            self::STATE_HOLDED,
         ];
         if (in_array($this->getState(), $notHoldableStates)) {
             return false;
@@ -1772,12 +1772,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Get formated order created date in store timezone
+     * Get formatted order created date in store timezone
      *
      * @param   string $format date format type (short|medium|long|full)
      * @return  string
      */
-    public function getCreatedAtFormated($format)
+    public function getCreatedAtFormatted($format)
     {
         return $this->timezone->formatDate(
             $this->timezone->scopeDate(

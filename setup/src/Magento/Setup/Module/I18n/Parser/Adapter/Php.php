@@ -13,6 +13,11 @@ use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 class Php extends AbstractAdapter
 {
     /**
+     * Partial path to unit test file which intentionally contains an invalid phrase
+     */
+    const UNIT_TEST_MATCH_STR = 'Test/Unit/File/WriteTest.php';
+
+    /**
      * Phrase collector
      *
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
@@ -36,6 +41,10 @@ class Php extends AbstractAdapter
     {
         $this->_phraseCollector->setIncludeObjects();
         $this->_phraseCollector->parse($this->_file);
+
+        if (stripos($this->_file, self::UNIT_TEST_MATCH_STR) !== false) {
+            return;
+        }
 
         foreach ($this->_phraseCollector->getPhrases() as $phrase) {
             $this->_addPhrase($phrase['phrase'], $phrase['line']);

@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <style type="text/css">
-        {{var template_styles}}
+        {{var template_styles|raw}}
 
         {{css file="css/email.css"}}
     </style>
@@ -44,6 +44,7 @@
                                 alt="{{var logo_alt}}"
                                 border="0"
                             />
+                        </a>
                     </td>
                 </tr>
                 <tr>

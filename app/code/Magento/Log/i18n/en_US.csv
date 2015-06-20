@@ -1,13 +1,30 @@
+All,All
+"Customers Only","Customers Only"
+"Visitors Only","Visitors Only"
+Customer,Customer
+Visitor,Visitor
+"Customers Now Online","Customers Now Online"
+Customers,Customers
+"Online Customers","Online Customers"
+"Log Cleanup Warnings","Log Cleanup Warnings"
+"Online Customers Options","Online Customers Options"
+"Online Minutes Interval","Online Minutes Interval"
+"Leave empty for default (15 minutes).","Leave empty for default (15 minutes)."
+"Log Cleaning","Log Cleaning"
+"Save Log, Days","Save Log, Days"
+"Enable Log Cleaning","Enable Log Cleaning"
 "Start Time","Start Time"
 Frequency,Frequency
 "Error Email Recipient","Error Email Recipient"
 "Error Email Sender","Error Email Sender"
 "Error Email Template","Error Email Template"
-"Log Cleaning","Log Cleaning"
-"Save Log, Days","Save Log, Days"
-"Enable Log Cleaning","Enable Log Cleaning"
-"Customers Now Online","Customers Now Online"
-Online,Online
-"Online Customers","Online Customers"
-"Online Customers Options","Online Customers Options"
-"Online Minutes Interval","Online Minutes Interval"
+ID,ID
+n/a,n/a
+"First Name","First Name"
+"Last Name","Last Name"
+Email,Email
+"IP Address","IP Address"
+"Session Start Time","Session Start Time"
+"Last Activity","Last Activity"
+Type,Type
+"Last URL","Last URL"

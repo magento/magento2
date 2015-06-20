@@ -7,6 +7,7 @@ namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Phrase;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,16 +17,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $_model = null;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\TestFramework\ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->_model = $this->_objectManager->create(
             'Magento\Email\Model\Template\Filter'
         );
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
@@ -79,31 +81,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
         $this->assertStringMatchesFormat('http://example.com/index.php/backend/translation/ajax/index/%A', $url);
-    }
-
-    public function testEscapehtmlDirective()
-    {
-        $this->_model->setVariables(
-            ['first' => '<p><i>Hello</i> <b>world!</b></p>', 'second' => '<p>Hello <strong>world!</strong></p>']
-        );
-
-        $allowedTags = 'i,b';
-
-        $expectedResults = [
-            'first' => '&lt;p&gt;<i>Hello</i> <b>world!</b>&lt;/p&gt;',
-            'second' => '&lt;p&gt;Hello &lt;strong&gt;world!&lt;/strong&gt;&lt;/p&gt;',
-        ];
-
-        foreach ($expectedResults as $varName => $expectedResult) {
-            $result = $this->_model->escapehtmlDirective(
-                [
-                    '{{escapehtml var=$' . $varName . ' allowed_tags=' . $allowedTags . '}}',
-                    'escapehtml',
-                    ' var=$' . $varName . ' allowed_tags=' . $allowedTags,
-                ]
-            );
-            $this->assertEquals($expectedResult, $result);
-        }
     }
 
     /**
@@ -190,6 +167,54 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $directive
+     * @param $translations
+     * @param $expectedResult
+     * @internal param $translatorData
+     * @dataProvider transDirectiveDataProvider
+     */
+    public function testTransDirective($directive, $translations, $expectedResult)
+    {
+        $renderer = Phrase::getRenderer();
+
+        $translator = $this->getMockBuilder('\Magento\Framework\Translate')
+            ->disableOriginalConstructor()
+            ->setMethods(['getData'])
+            ->getMock();
+
+        $translator->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($translations));
+
+        $this->_objectManager->addSharedInstance($translator, 'Magento\Framework\Translate');
+        $this->_objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');
+        Phrase::setRenderer($this->_objectManager->create('Magento\Framework\Phrase\RendererInterface'));
+
+        $this->assertEquals($expectedResult, $this->_model->filter($directive));
+
+        Phrase::setRenderer($renderer);
+    }
+
+    /**
+     * @return array
+     */
+    public function transDirectiveDataProvider()
+    {
+        return [
+            [
+                '{{trans "foobar"}}',
+                [],
+                'foobar',
+            ],
+            [
+                '{{trans "foobar"}}',
+                ['foobar' => 'barfoo'],
+                'barfoo',
+            ],
+        ];
+    }
+
+    /**
      * Ensures that the css directive will successfully compile and output contents of a LESS file,
      * as well as supporting loading files from a theme fallback structure.
      *
@@ -219,23 +244,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         return [
             'CSS from theme' => [
                 'file="css/email-1.css"',
-                'color: #111;'
+                'color: #111;',
             ],
             'CSS from parent theme' => [
                 'file="css/email-2.css"',
-                'color: #222;'
+                'color: #222;',
             ],
             'CSS from grandparent theme' => [
                 'file="css/email-3.css"',
-                'color: #333;'
+                'color: #333;',
             ],
             'Missing file parameter' => [
                 '',
-                '/* "file" parameter must be specified */'
+                '/* "file" parameter must be specified */',
             ],
             'Empty or missing file' => [
                 'file="css/non-existent-file.css"',
-                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
+                '/* Contents of css/non-existent-file.css could not be loaded or is empty */',
             ],
             'File with compilation error results in error message' => [
                 'file="css/file-with-error.css"',
