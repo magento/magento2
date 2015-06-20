@@ -363,6 +363,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail'];
 
     /**
+     * Column names that holds images files names from bunch
+     *
+     * @var string[]
+     */
+    protected $_imagesArrayKeysFromBunch = ['base_image', 'small_image', 'thumbnail_image', 'additional_images'];
+
+    /**
      * Permanent entity columns.
      *
      * @var string[]
@@ -1224,36 +1231,26 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Prepare all media files
      *
-     * @return $this
+     * @param $allImegesFromBunch
+     * @return array
      */
-    protected function _prepareAllMediaFiles()
+    protected function _prepareAllMediaFiles($allImegesFromBunch)
     {
-        static $productEntityTableName = null;
         static $productMediaGalleryTableName = null;
         static $resource = null;
         if (!$resource) {
             $resource = $this->_resourceFactory->create();
         }
-        if (!$productEntityTableName) {
-            $productEntityTableName = $resource->getTable('catalog_product_entity');
-        }
         if (!$productMediaGalleryTableName) {
             $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
         }
-        if(empty($this->cachedImages)) {
-            $allMedia = $this->_connection->fetchAll($this->_connection->select()
-                ->from(
-                    ["entity" => $productEntityTableName],
-                    ['sku']
-                )->joinLeft(
-                    ["media_gallery" => $productMediaGalleryTableName],
-                    "entity.entity_id = media_gallery.entity_id",
-                    ['value']
-                )
-            );
-            $this->cachedImages = $allMedia;
-        }
-        return $this;
+        $allMedia = $this->_connection->fetchAll($this->_connection->select()
+            ->from(
+                $productMediaGalleryTableName,
+                ['entity_id', 'value']
+            )->where('value IN (?)', $allImegesFromBunch)
+        );
+        return $allMedia;
     }
 
     /**
@@ -1269,7 +1266,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
-        $this->_prepareAllMediaFiles();
+        //$this->_prepareAllMediaFiles();
         $productLimit = null;
         $productsQty = null;
 
@@ -1373,147 +1370,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'website_id' => self::VALUE_ALL == $rowData['_group_price_website'] ||
                         $priceIsGlobal ? 0 : $this->storeResolver->getWebsiteCodeToId($rowData['_group_price_website']),
                     ];
-                }
-
-                // 5. Media gallery phase
-
-                $fullDispersionPath = '';
-                $imageIsSet = null;
-                $imageFromProduct = null;
-                $imageInProductIsSet = null;
-                if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                    $dispersionPath =
-                        \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
-                    $imageName = preg_replace('/[^a-z0-9\._-]+/i', '', $rowData[self::COL_MEDIA_IMAGE]);
-                    $fullDispersionPath = mb_strtolower($dispersionPath . '/' . $imageName);
-                    foreach ($this->cachedImages as $image) {
-                        if (($image['sku'] == $rowData[self::COL_SKU])
-                            && ($image['value'] == $fullDispersionPath)
-                        ) {
-                            $imageInProductIsSet = true;
-                            $imageFromProduct = $image['value'];
-                            break;
-                        } elseif (($image['sku'] == $rowData[self::COL_SKU])
-                            && (preg_replace('/_[0-9]?\./', '.', $image['value']) == $fullDispersionPath)
-                        ) {
-                            $imageInProductIsSet = true;
-                            $imageFromProduct = preg_replace('/_[0-9]?\./', '.', $image['value']);
-                            break;
-                        } elseif (in_array($fullDispersionPath, $image)) {
-                            $imageIsSet = true;
-                            break;
-                        }
-                    }
-                }
-                if (($imageInProductIsSet && ($imageFromProduct != $fullDispersionPath))
-                    || (!isset($imageIsSet) && !isset($imageInProductIsSet))
-                ) {
-                    $mediaGalleryImages = array();
-                    $mediaGalleryLabels = array();
-                    if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                        $mediaGalleryImages =
-                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                        if (isset($rowData['_media_image_label'])) {
-                            $mediaGalleryLabels =
-                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
-                        } else {
-                            $mediaGalleryLabels = [];
-                        }
-                        if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
-                            $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
-                        } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
-                            $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
-                        }
-                    }
-
-                    foreach ($this->_imagesArrayKeys as $imageCol) {
-                        if (!empty($rowData[$imageCol])
-                            && ($imageCol != self::COL_MEDIA_IMAGE)
-                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
-                            $mediaGalleryImages[] = $rowData[$imageCol];
-                            if (isset($mediaGalleryLabels)) {
-                                $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label'])
-                                ? $rowData[$imageCol . '_label']
-                                : '';
-                            } else {
-                                $mediaGalleryLabels[] = '';
-                            }
-                        }
-                    }
-
-                    $rowData[self::COL_MEDIA_IMAGE] = array();
-                    foreach ($mediaGalleryImages as $mediaImage) {
-                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
-                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
-                                trim($mediaImage)
-                            );
-                        }
-                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                    }
-
-                    foreach ($this->_imagesArrayKeys as $imageCol) {
-                        if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE)) {
-                            $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
-                        }
-                    }
-
-                    if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                        $position = 0;
-
-                        foreach ($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
-                            $mediaGallery[$rowSku][] = [
-                                'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                'position' => $position++,
-                                'disabled' => '',
-                                'value' => $media_image,
-                            ];
-                        }
-                    }
-                } elseif ($imageInProductIsSet && $imageFromProduct == $fullDispersionPath) {
-                    $mediaGalleryImages = array();
-                    $mediaGalleryLabels = array();
-                    if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                        $mediaGalleryImages =
-                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                        if (isset($rowData['_media_image_label'])) {
-                            $mediaGalleryLabels =
-                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
-                        } else {
-                            $mediaGalleryLabels = array();
-                        }
-                        if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
-                            $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
-                        } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
-                            $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
-                        }
-                    }
-
-                    foreach ($this->_imagesArrayKeys as $imageCol) {
-                        if (!empty($rowData[$imageCol])
-                            && ($imageCol != self::COL_MEDIA_IMAGE)
-                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
-                            $mediaGalleryImages[] = $rowData[$imageCol];
-                            if (isset($rowData[$imageCol . '_label'])) {
-                                $mediaGalleryLabels[] = $rowData[$imageCol . '_label'];
-                            } else {
-                                $mediaGalleryLabels[] = '';
-                            }
-                        }
-                    }
-
-                    $rowData[self::COL_MEDIA_IMAGE] = array();
-                    foreach ($mediaGalleryImages as $mediaImage) {
-                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
-                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
-                                trim($mediaImage),
-                                true
-                            );
-                        }
-                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                    }
-                } else {
-                    $this->addRowError(__("Image already exists for '%s'"), $rowNum, self::COL_MEDIA_IMAGE);
                 }
 
                 // 6. Attributes phase
@@ -1622,7 +1478,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             )->_saveProductGroupPrices(
                 $groupPrices
             )->_saveMediaGallery(
-                $mediaGallery
+                $bunch
             )->_saveProductAttributes(
                 $attributes
             );
@@ -1803,15 +1659,147 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Upload images
+     *
+     * @param $bunch
+     * @return mixed
+     */
+    protected function getMediaGalleryData($bunch)
+    {
+        $allImegesFromBunch = [];
+        foreach ($bunch as $rowData) {
+            foreach ($this->_imagesArrayKeysFromBunch as $image) {
+                $dispersionPath =
+                    \Magento\Framework\File\Uploader::getDispretionPath($rowData[$image]);
+                $importImages = explode(",", $rowData[$image]);
+                foreach ($importImages as $importImage) {
+                    $imageSting = mb_strtolower(
+                        $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
+                    );
+                    $allImegesFromBunch[$importImage] = $imageSting;
+                }
+            }
+        }
+        $existedImages = $this->_prepareAllMediaFiles($allImegesFromBunch);
+        $mediaGallery = [];
+        foreach ($bunch as $rowNum => $rowData) {
+            $uploadedGalleryFiles = [];
+            if (!$this->validateRow($rowData, $rowNum)) {
+                continue;
+            }
+            $rowSku = $rowData[self::COL_SKU];
+            $mediaGalleryImages = array();
+            $mediaGalleryLabels = array();
+            if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
+                $mediaGalleryImages =
+                    explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                if (isset($rowData['_media_image_label'])) {
+                    $mediaGalleryLabels =
+                        explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
+                } else {
+                    $mediaGalleryLabels = [];
+                }
+                if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
+                    $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
+                } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
+                    $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
+                }
+            }
+
+            foreach ($this->_imagesArrayKeys as $imageCol) {
+                if (!empty($rowData[$imageCol])
+                    && ($imageCol != self::COL_MEDIA_IMAGE)
+                    && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
+                    $mediaGalleryImages[] = $rowData[$imageCol];
+                    if (isset($mediaGalleryLabels)) {
+                        $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label'])
+                            ? $rowData[$imageCol . '_label']
+                            : '';
+                    } else {
+                        $mediaGalleryLabels[] = '';
+                    }
+                }
+            }
+            $newSku = $this->getNewSku();
+            $entityIdNewProduct =
+                isset($newSku[$rowData[self::COL_SKU]]['entity_id'])
+                    ? $newSku[$rowData[self::COL_SKU]]['entity_id']
+                    : '';
+            $rowData[self::COL_MEDIA_IMAGE] = array();
+            foreach ($mediaGalleryImages as $mediaImage) {
+                if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
+                    $imageIsSet = 0;
+                    $idIsSet = 0;
+                    foreach ($existedImages as $currentImage) {
+                        if ($currentImage['value'] == $allImegesFromBunch[$mediaImage]) {
+                            $imageIsSet = 1;
+                            if ($currentImage['entity_id'] == $entityIdNewProduct) {
+                                $idIsSet = 1;
+                            }
+                            break;
+                        }
+                    }
+                    if ($imageIsSet && $idIsSet) {
+                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
+                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                                trim($mediaImage),
+                                true
+                            );
+                        }
+                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+                    } elseif (!$imageIsSet && !$idIsSet) {
+                        $newAddedImages = [];
+                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
+                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                                trim($mediaImage),
+                                true
+                            );
+                            $newAddedImages['entity_id'] = $entityIdNewProduct;
+                            $newAddedImages['value'] = $uploadedGalleryFiles[$mediaImage];
+                            $existedImages[] = $newAddedImages;
+                        }
+                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+
+                        foreach ($this->_imagesArrayKeys as $imageCol) {
+                            if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE)) {
+                                if(isset($uploadedGalleryFiles[$rowData[$imageCol]])) {
+                                    $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
+                                }
+                            }
+                        }
+                        if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
+                            $position = 0;
+
+                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
+                                $mediaGallery[$rowSku][] = [
+                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                    'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                    'position' => $position++,
+                                    'disabled' => '',
+                                    'value' => $media_image,
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (isset($mediaGallery)) {
+            return $mediaGallery;
+        }
+    }
+
+    /**
      * Save product media gallery.
      *
-     * @param array $mediaGalleryData
+     * @param array $bunch
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _saveMediaGallery(array $mediaGalleryData)
+    protected function _saveMediaGallery($bunch)
     {
+        $mediaGalleryData = $this->getMediaGalleryData($bunch);
         if (empty($mediaGalleryData)) {
             return $this;
         }
