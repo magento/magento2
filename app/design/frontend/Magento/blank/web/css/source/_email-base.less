@@ -144,18 +144,16 @@ body {
 .message-gift {
     background-color: @message__background__email;
     border: 1px solid @message__border-color__email;
-    margin: @layout-indent__width 0;
+    margin: @email-content__padding 0;
     width: 100%;
-}
 
-.message-info td,
-.message-gift td {
-    color: @message__color;
-    padding: @layout-indent__width;
-    margin: 0;
-}
+    td {
+        color: @message__color;
+        padding: @email-content__padding;
+        margin: 0;
 
-.message-info td a,
-.message-gift td a {
-    color: @message-link__color__email;
+        a {
+            color: @message-link__color__email;
+        }
+    }
 }
