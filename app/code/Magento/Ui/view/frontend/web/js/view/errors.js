@@ -9,6 +9,13 @@ define(['uiComponent', '../model/errorlist'], function (Component, errors) {
         errorList: errors.getAll(),
         defaults: {
             template: 'Magento_Ui/errors'
+        },
+
+        /**
+         * Remove all errors
+         */
+        removeAll: function () {
+            this.errorList.removeAll();
         }
     });
 });
