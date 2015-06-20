@@ -1231,10 +1231,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Prepare all media files
      *
-     * @param $allImegesFromBunch
+     * @param $allImagesFromBunch
      * @return array
      */
-    protected function _prepareAllMediaFiles($allImegesFromBunch)
+    protected function _prepareAllMediaFiles($allImagesFromBunch)
     {
         static $productMediaGalleryTableName = null;
         static $resource = null;
@@ -1248,7 +1248,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ->from(
                 $productMediaGalleryTableName,
                 ['entity_id', 'value']
-            )->where('value IN (?)', $allImegesFromBunch)
+            )->where('value IN (?)', $allImagesFromBunch)
         );
         return $allMedia;
     }
@@ -1665,7 +1665,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function getMediaGalleryData($bunch)
     {
-        $allImegesFromBunch = [];
+        $allImagesFromBunch = [];
         foreach ($bunch as $rowData) {
             foreach ($this->_imagesArrayKeysFromBunch as $image) {
                 $dispersionPath =
@@ -1675,11 +1675,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $imageSting = mb_strtolower(
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
                     );
-                    $allImegesFromBunch[$importImage] = $imageSting;
+                    $allImagesFromBunch[$importImage] = $imageSting;
                 }
             }
         }
-        $existedImages = $this->_prepareAllMediaFiles($allImegesFromBunch);
+        $existedImages = $this->_prepareAllMediaFiles($allImagesFromBunch);
         $mediaGallery = [];
         foreach ($bunch as $rowNum => $rowData) {
             $uploadedGalleryFiles = [];
@@ -1730,7 +1730,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $imageIsSet = 0;
                     $idIsSet = 0;
                     foreach ($existedImages as $currentImage) {
-                        if ($currentImage['value'] == $allImegesFromBunch[$mediaImage]) {
+                        if ($currentImage['value'] == $allImagesFromBunch[$mediaImage]) {
                             $imageIsSet = 1;
                             if ($currentImage['entity_id'] == $entityIdNewProduct) {
                                 $idIsSet = 1;
@@ -1767,8 +1767,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             }
                         }
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                            $position = 0;
-
+                            $position = array_search($mediaImage, $mediaGalleryImages);
                             foreach ($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
                                 $mediaGallery[$rowSku][] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
