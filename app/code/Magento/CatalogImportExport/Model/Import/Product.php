@@ -1266,7 +1266,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
-        //$this->_prepareAllMediaFiles();
         $productLimit = null;
         $productsQty = null;
 
