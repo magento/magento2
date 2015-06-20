@@ -93,7 +93,6 @@ body {
 
 .wrapper-inner {
     width: 100%;
-    padding-top: 15px;
 }
 
 .main {
@@ -101,18 +100,14 @@ body {
     width: 600px;
 }
 
-.header {
-    background-color: @email-content__background-color;
-    padding: 15px 15px 0 15px;
+.header,
+.footer {
+    padding: @layout-indent__width;
 }
 
 .content {
     background-color: @email-content__background-color;
-    padding: 15px;
-}
-
-.footer {
-    padding: 15px;
+    padding: @layout-indent__width;
 }
 
 // Layout (Mobile)
@@ -131,7 +126,7 @@ body {
     }
 
     .content {
-        padding: 15px !important;
+        padding: @layout-indent__width !important;
     }
 }
 
@@ -149,14 +144,14 @@ body {
 .message-gift {
     background-color: @message__background__email;
     border: 1px solid @message__border-color__email;
-    margin: 15px 0;
+    margin: @layout-indent__width 0;
     width: 100%;
 }
 
 .message-info td,
 .message-gift td {
     color: @message__color;
-    padding: 10px 15px;
+    padding: @layout-indent__width;
     margin: 0;
 }
 
