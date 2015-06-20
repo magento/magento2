@@ -14,8 +14,8 @@
 //  Styles for emails
 //  ---------------------------------------------
 
-// Import these file by reference so that only the styles included in the .email-non-inline() and .media-width()
-// mixins will be output. All other styles will be output via the email-inline.less file.
+//  Import these file by reference so that only the styles included in the .email-non-inline() and .media-width()
+//  mixins will be output. All other styles will be output via the email-inline.less file.
 
 @import (reference) 'source/_email-base.less'; // Contains primary email styles
 @import (reference) 'source/_email-extend.less'; // Contains theme-specific adjustments to email styles
@@ -32,12 +32,12 @@
 //  ---------------------------------------------
 
 @import 'source/lib/_responsive.less';
-// It is impossible to apply media queries as inline styles, so all media queries must be output in this file
+//  It is impossible to apply media queries as inline styles, so all media queries must be output in this file
 @media-target: 'all';
 
 //
 //  Non-inline styles
 //  ---------------------------------------------
 
-// Include all styles that have been indicated as non-inline styles
+//  Include all styles that have been indicated as non-inline styles
 .email-non-inline();
