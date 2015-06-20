@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="messages" data-bind="visible: errorList().length">
+<div class="messages" data-bind="visible: errorList().length, click: removeAll">
     <div class="message message-error error" data-bind="foreach: errorList">
         <div data-ui-id="checkout-cart-validationmessages-message-error" data-bind="text: $data"></div>
     </div>
