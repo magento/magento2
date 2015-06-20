@@ -7,15 +7,13 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
-        'mage/url',
         'Magento_Ui/js/model/errorlist',
-        'Magento_Customer/js/model/customer',
-        'underscore'
+        'Magento_Customer/js/model/customer'
     ],
-    function (quote, urlBuilder, storage, url, errorList, customer, _) {
+    function (quote, urlBuilder, storage, errorList, customer) {
         'use strict';
 
-        return function (deferred) {
+        return function () {
             var serviceUrl,
                 payload,
                 paymentData = quote.paymentMethod();
@@ -24,7 +22,7 @@ define(
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/set-payment-information', {
                     quoteId: quote.getQuoteId()
                 });
                 payload = {
@@ -34,24 +32,23 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
                 payload = {
                     cartId: quote.getQuoteId(),
                     paymentMethod: paymentData,
                     billingAddress: quote.billingAddress()
                 };
             }
-            storage.post(
+            return storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
-                    deferred.resolve();
+                    //do nothing
                 }
             ).fail(
                 function (response) {
                     var error = JSON.parse(response.responseText);
                     errorList.add(error);
-                    deferred.reject();
                 }
             );
         };
