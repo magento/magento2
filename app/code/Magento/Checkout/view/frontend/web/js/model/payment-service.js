@@ -19,10 +19,22 @@ define(
             selectedPaymentInfo: ko.observableArray([]),
             isFreeAvailable: false,
             setPaymentMethods: function(methods) {
+                var self = this,
+                    freeMethod = null;
+                $.each(methods, function (key, method) {
+                    if (method['code'] == 'free') {
+                        self.isFreeAvailable = true;
+                        freeMethod = method;
+                    }
+                });
+
+                if (self.isFreeAvailable && freeMethod && quote.totals().grand_total <= 0) {
+                    methods.splice(0, methods.length, freeMethod);
+                }
+
                 if (methods.length == 1) {
                     selectPaymentMethod(methods[0])
-                }
-                else if(quote.paymentMethod()) {
+                } else if(quote.paymentMethod()) {
                     var methodIsAvailable = methods.some(function (item) {
                         return (item.code == quote.paymentMethod().method);
                     });
@@ -44,8 +56,8 @@ define(
                     self = this;
                 $.each(methodList(), function (key, method) {
                     if (self.isFreeMethodActive() && (
-                        quote.getCalculatedTotal() <= 0 && method['code'] == 'free'
-                        || quote.getCalculatedTotal() > 0 && method['code'] != 'free'
+                        quote.totals().grand_total <= 0 && method['code'] == 'free'
+                        || quote.totals().grand_total > 0 && method['code'] != 'free'
                         ) || !self.isFreeMethodActive()
                     ) {
                         methods.push(method);
