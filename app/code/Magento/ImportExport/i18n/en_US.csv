@@ -1,28 +1,36 @@
-"-- Please Select --","-- Please Select --"
-Status,Status
-From,From
-To,To
 Export,Export
-label,label
-"Attribute Code","Attribute Code"
-Import,Import
-Continue,Continue
-"Attribute Label","Attribute Label"
 "Export Settings","Export Settings"
 "Entity Type","Entity Type"
 "Export File Format","Export File Format"
+From,From
+To,To
 "Attribute does not has options, so filtering is impossible","Attribute does not has options, so filtering is impossible"
 Exclude,Exclude
+"Attribute Label","Attribute Label"
+"Attribute Code","Attribute Code"
 Filter,Filter
 "Unknown attribute filter type","Unknown attribute filter type"
 "Check Data","Check Data"
+Import,Import
 "Import Settings","Import Settings"
 "Import Behavior","Import Behavior"
+"Field separator","Field separator"
+"Multiple value separator","Multiple value separator"
 "File to Import","File to Import"
 "Select File to Import","Select File to Import"
-Import/Export,Import/Export
+"Images File Directory","Images File Directory"
+"For Type ""Local Server"" use relative path to Magento installation,
+                                e.g. var/export, var/import, var/export/some/dir","For Type ""Local Server"" use relative path to Magento installation,
+                                e.g. var/export, var/import, var/export/some/dir"
 "Please correct the data sent.","Please correct the data sent."
+Import/Export,Import/Export
+Status,Status
 "Import successfully done","Import successfully done"
+"File is totally invalid. Please fix errors and re-upload file.","File is totally invalid. Please fix errors and re-upload file."
+"Errors limit (%1) reached. Please fix errors and re-upload file.","Errors limit (%1) reached. Please fix errors and re-upload file."
+"Please fix errors and re-upload file or simply press ""Import"" button to skip rows with errors","Please fix errors and re-upload file or simply press ""Import"" button to skip rows with errors"
+"File is partially valid, but import is not possible","File is partially valid, but import is not possible"
+"in rows:","in rows:"
 "File does not contain data. Please upload another one","File does not contain data. Please upload another one"
 "File is valid! To start import process press ""Import"" button","File is valid! To start import process press ""Import"" button"
 "File is valid, but import is not possible","File is valid, but import is not possible"
@@ -30,11 +38,6 @@ Import/Export,Import/Export
 "Please fix errors and re-upload file.","Please fix errors and re-upload file."
 "File was not uploaded","File was not uploaded"
 "Data is invalid or file is not uploaded","Data is invalid or file is not uploaded"
-"File is totally invalid. Please fix errors and re-upload file.","File is totally invalid. Please fix errors and re-upload file."
-"Errors limit (%1) reached. Please fix errors and re-upload file.","Errors limit (%1) reached. Please fix errors and re-upload file."
-"Please fix errors and re-upload file or simply press ""Import"" button' ' to skip rows with errors","Please fix errors and re-upload file or simply press ""Import"" button' ' to skip rows with errors"
-"File is partially valid, but import is not possible","File is partially valid, but import is not possible"
-"in rows:","in rows:"
 "The total size of the uploadable files can't be more than %1M","The total size of the uploadable files can't be more than %1M"
 "System doesn't allow to get file upload settings","System doesn't allow to get file upload settings"
 "Please enter a correct entity model","Please enter a correct entity model"
@@ -75,18 +78,19 @@ Import/Export,Import/Export
 "Columns number: ""%1"" have empty headers","Columns number: ""%1"" have empty headers"
 "Column names: ""%1"" are invalid","Column names: ""%1"" are invalid"
 "The adapter type must be a non empty string.","The adapter type must be a non empty string."
+"'%1' file extension is not supported","'%1' file extension is not supported"
 "Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource","Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource"
 "Please specify a source.","Please specify a source."
 "Cannot get autoincrement value","Cannot get autoincrement value"
 "Error in data structure: %1 values are mixed","Error in data structure: %1 values are mixed"
-"Add/Update","Add/Update"
-"Field separator","Field separator"
-"Multiple value separator","Multiple value separator"
-"Images File Directory","Images File Directory"
-"For Type ""Local Server"" use relative path to Magento installation, e.g. var/export, var/import, var/export/some/dir","For Type ""Local Server"" use relative path to Magento installation, e.g. var/export, var/import, var/export/some/dir"
+"-- Please Select --","-- Please Select --"
+label,label
+Add/Update,Add/Update
 "Replace Existing Complex Data","Replace Existing Complex Data"
 "Delete Entities","Delete Entities"
 "Add/Update Complex Data","Add/Update Complex Data"
 "Custom Action","Custom Action"
+"Error message","Error message"
 "Entity Attributes","Entity Attributes"
+Continue,Continue
 "Validation Results","Validation Results"

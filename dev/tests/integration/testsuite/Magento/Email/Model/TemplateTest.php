@@ -139,7 +139,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->_model->getTemplateSubject());
         $this->assertNotEmpty($this->_model->getOrigTemplateVariables());
         $this->assertInternalType('array', \Zend_Json::decode($this->_model->getOrigTemplateVariables()));
-        $this->assertNotEmpty($this->_model->getTemplateStyles());
     }
 
     /**
@@ -559,7 +558,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_mockModel();
         $this->_model->setId('customer_create_account_email_template');
-        $this->assertContains('<body style', $this->_model->processTemplate());
+        $this->assertContains('<body', $this->_model->processTemplate());
     }
 
     public function testGetSubject()

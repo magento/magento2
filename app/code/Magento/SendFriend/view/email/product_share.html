@@ -17,12 +17,20 @@ Available vars in this template:
   - sender_email    Sender email
 
 Use vars: {{var var_name}}
-*}<!--@subject Welcome, {{var name}} @-->
+*}
+<!--@subject Welcome, {{var name}} @-->
 <!--@vars
-{"escapehtml var=$name":"Recipient Name",
+{"var name":"Recipient Name",
 "var product_url":"Url for Product",
 "var product_name":"Product Name",
 "var message":"Sender Message"}
 @-->
 
-Welcome, {{escapehtml var=$name}}<br /><br />Please look at <a href="{{var product_url}}">{{var product_name}}</a><br /><br />Here is message: <br />{{var message}}<br /><br />
+{{template config_path="design/email/header_template"}}
+
+<h1>{{trans "Welcome, %name" name=$name}}</h1>
+<p>{{trans "Please look at"}} <a href="{{var product_url}}">{{var product_name}}</a></p>
+<h2>{{trans "Here is message:"}}</h2>
+<p>{{var message}}</p>
+
+{{template config_path="design/email/footer_template"}}

@@ -10,12 +10,12 @@
 <?php $_shipment = $block->getShipment() ?>
 <?php $_order    = $block->getOrder() ?>
 <?php if ($_shipment && $_order): ?>
-<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
+<table>
     <thead>
         <tr>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Item') ?></th>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Sku') ?></th>
-            <th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo __('Qty') ?></th>
+            <th><?= __('Item') ?></th>
+            <th><?= __('Sku') ?></th>
+            <th><?= __('Qty') ?></th>
         </tr>
     </thead>
 
@@ -25,8 +25,8 @@
 } else {
     $i++;
 } ?>
-    <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
-        <?php echo $block->getItemHtml($_item) ?>
+    <tbody<?= $i % 2 ? ' ' : '' ?>>
+        <?= $block->getItemHtml($_item) ?>
     </tbody>
     <?php endforeach; ?>
 

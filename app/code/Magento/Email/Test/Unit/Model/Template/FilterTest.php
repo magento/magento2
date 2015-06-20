@@ -16,11 +16,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filter;
-
-    /**
      * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
@@ -133,7 +128,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $mockedMethods Methods to mock
+     * @param array|null $mockedMethods Methods to mock
      * @return \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModel($mockedMethods = null)
@@ -159,6 +154,83 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests proper parsing of the {{trans ...}} directive used in email templates
+     *
+     * @dataProvider transDirectiveDataProvider
+     * @param $value
+     * @param $expected
+     * @param array $variables
+     */
+    public function testTransDirective($value, $expected, array $variables = [])
+    {
+        $filter = $this->getModel()->setVariables($variables);
+        $this->assertEquals($expected, $filter->filter($value));
+    }
+
+    /**
+     * Data provider for various possible {{trans ...}} usages
+     *
+     * @return array
+     */
+    public function transDirectiveDataProvider()
+    {
+        return [
+            'empty directive' => [
+                '{{trans}}',
+                '',
+            ],
+
+            'empty string' => [
+                '{{trans ""}}',
+                '',
+            ],
+
+            'no padding' => [
+                '{{trans"Hello cruel coder..."}}',
+                'Hello cruel coder...',
+            ],
+
+            'multi-line padding' => [
+                "{{trans \t\n\r'Hello cruel coder...' \t\n\r}}",
+                'Hello cruel coder...',
+            ],
+
+            'capture escaped double-quotes inside text' => [
+                '{{trans "Hello \"tested\" world!"}}',
+                'Hello &quot;tested&quot; world!',
+            ],
+
+            'capture escaped single-quotes inside text' => [
+                "{{trans 'Hello \\'tested\\' world!'|escape}}",
+                "Hello &#039;tested&#039; world!",
+            ],
+
+            'basic var' => [
+                '{{trans "Hello %adjective world!" adjective="tested"}}',
+                'Hello tested world!',
+            ],
+
+            'auto-escaped output' => [
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"}}',
+                'Hello &lt;em&gt;bad&lt;/em&gt; &lt;strong&gt;world&lt;/strong&gt;!',
+            ],
+
+            'unescaped modifier' => [
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"|raw}}',
+                'Hello <em>bad</em> <strong>world</strong>!',
+            ],
+
+            'variable replacement' => [
+                '{{trans "Hello %adjective world!" adjective="$mood"}}',
+                'Hello happy world!',
+                [
+                    'mood' => 'happy',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Test basic usages of applyInlineCss
      *
      * @param $html
@@ -169,7 +241,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyInlineCss($html, $css, $expectedResults)
     {
-        /* @var $filter \Magento\Email\Model\Template\Filter */
         $filter = $this->getModel(['getCssFilesContent']);
 
         $filter->expects($this->exactly(count($expectedResults)))

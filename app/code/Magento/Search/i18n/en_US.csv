@@ -1,0 +1,52 @@
+"Search Term","Search Term"
+Results,Results
+Uses,Uses
+"Search Terms","Search Terms"
+Search,Search
+"Add New Search Term","Add New Search Term"
+"Save Search","Save Search"
+"Delete Search","Delete Search"
+"Edit Search '%1'","Edit Search '%1'"
+"New Search","New Search"
+"Search Information","Search Information"
+"General Information","General Information"
+No,No
+Yes,Yes
+"Search Query","Search Query"
+Store,Store
+"Number of results","Number of results"
+"Number of results (For the last time placed)","Number of results (For the last time placed)"
+"For the last time placed.","For the last time placed."
+"Number of Uses","Number of Uses"
+"Synonym For","Synonym For"
+"Will make search for the query above return results for this search","Will make search for the query above return results for this search"
+"Redirect URL","Redirect URL"
+"ex. http://domain.com","ex. http://domain.com"
+"Display in Suggested Terms","Display in Suggested Terms"
+"You deleted the search.","You deleted the search."
+"We can't find a search term to delete.","We can't find a search term to delete."
+"This search no longer exists.","This search no longer exists."
+"Edit Search","Edit Search"
+"Please select searches.","Please select searches."
+"Total of %1 record(s) were deleted","Total of %1 record(s) were deleted"
+Reports,Reports
+"Search Terms Report","Search Terms Report"
+"You saved the search term.","You saved the search term."
+"Something went wrong while saving the search query.","Something went wrong while saving the search query."
+"You already have an identical search term query.","You already have an identical search term query."
+"Your search query can't be longer than %1, so we had to shorten your query.","Your search query can't be longer than %1, so we had to shorten your query."
+"Search entire store here...","Search entire store here..."
+"There are no search terms available.","There are no search terms available."
+"Search Engine","Search Engine"
+CSV,CSV
+"Excel XML","Excel XML"
+ID,ID
+Hits,Hits
+Delete,Delete
+"Are you sure?","Are you sure?"
+Synonym,Synonym
+"Suggested Terms","Suggested Terms"
+yes,yes
+no,no
+Action,Action
+Edit,Edit

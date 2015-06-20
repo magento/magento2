@@ -1,100 +1,30 @@
-All,All
-None,None
-"Are you sure?","Are you sure?"
-Cancel,Cancel
-Back,Back
-Product,Product
-Price,Price
-Quantity,Quantity
-Products,Products
-ID,ID
-SKU,SKU
-No,No
-Qty,Qty
-Action,Action
-Reset,Reset
-Edit,Edit
-"Add to Cart","Add to Cart"
-"Images (.gif, .jpg, .png)","Images (.gif, .jpg, .png)"
-"First Name","First Name"
-"Last Name","Last Name"
-Email,Email
-[GLOBAL],[GLOBAL]
-[WEBSITE],[WEBSITE]
-"[STORE VIEW]","[STORE VIEW]"
-"Use Default","Use Default"
-Delete,Delete
-Save,Save
-Store,Store
-"-- Please Select --","-- Please Select --"
-"Custom Design","Custom Design"
-Yes,Yes
-"Web Site","Web Site"
-Name,Name
-Status,Status
-Disabled,Disabled
-Enabled,Enabled
-"Save and Continue Edit","Save and Continue Edit"
-Title,Title
-"Store View","Store View"
-Type,Type
-Home,Home
-Search,Search
-"Select All","Select All"
-"Add New","Add New"
-"Please select items.","Please select items."
-Required,Required
-Website,Website
-"All Websites","All Websites"
-Next,Next
-"Please enter a valid number in this field.","Please enter a valid number in this field."
-Catalog,Catalog
-Images,Images
-"per page","per page"
-"Mass Actions","Mass Actions"
-"Unselect All","Unselect All"
-"Select Visible","Select Visible"
-"Unselect Visible","Unselect Visible"
-"items selected","items selected"
-"The information in this tab has been changed.","The information in this tab has been changed."
-"This tab contains invalid data. Please solve the problem before saving.","This tab contains invalid data. Please solve the problem before saving."
-Loading...,Loading...
-OK,OK
-Visibility,Visibility
-Position,Position
-Fixed,Fixed
-"Use Default Value","Use Default Value"
-N/A,N/A
-Percent,Percent
-"Option Title","Option Title"
-"Input Type","Input Type"
-"New Option","New Option"
-"Price Type","Price Type"
-"* Required Fields","* Required Fields"
-Availability,Availability
-"In stock","In stock"
-"Out of stock","Out of stock"
-"Excl. Tax:","Excl. Tax:"
-"Incl. Tax:","Incl. Tax:"
 Root,Root
 "Save Category","Save Category"
 "Delete Category","Delete Category"
+Reset,Reset
 "New Subcategory","New Subcategory"
 "New Root Category","New Root Category"
 "Set Root Category for Store","Set Root Category for Store"
 "Use Config Settings","Use Config Settings"
 "Use All Available Attributes","Use All Available Attributes"
-"General Information","General Information"
+"Custom Design","Custom Design"
+ID,ID
+Name,Name
+SKU,SKU
+Price,Price
+Position,Position
 "Category Data","Category Data"
 "Category Products","Category Products"
 "Add Subcategory","Add Subcategory"
 "Add Root Category","Add Root Category"
-"Create Permanent Redirect for old URL","Create Permanent Redirect for old URL"
 Day,Day
 Month,Month
 Year,Year
 "<label class=""label""><span>from</span></label>","<label class=""label""><span>from</span></label>"
 "<label class=""label""><span>to</span></label>","<label class=""label""><span>to</span></label>"
+[GLOBAL],[GLOBAL]
+[WEBSITE],[WEBSITE]
+"[STORE VIEW]","[STORE VIEW]"
 "WYSIWYG Editor","WYSIWYG Editor"
 "Add Product","Add Product"
 label,label
@@ -102,24 +32,27 @@ label,label
 "Add New Attribute","Add New Attribute"
 "Save in New Attribute Set","Save in New Attribute Set"
 "Enter Name for New Attribute Set","Enter Name for New Attribute Set"
+"Save and Continue Edit","Save and Continue Edit"
 "Save Attribute","Save Attribute"
 "Delete Attribute","Delete Attribute"
 "Edit Product Attribute ""%1""","Edit Product Attribute ""%1"""
 "New Product Attribute","New Product Attribute"
 "Advanced Attribute Properties","Advanced Attribute Properties"
 "Attribute Code","Attribute Code"
-"For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols","For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols"
+"This is used internally. Make sure you don't use spaces or more than %1 symbols.","This is used internally. Make sure you don't use spaces or more than %1 symbols."
 "Default Value","Default Value"
 "Unique Value","Unique Value"
 "Unique Value (not shared with other products)","Unique Value (not shared with other products)"
 "Not shared with other products","Not shared with other products"
 "Input Validation for Store Owner","Input Validation for Store Owner"
+"Store View","Store View"
+Website,Website
 Global,Global
 Scope,Scope
 "Declare attribute value saving scope","Declare attribute value saving scope"
 "Frontend Properties","Frontend Properties"
-"Use in Quick Search","Use in Quick Search"
-"Use in Advanced Search","Use in Advanced Search"
+"Use in Search","Use in Search"
+"Visible in Advanced Search","Visible in Advanced Search"
 "Comparable on Frontend","Comparable on Frontend"
 "Use for Promo Rule Conditions","Use for Promo Rule Conditions"
 "Enable WYSIWYG","Enable WYSIWYG"
@@ -131,6 +64,8 @@ Scope,Scope
 "Media Image","Media Image"
 Gallery,Gallery
 "System Properties","System Properties"
+No,No
+Yes,Yes
 "Data Type for Saving in Database","Data Type for Saving in Database"
 Text,Text
 Varchar,Varchar
@@ -143,9 +78,12 @@ Integer,Integer
 Properties,Properties
 "Manage Labels","Manage Labels"
 Visible,Visible
+"Web Site","Web Site"
 Searchable,Searchable
 Comparable,Comparable
 "Delete Selected Group","Delete Selected Group"
+"Add New","Add New"
+Back,Back
 "Delete Attribute Set","Delete Attribute Set"
 "You are about to delete all products in this set. ' 'Are you sure you want to delete this attribute set?","You are about to delete all products in this set. ' 'Are you sure you want to delete this attribute set?"
 "Save Attribute Set","Save Attribute Set"
@@ -162,6 +100,7 @@ Empty,Empty
 "Add New Set","Add New Set"
 "Product Templates","Product Templates"
 "Close Window","Close Window"
+Save,Save
 "New Product","New Product"
 "Save & Edit","Save & Edit"
 "Save & New","Save & New"
@@ -178,19 +117,27 @@ Websites,Websites
 "We saved the price alert subscription.","We saved the price alert subscription."
 "We saved the stock notification.","We saved the stock notification."
 "There are no customers for this alert.","There are no customers for this alert."
+"First Name","First Name"
+"Last Name","Last Name"
+Email,Email
 "Subscribe Date","Subscribe Date"
 "Last Notified","Last Notified"
 "Send Count","Send Count"
 "New Attribute","New Attribute"
+Type,Type
 "Attribute Set","Attribute Set"
+Status,Status
+Visibility,Visibility
 "Add New Option","Add New Option"
 "Import Options","Import Options"
+"Use Default","Use Default"
 Import,Import
 "Add New Row","Add New Row"
 "Delete Row","Delete Row"
 "Tier Pricing","Tier Pricing"
 "Default Price","Default Price"
 "Add Group Price","Add Group Price"
+"All Websites","All Websites"
 "ALL GROUPS","ALL GROUPS"
 "Add Tier","Add Tier"
 "Default Values","Default Values"
@@ -201,9 +148,13 @@ Cross-sells,Cross-sells
 "Watermark File for %1","Watermark File for %1"
 "Position of Watermark for %1","Position of Watermark for %1"
 "Name in %1","Name in %1"
-"Notify Low Stock RSS","Notify Low Stock RSS"
+Quantity,Quantity
+Edit,Edit
+Delete,Delete
+"Are you sure?","Are you sure?"
 "Change status","Change status"
 "Update Attributes","Update Attributes"
+Images,Images
 "Click here or drag and drop to add images","Click here or drag and drop to add images"
 "Delete image","Delete image"
 "Make Base","Make Base"
@@ -211,102 +162,98 @@ Hidden,Hidden
 "Image Management","Image Management"
 "start typing to search category","start typing to search category"
 "New Category","New Category"
+"Images (.gif, .jpg, .png)","Images (.gif, .jpg, .png)"
 "Add New Images","Add New Images"
 "Inc. Tax","Inc. Tax"
 lbs,lbs
-"Add New Search Term","Add New Search Term"
-"Save Search","Save Search"
-"Delete Search","Delete Search"
-"Edit Search '%1'","Edit Search '%1'"
-"New Search","New Search"
-"Search Information","Search Information"
-"Search Query","Search Query"
-"Number of results","Number of results"
-"Number of results (For the last time placed)","Number of results (For the last time placed)"
-"For the last time placed.","For the last time placed."
-"Number of Uses","Number of Uses"
-"Synonym For","Synonym For"
-"Will make search for the query above return results for this search","Will make search for the query above return results for this search"
-"Redirect URL","Redirect URL"
-"ex. http://domain.com","ex. http://domain.com"
-"Display in Suggested Terms","Display in Suggested Terms"
+Product,Product
+"Notify Low Stock RSS","Notify Low Stock RSS"
+"Low Stock Products","Low Stock Products"
+"%1 has reached a quantity of %2.","%1 has reached a quantity of %2."
+Home,Home
 "Go to Home Page","Go to Home Page"
-"%1 RSS Feed","%1 RSS Feed"
+"Subscribe to RSS Feed","Subscribe to RSS Feed"
 "Products Comparison List","Products Comparison List"
+N/A,N/A
 AM,AM
 PM,PM
+"-- Please Select --","-- Please Select --"
+None,None
+"New Products from %1","New Products from %1"
+"New Products","New Products"
+"%1 - Special Products","%1 - Special Products"
+"Click for price","Click for price"
+"Special Expires On: %1","Special Expires On: %1"
+"Price: %1","Price: %1"
+"Special Price: %1","Special Price: %1"
+"Special Products","Special Products"
+"You deleted the category.","You deleted the category."
+"Something went wrong while trying to delete the category.","Something went wrong while trying to delete the category."
 Categories,Categories
 "Manage Catalog Categories","Manage Catalog Categories"
 "Manage Categories","Manage Categories"
+"Category is not available for requested store.","Category is not available for requested store."
+"There was a category move error.","There was a category move error."
+"There was a category move error. %1","There was a category move error. %1"
+"You moved the category","You moved the category"
 "Attribute ""%1"" is required.","Attribute ""%1"" is required."
 "Unable to save the category","Unable to save the category"
 "You saved the category.","You saved the category."
-"There was a category move error.","There was a category move error."
-"There was a category move error %1","There was a category move error %1"
-"You deleted the category.","You deleted the category."
-"Something went wrong while trying to delete the category.","Something went wrong while trying to delete the category."
-"This product no longer exists.","This product no longer exists."
-"Unable to save product","Unable to save product"
-"You saved the product.","You saved the product."
-"SKU for product %1 has been changed to %2.","SKU for product %1 has been changed to %2."
-"You duplicated the product.","You duplicated the product."
-"Please select product(s).","Please select product(s)."
-"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
-"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
-"Something went wrong while updating the product(s) status.","Something went wrong while updating the product(s) status."
+"Please select products for attributes update.","Please select products for attributes update."
 "Please make sure to define SKU values for all processed products.","Please make sure to define SKU values for all processed products."
 "A total of %1 record(s) were updated.","A total of %1 record(s) were updated."
 "Something went wrong while updating the product(s) attributes.","Something went wrong while updating the product(s) attributes."
-"Please select products for attributes update.","Please select products for attributes update."
+Catalog,Catalog
 "Manage Product Attributes","Manage Product Attributes"
+"This attribute cannot be deleted.","This attribute cannot be deleted."
+"The product attribute has been deleted.","The product attribute has been deleted."
+"We can't find an attribute to delete.","We can't find an attribute to delete."
 "This attribute no longer exists.","This attribute no longer exists."
 "This attribute cannot be edited.","This attribute cannot be edited."
 "Edit Product Attribute","Edit Product Attribute"
-"An attribute with this code already exists.","An attribute with this code already exists."
-"Attribute with the same code (%1) already exists.","Attribute with the same code (%1) already exists."
 "Attribute Set with name '%1' already exists.","Attribute Set with name '%1' already exists."
 "Something went wrong saving the attribute.","Something went wrong saving the attribute."
 "Attribute code ""%1"" is invalid. Please use only letters (a-z), ' 'numbers (0-9) or underscore(_) in this field, first character should be a letter.","Attribute code ""%1"" is invalid. Please use only letters (a-z), ' 'numbers (0-9) or underscore(_) in this field, first character should be a letter."
 "You can't update your attribute.","You can't update your attribute."
 "You saved the product attribute.","You saved the product attribute."
-"This attribute cannot be deleted.","This attribute cannot be deleted."
-"The product attribute has been deleted.","The product attribute has been deleted."
-"We can't find an attribute to delete.","We can't find an attribute to delete."
+"An attribute with this code already exists.","An attribute with this code already exists."
+"Attribute with the same code (%1) already exists.","Attribute with the same code (%1) already exists."
+"You duplicated the product.","You duplicated the product."
+"This product no longer exists.","This product no longer exists."
+Products,Products
 "A group with the same name already exists.","A group with the same name already exists."
 "Something went wrong while saving this group.","Something went wrong while saving this group."
-"Manage Attribute Sets","Manage Attribute Sets"
+"Please select product(s).","Please select product(s)."
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
+"Unable to save product","Unable to save product"
+"You saved the product.","You saved the product."
+"SKU for product %1 has been changed to %2.","SKU for product %1 has been changed to %2."
+"New Product Template","New Product Template"
+"The attribute set has been removed.","The attribute set has been removed."
+"We can't delete this set right now.","We can't delete this set right now."
 "New Set","New Set"
 "Manage Product Sets","Manage Product Sets"
+"Manage Attribute Sets","Manage Attribute Sets"
 "This attribute set no longer exists.","This attribute set no longer exists."
 "You saved the attribute set.","You saved the attribute set."
 "An error occurred while saving the attribute set.","An error occurred while saving the attribute set."
-"New Product Template","New Product Template"
-"The attribute set has been removed.","The attribute set has been removed."
-"An error occurred while deleting this set.","An error occurred while deleting this set."
-"Search Terms","Search Terms"
-"This search no longer exists.","This search no longer exists."
-"Edit Search","Edit Search"
-"You already have an identical search term query.","You already have an identical search term query."
-"Something went wrong while saving the search query.","Something went wrong while saving the search query."
-"You deleted the search.","You deleted the search."
-"We can't find a search term to delete.","We can't find a search term to delete."
-"Please select catalog searches.","Please select catalog searches."
-"Total of %1 record(s) were deleted","Total of %1 record(s) were deleted"
 "You added product %1 to the comparison list.","You added product %1 to the comparison list."
-"You removed product %1 from the comparison list.","You removed product %1 from the comparison list."
 "You cleared the comparison list.","You cleared the comparison list."
-"Something went wrong  clearing the comparison list.","Something went wrong  clearing the comparison list."
-"To see product price, add this item to your cart. You can always remove it later.","To see product price, add this item to your cart. You can always remove it later."
-"See price before order confirmation.","See price before order confirmation."
-"The product is not loaded.","The product is not loaded."
+"You removed product %1 from the comparison list.","You removed product %1 from the comparison list."
+"1 item","1 item"
+"%1 items","%1 items"
 "Invalid attribute %1","Invalid attribute %1"
 Grid,Grid
 List,List
+All,All
 "Product is not loaded","Product is not loaded"
 "Bad controller interface for showing product","Bad controller interface for showing product"
-"Sorry, but we can't move the category because we can't find the new parent category you selected.","Sorry, but we can't move the category because we can't find the new parent category you selected."
+"Make sure the To Date is later than or the same as the From Date.","Make sure the To Date is later than or the same as the From Date."
+"Sorry, but we can\'t move the category because we can\'t find the new parent category you' ' selected.","Sorry, but we can\'t move the category because we can\'t find the new parent category you' ' selected."
 "Sorry, but we can't move the category because we can't find the new category you selected.","Sorry, but we can't move the category because we can't find the new category you selected."
-"We can't perform this category move operation because the parent category matches the child category.","We can't perform this category move operation because the parent category matches the child category."
+"We can\'t perform this category move operation because the parent category matches the child' 'category.","We can\'t perform this category move operation because the parent category matches the child' 'category."
+"Can't delete root category.","Can't delete root category."
 "The value of attribute ""%1"" must be unique.","The value of attribute ""%1"" must be unique."
 "Default Product Listing Sort by does not exist in Available Product Listing Sort By.","Default Product Listing Sort by does not exist in Available Product Listing Sort By."
 "No layout updates","No layout updates"
@@ -315,6 +262,13 @@ List,List
 "Static block and products","Static block and products"
 "Please select a static block.","Please select a static block."
 frontend_label,frontend_label
+"Could not save product ""%1"" with position %2 to category %3","Could not save product ""%1"" with position %2 to category %3"
+"Category does not contain specified product","Category does not contain specified product"
+"Could not save product ""%1"" with position %position to category %2","Could not save product ""%1"" with position %position to category %2"
+"Operation do not allow to move a parent category to any of children category","Operation do not allow to move a parent category to any of children category"
+"Could not move category","Could not move category"
+"Could not save category: %1","Could not save category: %1"
+"Cannot delete category with id %1","Cannot delete category with id %1"
 "-- Please Select a Category --","-- Please Select a Category --"
 "Grid Only","Grid Only"
 "List Only","List Only"
@@ -323,6 +277,8 @@ frontend_label,frontend_label
 "Automatic (equalize price ranges)","Automatic (equalize price ranges)"
 "Automatic (equalize product counts)","Automatic (equalize product counts)"
 Manual,Manual
+Fixed,Fixed
+Percent,Percent
 "-- Please select --","-- Please select --"
 "Product Thumbnail Itself","Product Thumbnail Itself"
 "Parent Product Thumbnail","Parent Product Thumbnail"
@@ -335,19 +291,23 @@ Top/Right,Top/Right
 Bottom/Left,Bottom/Left
 Bottom/Right,Bottom/Right
 Center,Center
+"%1 doesn't extends \Magento\Framework\Model\AbstractModel","%1 doesn't extends \Magento\Framework\Model\AbstractModel"
+"Unknown EAV indexer type ""%1"".","Unknown EAV indexer type ""%1""."
 "Could not rebuild index for undefined product","Could not rebuild index for undefined product"
 "Bad value was supplied.","Bad value was supplied."
-"The Flat Catalog module has a limit of %2\$d filterable and/or sortable attributes."" ""Currently there are %1\$d of them."" ""Please reduce the number of filterable/sortable attributes in order to use this module","The Flat Catalog module has a limit of %2\$d filterable and/or sortable attributes."" ""Currently there are %1\$d of them."" ""Please reduce the number of filterable/sortable attributes in order to use this module"
+"The Flat Catalog module has a limit of %2$d filterable and/or sortable attributes.' 'Currently there are %1$d of them.' 'Please reduce the number of filterable/sortable attributes in order to use this module","The Flat Catalog module has a limit of %2$d filterable and/or sortable attributes.' 'Currently there are %1$d of them.' 'Please reduce the number of filterable/sortable attributes in order to use this module"
 "Unsupported product type ""%1"".","Unsupported product type ""%1""."
-"Index product and categories URL Rewrites","Index product and categories URL Rewrites"
-"The category must be an instance of \Magento\Catalog\Model\Category.","The category must be an instance of \Magento\Catalog\Model\Category."
 "Please correct the category.","Please correct the category."
+"Must be category model instance or its id.","Must be category model instance or its id."
 "The attribute model is not defined.","The attribute model is not defined."
 Category,Category
 "%1 - %2","%1 - %2"
+"%1 was not found in algorithms","%1 was not found in algorithms"
+"%1 doesn't extend \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmInterface","%1 doesn't extend \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmInterface"
+"%1 doesn't extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter","%1 doesn't extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter"
 "The filter must be an object. Please set correct filter.","The filter must be an object. Please set correct filter."
-"%1 and above","%1 and above"
 "Clear Price","Clear Price"
+"%1 and above","%1 and above"
 "The filters must be an array.","The filters must be an array."
 "We found a duplicate website group price customer group.","We found a duplicate website group price customer group."
 "Group price must be a number greater than 0.","Group price must be a number greater than 0."
@@ -358,16 +318,32 @@ Category,Category
 "Please enter a number 0 or greater in this field.","Please enter a number 0 or greater in this field."
 "The value of attribute ""%1"" must be set","The value of attribute ""%1"" must be set"
 "SKU length should be %1 characters maximum.","SKU length should be %1 characters maximum."
-"The From Date value should be less than or equal to the To Date value.","The From Date value should be less than or equal to the To Date value."
+"Please enter a valid number in this field.","Please enter a valid number in this field."
 "We found a duplicate website, tier price, customer group and quantity.","We found a duplicate website, tier price, customer group and quantity."
+"Invalid option id %1","Invalid option id %1"
+"Can not create attribute set based on non product attribute set.","Can not create attribute set based on non product attribute set."
+"Can not create attribute set based on not existing attribute set","Can not create attribute set based on not existing attribute set"
+"Provided Attribute set non product Attribute set.","Provided Attribute set non product Attribute set."
 "Use config","Use config"
-"In Cart","In Cart"
-"Before Order Confirmation","Before Order Confirmation"
-"On Gesture","On Gesture"
+Enabled,Enabled
+Disabled,Disabled
+"Attribute set already exists.","Attribute set already exists."
+"Requested product does not support images.","Requested product does not support images."
+"There is no store with provided ID.","There is no store with provided ID."
+"The image content is not valid.","The image content is not valid."
+"Cannot save product.","Cannot save product."
+"Failed to save new media gallery entry.","Failed to save new media gallery entry."
+"There is no image with provided ID.","There is no image with provided ID."
+"Such product doesn't exist","Such product doesn't exist"
+"Such image doesn't exist","Such image doesn't exist"
+"Please provide valid data","Please provide valid data"
+"Values of following attributes are invalid: %1","Values of following attributes are invalid: %1"
+"Could not save group price","Could not save group price"
 "We can't find the image file.","We can't find the image file."
-"Index product attributes for layered navigation building","Index product attributes for layered navigation building"
 "The option type to get group instance is incorrect.","The option type to get group instance is incorrect."
 "Select type options required values rows.","Select type options required values rows."
+"Could not save product option","Could not save product option"
+"Could not remove custom option","Could not remove custom option"
 "Please specify date required option(s).","Please specify date required option(s)."
 "Please specify time required option(s).","Please specify time required option(s)."
 "Please specify the product's required option(s).","Please specify the product's required option(s)."
@@ -377,38 +353,67 @@ Category,Category
 "The configuration item instance in options group is incorrect.","The configuration item instance in options group is incorrect."
 "The BuyRequest instance in options group is incorrect.","The BuyRequest instance in options group is incorrect."
 "We couldn't add the product to the cart because of an option validation issue.","We couldn't add the product to the cart because of an option validation issue."
-"The file you uploaded is larger than %1 Megabytes allowed by server","The file you uploaded is larger than %1 Megabytes allowed by server"
+"%1 doesn't extends \Magento\Catalog\Model\Product\Option\Type\DefaultType","%1 doesn't extends \Magento\Catalog\Model\Product\Option\Type\DefaultType"
+"The file options format is not valid.","The file options format is not valid."
+px.,px.
 "The file '%1' for '%2' has an invalid extension.","The file '%1' for '%2' has an invalid extension."
 "Maximum allowed image size for '%1' is %2x%3 px.","Maximum allowed image size for '%1' is %2x%3 px."
 "The file '%1' you uploaded is larger than the %2 megabytes allowed by our server.","The file '%1' you uploaded is larger than the %2 megabytes allowed by our server."
-px.,px.
-"The file options format is not valid.","The file options format is not valid."
+"File '%1' is not an image.","File '%1' is not an image."
+"Validation failed. Required options were not filled or file was not uploaded.","Validation failed. Required options were not filled or file was not uploaded."
+"The file you uploaded is larger than %1 Megabytes allowed by server","The file you uploaded is larger than %1 Megabytes allowed by server"
+"Option required.","Option required."
 "Some of the selected item options are not currently available.","Some of the selected item options are not currently available."
 "The text is too long.","The text is too long."
+"This product doesn't have group price","This product doesn't have group price"
+"Product hasn't group price with such data: customerGroupId = '%1', website = %2.","Product hasn't group price with such data: customerGroupId = '%1', website = %2."
+"Invalid data provided for group price","Invalid data provided for group price"
+"This product doesn't have tier price","This product doesn't have tier price"
+"Product hasn\'t group price with such data: customerGroupId = \'%1\'' ', website = %2, qty = %3","Product hasn\'t group price with such data: customerGroupId = \'%1\'' ', website = %2, qty = %3"
+"Invalid data provided for tier_price","Invalid data provided for tier_price"
 "We can't create writeable directory ""%1"".","We can't create writeable directory ""%1""."
 "The file upload failed.","The file upload failed."
 "The product has required options.","The product has required options."
 "Something went wrong while processing the request.","Something went wrong while processing the request."
+"%1 doesn't extends \Magento\Catalog\Model\Product\Type\AbstractType","%1 doesn't extends \Magento\Catalog\Model\Product\Type\AbstractType"
+"%1 doesn't extends \Magento\Catalog\Model\Product\Type\Price","%1 doesn't extends \Magento\Catalog\Model\Product\Type\Price"
 "Not Visible Individually","Not Visible Individually"
+Search,Search
 "Catalog, Search","Catalog, Search"
 "Something went wrong removing products from the websites.","Something went wrong removing products from the websites."
 "Something went wrong adding products to websites.","Something went wrong adding products to websites."
-"Attribute '%1' is locked. ","Attribute '%1' is locked. "
-"Do not change the scope. ","Do not change the scope. "
-"We found an unknown EAV indexer type ""%1"".","We found an unknown EAV indexer type ""%1""."
+"Group with id ""%1"" does not exist.","Group with id ""%1"" does not exist."
+"Attribute group that contains system attributes can not be deleted","Attribute group that contains system attributes can not be deleted"
+"Collection provider is not registered","Collection provider is not registered"
+"Unknown link type: %1","Unknown link type: %1"
+"Provided link type ""%1"" does not exist","Provided link type ""%1"" does not exist"
+"Invalid data provided for linked products","Invalid data provided for linked products"
+"Product with SKU %1 is not linked to product with SKU %2","Product with SKU %1 is not linked to product with SKU %2"
+"Product %1 doesn't have linked %2 as %3","Product %1 doesn't have linked %2 as %3"
+"Requested product doesn't exist","Requested product doesn't exist"
+"Product option with id %1 does not exist","Product option with id %1 does not exist"
+"Product with SKU ""%1"" does not exist","Product with SKU ""%1"" does not exist"
+"Invalid product data: %1","Invalid product data: %1"
+"Unable to remove product %1","Unable to remove product %1"
+"Attribute '%1' is locked. %2","Attribute '%1' is locked. %2"
+"Do not change the scope. %1","Do not change the scope. %1"
 "A product type is not defined for the indexer.","A product type is not defined for the indexer."
-"Something went wrong saving the URL rewite.","Something went wrong saving the URL rewite."
+"%1 doesn't extend \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice","%1 doesn't extend \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice"
 "Multiple Select","Multiple Select"
 Dropdown,Dropdown
-"Please specify either a category or a product, or both.","Please specify either a category or a product, or both."
-"A category object is required for determining the product request path.","A category object is required for determining the product request path."
-"As low as:","As low as:"
+"%1 doesn't extend \Magento\Framework\Filter\Template","%1 doesn't extend \Magento\Framework\Filter\Template"
+"As low as","As low as"
+message,message
+fl,fl
+123,123
 "Are you sure you want to delete this category?","Are you sure you want to delete this category?"
 "ID: %1","ID: %1"
 "Set root category for this store in the <a href=""%1"">configuration</a>.","Set root category for this store in the <a href=""%1"">configuration</a>."
+"This operation can take a long time","This operation can take a long time"
 "Collapse All","Collapse All"
 "Expand All","Expand All"
 "Please confirm site switching. All data that hasn't been saved will be lost.","Please confirm site switching. All data that hasn't been saved will be lost."
+"Use Default Value","Use Default Value"
 "Manage Titles (Size, Color, etc.)","Manage Titles (Size, Color, etc.)"
 "Manage Options (values of your attribute)","Manage Options (values of your attribute)"
 "Is Default","Is Default"
@@ -434,6 +439,7 @@ Groups,Groups
 "Product offline","Product offline"
 "Product online status","Product online status"
 "Manage Stock","Manage Stock"
+Qty,Qty
 "Minimum Qty for Item's Status to be Out of Stock","Minimum Qty for Item's Status to be Out of Stock"
 "Minimum Qty Allowed in Shopping Cart","Minimum Qty Allowed in Shopping Cart"
 "Maximum Qty Allowed in Shopping Cart","Maximum Qty Allowed in Shopping Cart"
@@ -451,13 +457,19 @@ Backorders,Backorders
 "Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.","Bundle with dynamic pricing cannot include custom defined options. Options will not be saved."
 "Delete Custom Option","Delete Custom Option"
 "Sort Custom Options","Sort Custom Options"
+"Option Title","Option Title"
+"Input Type","Input Type"
+Required,Required
+"Price Type","Price Type"
 "Allowed File Extensions","Allowed File Extensions"
 "Maximum Image Size","Maximum Image Size"
 "%1 <span>x</span> %2 <span>px.</span>","%1 <span>x</span> %2 <span>px.</span>"
 "Please leave blank if it is not an image.","Please leave blank if it is not an image."
+Title,Title
 "Sort Custom Option","Sort Custom Option"
 "Max Characters","Max Characters"
 "Customer Group","Customer Group"
+Action,Action
 "Delete Group Price","Delete Group Price"
 "Item Price","Item Price"
 "and above","and above"
@@ -470,72 +482,75 @@ Backorders,Backorders
 Role,Role
 "Hide from Product Page","Hide from Product Page"
 "Close panel","Close panel"
-"Regular Price:","Regular Price:"
-"Special Price:","Special Price:"
 "Product Alerts","Product Alerts"
 "Qty for Item's Status to Become Out of Stock","Qty for Item's Status to Become Out of Stock"
 "Can be Divided into Multiple Boxes for Shipping","Can be Divided into Multiple Boxes for Shipping"
 "Basic Settings","Basic Settings"
 "Advanced Settings","Advanced Settings"
-"Select Product Actions","Select Product Actions"
-"Price as configured:","Price as configured:"
-"Click for price","Click for price"
-"What's this?","What's this?"
+"Changes have been made to this section that have not been saved.","Changes have been made to this section that have not been saved."
+"This tab contains invalid data. Please solve the problem before saving.","This tab contains invalid data. Please solve the problem before saving."
+Actions,Actions
+"Mass Actions","Mass Actions"
+"Select All","Select All"
+"Unselect All","Unselect All"
+"Select Visible","Select Visible"
+"Unselect Visible","Unselect Visible"
+"Special Price","Special Price"
+"Regular Price","Regular Price"
 "Buy %1 for: ","Buy %1 for: "
-"Buy %1 for %2","Buy %1 for %2"
-each,each
-and,and
-save,save
-"Actual Price","Actual Price"
+"Buy %1 for %2 each and <strong class=""benefit"">save<span class=""percent tier-%3"">&nbsp;%4</span>%</strong>","Buy %1 for %2 each and <strong class=""benefit"">save<span class=""percent tier-%3"">&nbsp;%4</span>%</strong>"
+"Buy %1 for %2 each","Buy %1 for %2 each"
 "Shop By","Shop By"
 "Shopping Options","Shopping Options"
 "Compare Products","Compare Products"
-"1 item","1 item"
-"%1 items","%1 items"
 "Print This Page","Print This Page"
 "Remove Product","Remove Product"
-"Add to Wishlist","Add to Wishlist"
+"Add to Cart","Add to Cart"
+"In stock","In stock"
+"Out of stock","Out of stock"
+"Add to Wish List","Add to Wish List"
 "You have no items to compare.","You have no items to compare."
-"Are you sure you would like to remove this item from the compare products?","Are you sure you would like to remove this item from the compare products?"
-"Are you sure you would like to remove all products from your comparison?","Are you sure you would like to remove all products from your comparison?"
 "Remove This Item","Remove This Item"
 Compare,Compare
 "Clear All","Clear All"
 Prev,Prev
+Next,Next
 "There are no products matching the selection.","There are no products matching the selection."
 "Add to Compare","Add to Compare"
 "Learn More","Learn More"
 "You may also be interested in the following product(s)","You may also be interested in the following product(s)"
 "More Choices:","More Choices:"
-"New Products","New Products"
 "Check items to add to the cart or","Check items to add to the cart or"
 "select all","select all"
-"View as","View as"
+"Items %1-%2 of %3","Items %1-%2 of %3"
+"%1 Item","%1 Item"
+"%1 Items","%1 Items"
+Show,Show
+"per page","per page"
 "Sort By","Sort By"
 "Set Ascending Direction","Set Ascending Direction"
 "Set Descending Direction","Set Descending Direction"
-"Items %1-%2 of %3","Items %1-%2 of %3"
-"%1 Item","%1 Item"
-"%1 Item(s)","%1 Item(s)"
-Show,Show
+"View as","View as"
 "Additional Information","Additional Information"
 "More Views","More Views"
 "Click on image to view it full sized","Click on image to view it full sized"
 "Click on image to zoom","Click on image to zoom"
-"Email to a Friend","Email to a Friend"
-Details,Details
-Template,Template
-"File extension not known or unsupported type.","File extension not known or unsupported type."
+"* Required Fields","* Required Fields"
+Availability,Availability
+"Warning message","Warning message"
+Ok,Ok
+Cancel,Cancel
+"We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
 "Configure Product","Configure Product"
+OK,OK
 "Select type of option.","Select type of option."
 "Please add rows to option.","Please add rows to option."
+"New Option","New Option"
 "Select Product","Select Product"
+"Please select items.","Please select items."
 "Choose existing category.","Choose existing category."
 "Create Category","Create Category"
 "unselect all","unselect all"
-"Maximal Depth","Maximal Depth"
-"Anchor Custom Text","Anchor Custom Text"
-"Anchor Custom Title","Anchor Custom Title"
 "Product Fields Auto-Generation","Product Fields Auto-Generation"
 "Mask for SKU","Mask for SKU"
 "Use {{name}} as Product Name placeholder","Use {{name}} as Product Name placeholder"
@@ -561,17 +576,13 @@ Comma-separated.,Comma-separated.
 "E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance."
 "Product Image Placeholders","Product Image Placeholders"
 "Search Engine Optimization","Search Engine Optimization"
-"Category URL Suffix","Category URL Suffix"
-"You need to refresh the cache.","You need to refresh the cache."
-"Product URL Suffix","Product URL Suffix"
-"Use Categories Path for Product URLs","Use Categories Path for Product URLs"
-"Create Permanent Redirect for URLs if URL Key Changed","Create Permanent Redirect for URLs if URL Key Changed"
 "Page Title Separator","Page Title Separator"
 "Use Canonical Link Meta Tag For Categories","Use Canonical Link Meta Tag For Categories"
 "Use Canonical Link Meta Tag For Products","Use Canonical Link Meta Tag For Products"
 "Catalog Price Scope","Catalog Price Scope"
 "This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"").","This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"")."
 "Category Top Navigation","Category Top Navigation"
+"Maximal Depth","Maximal Depth"
 "Date & Time Custom Options","Date & Time Custom Options"
 "Use JavaScript Calendar","Use JavaScript Calendar"
 "Date Fields Order","Date Fields Order"
@@ -585,12 +596,7 @@ Watermark,Watermark
 "Watermark Position","Watermark Position"
 "Use Static URLs for Media Content in WYSIWYG for Catalog","Use Static URLs for Media Content in WYSIWYG for Catalog"
 "This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.","This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes."
-"Minimum Advertised Price","Minimum Advertised Price"
-"Enable MAP","Enable MAP"
-"<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the front end.","<strong style=""color:red"">Warning!</strong> Applying MAP by default will hide all product prices on the front end."
-"Display Actual Price","Display Actual Price"
-"Default Popup Text Message","Default Popup Text Message"
-"Default ""What's This"" Text Message","Default ""What's This"" Text Message"
+"Top Level Category","Top Level Category"
 "Product Flat Data","Product Flat Data"
 "Reorganize EAV product structure to flat structure","Reorganize EAV product structure to flat structure"
 "Category Flat Data","Category Flat Data"
@@ -600,6 +606,8 @@ Watermark,Watermark
 "Indexed product/categories association","Indexed product/categories association"
 "Product Price","Product Price"
 "Index product prices","Index product prices"
+"Product EAV","Product EAV"
+"Index product EAV","Index product EAV"
 "Catalog New Products List","Catalog New Products List"
 "List of Products that are set as New","List of Products that are set as New"
 "Display Type","Display Type"
@@ -609,6 +617,7 @@ Watermark,Watermark
 "Display Page Control","Display Page Control"
 "Number of Products per Page","Number of Products per Page"
 "Number of Products to Display","Number of Products to Display"
+Template,Template
 "New Products Grid Template","New Products Grid Template"
 "New Products List Template","New Products List Template"
 "New Products Images and Names Template","New Products Images and Names Template"
@@ -618,7 +627,9 @@ Watermark,Watermark
 "86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.","86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache."
 "Catalog Product Link","Catalog Product Link"
 "Link to a Specified Product","Link to a Specified Product"
+"Anchor Custom Text","Anchor Custom Text"
 "If empty, the Product Name will be used","If empty, the Product Name will be used"
+"Anchor Custom Title","Anchor Custom Title"
 "Product Link Block Template","Product Link Block Template"
 "Product Link Inline Template","Product Link Inline Template"
 "Catalog Category Link","Catalog Category Link"
@@ -629,4 +640,4 @@ Watermark,Watermark
 Set,Set
 none,none
 Overview,Overview
-"Field ""%1"" was not found in DO ""%2"".","Field ""%1"" was not found in DO ""%2""."
+Details,Details

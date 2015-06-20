@@ -17,24 +17,28 @@
                 <thead>
                     <tr>
                         <th class="cell-name">
-                            <?php if($_itemCount > 1): ?>
-                                <?php echo __('Items in your order'); ?>
+                            <?php if ($_itemCount > 1): ?>
+                                <?= __('Items in your order'); ?>
                             <?php else: ?>
-                                <?php echo __('Item in your order'); ?>
+                                <?= __('Item in your order'); ?>
                             <?php endif; ?>
                         </th>
                         <th class="cell-name align-center">
-                            <?php echo __('Qty'); ?>
+                            <?= __('Qty'); ?>
                         </th>
                         <th class="cell-name align-right">
-                            <?php echo __('Price'); ?>
+                            <?= __('Price'); ?>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i=0; foreach ($_items as $_item): ?>
-                        <?php if($_item->getParentItem()) continue; else $i++; ?>
-                        <?php echo $this->getItemHtml($_item) ?>
+                    <?php $i = 0; foreach ($_items as $_item): ?>
+                        <?php if ($_item->getParentItem()) {
+    continue;
+} else {
+    $i++;
+} ?>
+                        <?= $this->getItemHtml($_item) ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -46,7 +50,7 @@
                 <tr>
                     <td class="padding-totals">
                         <table cellspacing="0" cellpadding="0" border="0">
-                            <?php echo $block->getChildHtml('order_totals') ?>
+                            <?= $block->getChildHtml('order_totals') ?>
                         </table>
                     </td>
                 </tr>
@@ -61,10 +65,11 @@
                     <table class="message-gift" cellspacing="0" cellpadding="0" border="0">
                         <tr>
                             <td>
-                                <h3><?php echo __('Gift Message for this Order') ?></h3>
-                                <strong><?php echo __('From:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-                                <br /><strong><?php echo __('To:'); ?></strong> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                                <br /><strong><?php echo __('Message:'); ?></strong><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+                                <h3><?= __('Gift Message for this Order') ?></h3>
+                                <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                                <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                                <br /><strong><?= __('Message:'); ?></strong>
+                                <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                             </td>
                         </tr>
                     </table>

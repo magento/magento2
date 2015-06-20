@@ -1,33 +1,21 @@
-ID,ID
-Action,Action
-"Delete File","Delete File"
-"-- Please Select --","-- Please Select --"
-"Custom Design","Custom Design"
-"Block Information","Block Information"
-Status,Status
-Disabled,Disabled
-Enabled,Enabled
-"Save and Continue Edit","Save and Continue Edit"
-Title,Title
-"URL Key","URL Key"
-"Store View","Store View"
-Description,Description
-Home,Home
-"Browse Files...","Browse Files..."
-Content,Content
-"General Information","General Information"
-"Go to Home Page","Go to Home Page"
-px.,px.
-"Collapse All","Collapse All"
-"Expand All","Expand All"
 "Static Blocks","Static Blocks"
 "Add New Block","Add New Block"
 "Save Block","Save Block"
 "Delete Block","Delete Block"
+"Save and Continue Edit","Save and Continue Edit"
 "Edit Block '%1'","Edit Block '%1'"
 "New Block","New Block"
+"Block Information","Block Information"
+"General Information","General Information"
 "Block Title","Block Title"
 Identifier,Identifier
+"Store View","Store View"
+Status,Status
+Enabled,Enabled
+Disabled,Disabled
+Content,Content
+ID,ID
+Title,Title
 "Manage Pages","Manage Pages"
 "Add New Page","Add New Page"
 "Save Page","Save Page"
@@ -38,67 +26,80 @@ Identifier,Identifier
 "Page Layout","Page Layout"
 Layout,Layout
 "Layout Update XML","Layout Update XML"
+"Custom Design","Custom Design"
 "Custom Design From","Custom Design From"
 "Custom Design To","Custom Design To"
+"-- Please Select --","-- Please Select --"
 "Custom Theme","Custom Theme"
 "Custom Layout","Custom Layout"
 "Custom Layout Update XML","Custom Layout Update XML"
 Design,Design
 "Page Information","Page Information"
 "Page Title","Page Title"
+"URL Key","URL Key"
 "Relative to Web Site Base URL","Relative to Web Site Base URL"
 "Page Status","Page Status"
 "Meta Data","Meta Data"
 Keywords,Keywords
 "Meta Keywords","Meta Keywords"
+Description,Description
 "Meta Description","Meta Description"
 Created,Created
 Modified,Modified
+Action,Action
 Preview,Preview
 "Media Storage","Media Storage"
 "Create Folder...","Create Folder..."
 "Delete Folder","Delete Folder"
+"Delete File","Delete File"
 "Insert File","Insert File"
 "New Folder Name:","New Folder Name:"
 "Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
 "Are you sure you want to delete this file?","Are you sure you want to delete this file?"
 "Images (%1)","Images (%1)"
 "Storage Root","Storage Root"
+Home,Home
+"Go to Home Page","Go to Home Page"
+"Please select item(s).","Please select item(s)."
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
 CMS,CMS
-Blocks,Blocks
-"This block no longer exists.","This block no longer exists."
-"Edit Block","Edit Block"
-"The block has been saved.","The block has been saved."
 "The block has been deleted.","The block has been deleted."
 "We can't find a block to delete.","We can't find a block to delete."
-Pages,Pages
-"This page no longer exists.","This page no longer exists."
-"Edit Page","Edit Page"
-"The page has been saved.","The page has been saved."
-"Something went wrong while saving the page.","Something went wrong while saving the page."
+"This block no longer exists.","This block no longer exists."
+"Edit Block","Edit Block"
+Blocks,Blocks
+"The block has been saved.","The block has been saved."
 "The page has been deleted.","The page has been deleted."
 "We can't find a page to delete.","We can't find a page to delete."
+"This page no longer exists.","This page no longer exists."
+"Edit Page","Edit Page"
+Pages,Pages
+"The page has been saved.","The page has been saved."
+"Something went wrong while saving the page.","Something went wrong while saving the page."
 "The directory %1 is not writable by server.","The directory %1 is not writable by server."
 "Make sure that static block content does not reference the block itself.","Make sure that static block content does not reference the block itself."
+"CMS Block with id ""%1"" does not exist.","CMS Block with id ""%1"" does not exist."
 "Enabled by Default","Enabled by Default"
 "Disabled by Default","Disabled by Default"
 "Disabled Completely","Disabled Completely"
+"CMS Page with id ""%1"" does not exist.","CMS Page with id ""%1"" does not exist."
 "A block identifier with the same properties already exists in the selected store.","A block identifier with the same properties already exists in the selected store."
-"A page URL key for specified store already exists.","A page URL key for specified store already exists."
 "The page URL key contains capital letters or disallowed symbols.","The page URL key contains capital letters or disallowed symbols."
 "The page URL key cannot be made of only numbers.","The page URL key cannot be made of only numbers."
 "Please correct the folder name. Use only letters, numbers, underscores and dashes.","Please correct the folder name. Use only letters, numbers, underscores and dashes."
 "We found a directory with the same name. Please try another folder name.","We found a directory with the same name. Please try another folder name."
 "We cannot create a new directory.","We cannot create a new directory."
 "We cannot delete directory %1.","We cannot delete directory %1."
-"We cannot upload the file.","We cannot upload the file."
-"We cannot delete root directory %1.","We cannot delete root directory %1."
+"We can't upload the file right now.","We can't upload the file right now."
+"We can't delete root directory %1 right now.","We can't delete root directory %1 right now."
 "Directory %1 is not under storage root path.","Directory %1 is not under storage root path."
+Edit,Edit
+px.,px.
 "No files found","No files found"
-Block,Block
-Template,Template
-"Anchor Custom Text","Anchor Custom Text"
-"Anchor Custom Title","Anchor Custom Title"
+"Browse Files...","Browse Files..."
+"Collapse All","Collapse All"
+"Expand All","Expand All"
+"We could not detect a size.","We could not detect a size."
 "CMS Home Page","CMS Home Page"
 "CMS No Route Page","CMS No Route Page"
 "CMS No Cookies Page","CMS No Cookies Page"
@@ -113,9 +114,32 @@ Template,Template
 "CMS Page Link","CMS Page Link"
 "Link to a CMS Page","Link to a CMS Page"
 "CMS Page","CMS Page"
+"Anchor Custom Text","Anchor Custom Text"
 "If empty, the Page Title will be used","If empty, the Page Title will be used"
+"Anchor Custom Title","Anchor Custom Title"
+Template,Template
 "CMS Page Link Block Template","CMS Page Link Block Template"
 "CMS Page Link Inline Template","CMS Page Link Inline Template"
 "CMS Static Block","CMS Static Block"
 "Contents of a Static Block","Contents of a Static Block"
+Block,Block
 "CMS Static Block Default Template","CMS Static Block Default Template"
+from,from
+From,From
+to,to
+To,To
+Select...,Select...
+MM/dd/YYYY,MM/dd/YYYY
+"Are you sure you want to perform this action?","Are you sure you want to perform this action?"
+Delete,Delete
+20,20
+30,30
+50,50
+100,100
+200,200
+Published,Published
+"Delete selected items?","Delete selected items?"
+Disable,Disable
+Enable,Enable
+"Custom design from","Custom design from"
+"Custom design to","Custom design to"

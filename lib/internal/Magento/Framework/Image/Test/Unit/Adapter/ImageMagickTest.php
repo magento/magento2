@@ -50,7 +50,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
             ->getObject(
                 'Magento\Framework\Image\Adapter\ImageMagick',
                 ['filesystem' => $this->filesystemMock,
-                    'logger' => $this->loggerMock]
+                    'logger' => $this->loggerMock, ]
             );
     }
     /**
@@ -74,8 +74,8 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
             [__DIR__ . '/not_exists', \Magento\Framework\Image\Adapter\ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
             [
                 __DIR__ . '/_files/invalid_image.jpg',
-                \Magento\Framework\Image\Adapter\ImageMagick::ERROR_WRONG_IMAGE
-            ]
+                \Magento\Framework\Image\Adapter\ImageMagick::ERROR_WRONG_IMAGE,
+            ],
         ];
     }
 
@@ -85,7 +85,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithException()
     {
-        $exception = new FileSystemException(new \Magento\Framework\Phrase(''));
+        $exception = new FileSystemException(new \Magento\Framework\Phrase('Unable to write file into directory product/cache. Access forbidden.'));
         $this->writeMock->method('create')->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->imageMagic->save('product/cache', 'sample.jpg');

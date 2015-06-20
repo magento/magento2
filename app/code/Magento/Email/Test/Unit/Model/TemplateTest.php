@@ -6,8 +6,6 @@
 namespace Magento\Email\Test\Unit\Model;
 
 use Magento\Email\Model\Template\Filter;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filter\Template as FilterTemplate;
 
 /**
  * Covers \Magento\Email\Model\Template
@@ -140,7 +138,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
-                    $this->filterFactory
+                    $this->filterFactory,
                 ]
             )
             ->getMock();
@@ -454,35 +452,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => true
+                'expectedValue' => true,
             ],
             'no smtp so not valid' => [
                 'isSMTPDisabled' => true,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no sender name so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => '',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no sender email so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => '',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no subject so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => '',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
         ];
     }
@@ -563,7 +561,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables' => [
                 'withGroup' => false,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     [
                         'value' => '{{store url=""}}',
@@ -574,7 +572,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                         'label' => __('%1', 'Email Logo Image Url'),
                     ],
                     [
-                        'value' => '{{escapehtml var=$customer.name}}',
+                        'value' => '{{var customer.name}}',
                         'label' => __('%1', 'Customer Name'),
                     ],
                 ],
@@ -582,7 +580,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'customer account new variables with grouped option' => [
                 'withGroup' => true,
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
-                . '"escapehtml var=$customer.name":"Customer Name"}',
+                . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
                     'label' => __('Template Variables'),
                     'value' => [
@@ -595,7 +593,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                             'label' => __('%1', 'Email Logo Image Url'),
                         ],
                         [
-                            'value' => '{{escapehtml var=$customer.name}}',
+                            'value' => '{{var customer.name}}',
                             'label' => __('%1', 'Customer Name'),
                         ],
                     ],
