@@ -64,24 +64,24 @@
             <table class="order-information" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                     <td class="address-details">
-                        <h6>Bill To:</h6>
+                        <h3>Bill To:</h3>
                         <p>{{var formattedBillingAddress }}</p>
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="address-details">
-                        <h6>Ship To:</h6>
+                        <h3>Ship To:</h3>
                         <p>{{var formattedShippingAddress }}</p>
                     </td>
                     {{/depend}}
                 </tr>
                 <tr>
                     <td class="method-info">
-                        <h6>Payment Method:</h6>
+                        <h3>Payment Method:</h3>
                         {{var payment_html}}
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="method-info">
-                        <h6>Shipping Method:</h6>
+                        <h3>Shipping Method:</h3>
                         <p>{{var order.getShippingDescription()}}</p>
                     </td>
                     {{/depend}}
