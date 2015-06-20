@@ -45,13 +45,25 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     /**
      * {@inheritDoc}
      */
+    public function savePaymentInformationAndPlaceOrder(
+        $cartId,
+        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+    ) {
+        $this->savePaymentInformation($cartId, $paymentMethod, $billingAddress);
+        return $this->cartManagement->placeOrder($cartId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function savePaymentInformation(
         $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     ) {
-        $this->billingAddressManagement->assign($cartId,  $billingAddress);
+        $this->billingAddressManagement->assign($cartId, $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
-        return $this->cartManagement->placeOrder($cartId);
+        return true;
     }
 }
