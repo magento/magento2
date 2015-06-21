@@ -10,68 +10,50 @@
 <?php $_order = $block->getOrder() ?>
 <?php if ($_order): ?>
     <?php $_items = $_order->getAllItems(); ?>
-    <tr>
-        <td>
-            <table class="items" cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                    <tr>
-                        <th class="item-info">
-                            <?= __('Items'); ?>
-                        </th>
-                        <th class="item-qty">
-                            <?= __('Qty'); ?>
-                        </th>
-                        <th class="item-price">
-                            <?= __('Price'); ?>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $i = 0; foreach ($_items as $_item): ?>
-                        <?php
-                            if ($_item->getParentItem()) {
-                                continue;
-                            } else {
-                                $i++;
-                            }
-                        ?>
-                        <?= $this->getItemHtml($_item) ?>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table class="table-totals" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                    <td class="padding-totals">
-                        <table cellspacing="0" cellpadding="0" border="0">
-                            <?= $block->getChildHtml('order_totals') ?>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+    <table class="order-items" cellpadding="0" cellspacing="0" border="0">
+        <thead>
+            <tr>
+                <th class="item-info">
+                    <?= __('Items'); ?>
+                </th>
+                <th class="item-qty">
+                    <?= __('Qty'); ?>
+                </th>
+                <th class="item-price">
+                    <?= __('Price'); ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $i = 0; foreach ($_items as $_item): ?>
+                <?php
+                    if ($_item->getParentItem()) {
+                        continue;
+                    } else {
+                        $i++;
+                    }
+                ?>
+                <?= $this->getItemHtml($_item) ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <table class="order-totals" cellspacing="0" cellpadding="0" border="0">
+        <?= $block->getChildHtml('order_totals') ?>
+    </table>
     <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
         <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
         <?php if ($_giftMessage): ?>
-            <tr>
-                <td>
-                    <table class="message-gift" cellspacing="0" cellpadding="0" border="0">
-                        <tr>
-                            <td>
-                                <h3><?= __('Gift Message for this Order') ?></h3>
-                                <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                                <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                                <br /><strong><?= __('Message:'); ?></strong>
-                                <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            <table class="message-gift" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td>
+                        <h3><?= __('Gift Message for this Order') ?></h3>
+                        <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= __('Message:'); ?></strong>
+                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                    </td>
+                </tr>
+            </table>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
