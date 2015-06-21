@@ -13,7 +13,7 @@ $_item = $block->getItem();
 $_order = $_item->getOrder();
 ?>
 <tr>
-    <td class="cell-content product-info">
+    <td class="item-info">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
@@ -32,8 +32,8 @@ $_order = $_item->getOrder();
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="cell-content align-center"><?= $_item->getQtyOrdered() * 1 ?></td>
-    <td class="cell-content align-right">
+    <td class="item-qty"><?= $_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-price">
         <?= $block->getItemPrice($_item); ?>
     </td>
 </tr>

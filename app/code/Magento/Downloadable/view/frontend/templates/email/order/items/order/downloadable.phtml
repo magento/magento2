@@ -11,7 +11,7 @@
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder() ?>
 <tr>
-    <td class="cell-content product-info">
+    <td class="item-info">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= __('SKU'); ?>: <?= $this->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
@@ -41,8 +41,8 @@
         <br /><?= __('Message:') ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
         <?php endif; ?>
     </td>
-    <td class="cell-content align-center"><?= $_item->getQtyOrdered() * 1 ?></td>
-    <td class="cell-content align-right">
+    <td class="item-qty"><?= $_item->getQtyOrdered() * 1 ?></td>
+    <td class="item-price">
         <?= $block->getItemPrice($_item); ?>
     </td>
 </tr>

@@ -35,23 +35,26 @@
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr id="order-item-row-<?= $_item->getId() ?>">
-        <?php if (!$_item->getParentItem()): ?>
-            <td class="bundle-item-parent product-info">
+    <?php if (!$_item->getParentItem()): ?>
+        <tr class="bundle-item bundle-parent">
+            <td class="item-info">
                 <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
                 <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
-            <td class="bundle-item-parent align-center">
+            <td class="item-qty">
                 <?= $_item->getQtyOrdered() * 1 ?>
             </td>
-            <td class="bundle-item-parent align-right">
+            <td class="item-price">
                 <?= $block->getItemPrice($_item); ?>
             </td>
-        <?php else: ?>
-            <td class="bundle-item bundle-details product-info" colspan="3">
+        </tr>
+    <?php else: ?>
+        <tr class="bundle-item bundle-details">
+            <td class="item-info" colspan="3">
                 <p><?= $block->getValueHtml($_item)?></p>
             </td>
-        <?php endif; ?>
+        </tr>
+    <?php endif; ?>
     </tr>
 <?php endforeach; ?>
 
