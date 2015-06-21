@@ -118,7 +118,7 @@ return [
             "Element 'resource': [facet 'minLength'] The value has a length of '4'; this underruns the allowed " .
             "minimum length of '8'.",
             "Element 'resource': [facet 'pattern'] The value 'One:' is not accepted by the " .
-            "pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "pattern '([A-Z]+[a-z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'resource': 'One:' is not " . "a valid value of the atomic type 'typeAclResourceId'."
         ],
     ],
