@@ -363,13 +363,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail'];
 
     /**
-     * Column names that holds images files names from bunch
-     *
-     * @var string[]
-     */
-    protected $_imagesArrayKeysFromBunch = ['base_image', 'small_image', 'thumbnail_image', 'additional_images'];
-
-    /**
      * Permanent entity columns.
      *
      * @var string[]
@@ -1330,9 +1323,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->websitesCache[$rowSku] = [];
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-                    $websiteIds = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
-                    foreach ($websiteIds as $websiteId) {
-                        $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
+                    $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
+                    foreach ($websiteCodes as $websiteCode) {
+                        $websiteId = $this->storeResolver->getWebsiteCodeToId($websiteCode);
                         $this->websitesCache[$rowSku][$websiteId] = true;
                     }
                 }
@@ -1667,10 +1660,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $allImagesFromBunch = [];
         foreach ($bunch as $rowData) {
-            foreach ($this->_imagesArrayKeysFromBunch as $image) {
+            $rowData = $this->_customFieldsMapping($rowData);
+            foreach ($this->_imagesArrayKeys as $image) {
                 $dispersionPath =
                     \Magento\Framework\File\Uploader::getDispretionPath($rowData[$image]);
-                $importImages = explode(",", $rowData[$image]);
+                $importImages = explode($this->getMultipleValueSeparator(), $rowData[$image]);
                 foreach ($importImages as $importImage) {
                     $imageSting = mb_strtolower(
                         $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
@@ -1768,13 +1762,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         }
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
                             $position = array_search($mediaImage, $mediaGalleryImages);
-                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
+                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
                                 $mediaGallery[$rowSku][] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
                                     'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
                                     'position' => $position,
                                     'disabled' => '',
-                                    'value' => $media_image,
+                                    'value' => $mediaImage,
                                 ];
                             }
                         }
