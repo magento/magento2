@@ -154,13 +154,16 @@ body {
     width: @email-body__width;
 }
 
-.header,
-.footer {
-    padding: @email-content__padding;
+.header {
+    padding: @email-content__padding @email-content__padding 0 @email-content__padding;
 }
 
 .content {
     background-color: @email-content__background-color;
+    padding: @email-content__padding;
+}
+
+.footer {
     padding: @email-content__padding;
 }
 
