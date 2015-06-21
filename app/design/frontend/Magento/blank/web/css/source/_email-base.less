@@ -38,7 +38,53 @@
 //  Resets
 //  ---------------------------------------------
 
-// TODO: Populate with email-specific resets
+//  Generic resets
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: 0;
+    height: auto;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+
+    td {
+        vertical-align: top;
+    }
+}
+
+//  Client-specific resets (from the Salted email template: https://github.com/rodriguezcommaj/salted)
+
+.email-non-inline() {
+    //  Prevent WebKit and Windows mobile from changing default text sizes
+    body,
+    table,
+    td,
+    a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    //  Allow smoother rendering of resized images in Internet Explorer (such as high-resolution logo)
+    img {
+        -ms-interpolation-mode: bicubic;
+    }
+
+    //  Remove spacing between tables in Outlook 2007 and up
+    table,
+    td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+    }
+}
 
 //
 //  Typography
@@ -91,8 +137,6 @@ a {
 
 html,
 body {
-    margin: 0;
-    padding: 0;
     background-color: @email__background-color;
 }
 
