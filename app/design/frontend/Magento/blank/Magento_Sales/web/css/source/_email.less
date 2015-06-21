@@ -15,6 +15,18 @@
     width: 100%;
 }
 
+//  Remove address and phone number link color on iOS
+.address-details a:extend(.no-link a) {};
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    //  Stack columns
+    .order-details {
+        td {
+            display: block;
+        }
+    }
+}
+
 //
 //  Items Table
 //  --------------------------------------
