@@ -22,13 +22,12 @@
 {{template config_path="design/email/header_template"}}
 
 <table cellpadding="0" cellspacing="0" border="0">
-    <tr>
-        <td class="intro">
-            <p>{{trans "Hello %customer_name," customer_name=$order.getCustomerName()}}</p>
-
+    <tr class="intro">
+        <td>
+            <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
-                {{trans "Once your package ships we will send an email with a link to track your order."}}
+                {{trans "Once your package ships we will send you a tracking number."}}
                 {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}
             </p>
             <p>
@@ -41,12 +40,12 @@
                 {{/depend}}.
 
                 {{depend store_hours}}
-                    {{trans 'Our store hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
                 {{/depend}}
             </p>
         </td>
     </tr>
-    <tr class="order-details">
+    <tr class="order-summary">
         <td>
             <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
             <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
@@ -55,7 +54,7 @@
     <tr class="order-information">
         <td>
             {{depend order.getEmailCustomerNote()}}
-            <table cellspacing="0" cellpadding="0" border="0" class="message-info">
+            <table class="message-info" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                     <td>
                         {{var order.getEmailCustomerNote()}}
@@ -63,27 +62,27 @@
                 </tr>
             </table>
             {{/depend}}
-            <table class="order-information" cellspacing="0" cellpadding="0" border="0">
+            <table class="order-details" cellspacing="0" cellpadding="0" border="0">
                 <tr>
                     <td class="address-details">
-                        <h3>{{trans "Billing Information:"}}</h3>
+                        <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="address-details">
-                        <h3>{{trans "Shipping Information:"}}</h3>
+                        <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
                     </td>
                     {{/depend}}
                 </tr>
                 <tr>
                     <td class="method-info">
-                        <h3>Payment Method:</h3>
+                        <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
                     {{depend order.getIsNotVirtual()}}
                     <td class="method-info">
-                        <h3>Shipping Method:</h3>
+                        <h3>{{trans "Shipping Method"}}</h3>
                         <p>{{var order.getShippingDescription()}}</p>
                     </td>
                     {{/depend}}

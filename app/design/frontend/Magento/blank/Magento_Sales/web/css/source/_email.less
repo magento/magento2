@@ -7,11 +7,19 @@
 //  Sales Module Styles
 //  ---------------------------------------------
 
-.order-information {
+//
+//  Order Summary
+//  --------------------------------------
+
+.order-details {
     width: 100%;
 }
 
-table.items {
+//
+//  Items Table
+//  --------------------------------------
+
+.order-items {
     .table(@table__width, 0);
     .table-background-color();
     .table-bordered(@_table_type: horizontal);
@@ -31,8 +39,28 @@ table.items {
 
                 &.message-gift {
                     border-top: none;
-                    padding-top: none;
+                    padding-top: 0;
                 }
+            }
+        }
+    }
+
+    .product-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .item-info {
+        dl {
+            margin-bottom: @indent__s;
+
+            dt,
+            dd {
+                margin-bottom: 0;
+            }
+
+            dd {
+                padding-left: @email-content__padding;
             }
         }
     }
@@ -47,22 +75,7 @@ table.items {
 }
 
 .email-non-inline() {
-    table.items {
+    .order-items {
         .table-overflow();
-    }
-}
-
-.item-info {
-    dl {
-        margin-bottom: @indent__s;
-
-        dt,
-        dd {
-            margin-bottom: 0;
-        }
-
-        dd {
-            padding-left: @email-content__padding;
-        }
     }
 }

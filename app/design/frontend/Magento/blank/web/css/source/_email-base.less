@@ -90,8 +90,9 @@ table {
 //  Typography
 //  ---------------------------------------------
 
-@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
+//  See _email-extend.less for @font-face declarations
 
+@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
 .typography-all();
 
 body {
@@ -150,7 +151,7 @@ body {
 
 .main {
     margin: 0 auto;
-    width: 600px;
+    width: @email-body__width;
 }
 
 .header,
