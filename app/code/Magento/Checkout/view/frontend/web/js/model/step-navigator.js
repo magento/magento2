@@ -77,6 +77,19 @@ define(
                 if (steps().length > activeIndex + 1) {
                     steps()[activeIndex + 1].isVisible(true);
                 }
+            },
+
+            back: function() {
+                var activeIndex = 0;
+                steps.sort(this.sortItems).forEach(function(element, index) {
+                    if (element.isVisible()) {
+                        element.isVisible(false);
+                        activeIndex = index;
+                    }
+                });
+                if (steps()[activeIndex - 1]) {
+                    steps()[activeIndex - 1].isVisible(true);
+                }
             }
         };
     }
