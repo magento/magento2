@@ -17,20 +17,21 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class UrlRewriteForm extends Form
 {
     /**
-     * Get target path value for url rewrite fixture.
+     * Prepare data for url rewrite fixture.
      *
      * @param FixtureInterface $fixture
-     * @return string|void
+     * @return array
      */
-    protected function getTargetPath(FixtureInterface $fixture)
+    protected function prepareData(FixtureInterface $fixture)
     {
         $data = $fixture->getData();
         if (empty($data['entity_type']) && empty($this->getData()['target_path']) && !isset($data['target_path'])) {
             $entity = $fixture->getDataFieldConfig('target_path')['source']->getEntity();
-            return $entity->hasData('identifier')
+            $data['target_path'] = $entity->hasData('identifier')
                 ? $entity->getIdentifier()
                 : $entity->getUrlKey() . '.html';
         }
+        return $data;
     }
 
     /**
@@ -65,8 +66,7 @@ class UrlRewriteForm extends Form
         array $replace = []
     ) {
         $context = ($element === null) ? $this->_rootElement : $element;
-        $data = $fixture->getData();
-        $data['target_path'] = $this->getTargetPath($fixture);
+        $data = $this->prepareData($fixture);
 
         foreach ($replace as $key => $value) {
             if (isset($data[$key])) {

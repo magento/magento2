@@ -88,7 +88,7 @@ class FormTabs extends Form
         foreach ($tabs as $tabName => $tabFields) {
             $tab = $this->getTab($tabName);
             $this->openTab($tabName);
-            $tab->fillFormTab(array_merge($tabFields, $this->unassignedFields), $context);
+            $tab->fillFormTab($tabFields, $context);
         }
         if (!empty($this->unassignedFields)) {
             $this->fillMissedFields($tabs);
