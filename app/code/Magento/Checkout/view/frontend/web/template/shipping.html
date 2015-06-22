@@ -63,7 +63,7 @@
                 <div id="checkout-shipping-method-load">
                     <table class="table-checkout-shipping-method">
                         <thead>
-                            <tr>
+                            <tr class="row">
                                 <th class="col">&nbsp;</th>
                                 <th class="col col-price">Price</th>
                                 <th class="col col-method">Method Title</th>
@@ -73,7 +73,7 @@
                         <tbody>
 
                         <!--ko foreach: { data: rates(), as: 'method'}-->
-                        <tr>
+                        <tr class="row" data-bind="click: $parent.selectShippingMethod">
                             <td class="col">
                                 <!-- ko ifnot: method.error_message -->
                                 <!-- ko if: $parent.rates().length == 1 -->
