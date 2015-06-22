@@ -222,7 +222,7 @@ class Adapter implements MethodInterface
      */
     public function isInitializeNeeded()
     {
-        return false;
+        return (bool)(int)$this->getConfiguredValue('can_initialize');
     }
 
     /**
@@ -570,6 +570,11 @@ class Adapter implements MethodInterface
      */
     public function initialize($paymentAction, $stateObject)
     {
+        $this->executeCommand(
+            'initialize',
+            $this->getInfoInstance(),
+            ['paymentAction' => $paymentAction, 'stateObject' => $stateObject]
+        );
         return $this;
     }
 
