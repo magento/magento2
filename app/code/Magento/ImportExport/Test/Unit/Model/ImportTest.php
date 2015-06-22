@@ -112,11 +112,18 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_coreConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_importConfig = $this->getMockBuilder('\Magento\ImportExport\Model\Import\ConfigInterface')
+        $this->_importConfig = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Config')
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityTypeCode', 'getBehavior'])
+            ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities'])
             ->getMockForAbstractClass();
-        $this->_entityFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
+        $this->_entityFactory = $this->getMock(
+            '\Magento\ImportExport\Model\Import\Entity\Factory',
+            ['create', 'isNeedToLogInHistory'],
+            [],
+            '',
+            false
+        );
+            $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\Factory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_importData = $this->getMockBuilder('\Magento\ImportExport\Model\Resource\Import\Data')
@@ -422,16 +429,61 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider isReportEntityTypeDataProvider
      */
-    public function testIsReportEntityType($entity, $processedReportsEntities, $getEntityResult, $expectedResult)
+    public function testIsReportEntityType($entity, $getEntityResult, $expectedResult)
     {
         $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getEntity',
+                'getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory'
             ])
             ->getMock();
+        $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
+        $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
+        $this->_importConfig
+            ->expects($this->any())
+            ->method('getEntities')
+            ->willReturn(
+                [
+                    'advanced_pricing' => [
+                        'model' => 'advanced_pricing'
+                    ]
+                ]
+            );
+        $this->_entityFactory->expects($this->any())->method('create')->willReturnSelf();
+        $this->setPropertyValue($importMock, '_importConfig', $this->_importConfig);
+        $this->setPropertyValue($importMock, '_entityFactory', $this->_entityFactory);
+        $importMock
+            ->expects($this->any())
+            ->method('getEntity')
+            ->willReturn($getEntityResult);
 
-        $this->setPropertyValue($importMock, 'processedReportsEntities', $processedReportsEntities);
+        $actualResult = $importMock->isReportEntityType($entity);
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * Cover isReportEntityType().
+     *
+     * @dataProvider isReportEntityTypeExceptionDataProvider
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testIsReportEntityTypeException($entity, $getEntitiesResult, $getEntityResult, $expectedResult)
+    {
+        $importMock = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory'
+            ])
+            ->getMock();
+        $importMock->expects($this->any())->method('_getEntityAdapter')->willReturnSelf();
+        $importMock->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
+        $this->_importConfig
+            ->expects($this->any())
+            ->method('getEntities')
+            ->willReturn($getEntitiesResult);
+        $this->_entityFactory->expects($this->any())->method('create')->willReturn('');
+        $this->setPropertyValue($importMock, '_importConfig', $this->_importConfig);
+        $this->setPropertyValue($importMock, '_entityFactory', $this->_entityFactory);
         $importMock
             ->expects($this->any())
             ->method('getEntity')
@@ -677,45 +729,45 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->import, $actualResult);
     }
 
+    /**
+     * Dataprovider for isReportEntityType()
+     *
+     * @return array
+     */
     public function isReportEntityTypeDataProvider()
     {
         return [
             [
                 '$entity' => null,
-                '$processedReportsEntities' => [],
                 '$getEntityResult' => null,
                 '$expectedResult' => false,
             ],
             [
-                '$entity' => null,
-                '$processedReportsEntities' => [
-                    'entity'
-                ],
-                '$getEntityResult' => null,
-                '$expectedResult' => false,
+                '$entity' => 'advanced_pricing',
+                '$getEntityResult' => 'advanced_pricing',
+                '$expectedResult' => null,
             ],
-            [
-                '$entity' => null,
-                '$processedReportsEntities' => [
-                    'entity 1'
-                ],
-                '$getEntityResult' => 'entity 2',
-                '$expectedResult' => false,
-            ],
+        ];
+    }
+
+    /**
+     * Dataprovider for isReportEntityTypeException()
+     *
+     * @return array
+     */
+    public function isReportEntityTypeExceptionDataProvider()
+    {
+        return [
             [
                 '$entity' => 'entity',
-                '$processedReportsEntities' => [
-                    'entity 1'
-                ],
-                '$getEntityResult' => 'entity 2',
+                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                '$getEntityResult' => 'catalog_product',
                 '$expectedResult' => false,
             ],
             [
-                '$entity' => 'entity',
-                '$processedReportsEntities' => [
-                    'entity'
-                ],
-                '$getEntityResult' => null,
+                '$entity' => 'advanced_pricing',
+                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                '$getEntityResult' => 'advanced_pricing',
                 '$expectedResult' => true,
             ],
         ];
