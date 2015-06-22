@@ -243,7 +243,7 @@ class Http extends File
         if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'Something went wrong connecting to the host. Error#%1 - %2.',
+                    'Something went wrong while connecting to the host. Error#%1 - %2.',
                     [$errorNumber, $errorMessage]
                 )
             );
