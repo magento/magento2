@@ -394,7 +394,6 @@ class Base implements ActionInterface
     protected function prepareFields()
     {
         $defaultHandler = $this->handlerPool->get($this->defaultHandler);
-        var_dump($this->data['fieldsets']);
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             if (isset($fieldset['class'])) {
