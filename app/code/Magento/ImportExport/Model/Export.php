@@ -12,6 +12,7 @@ namespace Magento\ImportExport\Model;
  * Export model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -213,14 +214,42 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             return self::FILTER_TYPE_DATE;
         } elseif ('decimal' == $attribute->getBackendType() || 'int' == $attribute->getBackendType()) {
             return self::FILTER_TYPE_NUMBER;
-        } elseif ($attribute->isStatic() ||
-            'varchar' == $attribute->getBackendType() ||
-            'text' == $attribute->getBackendType()
-        ) {
+        } elseif ('varchar' == $attribute->getBackendType() || 'text' == $attribute->getBackendType()) {
             return self::FILTER_TYPE_INPUT;
+        } elseif ($attribute->isStatic()) {
+            return self::getStaticAttributeFilterType($attribute);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot determine attribute filter type'));
         }
+    }
+
+    /**
+     * Determine filter type for static attribute.
+     *
+     * @static
+     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @return string
+     */
+    public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
+    {
+        if ($attribute->getAttributeCode() == 'category_ids') {
+            return self::FILTER_TYPE_INPUT;
+        }
+        $columns = $attribute->getFlatColumns();
+        switch ($columns[$attribute->getAttributeCode()]['type']) {
+            case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
+            case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:
+                $type = self::FILTER_TYPE_NUMBER;
+                break;
+            case \Magento\Framework\DB\Ddl\Table::TYPE_DATE:
+            case \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME:
+            case \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP:
+                $type = self::FILTER_TYPE_DATE;
+                break;
+            default:
+                $type = self::FILTER_TYPE_INPUT;
+        }
+        return $type;
     }
 
     /**

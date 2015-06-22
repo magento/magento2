@@ -6,20 +6,21 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="config">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="system" minOccurs="1" maxOccurs="1" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <xs:element name="config" type="configDeclaration"/>
+
+    <xs:complexType name="configDeclaration">
+        <xs:sequence>
+            <xs:element ref="system" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:element name="system">
         <xs:complexType>
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="tab" />
-                    <xs:element ref="section"/>
+                    <xs:element ref="section" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
         </xs:complexType>
@@ -64,6 +65,15 @@
         <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
+    <xs:complexType name="includeType">
+        <xs:annotation>
+            <xs:documentation>
+                Include Resource. Recursive complex type
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="path" type="typePath" use="required" />
+    </xs:complexType>
+
     <xs:element name="tab">
         <xs:annotation>
             <xs:documentation>
@@ -95,6 +105,7 @@
                     <xs:element name="header_css" type="xs:string" />
                     <xs:element name="resource" type="typeAclResourceId" />
                     <xs:element ref="group" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
 
@@ -136,6 +147,7 @@
                     <xs:element ref="group" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="depends" />
                     <xs:element ref="attribute" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
 
@@ -416,6 +428,22 @@
 
         <xs:restriction base="xs:string">
             <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
+            <xs:minLength value="8" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typePath">
+        <xs:annotation>
+            <xs:documentation>
+                <![CDATA[
+                    Path identifier. Item can has only [a-zA-Z0-9/_:]. Minimal length 8 symbol. Case sensitive.
+                    For example: <Magento_Module>::path/to/file.xml (path in the "etc/adminhtml" area in module)
+                 ]]>
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9/.]{1,}" />
             <xs:minLength value="8" />
         </xs:restriction>
     </xs:simpleType>

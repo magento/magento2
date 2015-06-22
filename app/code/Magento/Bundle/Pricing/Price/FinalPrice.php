@@ -8,6 +8,8 @@ namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Bundle\Model\Product\Price;
 
 /**
  * Final price model
@@ -68,7 +70,13 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
     public function getMaximalPrice()
     {
         if (!$this->maximalPrice) {
-            $this->maximalPrice = $this->calculator->getMaxAmount($this->getBasePrice()->getValue(), $this->product);
+            $price = $this->getBasePrice()->getValue();
+            if ($this->product->getPriceType() == Price::PRICE_TYPE_FIXED) {
+                /** @var \Magento\Catalog\Pricing\Price\CustomOptionPrice $customOptionPrice */
+                $customOptionPrice = $this->priceInfo->getPrice(CustomOptionPrice::PRICE_CODE);
+                $price += $customOptionPrice->getCustomOptionRange(false);
+            }
+            $this->maximalPrice = $this->calculator->getMaxAmount($price, $this->product);
         }
         return $this->maximalPrice;
     }
@@ -91,7 +99,13 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
     public function getAmount()
     {
         if (!$this->minimalPrice) {
-            $this->minimalPrice = $this->calculator->getAmount(parent::getValue(), $this->product);
+            $price = parent::getValue();
+            if ($this->product->getPriceType() == Price::PRICE_TYPE_FIXED) {
+                /** @var \Magento\Catalog\Pricing\Price\CustomOptionPrice $customOptionPrice */
+                $customOptionPrice = $this->priceInfo->getPrice(CustomOptionPrice::PRICE_CODE);
+                $price += $customOptionPrice->getCustomOptionRange(true);
+            }
+            $this->minimalPrice = $this->calculator->getAmount($price, $this->product);
         }
         return $this->minimalPrice;
     }

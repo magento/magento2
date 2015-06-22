@@ -4,8 +4,8 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  ---------------------------------------------
 
 & when (@media-common = true) {
 
@@ -95,6 +95,7 @@
 }
 
 .account,
+[class^="sales-guest-"],
 .sales-guest-view {
     .page-title-wrapper {
         .page-title {
@@ -188,8 +189,10 @@
 }
 
 //
-//    Guest order view page
-//--------------------------------------
+//  Guest order view page
+//  ---------------------------------------------
+
+[class^="sales-guest-"],
 .sales-guest-view {
     .column.main {
         .block:not(.widget) {
@@ -201,8 +204,9 @@
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .account {
         .order-details-items {
@@ -232,8 +236,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .table-order-items {
         .subtotal,
@@ -269,8 +274,10 @@
     }
 
     //
-    //    Guest order view page
-    //--------------------------------------
+    //  Guest order view page
+    //  ---------------------------------------------
+
+    [class^="sales-guest-"],
     .sales-guest-view {
         .column.main {
             .block:not(.widget) {

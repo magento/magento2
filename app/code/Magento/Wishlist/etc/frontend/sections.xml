@@ -33,6 +33,9 @@
         <section name="wishlist"/>
         <section name="cart"/>
     </action>
+    <action name="wishlist/shared/cart">
+        <section name="cart"/>
+    </action>
     <action name="wishlist/index/fromcart">
         <section name="cart"/>
     </action>

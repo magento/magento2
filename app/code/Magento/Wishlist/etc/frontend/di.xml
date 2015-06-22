@@ -30,4 +30,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Wishlist\Controller\Index\Send">
+        <arguments>
+            <argument name="wishlistSession" xsi:type="object">Magento\Wishlist\Model\Session</argument>
+        </arguments>
+    </type>
 </config>

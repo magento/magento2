@@ -11,6 +11,6 @@ class HttpFactoryMock extends FileTransferFactory
 {
     public function create(array $options = [])
     {
-        return new \Magento\Framework\Validator\NotEmpty();
+        return new \Magento\Framework\Validator\NotEmpty($options);
     }
 }
