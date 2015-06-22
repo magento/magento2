@@ -62,14 +62,6 @@
             @_icon-font-color-hover: @checkout-tooltip-icon__hover__color,
             @_icon-font-color-active: false
             );
-            &:focus {
-                + .field-tooltip-content {
-                    display: block;
-                }
-                &:before {
-                    .css(color, @checkout-tooltip-icon__hover__color);
-                }
-            }
         }
 
         .field-tooltip-content {
