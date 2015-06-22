@@ -85,7 +85,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
      */
     protected function getStore()
     {
-        return $this->storeManager->getStore($this->request->getParam('store', 2));
+        return $this->storeManager->getStore($this->request->getParam('store', Store::DEFAULT_STORE_ID));
     }
 
     /**
