@@ -40,7 +40,7 @@ class Index extends Action
     public function execute()
     {
         $versionParts = explode('.', $this->productMetadata->getVersion());
-        if(!isset($versionParts[0]) || !isset($versionParts[1])) {
+        if (!isset($versionParts[0]) || !isset($versionParts[1])) {
             return ; // Major and minor version are not set - return empty response
         }
         $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
