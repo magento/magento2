@@ -7,6 +7,9 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -64,6 +67,39 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $this->model->expects($this->any())->method('_getMail')->will($this->returnCallback([$this, 'getMail']));
         $this->model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
+    }
+
+    /**
+     * Manually set a module directory to allow for testing the loading of email templates from module directories.
+     * TODO: Improve this method of mocking module folders, as it is fragile/error-prone
+     *
+     * @return \Magento\Framework\Filesystem
+     */
+    protected function _getMockedFilesystem($vendor = 'Magento', $module = 'Email', $type = 'view')
+    {
+        /* @var $moduleReader \Magento\Framework\Module\Dir\Reader */
+        $moduleReader = $this->_objectManager->get('Magento\Framework\Module\Dir\Reader');
+        $moduleReader->setModuleDir(
+            $vendor . '_' . $module,
+            $type,
+            realpath(__DIR__) . "/_files/code/$vendor/$module/$type"
+        );
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\App\Filesystem\DirectoryList',
+            [
+                'root' => DirectoryList::ROOT,
+                'config' => [
+                    DirectoryList::MODULES => [
+                        DirectoryList::PATH => realpath(__DIR__) . '/_files/code',
+                    ],
+                ],
+            ]
+        );
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem',
+            ['directoryList' => $directoryList]
+        );
+        return $filesystem;
     }
 
     /**

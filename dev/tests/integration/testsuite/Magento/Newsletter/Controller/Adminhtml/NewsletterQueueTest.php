@@ -49,8 +49,8 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
             'text' => 'newsletter text',
         ];
         $this->getRequest()->setPostValue($postForQueue);
-        
-		// Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
         $this->_model->load('some_unique_code', 'template_code');
 
         // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template

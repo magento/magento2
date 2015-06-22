@@ -222,8 +222,6 @@ class Customer extends AbstractCustomer
             'suffix',
             'dob',
             'password_hash',
-            'default_billing',
-            'default_shipping',
             'taxvat',
             'confirmation',
             'gender',

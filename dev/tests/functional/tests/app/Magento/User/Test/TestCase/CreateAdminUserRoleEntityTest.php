@@ -12,8 +12,6 @@ use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateAdminUserRolesEntity
- *
  * Test Flow:
  * 1. Log in as default admin user
  * 2. Go to System>Permissions>User Roles
@@ -33,25 +31,27 @@ class CreateAdminUserRoleEntityTest extends Injectable
     /* end tags */
 
     /**
+     * UserRoleIndex page.
+     *
      * @var UserRoleIndex
      */
     protected $userRoleIndex;
 
     /**
+     * UserRoleEditRole page.
+     *
      * @var UserRoleEditRole
      */
     protected $userRoleEditRole;
 
     /**
-     * Setup data for test
+     * Setup data for test.
      *
      * @param UserRoleIndex $userRoleIndex
      * @param UserRoleEditRole $userRoleEditRole
      */
-    public function __inject(
-        UserRoleIndex $userRoleIndex,
-        UserRoleEditRole $userRoleEditRole
-    ) {
+    public function __inject(UserRoleIndex $userRoleIndex, UserRoleEditRole $userRoleEditRole)
+    {
         $this->userRoleIndex = $userRoleIndex;
         $this->userRoleEditRole = $userRoleEditRole;
     }
