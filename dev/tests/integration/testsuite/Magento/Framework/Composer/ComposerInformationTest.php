@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Composer;
 
 /**
- * Tests Magento\Setup\Model\ComposerInformation
+ * Tests Magento\Framework\ComposerInformation
  */
 class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,6 +82,17 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedExtensions as $expectedExtension) {
             $this->assertContains($expectedExtension, $actualRequiredExtensions);
         }
+    }
+
+    public function testGetRootRequiredPackagesAndTypes($composerDir)
+    {
+        $this->setupDirectoryMock($composerDir);
+        $composerInfo = new ComposerInformation($this->filesystemMock, $this->ioMock);
+
+        $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackagesAndTypes();
+
+        $this->assertArrayHasKey('composer/composer', $requiredPackagesAndTypes);
+        $this->assertEquals('library', $requiredPackagesAndTypes['composer/composer']);
     }
 
     /**
