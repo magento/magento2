@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model
@@ -323,6 +324,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $dataObjectHelper;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -355,6 +361,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -393,6 +400,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -425,6 +433,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->dataObjectHelper = $dataObjectHelper;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -1323,6 +1332,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
         if (null === $this->_items) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
+            $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);
         }
         return $this->_items;
@@ -1337,8 +1347,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
-                $items[] = $item;
+                $items[$item->getId()] = $item;
             }
         }
         return $items;

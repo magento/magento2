@@ -34,14 +34,4 @@ interface ActionInterface
      * @return ResponseInterface
      */
     public function getResponse();
-
-    /**
-     * Get default result object
-     *
-     * Method is invoked to return default result of action execution within controllers.
-     * Can be used to generate 'execute' method result in action controllers.
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
-     */
-    public function getDefaultResult();
 }
