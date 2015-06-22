@@ -36,7 +36,7 @@
         "oyejorge/less.php": "1.7.0.3",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*",
-        "symfony/console": "~2.3"
+        "symfony/console": "~2.3 <2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",

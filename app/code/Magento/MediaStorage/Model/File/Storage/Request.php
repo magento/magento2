@@ -29,7 +29,9 @@ class Request
      */
     public function __construct($workingDir, HttpRequest $request = null)
     {
-        $request = $request ?: new HttpRequest();
+        $request = $request ?: new HttpRequest(
+            new \Magento\Framework\Stdlib\Cookie\PhpCookieReader()
+        );
         $this->_pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
         $this->_filePath = $workingDir . '/' . $this->_pathInfo;
     }
