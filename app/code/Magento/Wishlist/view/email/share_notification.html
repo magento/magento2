@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Take a look at {{var customerName}}'s wishlist @-->
+<!--@subject Take a look at {{var customerName}}'s Wish List @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "var logo_url":"Email Logo Image Url",
 "var logo_alt":"Email Logo Image Alt",
-"var message":"Wishlist Message",
-"var items":"Wishlist Items"}
+"var message":"Wish List Message",
+"var items":"Wish List Items"}
 @-->
 <!--@styles
 body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
@@ -31,11 +31,11 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 <!-- [ middle starts here] -->
                 <tr>
                     <td valign="top">
-                        <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Hey,<br/>Take a look at my wish list from {{var store.getFrontendName()}}.</p>
+                        <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Hey,<br/>Take a look at my Wish List from {{var store.getFrontendName()}}.</p>
                         <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">{{var message}}</p>
                         {{var items}}
                         <br/>
-                        <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;">{{depend salable}}<strong><a href="{{var addAllLink}}" style="color:#1E7EC8;">Add all items to shopping cart</a></strong> |{{/depend}} <strong><a href="{{var viewOnSiteLink}}" style="color:#1E7EC8;">View all wishlist items</a></strong></p>
+                        <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;text-align: center;"><strong><a href="{{var viewOnSiteLink}}" style="color:#1E7EC8;">View all Wish List items</a></strong></p>
                     </td>
                 </tr>
                 <tr>

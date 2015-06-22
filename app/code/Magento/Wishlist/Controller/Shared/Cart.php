@@ -5,10 +5,71 @@
  */
 namespace Magento\Wishlist\Controller\Shared;
 
+use Magento\Checkout\Helper\Cart as CartHelper;
+use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Item\OptionFactory;
+use Magento\Wishlist\Model\ItemFactory;
+use Magento\Wishlist\Model\Resource\Item\Option\Collection as OptionCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Cart extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * @var CustomerCart
+     */
+    protected $cart;
+
+    /**
+     * @var OptionFactory
+     */
+    protected $optionFactory;
+
+    /**
+     * @var ItemFactory
+     */
+    protected $itemFactory;
+
+    /**
+     * @var CartHelper
+     */
+    protected $cartHelper;
+
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
+     * @param ActionContext $context
+     * @param CustomerCart $cart
+     * @param OptionFactory $optionFactory
+     * @param ItemFactory $itemFactory
+     * @param CartHelper $cartHelper
+     * @param Escaper $escaper
+     */
+    public function __construct(
+        ActionContext $context,
+        CustomerCart $cart,
+        OptionFactory $optionFactory,
+        ItemFactory $itemFactory,
+        CartHelper $cartHelper,
+        Escaper $escaper
+    ) {
+        $this->cart = $cart;
+        $this->optionFactory = $optionFactory;
+        $this->itemFactory = $itemFactory;
+        $this->cartHelper = $cartHelper;
+        $this->escaper = $escaper;
+        parent::__construct($context);
+    }
+
     /**
      * Add shared wishlist item to shopping cart
      *
@@ -21,36 +82,41 @@ class Cart extends \Magento\Framework\App\Action\Action
     {
         $itemId = (int)$this->getRequest()->getParam('item');
 
-        /* @var $item \Magento\Wishlist\Model\Item */
-        $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
-
-        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        /* @var $item Item */
+        $item = $this->itemFactory->create()
+            ->load($itemId);
 
         $redirectUrl = $this->_redirect->getRefererUrl();
 
         try {
-            $options = $this->_objectManager->create(
-                'Magento\Wishlist\Model\Item\Option'
-            )->getCollection()->addItemFilter(
-                [$itemId]
-            );
+            /** @var OptionCollection $options */
+            $options = $this->optionFactory->create()
+                ->getCollection()->addItemFilter([$itemId]);
             $item->setOptions($options->getOptionsByItem($itemId));
+            $item->addToCart($this->cart);
 
-            $item->addToCart($cart);
-            $cart->save()->getQuote()->collectTotals();
+            $this->cart->save();
 
-            if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
-                $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
+            if (!$this->cart->getQuote()->getHasError()) {
+                $message = __(
+                    'You added %1 to your shopping cart.',
+                    $this->escaper->escapeHtml($item->getProduct()->getName())
+                );
+                $this->messageManager->addSuccess($message);
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
+
+            if ($this->cartHelper->getShouldRedirectToCart()) {
+                $redirectUrl = $this->cartHelper->getCartUrl();
+            }
+        } catch (LocalizedException $e) {
+            if ($e->getCode() == Item::EXCEPTION_CODE_NOT_SALABLE) {
                 $this->messageManager->addError(__('This product(s) is out of stock.'));
             } else {
                 $this->messageManager->addNotice($e->getMessage());
                 $redirectUrl = $item->getProductUrl();
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
+            $this->messageManager->addException($e, __('We can\'t add the item to the cart right now.'));
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

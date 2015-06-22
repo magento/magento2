@@ -238,6 +238,16 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
+     * Get disable auto group change flag.
+     *
+     * @return int|null
+     */
+    public function getDisableAutoGroupChange()
+    {
+        return $this->_get(self::DISABLE_AUTO_GROUP_CHANGE);
+    }
+
+    /**
      * Set customer id
      *
      * @param int $id
@@ -444,6 +454,17 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setAddresses(array $addresses = null)
     {
         return $this->setData(self::KEY_ADDRESSES, $addresses);
+    }
+
+    /**
+     * Set disable auto group change flag.
+     *
+     * @param int $disableAutoGroupChange
+     * @return $this
+     */
+    public function setDisableAutoGroupChange($disableAutoGroupChange)
+    {
+        return $this->setData(self::DISABLE_AUTO_GROUP_CHANGE, $disableAutoGroupChange);
     }
 
     /**

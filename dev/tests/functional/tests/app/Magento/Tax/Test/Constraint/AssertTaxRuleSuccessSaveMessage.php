@@ -18,7 +18,7 @@ class AssertTaxRuleSuccessSaveMessage extends AbstractConstraint
     const SEVERITY = 'low';
     /* end tags */
 
-    const SUCCESS_MESSAGE = 'The tax rule has been saved.';
+    const SUCCESS_MESSAGE = 'You saved the tax rule.';
 
     /**
      * Assert that success message is displayed after tax rule saved

@@ -29,6 +29,13 @@
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
             <directory suffix=".php">../../../update/app/code</directory>
+            <exclude>
+                <directory>../../../app/code/*/*/Test</directory>
+                <directory>../../../lib/internal/*/*/Test</directory>
+                <directory>../../../lib/internal/*/*/*/Test</directory>
+                <directory>../../../setup/src/*/*/Test</directory>
+                <directory>../../../update/app/code/*/*/Test</directory>
+            </exclude>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->

@@ -27,4 +27,14 @@ class Refresh extends \Magento\Backend\App\Action
         $this->getResponse()->representJson(json_encode(['imgSrc' => $captchaModel->getImgSrc()]));
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
+
+    /**
+     * Check if user has permissions to access this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return true;
+    }
 }

@@ -67,6 +67,12 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     protected $dispatched = false;
 
+    /**
+     * Flag for whether the request is forwarded or not
+     *
+     * @var bool
+     */
+    protected $forwarded;
 
     /**
      * @var CookieReaderInterface
@@ -689,5 +695,25 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $url = urldecode(parent::getBaseUrl());
         $url = str_replace('\\', '/', $url);
         return $url;
+    }
+
+    /**
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    public function isForwarded()
+    {
+        return $this->forwarded;
+    }
+
+    /**
+     * @param bool $forwarded
+     * @return $this
+     * @codeCoverageIgnore
+     */
+    public function setForwarded($forwarded)
+    {
+        $this->forwarded = $forwarded;
+        return $this;
     }
 }
