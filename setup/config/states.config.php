@@ -157,5 +157,25 @@ return [
             'nav-bar'     => false,
             'order'       => 2,
         ],
+        [
+            'id'          => 'root.create-backup',
+            'url'         => 'create-backup',
+            'templateUrl' => "{$base}/create-backup",
+            'title'       => "Create \n Backup",
+            'header'      => 'Step 2: Create Backup',
+            'controller'  => 'createBackupController',
+            'nav-bar'     => true,
+            'validate'    => true,
+            'order'       => 3,
+        ],
+        [
+            'id'          => 'root.complete-backup',
+            'url'         => 'complete-backup',
+            'templateUrl' => "{$base}/complete-backup",
+            'title'       => "Backup \n Status",
+            'header'      => 'Step 2: Create Backup',
+            'nav-bar'     => false,
+            'order'       => 4,
+        ],
     ]
 ];

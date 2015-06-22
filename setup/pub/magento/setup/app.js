@@ -18,7 +18,8 @@ var app = angular.module(
         'create-admin-account',
         'install',
         'success',
-        'updater-landing'
+        'updater-landing',
+        'create-backup'
     ]);
 
 app.config(function ($stateProvider) {
