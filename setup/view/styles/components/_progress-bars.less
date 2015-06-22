@@ -74,6 +74,16 @@
 
 //  Call animation for the active one
 
-.progress-bar.active {
-    .animation(progress-bar-stripes 2s linear infinite);
+.progress-bar {
+    &.active {
+        .animation(progress-bar-stripes 2s linear infinite);
+    }
+}
+
+.progress-bar-top-text {
+    margin-bottom: 1.6rem;
+}
+
+.progress-bar-top-text-right {
+    text-align: right;
 }

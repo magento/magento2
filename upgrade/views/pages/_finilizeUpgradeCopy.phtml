@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php require_once('./views/shared/nav/_navFinilizeUpgrade.phtml') ?>
+
+<h2 class="page-sub-title">Step 5: Finalize Upgrade</h2>
+
+<div class="content-install">
+    <div class="row">
+        <div class="col-xs-6 progress-bar-top-text">Upgrading [module name]...</div>
+        <div class="col-xs-6 progress-bar-top-text progress-bar-top-text-right">3 out of 12 items installed </div>
+    <div class="progress">
+        <div
+            class="progress-bar"
+            style="width: 25%"
+            role="progressbar"
+            aria-valuenow="{{progress}}"
+            aria-valuemin="0"
+            aria-valuemax="100">
+        </div>
+    </div>
+    <div ng-show="isFailed" class="message message-error">
+        <span class="message-text">
+            <strong>Installation is incomplete.</strong>
+            <br>
+            Check the console log for errors before trying again.
+        </span>
+    </div>
+    <button
+        type="button"
+        class="btn btn-expand">
+        Console Log
+    </button>
+    <div id="console">
+        <div class="console">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolores explicabo quos repellat! Amet, aperiam aspernatur assumenda autem beatae blanditiis culpa dolores doloribus ducimus eius est excepturi expedita impedit inventore iusto laborum minima perferendis perspiciatis porro quas quis quo ratione reprehenderit sapiente sunt temporibus ullam vel veniam voluptas, voluptatum? Explicabo, molestiae repudiandae. Assumenda blanditiis consequuntur dolores, numquam quae ratione velit voluptate? Adipisci, beatae debitis fugit id laudantium minima molestias odio perferendis provident quibusdam recusandae repellat rerum temporibus vel, veniam vitae voluptate. Accusamus accusantium aliquid asperiores assumenda atque aut consequuntur dolorem dolores eaque facilis inventore natus neque officia officiis omnis possimus qui, sed tempore ut vel veniam veritatis vero. A accusantium animi, aspernatur assumenda dolor eius expedita facilis harum impedit in incidunt magnam nesciunt obcaecati quibusdam quo repellendus rerum sapiente suscipit tempore tenetur totam veritatis voluptatibus! Adipisci amet animi architecto asperiores consectetur culpa delectus doloribus eligendi enim expedita facilis illum impedit in iure, labore laboriosam magni maiores maxime minus natus nobis non nostrum numquam omnis optio placeat porro quasi qui sint soluta sunt tenetur unde voluptas. Alias, animi debitis dicta, esse exercitationem in, iure maiores odit perspiciatis quos suscipit voluptate! Facere labore, officiis. Alias asperiores at enim explicabo facere fugit harum in incidunt iusto laborum, laudantium maiores molestiae nisi pariatur perspiciatis quasi quis, repellat, similique tempore voluptatem! Atque, autem dolorum exercitationem facere, fuga harum illo iusto maiores minus molestiae nobis nostrum perferendis porro quibusdam quis similique temporibus totam, vero. Alias aliquam aperiam asperiores assumenda atque aut beatae consequuntur deleniti dolor ea esse explicabo impedit inventore iure labore modi necessitatibus nihil obcaecati odit quibusdam, recusandae, rem sequi soluta temporibus tenetur veniam veritatis, vitae. Accusamus aliquid aperiam aspernatur aut culpa cum cupiditate deleniti dolore doloribus eius enim eos error est eveniet ex expedita facilis id illo illum in ipsam iure laborum laudantium libero magni maxime, minus molestiae mollitia nobis non nostrum odio quod repudiandae sit tempora vel vero. Ab aspernatur consectetur consequuntur culpa cupiditate, deserunt dolorum ducimus, earum eveniet exercitationem fuga fugit illum incidunt laboriosam magnam mollitia nam numquam pariatur, provident qui quidem quo recusandae repellendus saepe sequi tenetur voluptatum. Animi aut delectus dolorem, esse fugit minus molestias necessitatibus nesciunt odio quaerat quasi quibusdam recusandae repellendus saepe sapiente sit voluptas voluptate. Excepturi illo iusto neque quisquam voluptas? Accusamus animi atque eos labore molestias porro, praesentium ratione repellat ut voluptates. Atque enim ipsam necessitatibus, numquam praesentium quod quos sapiente tempora. Consectetur eligendi fugit illo labore libero odio quos sint temporibus totam voluptate? Aut consequatur deserunt doloremque dolores ea et, eum ex illo, impedit iure laborum nihil, nostrum optio similique voluptatem? A accusamus alias aliquid at autem blanditiis commodi corporis cupiditate dicta dolorum ea esse et, impedit in libero maiores minus mollitia nemo odit officia omnis placeat porro provident quidem quis quod ratione repudiandae totam unde velit vero, voluptas voluptatem voluptatibus. Ad deserunt dolore harum perferendis tenetur. Consectetur ea laborum maxime modi provident repellat similique voluptatem! Ad assumenda dignissimos dolores ea, explicabo fugit hic, illum minus obcaecati omnis praesentium quasi quod repellendus reprehenderit similique, tenetur.
+        </div>
+    </div>
+</div>
