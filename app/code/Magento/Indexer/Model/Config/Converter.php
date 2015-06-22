@@ -102,6 +102,7 @@ class Converter implements ConverterInterface
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
             'source'   => $this->getAttributeValue($node, 'source'),
+            'name'     => $this->getAttributeValue($node, 'name'),
             'provider' => $this->getAttributeValue($node, 'provider'),
             'fields'   => [],
         ];
@@ -121,7 +122,17 @@ class Converter implements ConverterInterface
                         isset($data['fieldsets'][$this->getAttributeValue($node, 'name')]['references'])
                         ? $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
                         : [];
-                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references'][] = [
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
+                    [$this->getAttributeValue($childNode, 'fieldset')] =
+                        isset(
+                            $data['fieldsets'][$this->getAttributeValue($node, 'name')]
+                            ['references'][$this->getAttributeValue($childNode, 'fieldset')]
+                        )
+                            ? $data['fieldsets'][$this->getAttributeValue($node, 'name')]
+                        ['references'][$this->getAttributeValue($childNode, 'fieldset')]
+                            : [];
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
+                    [$this->getAttributeValue($childNode, 'fieldset')][] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
                         'from'     => $this->getAttributeValue($childNode, 'from'),
                         'to'       => $this->getAttributeValue($childNode, 'to'),
@@ -139,7 +150,7 @@ class Converter implements ConverterInterface
                     break;
             }
         }
-        return $data;
+        return $this->sorting($data);
     }
 
     /**
@@ -178,7 +189,6 @@ class Converter implements ConverterInterface
         ];
 
         $data['fields'][$this->getAttributeValue($node, 'name')]['filters'] = [];
-        $data['fields'][$this->getAttributeValue($node, 'name')]['reference'] = [];
         /** @var $childNode \DOMNode */
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType != XML_ELEMENT_NODE) {
@@ -203,5 +213,25 @@ class Converter implements ConverterInterface
             $value = __($value);
         }
         return $value;
+    }
+
+    /**
+     * Sorting fieldset
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function sorting($data)
+    {
+        usort($data['fieldsets'], function ($current, $parent) {
+            if (!isset($current['references']) || isset($parent['references'][$current['name']])) {
+                return -1;
+            }
+            if (!isset($parent['references']) || isset($current['references'][$parent['name']])) {
+                return 1;
+            }
+            return 0;
+        });
+        return $data;
     }
 }
