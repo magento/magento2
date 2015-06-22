@@ -112,7 +112,7 @@
     * Fixed an issue where first store could not be selected on frontend
     * Fixed an issue with performance toolkit category creation
     * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
-    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where fatal error occurred on Abandoned Carts report grid
     * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
     * Fixed an issue where email was not required during Guest Checkout 
     * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
@@ -2652,7 +2652,7 @@
   * Canadian provincial sales taxes
   * Fixed issues with bundle product price inconsistency across the system
   * Added warnings if invalid tax configuration is created in the Admin panel
-  * Fixed issues with regards to hidden tax
+  * Fixed issues with regards to discount tax compensation
 * Fixed bugs:
   * Fixed an issue where grouped price was not applied for grouped products
   * Fixed an issue where a fatal error occurred when opening a grouped product page without assigned products on the frontend
@@ -2699,7 +2699,7 @@
   * Fixed an issue with status and visibility settings of a related product on the backend
   * Fixed an issue with unused DB indexes, which used resources, but did not contribute to higher performance
   * Fixed an issue where it was possible to create a downloadable product without specifying a link or a file
-  * Fixed an issue where a fatal error occured when opening a fixed bundle product with custom options page on the frontend
+  * Fixed an issue where a fatal error occurred when opening a fixed bundle product with custom options page on the frontend
   * Fixed an issue where the was a wrong config key for backend cataloginventory
 * Processed GitHub requests:
   * [#548] (https://github.com/magento/magento2/issues/548) -- Console installer doesn't checks filesystem permissions

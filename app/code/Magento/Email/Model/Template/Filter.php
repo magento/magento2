@@ -709,7 +709,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $css = $this->getCssFilesContent([$params['file']]);
 
-        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false ) {
+        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
             // Return LESS compilation error wrapped in CSS comment
             return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
         } elseif (!empty($css)) {
@@ -876,10 +876,14 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             $value = parent::filter($value);
         } catch (\Exception $e) {
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
+
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = '';
+                $value = __("We're sorry, an error has occurred while generating this email.");
             }
             $this->_logger->critical($e);
         }

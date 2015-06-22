@@ -153,7 +153,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Runs callbacks that have been added to filter content after directive processing is finished.
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     protected function afterFilter($value)
@@ -161,6 +161,9 @@ class Template implements \Zend_Filter_Interface
         foreach ($this->afterFilterCallbacks as $callback) {
             $value = call_user_func($callback, $value);
         }
+        // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+        // prevent callbacks running for unrelated content (e.g., email subject and email body)
+        $this->resetAfterFilterCallbacks();
         return $value;
     }
 
@@ -179,6 +182,17 @@ class Template implements \Zend_Filter_Interface
         }
 
         $this->afterFilterCallbacks[] = $afterFilterCallback;
+        return $this;
+    }
+
+    /**
+     * Resets the after filter callbacks
+     *
+     * @return $this
+     */
+    protected function resetAfterFilterCallbacks()
+    {
+        $this->afterFilterCallbacks = [];
         return $this;
     }
 

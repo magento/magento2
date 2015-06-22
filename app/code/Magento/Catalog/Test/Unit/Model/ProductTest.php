@@ -892,14 +892,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($linkTypes);
 
         $inputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $inputRelatedLink->setProductSku("Simple Product 1");
+        $inputRelatedLink->setSku("Simple Product 1");
         $inputRelatedLink->setLinkType("related");
         $inputRelatedLink->setData("sku", "Simple Product 2");
         $inputRelatedLink->setData("type", "simple");
         $inputRelatedLink->setPosition(0);
 
         $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $outputRelatedLink->setProductSku("Simple Product 1");
+        $outputRelatedLink->setSku("Simple Product 1");
         $outputRelatedLink->setLinkType("related");
         $outputRelatedLink->setLinkedProductSku("Simple Product 2");
         $outputRelatedLink->setLinkedProductType("simple");
@@ -946,7 +946,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testSetProductLinks()
     {
         $link = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $link->setProductSku("Simple Product 1");
+        $link->setSku("Simple Product 1");
         $link->setLinkType("upsell");
         $link->setLinkedProductSku("Simple Product 2");
         $link->setLinkedProductType("simple");
@@ -1277,7 +1277,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptions()
     {
-        $optionInstanceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+        $optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $joinProcessorMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1286,6 +1289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product',
             [
                 'catalogProductOption' => $optionInstanceMock,
+                'joinProcessor' => $joinProcessorMock
             ]
         );
         $productModel->setHasOptions(true);
@@ -1315,12 +1319,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('setProduct')
             ->with($productModel)
             ->willReturn($option1Id);
-        $options = [$optionMock1, $optionMock2];
+        $optionColl = $this->objectManagerHelper->getCollectionMock(
+            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            [$optionMock1, $optionMock2]
+        );
 
         $optionInstanceMock->expects($this->once())
             ->method('getProductOptionCollection')
             ->with($productModel)
-            ->willReturn($options);
+            ->willReturn($optionColl);
+
+        $joinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->isInstanceOf('Magento\Catalog\Model\Resource\Product\Option\Collection'));
 
         $expectedOptions = [
             $option1Id => $optionMock1,

@@ -21,7 +21,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testFilter()
     {
-
         $this->templateFilter->setVariables(
             [
                 'customer' => new \Magento\Framework\Object(['firstname' => 'Felicia', 'lastname' => 'Henry']),
@@ -64,7 +63,11 @@ T: 760-663-5876
 
 EXPECTED_RESULT;
 
-        $this->assertEquals($expectedResult, $this->templateFilter->filter($template), 'Template was processed incorrectly');
+        $this->assertEquals(
+            $expectedResult,
+            $this->templateFilter->filter($template),
+            'Template was processed incorrectly'
+        );
     }
 
     /**
@@ -92,5 +95,34 @@ EXPECTED_RESULT;
         $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 
         $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+    }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::afterFilter
+     * @covers \Magento\Framework\Filter\Template::addAfterFilterCallback
+     * @covers \Magento\Framework\Filter\Template::resetAfterFilterCallbacks
+     */
+    public function testAfterFilterCallbackReset()
+    {
+        $value = 'test string';
+        $expectedResult = 'TEST STRING';
+
+        // Build arbitrary object to pass into the addAfterFilterCallback method
+        $callbackObject = $this->getMockBuilder('stdObject')
+            ->setMethods(['afterFilterCallbackMethod'])
+            ->getMock();
+
+        $callbackObject->expects($this->once())
+            ->method('afterFilterCallbackMethod')
+            ->with($value)
+            ->will($this->returnValue($expectedResult));
+
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+
+        // Callback should run and filter content
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+
+        // Callback should *not* run as callbacks should be reset
+        $this->assertEquals($value, $this->templateFilter->filter($value));
     }
 }

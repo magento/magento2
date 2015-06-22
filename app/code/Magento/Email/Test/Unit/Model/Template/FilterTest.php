@@ -5,6 +5,9 @@
  */
 namespace Magento\Email\Test\Unit\Model\Template;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -149,7 +152,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 $this->appState,
                 $this->backendUrlBuilder,
                 $this->emogrifier,
-                []
+                [],
             ])
             ->setMethods($mockedMethods)
             ->getMock();
@@ -164,7 +167,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider applyInlineCssDataProvider
      */
-    public function testApplyInlineCss($html, $css, $expectedResults){
+    public function testApplyInlineCss($html, $css, $expectedResults)
+    {
         /* @var $filter \Magento\Email\Model\Template\Filter */
         $filter = $this->getModel(['getCssFilesContent']);
 
@@ -206,7 +210,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 [
                     '<head><style type="text/css">div { color: #111; }</style></head>',
                     '<p style="color: #000;"></p>',
-                ]
+                ],
             ],
         ];
     }
@@ -217,5 +221,42 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
     {
         $this->getModel()->applyInlineCss('test');
+    }
+
+    /**
+     * Ensure that after filter callbacks are reset after exception is thrown during filtering
+     */
+    public function testAfterFilterCallbackGetsResetWhenExceptionTriggered()
+    {
+        $value = '{{var random_var}}';
+        $exception = new \Exception('Test exception');
+        $exceptionResult = sprintf(__('Error filtering template: %s'), $exception->getMessage());
+
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->with($exception);
+
+        $filter = $this->getModel(['varDirective', 'resetAfterFilterCallbacks']);
+        $filter->expects($this->once())
+            ->method('varDirective')
+            ->will($this->throwException($exception));
+
+        // Callbacks must be reset after exception is thrown
+        $filter->expects($this->once())
+            ->method('resetAfterFilterCallbacks');
+
+        // Build arbitrary object to pass into the addAfterFilterCallback method
+        $callbackObject = $this->getMockBuilder('stdObject')
+            ->setMethods(['afterFilterCallbackMethod'])
+            ->getMock();
+        // Callback should never run due to exception happening during filtering
+        $callbackObject->expects($this->never())
+            ->method('afterFilterCallbackMethod');
+        $filter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+
+        $this->assertEquals($exceptionResult, $filter->filter($value));
     }
 }

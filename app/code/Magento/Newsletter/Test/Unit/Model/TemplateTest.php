@@ -5,6 +5,9 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -152,14 +155,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->registry,
                     $this->appEmulation,
                     $this->storeManager,
-                    $this->scopeConfig,
                     $this->assetRepo,
                     $this->filesystem,
+                    $this->scopeConfig,
                     $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
                     $this->request,
-                    $this->filterFactory
+                    $this->filterFactory,
                 ]
             )
             ->getMock();
