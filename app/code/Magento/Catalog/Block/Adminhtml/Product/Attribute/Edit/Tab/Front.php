@@ -102,8 +102,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_comparable',
-                'label' => __('Comparable on Frontend'),
-                'title' => __('Comparable on Frontend'),
+                'label' => __('Comparable on Storefront'),
+                'title' => __('Comparable on Storefront'),
                 'values' => $yesnoSource,
             ]
         );
@@ -137,8 +137,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_html_allowed_on_front',
-                'label' => __('Allow HTML Tags on Frontend'),
-                'title' => __('Allow HTML Tags on Frontend'),
+                'label' => __('Allow HTML Tags on Storefront'),
+                'title' => __('Allow HTML Tags on Storefront'),
                 'values' => $yesnoSource,
             ]
         );
@@ -151,8 +151,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_visible_on_front',
-                'label' => __('Visible on Catalog Pages on Frontend'),
-                'title' => __('Visible on Catalog Pages on Frontend'),
+                'label' => __('Visible on Catalog Pages on Storefront'),
+                'title' => __('Visible on Catalog Pages on Storefront'),
                 'values' => $yesnoSource
             ]
         );

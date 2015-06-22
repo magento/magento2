@@ -406,7 +406,7 @@
                     <depends>
                         <field id="use_custom_path">1</field>
                     </depends>
-                    <comment>You will have to log in after you save your custom admin path.</comment>
+                    <comment>You will have to sign in after you save your custom admin path.</comment>
                 </field>
             </group>
             <group id="security" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
