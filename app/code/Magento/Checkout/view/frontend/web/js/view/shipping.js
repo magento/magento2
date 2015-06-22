@@ -233,6 +233,8 @@ define(
                             shippingAddress[field] = addressData[field];
                         }
                     }
+
+                    shippingAddress.save_in_address_book = this.saveInAddressBook;
                     selectShippingAddress(shippingAddress);
                 }
                 return true;
