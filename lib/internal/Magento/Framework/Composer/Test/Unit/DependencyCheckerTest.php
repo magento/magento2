@@ -11,7 +11,8 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCheckDependencies()
     {
-        $composerApp = $this->getMock('Composer\Console\Application',
+        $composerApp = $this->getMock(
+            'Composer\Console\Application',
             ['setAutoExit', 'run', 'resetComposer'],
             [],
             '',
