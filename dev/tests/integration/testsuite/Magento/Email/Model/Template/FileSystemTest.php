@@ -9,12 +9,12 @@ namespace Magento\Email\Model\Template;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Fallback Test
+ * FileSystemTest Test
  *
  * @package Magento\View
  * @magentoDataFixture Magento/Framework/View/_files/fallback/themes_registration.php
  */
-class FallbackTest extends \PHPUnit_Framework_TestCase
+class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\FlyweightFactory

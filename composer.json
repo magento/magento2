@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta11",
+    "version": "0.74.0-beta13",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -31,7 +31,7 @@
         "zendframework/zend-log": "2.4.0",
         "zendframework/zend-http": "2.4.0",
         "magento/zendframework1": "1.12.13",
-        "composer/composer": "1.0.0-alpha9",
+        "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.11.0",
         "oyejorge/less.php": "1.7.0.3",
         "pelago/emogrifier": "0.1.1",
@@ -55,6 +55,7 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
+        "ext-xsl": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3"
@@ -65,6 +66,7 @@
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",
         "magento/module-bundle": "self.version",
+        "magento/module-bundle-import-export": "self.version",
         "magento/module-cache-invalidate": "self.version",
         "magento/module-captcha": "self.version",
         "magento/module-catalog": "self.version",

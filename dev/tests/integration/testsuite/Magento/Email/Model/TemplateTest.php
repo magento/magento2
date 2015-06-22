@@ -5,7 +5,6 @@
  */
 namespace Magento\Email\Model;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -53,13 +52,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Registry'),
                 $objectManager->get('Magento\Store\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
-                $filesystem,
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
+                $filesystem,
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
+                $objectManager->get('Magento\Email\Model\TemplateFactory'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
-                $objectManager->get('Magento\Email\Model\TemplateFactory')
             ]
         )->getMock();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
@@ -129,172 +128,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplate());
-    }
-
-    /**
-     * Ensures that the css directive will successfully compile and output contents of a LESS file,
-     * as well as supporting loading files from a theme fallback structure. The css directive must be tested within
-     * the context of a Magento\Email\Model\AbstractTemplate class, as it uses its methods to load the CSS.
-     *
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
-     * @magentoAppIsolation enabled
-     * @dataProvider cssDirectiveDataProvider
-     *
-     * @param $area
-     * @param $templateText
-     * @param $expectedOutput
-     */
-    public function testCssDirective($area, $templateText, $expectedOutput)
-    {
-        $this->mockModel();
-        $this->setUpThemeFallback($area);
-        $this->model->setTemplateText($templateText);
-
-        $this->assertContains($expectedOutput, $this->model->getProcessedTemplate());
-    }
-
-    /**
-     * @return array
-     */
-    public function cssDirectiveDataProvider()
-    {
-        return [
-            'CSS from theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html>{{css file="css/email-1.css"}}</html>',
-                'color: #111;'
-            ],
-            'CSS from theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{css file="css/email-1.css"}}</html>',
-                'color: #111;'
-            ],
-            'CSS from parent theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html>{{css file="css/email-2.css"}}</html>',
-                'color: #222;'
-            ],
-            'CSS from parent theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{css file="css/email-2.css"}}</html>',
-                'color: #222;'
-            ],
-            'CSS from grandparent theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html>{{css file="css/email-3.css"}}</html>',
-                'color: #333;'
-            ],
-            'CSS from grandparent theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{css file="css/email-3.css"}}</html>',
-                'color: #333;'
-            ],
-            'Missing file argument' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{css}}</html>',
-                '/* "file" argument must be specified */'
-            ],
-            'Empty or missing file' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{css file="css/non-existent-file.css"}}</html>',
-                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
-            ],
-            'File with compilation error results in error message' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html>{{inlinecss file="css/file-with-error.css"}}</html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
-            ],
-        ];
-    }
-
-    /**
-     * Ensures that the inlinecss directive will successfully load and inline CSS to HTML markup,
-     * as well as supporting loading files from a theme fallback structure. The inlinecss directive must be tested within
-     * the context of a Magento\Email\Model\AbstractTemplate class, as it uses its methods to load the CSS.
-     *
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
-     * @magentoAppIsolation enabled
-     * @dataProvider inlinecssDirectiveDataProvider
-     *
-     * @param string $area
-     * @param string $templateText
-     * @param string $expectedOutput
-     * @param bool $productionMode
-     */
-    public function testInlinecssDirective($area, $templateText, $expectedOutput, $productionMode = false)
-    {
-        $this->mockModel();
-        $this->setUpThemeFallback($area);
-        $this->model->setTemplateText($templateText);
-
-        if ($productionMode) {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
-                ->setMode(\Magento\Framework\App\State::MODE_PRODUCTION);
-        }
-
-        $this->assertContains($expectedOutput, $this->model->getProcessedTemplate());
-    }
-
-    /**
-     * @return array
-     */
-    public function inlinecssDirectiveDataProvider()
-    {
-        return [
-            'CSS from theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
-                '<p style="color: #111; text-align: left;">'
-            ],
-            'CSS from theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
-                '<p style="color: #111; text-align: left;">'
-            ],
-            'CSS from parent theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html><p></p> {{inlinecss file="css/email-inline-2.css"}}</html>',
-                '<p style="color: #222; text-align: left;">'
-            ],
-            'CSS from parent theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/email-inline-2.css"}}</html>',
-                '<p style="color: #222; text-align: left;">'
-            ],
-            'CSS from grandparent theme - adminhtml' => [
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                '<html><p></p> {{inlinecss file="css/email-inline-3.css"}}</html>',
-                '<p style="color: #333; text-align: left;">'
-            ],
-            'CSS from grandparent theme - frontend' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/email-inline-3.css"}}</html>',
-                '<p style="color: #333; text-align: left;">'
-            ],
-            'Non-existent file results in unmodified markup' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/non-existent-file.css"}}</html>',
-                '<html><p></p> </html>',
-            ],
-            'Production mode - File with compilation error results in unmodified markup' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
-                true,
-            ],
-            'Developer mode - File with compilation error results in error message' => [
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
-                false,
-            ],
-        ];
     }
 
     /**
@@ -390,8 +227,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOutput,
         $storeConfigPath = null,
         $mockAdminTheme = false
-    )
-    {
+    ) {
         $this->mockModel();
 
         if ($mockAdminTheme) {
@@ -434,7 +270,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function templateDirectiveDataProvider()
     {
         return [
-             'Template from module folder - adminhtml' => [
+            'Template from module folder - adminhtml' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                 '{{template config_path="design/email/footer_template"}}',
                 '<!-- End wrapper table -->',
@@ -497,7 +333,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTemplateStylesVariable($area, $expectedOutput, $unexpectedOutputs, $templateForDatabase = [])
     {
-
         if (count($templateForDatabase)) {
             $this->mockModel();
             $this->setUpThemeFallback($area);
@@ -558,7 +393,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from <!--@styles @--> comment - frontend' => [
                 \Magento\Framework\App\Area::AREA_FRONTEND,
@@ -566,7 +401,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [
                     '<!--@styles',
                     '{{var template_styles}}',
-                ]
+                ],
             ],
             'Styles from "Template Styles" textarea from backend - adminhtml' => [
                 \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
@@ -653,7 +488,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
     }
@@ -701,7 +536,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
-                )->getId()
+                )->getId(),
             ]
         );
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
