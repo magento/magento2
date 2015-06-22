@@ -164,7 +164,7 @@ class CategoryProcessor
      *
      * @param int $categoryId
      *
-     * @return
+     * @return \Magento\Catalog\Model\Category|null
      */
     public function getCategoryById($categoryId)
     {

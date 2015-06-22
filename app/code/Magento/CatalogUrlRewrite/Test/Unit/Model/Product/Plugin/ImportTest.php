@@ -459,7 +459,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             [$this->products[1][ImportProduct::COL_STORE], $this->products[1][ImportProduct::COL_STORE]]
         ];
         $this->importProduct
-            ->expects($this->exactly($productsCount))
+            ->expects($this->exactly(1))
             ->method('getStoreIdByCode')
             ->will($this->returnValueMap($map));
         $product = $this->getMock(

@@ -141,16 +141,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * Entity types supporting import history
-     *
-     * @var array
-     */
-    protected $processedReportsEntities = [
-        \Magento\Catalog\Model\Product::ENTITY,
-        \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::ENTITY_TYPE_CODE
-    ];
-
-    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -684,11 +674,20 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isReportEntityType($entity = null)
     {
         $result = false;
-        if (!$entity) {
-            $entity = $this->getEntity();
-        }
-        if (in_array($entity, $this->processedReportsEntities)) {
-            $result = true;
+        if ($entity !== null && $this->_getEntityAdapter()->getEntityTypeCode() != $entity) {
+            $entities = $this->_importConfig->getEntities();
+            if (isset($entities[$this->getEntity()])) {
+                try {
+                    $adapter = $this->_entityFactory->create($entities[$entity]['model']);
+                    $result = $adapter->isNeedToLogInHistory();
+                } catch (\Exception $e) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
+                }
+            } else {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
+            }
+        } else {
+            $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
         }
         return $result;
     }

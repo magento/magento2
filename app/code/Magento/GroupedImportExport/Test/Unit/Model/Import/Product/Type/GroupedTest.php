@@ -33,6 +33,21 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     protected $attrCollectionFactory;
 
     /**
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $connection;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $select;
+
+    /**
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+    /**
      * @var []
      */
     protected $params;
@@ -72,11 +87,13 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->attrCollectionFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            ['create'],
+            ['create', 'addFieldToFilter'],
             [],
             '',
             false
         );
+        $this->attrCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
+        $this->attrCollectionFactory->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
             ['getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope'],
@@ -95,6 +112,66 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $entityAttributes = [
+            'attribute_id' => 'attributeSetName'
+        ];
+        $this->connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            [
+                'select',
+                'fetchAll',
+                'fetchPairs',
+                'joinLeft',
+                'insertOnDuplicate',
+                'delete',
+                'quoteInto'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->select = $this->getMock(
+            'Magento\Framework\DB\Select',
+            [
+                'from',
+                'where',
+                'joinLeft',
+                'getAdapter',
+            ],
+            [],
+            '',
+            false
+        );
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
+        $this->connection->expects($this->any())->method('delete')->willReturnSelf();
+        $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
+        $this->connection
+            ->expects($this->any())
+            ->method('fetchPairs')
+            ->will($this->returnValue($entityAttributes));
+        $this->resource = $this->getMock(
+            '\Magento\Framework\App\Resource',
+            [
+                'getConnection',
+                'getTableName',
+            ],
+            [],
+            '',
+            false
+        );
+        $this->resource->expects($this->any())->method('getConnection')->will(
+            $this->returnValue($this->connection)
+        );
+        $this->resource->expects($this->any())->method('getTableName')->will(
+            $this->returnValue('tableName')
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->grouped = $this->objectManagerHelper->getObject(
@@ -102,6 +179,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             [
                 'attrSetColFac' => $this->setCollectionFactory,
                 'prodAttrColFac' => $this->attrCollectionFactory,
+                'resource' => $this->resource,
                 'params' => $this->params,
                 'links' => $this->links
             ]

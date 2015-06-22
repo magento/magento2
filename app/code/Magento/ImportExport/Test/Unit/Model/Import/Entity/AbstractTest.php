@@ -128,6 +128,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method isNeedToLogInHistory()
+     *
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isNeedToLogInHistory
+     */
+    public function testIsNeedToLogInHistory()
+    {
+        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+    }
+
+    /**
      * Test for method isAttributeValid()
      *
      * @dataProvider isAttributeValidDataProvider
