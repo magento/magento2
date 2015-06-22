@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AddressTest
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class RelationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $customerFactoryMock;
@@ -97,7 +97,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testSave method
+     * Data provider for processRelation method
      *
      * @return array
      */
