@@ -43,6 +43,11 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     private $resultFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesJoinProcessorMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -76,12 +81,20 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Eav\Model\AttributeSetRepository(
             $this->resourceMock,
             $this->setFactoryMock,
             $this->collectionFactoryMock,
             $this->eavConfigMock,
-            $this->resultFactoryMock
+            $this->resultFactoryMock,
+            $this->extensionAttributesJoinProcessorMock
         );
     }
 
