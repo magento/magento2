@@ -73,7 +73,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     ];
 
     /**
-     * Template array for export data
+     * Export template
      *
      * @var array
      */
