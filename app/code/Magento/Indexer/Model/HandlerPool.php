@@ -5,17 +5,19 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\ObjectManagerInterface;
+
 class HandlerPool
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
