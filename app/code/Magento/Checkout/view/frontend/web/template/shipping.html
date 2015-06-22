@@ -5,9 +5,7 @@
  */
 -->
 <li id="opc-shipping" data-bind="fadeVisible: visible()">
-    <div class="step-title" data-role="title">
-        <h2 data-bind="text: $t('Shipping Address')"></h2>
-    </div>
+    <div class="step-title" data-bind="text: $t('Shipping Address')" data-role="title"></div>
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content">
@@ -51,9 +49,7 @@
 <!--Shipping method template-->
 <li id="opc-shipping_method" data-bind="fadeVisible: visible(), blockLoader: isLoading" role="presentation">
     <div class="checkout-shipping-method">
-        <div class="step-title" data-role="title">
-            <h2 data-bind="text: $t('Shipping Method')"></h2>
-        </div>
+        <div class="step-title" data-bind="text: $t('Shipping Method')" data-role="title"></div>
         <!-- ko foreach: getRegion('before-shipping-method-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
