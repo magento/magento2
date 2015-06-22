@@ -11,16 +11,22 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class Navigation
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var array
      */
-    protected $serviceLocator;
+    private $navStates;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ObjectManagerProvider $objectManagerProvider)
     {
-        $this->serviceLocator = $serviceLocator;
+        $objectManager = $objectManagerProvider->get();
+        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            $this->navStates = $serviceLocator->get('config')['navUpdater'];
+        } else {
+            $this->navStates = $serviceLocator->get('config')['nav'];
+        }
     }
 
     /**
@@ -28,7 +34,7 @@ class Navigation
      */
     public function getData()
     {
-        return $this->serviceLocator->get('config')['nav'];
+        return $this->navStates;
     }
 
     /**
@@ -41,7 +47,7 @@ class Navigation
     public function getMenuItems()
     {
         return array_filter(
-            $this->serviceLocator->get('config')['nav'],
+            $this->navStates,
             function ($value) {
                 return isset($value['nav-bar']) && (bool)$value['nav-bar'];
             }
@@ -58,7 +64,7 @@ class Navigation
     public function getMainItems()
     {
         $result = array_filter(
-            $this->serviceLocator->get('config')['nav'],
+            $this->navStates,
             function ($value) {
                 return isset($value['main']) && (bool)$value['main'];
             }

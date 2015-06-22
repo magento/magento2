@@ -17,7 +17,8 @@ var app = angular.module(
         'customize-your-store',
         'create-admin-account',
         'install',
-        'success'
+        'success',
+        'updater-landing'
     ]);
 
 app.config(function ($stateProvider) {
