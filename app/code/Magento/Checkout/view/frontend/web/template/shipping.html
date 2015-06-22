@@ -19,16 +19,6 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
-        <!-- ko if: (!quoteIsVirtual) -->
-            <!-- ko foreach: getRegion('customer-email') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        <!--/ko-->
-
-        <!-- ko foreach: getRegion('before-form') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
         <button type="button"
@@ -39,6 +29,16 @@
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
         </div>
         <!-- /ko -->
+
+        <!-- ko if: (!quoteIsVirtual) -->
+            <!-- ko foreach: getRegion('customer-email') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        <!--/ko-->
+
+        <!-- ko foreach: getRegion('before-form') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
 
         <!-- Inline address form -->
         <!-- ko if: (isFormInline) -->
