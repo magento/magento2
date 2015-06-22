@@ -256,7 +256,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $orderState = Order::STATE_NEW;
         $orderStatus = $methodInstance->getConfigData('order_status');
-        $isCustomerNotified = false;
+        $isCustomerNotified = null;
 
         // Do order payment validation on payment method level
         $methodInstance->validate();
@@ -278,7 +278,7 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
 
-        $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
+        $isCustomerNotified = $isCustomerNotified === null ? $order->getCustomerNoteNotify() : $isCustomerNotified;
 
         if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
