@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Model\Resource\Db\VersionControl;
 
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Class Metadata represents a list of entity fields that are applicable for persistence operations
  */
@@ -20,11 +18,11 @@ class Metadata
     /**
      * Returns list of entity fields that are applicable for persistence operations
      *
-     * @param AbstractModel $entity
+     * @param \Magento\Framework\Object $entity
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getFields(AbstractModel $entity)
+    public function getFields(\Magento\Framework\Object $entity)
     {
         if (!isset($this->metadataInfo[get_class($entity)])) {
             $this->metadataInfo[get_class($entity)] =

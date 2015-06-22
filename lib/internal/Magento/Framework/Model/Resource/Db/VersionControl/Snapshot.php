@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Model\Resource\Db\VersionControl;
 
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Class Snapshot register snapshot of entity data, for tracking changes
  */
@@ -38,11 +36,10 @@ class Snapshot
     /**
      * Register snapshot of entity data, for tracking changes
      *
-     * @param AbstractModel $entity
+     * @param \Magento\Framework\Object $entity
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function registerSnapshot(AbstractModel $entity)
+    public function registerSnapshot(\Magento\Framework\Object $entity)
     {
         $data = [];
 
@@ -60,10 +57,10 @@ class Snapshot
     /**
      * Check is current entity has changes, by comparing current object state with stored snapshot
      *
-     * @param AbstractModel $entity
+     * @param \Magento\Framework\Object $entity
      * @return bool
      */
-    public function isModified(AbstractModel $entity)
+    public function isModified(\Magento\Framework\Object $entity)
     {
         if (!$entity->getId()) {
             return true;
