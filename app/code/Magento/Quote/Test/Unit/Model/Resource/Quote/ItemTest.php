@@ -6,8 +6,7 @@
 namespace Magento\Quote\Test\Unit\Model\Resource\Quote;
 
 use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
-use Magento\Quote\Model\Resource\Quote\Address\Item;
-
+use Magento\Quote\Model\Resource\Quote\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -19,9 +18,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Item
+     * @var Item
      */
-    protected $resource;
+    protected $model;
 
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
@@ -104,7 +103,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->objectRelationProcessorMock);
 
         $objectManager = new ObjectManagerHelper($this);
-        $this->resource = $objectManager->getObject(
+        $this->model = $objectManager->getObject(
             'Magento\Quote\Model\Resource\Quote\Item',
             [
                 'context' => $contextMock,
@@ -112,6 +111,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'entityRelationComposite' => $this->relationCompositeMock
             ]
         );
+    }
+
+    public function testInstanceOf()
+    {
+        $this->assertInstanceOf('Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb', $this->model);
     }
 
     public function testSaveNotModifiedItem()
@@ -130,7 +134,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->adapterMock);
 
-        $this->assertEquals($this->resource, $this->resource->save($this->quoteItemMock));
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
 
     public function testSaveSavedBeforeItem()
@@ -150,7 +154,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->adapterMock);
 
-        $this->assertEquals($this->resource, $this->resource->save($this->quoteItemMock));
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
 
     public function testSaveModifiedItem()
@@ -170,6 +174,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->adapterMock);
 
-        $this->assertEquals($this->resource, $this->resource->save($this->quoteItemMock));
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
 }
