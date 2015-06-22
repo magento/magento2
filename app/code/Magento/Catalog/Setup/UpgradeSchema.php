@@ -60,5 +60,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $installer->endSetup();
         }
+
+        if (version_compare($context->getVersion(), '2.0.0.2') > 0) {
+            $setup->startSetup();
+
+            $connection = $setup->getConnection();
+            $connection->addColumn(
+                $setup->getTable('catalog_eav_attribute'),
+                'is_used_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Used In Grid'
+                ]
+            );
+
+            $setup->endSetup();
+        }
     }
 }
