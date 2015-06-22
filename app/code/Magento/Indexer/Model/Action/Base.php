@@ -16,6 +16,7 @@ use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
+use Magento\Indexer\Model\SaveHandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -128,21 +129,30 @@ class Base implements ActionInterface
     }
 
     /**
+     * Execute
+     *
+     * @param null|int|array $ids
+     * @return void
+     */
+    protected function execute($ids = null)
+    {
+        $this->prepareFields();
+        $this->prepareSchema();
+        $this->prepareIndexes();
+        $this->deleteItems();
+        $this->prepareQuery(
+            $this->prepareSelect($ids)
+        );
+    }
+
+    /**
      * Execute full indexation
      *
      * @return void
      */
     public function executeFull()
     {
-        $this->prepareFields();
-        $this->prepareSchema();
-        $this->prepareIndexes();
-        $this->deleteItems();
-        $this->connection->query(
-            $this->prepareQuery(
-                $this->prepareSelect()
-            )
-        );
+        $this->execute();
     }
 
     /**
@@ -153,15 +163,7 @@ class Base implements ActionInterface
      */
     public function executeList(array $ids)
     {
-        $this->prepareFields();
-        $this->prepareSchema();
-        $this->prepareIndexes();
-        $this->deleteItems($ids);
-        $this->connection->query(
-            $this->prepareQuery(
-                $this->prepareSelect($ids)
-            )
-        );
+        $this->execute($ids);
     }
 
     /**
@@ -172,15 +174,7 @@ class Base implements ActionInterface
      */
     public function executeRow($id)
     {
-        $this->prepareFields();
-        $this->prepareSchema();
-        $this->prepareIndexes();
-        $this->deleteItems($id);
-        $this->connection->query(
-            $this->prepareQuery(
-                $this->prepareSelect($id)
-            )
-        );
+        $this->execute($id);
     }
 
     /**
@@ -234,14 +228,13 @@ class Base implements ActionInterface
      * Prepare insert query
      *
      * @param Select $select
-     * @return string
+     * @return void
      */
     protected function prepareQuery(Select $select)
     {
-        return $this->connection->insertFromSelect(
-            $select,
-            $this->getTableName()
-        );
+        $saveHandler = $this->data['saveHandler'];
+        /** @var SaveHandlerInterface $saveHandler */
+        $saveHandler->save($select, $this->getTableName());
     }
 
     /**
@@ -321,23 +314,22 @@ class Base implements ActionInterface
         $select = $this->connection->select();
         $select->from($this->getPrimaryResource()->getMainTable(), $this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldset) {
-            if (isset($fieldset['reference']['from'])
-                && isset($fieldset['reference']['to'])
-                && isset($fieldset['reference']['fieldset'])
-            ) {
-                $source = $fieldset['source'];
-                $referenceSource = $this->data['fieldsets'][$fieldset['reference']['fieldset']]['source'];
-                /** @var SourceProviderInterface $source */
-                /** @var SourceProviderInterface $referenceSource */
-                $currentEntityName = $source->getMainTable();
-                $select->joinInner(
-                    $currentEntityName,
-                    new \Zend_Db_Expr(
-                        $referenceSource->getMainTable() . '.' . $fieldset['reference']['from']
-                        . '=' . $currentEntityName . '.' . $fieldset['reference']['to']
-                    ),
-                    null
-                );
+            if (isset($fieldset['references'])) {
+                foreach ($fieldset['references'] as $reference) {
+                    $source = $fieldset['source'];
+                    $referenceSource = $this->data['fieldsets'][$reference['fieldset']]['source'];
+                    /** @var SourceProviderInterface $source */
+                    /** @var SourceProviderInterface $referenceSource */
+                    $currentEntityName = $source->getMainTable();
+                    $select->joinInner(
+                        $currentEntityName,
+                        new \Zend_Db_Expr(
+                            $referenceSource->getMainTable() . '.' . $reference['from']
+                            . '=' . $currentEntityName . '.' . $reference['to']
+                        ),
+                        null
+                    );
+                }
             }
             foreach ($fieldset['fields'] as $field) {
                 $handler = $field['handler'];

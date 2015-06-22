@@ -117,7 +117,11 @@ class Converter implements ConverterInterface
                     );
                     break;
                 case 'reference':
-                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['reference'] = [
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references'] =
+                        isset($data['fieldsets'][$this->getAttributeValue($node, 'name')]['references'])
+                        ? $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references']
+                        : [];
+                    $data['fieldsets'][$this->getAttributeValue($node, 'name')]['references'][] = [
                         'fieldset' => $this->getAttributeValue($childNode, 'fieldset'),
                         'from'     => $this->getAttributeValue($childNode, 'from'),
                         'to'       => $this->getAttributeValue($childNode, 'to'),
