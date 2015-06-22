@@ -66,6 +66,7 @@ class Base implements ActionInterface
         'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
         'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
     ];
+
     /**
      * @var array
      */
@@ -250,7 +251,7 @@ class Base implements ActionInterface
      */
     protected function getPrimaryResource()
     {
-        return $this->data['fieldsets'][$this->data['primary']]['source'];
+        return $this->data['fieldsets'][0]['source'];
     }
 
     /**
@@ -393,6 +394,7 @@ class Base implements ActionInterface
     protected function prepareFields()
     {
         $defaultHandler = $this->handlerPool->get($this->defaultHandler);
+        var_dump($this->data['fieldsets']);
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             if (isset($fieldset['class'])) {
