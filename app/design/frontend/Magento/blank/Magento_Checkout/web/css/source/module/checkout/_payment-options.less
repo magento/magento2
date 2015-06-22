@@ -26,10 +26,6 @@
 
 & when (@media-common = true) {
     .checkout-payment-method {
-        .payment-options {
-            .css(margin, 0 0 @indent__base);
-        }
-
         .payment-option {
             &._active {
                 .payment-option-title {
@@ -82,7 +78,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .checkout-payment-method {
-        .payment-options {
+        .payment-option {
             .css(margin, 0 -(@checkout-payment-option-title-mobile__padding));
 
             .payment-option-title {
