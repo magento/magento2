@@ -39,6 +39,7 @@ class DateTime
      *
      * @param  string|null $timezone
      * @return int offset between timezone and gmt
+     * @api
      */
     public function calculateOffset($timezone = null)
     {
@@ -86,6 +87,7 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in GMT timezone
      * @return string
+     * @api
      */
     public function date($format = null, $input = null)
     {
@@ -148,6 +150,7 @@ class DateTime
      *
      * @param  string $type
      * @return int
+     * @api
      */
     public function getGmtOffset($type = 'seconds')
     {

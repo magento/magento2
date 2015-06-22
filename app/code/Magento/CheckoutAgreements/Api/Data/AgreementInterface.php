@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Api\Data;
 
-interface AgreementInterface
+interface AgreementInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -147,4 +147,21 @@ interface AgreementInterface
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function setIsAutoApproved($isAutoApproved);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+    );
 }
