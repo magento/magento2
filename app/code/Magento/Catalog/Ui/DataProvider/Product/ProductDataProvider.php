@@ -15,16 +15,22 @@ use Magento\Store\Model\StoreManagerInterface;
 class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
 {
     /**
+     * Product collection
+     *
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected $collection;
 
     /**
+     * Store manager
+     *
      * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
+     * Construct
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -48,9 +54,12 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->collection = $collectionFactory->create();
+        $this->initCollection();
     }
 
     /**
+     * Get collection
+     *
      * @return \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected function getCollection()
@@ -59,12 +68,24 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     }
 
     /**
+     * Init collection hook
+     */
+    protected function initCollection()
+    {
+        $store = $this->getStore();
+        if ($store->getId()) {
+            $this->collection->addStoreFilter($store);
+        }
+    }
+
+    /**
+     * Get store
+     *
      * @return Store
      */
     protected function getStore()
     {
-        $storeId = $this->request->getParam('store', 0);
-        return $this->storeManager->getStore($storeId);
+        return $this->storeManager->getStore($this->request->getParam('store', 2));
     }
 
     /**
@@ -74,11 +95,9 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
      */
     public function getData()
     {
-        $store = $this->getStore();
-        if ($store->getId()) {
-            $this->collection->addStoreFilter($this->getStore());
+        if (!$this->collection->isLoaded()) {
+            $this->collection->load();
         }
-        $this->collection->load();
         $items = $this->getCollection()->toArray();
 
         return [
