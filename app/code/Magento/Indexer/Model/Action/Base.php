@@ -12,10 +12,11 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Stdlib\String;
 use Magento\Indexer\Model\ActionInterface;
-use Magento\Indexer\Model\FieldsetPool;
+use Magento\Indexer\Model\Fieldset\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
+use Magento\Indexer\Model\IndexStructure;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -99,6 +100,10 @@ class Base implements ActionInterface
      * @var []
      */
     protected $columns = [];
+    /**
+     * @var IndexStructure
+     */
+    private $indexStructure;
 
     /**
      * @param AppResource $resource
@@ -115,6 +120,7 @@ class Base implements ActionInterface
         HandlerPool $handlerPool,
         FieldsetPool $fieldsetPool,
         String $string,
+        IndexStructure $indexStructure,
         $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
         $data = []
     ) {
@@ -125,6 +131,7 @@ class Base implements ActionInterface
         $this->handlerPool = $handlerPool;
         $this->defaultHandler = $defaultHandler;
         $this->string = $string;
+        $this->indexStructure = $indexStructure;
     }
 
     /**
@@ -134,15 +141,34 @@ class Base implements ActionInterface
      */
     public function executeFull()
     {
+        $dimensions = [1,2,3];
         $this->prepareFields();
         $this->prepareSchema();
         $this->prepareIndexes();
+        $this->dropTables($dimensions);
+        $this->createTables($dimensions);
         $this->deleteItems();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect()
             )
         );
+    }
+
+    /**
+     * @param array $dimensions
+     */
+    private function dropTables(array $dimensions)
+    {
+        $this->indexStructure->delete($this->getTableName(), $dimensions);
+    }
+
+    /**
+     * @param array $dimensions
+     */
+    private function createTables(array $dimensions)
+    {
+        $this->indexStructure->create($this->getTableName(), $this->filterColumns, $dimensions);
     }
 
     /**
