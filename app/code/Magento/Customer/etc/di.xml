@@ -126,4 +126,27 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="EavVersionControlSnapshot" type="Magento\Framework\Model\Resource\Db\VersionControl\Snapshot">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Customer\Model\Resource\Customer\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Model\Resource\Customer">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entityRelationComposite" xsi:type="object">CustomerRelationsComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Customer\Collection">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+        </arguments>
+    </type>
 </config>
