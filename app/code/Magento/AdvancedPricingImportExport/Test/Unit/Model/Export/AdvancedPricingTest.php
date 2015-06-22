@@ -204,9 +204,12 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_setColFactory = $this->getMock(
-            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
-            ['create'],
+        $this->attrSetColFactory = $this->getMock(
+            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            [
+                'create',
+                'setEntityTypeFilter',
+            ],
             [],
             '',
             false
@@ -327,7 +330,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             $this->collection,
             $this->exportConfig,
             $this->productFactory,
-            $this->_setColFactory,
+            $this->attrSetColFactory,
             $this->categoryColFactory,
             $this->itemFactory,
             $this->optionColFactory,
@@ -379,23 +382,25 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
         $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
         $headers = ['headers'];
-        $this->advancedPricing->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
-        $data = [
-            'sku' => 'simpletest',
-            'group_price_website' => '0',
-            'group_price_customer_group' => '1',
-            'group_price' => '100',
-            'tier_price_website' => '0',
-            'tier_price_customer_group' => '2',
-            'tier_price_qty' => '2',
-            'tier_price' => '23',
-        ];
-        $this->advancedPricing->expects($this->once())->method('getExportData')->willReturn($data);
+        $this->advancedPricing->expects($this->any())->method('_getHeaderColumns')->willReturn($headers);
+        $this->writer->expects($this->any())->method('setHeaderCols')->with($headers);
         $webSite = 'All Websites [USD]';
         $userGroup = 'General';
-        $this->advancedPricing->expects($this->once())->method('_getWebsiteCode')->willReturn($webSite);
-        $this->advancedPricing->expects($this->once())->method('_getCustomerGroupById')->willReturn($userGroup);
+        $this->advancedPricing->expects($this->any())->method('_getWebsiteCode')->willReturn($webSite);
+        $this->advancedPricing->expects($this->any())->method('_getCustomerGroupById')->willReturn($userGroup);
+        $data = [
+            [
+                'sku' => 'simpletest',
+                'group_price_website' => $webSite,
+                'group_price_customer_group' => $userGroup,
+                'group_price' => '100',
+                'tier_price_website' => $webSite,
+                'tier_price_customer_group' => $userGroup,
+                'tier_price_qty' => '2',
+                'tier_price' => '23',
+            ]
+        ];
+        $this->advancedPricing->expects($this->once())->method('getExportData')->willReturn($data);
         $exportData = [
             'sku' => 'simpletest',
             'group_price_website' => $webSite,
@@ -406,6 +411,10 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             'tier_price_qty' => '2',
             'tier_price' => '23',
         ];
+        $this->advancedPricing
+            ->expects($this->any())
+            ->method('correctExportData')
+            ->willReturn($exportData);
         $this->writer->expects($this->once())->method('writeRow')->with($exportData);
         $this->writer->expects($this->once())->method('getContents');
         $this->advancedPricing->export();
