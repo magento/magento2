@@ -94,4 +94,14 @@ abstract class AbstractProcessor
     {
         return static::INDEXER_ID;
     }
+
+    /**
+     * Check if indexer is on scheduled
+     *
+     * @return bool
+     */
+    public function isIndexerScheduled()
+    {
+        return $this->getIndexer()->isScheduled();
+    }
 }

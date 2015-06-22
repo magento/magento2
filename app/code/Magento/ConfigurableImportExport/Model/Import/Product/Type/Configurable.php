@@ -184,8 +184,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param array $params
      * @param \Magento\Framework\App\Resource $resource
+     * @param array $params
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
@@ -193,8 +193,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        array $params,
         \Magento\Framework\App\Resource $resource,
+        array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
@@ -203,7 +203,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_resourceHelper = $resourceHelper;
         $this->_resource = $resource;
         $this->_productColFac = $_productColFac;
-        parent::__construct($attrSetColFac, $prodAttrColFac, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_connection = $this->_entityModel->getConnection();
     }
 
@@ -573,7 +573,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 !empty($oneOptionValuePrice['value']) &&
                 isset($oneOptionValuePrice['price'])
             ) {
-                $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] = $oneOptionValuePrice['price'];
+                $postfix = !empty($oneOptionValuePrice['price_type'])
+                && ($oneOptionValuePrice['price_type'] == 'percent') ? '%' : '';
+                $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] =
+                    $oneOptionValuePrice['price'] . $postfix;
             }
         }
         return $prices;
@@ -814,6 +817,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
 
         while ($bunch = $this->_entityModel->getNextBunch()) {
+            if (!$this->configurableInBunch($bunch)) {
+                continue;
+            }
+
             $this->_superAttributesData = [
                 'attributes' => [],
                 'labels' => [],
@@ -855,6 +862,24 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_insertData();
         }
         return $this;
+    }
+
+    /**
+     * @param $bunch
+     * @return bool
+     */
+    protected function configurableInBunch($bunch)
+    {
+        $newSku = $this->_entityModel->getNewSku();
+        foreach ($bunch as $rowNum => $rowData) {
+            $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+            if (($this->_type == $productData['type_id']) &&
+                ($rowData == $this->_entityModel->isRowAllowedToImport($rowData, $rowNum))
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -31,7 +31,9 @@ class Import
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {
-        $this->_stockndexerProcessor->markIndexerAsInvalid();
+        if (!$this->_stockndexerProcessor->isIndexerScheduled()) {
+            $this->_stockndexerProcessor->markIndexerAsInvalid();
+        }
         return $import;
     }
 }
