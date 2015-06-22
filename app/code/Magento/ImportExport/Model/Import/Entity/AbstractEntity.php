@@ -686,11 +686,11 @@ abstract class AbstractEntity
         return $this->validateRow($rowData, $rowNum) && !isset($this->_rowsToSkip[$rowNum]);
     }
 
-    /*
-    * Is import need to log in history.
-    *
-    * @return bool
-    */
+    /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
     public function isNeedToLogInHistory()
     {
         return $this->logInHistory;

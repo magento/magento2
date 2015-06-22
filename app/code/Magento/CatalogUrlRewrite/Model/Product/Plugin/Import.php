@@ -19,6 +19,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 
+/**
+ * Class Import
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Import
 {
     /**
@@ -68,8 +74,10 @@ class Import
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
 
+    /** @var array */
     protected $websitesToStoreIds;
 
+    /** @var array */
     protected $entityStoresToCheckOverridden = [];
 
     /** @var array */
@@ -101,6 +109,7 @@ class Import
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
@@ -123,7 +132,10 @@ class Import
         $this->urlRewriteFactory = $urlRewriteFactory;
         $attribute = $eavConfig->getAttribute(Product::ENTITY, self::URL_KEY_ATTRIBUTE_CODE);
         if (!$attribute) {
-            throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', Product::ENTITY_TYPE));
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot retrieve attribute for entity type "%s"',
+                Product::ENTITY_TYPE
+            ));
         }
         $this->connection = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
         $this->urlKeyAttributeId = $attribute->getId();
@@ -156,9 +168,10 @@ class Import
     /**
      * Create product model from imported data for URL rewrite purposes.
      *
-     * @param $rowData
+     * @param array $rowData
      *
      * @return Import
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _populateForUrlGeneration($rowData)
     {
@@ -197,8 +210,10 @@ class Import
     }
 
     /**
-     * @param $product
-     * @param $storeId
+     * Add product to import
+     *
+     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param string $storeId
      * @return $this
      */
     protected function addProductToImport($product, $storeId)
@@ -210,6 +225,12 @@ class Import
         return $this;
     }
 
+    /**
+     * Populate global product
+     *
+     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @return $this
+     */
     protected function populateGlobalProduct($product)
     {
         foreach ($this->import->getProductWebsites($product->getSku()) as $websiteId) {
@@ -218,12 +239,12 @@ class Import
                 if (!$this->isGlobalScope($storeId)) {
                     $this->addProductToImport($product, $storeId);
                     $this->entityStoresToCheckOverridden[] = $this->connection->quoteInto(
-                            '(store_id = ?',
-                            $storeId
-                        ) . $this->connection->quoteInto(
-                            ' AND entity_id = ?)',
-                            $product->getId()
-                        );
+                        '(store_id = ?',
+                        $storeId
+                    ) . $this->connection->quoteInto(
+                        ' AND entity_id = ?)',
+                        $product->getId()
+                    );
                 }
             }
         }
