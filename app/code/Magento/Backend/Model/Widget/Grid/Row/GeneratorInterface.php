@@ -12,6 +12,7 @@ interface GeneratorInterface
     /**
      * @param \Magento\Framework\Object $item
      * @return string
+     * @api
      */
     public function getUrl($item);
 }
