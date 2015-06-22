@@ -12,6 +12,5 @@ define(
         return function (paymentMethod) {
             quote.paymentMethod(paymentMethod);
         }
-
     }
 );

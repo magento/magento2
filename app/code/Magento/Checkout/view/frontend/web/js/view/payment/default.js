@@ -13,6 +13,7 @@ define(
     function (ko, Component, placeOrderAction, selectPaymentMethodAction, quote) {
         'use strict';
         return Component.extend({
+            redirectAfterPlaceOrder: true,
             /**
              * Initialize view.
              *
@@ -37,7 +38,7 @@ define(
              */
             placeOrder: function () {
                 if (this.validate()) {
-                    placeOrderAction(this.getData());
+                    placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
                 }
             },
 

@@ -29,8 +29,8 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function (response) {
+                        quote.setTotals(response.totals);
                         paymentService.setPaymentMethods(response.payment_methods);
-                        quote.setTotals(response.totals)
                     }
                 ).fail(
                     function (response) {

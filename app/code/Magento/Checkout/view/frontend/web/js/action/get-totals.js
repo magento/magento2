@@ -6,32 +6,35 @@
 /*global define,alert*/
 define(
     [
-        'ko',
+        'jquery',
         '../model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Ui/js/model/errorlist',
-        'mage/storage',
-        'underscore'
+        'mage/storage'
     ],
-    function (ko, quote, resourceUrlManager, errorList, storage, _) {
+    function ($, quote, resourceUrlManager, errorList, storage) {
         "use strict";
-        return function (callbacks) {
+        return function (callbacks, deferred) {
+            deferred = deferred || $.Deferred();
+
             return storage.get(
                 resourceUrlManager.getUrlForCartTotals(quote)
             ).done(
                 function (response) {
                     var proceed = true;
-                    _.each(callbacks, function(callback) {
+                    $.each(callbacks, function(index, callback) {
                         proceed = proceed && callback();
                     });
                     if (proceed) {
                         quote.setTotals(response);
+                        deferred.resolve();
                     }
                 }
             ).error(
                 function (response) {
                     var error = JSON.parse(response.responseText);
                     errorList.add(error);
+                    deferred.reject();
                 }
             );
 

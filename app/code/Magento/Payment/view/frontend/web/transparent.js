@@ -6,13 +6,14 @@
 define([
     "jquery",
     "mage/template",
-    "Magento_Checkout/js/action/set-payment-information",
     "jquery/ui"
-], function($, mageTemplate, setPaymentInformationAction){
+], function($, mageTemplate){
     "use strict";
 
     $.widget('mage.transparent', {
         options: {
+            placeOrderHandler: null,
+            validateHandler: null,
             placeOrderSelector: '[data-role="review-save"]',
             paymentFormSelector: '#co-payment-form',
             updateSelectorPrefix: '#checkout-',
@@ -34,9 +35,26 @@ define([
 
         _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            $(this.options.placeOrderSelector)
-                .off('click')
-                .on('click', $.proxy(this._placeOrderHandler, this));
+            if (this.options.placeOrderHandler) {
+                this.options.placeOrderHandler.setTransparentHandler($.proxy(this._orderSave, this));
+            } else {
+                $(this.options.placeOrderSelector)
+                    .off('click')
+                    .on('click', $.proxy(this._placeOrderHandler, this));
+            }
+
+            if (this.options.validateHandler) {
+                this.options.validateHandler.setValidateHandler($.proxy(this._validateHandler, this));
+            }
+        },
+
+        /**
+         * handler for credit card validation
+         * @return {Boolean}
+         * @private
+         */
+        _validateHandler: function() {
+            return (this.element.validation && this.element.validation('isValid'));
         },
 
         /**
@@ -45,26 +63,10 @@ define([
          * @private
          */
         _placeOrderHandler: function() {
-            if (this.element.validation && this.element.validation('isValid')) {
-                this._savePaymentInformation();
+            if (this._validateHandler()) {
+                this._orderSave();
             }
             return false;
-        },
-
-        /**
-         * Save quote payment information
-         * @private
-         */
-        _savePaymentInformation: function() {
-            var self = this,
-                deferred = $.Deferred();
-
-            $.when(deferred).done(function() {
-                self._orderSave();
-            }).fail( function() {
-                alert('Something goes wrong');
-            });
-            setPaymentInformationAction(deferred);
         },
 
         /**
@@ -77,7 +79,7 @@ define([
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();
             }
             postData += '&controller=' + this.options.controller;
-            $.ajax({
+            return $.ajax({
                 url: this.options.orderSaveUrl,
                 type: 'post',
                 context: this,
@@ -122,11 +124,6 @@ define([
                     inputs: data
                 }
             });
-
-            $(iframeSelector).submit(function(event) {
-                console.log(event);
-            });
-
             $(tmpl).appendTo($(iframeSelector)).submit();
         },
 
