@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 /**
  * Command for disabling list or all of modules
  */
-class ModuleDisableCommand extends AbstractModuleCommand
+class ModuleDisableCommand extends AbstractModuleManageCommand
 {
     /**
      * {@inheritdoc}
