@@ -140,6 +140,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -148,7 +149,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
+     * @param ImportProduct\StoreResolver $storeResolver
      * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator

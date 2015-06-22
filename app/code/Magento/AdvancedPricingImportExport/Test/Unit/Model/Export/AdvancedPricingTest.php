@@ -10,7 +10,7 @@ use \Magento\Store\Model\Store;
 /**
  * @SuppressWarnings(PHPMD)
  */
-class ExportTest extends \PHPUnit_Framework_TestCase
+class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject
