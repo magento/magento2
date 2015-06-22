@@ -19,6 +19,11 @@ class Engine extends AbstractDb implements EngineInterface
     const ATTRIBUTE_PREFIX = 'attr_';
 
     /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
+
+    /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
@@ -77,7 +82,7 @@ class Engine extends AbstractDb implements EngineInterface
     public function saveIndex(Dimension $dimension, \Traversable $documents)
     {
         $data = [];
-        $storeId = $dimension->getName() == 'store_id' ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
+        $storeId = $dimension->getName() == self::SCOPE_FIELD_NAME ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
         foreach ($documents as $entityId => $productAttributes) {
             foreach ($productAttributes as $attributeId => $indexValue) {
                 $data[] = [

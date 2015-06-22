@@ -13,7 +13,10 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Full
 {
-    const STORE_FIELD_NAME = 'store_id';
+    /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
 
     /**
      * Searchable attributes cache
@@ -419,7 +422,7 @@ class Full
      */
     protected function cleanIndex($storeId)
     {
-        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
         $this->engineProvider->get()->cleanIndex($dimension);
     }
 
@@ -432,7 +435,7 @@ class Full
      */
     protected function deleteIndex($storeId = null, $productIds = null)
     {
-        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
         $productIds = new \ArrayObject($productIds);
         $this->engineProvider->get()->deleteIndex($dimension, $productIds->getIterator());
     }
@@ -756,7 +759,7 @@ class Full
      */
     protected function saveProductIndexes($storeId, array $productIndexes)
     {
-        $dimension = $this->dimensionFactory->create(['name' => self::STORE_FIELD_NAME, 'value' => $storeId]);
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
         $productIndexes = new \ArrayObject($productIndexes);
         $this->engineProvider->get()->saveIndex($dimension, $productIndexes->getIterator());
 
