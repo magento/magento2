@@ -1472,21 +1472,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ];
                             }
                         }
-                    } else {
-                        foreach ($this->_imagesArrayKeys as $imageCol) {
-                            if (!empty($rowData[$imageCol]) && ($rowData[$imageCol] == $imagePath)) {
-                                $rowData[$imageCol] = '';
-                            }
-                        }
                     }
-                    if (!isset($existingImages[$imagePath]) || in_array($rowSku, $existingImages[$imagePath])) {
-                        foreach ($this->_imagesArrayKeys as $imageCol) {
-                            if (!empty($rowData[$imageCol])
-                                && ($imageCol != self::COL_MEDIA_IMAGE)
-                                && isset($uploadedGalleryFiles[$rowData[$imageCol]])
-                            ) {
-                                $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
-                            }
+                    foreach ($this->_imagesArrayKeys as $imageCol) {
+                        if (empty($rowData[$imageCol]) || ($imageCol == self::COL_MEDIA_IMAGE)) {
+                            continue;
+                        }
+                        if (isset($existingImages[$imagePath])
+                            && !in_array($rowSku, $existingImages[$imagePath])
+                            && (($rowData[$imageCol] == $imagePath) || ($rowData[$imageCol] == $mediaImage))
+                        ) {
+                            unset($rowData[$imageCol]);
+                        } elseif (isset($uploadedGalleryFiles[$rowData[$imageCol]])) {
+                            $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
                         }
                     }
                 }
