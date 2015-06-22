@@ -57,6 +57,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorFactoryMock;
 
+    /**
+     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $statementMock;
+
     public function setUp()
     {
         $this->coreEntityFactoryMock = $this->getMock(
@@ -100,6 +105,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->statementMock = $this->getMock('Magento\Framework\DB\Statement\Pdo\Mysql', ['fetch'], [], '', false);
         /** @var $selectMock \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject */
         $selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
         $this->coreEntityFactoryMock->expects(
@@ -110,6 +116,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'getMagentoObject'])
         );
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('query')->willReturn($this->statementMock);
 
         $this->coreResourceMock->expects(
             $this->any()
@@ -119,11 +126,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($connectionMock)
         );
         $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
-        $entityMock->expects($this->once())->method('getReadConnection')->will($this->returnValue($connectionMock));
-        $entityMock->expects($this->once())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entityMock->expects($this->any())->method('getReadConnection')->will($this->returnValue($connectionMock));
+        $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
 
         $this->validatorFactoryMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'create'
         )->with(
