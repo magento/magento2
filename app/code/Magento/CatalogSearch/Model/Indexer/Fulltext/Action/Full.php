@@ -233,11 +233,6 @@ class Full
      */
     protected function getReadAdapter()
     {
-        $writeAdapter = $this->getWriteAdapter();
-        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
-            // if transaction is started we should use write connection for reading
-            return $writeAdapter;
-        }
         return $this->resource->getConnection('read');
     }
 

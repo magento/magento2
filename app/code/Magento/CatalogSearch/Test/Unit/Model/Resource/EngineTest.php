@@ -70,7 +70,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMock();
-        $dimension->expects($this->any())->method('getName')->willReturn('store_id');
+        $dimension->expects($this->any())->method('getName')->willReturn('scope');
         $dimension->expects($this->any())->method('getValue')->willReturn($storeId);
         if ($expected) {
             $this->connection->expects($this->once())
