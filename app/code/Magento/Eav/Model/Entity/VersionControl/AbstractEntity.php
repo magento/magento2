@@ -27,9 +27,9 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param array $data
      */
     public function __construct(
+        \Magento\Eav\Model\Entity\Context $context,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
-        \Magento\Eav\Model\Entity\Context $context,
         $data = []
     ) {
         $this->entitySnapshot = $entitySnapshot;
