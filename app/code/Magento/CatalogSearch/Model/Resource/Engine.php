@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Store\Model\Store;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
@@ -15,6 +17,11 @@ use Magento\Framework\Model\Resource\Db\AbstractDb;
 class Engine extends AbstractDb implements EngineInterface
 {
     const ATTRIBUTE_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
 
     /**
      * Catalog product visibility
@@ -70,39 +77,13 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Add entity data to fulltext search table
-     *
-     * @param int $entityId
-     * @param int $storeId
-     * @param array $index
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
-    {
-        $this->_getWriteAdapter()
-            ->insert(
-                $this->getMainTable(),
-                ['product_id' => $entityId, 'store_id' => $storeId, 'data_index' => $index]
-            );
-
-        return $this;
-    }
-
-    /**
-     * Multi add entities data to fulltext search table
-     *
-     * @param int $storeId
-     * @param array $entityIndexes
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
+    public function saveIndex(Dimension $dimension, \Traversable $documents)
     {
         $data = [];
-        foreach ($entityIndexes as $entityId => $productAttributes) {
+        $storeId = $dimension->getName() == self::SCOPE_FIELD_NAME ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
+        foreach ($documents as $entityId => $productAttributes) {
             foreach ($productAttributes as $attributeId => $indexValue) {
                 $data[] = [
                     'product_id' => (int)$entityId,
@@ -181,26 +162,29 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Remove entity data from fulltext search table
-     *
-     * @param int $storeId
-     * @param int $entityId
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
+    public function deleteIndex(Dimension $dimension, \Traversable $documents)
     {
         $where = [];
-
-        if ($entityId !== null) {
+        $entityIds = iterator_to_array($documents);
+        if ($entityIds !== null) {
             $where[] = $this->_getWriteAdapter()
-                ->quoteInto('product_id IN (?)', $entityId);
+                ->quoteInto('product_id IN (?)', $entityIds);
         }
 
         $this->_getWriteAdapter()
             ->delete($this->getMainTable(), $where);
 
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cleanIndex(Dimension $dimension)
+    {
+        $this->_getWriteAdapter()->delete($this->getMainTable());
         return $this;
     }
 
@@ -217,11 +201,9 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Define if engine is available
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function test()
+    public function isAvailable()
     {
         return true;
     }

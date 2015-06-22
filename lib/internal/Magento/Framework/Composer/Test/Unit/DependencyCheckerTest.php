@@ -13,7 +13,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock(
             'Composer\Console\Application',
-            ['setAutoExit', 'run', 'resetComposer'],
+            ['setAutoExit', 'resetComposer', 'run'],
             [],
             '',
             false
@@ -52,7 +52,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock(
             'Composer\Console\Application',
-            ['setAutoExit', 'run', 'resetComposer'],
+            ['setAutoExit', 'resetComposer', 'run'],
             [],
             '',
             false
