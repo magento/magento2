@@ -164,7 +164,7 @@ class Resource
      */
     public function getTriggerName($tableName, $time, $event)
     {
-        return $this->getConnectionByName(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+        return $this->getConnection(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
     }
 
     /**
