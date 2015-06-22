@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
-
 class SuggestedAttributeList
 {
     /**
@@ -14,47 +13,24 @@ class SuggestedAttributeList
      *
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
      */
-    protected $attributeCollectionFactory;
-
+    protected $_attributeColFactory;
     /**
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\Resource\Helper
      */
-    protected $resourceHelper;
-
+    protected $_resourceHelper;
     /**
-     * Application Event Dispatcher
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * Object Factory
-     *
-     * @var \Magento\Framework\ObjectFactory
-     */
-    protected $objectFactory;
-
-    /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\ObjectFactory $objectFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\ObjectFactory $objectFactory
+        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
+        \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->resourceHelper = $resourceHelper;
-        $this->objectFactory = $objectFactory;
-        $this->eventManager = $eventManager;
+        $this->_attributeColFactory = $attributeColFactory;
+        $this->_resourceHelper = $resourceHelper;
     }
-
     /**
      * Retrieve list of attributes with admin store label containing $labelPart
      *
@@ -63,14 +39,12 @@ class SuggestedAttributeList
      */
     public function getSuggestedAttributes($labelPart)
     {
-        $escapedLabelPart = $this->resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
-        $availableFrontendTypes = $this->getAvailableFrontendTypes();
-
+        $escapedLabelPart = $this->_resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $collection = $this->attributeCollectionFactory->create();
+        $collection = $this->_attributeColFactory->create();
         $collection->addFieldToFilter(
-            'main_table.frontend_input',
-            ['in' => $availableFrontendTypes->getData('values')]
+            'frontend_input',
+            'select'
         )->addFieldToFilter(
             'frontend_label',
             ['like' => $escapedLabelPart]
@@ -81,7 +55,6 @@ class SuggestedAttributeList
             'is_global',
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
         );
-
         $result = [];
         $types = [
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
@@ -100,23 +73,5 @@ class SuggestedAttributeList
             }
         }
         return $result;
-    }
-
-    /**
-     * @return \Magento\Framework\Object
-     */
-    private function getAvailableFrontendTypes()
-    {
-        $availableFrontendTypes = $this->objectFactory->create();
-        $availableFrontendTypes->setData(
-            [
-                'values' => ['select']
-            ]
-        );
-        $this->eventManager->dispatch(
-            'product_suggested_attribute_frontend_type_init_after',
-            ['types_dto' => $availableFrontendTypes]
-        );
-        return $availableFrontendTypes;
     }
 }
