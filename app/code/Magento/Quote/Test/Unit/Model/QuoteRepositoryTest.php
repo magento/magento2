@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model;
 use \Magento\Quote\Model\QuoteRepository;
 
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,34 +20,39 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchResultsDataFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Resource\Quote\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteCollectionMock;
+
+    /**
+     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesJoinProcessorMock;
 
     protected function setUp()
     {
@@ -56,8 +62,17 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
-            ['load', 'loadByCustomer', 'getIsActive', 'getId', '__wakeup', 'setSharedStoreIds', 'save', 'delete',
-                'getCustomerId'],
+            [
+                'load',
+                'loadByCustomer',
+                'getIsActive',
+                'getId',
+                '__wakeup',
+                'setSharedStoreIds',
+                'save',
+                'delete',
+                'getCustomerId'
+            ],
             [],
             '',
             false
@@ -73,6 +88,14 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteCollectionMock = $this->getMock('Magento\Quote\Model\Resource\Quote\Collection', [], [], '', false);
 
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\QuoteRepository',
             [
@@ -80,6 +103,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'searchResultsDataFactory' => $this->searchResultsDataFactory,
                 'quoteCollection' => $this->quoteCollectionMock,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
     }
@@ -362,6 +386,11 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
         $this->quoteCollectionMock->expects($this->once())->method('setPageSize')->with(10);
 
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->isInstanceOf('\Magento\Quote\Model\Resource\Quote\Collection')
+            );
 
         $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
         $searchResult->expects($this->once())->method('setItems')->with([$cartMock]);
