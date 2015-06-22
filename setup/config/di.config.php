@@ -9,6 +9,7 @@ return [
         'allowed_controllers' => [
             'Magento\Setup\Controller\Index',
             'Magento\Setup\Controller\Landing',
+            'Magento\Setup\Controller\UpdaterLanding',
             'Magento\Setup\Controller\Navigation',
             'Magento\Setup\Controller\License',
             'Magento\Setup\Controller\ReadinessCheck',
