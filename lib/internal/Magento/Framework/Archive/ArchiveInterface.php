@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\Archive;
 
+/**
+ * @api
+ */
 interface ArchiveInterface
 {
     /**

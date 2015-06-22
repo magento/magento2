@@ -317,16 +317,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function addQty($qty)
     {
-        $oldQty = $this->getQty();
-        $qty = $this->_prepareQty($qty);
-
         /**
          * We can't modify quantity of existing items which have parent
          * This qty declared just once during add process and is not editable
          */
         if (!$this->getParentItem() || !$this->getId()) {
+            $qty = $this->_prepareQty($qty);
             $this->setQtyToAdd($qty);
-            $this->setQty($oldQty + $qty);
+            $this->setQty($this->getQty() + $qty);
         }
         return $this;
     }

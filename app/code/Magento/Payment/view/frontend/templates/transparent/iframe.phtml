@@ -26,8 +26,8 @@ $params = $block->getParams();
             window.top.location = "<?php echo $params['order_success'] ?>";
         <?php else: ?>
             var require = window.top.require;
-            require(['jquery'], function($) {
-                $('#originalPlaceOrder').click();
+            require(['jquery', 'mage/url'], function($, url) {
+                window.location.replace(url.build('checkout/onepage/success/'));
             });
         <?php endif; ?>
         </script>
