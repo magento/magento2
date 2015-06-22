@@ -11,7 +11,7 @@ define(
     function (Component) {
         return Component.extend({
             defaults: {
-                template: 'Magento_Payment/review/actions/iframe'
+                template: 'Magento_Payment/payment/iframe'
             },
             getSource: function () {
                 return window.checkoutConfig.payment.iframe.source[this.getCode()];

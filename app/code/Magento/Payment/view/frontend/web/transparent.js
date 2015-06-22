@@ -12,8 +12,7 @@ define([
 
     $.widget('mage.transparent', {
         options: {
-            placeOrderHandler: null,
-            validateHandler: null,
+            context: null,
             placeOrderSelector: '[data-role="review-save"]',
             paymentFormSelector: '#co-payment-form',
             updateSelectorPrefix: '#checkout-',
@@ -35,16 +34,14 @@ define([
 
         _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            if (this.options.placeOrderHandler) {
-                this.options.placeOrderHandler.setTransparentHandler($.proxy(this._orderSave, this));
+
+            if (this.options.context) {
+                this.options.context.setPlaceOrderHandler($.proxy(this._orderSave, this));
+                this.options.context.setValidateHandler($.proxy(this._validateHandler, this));
             } else {
                 $(this.options.placeOrderSelector)
                     .off('click')
                     .on('click', $.proxy(this._placeOrderHandler, this));
-            }
-
-            if (this.options.validateHandler) {
-                this.options.validateHandler.setValidateHandler($.proxy(this._validateHandler, this));
             }
         },
 
