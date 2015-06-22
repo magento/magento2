@@ -212,12 +212,14 @@ class Form extends FormInterface
         foreach ($taxClasses as $taxClass) {
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
-                $this->clickAddNewButton($element);
-                $inputSelector = $this->addNewInput;
                 $element->waitUntil(
-                    function () use ($element, $inputSelector) {
-                        $input = $element->find($inputSelector);
-                        return $input->isVisible() ? true : null;
+                    function () use ($element) {
+                        if ($element->find($this->addNewInput)->isVisible()) {
+                            return true;
+                        } else {
+                            $this->clickAddNewButton($element);
+                            return null;
+                        }
                     }
                 );
                 $element->find($this->addNewInput)->keys([$taxClass]);
@@ -269,10 +271,9 @@ class Form extends FormInterface
      */
     protected function clickAddNewButton(SimpleElement $element)
     {
-        $addNewButton = $this->addNewButton;
         $element->waitUntil(
-            function () use ($element, $addNewButton) {
-                return $element->find($addNewButton)->isVisible() ? true : null;
+            function () use ($element) {
+                return $element->find($this->addNewButton)->isVisible() ? true : null;
             }
         );
         $element->find($this->addNewButton)->click();
