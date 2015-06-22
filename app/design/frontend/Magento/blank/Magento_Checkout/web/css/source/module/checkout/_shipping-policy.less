@@ -49,8 +49,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .shipping-policy-block {
         &.field-tooltip {
+            .css(margin-bottom, @indent__base);
+            position: relative;
             right: auto;
-            top: 27px;
+            top: auto;
 
             .field-tooltip-content {
                 .css(width, @checkout-shipping-policy-tooltip-mobile__width);
