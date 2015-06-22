@@ -43,6 +43,19 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     /**
      * {@inheritDoc}
      */
+    public function savePaymentInformationAndPlaceOrder(
+        $cartId,
+        $email,
+        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+    ) {
+        $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
+        return $this->cartManagement->placeOrder($cartId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function savePaymentInformation(
         $cartId,
         $email,
@@ -52,6 +65,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $billingAddress->setEmail($email);
         $this->billingAddressManagement->assign($cartId,  $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
-        return $this->cartManagement->placeOrder($cartId);
+        return true;
     }
 }

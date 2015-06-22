@@ -15,9 +15,10 @@ define(
     function (quote, urlBuilder, storage, url, errorList, customer, _) {
         'use strict';
 
-        return function (paymentData) {
+        return function (paymentData, redirectOnSuccess) {
             var serviceUrl, payload;
 
+            redirectOnSuccess = redirectOnSuccess === false ? false : true;
             /**
              * Checkout for guest and registered customer.
              */
@@ -43,7 +44,9 @@ define(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
-                    window.location.replace(url.build('checkout/onepage/success/'));
+                    if (redirectOnSuccess) {
+                        window.location.replace(url.build('checkout/onepage/success/'));
+                    }
                 }
             ).fail(
                 function (response) {
