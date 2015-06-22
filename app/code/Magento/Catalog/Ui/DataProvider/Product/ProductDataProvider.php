@@ -22,11 +22,9 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     protected $collection;
 
     /**
-     * Store manager
-     *
-     * @var StoreManagerInterface
+     * @var \Magento\Ui\DataProvider\AddFieldToCollectionInterface[]
      */
-    protected $storeManager;
+    protected $addFieldStrategies;
 
     /**
      * Construct
@@ -35,8 +33,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
      * @param array $meta
      * @param array $data
      */
@@ -45,16 +42,13 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        StoreManagerInterface $storeManager,
-        \Magento\Framework\App\RequestInterface $request,
+        array $addFieldStrategies,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->storeManager = $storeManager;
-        $this->request = $request;
         $this->collection = $collectionFactory->create();
-        $this->initCollection();
+        $this->addFieldStrategies = $addFieldStrategies;
     }
 
     /**
@@ -68,35 +62,14 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     }
 
     /**
-     * Init collection hook
-     */
-    protected function initCollection()
-    {
-        $store = $this->getStore();
-        if ($store->getId()) {
-            $this->collection->addStoreFilter($store);
-        }
-    }
-
-    /**
-     * Get store
-     *
-     * @return Store
-     */
-    protected function getStore()
-    {
-        return $this->storeManager->getStore($this->request->getParam('store', Store::DEFAULT_STORE_ID));
-    }
-
-    /**
      * Get data
      *
      * @return array
      */
     public function getData()
     {
-        if (!$this->collection->isLoaded()) {
-            $this->collection->load();
+        if (!$this->getCollection()->isLoaded()) {
+            $this->getCollection()->load();
         }
         $items = $this->getCollection()->toArray();
 
@@ -104,5 +77,20 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
             'totalRecords' => count($items),
             'items' => array_values($items),
         ];
+    }
+
+    /**
+     * Add field to select
+     *
+     * @param string|array $field
+     * @param string|null $alias
+     */
+    public function addField($field, $alias = null)
+    {
+        if (isset($this->addFieldStrategies[$field])) {
+            $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias = null);
+        } else {
+            $this->addFieldStrategies['default']->addField($this->getCollection(), $field, $alias = null);
+        }
     }
 }
