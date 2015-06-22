@@ -172,7 +172,7 @@
         </paging>
     </container>
 
-    <columns name="product_columns">
+    <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="childDefaults" xsi:type="array">
