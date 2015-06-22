@@ -49,7 +49,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         $data = []
     ) {
-        parent::__construct($entitySnapshot, $entityRelationComposite, $context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
