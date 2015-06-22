@@ -305,6 +305,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * @param array $exportData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function correctExportData($exportData)
     {
@@ -343,6 +344,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param array $listSku
      * @param string $table
      * @return array|bool
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getTierAndGroupPrices(array $listSku, $table)
     {

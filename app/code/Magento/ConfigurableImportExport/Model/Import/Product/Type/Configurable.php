@@ -804,6 +804,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @throws \Exception
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveData()
     {
@@ -865,7 +866,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * @param $bunch
+     * Configurable in bunch
+     *
+     * @param array $bunch
      * @return bool
      */
     protected function configurableInBunch($bunch)
