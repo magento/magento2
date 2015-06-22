@@ -33,23 +33,23 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         $data = []
     ) {
-        parent::__construct($entitySnapshot, $entityRelationComposite, $context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
