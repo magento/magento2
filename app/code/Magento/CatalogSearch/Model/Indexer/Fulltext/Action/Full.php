@@ -436,8 +436,7 @@ class Full
     protected function deleteIndex($storeId = null, $productIds = null)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $productIds = new \ArrayObject($productIds);
-        $this->engineProvider->get()->deleteIndex($dimension, $productIds->getIterator());
+        $this->engineProvider->get()->deleteIndex($dimension, $this->getIterator($productIds));
     }
 
     /**
@@ -760,8 +759,7 @@ class Full
     protected function saveProductIndexes($storeId, array $productIndexes)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $productIndexes = new \ArrayObject($productIndexes);
-        $this->engineProvider->get()->saveIndex($dimension, $productIndexes->getIterator());
+        $this->engineProvider->get()->saveIndex($dimension, $this->getIterator($productIndexes));
 
         return $this;
     }
@@ -798,5 +796,18 @@ class Full
         }
 
         return null;
+    }
+
+    /**
+     * Get iterator
+     *
+     * @param array $data
+     * @return \Generator
+     */
+    protected function getIterator(array $data)
+    {
+        foreach ($data as $key => $value) {
+            yield $key => $value;
+        }
     }
 }
