@@ -147,12 +147,16 @@
                 margin-bottom: 0;
             }
         }
+        .no-quotes-block {
+            .css(margin, @indent__base 0);
+        }
     }
 
     .methods-shipping {
         .actions-toolbar {
             .action {
                 &.primary {
+                    &:extend(.abs-button-l all);
                     .css(margin, @indent__base 0 0);
                 }
             }

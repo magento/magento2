@@ -1069,9 +1069,9 @@
     &:before,
     &:after {
         .arrow(
-        @_position: top,
-        @_size: @checkout-tooltip-icon-arrow__font-size,
-        @_color: @checkout-tooltip-content__background-color
+            @_position: top,
+            @_size: @checkout-tooltip-icon-arrow__font-size,
+            @_color: @checkout-tooltip-content__background-color
         );
         .css(margin-top, @checkout-tooltip-icon-arrow__left);
         .css(right, @indent__s);
@@ -1087,7 +1087,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
     .abs-checkout-tooltip-content-position-top-mobile {
         .abs-checkout-tooltip-content-position-top;
     }
