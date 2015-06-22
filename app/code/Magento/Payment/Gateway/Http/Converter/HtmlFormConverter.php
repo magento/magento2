@@ -20,9 +20,13 @@ class HtmlFormConverter implements ConverterInterface
     public function convert($response)
     {
         $document = new \DOMDocument();
+
+        libxml_use_internal_errors(true);
         if (!$document->loadHTML($response)) {
             throw new ConverterException(__('Wrong gateway response format.'));
         }
+        libxml_use_internal_errors(false);
+
         $document->getElementsByTagName('input');
 
         $convertedResponse = [];
