@@ -5,7 +5,6 @@
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Store\Model\Store;
 
 /**
@@ -98,8 +97,14 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      */
     protected $rowCustomizer;
 
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $storeResolver;
 
+    /**
+     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $groupRepository;
 
     /**
@@ -112,14 +117,14 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      */
     protected $advancedPricing;
 
-    protected $_entityTypeCode;
-
-
     /**
      * @var StubProduct|\Magento\CatalogImportExport\Model\Export\Product
      */
     protected $object;
 
+    /**
+     * Set Up
+     */
     protected function setUp()
     {
         $this->localeDate = $this->getMock(
@@ -343,7 +348,10 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExportCountZeroBreakInternalCalls()
+    /**
+     * Test export with zero condition
+     */
+    public function testExportZeroConditionCalls()
     {
         $page = 1;
         $itemsPerPage = 10;
@@ -367,7 +375,10 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->export();
     }
 
-    public function testExportCurPageEqualToLastBreakInternalCalls()
+    /**
+     * Test export for current page
+     */
+    public function testExportCurrentPageCalls()
     {
         $curPage = $lastPage = $page = 1;
         $itemsPerPage = 10;
@@ -420,6 +431,9 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->export();
     }
 
+    /**
+     * tearDown
+     */
     protected function tearDown()
     {
         unset($this->object);
