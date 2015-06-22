@@ -146,11 +146,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->historyModel = $this->getMockBuilder('\Magento\ImportExport\Model\History')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'updateReport',
-                'invalidateReport',
-                'addReport',
-            ])
+            ->setMethods(['updateReport', 'invalidateReport', 'addReport'])
             ->getMock();
         $this->historyModel->expects($this->any())->method('updateReport')->willReturnSelf();
         $this->dateTime = $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime\DateTime')
@@ -159,7 +155,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_varDirectory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->import = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
             ->setConstructorArgs([
                 $logger,
@@ -190,14 +185,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'isReportEntityType',
             ])
             ->getMock();
-
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
-
         $this->_entityAdapter = $this->getMockBuilder('\Magento\ImportExport\Model\Import\Entity\AbstractEntity')
             ->disableOriginalConstructor()
             ->setMethods(['importData'])
             ->getMockForAbstractClass();
-
     }
 
     /**
