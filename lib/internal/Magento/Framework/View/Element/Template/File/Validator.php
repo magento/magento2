@@ -72,16 +72,15 @@ class Validator
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+     * @param string|null $scope
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
+        $scope = null
     ) {
         $this->_filesystem = $filesystem;
-        $this->_isAllowSymlinks = $scopeConfigInterface->getValue(
-            self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
         $this->_themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $this->_appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
