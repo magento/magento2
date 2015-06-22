@@ -26,9 +26,15 @@ $params = $block->getParams();
             window.top.location = "<?php echo $params['order_success'] ?>";
         <?php else: ?>
             var require = window.top.require;
-            require(['jquery', 'mage/url'], function($, url) {
-                window.location.replace(url.build('checkout/onepage/success/'));
-            });
+            require(
+                [
+                    'Magento_Checkout/js/model/quote',
+                    'Magento_Checkout/js/action/place-order'
+                ],
+                function(quote, placeOrderAction) {
+                    placeOrderAction(quote.paymentMethod(), true);
+                }
+            );
         <?php endif; ?>
         </script>
     </head>
