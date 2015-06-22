@@ -50,14 +50,14 @@
             margin: 0;
 
             .payment-icon {
-                .css(margin-right, @indent__xs);
                 display: inline-block;
+                margin-right: @indent__xs;
                 vertical-align: middle;
             }
 
             .action-help {
-                .css(margin-left, @indent__xs);
                 display: inline-block;
+                margin-left: @indent__xs;
             }
         }
 
@@ -66,10 +66,10 @@
             .css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
             .fieldset {
                 &:not(:last-child) {
-                    .css(margin, 0 0 @indent__base);
+                    margin: 0 0 @indent__base;
                 }
                 > .field {
-                    .css(margin, 0 0 @indent__base);
+                    margin: 0 0 @indent__base;
                 }
             }
         }
@@ -80,14 +80,16 @@
         }
 
         .billing-address-same-as-shipping-block {
-            .css(margin, 0 0 @indent__s);
+            margin: 0 0 @indent__s;
         }
 
         .payment-method-billing-address {
-            .css(margin, 0 0 @indent__base);
+            margin: 0 0 @indent__base;
 
-            .action-update {
-                margin-right: 0;
+            .primary {
+                .action-update {
+                    margin-right: 0;
+                }
             }
 
             .action-cancel {
@@ -117,7 +119,7 @@
             width: 100%;
         }
         .no-payments-block {
-            .css(margin, @indent__base 0);
+            margin: @indent__base 0;
         }
     }
 }
@@ -142,7 +144,7 @@
 
         .payment-method-billing-address {
             .action-cancel {
-                .css(margin-top, @indent__s);
+                margin-top: @indent__s;
             }
         }
     }
@@ -177,7 +179,7 @@
         }
         .actions-toolbar {
             .action-cancel {
-                .css(margin, 6px @indent__base 0 0);
+                margin: 6px @indent__base 0 0;
             }
         }
     }

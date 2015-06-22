@@ -15,11 +15,11 @@
 @checkout-progress-bar-item__border-radius: 6px;
 @checkout-progress-bar-item__color: @primary__color;
 @checkout-progress-bar-item__margin: @indent__s;
+@checkout-progress-bar-item__transition: background .3s;
 @checkout-progress-bar-item__width: 185px;
 
 @checkout-progress-bar-item__active__background-color: @color-orange-red1;
 @checkout-progress-bar-item__complete__color: @link__color;
-@checkout-progress-bar-item__complete__transition: background .3s;
 @checkout-progress-bar-item__hover__background-color: darken(@checkout-progress-bar-item__background-color, 5%);
 
 @checkout-progress-bar-item-element__height: @checkout-progress-bar-item-element__width;
@@ -72,6 +72,7 @@
         &:before { // Horizontal line
             .css(background, @checkout-progress-bar-item__background-color);
             .css(top, @checkout-progress-bar-item-element__width/2);
+            .css(transition, @checkout-progress-bar-item__transition);
             content: '';
             height: 7px;
             left: 0;
@@ -111,6 +112,7 @@
                 .css(background, @checkout-progress-bar-item__background-color);
                 .css(height, @checkout-progress-bar-item-element__height);
                 .css(margin-left, -(@checkout-progress-bar-item-element__width/2));
+                .css(transition, @checkout-progress-bar-item__transition);
                 .css(width, @checkout-progress-bar-item-element__width);
                 border-radius: 50%;
                 content: '';
@@ -140,9 +142,6 @@
 
         &._complete {
             cursor: pointer;
-            &:before {
-                .css(transition, @checkout-progress-bar-item__complete__transition);
-            }
             &:hover {
                 &:before {
                     .css(background, @checkout-progress-bar-item__hover__background-color);
@@ -155,10 +154,6 @@
             }
             > span {
                 .css(color, @checkout-progress-bar-item__complete__color);
-
-                &:before {
-                    .css(transition, @checkout-progress-bar-item__complete__transition);
-                }
 
                 &:after {
                     .css(font-family, @icons__font-name);

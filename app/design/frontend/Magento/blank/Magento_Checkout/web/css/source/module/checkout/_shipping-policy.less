@@ -35,8 +35,8 @@
             .field-tooltip-content {
                 &:extend(.abs-add-box-sizing all);
                 &:extend(.abs-checkout-tooltip-content-position-top all);
-                .css(top, @indent__l);
                 .css(width, @checkout-shipping-policy-tooltip__width);
+                top: @indent__l;
             }
         }
     }
@@ -49,7 +49,7 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .shipping-policy-block {
         &.field-tooltip {
-            .css(margin-bottom, @indent__base);
+            margin-bottom: @indent__base;
             position: relative;
             right: auto;
             top: auto;
