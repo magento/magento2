@@ -175,7 +175,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -190,7 +190,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

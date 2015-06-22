@@ -251,7 +251,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param Address\CustomAttributeListInterface $attributeList
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -285,7 +285,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         Address\CustomAttributeListInterface $attributeList,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -1294,6 +1294,27 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Get subtotal amount with applied discount in base currency
+     *
+     * @return float
+     */
+    public function getBaseSubtotalWithDiscount()
+    {
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+    }
+
+    /**
+     * Get subtotal amount with applied discount
+     *
+     * @return float
+     */
+    public function getSubtotalWithDiscount()
+    {
+        return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
      * Get all total amount values
      *
      * @return array
@@ -1314,26 +1335,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Get subtotal amount with applied discount in base currency
-     *
-     * @return float
-     */
-    public function getBaseSubtotalWithDiscount()
-    {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
-    }
-
-    /**
-     * Get subtotal amount with applied discount
-     *
-     * @return float
-     */
-    public function getSubtotalWithDiscount()
-    {
-        return $this->getSubtotal() + $this->getDiscountAmount();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function _getValidationRulesBeforeSave()
@@ -1343,7 +1344,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnoreStart
      */
     public function getCountryId()
     {

@@ -133,18 +133,11 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $customerAddressId = 42;
-
-        $customerAddressMock = $this->getMock('\Magento\Customer\Model\Data\Address', [], [], '', false);
-        $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
-        $customerAddresses = [$customerAddressMock];
-
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([]);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
 
         $this->helperMock->expects($this->once())->method('getMaximumQty')->willReturn(500);
 
-        $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);
         $this->quoteMock->expects($this->once())->method('getItemById')->with(array_keys($info[0])[0])
             ->willReturn(null);
 
@@ -189,7 +182,10 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $customerAddressMock->expects($this->atLeastOnce())->method('getId')->willReturn($customerAddressId);
         $customerAddresses = [$customerAddressMock];
 
+        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $this->quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([]);
+
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->helperMock->expects($this->once())->method('getMaximumQty')->willReturn(500);
         $this->customerMock->expects($this->once())->method('getAddresses')->willReturn($customerAddresses);

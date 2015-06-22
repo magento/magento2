@@ -35,7 +35,7 @@ class Builder
     /**
      * @param Resource $resource
      * @param DataProviderContainer $dataProviderContainer
-     * @param Builder\Container $aggregationContainer
+     * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      */
     public function __construct(

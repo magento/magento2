@@ -90,19 +90,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $this->_model->expects($this->atLeastOnce())
-            ->method('getThemeTemplates')
-            ->will($this->returnValue([]));
-
-        $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
-
-        foreach ($this->_model->getAvailableTemplates() as $templateOptions) {
-            $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
-            $expectedOptions = $expectedTemplates[$templateOptions['value']];
-
-            $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
-            $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
-        }
+        $this->assertEquals(['template_one', 'template_two'], $this->_model->getAvailableTemplates());
     }
 
     public function testGetThemeTemplates()
@@ -314,7 +302,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 "Field 'file' is not defined for email template 'fixture'.",
                 ['module' => 'Fixture_Module'],
                 $this->designParams,
-            ]
+            ],
         ];
     }
 }
