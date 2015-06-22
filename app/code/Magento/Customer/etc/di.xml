@@ -138,6 +138,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="CustomerAddressRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Customer\Model\Resource\Address\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Customer\Model\Resource\Customer">
         <arguments>
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
@@ -147,6 +154,12 @@
     <type name="Magento\Customer\Model\Resource\Customer\Collection">
         <arguments>
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Address">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
 </config>
