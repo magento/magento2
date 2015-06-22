@@ -49,7 +49,8 @@ class Zend implements ClientInterface
     public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject)
     {
         $log = [
-            'request' => $transferObject->getBody()
+            'request' => $transferObject->getBody(),
+            'request_uri' => $transferObject->getUri()
         ];
         $result = [];
         /** @var ZendClient $client */
