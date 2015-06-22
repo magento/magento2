@@ -21,9 +21,9 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $entityRelationComposite;
 
     /**
+     * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
-     * @param \Magento\Eav\Model\Entity\Context $context
      * @param array $data
      */
     public function __construct(
