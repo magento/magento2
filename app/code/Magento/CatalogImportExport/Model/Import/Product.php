@@ -14,7 +14,6 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
 
-
 /**
  * Import entity product model
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -488,6 +487,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $categoryProcessor;
 
+    /** @var array */
+    protected $websitesCache = [];
+
+    /** @var array */
+    protected $categoriesCache = [];
+
     /**
      * Instance of product tax class processor.
      *
@@ -518,13 +523,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $masterAttributeCode = 'sku';
 
     /**
-     * Instance of catalog product factory.
-     *
-     * @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory
-     */
-    protected $catalogProductFactory;
-
-    /**
      * @var ObjectRelationProcessor
      */
     protected $objectRelationProcessor;
@@ -540,6 +538,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var null
      */
     protected $_replaceFlag = null;
+
+    /**
+     * Flag for replace operation.
+     *
+     * @var null
+     */
+    protected $cachedImages = null;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -573,7 +578,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\CategoryProcessor $categoryProcessor
      * @param Product\TaxClassProcessor $taxClassProcessor
      * @param Product\Validator $validator
-     * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -609,7 +613,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
         Product\Validator $validator,
-        \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
@@ -639,7 +642,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->validator = $validator;
         $this->objectRelationProcessor = $objectRelationProcessor;
         $this->transactionManager = $transactionManager;
-        $this->catalogProductFactory = $catalogProductFactory;
         $this->taxClassProcessor = $taxClassProcessor;
         parent::__construct($jsonHelper, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
@@ -794,6 +796,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
             if ($idToDelete) {
+                $this->countItemsDeleted += count($idToDelete);
                 $this->transactionManager->start($this->_connection);
                 try {
                     $this->objectRelationProcessor->delete(
@@ -1182,6 +1185,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _saveProductEntity(array $entityRowsIn, array $entityRowsUp)
     {
         static $entityTable = null;
+        $this->countItemsCreated += count($entityRowsIn);
+        $this->countItemsUpdated += count($entityRowsUp);
 
         if (!$entityTable) {
             $entityTable = $this->_resourceFactory->create()->getEntityTable();
@@ -1210,6 +1215,41 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Prepare all media files
+     *
+     * @return $this
+     */
+    protected function _prepareAllMediaFiles()
+    {
+        static $productEntityTableName = null;
+        static $productMediaGalleryTableName = null;
+        static $resource = null;
+        if (!$resource) {
+            $resource = $this->_resourceFactory->create();
+        }
+        if (!$productEntityTableName) {
+            $productEntityTableName = $resource->getTable('catalog_product_entity');
+        }
+        if (!$productMediaGalleryTableName) {
+            $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
+        }
+        if(empty($this->cachedImages)) {
+            $allMedia = $this->_connection->fetchAll($this->_connection->select()
+                ->from(
+                    ["entity" => $productEntityTableName],
+                    ['sku']
+                )->joinLeft(
+                    ["media_gallery" => $productMediaGalleryTableName],
+                    "entity.entity_id = media_gallery.entity_id",
+                    ['value']
+                )
+            );
+            $this->cachedImages = $allMedia;
+        }
+        return $this;
+    }
+
+    /**
      * Gather and save information about product entities.
      *
      * @return $this
@@ -1222,6 +1262,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
         $resource = $this->_resourceFactory->create();
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
+        $this->_prepareAllMediaFiles();
         $productLimit = null;
         $productsQty = null;
 
@@ -1229,8 +1270,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
-            $websites = [];
-            $categories = [];
+            $this->websitesCache = [];
+            $this->categoriesCache = [];
             $tierPrices = [];
             $groupPrices = [];
             $mediaGallery = [];
@@ -1283,16 +1324,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
+                $this->websitesCache[$rowSku] = [];
                 // 2. Product-to-Website phase
                 if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-                    $websites[$rowSku][$this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES])] = true;
+                    $websiteIds = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
+                    foreach ($websiteIds as $websiteId) {
+                        $websiteId = $this->storeResolver->getWebsiteCodeToId($rowData[self::COL_PRODUCT_WEBSITES]);
+                        $this->websitesCache[$rowSku][$websiteId] = true;
+                    }
                 }
 
                 // 3. Categories phase
                 $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
+                $this->categoriesCache[$rowSku] = [];
                 if (!empty($categoriesString)) {
                     foreach ($this->categoryProcessor->upsertCategories($categoriesString) as $categoryId) {
-                        $categories[$rowSku][$categoryId] = true;
+                        $this->categoriesCache[$rowSku][$categoryId] = true;
                     }
                 }
 
@@ -1322,54 +1369,144 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 5. Media gallery phase
-                $mediaGalleryImages = array();
-                $mediaGalleryLabels = array();
+
+                $fullDispersionPath = '';
+                $imageIsSet = null;
+                $imageFromProduct = null;
+                $imageInProductIsSet = null;
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                    $mediaGalleryImages = explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                    $mediaGalleryLabels = isset($rowData['_media_image_label']) ? explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']) : array();
-                    if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
-                        $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
-                    } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
-                        $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
+                    $dispersionPath =
+                        \Magento\Framework\File\Uploader::getDispretionPath($rowData[self::COL_MEDIA_IMAGE]);
+                    $imageName = preg_replace('/[^a-z0-9\._-]+/i', '', $rowData[self::COL_MEDIA_IMAGE]);
+                    $fullDispersionPath = mb_strtolower($dispersionPath . '/' . $imageName);
+                    foreach ($this->cachedImages as $image) {
+                        if (($image['sku'] == $rowData[self::COL_SKU])
+                            && ($image['value'] == $fullDispersionPath)
+                        ) {
+                            $imageInProductIsSet = true;
+                            $imageFromProduct = $image['value'];
+                            break;
+                        } elseif (($image['sku'] == $rowData[self::COL_SKU])
+                            && (preg_replace('/_[0-9]?\./', '.', $image['value']) == $fullDispersionPath)
+                        ) {
+                            $imageInProductIsSet = true;
+                            $imageFromProduct = preg_replace('/_[0-9]?\./', '.', $image['value']);
+                            break;
+                        } elseif (in_array($fullDispersionPath, $image)) {
+                            $imageIsSet = true;
+                            break;
+                        }
                     }
                 }
-
-                foreach ($this->_imagesArrayKeys as $imageCol) {
-                    if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE) && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
-                        $mediaGalleryImages[] = $rowData[$imageCol];
-                        $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label']) ? $rowData[$imageCol . '_label'] : '';
+                if (($imageInProductIsSet && ($imageFromProduct != $fullDispersionPath))
+                    || (!isset($imageIsSet) && !isset($imageInProductIsSet))
+                ) {
+                    $mediaGalleryImages = array();
+                    $mediaGalleryLabels = array();
+                    if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
+                        $mediaGalleryImages =
+                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                        if (isset($rowData['_media_image_label'])) {
+                            $mediaGalleryLabels =
+                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
+                        } else {
+                            $mediaGalleryLabels = [];
+                        }
+                        if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
+                            $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
+                        } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
+                            $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
+                        }
                     }
-                }
 
-                $rowData[self::COL_MEDIA_IMAGE] = array();
-
-                foreach ($mediaGalleryImages as $mediaImage) {
-                    if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
-                        $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
-                            trim($mediaImage)
-                        );
+                    foreach ($this->_imagesArrayKeys as $imageCol) {
+                        if (!empty($rowData[$imageCol])
+                            && ($imageCol != self::COL_MEDIA_IMAGE)
+                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
+                            $mediaGalleryImages[] = $rowData[$imageCol];
+                            if (isset($mediaGalleryLabels)) {
+                                $mediaGalleryLabels[] = isset($rowData[$imageCol . '_label'])
+                                ? $rowData[$imageCol . '_label']
+                                : '';
+                            } else {
+                                $mediaGalleryLabels[] = '';
+                            }
+                        }
                     }
-                    $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                }
 
-                foreach ($this->_imagesArrayKeys as $imageCol) {
-                    if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE)) {
-                        $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
+                    $rowData[self::COL_MEDIA_IMAGE] = array();
+                    foreach ($mediaGalleryImages as $mediaImage) {
+                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
+                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                                trim($mediaImage)
+                            );
+                        }
+                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
                     }
-                }
 
-                if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                    $position = 0;
-
-                    foreach($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
-                        $mediaGallery[$rowSku][] = [
-                            'attribute_id' => $this->getMediaGalleryAttributeId(),
-                            'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                            'position' => $position++,
-                            'disabled' => '',
-                            'value' => $media_image,
-                        ];
+                    foreach ($this->_imagesArrayKeys as $imageCol) {
+                        if (!empty($rowData[$imageCol]) && ($imageCol != self::COL_MEDIA_IMAGE)) {
+                            $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
+                        }
                     }
+
+                    if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
+                        $position = 0;
+
+                        foreach ($rowData[self::COL_MEDIA_IMAGE] as $media_image) {
+                            $mediaGallery[$rowSku][] = [
+                                'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                'position' => $position++,
+                                'disabled' => '',
+                                'value' => $media_image,
+                            ];
+                        }
+                    }
+                } elseif ($imageInProductIsSet && $imageFromProduct == $fullDispersionPath) {
+                    $mediaGalleryImages = array();
+                    $mediaGalleryLabels = array();
+                    if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
+                        $mediaGalleryImages =
+                            explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                        if (isset($rowData['_media_image_label'])) {
+                            $mediaGalleryLabels =
+                                explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']);
+                        } else {
+                            $mediaGalleryLabels = array();
+                        }
+                        if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
+                            $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
+                        } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
+                            $mediaGalleryLabels = array_pad($mediaGalleryLabels, count($mediaGalleryImages), '');
+                        }
+                    }
+
+                    foreach ($this->_imagesArrayKeys as $imageCol) {
+                        if (!empty($rowData[$imageCol])
+                            && ($imageCol != self::COL_MEDIA_IMAGE)
+                            && !in_array($rowData[$imageCol], $mediaGalleryImages)) {
+                            $mediaGalleryImages[] = $rowData[$imageCol];
+                            if (isset($rowData[$imageCol . '_label'])) {
+                                $mediaGalleryLabels[] = $rowData[$imageCol . '_label'];
+                            } else {
+                                $mediaGalleryLabels[] = '';
+                            }
+                        }
+                    }
+
+                    $rowData[self::COL_MEDIA_IMAGE] = array();
+                    foreach ($mediaGalleryImages as $mediaImage) {
+                        if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
+                            $uploadedGalleryFiles[$mediaImage] = $this->_uploadMediaFiles(
+                                trim($mediaImage),
+                                true
+                            );
+                        }
+                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+                    }
+                } else {
+                    $this->addRowError(__("Image already exists for '%s'"), $rowNum, self::COL_MEDIA_IMAGE);
                 }
 
                 // 6. Attributes phase
@@ -1398,7 +1535,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $productTypeModel = $this->_productTypeModels[$productType];
                 if (!empty($rowData['tax_class_name'])) {
-                    $rowData['tax_class_id'] = $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
+                    $rowData['tax_class_id'] =
+                        $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
                 }
 
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND ||
@@ -1469,9 +1607,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $entityRowsIn,
                 $entityRowsUp
             )->_saveProductWebsites(
-                $websites
+                $this->websitesCache
             )->_saveProductCategories(
-                $categories
+                $this->categoriesCache
             )->_saveProductTierPrices(
                 $tierPrices
             )->_saveProductGroupPrices(
@@ -1482,9 +1620,42 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $attributes
             );
 
-            $this->_eventManager->dispatch('catalog_product_import_bunch_save_after', ['adapter' => $this, 'bunch' => $bunch]);
+            $this->_eventManager->dispatch(
+                'catalog_product_import_bunch_save_after',
+                ['adapter' => $this, 'bunch' => $bunch]
+            );
         }
         return $this;
+    }
+
+    /**
+     * @param $productSku
+     * @return array
+     */
+    public function getProductWebsites($productSku)
+    {
+        return array_keys($this->websitesCache[$productSku]);
+    }
+
+    /**
+     * @param $productSku
+     * @return array
+     */
+    public function getProductCategories($productSku)
+    {
+        return array_keys($this->categoriesCache[$productSku]);
+    }
+
+    /**
+     * @param $storeCode
+     * @return array|int|null|string
+     */
+    public function getStoreIdByCode($storeCode)
+    {
+        if (empty($storeCode)) {
+            return self::SCOPE_DEFAULT;
+        }
+        return $this->storeResolver->getStoreCodeToId($storeCode);
     }
 
     /**
@@ -1614,10 +1785,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $fileName
      * @return string
      */
-    protected function _uploadMediaFiles($fileName)
+    protected function _uploadMediaFiles($fileName, $renameFileOff = false)
     {
         try {
-            $res = $this->_getUploader()->move($fileName);
+            $res = $this->_getUploader()->move($fileName, $renameFileOff);
             return $res['file'];
         } catch (\Exception $e) {
             return '';
@@ -1863,11 +2034,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * New products SKU data.
      *
+     * @var string $sku
      * @return array
      */
-    public function getNewSku()
+    public function getNewSku($sku = null)
     {
-        return $this->skuProcessor->getNewSku();
+        return $this->skuProcessor->getNewSku($sku);
     }
 
     /**
@@ -1888,6 +2060,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function getOldSku()
     {
         return $this->_oldSku;
+    }
+
+    /**
+     * Retrieve Category Processor
+     *
+     * @return \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor
+     */
+    public function getCategoryProcessor()
+    {
+        return $this->categoryProcessor;
     }
 
     /**
@@ -2121,47 +2303,5 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
-    }
-
-    /**
-     * Get array of affected products
-     *
-     * @return array
-     */
-    public function getAffectedProducts()
-    {
-        $products = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
-                    continue;
-                }
-                if ($product = $this->_populateToUrlGeneration($rowData)) {
-                    $products[] = $product;
-                }
-            }
-        }
-        return $products;
-    }
-
-    /**
-     * Create product model from imported data for URL rewrite purposes.
-     *
-     * @param $rowData
-     *
-     * @return \Magento\Framework\Model\AbstractModel|void
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function _populateToUrlGeneration($rowData)
-    {
-        $product = $this->catalogProductFactory->create();
-        $newSku = $this->skuProcessor->getNewSku($rowData[self::COL_SKU]);
-        if (empty($newSku) || !isset($newSku['entity_id'])) {
-            return;
-        }
-        $rowData['entity_id'] = $newSku['entity_id'];
-        $product->addData($rowData);
-        return $product;
     }
 }
