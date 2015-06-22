@@ -1233,6 +1233,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($bunch as $rowData) {
             $rowData = $this->_customFieldsMapping($rowData);
             foreach ($this->_imagesArrayKeys as $image) {
+                if (empty($rowData[$image])) {
+                    continue;
+                }
                 $dispersionPath =
                     \Magento\Framework\File\Uploader::getDispretionPath($rowData[$image]);
                 $importImages = explode($this->getMultipleValueSeparator(), $rowData[$image]);
