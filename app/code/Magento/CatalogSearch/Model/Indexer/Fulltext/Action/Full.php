@@ -14,6 +14,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Full
 {
     /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
+
+    /**
      * Searchable attributes cache
      *
      * @var \Magento\Eav\Model\Entity\Attribute[]
@@ -73,13 +78,6 @@ class Full
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $catalogProductType;
-
-    /**
-     * Catalog search data
-     *
-     * @var \Magento\CatalogSearch\Helper\Data
-     */
-    protected $catalogSearchData;
 
     /**
      * Core event manager proxy
@@ -143,6 +141,11 @@ class Full
     protected $searchRequestConfig;
 
     /**
+     * @var \Magento\Framework\Search\Request\DimensionFactory
+     */
+    private $dimensionFactory;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -151,7 +154,6 @@ class Full
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
      * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -159,6 +161,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -170,14 +173,14 @@ class Full
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -186,7 +189,6 @@ class Full
         $this->catalogProductStatus = $catalogProductStatus;
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->eventManager = $eventManager;
-        $this->catalogSearchData = $catalogSearchData;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->engineProvider = $engineProvider;
@@ -195,16 +197,22 @@ class Full
         $this->localeDate = $localeDate;
         $this->fulltextResource = $fulltextResource;
         $this->priceCurrency = $priceCurrency;
+        $this->dimensionFactory = $dimensionFactory;
     }
 
     /**
-     * Rebuild whole fulltext index
+     * Rebuild whole fulltext index for all stores
      *
      * @return void
      */
     public function reindexAll()
     {
-        $this->rebuildIndex();
+        $storeIds = array_keys($this->storeManager->getStores());
+        foreach ($storeIds as $storeId) {
+            $this->cleanIndex($storeId);
+            $this->rebuildStoreIndex($storeId);
+        }
+        $this->searchRequestConfig->reset();
     }
 
     /**
@@ -225,11 +233,6 @@ class Full
      */
     protected function getReadAdapter()
     {
-        $writeAdapter = $this->getWriteAdapter();
-        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
-            // if transaction is started we should use write connection for reading
-            return $writeAdapter;
-        }
         return $this->resource->getConnection('read');
     }
 
@@ -244,7 +247,7 @@ class Full
     }
 
     /**
-     * Regenerate search index for store(s)
+     * Regenerate search index for all stores
      *
      * @param int|array|null $productIds
      * @return void
@@ -253,6 +256,7 @@ class Full
     {
         $storeIds = array_keys($this->storeManager->getStores());
         foreach ($storeIds as $storeId) {
+            $this->deleteIndex($storeId, $productIds);
             $this->rebuildStoreIndex($storeId, $productIds);
         }
         $this->searchRequestConfig->reset();
@@ -269,8 +273,6 @@ class Full
      */
     protected function rebuildStoreIndex($storeId, $productIds = null)
     {
-        $this->cleanIndex($storeId, $productIds);
-
         // prepare searchable attributes
         $staticFields = [];
         foreach ($this->getSearchableAttributes('static') as $attribute) {
@@ -408,17 +410,28 @@ class Full
     }
 
     /**
+     * Clean search index data for store
+     *
+     * @param int $storeId
+     * @return void
+     */
+    protected function cleanIndex($storeId)
+    {
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
+        $this->engineProvider->get()->cleanIndex($dimension);
+    }
+
+    /**
      * Delete search index data for store
      *
      * @param int $storeId Store View Id
-     * @param int $productId Product Entity Id
+     * @param array $productIds Product Entity Id
      * @return void
      */
-    protected function cleanIndex($storeId = null, $productId = null)
+    protected function deleteIndex($storeId = null, $productIds = null)
     {
-        if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->cleanIndex($storeId, $productId);
-        }
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
+        $this->engineProvider->get()->deleteIndex($dimension, $this->getIterator($productIds));
     }
 
     /**
@@ -696,11 +709,7 @@ class Full
             $index['options'] = $data;
         }
 
-        if ($this->engineProvider->get()) {
-            return $this->engineProvider->get()->prepareEntityIndex($index, $this->separator);
-        }
-
-        return $this->catalogSearchData->prepareIndexdata($index, $this->separator);
+        return $this->engineProvider->get()->prepareEntityIndex($index, $this->separator);
     }
 
     /**
@@ -742,11 +751,10 @@ class Full
      * @param array $productIndexes
      * @return $this
      */
-    protected function saveProductIndexes($storeId, $productIndexes)
+    protected function saveProductIndexes($storeId, array $productIndexes)
     {
-        if ($this->engineProvider->get()) {
-            $this->engineProvider->get()->saveEntityIndexes($storeId, $productIndexes);
-        }
+        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
+        $this->engineProvider->get()->saveIndex($dimension, $this->getIterator($productIndexes));
 
         return $this;
     }
@@ -783,5 +791,18 @@ class Full
         }
 
         return null;
+    }
+
+    /**
+     * Get iterator
+     *
+     * @param array $data
+     * @return \Generator
+     */
+    protected function getIterator(array $data)
+    {
+        foreach ($data as $key => $value) {
+            yield $key => $value;
+        }
     }
 }

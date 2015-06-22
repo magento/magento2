@@ -62,36 +62,42 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider saveEntityIndexesDataProvider
+     * @dataProvider saveDataProvider
      */
-    public function testSaveEntityIndexes($storeId, $entityIndexes, $expected)
+    public function testSave($storeId, $entityIndexes, $expected)
     {
+        $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMock();
+        $dimension->expects($this->any())->method('getName')->willReturn('scope');
+        $dimension->expects($this->any())->method('getValue')->willReturn($storeId);
         if ($expected) {
             $this->connection->expects($this->once())
                 ->method('insertOnDuplicate')
                 ->with(null, $expected, ['data_index'])
                 ->willReturnSelf();
         }
-        $this->target->saveEntityIndexes($storeId, $entityIndexes);
+        $this->target->saveIndex($dimension, $entityIndexes);
     }
 
-    public function saveEntityIndexesDataProvider()
+    public function saveDataProvider()
     {
         return [
             'empty' => [
                 null,
-                [],
+                new \ArrayIterator([]),
                 []
             ],
             'correctData' => [
                 13,
-                [
+                new \ArrayIterator([
                     28 => [
                         123 => 'Value of 123',
                         845 => 'Value of 845',
                         'options' => 'Some | Index | Value'
                     ]
-                ],
+                ]),
                 [
                     [
                         'product_id' => 28,
