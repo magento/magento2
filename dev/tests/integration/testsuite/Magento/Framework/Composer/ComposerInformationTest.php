@@ -84,6 +84,11 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param $composerDir string Directory under _files that contains composer files
+     *
+     * @dataProvider getRequiredPhpVersionDataProvider
+     */
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
