@@ -11,10 +11,14 @@
 <div class="page-wrapper">
     <header class="page-header row">
 
-        <!--<div class="message message-warning">
+<!--        <div class="message message-warning">
             <span class="message-text">
                 Your store and Magento Admin are now in maintenance mode. You can turn off maintenance mode in <a href="#">System Configuration</a>.
             </span>
+        </div>
+
+        <div class="message message-success">
+            <span class="message-text">You configured module settings.</span>
         </div>-->
 
         <div class="page-header-hgroup col-l-8 col-m-6">
@@ -25,7 +29,7 @@
         <?php require_once('./views/shared/_pageHeaderActions.phtml') ?>
     </header>
     <main id="anchor-content" class="page-content">
-        <?php require_once('./views/pages/_codeUpgradeSuccess.phtml') ?>
+        <?php require_once('./views/pages/_home.phtml') ?>
     </main>
 </div>
 

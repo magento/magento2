@@ -17,6 +17,7 @@
 //  Inherit Backend lib (sources)
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_variables.less';
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_utilities.less';
+@import '../../../app/design/adminhtml/Magento/backend/web/css/source/_extends.less';
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_reset.less';
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_typography.less';
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_lists.less';
@@ -37,21 +38,27 @@
 //  Components
 //  ---------------------------------------------
 
+//  Inherit Lib components
+@import '../../../lib/web/css/source/components/_modals.less';
+
 //  Inherit Backend components
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/_actions.less';
 @import '../../../app/design/adminhtml/Magento/backend/web/css/source/components/_messages.less';
+@import '../../../app/design/adminhtml/Magento/backend/web/css/source/components/_modals_extend.less';
 
 @import '../../../app/design/adminhtml/Magento/backend/Magento_Backend/web/css/source/module/_header.less';
 @import '../../../app/design/adminhtml/Magento/backend/Magento_Backend/web/css/source/module/_menu.less';
 
 //  Inherit Setup components
-@import '../../../setup/view/styles/components/_navigation-bar';
-@import '../../../setup/view/styles/components/_messages';
-@import '../../../setup/view/styles/components/_spinner';
+@import '../../../setup/view/styles/components/_navigation-bar.less';
+@import '../../../setup/view/styles/components/_messages.less';
+@import '../../../setup/view/styles/components/_progress-bars.less';
+@import '../../../setup/view/styles/components/_spinner.less';
 
 //  Extend components
 @import 'components/_header.less';
 @import 'components/_menu.less';
+@import 'components/_modals.less';
 @import 'components/_navigation-bar.less';
 
 //
@@ -61,9 +68,11 @@
 //  Inherit Setup pages
 @import '../../../setup/view/styles/pages/_common.less';
 @import '../../../setup/view/styles/pages/_readiness-check.less';
+@import '../../../setup/view/styles/pages/_install.less';
 
 //  Extend pages
 @import 'pages/_common.less';
+@import 'pages/_home.less';
 @import 'pages/_readiness-check.less';
 
 //
