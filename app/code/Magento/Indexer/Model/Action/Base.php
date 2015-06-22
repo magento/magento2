@@ -10,13 +10,13 @@ use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
+use Magento\Indexer\Model\SaveHandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\SaveHandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -87,6 +87,11 @@ class Base implements ActionInterface
     protected $handlerPool;
 
     /**
+     * @var SaveHandlerPool
+     */
+    protected $saveHandlerPool;
+
+    /**
      * @var string
      */
     protected $defaultHandler;
@@ -105,8 +110,9 @@ class Base implements ActionInterface
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param HandlerPool $handlerPool
+     * @param SaveHandlerPool $saveHandlerPool
      * @param FieldsetPool $fieldsetPool
-     * @param String $string
+     * @param StdString $string
      * @param string $defaultHandler
      * @param array $data
      */
@@ -114,8 +120,9 @@ class Base implements ActionInterface
         AppResource $resource,
         SourcePool $sourcePool,
         HandlerPool $handlerPool,
+        SaveHandlerPool $saveHandlerPool,
         FieldsetPool $fieldsetPool,
-        String $string,
+        StdString $string,
         $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
         $data = []
     ) {
@@ -124,6 +131,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourcePool = $sourcePool;
         $this->handlerPool = $handlerPool;
+        $this->saveHandlerPool = $saveHandlerPool;
         $this->defaultHandler = $defaultHandler;
         $this->string = $string;
     }
@@ -232,9 +240,7 @@ class Base implements ActionInterface
      */
     protected function prepareQuery(Select $select)
     {
-        $saveHandler = $this->data['saveHandler'];
-        /** @var SaveHandlerInterface $saveHandler */
-        $saveHandler->save($select, $this->getTableName());
+        $this->saveHandlerPool->get($this->data['saveHandler'])->save($select, $this->getTableName());
     }
 
     /**
