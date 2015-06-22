@@ -687,7 +687,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
             }
         } else {
-            $result = $this->_entityAdapter->isNeedToLogInHistory();
+            $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
         }
         return $result;
     }
