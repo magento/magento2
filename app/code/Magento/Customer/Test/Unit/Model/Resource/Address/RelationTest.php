@@ -22,7 +22,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerFactoryMock = $this->getMock(
             'Magento\Customer\Model\CustomerFactory',
-            [],
+            ['create'],
             [],
             '',
             false
