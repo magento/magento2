@@ -10,7 +10,7 @@ namespace Magento\Customer\Model\Resource\Customer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
+class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
     /**
      * Name of collection model
@@ -38,6 +38,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param string $modelName
      *
@@ -54,6 +55,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Object\Copy\Config $fieldsetConfig,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
@@ -69,6 +71,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
+            $entitySnapshot,
             $connection
         );
     }
