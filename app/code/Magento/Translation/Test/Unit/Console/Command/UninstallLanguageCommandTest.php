@@ -93,7 +93,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dependencies);
 
         $this->composerInfo->expects($this->once())
-            ->method('getRootRequiredPackageTypeByName')
+            ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
                     'vendor/language-ua_ua' => 'magento2-language'
@@ -123,7 +123,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dependencies);
 
         $this->composerInfo->expects($this->once())
-            ->method('getRootRequiredPackageTypeByName')
+            ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
                     'vendor/language-ua_ua' => 'magento2-language'
@@ -148,7 +148,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dependencies);
 
         $this->composerInfo->expects($this->once())
-            ->method('getRootRequiredPackageTypeByName')
+            ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
                     'vendor/language-ua_ua' => 'magento2-language'
@@ -178,7 +178,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dependencies);
 
         $this->composerInfo->expects($this->once())
-            ->method('getRootRequiredPackageTypeByName')
+            ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
                     'vendor/language-ua_ua' => 'library'

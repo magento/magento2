@@ -94,7 +94,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $this->setupDirectoryMock($composerDir);
         $composerInfo = new ComposerInformation($this->filesystemMock, $this->ioMock);
 
-        $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypeByName();
+        $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
         $this->assertArrayHasKey('composer/composer', $requiredPackagesAndTypes);
         $this->assertEquals('library', $requiredPackagesAndTypes['composer/composer']);
