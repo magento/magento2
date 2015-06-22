@@ -129,7 +129,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->config = $this->getMock(
             'Magento\Eav\Model\Config',
             ['getEntityType'],
@@ -145,7 +144,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
-
         $this->resource = $this->getMock(
             'Magento\Framework\App\Resource',
             [],
@@ -153,7 +151,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->storeManager = $this->getMock(
             'Magento\Store\Model\StoreManager',
             [],
@@ -168,7 +165,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->collection = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
             [],
@@ -198,7 +194,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->productFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\ProductFactory',
             [
@@ -209,18 +204,13 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->attrSetColFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
-            [
-                'create',
-                'setEntityTypeFilter',
-            ],
+        $this->_setColFactory = $this->getMock(
+            '\Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            ['create'],
             [],
             '',
             false
         );
-
         $this->categoryColFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Category\CollectionFactory',
             [
@@ -231,7 +221,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->itemFactory = $this->getMock(
             'Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
             [],
@@ -246,7 +235,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->attributeColFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
             [],
@@ -261,7 +249,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->linkTypeProvider = $this->getMock(
             'Magento\Catalog\Model\Product\LinkTypeProvider',
             [],
@@ -290,7 +277,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->writer = $this->getMock(
             'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
             [
@@ -302,7 +288,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $constructorMethods = [
             'initTypeModels',
             'initAttributes',
@@ -311,7 +296,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             'initWebsites',
             'initCategories'
         ];
-
         $mockMethods = array_merge($constructorMethods, [
             '_customHeadersMapping',
             '_prepareEntityCollection',
@@ -331,11 +315,9 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         foreach ($constructorMethods as $method) {
             $this->advancedPricing->expects($this->once())->method($method)->will($this->returnSelf());
         }
-
         $this->advancedPricing->__construct(
             $this->localeDate,
             $this->config,
@@ -345,7 +327,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             $this->collection,
             $this->exportConfig,
             $this->productFactory,
-            $this->attrSetColFactory,
+            $this->_setColFactory,
             $this->categoryColFactory,
             $this->itemFactory,
             $this->optionColFactory,
@@ -370,9 +352,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
-
         $this->abstractCollection->expects($this->never())->method('getCurPage');
         $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
         $this->advancedPricing->expects($this->never())->method('_getHeaderColumns');
@@ -380,9 +360,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->writer->expects($this->never())->method('writeRow');
         $this->advancedPricing->expects($this->never())->method('getExportData');
         $this->advancedPricing->expects($this->never())->method('_customFieldsMapping');
-
         $this->writer->expects($this->once())->method('getContents');
-
         $this->advancedPricing->export();
     }
 
@@ -390,7 +368,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     {
         $curPage = $lastPage = $page = 1;
         $itemsPerPage = 10;
-
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
         $this->advancedPricing->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
         $this->advancedPricing->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
@@ -398,23 +375,21 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
-
         $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
         $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
         $headers = ['headers'];
         $this->advancedPricing->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
         $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
         $data = [
-            ImportAdvancedPricing::COL_SKU => 'simpletest',
-            ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => '0',
-            ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => '1',
-            ImportAdvancedPricing::COL_GROUP_PRICE => '100',
-            ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => '0',
-            ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => '2',
-            ImportAdvancedPricing::COL_TIER_PRICE_QTY => '2',
-            ImportAdvancedPricing::COL_TIER_PRICE => '23',
+            'sku' => 'simpletest',
+            'group_price_website' => '0',
+            'group_price_customer_group' => '1',
+            'group_price' => '100',
+            'tier_price_website' => '0',
+            'tier_price_customer_group' => '2',
+            'tier_price_qty' => '2',
+            'tier_price' => '23',
         ];
         $this->advancedPricing->expects($this->once())->method('getExportData')->willReturn($data);
         $webSite = 'All Websites [USD]';
@@ -422,19 +397,17 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $this->advancedPricing->expects($this->once())->method('_getWebsiteCode')->willReturn($webSite);
         $this->advancedPricing->expects($this->once())->method('_getCustomerGroupById')->willReturn($userGroup);
         $exportData = [
-            ImportAdvancedPricing::COL_SKU => 'simpletest',
-            ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => $webSite,
-            ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => $userGroup,
-            ImportAdvancedPricing::COL_GROUP_PRICE => '100',
-            ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => $webSite,
-            ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => $userGroup,
-            ImportAdvancedPricing::COL_TIER_PRICE_QTY => '2',
-            ImportAdvancedPricing::COL_TIER_PRICE => '23',
+            'sku' => 'simpletest',
+            'group_price_website' => $webSite,
+            'group_price_customer_group' => $userGroup,
+            'group_price' => '100',
+            'tier_price_website' => $webSite,
+            'tier_price_customer_group' => $userGroup,
+            'tier_price_qty' => '2',
+            'tier_price' => '23',
         ];
         $this->writer->expects($this->once())->method('writeRow')->with($exportData);
-
         $this->writer->expects($this->once())->method('getContents');
-
         $this->advancedPricing->export();
     }
 
@@ -455,7 +428,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
         $reflectionProperty->setAccessible(true);
-
         return $reflectionProperty->getValue($object);
     }
 
@@ -472,7 +444,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty = $reflection->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
-
         return $object;
     }
 }
