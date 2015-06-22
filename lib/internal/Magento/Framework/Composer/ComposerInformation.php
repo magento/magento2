@@ -139,7 +139,7 @@ class ComposerInformation
      *
      * @return array
      */
-    public function getRootRequiredPackagesAndTypes()
+    public function getRootRequiredPackageTypeByName()
     {
         $packages = [];
         /** @var PackageInterface $package */
