@@ -232,4 +232,12 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     {
         //
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataSourceData()
+    {
+        return [];
+    }
 }

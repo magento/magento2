@@ -27,6 +27,11 @@ class DirTest extends \PHPUnit_Framework_TestCase
      */
     protected $directoryMock;
 
+    /**
+     * @var \Magento\Framework\Module\ModuleRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleRegistryMock;
+
     protected function setUp()
     {
         $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
@@ -39,8 +44,14 @@ class DirTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false, false);
-
-        $this->_stringMock->expects($this->once())->method('upperCaseWords')->will($this->returnValue('Test/Module'));
+        $this->moduleRegistryMock = $this->getMock(
+            'Magento\Framework\Module\ModuleRegistryInterface',
+            [],
+            [],
+            '',
+            false,
+            false
+        );
 
         $this->filesystemMock->expects(
             $this->once()
@@ -50,11 +61,27 @@ class DirTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->_model = new \Magento\Framework\Module\Dir($this->filesystemMock, $this->_stringMock);
+        $this->_model = new \Magento\Framework\Module\Dir(
+            $this->filesystemMock,
+            $this->_stringMock,
+            $this->moduleRegistryMock
+        );
     }
 
     public function testGetDirModuleRoot()
     {
+        $this->moduleRegistryMock->expects(
+            $this->once()
+        )->method(
+            'getModulePath'
+        )->with(
+            'Test_Module'
+        )->will(
+            $this->returnValue(null)
+        );
+
+        $this->_stringMock->expects($this->once())->method('upperCaseWords')->will($this->returnValue('Test/Module'));
+
         $this->directoryMock->expects(
             $this->once()
         )->method(
@@ -64,20 +91,39 @@ class DirTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('/Test/Module')
         );
+
         $this->assertEquals('/Test/Module', $this->_model->getDir('Test_Module'));
+    }
+
+    public function testGetDirModuleRootFromResolver()
+    {
+        $this->moduleRegistryMock->expects(
+            $this->once()
+        )->method(
+            'getModulePath'
+        )->with(
+            'Test_Module2'
+        )->will(
+            $this->returnValue('/path/to/module')
+        );
+
+        $this->assertEquals('/path/to/module', $this->_model->getDir('Test_Module2'));
     }
 
     public function testGetDirModuleSubDir()
     {
+        $this->_stringMock->expects($this->once())->method('upperCaseWords')->will($this->returnValue('Test/Module'));
+
         $this->directoryMock->expects(
             $this->once()
         )->method(
             'getAbsolutePath'
         )->with(
-            'Test/Module/etc'
+            'Test/Module'
         )->will(
-            $this->returnValue('/Test/Module/etc')
+            $this->returnValue('/Test/Module')
         );
+
         $this->assertEquals('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
     }
 
@@ -87,6 +133,8 @@ class DirTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirModuleSubDirUnknown()
     {
+        $this->_stringMock->expects($this->once())->method('upperCaseWords')->will($this->returnValue('Test/Module'));
+
         $this->_model->getDir('Test_Module', 'unknown');
     }
 }

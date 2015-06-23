@@ -63,6 +63,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('getMessagesBlock')
             ->willReturn($messagesMock);
         $layoutFactoryMock = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $layoutFactoryMock->expects($this->any())->method('create')->willReturn($this->layoutMock);
@@ -90,6 +91,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $resultJsonFactoryMock->expects($this->any())->method('create')->willReturn($this->resultJsonMock);
@@ -103,9 +105,11 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
                 [
                     $contextMock,
                     $coreRegistryMock,
-                    $this->getMock('Magento\Backend\Model\View\Result\ForwardFactory', [], [], '', false),
+                    $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+                        ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
                     $resultJsonFactoryMock,
-                    $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false),
+                    $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+                        ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
                     $layoutFactoryMock,
                 ]
             )->setMethods(['_initVariable'])

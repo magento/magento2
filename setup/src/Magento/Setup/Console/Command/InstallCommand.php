@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Setup\Model\ConfigModel;
 
@@ -110,7 +110,7 @@ class InstallCommand extends AbstractSetupCommand
             )
         ]);
         $this->setName('setup:install')
-            ->setDescription('Installs Magento Application')
+            ->setDescription('Installs the Magento application')
             ->setDefinition($inputOptions);
         parent::configure();
     }

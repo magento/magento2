@@ -203,4 +203,14 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
         $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
+     */
+    public function testFindSetterMethodNameWrongCamelCasedAttribute()
+    {
+        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
+    }
 }

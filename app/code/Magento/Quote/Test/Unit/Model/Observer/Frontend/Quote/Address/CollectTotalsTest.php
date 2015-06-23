@@ -192,12 +192,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testDispatchWithDisableAutoGroupChange()
-    {
-        $this->setAttributeCodeValue('disable_auto_group_change');
-        $this->model->dispatch($this->observerMock);
-    }
-
     public function testDispatchWithDisableVatValidator()
     {
         $this->vatValidatorMock->expects($this->once())
@@ -217,7 +211,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->groupInterfaceMock));
         $this->groupInterfaceMock->expects($this->once())
             ->method('getId')->will($this->returnValue(0));
-        $this->setAttributeCodeValue(false);
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -254,7 +247,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithDefaultCustomerGroupId()
     {
-        $this->setAttributeCodeValue(false);
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -296,7 +288,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithCustomerCountryInEU()
     {
-        $this->setAttributeCodeValue(false);
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -344,17 +335,5 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->dispatch($this->observerMock);
-    }
-
-    protected function setAttributeCodeValue($value)
-    {
-        $attributeInterface = $this->getMockForAbstractClass('Magento\Framework\Api\AttributeInterface', [], '', false);
-        $this->customerMock->expects($this->any())
-            ->method('getCustomAttribute')
-            ->with('disable_auto_group_change')
-            ->willReturn($attributeInterface);
-        $attributeInterface->expects($this->once())
-            ->method('getValue')
-            ->willReturn($value);
     }
 }

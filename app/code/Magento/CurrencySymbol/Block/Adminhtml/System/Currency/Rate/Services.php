@@ -52,6 +52,8 @@ class Services extends \Magento\Backend\Block\Template
                 $this->_srcCurrencyFactory->create()->toOptionArray()
             )->setId(
                 'rate_services'
+            )->setClass(
+                'admin__control-select'
             )->setName(
                 'rate_services'
             )->setValue(

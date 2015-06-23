@@ -52,7 +52,7 @@ class CategoriesFixture extends Fixture
                 ->setName("Category $categoryIndex")
                 ->setParentId($parentCategoryId[$groupNumber])
                 ->setPath($nestingPath[$groupNumber])
-                ->setLevel($nestingLevel[$groupNumber])
+                ->setLevel($nestingLevel[$groupNumber] + 1)
                 ->setAvailableSortBy('name')
                 ->setDefaultSortBy('name')
                 ->setIsActive(true)

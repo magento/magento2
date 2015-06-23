@@ -43,13 +43,9 @@ class InstructionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInstruction()
     {
-        $methodInstance = $this->getMock(
-            'Magento\Payment\Model\MethodInterface',
-            ['getConfigData', 'getCode', 'getFormBlockType', 'getTitle'],
-            [],
-            '',
-            false
-        );
+        $methodInstance = $this->getMockBuilder(
+            'Magento\Payment\Model\MethodInterface'
+        )->getMockForAbstractClass();
         $methodInstance->expects($this->once())
             ->method('getConfigData')
             ->with('instructions')

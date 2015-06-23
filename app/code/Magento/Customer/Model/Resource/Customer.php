@@ -202,8 +202,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
-        $this->saveAttribute($customer, 'default_billing');
-        $this->saveAttribute($customer, 'default_shipping');
+        $changedAddresses = [];
+
+        $changedAddresses['default_billing'] = $customer->getData('default_billing');
+        $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
+        $this->_getWriteAdapter()->update(
+            $this->getTable('customer_entity'),
+            $changedAddresses,
+            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
+        );
 
         return $this;
     }
@@ -274,7 +281,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     public function changePassword(\Magento\Customer\Model\Customer $customer, $newPassword)
     {
         $customer->setPassword($newPassword);
-        $this->saveAttribute($customer, 'password_hash');
         return $this;
     }
 
@@ -383,8 +389,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             $customer->setRpTokenCreatedAt(
                 (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             );
-            $this->saveAttribute($customer, 'rp_token');
-            $this->saveAttribute($customer, 'rp_token_created_at');
         }
         return $this;
     }

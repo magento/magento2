@@ -18,17 +18,19 @@
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\Resource\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
+    <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item name="xhtml" xsi:type="string">Magento\Ui\TemplateEngine\Xhtml</item>
+                <item name="xhtml" xsi:type="string">Magento\Framework\View\TemplateEngine\Xhtml</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\TemplateEngine\Xhtml">
+    <type name="Magento\Framework\View\TemplateEngine\Xhtml">
         <arguments>
-            <argument name="compiler" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler</argument>
+            <argument name="compilerFactory" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory">
@@ -40,35 +42,40 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler\Text">
+    <type name="Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text">
         <arguments>
             <argument name="directivePool" xsi:type="array">
-                <item name="variable" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
-                <item name="callableMethod" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
+                <item name="variable" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler\Attribute">
+    <type name="Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute">
         <arguments>
             <argument name="directivePool" xsi:type="array">
-                <item name="variable" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
-                <item name="callableMethod" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
+                <item name="variable" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler" shared="false">
+    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory" type="Magento\Framework\View\TemplateEngine\Xhtml\CompilerFactory">
         <arguments>
-            <argument name="compilerText" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Text</argument>
-            <argument name="compilerAttribute" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Attribute</argument>
-            <argument name="compilerCdata" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Cdata</argument>
-            <argument name="compilerComment" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Comment</argument>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
+        <arguments>
+            <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
+            <argument name="compilerAttribute" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute</argument>
+            <argument name="compilerCdata" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Cdata</argument>
+            <argument name="compilerComment" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Comment</argument>
             <argument name="elementCompilers" xsi:type="array">
                 <item name="render" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Render</item>
-                <item name="content" xsi:type="object">\Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Content</item>
+                <item name="content" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Content</item>
                 <item name="form" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Form</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <virtualType name="uiConfigurationDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
             <argument name="schemaFileType" xsi:type="string">etc</argument>

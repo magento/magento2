@@ -31,7 +31,7 @@
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.block.report.review.product.grid.columnSet">
                     <arguments>
-                        <argument name="filter_visibility" xsi:type="string">0</argument>
+                        <argument name="filter_visibility" xsi:type="string">1</argument>
                         <argument name="id" xsi:type="string">gridProducts</argument>
                         <argument name="rowUrl" xsi:type="array">
                             <item name="path" xsi:type="string">review/product</item>

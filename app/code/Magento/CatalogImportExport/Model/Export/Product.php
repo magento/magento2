@@ -126,6 +126,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Product collection
      *
+     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     */
+    protected $_entityCollectionFactory;
+
+    /**
+     * Product collection
+     *
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected $_entityCollection;
@@ -231,7 +238,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\Resource\Product\Collection $collection,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
@@ -243,7 +250,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
     ) {
-        $this->_entityCollection = $collection;
+        $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
         $this->_logger = $logger;
         $this->_productFactory = $productFactory;
@@ -669,12 +676,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Get product collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * {@inheritdoc}
      */
-    protected function _getEntityCollection()
+    protected function _getEntityCollection($resetCollection = false)
     {
+        if ($resetCollection || empty($this->_entityCollection)) {
+            $this->_entityCollection = $this->_entityCollectionFactory->create();
+        }
         return $this->_entityCollection;
     }
 
@@ -735,7 +743,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Export process
      *
-     * @see https://jira.corp.x.com/browse/MAGETWO-7894
      * @return string
      */
     public function export()
@@ -743,15 +750,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         //Execution time may be very long
         set_time_limit(0);
 
-        $this->_prepareEntityCollection($this->_getEntityCollection());
-        $this->_getEntityCollection()->setOrder('has_options', 'asc');
-        $this->_getEntityCollection()->setStoreId(Store::DEFAULT_STORE_ID);
         $writer = $this->getWriter();
         $page = 0;
         while (true) {
             ++$page;
+            $entityCollection = $this->_getEntityCollection(true);
+            $entityCollection->setOrder('has_options', 'asc');
+            $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
+            $this->_prepareEntityCollection($entityCollection);
             $this->paginateCollection($page, $this->getItemsPerPage());
-            if ($this->_getEntityCollection()->count() == 0) {
+            if ($entityCollection->count() == 0) {
                 break;
             }
             $exportData = $this->getExportData();
@@ -761,7 +769,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($exportData as $dataRow) {
                 $writer->writeRow($dataRow);
             }
-            if ($this->_getEntityCollection()->getCurPage() >= $this->_getEntityCollection()->getLastPageNumber()) {
+            if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
                 break;
             }
         }
@@ -1100,23 +1108,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
                 $customOptionsDataPre[$productId][$optionId][] = $row;
 
-                foreach ($values as $value) {
-                    $row = [];
-                    $valuePriceType = $value['price_type'] == 'percent' ? '%' : '';
+                if ($values) {
+                    foreach ($values as $value) {
+                        $row = [];
+                        $valuePriceType = $value['price_type'] == 'percent' ? '%' : '';
 
-                    if (Store::DEFAULT_STORE_ID == $storeId) {
-                        $row['_custom_option_row_title'] = $value['title'];
-                        $row['_custom_option_row_price'] = $value['price'] . $valuePriceType;
-                        $row['_custom_option_row_sku'] = $value['sku'];
-                        $row['_custom_option_row_sort'] = $value['sort_order'];
-                    } else {
-                        $row['_custom_option_row_title'] = $value['title'];
-                    }
-                    if ($row) {
-                        if (Store::DEFAULT_STORE_ID != $storeId) {
-                            $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
+                        if (Store::DEFAULT_STORE_ID == $storeId) {
+                            $row['_custom_option_row_title'] = $value['title'];
+                            $row['_custom_option_row_price'] = $value['price'] . $valuePriceType;
+                            $row['_custom_option_row_sku'] = $value['sku'];
+                            $row['_custom_option_row_sort'] = $value['sort_order'];
+                        } else {
+                            $row['_custom_option_row_title'] = $value['title'];
                         }
-                        $customOptionsDataPre[$option['product_id']][$optionId][] = $row;
+                        if ($row) {
+                            if (Store::DEFAULT_STORE_ID != $storeId) {
+                                $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
+                            }
+                            $customOptionsDataPre[$option['product_id']][$optionId][] = $row;
+                        }
                     }
                 }
                 $option = null;

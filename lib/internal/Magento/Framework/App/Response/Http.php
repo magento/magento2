@@ -52,19 +52,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
-     * Send the response, including all headers, rendering exceptions if so
-     * requested.
-     *
-     * @return void
-     */
-    public function sendResponse()
-    {
-        $this->sendVary();
-        parent::sendResponse();
-    }
-
-    /**
-     * Send Vary coookie
+     * Send Vary cookie
      *
      * @return void
      */
@@ -74,12 +62,10 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         if (!empty($data)) {
             ksort($data);
             $cookieValue = sha1(serialize($data));
-            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()
-                ->setPath('/');
+            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $cookieValue, $sensitiveCookMetadata);
         } else {
-            $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()
-                ->setPath('/');
+            $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
         }
     }

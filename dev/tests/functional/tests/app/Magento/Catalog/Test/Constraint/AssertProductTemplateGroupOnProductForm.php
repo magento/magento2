@@ -61,7 +61,7 @@ class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
         $productBlockForm->fill($productSimple);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $productEdit->getProductForm()->isTabVisible($attributeSet->getGroup()),
+            $productEdit->getProductForm()->isCustomTabVisible($attributeSet->getGroup()),
             "Product Group is absent on Product form tabs."
         );
 
