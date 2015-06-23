@@ -14,7 +14,7 @@ use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Search\Model\IndexScopeResolver;
+use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -76,9 +76,10 @@ class IndexBuilder implements IndexBuilderInterface
      */
     public function build(RequestInterface $request)
     {
+        $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
         $select = $this->getSelect()
             ->from(
-                ['search_index' => $this->getScopeTableName($request)],
+                ['search_index' => $searchIndexTable],
                 ['entity_id' => 'product_id']
             )
             ->joinLeft(
@@ -177,23 +178,5 @@ class IndexBuilder implements IndexBuilderInterface
     private function getSelect()
     {
         return $this->getReadConnection()->select();
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @return array
-     */
-    private function getScopeTableName(RequestInterface $request)
-    {
-        $storeId = null;
-        /** @var \Magento\Framework\Search\Request\Dimension $dimension */
-        foreach ($request->getDimensions() as $dimension) {
-            if ('scope' === $dimension->getName()) {
-                $storeId = $dimension->getValue();
-                break;
-            }
-        }
-        $tableName = $this->scopeResolver->resolve($request->getIndex(), $storeId);
-        return $tableName;
     }
 }
