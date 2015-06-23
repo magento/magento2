@@ -13,57 +13,6 @@ define([
 
     //TODO: where unique id for options
     var viewModel;
-    var vm = {
-        attributes: [
-            {
-                id: '12',
-                label: 'color',
-                options: [
-                    {
-                        label: 'gray',
-                        value: '12gray'
-                    },
-                    {
-                        label: 'blue',
-                        value: null
-                    }
-                ]
-            },
-            {
-                id: '155',
-                label: 'size',
-                options: [
-                    {
-                        label: 'm',
-                        value: ''
-                    },
-                    {
-                        label: 's',
-                        value: 'xxx'
-                    }
-                ]
-            }
-        ],
-        sections: {
-            images: {
-                type: 'each',
-                value: {
-                    'gray': ['img1', 'img2'],
-                    'blue': null
-                },
-                attribute: 12
-            },
-            pricing: {
-                type: 'single',
-                value: 100
-            },
-            inventory: {
-                type: 'none',
-                value: 0
-            }
-        }
-    };
-
     viewModel = Component.extend({
         attributes: ko.observableArray([]),
         sections: ko.observableArray([
@@ -86,8 +35,19 @@ define([
                 attribute: ko.observable()
             }
         ]),
+        getOptions: function (attribute) {
+            if(this.attributes().length > 0 && attribute()) {
+                return this.attributes.findWhere({id:attribute()}).options;
+            }
+            return [];
+        },
         render: function (wizard) {
             viewModel.prototype.attributes(wizard.data.attributesValues);
+            viewModel.prototype.attributes.each(function (attribute) {
+                attribute.options.each(function (option) {
+                    option.sections = ko.observable({images:'',pricing:'',inventory:''});
+                });
+            });
         },
         force: function (wizard) {
         },

@@ -48,6 +48,14 @@
                 <select
                     data-bind="options: $parent.attributes(), optionsText: 'label', optionsValue: 'id',
                     value: attribute, optionsCaption: 'Select'"></select>
+                <ul data-bind="foreach: $parent.getOptions(attribute)">
+                    <li>
+                        <label>
+                            <span data-bind="text:label"></span>
+                            <input type="text" data-bind="value:sections()[$parent.label]">
+                        </label>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
