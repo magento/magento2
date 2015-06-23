@@ -16,7 +16,6 @@ use Magento\Indexer\Model\Fieldset\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\IndexStructure;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -100,10 +99,6 @@ class Base implements ActionInterface
      * @var []
      */
     protected $columns = [];
-    /**
-     * @var IndexStructure
-     */
-    private $indexStructure;
 
     /**
      * @param AppResource $resource
@@ -120,7 +115,6 @@ class Base implements ActionInterface
         HandlerPool $handlerPool,
         FieldsetPool $fieldsetPool,
         String $string,
-        IndexStructure $indexStructure,
         $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
         $data = []
     ) {
@@ -131,7 +125,6 @@ class Base implements ActionInterface
         $this->handlerPool = $handlerPool;
         $this->defaultHandler = $defaultHandler;
         $this->string = $string;
-        $this->indexStructure = $indexStructure;
     }
 
     /**
