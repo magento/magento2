@@ -30,6 +30,24 @@ define(
                 return this.getUrl(urls, params);
             },
 
+            getApplyCouponUrl: function(couponCode, quoteId) {
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
+                var urls = {
+                    'guest': '/guest-carts/' + quoteId + '/coupons/' + couponCode,
+                    'customer': '/carts/mine/coupons/' + couponCode
+                };
+                return this.getUrl(urls, params);
+            },
+
+            getCancelCouponUrl: function(quoteId) {
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
+                var urls = {
+                    'guest': '/guest-carts/' + quoteId + '/coupons/',
+                    'customer': '/carts/mine/coupons/'
+                };
+                return this.getUrl(urls, params);
+            },
+
             getUrlForCartTotals: function(quote) {
                 var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {
