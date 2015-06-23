@@ -107,7 +107,7 @@ class InstallData implements InstallDataInterface
     <div class="message info">
         <span>
             Please replace this text with you Privacy Policy.
-            Please add any additional cookies your website uses below (e.g., Google Analytics)
+            Please add any additional cookies your website uses below (e.g. Google Analytics).
         </span>
     </div>
     <p>
@@ -258,7 +258,7 @@ class InstallData implements InstallDataInterface
             </tr>
             <tr>
                 <th>FRONTEND</th>
-                <td>You sesssion ID on the server.</td>
+                <td>You session ID on the server.</td>
             </tr>
             <tr>
                 <th>GUEST-VIEW</th>
