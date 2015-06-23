@@ -29,7 +29,7 @@ angular.module('readiness-check', [])
             $scope.hasErrors = true;
             $rootScope.hasErrors = true;
             $scope.stopProgress();
-        }
+        };
 
         $scope.completed = false;
         $scope.hasErrors = false;
