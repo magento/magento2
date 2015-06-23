@@ -76,6 +76,10 @@
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing_data_source</item>
                     <item name="chipsProvider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters_chips</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
                 </item>
             </argument>
         </container>
