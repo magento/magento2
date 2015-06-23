@@ -256,7 +256,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $orderState = Order::STATE_NEW;
         $orderStatus = $methodInstance->getConfigData('order_status');
-        $isCustomerNotified = null;
+        $isCustomerNotified = $order->getCustomerNoteNotify();
 
         // Do order payment validation on payment method level
         $methodInstance->validate();
@@ -267,9 +267,11 @@ class Payment extends Info implements OrderPaymentInterface
                 $stateObject = new \Magento\Framework\Object();
                 // For method initialization we have to use original config value for payment action
                 $methodInstance->initialize($methodInstance->getConfigData('payment_action'), $stateObject);
-                $orderState = $stateObject->getState() ?: $orderState;
-                $orderStatus = $stateObject->getStatus() ?: $orderStatus;
-                $isCustomerNotified = $stateObject->getIsNotified();
+                $orderState = $stateObject->getData('state') ?: $orderState;
+                $orderStatus = $stateObject->getData('status') ?: $orderStatus;
+                $isCustomerNotified = $stateObject->hasData('is_notified')
+                    ? $stateObject->getData('is_notified')
+                    : $isCustomerNotified;
             } else {
                 $orderState = Order::STATE_PROCESSING;
                 $this->processAction($action, $order);
@@ -277,8 +279,6 @@ class Payment extends Info implements OrderPaymentInterface
                 $orderStatus = $order->getStatus() ? $order->getStatus() : $orderStatus;
             }
         }
-
-        $isCustomerNotified = $isCustomerNotified === null ? $order->getCustomerNoteNotify() : $isCustomerNotified;
 
         if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
