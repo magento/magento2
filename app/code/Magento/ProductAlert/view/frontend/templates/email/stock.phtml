@@ -9,7 +9,7 @@
 /** @var $block \Magento\ProductAlert\Block\Email\Stock */
 ?>
 <?php if ($_products = $block->getProducts()): ?>
-<p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the following products are back in stock:') ?></p>
+<p><?php echo __('In stock alert! We wanted you to know that these products are now available:') ?></p>
 <table>
 <?php foreach ($_products as $_product): ?>
     <tr>
@@ -37,7 +37,7 @@
                 );
                 ?>
             </p>
-            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here to stop alerts for this product.') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>

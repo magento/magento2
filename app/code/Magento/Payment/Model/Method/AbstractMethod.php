@@ -586,6 +586,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -603,6 +604,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -620,6 +622,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -638,6 +641,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -653,6 +657,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\Object|InfoInterface $payment
      * @return $this
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -666,11 +671,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$this->canVoid()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Void action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The void action is not available.'));
         }
         return $this;
     }
@@ -692,6 +698,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -708,6 +715,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function denyPayment(InfoInterface $payment)
     {
