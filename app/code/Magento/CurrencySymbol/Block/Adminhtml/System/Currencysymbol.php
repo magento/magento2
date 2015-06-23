@@ -77,6 +77,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns page header
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getHeader()
     {
@@ -87,6 +88,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns URL for save action
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFormActionUrl()
     {
@@ -97,6 +99,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns website id
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getWebsiteId()
     {
@@ -107,6 +110,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns store id
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getStoreId()
     {
@@ -117,6 +121,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns Custom currency symbol properties
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getCurrencySymbolsData()
     {
@@ -130,6 +135,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns inheritance text
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getInheritText()
     {
