@@ -55,7 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $dateStart = new \DateTime($from);
         $dateEnd = new \DateTime($to);
-        while ($dateStart->diff($dateEnd)->invert = 0) {
+        while ($dateStart->diff($dateEnd)->invert == 0) {
             switch ($period) {
                 case self::REPORT_PERIOD_TYPE_DAY:
                     $intervals[] = $dateStart->format('Y-m-d');
