@@ -8,6 +8,7 @@ namespace Magento\User\Model;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Api\Data\UserInterface;
 
 /**
  * Admin user model
