@@ -182,7 +182,7 @@ return [
             'url'         => 'component-upgrade',
             'templateUrl' => "{$base}/component-upgrade",
             'controller'  => 'componentUpgradeController',
-            'title'       => 'Component Upgrade',
+            'title'       => "Component \n Upgrade",
             'header'      => 'Step 3: Component Upgrade',
             'nav-bar'     => true,
             'order'       => 5,
