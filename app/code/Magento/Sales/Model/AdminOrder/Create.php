@@ -1891,7 +1891,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $items = $this->getQuote()->getAllItems();
 
         if (count($items) == 0) {
-            $this->_errors[] = __('You need to specify order items.');
+            $this->_errors[] = __('Please specify order items.');
         }
 
         foreach ($items as $item) {
@@ -1903,12 +1903,12 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
-                $this->_errors[] = __('You need to specify a shipping method.');
+                $this->_errors[] = __('Please specify a shipping method.');
             }
         }
 
         if (!$this->getQuote()->getPayment()->getMethod()) {
-            $this->_errors[] = __('A payment method must be specified.');
+            $this->_errors[] = __('Please specify a payment method.');
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
             if (!$method->isAvailable($this->getQuote())) {

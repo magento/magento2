@@ -19,7 +19,7 @@ class AssertOrderStatusSuccessCreateMessage extends AbstractConstraint
     const SEVERITY = 'low';
     /* end tags */
 
-    const SUCCESS_MESSAGE = 'You have saved the order status.';
+    const SUCCESS_MESSAGE = 'You saved the order status.';
 
     /**
      * Assert that success message is displayed after order status saved.
