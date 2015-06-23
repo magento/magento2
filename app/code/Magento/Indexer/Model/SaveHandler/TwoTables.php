@@ -13,6 +13,9 @@ use Magento\Indexer\Model\IndexStructure;
 
 class TwoTables implements IndexerInterface
 {
+    /**
+     * @var string[]
+     */
     private $dataTypes = ['searchable', 'filterable'];
 
     /**
