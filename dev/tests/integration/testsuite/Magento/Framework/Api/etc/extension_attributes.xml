@@ -16,8 +16,8 @@
                   join_on_field="entity_id"
                   reference_field="product_id"
                     >
-                <select_field>qty</select_field>
-                <select_field>item_id</select_field>
+                <field>qty</field>
+                <field>item_id</field>
             </join>
         </attribute>
         <attribute code="test_stock_item_qty" type="string">
@@ -28,17 +28,18 @@
                   join_on_field="entity_id"
                   reference_field="product_id"
                     >
-                <select_field>qty</select_field>
+                <field>qty</field>
             </join>
         </attribute>
     </extension_attributes>
+
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="test_group_code" type="string">
             <join reference_table="customer_group"
                   join_on_field="group_id"
                   reference_field="customer_group_id"
                     >
-                <select_field>customer_group_code</select_field>
+                <field>customer_group_code</field>
             </join>
         </attribute>
         <attribute code="test_group" type="Magento\Customer\Api\Data\GroupInterface">
@@ -46,8 +47,39 @@
                   join_on_field="group_id"
                   reference_field="customer_group_id"
                     >
-                <select_field>tax_class_id</select_field>
-                <select_field setter_name="setCode">customer_group_code</select_field>
+                <field>tax_class_id</field>
+                <field column="customer_group_code">code</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Customer\Api\Data\GroupInterface">
+        <attribute code="test_dummy_attribute" type="string">
+            <join reference_table="eav_attribute"
+                  reference_field="attribute_id"
+                  join_on_field="customer_group_id"
+                    >
+                <field>attribute_code</field>
+            </join>
+        </attribute>
+        <attribute code="test_complex_dummy_attribute" type="Magento\Catalog\Api\Data\ProductAttributeInterface">
+            <join reference_table="admin_user"
+                  reference_field="user_id"
+                  join_on_field="customer_group_id"
+                    >
+                <field column="username">attribute_code</field>
+                <field column="firstname">frontend_label</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Sales\Api\Data\InvoiceInterface">
+        <attribute code="test_dummy_attribute" type="string">
+            <join reference_table="eav_attribute"
+                  reference_field="attribute_id"
+                  join_on_field="entity_id"
+                    >
+                <field>attribute_code</field>
             </join>
         </attribute>
     </extension_attributes>
