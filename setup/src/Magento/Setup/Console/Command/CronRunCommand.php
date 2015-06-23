@@ -72,6 +72,7 @@ class CronRunCommand extends AbstractSetupCommand
                     $job->execute();
                     $this->status->add(sprintf('Job "%s" has been successfully completed', $job));
                 } catch (\Exception $e) {
+                    $this->status->toggleUpdateError(true);
                     $this->status->add(
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage())
                     );
