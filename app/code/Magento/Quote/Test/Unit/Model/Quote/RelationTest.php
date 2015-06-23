@@ -29,7 +29,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Quote\Model\Quote\Relation'
+            'Magento\Quote\Model\Quote\Relation'
         );
     }
 
@@ -69,7 +69,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getPaymentsCollection')->willReturn($paymentCollectionMock);
         $paymentCollectionMock->expects($this->once())->method('save');
 
-        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('save');
 
