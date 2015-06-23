@@ -160,7 +160,6 @@ class Resource
      * @param string $time  Either "before" or "after"
      * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
-     * @codeCoverageIgnore
      */
     public function getTriggerName($tableName, $time, $event)
     {
