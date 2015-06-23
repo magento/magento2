@@ -213,8 +213,13 @@ class Form extends FormInterface
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
                 $element->waitUntil(
-                    function () use ($element) {
-                        if ($element->find($this->addNewInput)->isVisible()) {
+                    function () use ($element, $taxClass) {
+                        $input = $element->find($this->addNewInput);
+                        if ($input->isVisible()) {
+                            $input->click();
+                            $input->setValue($taxClass);
+                            $element->find($this->saveButton)->click();
+                            $this->waitUntilOptionIsVisible($element, $taxClass);
                             return true;
                         } else {
                             $this->clickAddNewButton($element);
@@ -222,9 +227,6 @@ class Form extends FormInterface
                         }
                     }
                 );
-                $element->find($this->addNewInput)->keys([$taxClass]);
-                $element->find($this->saveButton)->click();
-                $this->waitUntilOptionIsVisible($element, $taxClass);
             }
         }
     }
