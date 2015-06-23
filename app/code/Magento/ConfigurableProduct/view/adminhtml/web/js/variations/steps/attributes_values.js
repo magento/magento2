@@ -65,11 +65,11 @@ define([
         initialOpened: function (index) {
             return index < 3;
         },
-        saveAttribute: function (attribute) {
-            this.attributes.map(function(attribute) {
+        saveAttribute: function () {
+            this.attributes.each(function(attribute) {
                 attribute.chosen = [];
                 attribute.chosenOptions.each(function(key) {
-                    attribute.chosen.push(_.where(attribute.options(), {value:key}));
+                    attribute.chosen.push(attribute.options.findWhere({value:key}));
                 });
             });
         },
@@ -84,13 +84,13 @@ define([
                 data: {attributes: wizard.data.attributes()},
                 showLoader: true
             }).done(function(attributes){
-                viewModel.prototype.attributes(_.map(attributes, viewModel.prototype.createAttribute, viewModel.prototype));
-            });
+                this.attributes(_.map(attributes, this.createAttribute, this));
+            }.bind(this));
         },
         force: function(wizard) {
             viewModel.prototype.saveAttribute(wizard);
 
-            wizard.data.attributesValues = ko.toJS(this.attributes);
+            wizard.data.attributes = this.attributes;
         },
         back: function(wizard) {
             wizard.data.attributes(viewModel.prototype.attributes().pluck('id'));
