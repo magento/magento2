@@ -17,6 +17,10 @@ class Batch
         $this->n = $n;
     }
 
+    /**
+     * @param \Traversable $documents
+     * @return \Generator
+     */
     public function getItems(\Traversable $documents)
     {
         $i = 0;
@@ -31,7 +35,8 @@ class Batch
                 $batch = [];
             }
         }
-        
-        return $batch;
+        if (count($batch) > 0) {
+            yield $batch;
+        }
     }
 }
