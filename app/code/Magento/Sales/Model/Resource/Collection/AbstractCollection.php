@@ -17,42 +17,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\V
     protected $_countSelect;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot
-     */
-    protected $entitySnapshot;
-
-    /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param string|null $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
-     * @throws \Zend_Exception
-     */
-    public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        $connection = null,
-        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
-    ) {
-        $this->entitySnapshot = $entitySnapshot;
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $entitySnapshot,
-            $connection,
-            $resource
-        );
-    }
-
-    /**
      * Set select count sql
      *
      * @param \Zend_Db_Select $countSelect
