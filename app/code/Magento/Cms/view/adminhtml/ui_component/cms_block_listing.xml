@@ -65,7 +65,17 @@
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
-        </container>   
+        </container>
+        <container name="search">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
+                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                    <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing_data_source</item>
+                    <item name="chipsProvider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters_chips</item>
+                </item>
+            </argument>
+        </container>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

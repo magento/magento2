@@ -6,10 +6,10 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
+    'uiLayout',
     './storage',
-    'Magento_Ui/js/lib/collapsible',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, registry, Storage, Collapsible, layout) {
+    'Magento_Ui/js/lib/collapsible'
+], function (_, utils, registry, layout, Storage, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
