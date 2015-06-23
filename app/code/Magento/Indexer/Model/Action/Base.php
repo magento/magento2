@@ -141,34 +141,15 @@ class Base implements ActionInterface
      */
     public function executeFull()
     {
-        $dimensions = [1,2,3];
         $this->prepareFields();
         $this->prepareSchema();
         $this->prepareIndexes();
-        $this->dropTables($dimensions);
-        $this->createTables($dimensions);
         $this->deleteItems();
         $this->connection->query(
             $this->prepareQuery(
                 $this->prepareSelect()
             )
         );
-    }
-
-    /**
-     * @param array $dimensions
-     */
-    private function dropTables(array $dimensions)
-    {
-        $this->indexStructure->delete($this->getTableName(), $dimensions);
-    }
-
-    /**
-     * @param array $dimensions
-     */
-    private function createTables(array $dimensions)
-    {
-        $this->indexStructure->create($this->getTableName(), $this->filterColumns, $dimensions);
     }
 
     /**
