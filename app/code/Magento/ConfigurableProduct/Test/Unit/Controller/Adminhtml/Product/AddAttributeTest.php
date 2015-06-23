@@ -88,7 +88,9 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['_wakeup', 'getId'])
             ->getMock();
         $layout = $this->getMock('\Magento\Framework\View\LayoutInterface');
-        $block = $this->getMockBuilder('Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created')
+        $block = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created'
+        )
             ->disableOriginalConstructor()
             ->setMethods(['setIndex', 'toHtml'])
             ->getMock();
@@ -100,6 +102,6 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->once())->method('setChild')->willReturnSelf();
         $this->view->expects($this->any())->method('renderLayout')->willReturnSelf();
 
-         $this->controller->execute();
+        $this->controller->execute();
     }
 }
