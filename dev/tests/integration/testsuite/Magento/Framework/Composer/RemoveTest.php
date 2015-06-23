@@ -13,7 +13,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock(
             'Composer\Console\Application',
-            ['resetComposer', 'setAutoExit', 'run'],
+            ['setAutoExit', 'resetComposer', 'run'],
             [],
             '',
             false
@@ -24,7 +24,6 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(BP . '/app/etc');
-        $composerApp->expects($this->once())->method('resetComposer');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
         $composerApp->expects($this->once())->method('run');
         $remove = new Remove($composerApp, $directoryList);

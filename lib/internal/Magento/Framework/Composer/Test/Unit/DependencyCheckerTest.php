@@ -13,7 +13,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock(
             'Composer\Console\Application',
-            ['setAutoExit', 'run', 'resetComposer'],
+            ['setAutoExit', 'resetComposer', 'run'],
             [],
             '',
             false
@@ -36,7 +36,6 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
                 $buffer->writeln($output);
             }
         );
-        $composerApp->expects($this->atLeastOnce())->method('resetComposer');
 
         $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
         $expected = [
@@ -53,7 +52,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $composerApp = $this->getMock(
             'Composer\Console\Application',
-            ['setAutoExit', 'run', 'resetComposer'],
+            ['setAutoExit', 'resetComposer', 'run'],
             [],
             '',
             false
@@ -82,7 +81,6 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
                 $buffer->writeln($output);
             }
         );
-        $composerApp->expects($this->atLeastOnce())->method('resetComposer');
 
         $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
         $expected = [
