@@ -305,6 +305,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Save and replace advanced prices
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function saveAndReplaceAdvancedPrices()
     {

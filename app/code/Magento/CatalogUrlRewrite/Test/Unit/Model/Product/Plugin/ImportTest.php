@@ -1092,7 +1092,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ])));
         $this->productUrlPathGenerator->expects($this->never())->method('getUrlPathWithSuffix');
         $this->product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-        $this->currentUrlRewritesRegeneratorPrepareUrlRewriteMock($storeId, $productId, $requestPath, $targetPath, 0, [], $description);
+        $this->currentUrlRewritesRegeneratorPrepareUrlRewriteMock(
+            $storeId,
+            $productId,
+            $requestPath,
+            $targetPath,
+            0,
+            [],
+            $description
+        );
 
         $actualResult = $this->import->currentUrlRewritesRegenerate();
         $this->assertEquals(
@@ -1135,7 +1143,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
             ->will($this->returnValue($targetPath));
         $this->product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-        $this->currentUrlRewritesRegeneratorPrepareUrlRewriteMock($storeId, $productId, $requestPath, $targetPath, 'code', [], $description);
+        $this->currentUrlRewritesRegeneratorPrepareUrlRewriteMock(
+            $storeId,
+            $productId,
+            $requestPath,
+            $targetPath,
+            'code',
+            [],
+            $description
+        );
 
         $actualResult = $this->import->currentUrlRewritesRegenerate();
         $this->assertEquals(

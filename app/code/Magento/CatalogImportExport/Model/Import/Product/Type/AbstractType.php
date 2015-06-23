@@ -12,7 +12,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
  */
 abstract class AbstractType
 {
-    static $commonAttributesCache = [];
+    /**
+     * Common attributes cache
+     *
+     * @var array
+     */
+    public static $commonAttributesCache = [];
 
     /**
      * Product type attribute sets and attributes parameters.
@@ -176,7 +181,7 @@ abstract class AbstractType
     protected function _initAttributes()
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
-        $entity_id = $this->_entityModel->getEntityTypeId();
+        $entityId = $this->_entityModel->getEntityTypeId();
         $entityAttributes = $this->_connection->fetchPairs(
             $this->_connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
@@ -186,27 +191,27 @@ abstract class AbstractType
                 'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
             )->where(
-                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entity_id)
+                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
             )
         );
         $absentKeys = [];
-        foreach ($entityAttributes as $attribute_id => $attributeSetName) {
-            if (!isset(self::$commonAttributesCache[$attribute_id])) {
+        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+            if (!isset(self::$commonAttributesCache[$attributeId])) {
                 if (!isset($absentKeys[$attributeSetName])) {
                     $absentKeys[$attributeSetName] = [];
                 }
-                $absentKeys[$attributeSetName][] = $attribute_id;
+                $absentKeys[$attributeSetName][] = $attributeId;
             }
         }
         foreach ($absentKeys as $attributeSetName => $attributeIds) {
             $this->attachAttributesById($attributeSetName, $attributeIds);
         }
-        foreach ($entityAttributes as $attribute_id => $attributeSetName) {
-            if (isset(self::$commonAttributesCache[$attribute_id])) {
-                $attribute = self::$commonAttributesCache[$attribute_id];
+        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+            if (isset(self::$commonAttributesCache[$attributeId])) {
+                $attribute = self::$commonAttributesCache[$attributeId];
                 $this->_addAttributeParams(
                     $attributeSetName,
-                    self::$commonAttributesCache[$attribute_id],
+                    self::$commonAttributesCache[$attributeId],
                     $attribute
                 );
             }
@@ -215,12 +220,18 @@ abstract class AbstractType
     }
 
     /**
+     * Attach Attributes By Id
+     *
      * @param string $attributeSetName
      * @param array $attributeIds
+     * @return void
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
-        foreach ($this->_prodAttrColFac->create()->addFieldToFilter('main_table.attribute_id', ['in' => $attributeIds]) as $attribute) {
+        foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
+            'main_table.attribute_id',
+            ['in' => $attributeIds]
+        ) as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $attributeId = $attribute->getId();
 
