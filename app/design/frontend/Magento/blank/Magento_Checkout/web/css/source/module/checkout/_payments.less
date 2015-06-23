@@ -99,6 +99,10 @@
             .billing-address-details {
                 .css(line-height, @checkout-billing-address-details__line-height);
                 .css(padding, @checkout-billing-address-details__padding);
+
+                .action-edit-address {
+                    &:extend(.abs-action-button-as-link all);
+                }
             }
         }
 

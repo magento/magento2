@@ -89,11 +89,10 @@
                              enable: isActive($parents),
                              value: creditCardVerificationNumber"/>
             <div class="field-tooltip toggle">
-                <a href="#"
-                   class="field-tooltip-action action-cvv"
-                   data-bind="attr: {title: $t('What is this?')}, mageInit:{'tooltip': {'content': getCvvImageHtml()}}">
+                <span class="field-tooltip-action action-cvv" data-bind="attr: {title: $t('What is this?')}">
                     <span><!-- ko text: $t('What is this?')--><!-- /ko --></span>
-                </a>
+                </span>
+                <div class="field-tooltip-content" data-bind="html: getCvvImageHtml()"></div>
             </div>
         </div>
     </div>
