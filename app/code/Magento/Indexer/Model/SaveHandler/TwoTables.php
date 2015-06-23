@@ -13,6 +13,8 @@ use Magento\Indexer\Model\IndexStructure;
 
 class TwoTables implements IndexerInterface
 {
+    private $dataTypes = ['searchable', 'filterable'];
+
     /**
      * @var IndexStructure
      */
@@ -62,10 +64,9 @@ class TwoTables implements IndexerInterface
             }
         }
 
-        $tableName = $this->getTableName();
-        $dataTypes = ['searchable', 'filterable'];
-        foreach ($dataTypes as $dataType) {
-            $this->getAdapter()->insertMultiple($tableName, $indexDocuments[$dataType]);
+
+        foreach ($this->dataTypes as $dataType) {
+            $this->getAdapter()->insertMultiple($this->getTableName($dataType), $indexDocuments[$dataType]);
         }
     }
 
@@ -74,8 +75,8 @@ class TwoTables implements IndexerInterface
      */
     public function deleteIndex(Dimension $dimension, \Traversable $documents)
     {
-        foreach ($documents as $document) {
-            $this->getAdapter()->delete($this->getTableName(), $document['id']);
+        foreach ($this->dataTypes as $dataType) {
+            $this->getAdapter()->delete($this->getTableName($dataType), ['id' => array_column($documents, 'id')]);
         }
     }
 
@@ -84,9 +85,11 @@ class TwoTables implements IndexerInterface
      */
     public function cleanIndex(Dimension $dimension)
     {
-        $tableName = $this->getTableName();
-        $this->indexStructure->delete($tableName, [$dimension]);
-        $this->indexStructure->create($tableName, $this->data, [$dimension]);
+        foreach ($this->dataTypes as $dataType) {
+            $tableName = $this->getTableName($dataType);
+            $this->indexStructure->delete($tableName, [$dimension]);
+            $this->indexStructure->create($tableName, $this->data, [$dimension]);
+        }
     }
 
     /**
@@ -98,11 +101,12 @@ class TwoTables implements IndexerInterface
     }
 
     /**
+     * @param string $dataType
      * @return string
      */
-    private function getTableName()
+    private function getTableName($dataType)
     {
-        return $this->getIndexName() . '_scope';
+        return $this->getIndexName() . $dataType . '_scope';
     }
 
     /**
