@@ -86,6 +86,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getResourceCollectionName()
@@ -339,8 +341,10 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param array $storeIds
+     * StoreIds setter
+     * @codeCoverageIgnore
      *
+     * @param array $storeIds
      * @return $this
      */
     public function setStoreIds($storeIds)

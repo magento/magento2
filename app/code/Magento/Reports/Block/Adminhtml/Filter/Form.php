@@ -38,10 +38,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Set field visibility
+     * @codeCoverageIgnore
      *
      * @param string $fieldId
      * @param bool $visibility
-     *
      * @return void
      */
     public function setFieldVisibility($fieldId, $visibility)
