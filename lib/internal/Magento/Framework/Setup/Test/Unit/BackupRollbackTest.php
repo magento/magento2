@@ -200,7 +200,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('getBackupFilename')
             ->willReturn('RollbackFile_A.tgz');
-        $this->filesystem->expects($this->once())
+        $this->filesystem->expects($this->any())
             ->method('getBackupPath')
             ->willReturn('pathToFile/12345_filesystem_code.tgz');
         $this->log->expects($this->once())
@@ -218,7 +218,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->database->expects($this->once())
             ->method('getBackupFilename')
             ->willReturn('RollbackFile_A.gz');
-        $this->database->expects($this->once())
+        $this->database->expects($this->any())
             ->method('getBackupPath')
             ->willReturn('pathToFile/12345_db.tgz');
         $this->log->expects($this->once())

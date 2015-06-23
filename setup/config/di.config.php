@@ -16,6 +16,7 @@ return [
             'Magento\Setup\Controller\Navigation',
             'Magento\Setup\Controller\License',
             'Magento\Setup\Controller\ReadinessCheck',
+            'Magento\Setup\Controller\UpdaterReadinessCheck',
             'Magento\Setup\Controller\Environment',
             'Magento\Setup\Controller\DatabaseCheck',
             'Magento\Setup\Controller\AddDatabase',

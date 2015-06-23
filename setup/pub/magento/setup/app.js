@@ -19,9 +19,11 @@ var app = angular.module(
         'install',
         'success',
         'updater-landing',
+        'updater-readiness-check',
+        'create-backup',
+        'complete-backup',
         'component-upgrade',
-        'component-upgrade-success',
-        'create-backup'
+        'component-upgrade-success'
     ]);
 
 app.config(function ($stateProvider) {

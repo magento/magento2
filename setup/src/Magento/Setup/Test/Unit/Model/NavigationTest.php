@@ -16,6 +16,16 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     private $serviceLocatorMock;
 
     /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerProvider;
+
+    /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * @var Navigation
      */
     private $navigation;
@@ -24,8 +34,12 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceLocatorMock =
             $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-
-        $this->navigation = new Navigation($this->serviceLocatorMock);
+        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $objectManager->expects($this->once())->method('get')->willReturn($deploymentConfig);
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
     }
 
     public function testGetData()
@@ -40,7 +54,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['key2' => 'value2'],
                 ]
             ]));
-
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->objectManagerProvider);
         $this->assertEquals([['key1' => 'value1'], ['key2' => 'value2']], $this->navigation->getData());
     }
 
@@ -59,7 +73,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['nav-bar' => false],
                 ]
             ]));
-
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->objectManagerProvider);
         $this->assertEquals(
             [['nav-bar' => 'abc', 'key3' => 'value3']],
             array_values($this->navigation->getMenuItems())
@@ -81,7 +95,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['main' => false],
                 ]
             ]));
-
+        $this->navigation = new Navigation($this->serviceLocatorMock, $this->objectManagerProvider);
         $this->assertEquals([['main' => 'abc', 'key3' => 'value3']], array_values($this->navigation->getMainItems()));
     }
 }

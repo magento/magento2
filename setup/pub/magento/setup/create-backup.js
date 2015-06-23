@@ -6,29 +6,33 @@
 'use strict';
 angular.module('create-backup', ['ngStorage'])
     .controller('createBackupController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
-        $scope.backupOptions = {
-            code: false,
-            media: false,
-            db: false,
-            none: false
+        $scope.backupInfo = {
+            options: {
+                code: false,
+                media: false,
+                db: false,
+                none: false               
+            },
+            backupFiles: ''            
         };
 
         $scope.loading = false;
 
-        if ($localStorage.backupOptions) {
-            $scope.backupOptions = $localStorage.backupOptions;
+        if ($localStorage.backupInfo) {
+            $scope.backupInfo = $localStorage.backupInfo;
         }
 
         $scope.$on('nextState', function () {
-            $localStorage.backupOptions = $scope.backupOptions;
+            $localStorage.backupInfo = $scope.backupInfo;
         });
 
         $scope.takeBackup = function () {
             $scope.loading = true;
-            $http.post('index.php/take-backup', $scope.backupOptions)
+            $http.post('index.php/take-backup', $scope.backupInfo)
                 .success(function (data) {
                     $scope.takeBackup.result = data;
                     if ($scope.takeBackup.result.success) {
+                        $scope.backupInfo.backupFiles = $scope.takeBackup.result.backupFiles;
                         $scope.loading = false;
                         $scope.nextState();
                     }

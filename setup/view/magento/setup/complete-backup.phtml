@@ -28,13 +28,6 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-<div
-    class="message message-error"
-    ng-show="takeBackup.result.success === false && takeBackup.result !== undefined"
-    >
-    <span class="message-text">{{takeBackup.result.error}}</span>
-</div>
-
 <form
     novalidate
     name="backupStatus"
@@ -42,21 +35,38 @@
     >
 
     <fieldset class="form-fieldset">
-        <label class="form-label" color="#088A08">
-            <p><b> Complete </b></p>
-            <p></p>
-        </label>
-        <label class="form-label" color="#04B431">
-            <p><b>Store in maintenance mode </b></p>
-        </label>
-        <label class="form-label">
-            <p> Your store will stay in maintenance mode until you complete the process. Then, it will be lifter automatically.</p>
-        </label>
-        <label class="form-label" color="#04B431">
-            <p><b>Backup Created </b></p>
-        </label>
-        <label class="form-label">
-            <p>This backup can be found in Magento Admin's backup management.</p>
-        </label>
+        <div ng-show="backupinfo.options.code || backupinfo.options.media || backupinfo.options.db">
+            <label class="form-label" color="#088A08">
+                <p><b> Complete </b></p>
+                <p></p>
+            </label>
+            <label class="form-label" color="#04B431">
+                <p><b>Store in maintenance mode </b></p>
+            </label>
+            <label class="form-label">
+                <p> Your store will stay in maintenance mode until you complete the process. Then, it will be lifter automatically.</p>
+            </label>
+            <label class="form-label" color="#04B431">
+                <p><b>Backup Created </b></p>
+            </label>
+            <label class="form-label">
+                <p>This backup can be found in Magento Admin's backup management.</p>
+                <p>The backup file(s) are located in:</p>
+                <p> {{files}} </p>
+            </label>
+        </div>
+        <div ng-show="backupinfo.options.none || (!backupinfo.options.code && !backupinfo.options.media && !backupinfo.options.db && !backupinfo.options.none)">
+            <label class="form-label" color="#088A08">
+                <p><b> You didn't take any backup </b></p>
+                <p></p>
+            </label>
+            <label class="form-label" color="#04B431">
+                <p><b>Store in maintenance mode </b></p>
+            </label>
+            <label class="form-label">
+                <p> Your store will stay in maintenance mode until you complete the process. Then, it will be lifter automatically.</p>
+            </label>
+        </div>
+
     </fieldset>
 </form>
