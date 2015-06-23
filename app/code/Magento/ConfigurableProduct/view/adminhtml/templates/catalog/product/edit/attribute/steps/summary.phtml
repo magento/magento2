@@ -4,6 +4,34 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
+/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
 ?>
-TBD [summary step]
+<div data-bind="scope: '<?= $block->getComponentName()?>'">
+    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Summary') ?></h1>
+    <div style="padding-bottom: 10px">
+        <span><?= __('Here are all the products you are going to create. ') ?></span>
+    </div>
+    <div data-bind="foreach:sections">
+        <div data-bind="text: label"></div>
+        <div data-bind="text: type"></div>
+        <div data-bind="text: value"></div>
+        <div data-bind="text: ko.toJSON(attribute)"></div>
+    </div>
+    <h2>Attributes</h2>
+    <div data-bind="text: ko.toJSON(attributes)"></div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "<?= $block->getComponentName()?>": {
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
+                        "appendTo": "<?= $block->getParentComponentName()?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

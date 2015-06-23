@@ -48,7 +48,7 @@
             </div>
             <div data-bind="visible: type() == 'each'">
                 <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
-                    options: $parent.attributes(),
+                    options: $parent.attributes,
                     optionsText: 'label',
                     value: attribute,
                     optionsCaption: 'Select'"
@@ -56,7 +56,7 @@
                 <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
                     data-bind="if:attribute"
                     >
-                    <!-- ko foreach: attribute().options -->
+                    <!-- ko foreach: attribute().chosen -->
                     <li style="margin-left: 15px;">
                         <label>
                             <span data-bind="text:label"></span>

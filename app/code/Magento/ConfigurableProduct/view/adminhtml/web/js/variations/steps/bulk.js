@@ -36,14 +36,15 @@ define([
             }
         ]),
         render: function (wizard) {
-            viewModel.prototype.attributes(wizard.data.attributesValues);
-            viewModel.prototype.attributes.each(function (attribute) {
-                attribute.options.each(function (option) {
+            this.attributes(wizard.data.attributes());
+            this.attributes.each(function (attribute) {
+                attribute.chosen.each(function (option) {
                     option.sections = ko.observable({images:'',pricing:'',inventory:''});
                 });
             });
         },
         force: function (wizard) {
+            wizard.data.sections = this.sections;
         },
         back: function (wizard) {
         }
