@@ -8,9 +8,9 @@
             "<%= path.css.setup %>/setup.css": "<%= path.css.setup %>/setup.css"
         }
     },
-    "upgrade": {
+    "updater": {
         "files": {
-            "<%= path.css.upgrade %>/upgrade.css": "<%= path.css.upgrade %>/upgrade.css"
+            "<%= path.css.updater %>/updater.css": "<%= path.css.updater %>/updater.css"
         }
     }
 }

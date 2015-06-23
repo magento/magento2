@@ -8,7 +8,7 @@
     "setup": {
         "src": "<%= path.css.setup %>/setup.css"
     },
-    "upgrade": {
-        "src": "<%= path.css.upgrade %>/upgrade.css"
+    "updater": {
+        "src": "<%= path.css.updater %>/updater.css"
     }
 }
