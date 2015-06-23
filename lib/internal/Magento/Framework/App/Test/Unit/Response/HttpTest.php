@@ -271,4 +271,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();
     }
+
+    public function testSetXFrameOptions()
+    {
+        $value = 'DENY';
+        $this->model->setXFrameOptions($value);
+        $this->assertSame($value, $this->model->getHeader(Http::HEADER_X_FRAME_OPT)->getFieldValue());
+    }
 }
