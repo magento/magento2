@@ -11,6 +11,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
         'theme' => 'Magento/blank',
         'locale' => \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE,
+        'module' => 'Fixture_ModuleOne',
     ];
 
     /**
@@ -215,7 +216,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('frontend', $this->_model->getTemplateArea('template_one'));
     }
 
-    public function testGetTemplateFilename()
+    public function testGetTemplateFilenameWithParams()
     {
         $this->emailTemplateFileSystem->expects(
             $this->once()
@@ -230,6 +231,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $actualResult = $this->_model->getTemplateFilename('template_one', $this->designParams);
+        $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
+    }
+
+    /**
+     * Ensure that the getTemplateFilename method can be called without design params
+     */
+    public function testGetTemplateFilenameWithNoParams()
+    {
+        $this->emailTemplateFileSystem->expects(
+            $this->once()
+        )->method(
+            'getEmailTemplateFileName'
+        )->with(
+            'one.html',
+            'Fixture_ModuleOne'
+        )->will(
+            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        );
+
+        $actualResult = $this->_model->getTemplateFilename('template_one');
         $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
