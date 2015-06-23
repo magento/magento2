@@ -20,14 +20,14 @@ class ProcessLayoutRenderElement
      *
      * @var bool
      */
-    protected $_isVarnishEnabled;
+    protected $isVarnishEnabled;
 
     /**
      * Is full page cache enabled flag
      *
      * @var bool
      */
-    protected $_isFullPageCacheEnabled;
+    protected $isFullPageCacheEnabled;
 
     /**
      * Class constructor
@@ -67,10 +67,10 @@ class ProcessLayoutRenderElement
      */
     protected function isFullPageCacheEnabled()
     {
-        if ($this->_isFullPageCacheEnabled === null) {
-            $this->_isFullPageCacheEnabled = $this->_config->isEnabled();
+        if ($this->isFullPageCacheEnabled === null) {
+            $this->isFullPageCacheEnabled = $this->_config->isEnabled();
         }
-        return $this->_isFullPageCacheEnabled;
+        return $this->isFullPageCacheEnabled;
     }
 
     /**
@@ -78,12 +78,12 @@ class ProcessLayoutRenderElement
      *
      * @return bool
      */
-    protected function isVarnishEbabled()
+    protected function isVarnishEnabled()
     {
-        if ($this->_isVarnishEnabled === null) {
-            $this->_isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
+        if ($this->isVarnishEnabled === null) {
+            $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
         }
-        return $this->_isVarnishEnabled;
+        return $this->isVarnishEnabled;
     }
 
     /**
@@ -106,7 +106,7 @@ class ProcessLayoutRenderElement
             if ($block instanceof \Magento\Framework\View\Element\AbstractBlock) {
                 $blockTtl = $block->getTtl();
                 $output = $transport->getData('output');
-                if (isset($blockTtl) && $this->isVarnishEbabled()) {
+                if (isset($blockTtl) && $this->isVarnishEnabled()) {
                     $output = $this->_wrapEsi($block, $layout);
                 } elseif ($block->isScopePrivate()) {
                     $output = sprintf(
