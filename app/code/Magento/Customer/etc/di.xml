@@ -162,4 +162,9 @@
             <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Resource\Address\Collection">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+        </arguments>
+    </type>
 </config>
