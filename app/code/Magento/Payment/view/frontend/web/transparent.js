@@ -29,7 +29,8 @@ define([
             controller: null,
             gateway: null,
             dateDelim: null,
-            cardFieldsMap: null
+            cardFieldsMap: null,
+            expireYearLength: 2
         },
 
         _create: function() {
@@ -76,6 +77,10 @@ define([
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();
             }
             postData += '&controller=' + this.options.controller;
+            postData += '&cc_type=' + this.element.find(
+                '[data-container="' + this.options.gateway + '-cc-type"]'
+            ).val();
+
             return $.ajax({
                 url: this.options.orderSaveUrl,
                 type: 'post',
@@ -155,9 +160,10 @@ define([
                     this.element.find('[data-container="' + this.options.gateway + '-cc-month"]').val(),
                     10
                 );
-            if (year.length > 2) {
-                year = year.substring(2);
+            if (year.length > this.options.expireYearLength) {
+                year = year.substring(year.length - this.options.expireYearLength);
             }
+
             if (month < 10) {
                 month = '0' + month;
             }
