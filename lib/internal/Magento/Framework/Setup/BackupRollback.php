@@ -81,7 +81,7 @@ class BackupRollback
      *
      * @param int $time
      * @param string $type
-     * @return void
+     * @return string
      * @throws LocalizedException
      */
     public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
@@ -115,6 +115,7 @@ class BackupRollback
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
         $this->log->logSuccess($granularType . ' backup completed successfully.');
+        return $fsBackup->getBackupPath();
     }
 
     /**
@@ -176,7 +177,7 @@ class BackupRollback
      * Take backup for database
      *
      * @param int $time
-     * @return void
+     * @return string
      */
     public function dbBackup($time)
     {
@@ -199,6 +200,7 @@ class BackupRollback
         );
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
         $this->log->logSuccess('DB backup completed successfully.');
+        return $dbBackup->getBackupPath();
     }
 
     /**

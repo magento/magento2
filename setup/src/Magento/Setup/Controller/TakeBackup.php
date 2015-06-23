@@ -46,9 +46,9 @@ class TakeBackup extends AbstractActionController
         MaintenanceMode $maintenanceMode,
         WebLogger $logger
     ) {
-        $this->objectManager = $objectManagerProvider->get();
+        $objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->backupRollbackFactory = $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
         $this->log = $logger;
     }
 
@@ -64,16 +64,17 @@ class TakeBackup extends AbstractActionController
             $this->maintenanceMode->set(true);
             $time = time();
             $backupHandler = $this->backupRollbackFactory->create($this->log);
-            if ($params['code']) {
-                $backupHandler->codeBackup($time);
+            $backupFiles = [];
+            if ($params['options']['code']) {
+                $backupFiles[] = $backupHandler->codeBackup($time);
             }
-            if ($params['media']) {
-                $backupHandler->codeBackup($time, Factory::TYPE_MEDIA);
+            if ($params['options']['media']) {
+                $backupFiles[] = $backupHandler->codeBackup($time, Factory::TYPE_MEDIA);
             }
-            if ($params['db']) {
-                $backupHandler->dbBackup($time);
+            if ($params['options']['db']) {
+                $backupFiles[] = $backupHandler->dbBackup($time);
             }
-            return new JsonModel(['success' => true]);
+            return new JsonModel(['success' => true, 'backupFiles' => $backupFiles]);
         } catch (\Exception $e) {
             $this->maintenanceMode->set(false);
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
