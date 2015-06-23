@@ -19,7 +19,6 @@ define(
             defaults: {
                 template: 'Magento_Checkout/shipping-information'
             },
-            shippingAddress: quote.shippingAddress,
 
             isVisible: function() {
                 return !quote.isVirtual() && stepNavigator.isProcessed('shipping');

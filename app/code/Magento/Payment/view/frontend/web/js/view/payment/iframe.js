@@ -36,6 +36,9 @@ define(
             },
             originalPlaceOrder: function(parent) {
                 return parent.placeOrder.bind(parent);
+            },
+            getExpireYearLength: function(parent) {
+                return window.checkoutConfig.payment.iframe.expireYearLength[this.getCode()];
             }
         });
     }

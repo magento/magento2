@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
+        
 <!-- ko if: (isVisible()) -->
 <div class="shipping-information">
     <div class="ship-to">
@@ -14,11 +15,9 @@
             </button>
         </div>
         <div class="shipping-information-content">
-            <!-- ko text: shippingAddress().firstname --><!-- /ko --> <!-- ko text: shippingAddress().lastname --><!-- /ko --><br/>
-            <!-- ko text: shippingAddress().street --><!-- /ko --><br/>
-            <!-- ko text: shippingAddress().city --><!-- /ko -->, <!-- ko text: shippingAddress().region --><!-- /ko --> <!-- ko text: shippingAddress().postcode --><!-- /ko --><br/>
-            <!-- ko text: getCountryName(shippingAddress().countryId) --><!-- /ko --><br/>
-            <!-- ko text: shippingAddress().telephone --><!-- /ko --><br/>
+            <!-- ko foreach: getRegion('ship-via') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
         </div>
     </div>
     <div class="ship-via">
