@@ -95,6 +95,7 @@ class Converter implements ConverterInterface
      * @param \DOMElement $node
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function convertFieldset(\DOMElement $node, $data)
     {
