@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
+
 <!-- ko if: (isVisible()) -->
 <div class="shipping-information">
     <div class="ship-to">
         <b><span data-bind="text: $t('Ship To')"></span></b>
         <a href="#" data-bind="click: back, text: $t('edit')"></a>
         <br>
-        <!-- ko text: shippingAddress().firstname --><!-- /ko --> <!-- ko text: shippingAddress().lastname --><!-- /ko --><br/>
-        <!-- ko text: shippingAddress().street --><!-- /ko --><br/>
-        <!-- ko text: shippingAddress().city --><!-- /ko -->, <!-- ko text: shippingAddress().region --><!-- /ko --> <!-- ko text: shippingAddress().postcode --><!-- /ko --><br/>
-        <!-- ko text: getCountryName(shippingAddress().countryId) --><!-- /ko --><br/>
-        <!-- ko text: shippingAddress().telephone --><!-- /ko --><br/>
+        <!-- ko foreach: getRegion('ship-via') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
     </div>
     <br>
     <div class="ship-via">
