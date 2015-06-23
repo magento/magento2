@@ -357,8 +357,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $itemsPerPage = 10;
 
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->advancedPricing->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
-        $this->advancedPricing->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
+        $this->advancedPricing
+            ->expects($this->exactly(1))
+            ->method('_getEntityCollection')
+            ->willReturn($this->abstractCollection);
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('_prepareEntityCollection')
+            ->with($this->abstractCollection);
         $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
@@ -383,8 +389,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $curPage = $lastPage = $page = 1;
         $itemsPerPage = 10;
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->advancedPricing->expects($this->exactly(1))->method('_getEntityCollection')->willReturn($this->abstractCollection);
-        $this->advancedPricing->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
+        $this->advancedPricing
+            ->expects($this->exactly(1))
+            ->method('_getEntityCollection')
+            ->willReturn($this->abstractCollection);
+        $this->advancedPricing
+            ->expects($this->once())
+            ->method('_prepareEntityCollection')
+            ->with($this->abstractCollection);
         $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
         $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
