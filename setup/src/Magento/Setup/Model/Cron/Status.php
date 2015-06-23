@@ -68,11 +68,21 @@ class Status
             : BP . '/var/.update_error.flag';
     }
 
+    /**
+     * Get status file path
+     *
+     * @return string
+     */
     public function getStatusFilePath()
     {
         return $this->statusFilePath;
     }
 
+    /**
+     * Get log file path
+     *
+     * @return string
+     */
     public function getLogFilePath()
     {
         return $this->logFilePath;
@@ -115,24 +125,6 @@ class Status
         }
         if ($isNewFile) {
             chmod($filePath, 0777);
-        }
-        return $this;
-    }
-
-    /**
-     * Clear current status text.
-     *
-     * Note that this method does not clear status information from the permanent status log.
-     *
-     * @return $this
-     * @throws \RuntimeException
-     */
-    public function clear()
-    {
-        if (!file_exists($this->statusFilePath)) {
-            return $this;
-        } else if (false === file_put_contents($this->statusFilePath, '')) {
-            throw new \RuntimeException(sprintf('Cannot clear status information from "%s"', $this->statusFilePath));
         }
         return $this;
     }

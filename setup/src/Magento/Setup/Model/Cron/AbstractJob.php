@@ -78,5 +78,10 @@ abstract class AbstractJob
         return '<' . $this->name . '>' . json_encode($this->params);
     }
 
+    /**
+     * Execute job
+     *
+     * @return void
+     */
     abstract public function execute();
 }

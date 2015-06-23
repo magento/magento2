@@ -8,6 +8,9 @@ namespace Magento\Setup\Model\Cron;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\Output;
 
+/**
+ * Class to allow output to multiple file streams
+ */
 class MultipleStreamOutput extends Output
 {
     /**
@@ -15,6 +18,14 @@ class MultipleStreamOutput extends Output
      */
     private $streams;
 
+    /**
+     * Constructor
+     *
+     * @param array $streams
+     * @param bool|int $verbosity
+     * @param null $decorated
+     * @param OutputFormatterInterface $formatter
+     */
     public function __construct(array $streams, $verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null)
     {
         foreach ($streams as $stream) {
