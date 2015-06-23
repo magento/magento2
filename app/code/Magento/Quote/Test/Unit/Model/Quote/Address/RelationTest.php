@@ -12,7 +12,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\AbstractModel | \PHPUnit_Framework_MockObject_MockObject
      */
-    private  $modelMock;
+    private $modelMock;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\Relation

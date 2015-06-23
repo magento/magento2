@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 
+use Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -15,7 +16,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     /**
      * Subject of testing.
      *
-     * @var \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
 

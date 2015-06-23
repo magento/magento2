@@ -38,7 +38,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
 
         $this->model = $this->getMock(
             'Magento\Framework\Model\AbstractModel',
-            ['getResource','getAttributes'],
+            ['getResource', 'getAttributes'],
             [],
             '',
             false

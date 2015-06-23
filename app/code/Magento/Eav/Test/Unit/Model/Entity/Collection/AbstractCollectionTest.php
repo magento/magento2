@@ -5,10 +5,12 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 
+use Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub;
+
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
 
@@ -139,7 +141,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($entityMock)
         );
 
-        $this->model = new \Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub(
+        $this->model = new AbstractCollectionStub(
             $this->coreEntityFactoryMock,
             $this->loggerMock,
             $this->fetchStrategyMock,

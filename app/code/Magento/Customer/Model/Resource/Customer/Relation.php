@@ -16,6 +16,7 @@ class Relation implements \Magento\Framework\Model\Resource\Db\VersionControl\Re
      *
      * @param \Magento\Framework\Model\AbstractModel $customer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $customer)
     {
