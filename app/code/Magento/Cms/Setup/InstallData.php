@@ -258,7 +258,7 @@ class InstallData implements InstallDataInterface
             </tr>
             <tr>
                 <th>FRONTEND</th>
-                <td>You session ID on the server.</td>
+                <td>Your session ID on the server.</td>
             </tr>
             <tr>
                 <th>GUEST-VIEW</th>
