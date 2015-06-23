@@ -9,7 +9,7 @@ namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Config
+class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
      * @var \Magento\Email\Model\Template\Config\Data
@@ -183,12 +183,20 @@ class Config
      * Retrieve full path to an email template file
      *
      * @param string $templateId
-     * @param array $designParams
+     * @param array|null $designParams
      * @return string
      */
-    public function getTemplateFilename($templateId, $designParams)
+    public function getTemplateFilename($templateId, $designParams = [])
     {
+        // If design params aren't passed, then use area/module defined in email_templates.xml
+        if (!isset($designParams['area'])) {
+            $designParams['area'] = $this->getTemplateArea($templateId);
+        }
         $module = $this->getTemplateModule($templateId);
+        if ($module) {
+            $designParams['module'] = $module;
+        }
+
         $file = $this->_getInfo($templateId, 'file');
 
         return $this->emailTemplateFileSystem->getEmailTemplateFileName($file, $module, $designParams);

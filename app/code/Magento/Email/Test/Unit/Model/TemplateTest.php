@@ -5,10 +5,6 @@
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\Template\Filter;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filter\Template as FilterTemplate;
-
 /**
  * Covers \Magento\Email\Model\Template
  *
@@ -140,7 +136,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
-                    $this->filterFactory
+                    $this->filterFactory,
                 ]
             )
             ->getMock();
@@ -211,7 +207,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedTemplateStyles
     ) {
         $model = $this->getModelMock([
-            'getDesignParams'
+            'getDesignParams',
         ]);
 
         $designParams = [
@@ -466,35 +462,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => true
+                'expectedValue' => true,
             ],
             'no smtp so not valid' => [
                 'isSMTPDisabled' => true,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no sender name so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => '',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no sender email so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => '',
                 'templateSubject' => 'template subject',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
             'no subject so not valid' => [
                 'isSMTPDisabled' => false,
                 'senderName' => 'sender name',
                 'senderEmail' => 'email@example.com',
                 'templateSubject' => '',
-                'expectedValue' => false
+                'expectedValue' => false,
             ],
         ];
     }

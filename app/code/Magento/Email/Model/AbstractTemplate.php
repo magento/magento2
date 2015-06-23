@@ -229,10 +229,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function getTemplateInstance()
     {
-        return $this->templateFactory->create([
-            // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
-            'filesystem' => $this->filesystem
-        ]);
+        return $this->templateFactory->create();
     }
 
     /**
@@ -539,12 +536,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param string $templateId
      * @return $this
-     * @thr
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function setForcedArea($templateId)
     {
         if ($this->_area) {
-            throw new \LogicException(__('Area is already set'));
+            throw new \Magento\Framework\Exception\MailException(__('Area is already set'));
         }
         $this->_area = $this->emailConfig->getTemplateArea($templateId);
         return $this;
