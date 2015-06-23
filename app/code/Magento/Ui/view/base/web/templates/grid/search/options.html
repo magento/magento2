@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<ul
+    class="action-menu"
+    data-bind="
+        css: {
+            _active: isVisible()
+        },
+        afterRender: setContainer.bind($data);
+        ">
+    <!-- ko foreach: {data: options} -->
+    <li>
+        <a
+            class="action-menu-item"
+            data-bind="
+                text: value,
+                click: $parent.select.bind($parent, $data),
+                css: {
+                    _selected: $index() === $parent.navigated()
+                }">
+        </a>
+    </li>
+    <!-- /ko -->
+</ul>
