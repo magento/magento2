@@ -209,7 +209,7 @@ class ThemeUninstallCommand extends Command
         );
         if (!empty($messages)) {
             $output->writeln(
-                '<error>Unable to uninstall. Please fix the following issues:</error>'
+                '<error>Unable to uninstall. Please resolve the following issues:</error>'
                 . PHP_EOL . implode(PHP_EOL, $messages)
             );
             return;
@@ -290,7 +290,7 @@ class ThemeUninstallCommand extends Command
             if (!empty($dependingPackages)) {
                 $messages[] =
                     '<error>' . $packageToPath[$package] .
-                    " has the following package(s) depend on it:</error>" .
+                    " has the following dependent package(s):</error>" .
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", $dependingPackages)
                     . "</error>";
             }
@@ -321,11 +321,13 @@ class ThemeUninstallCommand extends Command
         }
         if (!empty($themeHasVirtualChildren)) {
             $text = count($themeHasVirtualChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>' . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme</error>';
+            $messages[] = '<error>' . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme.'
+                . ' Parent themes cannot be uninstalled.</error>';
         }
         if (!empty($themeHasPhysicalChildren)) {
             $text = count($themeHasPhysicalChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>' . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme</error>';
+            $messages[] = '<error>' . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme.'
+                . ' Parent themes cannot be uninstalled.</error>';
         }
         return $messages;
     }
