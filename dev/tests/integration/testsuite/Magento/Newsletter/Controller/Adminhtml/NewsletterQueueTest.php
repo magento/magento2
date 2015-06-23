@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
+class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Newsletter\Model\Template

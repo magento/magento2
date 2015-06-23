@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Utility;
+namespace Magento\TestFramework\TestCase;
 
 /**
  * A parent class for backend controllers - contains directives for admin user creation and authentication
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.numberOfChildren)
  */
-class Controller extends \Magento\TestFramework\TestCase\AbstractController
+abstract class AbstractBackendController extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -21,6 +21,20 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
      * @var \Magento\Backend\Model\Auth
      */
     protected $_auth;
+
+    /**
+     * The resource used to authorize action
+     *
+     * @var string
+     */
+    protected $resource = null;
+
+    /**
+     * The uri at which to access the controller
+     *
+     * @var string
+     */
+    protected $uri = null;
 
     protected function setUp()
     {
@@ -69,5 +83,28 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
         $messageManagerClass = 'Magento\Framework\Message\Manager'
     ) {
         parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
+    }
+
+
+    public function testAclHasAccess()
+    {
+        if ($this->uri === null) {
+            $this->markTestIncomplete('AclHasAccess test is not complete');
+        }
+        $this->dispatch($this->uri);
+        $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
+        $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
+    }
+
+    public function testAclNoAccess()
+    {
+        if ($this->resource === null) {
+            $this->markTestIncomplete('Acl test is not complete');
+        }
+        $this->_objectManager->get('Magento\Framework\Acl\Builder')
+            ->getAcl()
+            ->deny(null, $this->resource);
+        $this->dispatch($this->uri);
+        $this->assertSame(403, $this->getResponse()->getHttpResponseCode());
     }
 }
