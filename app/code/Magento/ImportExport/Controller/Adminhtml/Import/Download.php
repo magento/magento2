@@ -24,6 +24,7 @@ class Download extends ImportController
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
