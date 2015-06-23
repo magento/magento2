@@ -271,7 +271,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['frontend/Magento/a is in use in default config']);
         $this->tester->execute(['theme' => ['frontend/Magento/a']]);
         $this->assertEquals(
-            'Unable to uninstall. Please fix the following issues:' . PHP_EOL
+            'Unable to uninstall. Please resolve the following issues:' . PHP_EOL
             . 'frontend/Magento/a is in use in default config' . PHP_EOL,
             $this->tester->getDisplay()
         );
@@ -324,44 +324,48 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please fix the following issues:' . PHP_EOL
-                . 'frontend/Magento/a is a parent of virtual theme'
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL
+                . 'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 false,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. Please fix the following issues:' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme'
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
             [
                 false,
                 true,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please fix the following issues:' . PHP_EOL .
-                'frontend/Magento/a is a parent of physical theme'
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
             ],
             [
                 false,
                 true,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. Please fix the following issues:' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of physical theme'
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 true,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please fix the following issues:' . PHP_EOL .
-                'frontend/Magento/a is a parent of virtual theme' . PHP_EOL .
-                'frontend/Magento/a is a parent of physical theme'
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.' . PHP_EOL .
+                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 true,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of physical theme'
+                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
+                . ' Parent themes cannot be uninstalled.' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
         ];
     }
@@ -376,8 +380,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['magento/theme-a' => ['magento/theme-b', 'magento/theme-c']]);
         $this->tester->execute(['theme' => ['frontend/Magento/a']]);
         $this->assertContains(
-            'Unable to uninstall. Please fix the following issues:' . PHP_EOL .
-            'frontend/Magento/a has the following package(s) depend on it:'
+            'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+            'frontend/Magento/a has the following dependent package(s):'
             . PHP_EOL . "\tmagento/theme-b" . PHP_EOL . "\tmagento/theme-c",
             $this->tester->getDisplay()
         );
