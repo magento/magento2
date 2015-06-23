@@ -64,8 +64,8 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
                 'label' => $this->getTemplateLabel($templateId),
                 'group' => $this->getTemplateModule($templateId),
             ];
-            $templatesFromThemes = $this->getThemeTemplates($templateId);
-            $templates = array_merge($templates, $templatesFromThemes);
+            $themeTemplates = $this->getThemeTemplates($templateId);
+            $templates = array_merge($templates, $themeTemplates);
         }
         return $templates;
     }
