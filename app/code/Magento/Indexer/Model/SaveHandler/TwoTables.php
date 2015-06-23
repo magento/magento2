@@ -79,7 +79,10 @@ class TwoTables implements IndexerInterface
     public function deleteIndex(Dimension $dimension, \Traversable $documents)
     {
         foreach ($this->dataTypes as $dataType) {
-            $this->getAdapter()->delete($this->getTableName($dataType), ['id' => array_column($documents, 'id')]);
+            foreach ($this->batch->getItems($documents) as $batchDocuments) {
+                $documentsId = array_column($batchDocuments, 'id');
+                $this->getAdapter()->delete($this->getTableName($dataType), ['id' => $documentsId]);
+            }
         }
     }
 
