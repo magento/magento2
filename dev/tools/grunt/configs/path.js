@@ -15,11 +15,11 @@ module.exports = {
     tmp: 'var',
     css: {
         setup: 'setup/pub/styles',
-        upgrade: 'upgrade/styles/css'
+        updater: '../magento2-updater/pub/css'
     },
     less: {
-        setup: 'setup/view/styles',
-        upgrade: 'upgrade/styles/less'
+        setup: 'app/design/adminhtml/Magento/backend/web/app/setup/styles/less',
+        updater: 'app/design/adminhtml/Magento/backend/web/app/updater/styles/less'
     },
     uglify: {
         legacy: 'lib/web/legacy-build.min.js'

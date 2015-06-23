@@ -25,12 +25,12 @@ var watchOptions = {
         'files': '<%= path.less.setup %>/**/*.less',
         'tasks': 'less:setup'
     },
-    'upgrade': {
+    'updater': {
         'options': {
             livereload: true
         },
-        'files': '<%= path.less.upgrade %>/**/*.less',
-        'tasks': 'less:upgrade'
+        'files': '<%= path.less.updater %>/**/*.less',
+        'tasks': 'less:updater'
     },
     'reload': {
         'files': '<%= path.pub %>/**/*.css',

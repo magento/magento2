@@ -39,9 +39,9 @@ var lessOptions = {
             '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/setup.less'
         }
     },
-    upgrade: {
+    updater: {
         files: {
-            '<%= path.css.upgrade %>/upgrade.css': '<%= path.less.upgrade %>/upgrade.less'
+            '<%= path.css.updater %>/updater.css': '<%= path.less.updater %>/updater.less'
         }
     },
     documentation: {

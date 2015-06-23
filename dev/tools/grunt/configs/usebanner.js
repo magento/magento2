@@ -39,12 +39,12 @@ module.exports = {
             src: '<%= path.css.setup %>/*.css'
         }
     },
-    upgrade: {
+    updater: {
         options: {
             banner: printCopyright('css')
         },
         files: {
-            src: '<%= path.css.upgrade %>/*.css'
+            src: '<%= path.css.updater %>/updater.css'
         }
     },
     documentationCss: {
