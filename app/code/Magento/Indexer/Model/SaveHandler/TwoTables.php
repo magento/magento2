@@ -10,6 +10,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Indexer\Model\IndexStructure;
+use Magento\Indexer\Model\SaveHandler\Batch;
 
 class TwoTables implements IndexerInterface
 {
@@ -29,15 +30,22 @@ class TwoTables implements IndexerInterface
     private $resource;
 
     /**
+     * @var Batch
+     */
+    private $batch;
+
+    /**
      * @param IndexStructure $indexStructure
-     * @param Resource $resource
+     * @param Resource|Resource $resource
+     * @param Batch $batch
      * @param array $data
      */
-    public function __construct(IndexStructure $indexStructure, Resource $resource, array $data)
+    public function __construct(IndexStructure $indexStructure, Resource $resource, Batch $batch, array $data)
     {
         $this->indexStructure = $indexStructure;
         $this->data = $data;
         $this->resource = $resource;
+        $this->batch = $batch;
     }
 
     /**
@@ -46,10 +54,12 @@ class TwoTables implements IndexerInterface
     public function saveIndex(Dimension $dimension, \Traversable $documents)
     {
         $indexDocuments = [];
-        foreach ($documents as $documentName => $documentValue) {
-            foreach ($documentValue as $fieldName => $fieldValue) {
-                $type = $this->getTypeByFieldName($fieldName);
-                $indexDocuments[$type][$documentName][$fieldName] = $fieldValue;
+        foreach ($this->batch->getItems($documents) as $batchDocuments) {
+            foreach ($batchDocuments as $documentName => $documentValue) {
+                foreach ($documentValue as $fieldName => $fieldValue) {
+                    $type = $this->getTypeByFieldName($fieldName);
+                    $indexDocuments[$type][$documentName][$fieldName] = $fieldValue;
+                }
             }
         }
 
