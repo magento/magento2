@@ -131,7 +131,11 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback([$this, 'tableName'])
+            $this->returnCallback(
+                function ($arg) {
+                    return $arg;
+                }
+            )
         );
 
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\Context')
@@ -273,15 +277,5 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
                 'deleteCount' => $this->never()
             ]
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function tableName()
-    {
-        $args = func_get_args();
-
-        return $args[0];
     }
 }
