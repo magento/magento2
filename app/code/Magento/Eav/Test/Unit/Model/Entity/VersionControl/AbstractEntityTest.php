@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
 
+use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -18,7 +20,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
     protected $entitySnapshot;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityRelationComposite;
 
@@ -49,6 +51,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
      * @param array $productData
      * @param array $productOrigData
      *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @dataProvider productAttributesDataProvider
      */
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
@@ -137,7 +140,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ]
         );
 
-        /** @var $model \Magento\Eav\Model\Entity\VersionControl\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\VersionControl\AbstractEntity')
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
@@ -173,7 +176,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ]
         );
 
-        /** @var $model \Magento\Eav\Model\Entity\VersionControl\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\VersionControl\AbstractEntity')
             ->setConstructorArgs($arguments)
             ->setMethods(['beginTransaction', 'commit'])

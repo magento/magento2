@@ -37,12 +37,13 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -54,8 +55,8 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {

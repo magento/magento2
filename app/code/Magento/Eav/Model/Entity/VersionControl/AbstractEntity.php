@@ -105,6 +105,12 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
         return $this;
     }
 
+    /**
+     * Checks if entity was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return bool
+     */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {
         return $this->entitySnapshot->isModified($object);

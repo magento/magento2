@@ -38,6 +38,7 @@ class Snapshot
      *
      * @param \Magento\Framework\Object $entity
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function registerSnapshot(\Magento\Framework\Object $entity)
     {
