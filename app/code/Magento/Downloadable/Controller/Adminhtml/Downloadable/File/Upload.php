@@ -11,6 +11,23 @@ use Magento\Framework\Controller\ResultFactory;
 class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
 {
     /**
+     * @var \Magento\Downloadable\Model\Link
+     */
+    protected $_link;
+
+    /**
+     * @var \Magento\Downloadable\Model\Sample
+     */
+    protected $_sample;
+
+    /**
+     * Downloadable file helper.
+     *
+     * @var \Magento\Downloadable\Helper\File
+     */
+    protected $_fileHelper;
+
+    /**
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     private $uploaderFactory;
@@ -39,7 +56,10 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\MediaStorage\Helper\File\Storage\Database $storageDatabase
     ) {
-        parent::__construct($context, $link, $sample, $fileHelper);
+        parent::__construct($context);
+        $this->_link = $link;
+        $this->_sample = $sample;
+        $this->_fileHelper = $fileHelper;
         $this->uploaderFactory = $uploaderFactory;
         $this->storageDatabase = $storageDatabase;
     }
