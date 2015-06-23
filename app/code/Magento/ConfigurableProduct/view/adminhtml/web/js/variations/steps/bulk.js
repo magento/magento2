@@ -35,12 +35,6 @@ define([
                 attribute: ko.observable()
             }
         ]),
-        getOptions: function (attribute) {
-            if(this.attributes().length > 0 && attribute()) {
-                return this.attributes.findWhere({id:attribute()}).options;
-            }
-            return [];
-        },
         render: function (wizard) {
             viewModel.prototype.attributes(wizard.data.attributesValues);
             viewModel.prototype.attributes.each(function (attribute) {
