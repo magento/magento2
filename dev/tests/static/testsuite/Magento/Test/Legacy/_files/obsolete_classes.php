@@ -3670,7 +3670,6 @@ return [
     ['Magento\GoogleShopping\Block\Adminhtml\Captcha'],
     ['Magento\GoogleShopping\Block\Adminhtml\Items'],
     ['Magento\GoogleShopping\Block\Adminhtml\Types'],
-    ['Magento\GoogleShopping\Block\SiteVerification'],
     ['Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items\ConfirmCaptcha'],
     ['Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items\Grid'],
     ['Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items\Index'],
