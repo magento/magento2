@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * This file contains errors that will fail schema validation.
+ *
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Indexer/etc/indexer.xsd">
+    <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="NotAClass">
+        <title translate="true">Test Indexer Declaration</title>
+        <description translate="true">Invalid handler attribute value</description>
+        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" source="tableSource" handler="Magento\Handler\Class" xsi:type="searchable"/>
+            <field name="name" source="Magento\Source\Class" handler="defaultHandler" xsi:type="both"/>
+        </fieldset>
+        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
+    </indexer>
+ </config>

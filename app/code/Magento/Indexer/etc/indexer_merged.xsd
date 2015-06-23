@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="indexer_types.xsd"/>
+    <xs:element name="config" type="configType">
+        <xs:unique name="uniqueIndexertId">
+            <xs:annotation>
+                <xs:documentation>
+                    Indexer Id must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="indexer" />
+            <xs:field xpath="@id" />
+            <xs:field xpath="@view_id" />
+        </xs:unique>
+        <xs:unique name="uniqueViewId">
+            <xs:annotation>
+                <xs:documentation>
+                    Indexer Id must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="indexer" />
+            <xs:field xpath="@view_id" />
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="configType">
+        <xs:sequence>
+            <xs:element ref="indexer"  minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="indexer" type="indexerType">
+        <xs:unique name="fieldsetKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Fieldset name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:keyref name="fieldsetReference" refer="fieldsetKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Field fieldset key must exists.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset/reference"/>
+            <xs:field xpath="@fieldset"/>
+        </xs:keyref>
+    </xs:element>
+</xs:schema>

@@ -98,12 +98,14 @@ class Template
             return $this->cachedTemplates[$hash];
         }
 
-        $this->cachedTemplates[$hash] = $this->readerFactory->create(
+        $reader = $this->readerFactory->create(
             [
                 'fileCollector' => $this->aggregatedFileCollectorFactory->create(['searchPattern' => $template]),
                 'domMerger' => $this->domMerger
             ]
-        )->getContent();
+        );
+        $reader->read();
+        $this->cachedTemplates[$hash] = $reader->getContent();
         $this->cache->save(serialize($this->cachedTemplates), static::CACHE_ID);
 
         return $this->cachedTemplates[$hash];

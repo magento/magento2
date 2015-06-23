@@ -92,6 +92,7 @@
     <type name="Magento\Ui\Model\Manager">
         <arguments>
             <argument name="domMerger" xsi:type="object">uiConfigurationDomMerger</argument>
+            <argument name="componentConfigProvider" xsi:type="object">Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition\Proxy</argument>
         </arguments>
     </type>
     <virtualType name="uiTemplateDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">

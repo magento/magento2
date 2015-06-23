@@ -9,14 +9,16 @@
     <indexer id="indexer_1" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration 1</title>
         <description translate="true">Test Indexer Declaration 1</description>
-        <fields handler="Magento\Framework\Search\Index\Fields\Handler">
-            <field name="title" origin="table_name.field_name" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="both">
+        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="title" source="tableSource" handler="default" xsi:type="both">
                 <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
             </field>
-            <field name="description" origin="table_name.field_name" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="match">
+            <field name="description" source="tableSource" handler="default" xsi:type="searchable">
                 <filter class="Magento\Framework\Search\Index\Filter\LowercaseFilter"/>
             </field>
-            <field name="visibility" origin="table_name.field_name" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="filter" dataType="int" />
-        </fields>
+            <field name="visibility" source="tableSource" handler="default" xsi:type="filterable" dataType="int" />
+        </fieldset>
+        <source class="Magento\Framework\Search\Index\Source\Class" name="tableSource"/>
+        <handler class="Magento\Framework\Search\Index\Field\Handler\Class" name="default"/>
     </indexer>
 </config>
