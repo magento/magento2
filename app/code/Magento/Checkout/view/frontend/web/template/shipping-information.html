@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-        
+
 <!-- ko if: (isVisible()) -->
 <div class="shipping-information">
     <div class="ship-to">
@@ -15,7 +15,7 @@
             </button>
         </div>
         <div class="shipping-information-content">
-            <!-- ko foreach: getRegion('ship-via') -->
+            <!-- ko foreach: getRegion('ship-to') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
