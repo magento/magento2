@@ -8,6 +8,10 @@ namespace Magento\Reports\Test\Unit\Model\Resource\Report\Product;
 
 use Magento\Reports\Model\Resource\Report\Product\Viewed;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ViewedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -91,7 +95,8 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     protected $flagMock;
 
     /**
-     * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
      */
     protected function setUp()
     {
