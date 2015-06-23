@@ -5,10 +5,17 @@
 define([
     'underscore',
     'mageUtils',
+    'uiLayout',
     'Magento_Ui/js/lib/collapsible'
-], function (_, utils, Collapsible) {
+], function (_, utils, layout, Collapsible) {
     'use strict';
 
+    /**
+     * Extracts and formats preview of an element.
+     *
+     * @param {Object} elem - Element whose preview should be extracted.
+     * @returns {Object} Formatted data.
+     */
     function extractPreview(elem) {
         return {
             label: elem.label,
@@ -39,6 +46,11 @@ define([
             filters: {
                 placeholder: true
             },
+            chipsConfig: {
+                name: '${ $.name }_chips',
+                provider: '${ $.chipsConfig.name }',
+                component: 'Magento_Ui/js/grid/filters/chips'
+            },
             listens: {
                 active: 'extractPreviews',
                 applied: 'cancel extractActive'
@@ -48,6 +60,9 @@ define([
             },
             exports: {
                 applied: '${ $.provider }:params.filters'
+            },
+            modules: {
+                chips: '${ $.chipsConfig.name || $.chipsConfig.provider }'
             }
         },
 
@@ -58,6 +73,7 @@ define([
          */
         initialize: function () {
             this._super()
+                .initChips()
                 .cancel()
                 .extractActive();
 
@@ -75,6 +91,19 @@ define([
                     active: [],
                     previews: []
                 });
+
+            return this;
+        },
+
+        /**
+         * Initializes chips component.
+         *
+         * @returns {Filters} Chainable.
+         */
+        initChips: function () {
+            layout([this.chipsConfig]);
+
+            this.chips('insertChild', this.name);
 
             return this;
         },
