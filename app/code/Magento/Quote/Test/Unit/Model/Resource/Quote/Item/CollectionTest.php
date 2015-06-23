@@ -77,7 +77,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->collection = $objectManager->getObject(
-            '\Magento\Quote\Model\Resource\Quote\Item\Collection',
+            'Magento\Quote\Model\Resource\Quote\Item\Collection',
             [
                 'entityFactory' => $this->entityFactoryMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
