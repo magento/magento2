@@ -8,10 +8,8 @@
 
 namespace Magento\Checkout\Test\Unit\Helper;
 
-use \Magento\Checkout\Helper\Data;
-
+use Magento\Checkout\Helper\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,17 +36,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_checkoutSession;
+    protected $_checkoutSession;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_scopeConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_collectionFactory;
+    protected $_collectionFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -74,50 +72,50 @@ class DataTest extends \PHPUnit_Framework_TestCase
                             'checkout/payment_failed/template',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
-                            'fixture_email_template_payment_failed'
+                            'fixture_email_template_payment_failed',
                         ],
                         [
                             'checkout/payment_failed/receiver',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
-                            'sysadmin'
+                            'sysadmin',
                         ],
                         [
                             'trans_email/ident_sysadmin/email',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
-                            'sysadmin@example.com'
+                            'sysadmin@example.com',
                         ],
                         [
                             'trans_email/ident_sysadmin/name',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
-                            'System Administrator'
+                            'System Administrator',
                         ],
                         [
                             'checkout/payment_failed/identity',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
-                            'noreply@example.com'
+                            'noreply@example.com',
                         ],
                         [
                             'carriers/ground/title',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
-                            'Ground Shipping'
+                            'Ground Shipping',
                         ],
                         [
                             'payment/fixture-payment-method/title',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
-                            'Check Money Order'
+                            'Check Money Order',
                         ],
                         [
                             'checkout/options/onepage_checkout_enabled',
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
-                            'One Page Checkout'
-                        ]
+                            'One Page Checkout',
+                        ],
                     ]
                 )
             );
@@ -148,7 +146,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setTemplateOptions'
         )->with(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 8]
+            [
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ]
         )->will(
             $this->returnSelf()
         );
@@ -200,7 +201,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'shippingMethod' => 'Ground Shipping',
                 'paymentMethod' => 'Check Money Order',
                 'items' => "Product One  x 2  USD 10<br />\nProduct Two  x 3  USD 60<br />\n",
-                'total' => 'USD 70'
+                'total' => 'USD 70',
             ]
         )->will(
             $this->returnSelf()
@@ -239,8 +240,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'payment' => new \Magento\Framework\Object(['method' => 'fixture-payment-method']),
                 'all_visible_items' => [
                     new \Magento\Framework\Object(['product' => $productOne, 'qty' => 2]),
-                    new \Magento\Framework\Object(['product' => $productTwo, 'qty' => 3])
-                ]
+                    new \Magento\Framework\Object(['product' => $productTwo, 'qty' => 3]),
+                ],
             ]
         );
         $this->assertSame($this->_helper, $this->_helper->sendPaymentFailedEmail($quote, 'test message'));
