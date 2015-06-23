@@ -61,14 +61,37 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $tableName = 'index_table_name';
-        $dimensions = [3,5,1];
+        $dimensions = [
+            'index_table_name_scope_3' => $this->createDimensionMock('scope', 3),
+            'index_table_name_scope_5' => $this->createDimensionMock('scope', 5),
+            'index_table_name_scope_1' => $this->createDimensionMock('scope', 1),
+        ];
         $position = 0;
-        foreach ($dimensions as $dimension) {
-            $position = $this->mockDropTable($position, $tableName . $dimension, true);
-            $position = $this->mockDropTable($position, $tableName . $dimension . '_fulltext', true);
+        foreach ($dimensions as $table => $dimension) {
+            $position = $this->mockDropTable($position, $table, true);
+            $position = $this->mockDropTable($position, $table . '_fulltext', true);
         }
 
         $this->target->delete($tableName, $dimensions);
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    private function createDimensionMock($name, $value)
+    {
+        $dimension = $this->getMockBuilder('\Magento\Framework\Search\Request\Dimension')
+            ->setMethods(['getName', 'getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dimension->expects($this->any())
+            ->method('getName')
+            ->willReturn($name);
+        $dimension->expects($this->any())
+            ->method('getValue')
+            ->willReturn($value);
+        return $dimension;
     }
 
     private function mockDropTable($callNumber, $tableName, $isTableExist)
@@ -105,17 +128,28 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 'size' => 'fieldSize3',
             ]
         ];
-        $table = 'index_table_name';
-        $dimensions = [3,5,1];
+        $tableName = 'index_table_name';
+        $dimensions = [
+            'index_table_name_scope_3' => $this->createDimensionMock('scope', 3),
+            'index_table_name_scope_5' => $this->createDimensionMock('scope', 5),
+            'index_table_name_scope_1' => $this->createDimensionMock('scope', 1),
+        ];
         $position = 0;
-        foreach ($dimensions as $dimension) {
-            $tableName = $table . $dimension;
-            $fulltextTableName = $tableName . '_fulltext';
-            $position = $this->mockFulltextTable($position, $fulltextTableName, true);
-            $position = $this->mockFlatTable($position, $tableName, $fields);
+        foreach ($dimensions as $table => $dimension) {
+//            $position = $this->mockDropTable($position, $table, true);
+//            $position = $this->mockDropTable($position, $table . '_fulltext', true);
+            $position = $this->mockFulltextTable($position, $table . '_fulltext', true);
+            $position = $this->mockFlatTable($position, $table, $fields);
         }
+//        $position = 0;
+//        foreach ($dimensions as $dimension) {
+//            $tableName = $table . $dimension;
+//            $fulltextTableName = $tableName . '_fulltext';
+//            $position = $this->mockFulltextTable($position, $fulltextTableName, true);
+//            $position = $this->mockFlatTable($position, $tableName, $fields);
+//        }
 
-        $this->target->create($table, $fields, $dimensions);
+        $this->target->create($tableName, $fields, $dimensions);
     }
 
     private function mockFlatTable($callNumber, $tableName, array $fields)
@@ -160,16 +194,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 Table::TYPE_INTEGER,
                 10,
                 ['unsigned' => true, 'nullable' => false],
-                'Product ID'
-            )->willReturnSelf();
-        $table->expects($this->at(0))
-            ->method('addColumn')
-            ->with(
-                'entity_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false],
-                'Product ID'
+                'Entity ID'
             )->willReturnSelf();
         $table->expects($this->at(1))
             ->method('addColumn')

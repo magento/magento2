@@ -7,56 +7,56 @@
 namespace Magento\Indexer\Model;
 
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Search\Request\Dimension;
 
 class IndexStructure
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     private $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(Resource $resource)
     {
         $this->resource = $resource;
     }
 
     /**
      * @param string $table
-     * @param array $dimensions
+     * @param Dimension[] $dimensions
      */
     public function delete($table, array $dimensions)
     {
         $adapter = $this->getAdapter();
         foreach ($dimensions as $dimension) {
-            $tableName = $table . $dimension;
-            $this->dropTable($adapter, $tableName);
-            $this->dropTable($adapter, $this->getFulltextTableName($tableName));
+            $this->dropTable($adapter, $this->getFlatTableName($table, $dimension));
+            $this->dropTable($adapter, $this->getFulltextTableName($table, $dimension));
         }
     }
 
     /**
      * @param string $table
      * @param array $filterFields
-     * @param array $dimensions
+     * @param Dimension[] $dimensions
      */
     public function create($table, array $filterFields, array $dimensions)
     {
         foreach ($dimensions as $dimension) {
-            $tableName = $table . $dimension;
-            $this->createFulltextIndex($this->getFulltextTableName($tableName));
+            $this->createFulltextIndex($this->getFulltextTableName($table, $dimension));
             if ($filterFields) {
-                $this->createFlatIndex($tableName, $filterFields);
+                $this->createFlatIndex($this->getFlatTableName($table, $dimension), $filterFields);
             }
         }
     }
 
     /**
-     * @param $tableName
+     * @param string $tableName
      * @throws \Zend_Db_Exception
      */
     protected function createFulltextIndex($tableName)
@@ -93,11 +93,11 @@ class IndexStructure
     }
 
     /**
-     * @param $tableName
-     * @param $fields
+     * @param string $tableName
+     * @param array $fields
      * @throws \Zend_Db_Exception
      */
-    protected function createFlatIndex($tableName, $fields)
+    protected function createFlatIndex($tableName, array $fields)
     {
         $adapter = $this->getAdapter();
         $table = $adapter->newTable($tableName);
@@ -132,11 +132,23 @@ class IndexStructure
     }
 
     /**
-     * @param $tableName
+     * @param $table
+     * @param Dimension $dimension
      * @return string
      */
-    private function getFulltextTableName($tableName)
+    private function getFulltextTableName($table, Dimension $dimension)
     {
-        return $tableName . '_fulltext';
+        return $this->getFlatTableName($table, $dimension) . '_fulltext';
+    }
+
+    /**
+     * @param string $table
+     * @param Dimension $dimension
+     * @return string
+     */
+    private function getFlatTableName($table, Dimension $dimension)
+    {
+        $tableName = $table . '_' . $dimension->getName() . '_' . $dimension->getValue();
+        return $tableName;
     }
 }
