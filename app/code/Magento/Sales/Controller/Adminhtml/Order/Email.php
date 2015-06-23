@@ -29,4 +29,12 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::email');
+    }
 }

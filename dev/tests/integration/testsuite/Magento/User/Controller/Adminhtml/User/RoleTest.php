@@ -10,7 +10,7 @@ namespace Magento\User\Controller\Adminhtml\User;
  *
  * @magentoAppArea adminhtml
  */
-class RoleTest extends \Magento\Backend\Utility\Controller
+class RoleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testEditRoleAction()
     {
