@@ -11,6 +11,8 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Search\Model\ScopeResolver\FlatScopeResolver;
+use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure
 {
@@ -18,26 +20,39 @@ class IndexStructure
      * @var Resource
      */
     private $resource;
+    /**
+     * @var IndexScopeResolver
+     */
+    private $indexScopeResolver;
+    /**
+     * @var FlatScopeResolver
+     */
+    private $flatScopeResolver;
 
     /**
-     * @param Resource $resource
+     * @param Resource|Resource $resource
+     * @param IndexScopeResolver $indexScopeResolver
+     * @param FlatScopeResolver $flatScopeResolver
      */
-    public function __construct(Resource $resource)
-    {
+    public function __construct(
+        Resource $resource,
+        IndexScopeResolver $indexScopeResolver,
+        FlatScopeResolver $flatScopeResolver
+    ) {
         $this->resource = $resource;
+        $this->indexScopeResolver = $indexScopeResolver;
+        $this->flatScopeResolver = $flatScopeResolver;
     }
 
     /**
-     * @param string $table
+     * @param string $index
      * @param Dimension[] $dimensions
      */
-    public function delete($table, array $dimensions)
+    public function delete($index, array $dimensions)
     {
         $adapter = $this->getAdapter();
-        foreach ($dimensions as $dimension) {
-            $this->dropTable($adapter, $this->getFlatTableName($table, $dimension));
-            $this->dropTable($adapter, $this->getFulltextTableName($table, $dimension));
-        }
+        $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
+        $this->dropTable($adapter, $this->flatScopeResolver->resolve($index, $dimensions));
     }
 
     /**
@@ -47,11 +62,9 @@ class IndexStructure
      */
     public function create($table, array $filterFields, array $dimensions)
     {
-        foreach ($dimensions as $dimension) {
-            $this->createFulltextIndex($this->getFulltextTableName($table, $dimension));
-            if ($filterFields) {
-                $this->createFlatIndex($this->getFlatTableName($table, $dimension), $filterFields);
-            }
+        $this->createFulltextIndex($this->indexScopeResolver->resolve($table, $dimensions));
+        if ($filterFields) {
+            $this->createFlatIndex($this->flatScopeResolver->resolve($table, $dimensions), $filterFields);
         }
     }
 
@@ -129,26 +142,5 @@ class IndexStructure
         if ($adapter->isTableExists($tableName)) {
             $adapter->dropTable($tableName);
         }
-    }
-
-    /**
-     * @param $table
-     * @param Dimension $dimension
-     * @return string
-     */
-    private function getFulltextTableName($table, Dimension $dimension)
-    {
-        return $this->getFlatTableName($table, $dimension) . '_fulltext';
-    }
-
-    /**
-     * @param string $table
-     * @param Dimension $dimension
-     * @return string
-     */
-    private function getFlatTableName($table, Dimension $dimension)
-    {
-        $tableName = $table . '_' . $dimension->getName() . '_' . $dimension->getValue();
-        return $tableName;
     }
 }
