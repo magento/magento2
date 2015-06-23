@@ -43,7 +43,7 @@ define([
             providerConfig: {
                 provider: '${ $.providerConfig.name }',
                 name: '${ $.name }_provider',
-                component: 'Magento_Ui/js/grid/search/provider'
+                component: 'Magento_Ui/js/grid/search/options-provider'
             },
             imports: {
                 options: '${ $.providerConfig.provider }:options'

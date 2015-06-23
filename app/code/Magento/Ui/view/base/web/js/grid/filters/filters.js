@@ -62,7 +62,7 @@ define([
                 applied: '${ $.provider }:params.filters'
             },
             modules: {
-                chips: '${ $.chipsConfig.name || $.chipsConfig.provider }'
+                chips: '{ $.chipsConfig.provider }'
             }
         },
 
