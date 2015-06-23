@@ -75,8 +75,6 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     {
         if (empty($code)) {
             $store = $this->_storeManager->getStore();
-        } elseif (($code == ScopeConfigInterface::SCOPE_TYPE_DEFAULT)) {
-            $store = $this->_storeManager->getDefaultStoreView();
         } else {
             $store = $this->_storeFactory->create();
             $store->load($code);
