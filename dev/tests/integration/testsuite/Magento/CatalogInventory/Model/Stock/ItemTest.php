@@ -89,6 +89,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertEquals('invalid', $indexerProcessor->getIndexer()->getStatus());
+
+        $indexer->setScheduled(false);
+        $indexer->getState()->setStatus(State::STATUS_VALID)->save();
     }
 
     /**
