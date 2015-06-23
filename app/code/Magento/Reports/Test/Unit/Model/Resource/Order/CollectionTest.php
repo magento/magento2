@@ -8,6 +8,9 @@ namespace Magento\Reports\Test\Unit\Model\Resource\Order;
 
 use Magento\Reports\Model\Resource\Order\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
