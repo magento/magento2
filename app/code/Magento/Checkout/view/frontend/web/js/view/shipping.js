@@ -103,8 +103,6 @@ define(
                 this.isFormPopUpVisible.subscribe(function(value) {
                     if (value) {
                         self.getPopUp().openModal();
-                    } else {
-                        self.getPopUp().closeModal();
                     }
                 });
 
@@ -123,19 +121,20 @@ define(
                     var buttons = this.popUpForm.options.buttons;
                     this.popUpForm.options.buttons = [
                         {
-                            text: buttons.save.text ? buttons.save.text : 'Save Address',
+                            text: buttons.save.text ? buttons.save.text : $t('Save Address'),
                             class: buttons.save.class ? buttons.save.class : 'action primary action-save-address',
                             click: self.saveNewAddress.bind(self)
                         },
                         {
-                            text: buttons.cancel.text ? buttons.cancel.text: 'Cancel',
+                            text: buttons.cancel.text ? buttons.cancel.text: $t('Cancel'),
                             class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
-                            click: self.hideFormPopUp.bind(self)
+                            click: function() {
+                                this.closeModal();
+                            }
                         }
                     ];
-                    this.popUpForm.options.modalCloseBtnCallback = {
-                        callback: self.hideFormPopUp.bind(self),
-                        context: self
+                    this.popUpForm.options.closed = function() {
+                        self.isFormPopUpVisible(false);
                     };
                     popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
                 }
@@ -147,10 +146,6 @@ define(
                 this.isFormPopUpVisible(true);
             },
 
-            /** Hide address form popup */
-            hideFormPopUp: function() {
-                this.isFormPopUpVisible(false);
-            },
 
             /** Save new shipping address */
             saveNewAddress: function() {
@@ -163,7 +158,7 @@ define(
 
                     // New address must be selected as a shipping address
                     selectShippingAddress(createShippingAddress(addressData));
-                    this.isFormPopUpVisible(false);
+                    this.getPopUp().closeModal();
                     this.isNewAddressAdded(true);
                 }
             },
@@ -234,7 +229,9 @@ define(
                         }
                     }
 
-                    shippingAddress.save_in_address_book = this.saveInAddressBook;
+                    if (customer.isLoggedIn()) {
+                        shippingAddress.save_in_address_book = true;
+                    }
                     selectShippingAddress(shippingAddress);
                 }
                 return true;
