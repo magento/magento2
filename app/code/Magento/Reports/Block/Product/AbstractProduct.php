@@ -98,7 +98,6 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
-     * @codeCoverageIgnore
      *
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */
