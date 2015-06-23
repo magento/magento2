@@ -84,7 +84,7 @@ define([
                 return this.waitParent(node, name);
             }
 
-            if (node.template) {
+            if (node.nodeTemplate) {
                 return this.waitTemplate.apply(this, arguments);
             }
 
@@ -154,7 +154,7 @@ define([
         waitTemplate: function (parent, node) {
             var args = _.toArray(arguments);
 
-            templates.get(node.template, function () {
+            templates.get(node.nodeTemplate, function () {
                 this.applyTemplate.apply(this, args);
             }.bind(this));
 
@@ -172,11 +172,11 @@ define([
         },
 
         applyTemplate: function (parent, node, name) {
-            var template = templates.get(node.template);
+            var template = templates.get(node.nodeTemplate);
 
             node = utils.extend({}, template, node);
 
-            delete node.template;
+            delete node.nodeTemplate;
 
             this.process(parent, node, name);
         }
