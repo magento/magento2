@@ -5,6 +5,7 @@
  */
 
 /** @var $product \Magento\Catalog\Model\Product */
+echo "Start products  creation";
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
@@ -325,3 +326,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         ]
     )
     ->save();
+
+echo "Products creation complete";
