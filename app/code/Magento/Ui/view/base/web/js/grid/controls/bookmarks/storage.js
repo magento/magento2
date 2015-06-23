@@ -28,7 +28,7 @@ define([
          * Delegates call to the localStorage adapter.
          */
         get: function () {
-            return storage.get.apply(storage, arguments);
+            return {};
         },
 
         /**
