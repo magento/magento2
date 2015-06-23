@@ -109,6 +109,11 @@ class Form extends FormInterface
     protected $taxClassMultiSelectList = ".//*[contains(@class, 'tax_%s_class')]//*[@class='block mselect-list']";
 
     /**
+     * Count of try for fill new tax class input.
+     */
+    const MAX_TRY_COUNT = 3;
+
+    /**
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
@@ -212,23 +217,38 @@ class Form extends FormInterface
         foreach ($taxClasses as $taxClass) {
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
-                $element->waitUntil(
-                    function () use ($element, $taxClass) {
-                        $input = $element->find($this->addNewInput);
-                        if ($input->isVisible()) {
-                            $input->click();
-                            $input->setValue($taxClass);
-                            $element->find($this->saveButton)->click();
-                            $this->waitUntilOptionIsVisible($element, $taxClass);
-                            return true;
-                        } else {
-                            $this->clickAddNewButton($element);
-                            return null;
-                        }
-                    }
-                );
+                $this->setNewTaxClassName($element, $taxClass);
             }
         }
+    }
+
+    /**
+     * Set new tax class name.
+     *
+     * @param SimpleElement $element
+     * @param string $taxClass
+     * @throws \Exception
+     * @return void
+     */
+    protected function setNewTaxClassName(SimpleElement $element, $taxClass)
+    {
+        $count = 0;
+        do {
+            try {
+                $this->clickAddNewButton($element);
+                $input = $element->find($this->addNewInput);
+                $input->click();
+                $input->setValue($taxClass);
+                $element->find($this->saveButton)->click();
+                $this->waitUntilOptionIsVisible($element, $taxClass);
+                return;
+            } catch (\Exception $e) {
+                // In parallel run on windows change the focus is lost on element
+                $count++;
+            }
+        } while ($count < self::MAX_TRY_COUNT);
+
+        throw new \Exception("Multiple rewrites detected:\n" . $e);
     }
 
     /**
