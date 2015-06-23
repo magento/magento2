@@ -10,7 +10,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Indexer\Model\IndexStructure;
-use Magento\Indexer\Model\SaveHandler\Batch;
 
 class TwoTables implements IndexerInterface
 {
