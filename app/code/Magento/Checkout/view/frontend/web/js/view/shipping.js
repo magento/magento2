@@ -234,7 +234,9 @@ define(
                         }
                     }
 
-                    shippingAddress.save_in_address_book = this.saveInAddressBook;
+                    if (customer.isLoggedIn()) {
+                        shippingAddress.save_in_address_book = true;
+                    }
                     selectShippingAddress(shippingAddress);
                 }
                 return true;
