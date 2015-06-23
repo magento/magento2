@@ -68,7 +68,7 @@ class IndexStructure
                 Table::TYPE_INTEGER,
                 10,
                 ['unsigned' => true, 'nullable' => false],
-                'Product ID'
+                'Entity ID'
             )->addColumn(
                 'attribute_id',
                 Table::TYPE_INTEGER,
