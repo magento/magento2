@@ -5,8 +5,6 @@
  */
 namespace Magento\Email\Test\Unit\Model;
 
-use Magento\Email\Model\Template\Filter;
-
 /**
  * Covers \Magento\Email\Model\Template
  *
@@ -208,7 +206,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOrigTemplateVariables,
         $expectedTemplateStyles
     ) {
-        $model = $this->getModelMock();
+        $model = $this->getModelMock([
+            'getDesignParams',
+        ]);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'Magento/blank',
+            'locale' => \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE,
+        ];
+
+        $model->expects($this->once())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
 
         $templateId = 'templateId';
 
@@ -237,7 +247,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MODULES)
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::ROOT)
             ->will($this->returnValue($modulesDir));
 
         $model->loadDefault($templateId);
