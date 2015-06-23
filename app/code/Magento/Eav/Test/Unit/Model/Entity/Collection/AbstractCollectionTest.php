@@ -7,6 +7,11 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 
 use Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub;
 
+/**
+ * AbstractCollection test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**

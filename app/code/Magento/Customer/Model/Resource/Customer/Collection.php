@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Resource\Customer;
  * Customers collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
@@ -43,7 +44,6 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
