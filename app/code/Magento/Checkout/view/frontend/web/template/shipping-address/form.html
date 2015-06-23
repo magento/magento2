@@ -13,7 +13,7 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
         <!-- ko if: (isCustomerLoggedIn) -->
-        <div class="field choice">
+        <div class="field choice" data-bind="visible: !isFormInline">
             <input type="checkbox" class="checkbox" id="shipping-save-in-address-book" data-bind="checked: saveInAddressBook" />
             <label class="label" for="shipping-save-in-address-book">
                 <span data-bind="text: $t('Save in address book')"></span>
