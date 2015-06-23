@@ -4,8 +4,8 @@
  */
 define([
     'underscore',
-    'mageUtils',
     'uiRegistry',
+    'mageUtils',
     'Magento_Ui/js/lib/collapsible',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
