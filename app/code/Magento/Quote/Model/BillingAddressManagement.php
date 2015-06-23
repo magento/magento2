@@ -87,6 +87,8 @@ class BillingAddressManagement implements BillingAddressManagementInterface
                 $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData);
                 $shippingAddress->setSaveInAddressBook($saveInAddressBook);
             }
+        } elseif ($quote->getCustomerId()) {
+            $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSaveInAddressBook($saveInAddressBook);
         $quote->setBillingAddress($address);
