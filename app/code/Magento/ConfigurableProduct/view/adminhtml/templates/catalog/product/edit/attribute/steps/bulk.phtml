@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. each rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@
         and pricing for your new products.') ?></span>
     </div>
     <div data-bind="foreach:sections">
-        <div data-role="section">
+        <div data-role="section" style="margin-top: 20px;">
             <div style="float: left; border: 0px" data-bind="text: label"></div>
             <div style="border-bottom: 1px solid gray; clear: both;"></div>
             <ul style="list-style-type: none; margin-top: 10px;">
@@ -38,23 +38,32 @@
                     </label>
                 </li>
             </ul>
-            <div data-bind="visible: type() == 'single'">
+            <div data-bind="visible: type() == 'single'"
+                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                >
                 <label>
                     <span data-bind="text:label"></span>
                     <input type="text" data-bind="value:value">
                 </label>
             </div>
             <div data-bind="visible: type() == 'each'">
-                <select
-                    data-bind="options: $parent.attributes(), optionsText: 'label', optionsValue: 'id',
-                    value: attribute, optionsCaption: 'Select'"></select>
-                <ul data-bind="foreach: $parent.getOptions(attribute)">
-                    <li>
+                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
+                    options: $parent.attributes(),
+                    optionsText: 'label',
+                    value: attribute,
+                    optionsCaption: 'Select'"
+                ></select>
+                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                    data-bind="if:attribute"
+                    >
+                    <!-- ko foreach: attribute().options -->
+                    <li style="margin-left: 15px;">
                         <label>
                             <span data-bind="text:label"></span>
                             <input type="text" data-bind="value:sections()[$parent.label]">
                         </label>
                     </li>
+                    <!-- /ko -->
                 </ul>
             </div>
         </div>
