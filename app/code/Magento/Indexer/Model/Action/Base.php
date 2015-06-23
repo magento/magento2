@@ -93,7 +93,7 @@ class Base implements ActionInterface
     protected $saveHandlerPool;
 
     /**
-     * @var string
+     * @var HandlerInterface
      */
     protected $defaultHandler;
 
@@ -114,7 +114,7 @@ class Base implements ActionInterface
      * @param SaveHandlerPool $saveHandlerPool
      * @param FieldsetPool $fieldsetPool
      * @param StdString $string
-     * @param string $defaultHandler
+     * @param \Magento\Indexer\Model\HandlerInterface $defaultHandler
      * @param array $data
      */
     public function __construct(
@@ -124,7 +124,7 @@ class Base implements ActionInterface
         SaveHandlerPool $saveHandlerPool,
         FieldsetPool $fieldsetPool,
         StdString $string,
-        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
+        HandlerInterface $defaultHandler,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -393,7 +393,6 @@ class Base implements ActionInterface
      */
     protected function prepareFields()
     {
-        $defaultHandler = $this->handlerPool->get($this->defaultHandler);
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             if (isset($fieldset['class'])) {
@@ -404,7 +403,7 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     isset($field['handler'])
                         ? $this->handlerPool->get($field['handler'])
-                        : $defaultHandler;
+                        : $this->defaultHandler;
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
                     isset($field['dataType']) ? $field['dataType'] : 'varchar';
             }
