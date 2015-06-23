@@ -8,6 +8,9 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Download sample file controller
+ */
 class Download extends ImportController
 {
     const SAMPLE_FILES_DIRECTORY = 'Magento/ImportExport/Files/Sample/';
@@ -17,7 +20,9 @@ class Download extends ImportController
      */
     protected $resultRawFactory;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
     protected $fileDirectory;
 
     /**
@@ -43,7 +48,7 @@ class Download extends ImportController
     /**
      * Download sample file action
      *
-     * @return void|\Magento\Backend\App\Action
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
