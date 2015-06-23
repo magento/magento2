@@ -40,15 +40,21 @@ define([
             }
             var self = this;
             $(event.handleObj.selector).each(function(index, element){
-                if ($(element).attr('type') == 'text') {
+                if ($(element).is('input[type=text]')
+                    || $(element).is('textarea')) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                     return;
                 }
-                if ($(element).is(':checked') || $(element).find(':checked').length) {
+                if ($(element).is('input[type=file]')) {
+                    var hidden = $('input[name=' + $(element).attr('name') + '_action]');
+                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(hidden));
+                    return;
+                }
+                if ($(element).is(':checked')
+                    || $(element).find(':checked').length) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                 }
             });
-
             this._updateAddToWishlistButton(dataToAdd);
             event.stopPropagation();
         },
@@ -90,7 +96,9 @@ define([
                     data[elementName + '[' + option + ']'] = option;
                 });
             } else {
-                data[elementName] = elementValue;
+                if (elementValue) {
+                    data[elementName] = elementValue;
+                }
             }
             return data;
         },
