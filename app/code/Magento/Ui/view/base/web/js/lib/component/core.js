@@ -24,7 +24,9 @@ define([
                 namespace: '${ $.name }',
                 path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
             },
-            additionalClasses: false
+            modules: {
+                storage: '${ $.storageConfig.provider }'
+            }
         },
 
         /**
@@ -38,7 +40,6 @@ define([
             this._super()
                 .initProperties()
                 .initObservable()
-                .initStorage()
                 .initModules()
                 .initUnique()
                 .initLinks()
@@ -67,17 +68,6 @@ define([
          */
         initObservable: function () {
             this.observe('elems');
-
-            return this;
-        },
-
-        /**
-         * Creates async wrapper on a specified storage component.
-         *
-         * @returns {Component} Chainable.
-         */
-        initStorage: function () {
-            this.storage = registry.async(this.storageConfig.provider);
 
             return this;
         },
@@ -207,27 +197,6 @@ define([
                 property = this.uniqueProp;
 
             this[property](active);
-        },
-
-        /**
-         * Provides classes of element as object used by knockout's css binding.
-         */
-        getStyles: function() {
-            var styles = {
-                required: this.required,
-                _error: this.error,
-                _disabled: this.disabled
-            };
-            if (typeof this.additionalClasses === 'string') {
-                var item,
-                    additionalClasses = this.additionalClasses.split(" ");
-                for (item in additionalClasses) {
-                    if (additionalClasses.hasOwnProperty(item)) {
-                        styles[additionalClasses[item]] = true;
-                    }
-                }
-            }
-            return styles;
         }
     };
 });

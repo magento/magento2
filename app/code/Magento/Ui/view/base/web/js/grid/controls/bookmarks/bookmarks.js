@@ -7,9 +7,8 @@ define([
     'mageUtils',
     'uiRegistry',
     'uiLayout',
-    './storage',
     'Magento_Ui/js/lib/collapsible'
-], function (_, utils, registry, layout, Storage, Collapsible) {
+], function (_, utils, registry, layout, Collapsible) {
     'use strict';
 
     /**
@@ -51,8 +50,9 @@ define([
                 }
             },
             storageConfig: {
-                provider: '${ $.storageConfig.namespace }.bookmarks.storage',
-                name: '${ $.storageConfig.provider }'
+                provider: '${ $.storageConfig.name }',
+                name: '${ $.name }_storage',
+                component: 'Magento_Ui/js/grid/controls/bookmarks/storage'
             },
             views: {
                 default: {
@@ -79,6 +79,8 @@ define([
             utils.limit(this, 'checkChanges', 50);
 
             this._super()
+                .restore()
+                .initStorage()
                 .initViews();
 
             return this;
@@ -102,11 +104,9 @@ define([
          * @returns {Bookmarks} Chainable.
          */
         initStorage: function () {
-            var storage = new Storage(this.storageConfig);
+            layout([this.storageConfig]);
 
-            registry.set(this.storageConfig.name, storage);
-
-            return this._super();
+            return this;
         },
 
         /**
