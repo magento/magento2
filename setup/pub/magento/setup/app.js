@@ -19,6 +19,8 @@ var app = angular.module(
         'install',
         'success',
         'updater-landing',
+        'component-upgrade',
+        'component-upgrade-success',
         'create-backup'
     ]);
 

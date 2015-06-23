@@ -177,5 +177,23 @@ return [
             'nav-bar'     => false,
             'order'       => 4,
         ],
+        [
+            'id'          => 'root.component-upgrade',
+            'url'         => 'component-upgrade',
+            'templateUrl' => "{$base}/component-upgrade",
+            'controller'  => 'componentUpgradeController',
+            'title'       => 'Component Upgrade',
+            'header'      => 'Step 3: Component Upgrade',
+            'nav-bar'     => true,
+            'order'       => 5,
+        ],
+        [
+            'id'          => 'root.component-upgrade-success',
+            'url'         => 'component-upgrade-success',
+            'templateUrl' => "{$base}/component-upgrade-success",
+            'controller'  => 'componentUpgradeSuccessController',
+            'order'       => 6,
+            'main'        => true
+        ],
     ]
 ];
