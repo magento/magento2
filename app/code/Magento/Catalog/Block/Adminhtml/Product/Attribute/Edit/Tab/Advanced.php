@@ -162,6 +162,18 @@ class Advanced extends Generic
             ]
         );
 
+        $fieldset->addField(
+            'is_used_in_grid',
+            'select',
+            [
+                'name' => 'is_used_in_grid',
+                'label' => __('To Show attribute in grid'),
+                'title' => __('To Show attribute in grid'),
+                'values' => $yesno,
+                'value' => $attributeObject->getData('is_used_in_grid') ?: 1,
+            ]
+        );
+
         if ($attributeObject->getId()) {
             $form->getElement('attribute_code')->setDisabled(1);
             if (!$attributeObject->getIsUserDefined()) {
