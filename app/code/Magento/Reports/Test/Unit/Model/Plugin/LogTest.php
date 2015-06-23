@@ -1,84 +1,86 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright � 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Test\Unit\Model\Plugin;
+
+use Magento\Reports\Model\Plugin\Log;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Reports\Model\Plugin\Log
      */
-    protected $model;
+    protected $log;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Event|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $reportEventMock;
+    protected $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cmpProductIdxMock;
+    protected $comparedMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Viewed|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewProductIdxMock;
+    protected $viewedMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Log\Model\Resource\Log|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Log\Model\Resource\Log|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
-        $this->reportEventMock = $this->getMock('Magento\Reports\Model\Event', [], [], '', false);
-        $this->cmpProductIdxMock = $this->getMock(
-            'Magento\Reports\Model\Product\Index\Compared',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->viewProductIdxMock = $this->getMock(
-            'Magento\Reports\Model\Product\Index\Viewed',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->eventMock = $this->getMockBuilder('Magento\Reports\Model\Event')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->comparedMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Compared')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->viewedMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Viewed')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->logResourceMock = $this->getMock('Magento\Log\Model\Resource\Log', [], [], '', false);
+        $this->logResourceMock = $this->getMockBuilder('Magento\Log\Model\Resource\Log')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->subjectMock = $this->getMockBuilder('Magento\Log\Model\Resource\Log')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->subjectMock = $this->getMock('Magento\Log\Model\Resource\Log', [], [], '', false);
-        $this->model = new \Magento\Reports\Model\Plugin\Log(
-            $this->reportEventMock,
-            $this->cmpProductIdxMock,
-            $this->viewProductIdxMock
+        $this->log = new Log(
+            $this->eventMock,
+            $this->comparedMock,
+            $this->viewedMock
         );
     }
 
     /**
-     * @covers \Magento\Reports\Model\Plugin\Log::afterClean
+     * @return void
      */
     public function testAfterClean()
     {
-        $this->reportEventMock->expects($this->once())->method('clean');
-
-        $this->cmpProductIdxMock->expects($this->once())->method('clean');
-
-        $this->viewProductIdxMock->expects($this->once())->method('clean');
+        $this->eventMock->expects($this->once())->method('clean');
+        $this->comparedMock->expects($this->once())->method('clean');
+        $this->viewedMock->expects($this->once())->method('clean');
 
         $this->assertEquals(
             $this->logResourceMock,
-            $this->model->afterClean($this->subjectMock, $this->logResourceMock)
+            $this->log->afterClean($this->subjectMock, $this->logResourceMock)
         );
     }
 }
