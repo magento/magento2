@@ -45,19 +45,18 @@ class TwoTables implements IndexerInterface
      */
     public function saveIndex(Dimension $dimension, \Traversable $documents)
     {
-        $fulltextIndexDocuments = [];
-        $flatIndexDocuments = [];
-        foreach ($documents as $document) {
-            if ($document['type'] === 'searchable') {
-                $fulltextIndexDocuments[] = $document;
-            } elseif ($document['type'] === 'filterable') {
-                $flatIndexDocuments[] = $document;
+        $indexDocuments = [];
+        foreach ($documents as $documentName => $documentValue) {
+            foreach ($documentValue as $fieldName => $fieldValue) {
+                $type = $this->getTypeByFieldName($fieldName);
+                $indexDocuments[$type][$documentName][$fieldName] = $fieldValue;
             }
         }
 
-        foreach ($fulltextIndexDocuments as $document) {
-            /** @var array $document */
-            $this->getAdapter()->insertArray($this->getTableName(), array_keys($document), array_values($document));
+        $tableName = $this->getTableName();
+        $dataTypes = ['searchable', 'filterable'];
+        foreach ($dataTypes as $dataType) {
+            $this->getAdapter()->insertMultiple($tableName, $indexDocuments[$dataType]);
         }
     }
 
@@ -110,6 +109,15 @@ class TwoTables implements IndexerInterface
      */
     private function getAdapter()
     {
-        return $this->resource->getConnectionByName(Resource::DEFAULT_WRITE_RESOURCE);
+        return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
+    }
+
+    /**
+     * @param string $fieldName
+     * @return string
+     */
+    private function getTypeByFieldName($fieldName)
+    {
+        return $this->data['fields'][$fieldName]['type'];
     }
 }
