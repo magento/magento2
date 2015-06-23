@@ -5,8 +5,17 @@
  */
 namespace Magento\Setup\Model\Cron\Queue;
 
+/**
+ * Queue content writer
+ */
 class Writer extends Reader
 {
+    /**
+     * Write JSON string into queue
+     *
+     * @param $data
+     * @return void
+     */
     public function write($data)
     {
         file_put_contents($this->queueFilePath, $data);

@@ -13,14 +13,37 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Upgrade job
+ */
 class JobUpgrade extends AbstractJob
 {
+    /**
+     * @var \Magento\Framework\App\Cache
+     */
     private $cache;
 
+    /**
+     * @var MaintenanceMode
+     */
     private $maintenanceMode;
 
+    /**
+     * @var \Magento\Framework\App\State\CleanupFiles
+     */
     private $cleanupFiles;
 
+    /**
+     * Constructor
+     *
+     * @param AbstractSetupCommand $command
+     * @param ObjectManagerProvider $objectManagerProvider
+     * @param MaintenanceMode $maintenanceMode
+     * @param OutputInterface $output
+     * @param Status $status
+     * @param $name
+     * @param array $params
+     */
     public function __construct(
         AbstractSetupCommand $command,
         ObjectManagerProvider $objectManagerProvider,
@@ -37,6 +60,11 @@ class JobUpgrade extends AbstractJob
         parent::__construct($command, $output, $status, $name, $params);
     }
 
+    /**
+     * Execute job
+     *
+     * @return void
+     */
     public function execute()
     {
         try {

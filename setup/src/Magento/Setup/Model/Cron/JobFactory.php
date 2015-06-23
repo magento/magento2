@@ -9,6 +9,9 @@ use Magento\Setup\Console\Command\UpgradeCommand;
 use Symfony\Component\Console\Output\StreamOutput;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Factory class to create jobs
+ */
 class JobFactory
 {
     const NAME_UPGRADE = 'setup:upgrade';
@@ -18,6 +21,11 @@ class JobFactory
      */
     private $serviceLocator;
 
+    /**
+     * Constructor
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;

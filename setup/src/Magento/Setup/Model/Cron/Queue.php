@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Model\Cron;
 
+/**
+ * Job Queue
+ */
 class Queue
 {
     /**#@+
@@ -44,6 +47,11 @@ class Queue
         $this->writer = $writer;
     }
 
+    /**
+     * Peek at job queue
+     *
+     * @return array
+     */
     public function peek()
     {
         $queue = json_decode($this->reader->read(), true);
