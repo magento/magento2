@@ -52,9 +52,15 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', [], [], '', false);
+        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
-        $this->subscriberFactory = $this->getMock('Magento\Newsletter\Model\SubscriberFactory', [], [], '', false);
+        $this->subscriberFactory = $this->getMock(
+            'Magento\Newsletter\Model\SubscriberFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->preview = $this->objectManagerHelper->getObject(
@@ -71,10 +77,12 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtml()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap([
-            ['id', null, 1],
-            ['store_id', null, 1]
-        ]);
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['id', null, 1],
+                ['store_id', null, 1]
+            ]
+        );
 
         $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
         $this->template->expects($this->atLeastOnce())->method('revertDesign');
@@ -92,11 +100,13 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtmlForNewTemplate()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap([
-            ['type', null, TemplateTypesInterface::TYPE_TEXT],
-            ['text', null, 'Processed Template'],
-            ['styles', null, '.class-name{color:red;}']
-        ]);
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['type', null, TemplateTypesInterface::TYPE_TEXT],
+                ['text', null, 'Processed Template'],
+                ['styles', null, '.class-name{color:red;}']
+            ]
+        );
 
         $this->template->expects($this->once())->method('setTemplateType')->with(TemplateTypesInterface::TYPE_TEXT)
             ->willReturnSelf();
@@ -135,11 +145,13 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtmlWithSubscriber()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap([
-            ['id', null, 2],
-            ['store_id', null, 1],
-            ['subscriber', null, 3]
-        ]);
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['id', null, 2],
+                ['store_id', null, 1],
+                ['subscriber', null, 3]
+            ]
+        );
         $subscriber = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
         $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);

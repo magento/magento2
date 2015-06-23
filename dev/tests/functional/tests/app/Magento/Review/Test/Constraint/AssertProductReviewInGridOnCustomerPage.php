@@ -45,7 +45,7 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
         $customerIndexEdit->getCustomerForm()->openTab('product_reviews');
         $filter = $assertProductReviewInGrid->prepareFilter($product, $this->prepareData($review, $reviewInitial));
         /** @var ReviewsGrid $reviewsGrid */
-        $reviewsGrid = $customerIndexEdit->getCustomerForm()->getTabElement('product_reviews')->getReviewsGrid();
+        $reviewsGrid = $customerIndexEdit->getCustomerForm()->getTab('product_reviews')->getReviewsGrid();
         $reviewsGrid->search($filter);
         unset($filter['visible_in']);
         \PHPUnit_Framework_Assert::assertTrue(

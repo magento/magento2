@@ -67,7 +67,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $adminFactory;
 
     /**
-     * @var \Magento\Setup\Model\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
 
@@ -150,7 +150,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
-        $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
+        $this->logger = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $this->random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
@@ -434,7 +434,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
         $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
-        $this->logger->expects($this->once())->method('log')->with('Recreating database `magento`');
+        $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
         $this->object->cleanupDb();
     }
 }

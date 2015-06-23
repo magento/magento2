@@ -24,30 +24,25 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
             try {
                 $this->_taxRateRepository->deleteById($rateId);
 
-                $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the tax rate.'));
                 return $resultRedirect->setPath("*/*/");
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(
-                    __('Something went wrong deleting this rate because of an incorrect rate ID.')
+                    __('We can\'t delete this rate because of an incorrect rate ID.')
                 );
                 return $resultRedirect->setPath("tax/*/");
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('Something went wrong deleting this rate.'));
             }
-        }
-    }
 
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        if ($this->getRequest()->getServer('HTTP_REFERER')) {
-            $resultRedirect->setRefererUrl();
-        } else {
-            $resultRedirect->setPath("*/*/");
+            if ($this->getRequest()->getServer('HTTP_REFERER')) {
+                $resultRedirect->setRefererUrl();
+            } else {
+                $resultRedirect->setPath("*/*/");
+            }
+            return $resultRedirect;
         }
-        return $resultRedirect;
     }
 }

@@ -55,13 +55,31 @@ class DataGrid extends Grid
     }
 
     /**
+     * Wait filter to load on page.
+     *
+     * @return void
+     */
+    protected function waitFilterToLoad()
+    {
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $browser = $this->_rootElement;
+        $selector = $this->filterButton . ', ' . $this->resetButton;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $filter = $browser->find($selector);
+                return $filter->isVisible() == true ? true : null;
+            }
+        );
+    }
+
+    /**
      * Open "Filter" block.
      *
      * @return void
      */
     protected function openFilterBlock()
     {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->waitFilterToLoad();
 
         $toggleFilterButton = $this->_rootElement->find($this->filterButton);
         $searchButton = $this->_rootElement->find($this->searchButton);
@@ -86,5 +104,22 @@ class DataGrid extends Grid
     {
         $this->openFilterBlock();
         parent::search($filter);
+    }
+
+    /**
+     * Search item and open it.
+     *
+     * @param array $filter
+     * @throws \Exception
+     */
+    public function searchAndOpen(array $filter)
+    {
+        $this->waitLoader();
+        $rowItem = $this->getRow($filter);
+        if ($rowItem->isVisible()) {
+            $rowItem->find($this->editLink)->click();
+        } else {
+            throw new \Exception('Searched item was not found.');
+        }
     }
 }

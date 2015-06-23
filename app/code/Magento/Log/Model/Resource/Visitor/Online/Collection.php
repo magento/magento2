@@ -65,39 +65,19 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         // alias => attribute_code
         $attributes = [
-            'customer_lastname' => 'lastname',
-            'customer_firstname' => 'firstname',
-            'customer_email' => 'email',
+            'customer_lastname' => 'customer.lastname',
+            'customer_firstname' => 'customer.firstname',
+            'customer_email' => 'customer.email',
         ];
 
-        foreach ($attributes as $alias => $attributeCode) {
-            $attribute = $this->_eavHelper->getAttributeMetadata(
-                \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                $attributeCode
-            );
+        $this->getSelect()->joinLeft(
+            ['customer' => $this->getResource()->getTable('customer_entity')],
+            'customer.entity_id=main_table.customer_id',
+            $attributes
+        );
 
-            $tableAlias = 'customer_' . $attributeCode;
+        $this->_fields = array_merge($this->_fields, $attributes);
 
-            if ($attribute['backend_type'] == 'static') {
-                $this->getSelect()->joinLeft(
-                    [$tableAlias => $attribute['attribute_table']],
-                    sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    [$alias => $attributeCode]
-                );
-                $this->_fields[$alias] = sprintf('%s.%s', $tableAlias, $attributeCode);
-            } else {
-                $joinConds  = [
-                    sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    $this->getConnection()->quoteInto($tableAlias . '.attribute_id=?', $attribute['attribute_id']),
-                ];
-                $this->getSelect()->joinLeft(
-                    [$tableAlias => $attribute['attribute_table']],
-                    join(' AND ', $joinConds),
-                    [$alias => 'value']
-                );
-                $this->_fields[$alias] = sprintf('%s.value', $tableAlias);
-            }
-        }
         $this->setFlag('has_customer_data', true);
         return $this;
     }
@@ -107,11 +87,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int|int[] $websiteIds
      * @return $this
+     * @api
      */
     public function addWebsiteFilter($websiteIds)
     {
         if ($this->getFlag('has_customer_data')) {
-            $this->getSelect()->where('customer_email.website_id IN (?)', $websiteIds);
+            $this->getSelect()->where('customer.website_id IN (?)', $websiteIds);
         }
         return $this;
     }

@@ -30,6 +30,7 @@ class CheckoutWithGiftMessagesTest extends Scenario
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
+    const TO_MAINTAIN = 'yes'; // Consider variation #2 to work correctly with Virtual products
     /* end tags */
 
     /**
