@@ -62,7 +62,7 @@
         }
 
         .payment-method-content {
-            &:extend(.abs-no-display all);
+            display: none;
             .css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
             .fieldset {
                 &:not(:last-child) {
@@ -114,8 +114,8 @@
             }
         }
         .payment-method-iframe {
-            &:extend(.abs-no-display all);
             background-color: transparent;
+            display: none;
             width: 100%;
         }
         .no-payments-block {
