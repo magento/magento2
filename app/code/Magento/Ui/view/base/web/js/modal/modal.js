@@ -39,10 +39,6 @@ define([
             trigger: '',
             modalLeftMargin: 45,
             closeText: $.mage.__('Close'),
-            modalCloseBtnCallback: {
-                callback: null,
-                context: null
-            },
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
@@ -60,14 +56,7 @@ define([
             this._renderModal();
             this._createButtons();
 
-            var closeButtonCallback = this.options.modalCloseBtnCallback.callback == null
-                ? this.closeModal
-                : this.options.modalCloseBtnCallback.callback;
-            var closeButtonContext = this.options.modalCloseBtnCallback.context == null
-                ? this
-                : this.options.modalCloseBtnCallback.context;
-
-            this.modal.find(this.options.modalCloseBtn).on('click',  _.bind(closeButtonCallback, closeButtonContext));
+            this.modal.find(this.options.modalCloseBtn).on('click',  _.bind(this.closeModal, this));
             $('[data-open-modal="' + this.options.trigger + '"]').on('click', _.bind(this.openModal, this));
             this.element.on('openModal', _.bind(this.openModal, this));
             this.element.on('closeModal', _.bind(this.closeModal, this));
