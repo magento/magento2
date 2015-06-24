@@ -31,6 +31,11 @@ class IndexerHandler implements IndexerInterface
     private $data;
 
     /**
+     * @var array
+     */
+    private $fields;
+
+    /**
      * @var Resource|Resource
      */
     private $resource;
@@ -60,10 +65,13 @@ class IndexerHandler implements IndexerInterface
         array $data
     ) {
         $this->indexStructure = $indexStructure;
-        $this->data = $data;
         $this->resource = $resource;
         $this->batchFactory = $batchFactory;
         $this->eavConfig = $eavConfig;
+        $this->data = $data;
+        $this->fields = [];
+
+        $this->prepareFields();
     }
 
     /**
@@ -74,7 +82,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->batchFactory->create(self::BATCH_SIZE)->getItems($documents) as $batchDocuments) {
             $indexDocuments = [];
             foreach ($batchDocuments as $documentName => $documentValue) {
-                foreach ($this->data['fields'] as $fieldName => $fieldValue) {
+                foreach ($this->fields as $fieldName => $fieldValue) {
                     if (isset ($documentValue[$fieldName])) {
                         $indexDocuments[$fieldValue['type']][$documentName][$fieldName] = $documentValue[$fieldName];
                     }
@@ -102,12 +110,12 @@ class IndexerHandler implements IndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function cleanIndex($dimension)
+    public function cleanIndex($dimensions)
     {
         foreach ($this->dataTypes as $dataType) {
             $tableName = $this->getTableName($dataType);
-            $this->indexStructure->delete($tableName, [$dimension]);
-            $this->indexStructure->create($tableName, $this->data, [$dimension]);
+            $this->indexStructure->delete($tableName, $dimensions);
+            $this->indexStructure->create($tableName, $this->fields, $dimensions);
         }
     }
 
@@ -125,7 +133,7 @@ class IndexerHandler implements IndexerInterface
      */
     private function getTableName($dataType)
     {
-        return $this->getIndexId() . $dataType . '_scope';
+        return $this->getIndexId() . $dataType;
     }
 
     /**
@@ -178,5 +186,15 @@ class IndexerHandler implements IndexerInterface
         }
 
         return $insertDocuments;
+    }
+
+    /**
+     * @return void
+     */
+    private function prepareFields()
+    {
+        foreach ($this->data['fieldsets'] as $fieldset) {
+            $this->fields = array_merge($this->fields, $fieldset['fields']);
+        }
     }
 }
