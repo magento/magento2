@@ -705,6 +705,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     /**
      * {@inheritdoc}
      */
+    public function setRegionCode($regionCode)
+    {
+        return $this->setData(OrderAddressInterface::KEY_REGION_CODE, $regionCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setVatRequestDate($vatRequestDate)
     {
         return $this->setData(OrderAddressInterface::VAT_REQUEST_DATE, $vatRequestDate);
