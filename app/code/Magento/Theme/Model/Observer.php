@@ -135,6 +135,23 @@ class Observer
     }
 
     /**
+     * Theme registration
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
+     */
+    public function themeRegistration(\Magento\Framework\Event\Observer $observer)
+    {
+        $pathPattern = $observer->getEvent()->getPathPattern();
+        try {
+            $this->registration->register($pathPattern);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->logger->critical($e);
+        }
+        return $this;
+    }
+
+    /**
      * Apply customized static files to frontend
      *
      * @param \Magento\Framework\Event\Observer $observer
