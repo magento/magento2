@@ -81,22 +81,19 @@ define([
     }
 
     function setLinked(map, data) {
-        var hasLink,
-            match;
-        
+        var match;
+
         if (!map) {
             return;
         }
 
-        hasLink = map.some(function (item) {
-            match = item;
-
-            return !item.linked &&
-                item.target === data.target &&
-                item.property === data.property;
+        match = _.findWhere(map, {
+            linked: false,
+            target: data.target,
+            property: data.property
         });
 
-        if (hasLink) {
+        if (match) {
             match.linked = data;
             data.linked = match;
         }
@@ -105,6 +102,8 @@ define([
     function setData(maps, property, data) {
         var direction = data.direction,
             map = maps[direction];
+
+        data.linked = false;
 
         (map[property] = map[property] || []).push(data);
 
@@ -165,7 +164,7 @@ define([
                     });
                 });
             });
-            
+
             return this;
         },
 
