@@ -15,6 +15,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * Each job is using this class to share information about its current status.
  * Current status can be seen on the update app web page.
+ *
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Status
 {
@@ -76,24 +78,6 @@ class Status
     ) {
         $this->baseReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->varReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->initializePaths($statusFilePath, $logFilePath, $updateInProgressFlagFilePath, $updateErrorFlagFilePath);
-    }
-
-    /**
-     * Initialize paths
-     *
-     * @param string|null $statusFilePath
-     * @param string|null $logFilePath
-     * @param string|null $updateInProgressFlagFilePath
-     * @param string|null $updateErrorFlagFilePath
-     * @return void
-     */
-    private function initializePaths(
-        $statusFilePath = null,
-        $logFilePath = null,
-        $updateInProgressFlagFilePath = null,
-        $updateErrorFlagFilePath = null
-    ) {
         $this->statusFilePath = $statusFilePath ? $statusFilePath : 'update/var/.update_status.txt';
         $this->logFilePath = $logFilePath ? $logFilePath : 'update/var/update_status.log';
         $this->updateInProgressFlagFilePath = $updateInProgressFlagFilePath
