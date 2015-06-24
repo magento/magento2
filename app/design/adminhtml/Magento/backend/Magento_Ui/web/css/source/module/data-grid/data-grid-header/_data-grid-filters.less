@@ -12,6 +12,7 @@
 //  ---------------------------------------------
 
 @data-grid-search-action__size: 2rem;
+@data-grid-search-menu-item__background-color: @color-blue-clear-sky;
 
 @data-grid-filters__font-size: 1.3rem;
 @data-grid-filters__background-color: @page-wrapper__background-color;
@@ -90,6 +91,11 @@
         z-index: @data-grid-search-menu__z-index;
         max-height: 3.85rem * @data-grid-search-control-action-menu-item__quantity; // ToDo UI: change static item height
         overflow-y: auto;
+    }
+    .action-menu-item {
+        &._selected {
+            background-color: @data-grid-search-menu-item__background-color;
+        }
     }
 }
 
