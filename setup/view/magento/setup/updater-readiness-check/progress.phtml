@@ -290,3 +290,49 @@
     </div>
 
 </div>
+
+<div id="updater-application" class="rediness-check-item" ng-show="updater.visible">
+
+    <h3 class="updater-readiness-check-title" ng-hide="updater.processed">
+        Checking Updater application availability...
+    </h3>
+
+    <div ng-show="updater.processed" ng-switch="updater.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
+
+            <span class="updater-readiness-check-icon icon-success-round"></span>
+
+            <div class="updater-readiness-check-content">
+                <h3 class="updater-readiness-check-title">Check Updater Application Availability</h3>
+                <p>
+                    Updater application is available.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="updater-readiness-check-item" ng-switch-default ng-init="updateOnError(updater)">
+
+            <span class="updater-readiness-check-icon icon-failed-round"></span>
+
+            <div class="updater-readiness-check-content">
+                <h3 class="updater-readiness-check-title">Updater application availability check</h3>
+                <p>
+                    Updater application is not available.
+                    <a href="#php-version" ng-click="updateOnExpand(updater)">
+                        <span ng-hide="updater.expanded">Show detail</span>
+                        <span ng-show="updater.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="updater.expanded">
+                    Please, download and install Updater application.
+                </p>
+                <p ng-show="updater.expanded">If you need more help please visit documentation page.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

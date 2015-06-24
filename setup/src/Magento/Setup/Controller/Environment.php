@@ -11,6 +11,8 @@ use Zend\View\Model\JsonModel;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PhpInformation;
 use Magento\Setup\Model\FilePermissions;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Class Environment
@@ -34,23 +36,31 @@ class Environment extends AbstractActionController
     protected $versionParser;
 
     /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * Constructor
      *
      * @param PhpInformation $phpInformation
      * @param FilePermissions $permissions
      * @param VersionParser $versionParser
      * @param ComposerInformation $composerInformation
+     * @param Filesystem $filesystem
      */
     public function __construct(
         PhpInformation $phpInformation,
         FilePermissions $permissions,
         VersionParser $versionParser,
-        ComposerInformation $composerInformation
+        ComposerInformation $composerInformation,
+        Filesystem $filesystem
     ) {
         $this->phpInformation = $phpInformation;
         $this->permissions = $permissions;
         $this->versionParser = $versionParser;
         $this->composerInformation = $composerInformation;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -217,5 +227,23 @@ class Environment extends AbstractActionController
         }
 
         return $data;
+    }
+
+    /**
+     * Verifies php version
+     *
+     * @return JsonModel
+     */
+    public function updaterApplicationAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        if (!$this->filesystem->getDirectoryRead(DirectoryList::UPDATER_DIR)->isExist()) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+        }
+        $data = [
+            'responseType' => $responseType
+        ];
+        return new JsonModel($data);
     }
 }
