@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\UpgradeCommand;
-use Symfony\Component\Console\Output\StreamOutput;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
