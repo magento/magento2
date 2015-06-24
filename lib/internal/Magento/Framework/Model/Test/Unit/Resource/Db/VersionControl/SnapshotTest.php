@@ -93,7 +93,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
         ];
         $modifiedData = array_merge($data, ['name' => 'newName']);
         $this->model->expects($this->any())->method('getId')->willReturn($entityId);
-        $this->entityMetadata->expects($this->exactly(4))->method('getFields')->with($this->model)->willReturn($fields);
+        $this->entityMetadata->expects($this->exactly(2))->method('getFields')->with($this->model)->willReturn($fields);
         $this->model->setData($data);
         $this->entitySnapshot->registerSnapshot($this->model);
         $this->model->setData($modifiedData);
