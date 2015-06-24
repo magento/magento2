@@ -21,12 +21,12 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
 </form>
-<div class="actions-toolbar" id="review-buttons-container">
-    <div>
-        <!-- ko foreach: $parent.getRegion('before-place-order') -->
+<div class="checkout-agreements-block">
+    <!-- ko foreach: $parent.getRegion('before-place-order') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-    </div>
+    <!--/ko-->
+</div>
+<div class="actions-toolbar" id="review-buttons-container">
     <div class="primary">
         <button data-role="review-save" type="submit"
                 data-bind="attr: {title: $t('Place order')}"

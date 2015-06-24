@@ -20,12 +20,12 @@
             <!--/ko-->
         </div>
         <p data-bind="text: getInstructions()"></p>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
         <div class="actions-toolbar">
-            <div>
-                <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!--/ko-->
-            </div>
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
