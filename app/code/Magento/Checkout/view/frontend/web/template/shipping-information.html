@@ -8,19 +8,28 @@
 <!-- ko if: (isVisible()) -->
 <div class="shipping-information">
     <div class="ship-to">
-        <b><span data-bind="text: $t('Ship To')"></span></b>
-        <a href="#" data-bind="click: back, text: $t('edit')"></a>
-        <br>
-        <!-- ko foreach: getRegion('ship-to') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
+        <div class="shipping-information-title">
+            <span data-bind="text: $t('Ship To')"></span>
+            <button class="action action-edit" data-bind="click: back">
+                <span data-bind="text: $t('edit')"></span>
+            </button>
+        </div>
+        <div class="shipping-information-content">
+            <!-- ko foreach: getRegion('ship-to') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
     </div>
-    <br>
     <div class="ship-via">
-        <b><span data-bind="text: $t('Ship Via')"></span></b>
-        <a href="#" data-bind="click: back, text: $t('edit')"></a>
-        <br>
-        <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        <div class="shipping-information-title">
+            <span data-bind="text: $t('Ship Via')"></span>
+            <button class="action action-edit" data-bind="click: back">
+                <span data-bind="text: $t('edit')"></span>
+            </button>
+        </div>
+        <div class="shipping-information-content">
+            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+        </div>
     </div>
 </div>
 <!--/ko-->

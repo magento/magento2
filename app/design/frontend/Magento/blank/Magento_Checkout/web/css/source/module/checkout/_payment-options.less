@@ -26,10 +26,6 @@
 
 & when (@media-common = true) {
     .checkout-payment-method {
-        .payment-options {
-            .css(margin, 0 0 @indent__base);
-        }
-
         .payment-option {
             &._active {
                 .payment-option-title {
@@ -43,6 +39,9 @@
             &._collapsible {
                 .payment-option-title {
                     cursor: pointer;
+                }
+                .payment-option-content {
+                    display: none;
                 }
             }
         }
@@ -68,7 +67,10 @@
 
         .payment-option-content {
             .css(padding, 0 0 @indent__base @checkout-payment-option-content__padding__xl);
+        }
 
+        .payment-option-inner {
+            margin: 0 0 @indent__base;
         }
     }
 }
@@ -79,7 +81,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .checkout-payment-method {
-        .payment-options {
+        .payment-option {
             .css(margin, 0 -(@checkout-payment-option-title-mobile__padding));
 
             .payment-option-title {
@@ -101,6 +103,13 @@
     .checkout-payment-method {
         .payment-option-title {
             .css(padding-left, @checkout-payment-option-content__padding__xl);
+        }
+        .payment-option-content {
+            .payment-option-inner {
+                + .actions-toolbar {
+                    margin-left: 0;
+                }
+            }
         }
     }
 }

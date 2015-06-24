@@ -10,8 +10,14 @@
 <!-- /ko -->
 <div class="product-item-details">
 
-    <div class="product-item-name-block">
-        <strong class="product-item-name" data-bind="text: $t($parent.name)"></strong>
+    <div class="product-item-inner">
+        <div class="product-item-name-block">
+            <strong class="product-item-name" data-bind="text: $t($parent.name)"></strong>
+            <div class="details-qty">
+                <span class="label"><!-- ko text: $t('Qty') --><!-- /ko --></span>
+                <span class="value" data-bind="text: $parent.qty"></span>
+            </div>
+        </div>
         <!-- ko foreach: getRegion('after_details') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
@@ -36,9 +42,4 @@
         </div>
     </div>
     <!-- /ko -->
-
-    <div class="details-qty">
-        <span class="label"><!-- ko text: $t('Qty') --><!-- /ko --></span>
-        <span class="value" data-bind="text: $parent.qty"></span>
-    </div>
 </div>

@@ -5,9 +5,7 @@
  */
 -->
 <li id="opc-shipping" data-bind="fadeVisible: visible()">
-    <div class="step-title" data-role="title">
-        <h2 data-bind="text: $t('Shipping Address')"></h2>
-    </div>
+    <div class="step-title" data-bind="text: $t('Shipping Address')" data-role="title"></div>
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content">
@@ -16,16 +14,6 @@
         <!--/ko-->
 
         <!-- ko foreach: getRegion('address-list-additional-addresses') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-
-        <!-- ko if: (!quoteIsVirtual) -->
-            <!-- ko foreach: getRegion('customer-email') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        <!--/ko-->
-
-        <!-- ko foreach: getRegion('before-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
@@ -40,6 +28,16 @@
         </div>
         <!-- /ko -->
 
+        <!-- ko if: (!quoteIsVirtual) -->
+            <!-- ko foreach: getRegion('customer-email') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        <!--/ko-->
+
+        <!-- ko foreach: getRegion('before-form') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+
         <!-- Inline address form -->
         <!-- ko if: (isFormInline) -->
         <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
@@ -51,9 +49,7 @@
 <!--Shipping method template-->
 <li id="opc-shipping_method" data-bind="fadeVisible: visible(), blockLoader: isLoading" role="presentation">
     <div class="checkout-shipping-method">
-        <div class="step-title" data-role="title">
-            <h2 data-bind="text: $t('Shipping Method')"></h2>
-        </div>
+        <div class="step-title" data-bind="text: $t('Shipping Method')" data-role="title"></div>
         <!-- ko foreach: getRegion('before-shipping-method-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
@@ -67,17 +63,17 @@
                 <div id="checkout-shipping-method-load">
                     <table class="table-checkout-shipping-method">
                         <thead>
-                            <tr>
+                            <tr class="row">
                                 <th class="col">&nbsp;</th>
-                                <th class="col col-price">Price</th>
-                                <th class="col col-method">Method Title</th>
-                                <th class="col col-carrier">Carrier Title</th>
+                                <th class="col col-price" data-bind="text: $t('Price')"></th>
+                                <th class="col col-method" data-bind="text: $t('Method Title')"></th>
+                                <th class="col col-carrier" data-bind="text: $t('Carrier Title')"></th>
                             </tr>
                         </thead>
                         <tbody>
 
                         <!--ko foreach: { data: rates(), as: 'method'}-->
-                        <tr>
+                        <tr class="row" data-bind="click: $parent.selectShippingMethod">
                             <td class="col">
                                 <!-- ko ifnot: method.error_message -->
                                 <!-- ko if: $parent.rates().length == 1 -->
