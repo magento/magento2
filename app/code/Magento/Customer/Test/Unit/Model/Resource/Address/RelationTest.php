@@ -63,11 +63,30 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         );
         $customerModel = $this->getMock(
             'Magento\Customer\Model\Customer',
-            ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load'],
+            ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load', 'getResource', 'getId'],
             [],
             '',
             false
         );
+        $customerResource = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getWriteConnection', 'getTable']
+        );
+        $adapter = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['update', 'quoteInto']
+        );
+        $customerModel->expects($this->any())->method('getResource')->willReturn($customerResource);
         $addressModel->expects($this->any())->method('getId')->willReturn($addressId);
         $addressModel->expects($this->any())->method('getIsDefaultShipping')->willReturn($isDefaultShipping);
         $addressModel->expects($this->any())->method('getIsDefaultBilling')->willReturn($isDefaultBilling);
@@ -81,17 +100,28 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($customerModel);
         if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
+            $customerId = 1;
+            $customerResource->expects($this->exactly(2))->method('getWriteConnection')->willReturn($adapter);
+            $customerModel->expects($this->any())->method('getId')->willReturn(1);
+            $conditionSql = "entity_id = $customerId";
+            $adapter->expects($this->once())->method('quoteInto')
+                ->with('entity_id = ?', $customerId)
+                ->willReturn($conditionSql);
+            $customerResource->expects($this->once())->method('getTable')
+                ->with('customer_entity')
+                ->willReturn('customer_entity');
+            $toUpdate = [];
             if ($isDefaultBilling) {
-                $customerModel->expects($this->once())->method('setDefaultBilling')->with($addressId);
+                $toUpdate['default_billing'] = $addressId;
             }
             if ($isDefaultShipping) {
-                $customerModel->expects($this->once())->method('setDefaultShipping')->with($addressId);
+                $toUpdate['default_shipping'] = $addressId;
             }
-            $customerModel->expects($this->once())->method('save');
-        } else {
-            $customerModel->expects($this->never())->method('setDefaultBilling');
-            $customerModel->expects($this->never())->method('setDefaultShipping');
-            $customerModel->expects($this->never())->method('save');
+            $adapter->expects($this->once())->method('update')->with(
+                'customer_entity',
+                $toUpdate,
+                $conditionSql
+            );
         }
         $this->relation->processRelation($addressModel);
     }
