@@ -93,9 +93,9 @@ class IndexStructure
                 'Entity ID'
             )->addColumn(
                 'attribute_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false]
+                Table::TYPE_TEXT,
+                255,
+                ['unsigned' => true, 'nullable' => true]
             )->addColumn(
                 'data_index',
                 Table::TYPE_TEXT,
