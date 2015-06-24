@@ -18,8 +18,8 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Dear %name," name=$customer.name}}</h1>
 <p>{{trans "Your e-mail {{var customer.email}} must be confirmed before using it to log in to our store."}}</p>
+<p class="greeting">{{trans "%name," name=$customer.name}}</p>
 <p>
     {{trans
         'To confirm the e-mail and instantly log in, please, use <a href="%confirm_url">this confirmation link</a>. This link is valid only once.'

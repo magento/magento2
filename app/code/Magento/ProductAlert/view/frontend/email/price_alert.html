@@ -12,7 +12,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Dear %name," name=$customerName}}</h1>
+<p class="greeting">{{trans "%name," name=$customerName}}</p>
 {{var alertGrid|raw}}
 
 {{template config_path="design/email/footer_template"}}

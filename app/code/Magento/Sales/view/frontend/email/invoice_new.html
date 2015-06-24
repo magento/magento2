@@ -24,7 +24,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Dear %name," name=$order.getCustomerName()}}</h1>
+<p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
 <p>
     {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
     {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}
