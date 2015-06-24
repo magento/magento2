@@ -389,7 +389,7 @@ class Base implements ActionInterface
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             if (isset($fieldset['class'])) {
                 $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
-                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->update($fieldset);
+                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->addDynamicData($fieldset);
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
