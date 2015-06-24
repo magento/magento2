@@ -40,6 +40,7 @@ class TakeBackup extends AbstractActionController
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
+     * @param WebLogger $logger
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
