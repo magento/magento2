@@ -31,7 +31,7 @@
         "zendframework/zend-log": "2.4.0",
         "zendframework/zend-http": "2.4.0",
         "magento/zendframework1": "1.12.13",
-        "composer/composer": "dev-master",
+        "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.11.0",
         "oyejorge/less.php": "1.7.0.3",
         "tubalmartin/cssmin": "2.4.8-p4",
