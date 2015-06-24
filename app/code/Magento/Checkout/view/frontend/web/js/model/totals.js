@@ -13,6 +13,7 @@ define(
 
         return {
             totals: quote.totals,
+            isLoading: ko.observable(false),
             getItems: function() {
                 if (!this.totals() || !this.totals().items) {
                     return [];

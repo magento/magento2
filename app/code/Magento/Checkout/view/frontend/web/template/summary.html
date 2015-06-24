@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<span data-bind="text: $t('Order Summary')" class="title"></span>
-<!-- ko foreach: elems() -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-<!-- /ko -->
+<div class="opc-block-summary" data-bind="blockLoader: isLoading">
+    <span data-bind="text: $t('Order Summary')" class="title"></span>
+    <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</div>

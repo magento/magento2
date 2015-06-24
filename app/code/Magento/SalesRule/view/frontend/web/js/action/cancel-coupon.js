@@ -24,7 +24,8 @@ define(
             var quoteId = quote.getQuoteId();
             var url = urlManager.getCancelCouponUrl(quoteId);
             return storage.delete(
-                url
+                url,
+                false
             ).done(
                 function (response) {
                     isLoading(false);
