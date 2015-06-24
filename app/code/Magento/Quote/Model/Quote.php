@@ -2464,6 +2464,46 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function addressCollectionWasSet()
+    {
+        return null !== $this->_addresses;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function paymentsCollectionWasSet()
+    {
+        return null !== $this->_payments;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function currentPaymentWasSet()
+    {
+        return null !== $this->_currentPayment;
+    }
+
+    /**
      * Return checkout method code
      *
      * @param boolean $originalMethod if true return defined method from beginning

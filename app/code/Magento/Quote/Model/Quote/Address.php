@@ -1098,6 +1098,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function shippingRatesCollectionWasSet()
+    {
+        return null !== $this->_rates;
+    }
+
+    /**
      * Validate minimum amount
      *
      * @return bool
