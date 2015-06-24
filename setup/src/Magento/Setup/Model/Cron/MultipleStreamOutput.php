@@ -26,8 +26,12 @@ class MultipleStreamOutput extends Output
      * @param bool $decorated
      * @param OutputFormatterInterface $formatter
      */
-    public function __construct(array $streams, $verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null)
-    {
+    public function __construct(
+        array $streams,
+        $verbosity = self::VERBOSITY_NORMAL,
+        $decorated = null,
+        OutputFormatterInterface $formatter = null
+    ) {
         foreach ($streams as $stream) {
             if (!is_resource($stream) || 'stream' !== get_resource_type($stream)) {
                 throw new \InvalidArgumentException('The StreamOutput class needs a stream as its first argument.');
