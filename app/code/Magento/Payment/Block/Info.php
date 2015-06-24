@@ -15,7 +15,7 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Object
      */
-    protected $_paymentSpecificInformation = null;
+    protected $_paymentSpecificInformation;
 
     /**
      * @var string
@@ -152,10 +152,6 @@ class Info extends \Magento\Framework\View\Element\Template
             } elseif (is_array($transport)) {
                 $transport = new \Magento\Framework\Object($transport);
             }
-            $this->_eventManager->dispatch(
-                'payment_info_block_prepare_specific_information',
-                ['transport' => $transport, 'payment' => $this->getInfo(), 'block' => $this]
-            );
             $this->_paymentSpecificInformation = $transport;
         }
         return $this->_paymentSpecificInformation;
