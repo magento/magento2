@@ -39,9 +39,9 @@ class ExpressionConverterTest extends \PHPUnit_Framework_TestCase
                 'pre_'
             ],
             'Abbreviated identifier' => [
-                $length40 . 'enterprise_notification_index',
+                $length40 . 'downloadable_notification_index',
                 'pre_',
-                $length40 . 'ent_ntfc_idx'
+                $length40 . 'dl_ntfc_idx'
             ],
         ];
     }
