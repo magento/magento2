@@ -16,4 +16,19 @@
             vertical-align: baseline;
         }
     }
+
+    // Checkout Agreements in popup
+    .checkout-agreements-items {
+        &:extend(.abs-reset-list all);
+        padding-bottom: @indent__l;
+
+        .checkout-agreements-item {
+            margin-bottom: @indent__base;
+        }
+
+        .checkout-agreements-item-title {
+            &:extend(.abs-checkout-title all);
+            border-bottom: 0;
+        }
+    }
 }

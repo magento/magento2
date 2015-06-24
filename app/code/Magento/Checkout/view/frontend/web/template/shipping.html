@@ -9,6 +9,13 @@
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content">
+
+        <!-- ko if: (!quoteIsVirtual) -->
+            <!-- ko foreach: getRegion('customer-email') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        <!--/ko-->
+
         <!-- ko foreach: getRegion('address-list') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
@@ -27,12 +34,6 @@
             <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
         </div>
         <!-- /ko -->
-
-        <!-- ko if: (!quoteIsVirtual) -->
-            <!-- ko foreach: getRegion('customer-email') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        <!--/ko-->
 
         <!-- ko foreach: getRegion('before-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
