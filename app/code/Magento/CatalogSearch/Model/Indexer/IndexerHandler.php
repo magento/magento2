@@ -180,8 +180,10 @@ class IndexerHandler implements IndexerInterface
     {
         if ($dataType === 'searchable') {
             $documents = $this->insertSearchable($documents);
+        } else {
+            $documents = $documents[$dataType];
         }
-        $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents[$dataType]);
+        $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents);
     }
 
     /**
