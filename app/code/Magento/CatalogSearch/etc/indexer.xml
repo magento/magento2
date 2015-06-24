@@ -9,11 +9,5 @@
     <indexer id="catalogsearch_fulltext" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Catalog Search</title>
         <description translate="true">Rebuild Catalog product fulltext search index</description>
-        <fieldset name="base" source="service" class="Magento\Indexer\Model\Fieldset\DefaultFieldset">
-            <field name="title"/>
-            <field name="identifier"/>
-            <field name="content"/>
-        </fieldset>
-        <source class="Magento\Cms\Model\Indexer\Source\ServiceSource" name="service"/>
     </indexer>
 </config>

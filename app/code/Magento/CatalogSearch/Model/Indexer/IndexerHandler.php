@@ -10,8 +10,8 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
-use Magento\Indexer\Model\IndexStructure;
-use Magento\Indexer\Model\SaveHandler\BatchFactory;
+use Magento\CatalogSearch\Model\Indexer\IndexStructure;
+use Magento\Indexer\Model\SaveHandler\Batch;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -41,37 +41,43 @@ class IndexerHandler implements IndexerInterface
     private $resource;
 
     /**
-     * @var batchFactory->create(self::BATCH_SIZE)
+     * @var Batch
      */
-    private $batchFactory;
+    private $batch;
 
     /**
      * @var Config
      */
     private $eavConfig;
+    
+    /**
+     * @var int
+     */
+    private $batchSize;
 
     /**
      * @param IndexStructure $indexStructure
      * @param Resource|Resource $resource
      * @param Config $eavConfig
-     * @param batchFactory->create(self::BATCH_SIZE) $batch
      * @param array $data
      */
     public function __construct(
         IndexStructure $indexStructure,
         Resource $resource,
         Config $eavConfig,
-        BatchFactory $batchFactory,
-        array $data
+        Batch $batch,
+        array $data,
+        $batchSize = 100
     ) {
         $this->indexStructure = $indexStructure;
         $this->resource = $resource;
-        $this->batchFactory = $batchFactory;
+        $this->batch = $batch;
         $this->eavConfig = $eavConfig;
         $this->data = $data;
         $this->fields = [];
 
         $this->prepareFields();
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -79,7 +85,7 @@ class IndexerHandler implements IndexerInterface
      */
     public function saveIndex($dimension, \Traversable $documents)
     {
-        foreach ($this->batchFactory->create(self::BATCH_SIZE)->getItems($documents) as $batchDocuments) {
+        foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $indexDocuments = [];
             foreach ($batchDocuments as $documentName => $documentValue) {
                 foreach ($this->fields as $fieldName => $fieldValue) {
@@ -100,7 +106,7 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->dataTypes as $dataType) {
-            foreach ($this->batchFactory->create(self::BATCH_SIZE)->getItems($documents) as $batchDocuments) {
+            foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
                 $documentsId = array_column($batchDocuments, 'id');
                 $this->getAdapter()->delete($this->getTableName($dataType), ['id' => $documentsId]);
             }
@@ -115,7 +121,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->dataTypes as $dataType) {
             $tableName = $this->getTableName($dataType);
             $this->indexStructure->delete($tableName, $dimensions);
-            $this->indexStructure->create($tableName, $this->fields, $dimensions);
+            $this->indexStructure->create($tableName, $dimensions);
         }
     }
 

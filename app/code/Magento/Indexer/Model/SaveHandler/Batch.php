@@ -7,29 +7,19 @@ namespace Magento\Indexer\Model\SaveHandler;
 
 class Batch
 {
-    private $n;
-
-    /**
-     * @param $n
-     */
-    public function __construct($n)
-    {
-        $this->n = $n;
-    }
-
     /**
      * @param \Traversable $documents
+     * @param int $size
      * @return \Generator
      */
-    public function getItems(\Traversable $documents)
+    public function getItems(\Traversable $documents, $size)
     {
         $i = 0;
         $batch = [];
 
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
-
-            if ($i >= $this->n) {
+            if ($i++ >= $size) {
                 yield $batch;
                 $i = 0;
                 $batch = [];
