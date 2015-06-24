@@ -18,9 +18,14 @@
                 <span data-bind="text: $t('Email Address')"></span>
             </label>
             <div class="control _with-tooltip">
-                <input class="input-text" type="email" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
-                <span class="note"><!-- ko text: $t("(You can create an account after checkout)")--><!-- /ko --></span>
+                <input class="input-text"
+                       type="email"
+                       data-bind="textInput: email"
+                       name="username"
+                       data-validate="{required:true, 'validate-email':true}"
+                       id="customer-email" />
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
+                <span class="note"><!-- ko text: $t("(You can create an account after checkout)")--><!-- /ko --></span>
             </div>
         </div>
 
@@ -31,9 +36,15 @@
                     <span data-bind="text: $t('Password')"></span>
                 </label>
                 <div class="control">
-                    <input class="input-text" placeholder="optional" type="password" name="password" id="customer-password" data-validate="{required:true, 'validate-password':true}">
+                    <input class="input-text"
+                           placeholder="optional"
+                           type="password"
+                           name="password"
+                           id="customer-password"
+                           data-validate="{required:true, 'validate-password':true}" />
+                    <span class="note" data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
                 </div>
-                <span class="note" data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
+
             </div>
             <!-- ko foreach: getRegion('additional-login-form-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
