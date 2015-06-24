@@ -62,7 +62,7 @@ class Engine extends AbstractDb implements EngineInterface
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\Search\Model\IndexScopeResolver $indexScopeResolver,
+        \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver,
         $resourcePrefix = null
     ) {
         $this->_catalogProductVisibility = $catalogProductVisibility;
