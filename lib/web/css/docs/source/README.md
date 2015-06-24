@@ -39,7 +39,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
 * `images/` folder where default images are placed
 * `jquery/` folder where jQuery and jQuery widgets are placed
 
-###Magento UI library structure
+### Magento UI library structure
 
 ```css
 /lib/web/
@@ -95,7 +95,11 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    ├─── utilities.html
     │    │    └─── variables.html
     │    ├── source/
+    │    │    ├── components/ (Reusable components files)
+    │    │    │    └── _modals.less
     │    │    ├── lib/ (Library source files)
+    │    │    │    └── variables/ (Decoupled variables)
+    │    │    │          └── ...
     │    │    │    ├── _extends.less
     │    │    │    ├── _actions-toolbar.less
     │    │    │    ├── _breadcrumbs.less
