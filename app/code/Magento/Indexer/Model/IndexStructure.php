@@ -47,7 +47,7 @@ class IndexStructure
         Resource $resource,
         IndexScopeResolver $indexScopeResolver,
         FlatScopeResolver $flatScopeResolver,
-        array $columnTypesMap
+        array $columnTypesMap = []
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;
