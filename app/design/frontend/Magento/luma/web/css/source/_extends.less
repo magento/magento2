@@ -1435,24 +1435,28 @@
     &:extend(.abs-add-box-sizing all);
     position: relative;
     input {
-        &:extend(.abs-field-tooltip-input);
+        .css(margin-right, @indent__s);
+        width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
+        &:focus {
+            + .field-tooltip {
+                .field-tooltip-action {
+                    &:before {
+                        .css(color, @checkout-tooltip-icon__hover__color);
+                    }
+                }
+                .field-tooltip-content {
+                    display: block;
+                }
+            }
+        }
     }
-}
-
-//
-//  Form Field Tooltip Input
-//  ---------------------------------------------
-
-.abs-field-tooltip-input {
-    .css(margin-right, @indent__s);
-    width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
 }
 
 //
 //  Checkout Tooltip Content (position: top)
 //  ---------------------------------------------
 
-.abs-checkout-tooltip-content-position-top {
+@abs-checkout-tooltip-content-position-top: {
     .css(right, @checkout-tooltip-content-mobile__right);
     .css(top, @checkout-tooltip-content-mobile__top);
     left: auto;
@@ -1476,11 +1480,15 @@
         .css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
+};
+
+.abs-checkout-tooltip-content-position-top {
+    @abs-checkout-tooltip-content-position-top();
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
     .abs-checkout-tooltip-content-position-top-mobile {
-        .abs-checkout-tooltip-content-position-top;
+        @abs-checkout-tooltip-content-position-top();
     }
 }
 

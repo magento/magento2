@@ -45,7 +45,7 @@
     .opc-wrapper {
 
         //
-        //  Shipping Information
+        //  Shipping Address
         //  ---------------------------------------------
 
         .form-login,
@@ -54,12 +54,12 @@
             .fieldset {
                 .field {
                     .label {
-                        .css(font-weight, @font-weight__regular);
+                        font-weight: @font-weight__regular;
                     }
                 }
                 .note {
-                    .css(font-size, @font-size__base);
-                    .css(margin-top, @indent__s);
+                    font-size: @font-size__base;
+                    margin-top: @indent__s;
                 }
             }
         }
@@ -115,18 +115,18 @@
         }
 
         .action-show-popup {
-            .css(margin, 0 0 @indent__base);
+            margin: 0 0 @indent__base;
             > span {
                 &:before {
-                    .css(padding-right, @indent__xs);
                     content: '+';
+                    padding-right: @indent__xs;
                 }
             }
         }
 
         .action-select-shipping-item {
-            .css(margin, @indent__base 0 0);
             float: right;
+            margin: @indent__base 0 0;
         }
 
         .edit-address-link {
@@ -143,12 +143,10 @@
 
     .checkout-shipping-method {
         .step-title {
-            h2 {
-                margin-bottom: 0;
-            }
+            margin-bottom: 0;
         }
         .no-quotes-block {
-            .css(margin, @indent__base 0);
+            margin: @indent__base 0;
         }
     }
 
@@ -157,7 +155,7 @@
             .action {
                 &.primary {
                     &:extend(.abs-button-l all);
-                    .css(margin, @indent__base 0 0);
+                    margin: @indent__base 0 0;
                 }
             }
         }
@@ -166,7 +164,7 @@
     .table-checkout-shipping-method {
         thead {
             th {
-                &:extend(.abs-no-display all);
+                display: none;
             }
         }
         tbody {
@@ -188,12 +186,12 @@
                 }
             }
             .col-price {
-                .css(font-weight, @font-weight__semibold);
+                font-weight: @font-weight__semibold;
             }
             .row-error {
                 td {
-                    .css(padding-bottom, @indent__s);
                     border-top: none;
+                    padding-bottom: @indent__s;
                     padding-top: 0;
                 }
             }
@@ -235,8 +233,8 @@
         }
 
         .action-select-shipping-item {
-            .css(margin-top, @indent__s);
             float: none;
+            margin-top: @indent__s;
             width: 100%;
         }
 
@@ -246,7 +244,7 @@
 
         .methods-shipping {
             .css(border-bottom, @checkout-step-title__border);
-            .css(padding-top, @indent__l);
+            padding-top: @indent__l;
         }
 
         .edit-address-link {
