@@ -11,7 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+    implements OptionSourceInterface
 {
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
