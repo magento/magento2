@@ -332,49 +332,4 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         }
         return $result;
     }
-
-    /**
-     * @param int $countryId
-     * @param int $regionId
-     * @param int $websiteId
-     * @return int[]
-     */
-    public function getWeeeAttributes($countryId, $regionId, $websiteId)
-    {
-        $result = [];
-
-        if ($countryId == null && $regionId == null) {
-            return $result;
-        }
-
-        if ($regionId == null) {
-            $regionId = 0;
-        }
-
-        // Check if there is a weee_tax for the country and region
-        $attributeSelect = $this->getResource()->getReadConnection()->select();
-        $attributeSelect->from(
-            $this->getResource()->getTable('weee_tax'),
-            'value'
-        )->where(
-            'website_id IN(?)',
-            [$websiteId, 0]
-        )->where(
-            'country = ?',
-            $countryId
-        )->where(
-            'state IN(?)',
-            [$regionId, 0]
-        )->limit(
-            1
-        );
-
-        $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
-        if ($value) {
-            $result['countryId'] = $countryId;
-            $result['regionId'] = $regionId;
-        }
-
-        return $result;
-    }
 }

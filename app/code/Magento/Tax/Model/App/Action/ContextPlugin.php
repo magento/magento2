@@ -30,11 +30,6 @@ class ContextPlugin
     protected $taxHelper;
 
     /**
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeHelper;
-
-    /**
      * @var \Magento\Tax\Model\Calculation\Proxy
      */
     protected $taxCalculation;
@@ -47,11 +42,6 @@ class ContextPlugin
     private $moduleManager;
 
     /**
-     * @var \Magento\Weee\Model\Tax
-     */
-    protected $weeeTax;
-
-    /**
      * Cache config
      *
      * @var \Magento\PageCache\Model\Config
@@ -62,9 +52,7 @@ class ContextPlugin
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Tax\Model\Calculation\Proxy $calculation
-     * @param \Magento\Weee\Model\WeeeTax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\PageCache\Model\Config $cacheConfig
      */
@@ -72,18 +60,14 @@ class ContextPlugin
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Tax\Model\Calculation\Proxy $calculation,
-        \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
     ) {
         $this->customerSession = $customerSession;
         $this->httpContext = $httpContext;
         $this->taxCalculation = $calculation;
-        $this->weeeTax = $weeeTax;
         $this->taxHelper = $taxHelper;
-        $this->weeeHelper = $weeeHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
     }
@@ -101,51 +85,27 @@ class ContextPlugin
         \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->moduleManager->isEnabled('Magento_PageCache') ||
-            !$this->cacheConfig->isEnabled() ) {
+            !$this->cacheConfig->isEnabled() ||
+            !$this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
             return $proceed($request);
         }
 
-        if ($this->taxHelper->isCatalogPriceDisplayAffectedByTax() || $this->weeeHelper->isEnabled())
-        {
-            $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
-            $defaultShippingAddress = $this->customerSession->getDefaultTaxShippingAddress();
-            $websiteId = $this->customerSession->getWebsiteId();
-            $customerTaxClassId = $this->customerSession->getCustomerTaxClassId();
-        }
+        $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
+        $defaultShippingAddress = $this->customerSession->getDefaultTaxShippingAddress();
+        $customerTaxClassId = $this->customerSession->getCustomerTaxClassId();
 
-        if ($this->taxHelper->isCatalogPriceDisplayAffectedByTax())
-        {
-            if (!empty($defaultBillingAddress) || !empty($defaultShippingAddress)) {
-                $taxRates = $this->taxCalculation->getTaxRates(
-                    $defaultBillingAddress,
-                    $defaultShippingAddress,
-                    $customerTaxClassId
-                );
-                $this->httpContext->setValue(
-                    'tax_rates',
-                    $taxRates,
-                    0
-                );
-            }
+        if (!empty($defaultBillingAddress) || !empty($defaultShippingAddress)) {
+            $taxRates = $this->taxCalculation->getTaxRates(
+                $defaultBillingAddress,
+                $defaultShippingAddress,
+                $customerTaxClassId
+            );
+            $this->httpContext->setValue(
+                'tax_rates',
+                $taxRates,
+                0
+            );
         }
-
-        if ($this->weeeHelper->isEnabled()) {
-            if (!empty($defaultBillingAddress)) {
-                $countryId = $defaultBillingAddress['country_id'];
-                $regionId = $defaultBillingAddress['region_id'];
-                $weeeTaxes = $this->weeeTax->getWeeeAttributes(
-                    $countryId,
-                    $regionId,
-                    $websiteId
-                );
-                $this->httpContext->setValue(
-                    'weee_taxes',
-                    $weeeTaxes,
-                    0
-                );
-            }
-        }
-
         return $proceed($request);
     }
 }

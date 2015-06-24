@@ -127,11 +127,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                 ->method('isCatalogPriceDisplayAffectedByTax')
                 ->willReturn($taxEnabled);
 
-            $this->weeeHelperMock->expects($this->any())
-                ->method('isEnabled')
-                ->willReturn($weeeEnabled);
-
-            if ($taxEnabled || $weeeEnabled) {
+            if ($taxEnabled) {
                 $this->customerSessionMock->expects($this->once())
                     ->method('getDefaultTaxBillingAddress')
                     ->willReturn(['country_id' => 1, 'region_id' => 1, 'postcode' => 11111]);
@@ -141,12 +137,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                 $this->customerSessionMock->expects($this->once())
                     ->method('getCustomerTaxClassId')
                     ->willReturn(1);
-                $this->customerSessionMock->expects($this->once())
-                    ->method('getWebsiteId')
-                    ->willReturn(1);
-            }
 
-            if ($taxEnabled && $weeeEnabled) {
                 $this->taxCalculationMock->expects($this->once())
                     ->method('getTaxRates')
                     ->with(
@@ -156,44 +147,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                     )
                     ->willReturn([]);
 
-                $this->weeeTaxMock->expects($this->once())
-                    ->method('getWeeeAttributes')
-                    ->with(1, 1, 1)
-                    ->willReturn([]);
-
-                $this->httpContextMock->expects($this->at(0))
+                $this->httpContextMock->expects($this->any())
                     ->method('setValue')
                     ->with('tax_rates', [], 0);
-
-                $this->httpContextMock->expects($this->at(1))
-                    ->method('setValue')
-                    ->with('weee_taxes', [], 0);
-            } else {
-                if ($taxEnabled) {
-                    $this->taxCalculationMock->expects($this->once())
-                        ->method('getTaxRates')
-                        ->with(
-                            ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
-                            ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
-                            1
-                        )
-                        ->willReturn([]);
-
-                    $this->httpContextMock->expects($this->any())
-                        ->method('setValue')
-                        ->with('tax_rates', [], 0);
-                }
-
-                if ($weeeEnabled) {
-                    $this->weeeTaxMock->expects($this->once())
-                        ->method('getWeeeAttributes')
-                        ->with(1, 1, 1)
-                        ->willReturn([]);
-
-                    $this->httpContextMock->expects($this->any())
-                        ->method('setValue')
-                        ->with('weee_taxes', [], 0);
-                }
             }
 
             $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');

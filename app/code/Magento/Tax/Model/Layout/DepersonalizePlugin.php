@@ -62,7 +62,6 @@ class DepersonalizePlugin
             $this->defaultTaxBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
             $this->defaultTaxShippingAddress = $this->customerSession->getDefaultTaxShippingAddress();
             $this->customerTaxClassId = $this->customerSession->getCustomerTaxClassId();
-            $this->websiteId = $this->customerSession->getWebsiteId();
         }
         return [];
     }
@@ -80,7 +79,6 @@ class DepersonalizePlugin
             $this->customerSession->setDefaultTaxBillingAddress($this->defaultTaxBillingAddress);
             $this->customerSession->setDefaultTaxShippingAddress($this->defaultTaxShippingAddress);
             $this->customerSession->setCustomerTaxClassId($this->customerTaxClassId);
-            $this->customerSession->setWebsiteId($this->websiteId);
         }
         return $result;
     }
