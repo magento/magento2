@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\View\Test\Unit\Asset\ModuleNotation;
+namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
