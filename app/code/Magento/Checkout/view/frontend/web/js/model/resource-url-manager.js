@@ -31,7 +31,7 @@ define(
             },
 
             getApplyCouponUrl: function(couponCode, quoteId) {
-                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quoteId} : {};
                 var urls = {
                     'guest': '/guest-carts/' + quoteId + '/coupons/' + couponCode,
                     'customer': '/carts/mine/coupons/' + couponCode
@@ -40,7 +40,7 @@ define(
             },
 
             getCancelCouponUrl: function(quoteId) {
-                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
+                var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quoteId} : {};
                 var urls = {
                     'guest': '/guest-carts/' + quoteId + '/coupons/',
                     'customer': '/carts/mine/coupons/'

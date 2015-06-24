@@ -12,7 +12,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/summary/discount'
+                template: 'Magento_SalesRule/summary/discount'
             },
             totals: quote.getTotals(),
             isDisplayed: function() {
