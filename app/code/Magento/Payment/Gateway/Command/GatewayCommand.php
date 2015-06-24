@@ -52,8 +52,8 @@ class GatewayCommand implements CommandInterface
         BuilderInterface $requestBuilder,
         TransferFactoryInterface $transferFactory,
         ClientInterface $client,
-        HandlerInterface $handler,
-        ValidatorInterface $validator
+        HandlerInterface $handler = null,
+        ValidatorInterface $validator = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->transferFactory = $transferFactory;
@@ -67,6 +67,7 @@ class GatewayCommand implements CommandInterface
      *
      * @param array $commandSubject
      * @return null
+     * @throws \Exception
      */
     public function execute(array $commandSubject)
     {
@@ -76,16 +77,18 @@ class GatewayCommand implements CommandInterface
         );
 
         $response = $this->client->placeRequest($transferO);
-
-        $result = $this->validator->validate(array_merge($commandSubject, ['response' => $response]));
-        if ($result !== null && !$result->isValid()) {
-            $commandSubject['payment']->getPayment()->setIsTransactionPending(true);
-            return;
+        if ($this->validator) {
+            $result = $this->validator->validate(array_merge($commandSubject, ['response' => $response]));
+            if (!$result->isValid()) {
+                throw new CommandException;
+            }
         }
 
-        $this->handler->handle(
-            $commandSubject,
-            $response
-        );
+        if ($this->handler) {
+            $this->handler->handle(
+                $commandSubject,
+                $response
+            );
+        }
     }
 }
