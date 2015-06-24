@@ -103,6 +103,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_driver;
 
+    /**
+     * Set up
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
@@ -554,7 +559,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $fileName = $sourceFileRelative['file_name'];
         $gmtTimestamp = 1234567;
         $copyName = $gmtTimestamp . '_' . $fileName;
-        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
 
         $this->import
             ->expects($this->once())
@@ -599,7 +603,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $fileName = $result['name'];
         $gmtTimestamp = 1234567;
         $copyName = $gmtTimestamp . '_' . $fileName;
-        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
 
         $this->import
             ->expects($this->once())
@@ -640,7 +643,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $fileName = $entity . $extension;
         $gmtTimestamp = 1234567;
         $copyName = $gmtTimestamp . '_' . $fileName;
-        $copyFile = \Magento\ImportExport\Model\Import::IMPORT_HISTORY_DIR . $copyName;
 
         $this->import
             ->expects($this->once())
