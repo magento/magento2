@@ -100,17 +100,7 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $indexDocuments = [];
-            foreach ($batchDocuments as $documentName => $documentValue) {
-                foreach ($this->fields as $fieldName => $fieldValue) {
-                    if (isset ($documentValue[$fieldName])) {
-                        $indexDocuments[$fieldValue['type']][$documentName][$fieldName] = $documentValue[$fieldName];
-                    }
-                }
-            }
-            foreach ($this->dataTypes as $dataType) {
-                $this->insertDocuments($dataType, $indexDocuments, $dimensions);
-            }
+            $this->insertDocuments('searchable', $batchDocuments, $dimensions);
         }
     }
 
@@ -178,11 +168,7 @@ class IndexerHandler implements IndexerInterface
      */
     private function insertDocuments($dataType, array $documents, array $dimensions)
     {
-        if ($dataType === 'searchable') {
-            $documents = $this->insertSearchable($documents);
-        } else {
-            $documents = $documents[$dataType];
-        }
+        $documents = $this->insertSearchable($documents);
         $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents);
     }
 
@@ -193,11 +179,8 @@ class IndexerHandler implements IndexerInterface
     private function insertSearchable(array $documents)
     {
         $insertDocuments = [];
-        foreach ($documents as $document) {
-            $entityId = $document['id'];
-            unset($document['id']);
-            foreach ($document as $fieldName => $fieldValue) {
-                $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, $fieldName)->getAttributeId();
+        foreach ($documents as  $entityId => $document) {
+            foreach ($document as $attributeId => $fieldValue) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
                     'attribute_id' => $attributeId,
