@@ -1709,7 +1709,7 @@ return [
     [
         'convertModuleNotationToPath',
         'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-        'Magento\Framework\View\Asset\ModuleNotation\Resolver::convertModuleNotationToPath',
+        'Magento\Framework\View\Asset\NotationResolver\Module::convertModuleNotationToPath',
     ],
     ['getViewFile', 'Magento\Framework\View\FileSystem', 'Magento\Framework\View\Asset\File::getSourceFile()'],
     [

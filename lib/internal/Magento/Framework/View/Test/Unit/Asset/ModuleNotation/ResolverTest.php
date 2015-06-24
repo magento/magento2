@@ -21,7 +21,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\ModuleNotation\Resolver;
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module;
      */
     private $object;
 
@@ -29,7 +29,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->object = new \Magento\Framework\View\Asset\ModuleNotation\Resolver($this->assetRepo);
+        $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
     }
 
     public function testConvertModuleNotationToPathNoModularSeparator()
