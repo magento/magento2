@@ -40,14 +40,23 @@ class Relation implements RelationInterface
          */
         if (!$object->getIsCustomerSaveTransaction() && $this->isAddressDefault($object)) {
             $customer = $this->customerFactory->create()->load($object->getCustomerId());
+            $changedAddresses = [];
 
             if ($object->getIsDefaultBilling()) {
-                $customer->setDefaultBilling($object->getId());
+                $changedAddresses['default_billing'] = $object->getId();
             }
+
             if ($object->getIsDefaultShipping()) {
-                $customer->setDefaultShipping($object->getId());
+                $changedAddresses['default_shipping'] = $object->getId();
             }
-            $customer->save();
+
+            if ($changedAddresses) {
+                $customer->getResource()->getWriteConnection()->update(
+                    $customer->getResource()->getTable('customer_entity'),
+                    $changedAddresses,
+                    $customer->getResource()->getWriteConnection()->quoteInto('entity_id = ?', $customer->getId())
+                );
+            }
         }
     }
 
