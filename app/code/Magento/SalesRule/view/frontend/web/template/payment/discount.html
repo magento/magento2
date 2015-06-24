@@ -4,28 +4,40 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="opc-payment-additional discount-code">
-    <div data-role="title" class="title">
-        <strong id="block-discount-heading" role="heading" aria-level="2"><!-- ko text: $t('Apply promo code')--><!-- /ko --></strong>
+<div class="payment-option _collapsible opc-payment-additional discount-code"
+     data-bind="mageInit: {'collapsible':{'openedState': '_active'}}">
+    <div class="payment-option-title field choice" data-role="title">
+        <span class="action action-toggle" id="block-discount-heading" role="heading" aria-level="2">
+            <!-- ko text: $t('Apply promo code')--><!-- /ko -->
+        </span>
     </div>
-    <div class="field choice payment">
-        <form class="form discount" id="discount-form" data-bind="blockLoader: isLoading">
-            <div class="field">
-                <div class="control">
-                    <input class="input-text" type="text" id="discount-code" name="discount_code" data-validate="{'required-entry':true}" data-bind="value: couponCode, attr:{placeholder: $t('Enter promo code')} "/>
+    <div class="payment-option-content" data-role="content">
+        <form class="form form-discount" id="discount-form" data-bind="blockLoader: isLoading">
+            <div class="payment-option-inner">
+                <div class="field">
+                    <div class="control">
+                        <input class="input-text"
+                               type="text"
+                               id="discount-code"
+                               name="discount_code"
+                               data-validate="{'required-entry':true}"
+                               data-bind="value: couponCode, attr:{placeholder: $t('Enter promo code')} " />
+                    </div>
                 </div>
             </div>
             <div class="actions-toolbar">
-                <!-- ko ifnot: isApplied() -->
-                <button class="action apply" type="submit" data-bind="'value': $t('Apply'), click: apply">
-                    <span><!-- ko text: $t('Apply')--><!-- /ko --></span>
-                </button>
-                <!-- /ko -->
-                <!-- ko if: isApplied() -->
-                <button class="action cancel" type="submit" data-bind="'value': $t('Cancel'), click: cancel">
-                    <span><!-- ko text: $t('Cancel coupon')--><!-- /ko --></span>
-                </button>
-                <!-- /ko -->
+                <div class="primary">
+                    <!-- ko ifnot: isApplied() -->
+                        <button class="action action-apply" type="submit" data-bind="'value': $t('Apply'), click: apply">
+                            <span><!-- ko text: $t('Apply')--><!-- /ko --></span>
+                        </button>
+                    <!-- /ko -->
+                    <!-- ko if: isApplied() -->
+                        <button class="action action-cancel" type="submit" data-bind="'value': $t('Cancel'), click: cancel">
+                            <span><!-- ko text: $t('Cancel coupon')--><!-- /ko --></span>
+                        </button>
+                    <!-- /ko -->
+                </div>
             </div>
         </form>
     </div>

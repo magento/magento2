@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<span data-bind="visible: isVisible">
-    <!-- ko text: $t('You automatically accept') --><!-- /ko -->
-    <a data-bind="click: showAgreements"><!-- ko text: $t('terms and conditions') --><!-- /ko --></a>
-    <!-- ko text: $t('before placing the order') --><!-- /ko -->
-</span>
+
+<div class="checkout-agreements" data-bind="visible: isVisible">
+    <span><!-- ko text: $t('You automatically accept') --><!-- /ko --></span>
+    <button type="button" class="action action-show" data-bind="click: showAgreements">
+        <span><!-- ko text: $t('terms and conditions') --><!-- /ko --></span>
+    </button>
+    <span><!-- ko text: $t('before placing the order') --><!-- /ko --></span>
+</div>
