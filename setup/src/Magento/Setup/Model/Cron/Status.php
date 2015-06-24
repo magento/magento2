@@ -47,10 +47,10 @@ class Status
     /**
      * Constructor
      *
-     * @param null $statusFilePath
-     * @param null $logFilePath
-     * @param null $updateInProgressFlagFilePath
-     * @param null $updateErrorFlagFilePath
+     * @param string $statusFilePath
+     * @param string $logFilePath
+     * @param string $updateInProgressFlagFilePath
+     * @param string $updateErrorFlagFilePath
      */
     public function __construct(
         $statusFilePath = null,

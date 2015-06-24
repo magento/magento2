@@ -112,6 +112,7 @@ class Queue
      * Make sure job declaration is correct.
      *
      * @param object $job
+     * @return void
      * @throws \RuntimeException
      */
     protected function validateJobDeclaration($job)

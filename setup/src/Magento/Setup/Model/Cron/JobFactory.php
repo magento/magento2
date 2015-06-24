@@ -14,6 +14,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class JobFactory
 {
+    /**
+     * Name of jobs
+     */
     const NAME_UPGRADE = 'setup:upgrade';
 
     /**

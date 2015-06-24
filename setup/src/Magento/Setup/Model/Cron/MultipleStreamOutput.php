@@ -23,7 +23,7 @@ class MultipleStreamOutput extends Output
      *
      * @param array $streams
      * @param bool|int $verbosity
-     * @param null $decorated
+     * @param bool $decorated
      * @param OutputFormatterInterface $formatter
      */
     public function __construct(array $streams, $verbosity = self::VERBOSITY_NORMAL, $decorated = null, OutputFormatterInterface $formatter = null)

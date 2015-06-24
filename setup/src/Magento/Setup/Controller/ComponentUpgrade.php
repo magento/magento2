@@ -25,17 +25,11 @@ class ComponentUpgrade extends AbstractActionController
     private $updater;
 
     /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
-
-    /**
      * @param ModelUpdater $updater
      */
-    public function __construct(ModelUpdater $updater, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ModelUpdater $updater)
     {
         $this->updater = $updater;
-        $this->url = $objectManagerProvider->get()->get('Magento\Framework\Url');
     }
 
     /**
