@@ -32,7 +32,7 @@ class Filters extends \Magento\Ui\Component\Filters
     public function prepare()
     {
         foreach ($this->attributeRepository->getList() as $attribute) {
-            if (!isset($this->components[$attribute->getAttributeCode()])) {
+            if (!isset($this->components[$attribute->getAttributeCode()]) && $attribute->getIsFilterableInGrid()) {
                 $filter = $this->filterFactory->create($attribute, $this->getContext());
                 $filter->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $filter);

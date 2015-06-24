@@ -18,6 +18,7 @@ class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
      */
     public function addField(Collection $collection, $field, $alias = null)
     {
-        $collection->addWebsiteNamesToResult();
+//         TODO: fix issue with collection load
+//         $collection->addWebsiteNamesToResult();
     }
 }

@@ -27,6 +27,7 @@ class ColumnFactory
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',
+        'boolean' => 'select',
         'select' => 'select',
         'multiselect' => 'select',
         'date' => 'date',
@@ -54,6 +55,7 @@ class ColumnFactory
             'sorting' => 'asc',
             'align' => 'left',
             'add_field' => true,
+            'visible' => $attribute->getIsVisibleInGrid(),
         ];
 
         if ($attribute->usesSource()) {
