@@ -373,6 +373,9 @@ class Payment extends Info implements OrderPaymentInterface
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
