@@ -163,8 +163,10 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             $this->_condition,
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false)
         );
-        $this->_entityAttributeValuesProperty->setValue($this->_condition,
-            $this->getMock('Magento\Eav\Model\Config', [], [], '', false));
+        $this->_entityAttributeValuesProperty->setValue(
+            $this->_condition,
+            $this->getMock('Magento\Eav\Model\Config', [], [], '', false)
+        );
 
         $attribute = new \Magento\Framework\Object();
         $attribute->setBackendType('datetime');

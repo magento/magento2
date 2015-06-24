@@ -64,5 +64,4 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['by_percent', 1, 10, 9.90],
         ];
     }
-
 }
