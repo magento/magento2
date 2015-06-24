@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Test\Unit\Model;
+namespace Magento\CatalogSearch\Test\Unit\Model\Search\Indexer;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -20,10 +20,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     private $indexScopeResolver;
     /**
-     * @var \Magento\Search\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $flatScopeResolver;
-    /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
@@ -33,7 +29,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     private $adapter;
 
     /**
-     * @var \Magento\Indexer\Model\IndexStructure
+     * @var \Magento\CatalogSearch\Model\Indexer\IndexStructure
      */
     private $target;
 
@@ -62,11 +58,10 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            '\Magento\Indexer\Model\IndexStructure',
+            '\Magento\CatalogSearch\Model\Indexer\IndexStructure',
             [
                 'resource' => $this->resource,
                 'indexScopeResolver' => $this->indexScopeResolver,
-                'flatScopeResolver' => $this->flatScopeResolver
             ]
         );
     }
@@ -89,36 +84,14 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $this->flatScopeResolver->expects($this->once())
-            ->method('resolve')
-            ->with($index, $dimensions)
-            ->willReturn($index . '_flat');
         $position = 0;
         $position = $this->mockDropTable($position, $expectedTable, true);
-        $position = $this->mockDropTable($position, $index . '_flat', true);
 
         $this->target->delete($index, $dimensions);
     }
 
     public function testCreateWithEmptyFields()
     {
-        $fields = [
-            [
-                'name' => 'fieldName1',
-                'type' => 'fieldType1',
-                'size' => 'fieldSize1',
-            ],
-            [
-                'name' => 'fieldName2',
-                'type' => 'fieldType2',
-                'size' => 'fieldSize2',
-            ],
-            [
-                'name' => 'fieldName3',
-                'type' => 'fieldType3',
-                'size' => 'fieldSize3',
-            ]
-        ];
         $index = 'index_name';
         $expectedTable = 'index_name_scope3_scope5_scope1';
         $dimensions = [
@@ -131,14 +104,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($expectedTable);
-        $this->flatScopeResolver->expects($this->once())
-            ->method('resolve')
-            ->with($index, $dimensions)
-            ->willReturn($index . '_flat');
         $position = $this->mockFulltextTable($position, $expectedTable, true);
-        $position = $this->mockFlatTable($position, $index . '_flat', $fields);
 
-        $this->target->create($index, $fields, $dimensions);
+        $this->target->create($index, $dimensions);
     }
 
     /**
@@ -175,35 +143,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $callNumber;
     }
 
-    private function mockFlatTable($callNumber, $tableName, array $fields)
-    {
-        $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
-            ->setMethods(['addColumn'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $at = 0;
-        foreach ($fields as $field) {
-            $name = $field['name'];
-            $type = $field['type'];
-            $size = $field['size'];
-            $table->expects($this->at($at++))
-                ->method('addColumn')
-                ->with($name, $type, $size)
-                ->willReturnSelf();
-        }
-
-        $this->adapter->expects($this->at($callNumber++))
-            ->method('newTable')
-            ->with($tableName)
-            ->willReturn($table);
-        $this->adapter->expects($this->at($callNumber++))
-            ->method('createTable')
-            ->with($table)
-            ->willReturnSelf();
-
-        return $callNumber;
-    }
-
     private function mockFulltextTable($callNumber, $tableName)
     {
         $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
@@ -223,9 +162,9 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('addColumn')
             ->with(
                 'attribute_id',
-                Table::TYPE_TEXT,
-                255,
-                ['unsigned' => true, 'nullable' => true]
+                Table::TYPE_INTEGER,
+                10,
+                ['unsigned' => true, 'nullable' => false]
             )->willReturnSelf();
 
         $table->expects($this->at(2))
