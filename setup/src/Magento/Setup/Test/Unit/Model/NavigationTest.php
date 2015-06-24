@@ -21,11 +21,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     private $objectManagerProvider;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    /**
      * @var Navigation
      */
     private $navigation;
