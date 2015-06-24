@@ -12,4 +12,7 @@
     <event name="theme_save_after">
         <observer name="check_theme_is_assigned" instance="Magento\Theme\Model\Observer" method="checkThemeIsAssigned" />
     </event>
+    <event name="theme_registration_from_filesystem">
+        <observer name="theme_registration_observer" instance="Magento\Theme\Model\Observer" method="themeRegistration" />
+    </event>
 </config>
