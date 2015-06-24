@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Reports data helper
  */
@@ -23,16 +21,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const REPORT_PERIOD_TYPE_YEAR = 'year';
 
     /**
+     * Item factory
+     *
      * @var \Magento\Reports\Model\ItemFactory
      */
     protected $_itemFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ItemFactory $itemFactory
      */
-    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Reports\Model\ItemFactory $itemFactory)
-    {
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Reports\Model\ItemFactory $itemFactory
+    ) {
         parent::__construct($context);
         $this->_itemFactory = $itemFactory;
     }

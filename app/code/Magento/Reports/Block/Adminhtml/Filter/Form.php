@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Filter;
 
 /**
@@ -18,30 +16,31 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Report type options
      *
-     * @var array
+     * @var []
      */
     protected $_reportTypeOptions = [];
 
     /**
      * Report field visibility
      *
-     * @var array
+     * @var []
      */
     protected $_fieldVisibility = [];
 
     /**
      * Report field opions
      *
-     * @var array
+     * @var []
      */
     protected $_fieldOptions = [];
 
     /**
      * Set field visibility
-     * @codeCoverageIgnore
      *
      * @param string $fieldId
      * @param bool $visibility
+     *
+     * @codeCoverageIgnore
      * @return void
      */
     public function setFieldVisibility($fieldId, $visibility)
@@ -113,7 +112,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            ['data' => ['id' => 'filter_form', 'action' => $actionUrl, 'method' => 'get']]
+            [
+                'data' => [
+                    'id' => 'filter_form',
+                    'action' => $actionUrl,
+                    'method' => 'get'
+                ]
+            ]
         );
 
         $htmlIdPrefix = 'sales_report_';
@@ -127,7 +132,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'report_type',
             'select',
-            ['name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Match Period To')]
+            [
+                'name' => 'report_type',
+                'options' => $this->_reportTypeOptions,
+                'label' => __('Match Period To')
+            ]
         );
 
         $fieldset->addField(

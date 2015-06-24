@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml;
 
 /**
@@ -32,14 +30,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Filters array
      *
-     * @var array
+     * @var []
      */
     protected $_filters = [];
 
     /**
      * Default filters values
      *
-     * @var array
+     * @var []
      */
     protected $_defaultFilters = ['report_from' => '', 'report_to' => '', 'report_period' => 'day'];
 
@@ -53,7 +51,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Errors messages aggregated array
      *
-     * @var array
+     * @var []
      */
     protected $_errors = [];
 
@@ -67,7 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Filter values array
      *
-     * @var array
+     * @var []
      */
     protected $_filterValues;
 
@@ -81,7 +79,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     {
         $filter = $this->getParam($this->getVarNameFilter(), null);
 
-        if (is_null($filter)) {
+        if (null === $filter) {
             $filter = $this->_defaultFilter;
         }
 
@@ -154,7 +152,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Get allowed stores
      *
-     * @return array
+     * @return array|\int[]
      */
     protected function _getAllowedStoreIds()
     {
@@ -203,9 +201,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Set visibility of store switcher
-     * @codeCoverageIgnore
      *
      * @param bool $visible
+     * @codeCoverageIgnore
      * @return void
      */
     public function setStoreSwitcherVisibility($visible = true)
