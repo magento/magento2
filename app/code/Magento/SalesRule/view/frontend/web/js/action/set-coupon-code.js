@@ -24,7 +24,9 @@ define(
             var quoteId = quote.getQuoteId();
             var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
             return storage.put(
-                url
+                url,
+                {},
+                false
             ).done(
                 function (response) {
                     if (response) {

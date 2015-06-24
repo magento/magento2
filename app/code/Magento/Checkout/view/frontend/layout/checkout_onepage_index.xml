@@ -282,7 +282,7 @@
                                         </item>
                                     </item>
                                     <item name="summary" xsi:type="array">
-                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary</item>
                                         <item name="displayArea" xsi:type="string">summary</item>
                                         <item name="config" xsi:type="array">
                                             <item name="template" xsi:type="string">Magento_Checkout/summary</item>

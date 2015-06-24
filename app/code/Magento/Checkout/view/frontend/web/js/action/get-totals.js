@@ -10,17 +10,20 @@ define(
         '../model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Ui/js/model/messageList',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Checkout/js/model/totals'
     ],
-    function ($, quote, resourceUrlManager, messageList, storage) {
+    function ($, quote, resourceUrlManager, messageList, storage, totals) {
         "use strict";
         return function (callbacks, deferred) {
             deferred = deferred || $.Deferred();
-
+            totals.isLoading(true);
             return storage.get(
-                resourceUrlManager.getUrlForCartTotals(quote)
+                resourceUrlManager.getUrlForCartTotals(quote),
+                false
             ).done(
                 function (response) {
+                    totals.isLoading(false);
                     var proceed = true;
                     $.each(callbacks, function(index, callback) {
                         proceed = proceed && callback();
@@ -32,6 +35,7 @@ define(
                 }
             ).error(
                 function (response) {
+                    totals.isLoading(false);
                     var error = JSON.parse(response.responseText);
                     messageList.addErrorMessage(error);
                     deferred.reject();
