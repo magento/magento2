@@ -1098,26 +1098,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Checks if it not null
-     *
-     * @return bool
-     */
-    public function hasItemsCollection()
-    {
-        return null !== $this->_items;
-    }
-
-    /**
-     * Checks if it not null
-     *
-     * @return bool
-     */
-    public function hasShippingRatesCollection()
-    {
-        return null !== $this->_rates;
-    }
-
-    /**
      * Validate minimum amount
      *
      * @return bool
