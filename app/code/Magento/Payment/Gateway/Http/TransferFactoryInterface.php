@@ -5,15 +5,13 @@
  */
 namespace Magento\Payment\Gateway\Http;
 
-use Magento\Payment\Gateway\Http\TransferInterface;
-
-interface TransferBuilderInterface
+interface TransferFactoryInterface
 {
     /**
      * Builds gateway transfer object
      *
-     * @param array $requestENV
+     * @param array $request
      * @return TransferInterface
      */
-    public function build(array $requestENV);
+    public function create(array $request);
 }
