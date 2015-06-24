@@ -5,9 +5,29 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot */
+$entitySnapshot = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('EavVersionControlSnapshot');
+
+/** @var \Magento\Customer\Model\Resource\Address $addressResource */
+$addressResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(
+        'Magento\Customer\Model\Resource\Address',
+        [
+            'entitySnapshot' => $entitySnapshot
+        ]
+    );
+
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(
+        'Magento\Customer\Model\Address',
+        [
+            'resource' => $addressResource
+        ]
+    );
+
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
