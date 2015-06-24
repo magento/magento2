@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', 'Magento_Ui/js/model/errorlist'],
-    function (Component, ko, giftOptions, giftMessage, errorList) {
+define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', 'Magento_Ui/js/model/messageList'],
+    function (Component, ko, giftOptions, giftMessage, messageList) {
         "use strict";
 
         return Component.extend({
@@ -50,7 +50,7 @@ define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', '
                 }
                 var self = this;
                 if (giftOption.optionType === 'undefined') {
-                    errorList.add('You should define type of your custom option');
+                    messageList.addErrorMessage('You should define type of your custom option');
                 }
 
                 if (!this.options.hasOwnProperty(giftOption.optionType)) {

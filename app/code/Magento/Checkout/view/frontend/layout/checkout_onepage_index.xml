@@ -30,8 +30,8 @@
                                 <item name="children" xsi:type="array">
                                     <item name="errors" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">0</item>
-                                        <item name="component" xsi:type="string">Magento_Ui/js/view/errors</item>
-                                        <item name="displayArea" xsi:type="string">errors</item>
+                                        <item name="component" xsi:type="string">Magento_Ui/js/view/messages</item>
+                                        <item name="displayArea" xsi:type="string">messages</item>
                                     </item>
                                     <item name="authentication" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">1</item>
