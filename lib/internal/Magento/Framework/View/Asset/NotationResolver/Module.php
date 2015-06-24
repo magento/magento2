@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Asset\ModuleNotation;
+namespace Magento\Framework\View\Asset\NotationResolver;
 
 use Magento\Framework\View\Asset;
 use Magento\Framework\View\FileSystem;
 
-class Resolver
+class Module
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
