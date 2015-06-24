@@ -30,6 +30,15 @@ class IndexStructure
     private $flatScopeResolver;
 
     /**
+     * @var array
+     */
+    protected $columnTypesMap = [
+        'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
+        'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
+        'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
+    ];
+
+    /**
      * @param Resource $resource
      * @param IndexScopeResolver $indexScopeResolver
      * @param FlatScopeResolver $flatScopeResolver
@@ -37,11 +46,13 @@ class IndexStructure
     public function __construct(
         Resource $resource,
         IndexScopeResolver $indexScopeResolver,
-        FlatScopeResolver $flatScopeResolver
+        FlatScopeResolver $flatScopeResolver,
+        array $columnTypesMap
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;
         $this->flatScopeResolver = $flatScopeResolver;
+        $this->columnTypesMap = array_merge($this->columnTypesMap, $columnTypesMap);
     }
 
     /**
@@ -124,9 +135,12 @@ class IndexStructure
         $adapter = $this->getAdapter();
         $table = $adapter->newTable($tableName);
         foreach ($fields as $field) {
+            $columnMap = isset($this->columnTypesMap[$field['dataType']])
+                ? $this->columnTypesMap[$field['dataType']]
+                : ['type' => Table::TYPE_TEXT, 'size' => Table::DEFAULT_TEXT_SIZE];
             $name = $field['name'];
-            $type = $field['type'];
-            $size = $field['size'];
+            $type = $columnMap['type'];
+            $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
         $adapter->createTable($table);
