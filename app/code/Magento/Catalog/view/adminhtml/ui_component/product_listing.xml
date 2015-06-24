@@ -62,7 +62,7 @@
             </argument>
         </container>
 
-        <filters name="listing_filters">
+        <filters name="listing_filters" class="Magento\Catalog\Ui\Component\Listing\Filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>

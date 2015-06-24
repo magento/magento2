@@ -5,24 +5,24 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing;
 
-class Columns extends \Magento\Ui\Component\Listing\Columns
+class Filters extends \Magento\Ui\Component\Filters
 {
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-     * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
+     * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
      * @param AttributeRepository $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
-        \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory,
+        \Magento\Catalog\Ui\Component\FilterFactory $filterFactory,
         \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->columnFactory = $columnFactory;
+        $this->filterFactory = $filterFactory;
         $this->attributeRepository = $attributeRepository;
     }
 
@@ -33,9 +33,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         foreach ($this->attributeRepository->getList() as $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])) {
-                $column = $this->columnFactory->create($attribute, $this->getContext());
-                $column->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $column);
+                $filter = $this->filterFactory->create($attribute, $this->getContext());
+                $filter->prepare();
+                $this->addComponent($attribute->getAttributeCode(), $filter);
             }
         }
         parent::prepare();
