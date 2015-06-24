@@ -4,13 +4,14 @@
  */
 define(
     [
+        'jquery',
         'ko',
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_SalesRule/js/action/set-coupon-code',
         'Magento_SalesRule/js/action/cancel-coupon'
     ],
-    function (ko, Component, quote, setCouponCodeAction, cancelCouponAction) {
+    function ($, ko, Component, quote, setCouponCodeAction, cancelCouponAction) {
         'use strict';
         var totals = quote.getTotals();
         var couponCode = ko.observable(null);
@@ -18,6 +19,7 @@ define(
             couponCode(totals()['coupon_code']);
         }
         var isApplied = ko.observable(couponCode() != null);
+        var isLoading = ko.observable(false);
         return Component.extend({
             defaults: {
                 template: 'Magento_SalesRule/payment/discount'
@@ -27,14 +29,34 @@ define(
              * Applied flag
              */
             isApplied: isApplied,
-            isLoading: false,
+            isLoading: isLoading,
+            /**
+             * Coupon code application procedure
+             */
             apply: function() {
-                setCouponCodeAction(couponCode(), isApplied);
+                if (this.validate()) {
+                    isLoading(true);
+                    setCouponCodeAction(couponCode(), isApplied, isLoading);
+                }
             },
+            /**
+             * Cancel using coupon
+             */
             cancel: function() {
-                cancelCouponAction(isApplied);
-                this.couponCode = '';
-                couponCode('');
+                if (this.validate()) {
+                    isLoading(true);
+                    couponCode('');
+                    cancelCouponAction(isApplied, isLoading);
+                }
+            },
+            /**
+             * Coupon form validation
+             *
+             * @returns {boolean}
+             */
+            validate: function() {
+                var form = '#discount-form';
+                return $(form).validation() && $(form).validation('isValid');
             }
         });
     }
