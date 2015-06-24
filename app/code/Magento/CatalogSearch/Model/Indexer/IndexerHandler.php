@@ -11,14 +11,17 @@ use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexStructure;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Indexer\Model\SaveHandler\Batch;
+use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexerHandler implements IndexerInterface
 {
     /**
      * @var string[]
      */
-    private $dataTypes = ['searchable', 'filterable'];
+    private $dataTypes = ['searchable'];
 
     /**
      * @var IndexStructure
@@ -49,23 +52,32 @@ class IndexerHandler implements IndexerInterface
      * @var Config
      */
     private $eavConfig;
-    
+
     /**
      * @var int
      */
     private $batchSize;
 
     /**
+     * @var IndexScopeResolverInterface[]
+     */
+    private $scopeResolvers;
+
+    /**
      * @param IndexStructure $indexStructure
      * @param Resource|Resource $resource
      * @param Config $eavConfig
+     * @param Batch $batch
+     * @param IndexScopeResolver $indexScopeResolver
      * @param array $data
+     * @param int $batchSize
      */
     public function __construct(
         IndexStructure $indexStructure,
         Resource $resource,
         Config $eavConfig,
         Batch $batch,
+        IndexScopeResolver $indexScopeResolver,
         array $data,
         $batchSize = 100
     ) {
@@ -73,17 +85,19 @@ class IndexerHandler implements IndexerInterface
         $this->resource = $resource;
         $this->batch = $batch;
         $this->eavConfig = $eavConfig;
+        $this->scopeResolvers['searchable'] = $indexScopeResolver;
         $this->data = $data;
         $this->fields = [];
 
         $this->prepareFields();
         $this->batchSize = $batchSize;
+        $this->indexScopeResolver = $indexScopeResolver;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function saveIndex($dimension, \Traversable $documents)
+    public function saveIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $indexDocuments = [];
@@ -95,7 +109,7 @@ class IndexerHandler implements IndexerInterface
                 }
             }
             foreach ($this->dataTypes as $dataType) {
-                $this->insertDocuments($dataType, $indexDocuments);
+                $this->insertDocuments($dataType, $indexDocuments, $dimensions);
             }
         }
     }
@@ -108,7 +122,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->dataTypes as $dataType) {
             foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
                 $documentsId = array_column($batchDocuments, 'id');
-                $this->getAdapter()->delete($this->getTableName($dataType), ['id' => $documentsId]);
+                $this->getAdapter()->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
             }
         }
     }
@@ -118,11 +132,8 @@ class IndexerHandler implements IndexerInterface
      */
     public function cleanIndex($dimensions)
     {
-        foreach ($this->dataTypes as $dataType) {
-            $tableName = $this->getTableName($dataType);
-            $this->indexStructure->delete($tableName, $dimensions);
-            $this->indexStructure->create($tableName, $dimensions);
-        }
+        $this->indexStructure->delete($this->getIndexName(), $dimensions);
+        $this->indexStructure->create($this->getIndexName(), $dimensions);
     }
 
     /**
@@ -135,17 +146,18 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param string $dataType
+     * @param Dimension[] $dimensions
      * @return string
      */
-    private function getTableName($dataType)
+    private function getTableName($dataType, $dimensions)
     {
-        return $this->getIndexId() . $dataType;
+        return $this->scopeResolvers[$dataType]->resolve($this->getIndexName(), $dimensions);
     }
 
     /**
      * @return string
      */
-    private function getIndexId()
+    private function getIndexName()
     {
         return $this->data['indexer_id'];
     }
@@ -161,14 +173,15 @@ class IndexerHandler implements IndexerInterface
     /**
      * @param string $dataType
      * @param array $documents
+     * @param Dimension[] $dimensions
      * @return void
      */
-    private function insertDocuments($dataType, array $documents)
+    private function insertDocuments($dataType, array $documents, array $dimensions)
     {
         if ($dataType === 'searchable') {
             $documents = $this->insertSearchable($documents);
         }
-        $this->getAdapter()->insertMultiple($this->getTableName($dataType), $documents[$dataType]);
+        $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents[$dataType]);
     }
 
     /**

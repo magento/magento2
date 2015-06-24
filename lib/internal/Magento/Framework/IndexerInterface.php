@@ -16,7 +16,7 @@ interface IndexerInterface
     /**
      * Add entities data to index
      *
-     * @param Dimension[] $dimension
+     * @param Dimension[] $dimensions
      * @param \Traversable $documents
      * @return IndexerInterface
      */
@@ -25,7 +25,7 @@ interface IndexerInterface
     /**
      * Remove entities data from index
      *
-     * @param Dimension[] $dimension
+     * @param Dimension[] $dimensions
      * @param \Traversable $documents
      * @return IndexerInterface
      */
@@ -34,7 +34,7 @@ interface IndexerInterface
     /**
      * Remove all data from index
      *
-     * @param Dimension[] $dimension
+     * @param Dimension[] $dimensions
      * @return IndexerInterface
      */
     public function cleanIndex($dimensions);
