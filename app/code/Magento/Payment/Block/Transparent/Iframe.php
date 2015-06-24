@@ -12,6 +12,8 @@ namespace Magento\Payment\Block\Transparent;
  */
 class Iframe extends \Magento\Framework\View\Element\Template
 {
+    const REGISTRY_KEY = 'transparent_form_params';
+
     /**
      * Core registry
      *
@@ -42,10 +44,8 @@ class Iframe extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        if ($this->hasRegistryKey()) {
-            $params = $this->coreRegistry->registry($this->getRegistryKey());
-            $this->setParams($params);
-        }
+        $params = $this->coreRegistry->registry(self::REGISTRY_KEY);
+        $this->setParams($params);
         return parent::_prepareLayout();
     }
 }
