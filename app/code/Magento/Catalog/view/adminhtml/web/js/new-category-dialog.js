@@ -111,7 +111,7 @@ define([
                                 $('#new_category_name, #new_category_parent-suggest').val('');
                                 $suggest.val('');
                                 clearParentCategory();
-                                widget.element.trigger('closeModal');
+                                $(widget.element).modal('closeModal');
                             } else {
                                 $('#new_category_messages').html(data.messages);
                             }
