@@ -26,7 +26,7 @@ define([
          *
          * @returns {String}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var value = this._super();
 
             if (value) {
