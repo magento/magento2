@@ -56,7 +56,6 @@ define([
                     isFileUploaded = true;
                 }
             });
-            console.log(dataToAdd);
             if (isFileUploaded) {
                 this.bindFormSubmit();
             }
