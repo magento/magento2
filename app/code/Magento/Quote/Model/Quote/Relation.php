@@ -20,17 +20,9 @@ class Relation implements RelationInterface
         /**
          * @var $object \Magento\Quote\Model\Quote
          */
-        if ($object->hasAddressCollection()) {
-            $object->getAddressesCollection()->save();
-        }
-        if ($object->hasItemsCollection()) {
-            $object->getItemsCollection()->save();
-        }
-        if ($object->hasPaymentsCollection()) {
-            $object->getPaymentsCollection()->save();
-        }
-        if ($object->hasCurrentPayment()) {
-            $object->getPayment()->save();
-        }
+        $object->getAddressesCollection()->save();
+        $object->getItemsCollection()->save();
+        $object->getPaymentsCollection()->save();
+        $object->getPayment()->save();
     }
 }
