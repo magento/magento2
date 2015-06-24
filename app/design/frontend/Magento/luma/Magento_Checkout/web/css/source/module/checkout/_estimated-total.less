@@ -34,11 +34,10 @@
         }
 
         .minicart-wrapper {
-            .action {
-                &.showcart {
-                    &:before {
-                        .css(color, @primary__color);
-                    }
+            .action-showcart {
+                .button-reset();
+                &:before {
+                    .css(color, @primary__color);
                 }
             }
         }

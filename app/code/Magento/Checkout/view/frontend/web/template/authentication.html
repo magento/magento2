@@ -5,10 +5,12 @@
  */
 -->
 <div class="authentication-wrapper" data-block="authentication" data-bind="visible: isActive()">
-    <a href="#"
-       data-bind="text: $t('Sign In')"
-       class="action action-sign-in"
-       data-trigger="authentication"></a>
+    <button
+        type="button"
+        class="action-auth-toggle"
+        data-trigger="authentication">
+        <span data-bind="text: $t('Sign In')"></span>
+    </button>
     <div class="block-authentication"
          style="display: none"
          data-bind="mageInit: {
