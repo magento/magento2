@@ -23,9 +23,10 @@ define([
             template: 'ui/grid/paging',
             pageSize: 20,
             current: 1,
+            selectProvider: '',
 
             imports: {
-                totalSelected: '${ $.provider }:config.multiselect.total',
+                totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords'
             },
 
