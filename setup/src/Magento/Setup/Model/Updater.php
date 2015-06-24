@@ -32,6 +32,7 @@ class Updater
      * Constructor
      *
      * @param DirectoryList $directoryList
+     * @param Filesystem $filesystem
      */
     public function __construct(DirectoryList $directoryList, Filesystem $filesystem){
         $this->queueFilePath = '.update_queue.json';
@@ -40,6 +41,8 @@ class Updater
     }
 
     /**
+     * Create an update task for Updater app
+     *
      * @param array $packages
      * @return string
      */
@@ -55,6 +58,11 @@ class Updater
         }
     }
 
+    /**
+     * Read the job queue
+     *
+     * @return array
+     */
     private function readQueue(){
         try {
             $queueFileContent = $this->write->readFile($this->queueFilePath);

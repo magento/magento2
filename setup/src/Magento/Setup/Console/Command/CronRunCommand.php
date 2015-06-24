@@ -10,6 +10,9 @@ use Magento\Setup\Model\Cron\Status;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command to run scheduled jobs, this command should be run as a cron job
+ */
 class CronRunCommand extends AbstractSetupCommand
 {
     /**
@@ -50,6 +53,9 @@ class CronRunCommand extends AbstractSetupCommand
         parent::configure();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($this->status->isUpdateInProgress() || $this->status->isUpdateError()) {

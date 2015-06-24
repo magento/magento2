@@ -41,7 +41,7 @@ abstract class AbstractJob
      * @param AbstractSetupCommand $command
      * @param OutputInterface $output
      * @param Status $status
-     * @param $name
+     * @param string $name
      * @param array $params
      */
     public function __construct(
