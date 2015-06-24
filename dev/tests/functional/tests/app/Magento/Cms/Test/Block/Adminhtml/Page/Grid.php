@@ -6,8 +6,8 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Page;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Backend Data Grid for managing "CMS Page" entities.
@@ -66,8 +66,8 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = '.action-menu-item';
-
+    protected $previewCmsPage = ".//a[contains(@class, 'action-menu-item') and text() = '%s']";
+    
     /**
      * Search item and open it on Frontend.
      *
@@ -77,10 +77,12 @@ class Grid extends DataGrid
      */
     public function searchAndPreview(array $filter)
     {
+        $itemName = 'Preview';
         $this->search($filter);
         $rowItem = $this->_rootElement->find($this->rowItem);
         if ($rowItem->isVisible()) {
-            $rowItem->find($this->previewCmsPage)->click();
+            $rowItem->find('.action-select')->click();
+            $rowItem->find(sprintf($this->previewCmsPage, $itemName), Locator::SELECTOR_XPATH)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
