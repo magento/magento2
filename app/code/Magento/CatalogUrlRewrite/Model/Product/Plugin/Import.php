@@ -289,7 +289,7 @@ class Import
             return $this;
         }
         $select = $this->connection->select()
-            ->from($this->urlKeyAttributeBackendTable, 'store_id, entity_id')
+            ->from($this->urlKeyAttributeBackendTable, ['store_id', 'entity_id'])
             ->where('attribute_id = ?', $this->urlKeyAttributeId)
             ->where(implode(' OR ', $this->entityStoresToCheckOverridden));
         $entityStoresToClean = $this->connection->fetchAll($select);

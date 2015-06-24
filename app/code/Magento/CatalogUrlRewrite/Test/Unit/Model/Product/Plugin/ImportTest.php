@@ -616,7 +616,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->with(
                 $urlKeyAttributeBackendTable,
-                'store_id, entity_id'
+                ['store_id', 'entity_id']
             )
             ->will($this->returnSelf());
         $this->select
