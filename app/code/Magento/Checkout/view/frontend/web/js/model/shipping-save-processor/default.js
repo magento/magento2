@@ -10,9 +10,9 @@ define(
         'Magento_Checkout/js/model/resource-url-manager',
         'mage/storage',
         'Magento_Checkout/js/model/payment-service',
-        'Magento_Ui/js/model/errorlist'
+        'Magento_Ui/js/model/messageList'
     ],
-    function (ko, quote, resourceUrlManager, storage, paymentService, errorList) {
+    function (ko, quote, resourceUrlManager, storage, paymentService, messageList) {
         'use strict';
         return {
             saveShippingInformation: function() {
@@ -35,7 +35,7 @@ define(
                 ).fail(
                     function (response) {
                         var error = JSON.parse(response.responseText);
-                        errorList.add(error);
+                        messageList.addErrorMessage(error);
                     }
                 );
             }
