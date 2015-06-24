@@ -13,16 +13,6 @@ namespace Magento\Test\Integrity\Magento\Indexer;
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
     /**
-     * Set up
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        $this->markTestSkipped('In Progress');
-    }
-
-    /**
      * Returns the name of the XSD file to be used to validate the XML
      *
      * @return string
@@ -69,7 +59,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownInvalidPartialXml()
     {
-        return __DIR__ . '/_files/invalid_partial.xml';
+        return null;
     }
 
     /**
@@ -89,54 +79,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXmlName()
     {
-        return 'indexer.xml';
-    }
-
-    public function testSchemaUsingInvalidXml($expectedErrors = null)
-    {
-        // @codingStandardsIgnoreStart
-        $expectedErrors = [
-            "Element 'indexer': Duplicate key-sequence ['catalogsearch_fulltext'] in unique identity-constraint 'uniqueViewId'.",
-            "Element 'indexer': Duplicate key-sequence ['indexer_0', 'catalogsearch_fulltext'] in unique identity-constraint 'uniqueIndexertId'.",
-            "Element 'fields': Missing child element(s). Expected is ( field ).",
-            "Element 'fields', attribute 'handler': [facet 'pattern'] The value 'field_handler' is not accepted by the pattern '[a-zA-Z\\\\]+'.",
-            "Element 'fields', attribute 'handler': 'field_handler' is not a valid value of the atomic type 'classType'.",
-            "Element 'field': Duplicate key-sequence ['visibility'] in unique identity-constraint 'uniqueField'.",
-            "Element 'field', attribute 'origin': [facet 'pattern'] The value 'table_name_field_name' is not accepted by the pattern '[a-zA-Z0-9_]+\\.[a-zA-Z0-9_]+'.",
-            "Element 'field', attribute 'origin': 'table_name_field_name' is not a valid value of the atomic type 'originType'.",
-            "Element 'field': The attribute 'dataType' is required but missing.",
-            "Element 'field', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'any' of the xsi:type attribute does not resolve to a type definition.",
-            "Element 'field', attribute 'dataType': [facet 'enumeration'] The value 'string' is not an element of the set {'int', 'float', 'varchar'}.",
-            "Element 'field', attribute 'dataType': 'string' is not a valid value of the atomic type 'dataType'."
-        ];
-        // @codingStandardsIgnoreEnd
-        $expectedErrors = array_filter(
-            explode(
-                "\n",
-                "
-Element 'indexer': Duplicate key-sequence ['catalogsearch_fulltext'] in unique identity-constraint 'uniqueViewId'.
-Element 'indexer': Duplicate key-sequence ['indexer_0', 'catalogsearch_fulltext'] in unique identity-constraint" .
-                " 'uniqueIndexertId'.
-Element 'fieldset': Missing child element(s). Expected is ( field ).
-Element 'field', attribute 'handler': [facet 'pattern'] " .
-                "The value 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not accepted by the pattern " .
-                "'[a-zA-Z0-9_]+'.
-Element 'field', attribute 'handler': 'Magento\\Framework\\Search\\Index\\Field\\Handler\\Class' is not a valid " .
-                "value of the atomic type 'nameType'.
-Element 'field', attribute 'handler': Warning: No precomputed value available, the value was either invalid or " .
-                "something strange happend.
-Element 'field': Duplicate key-sequence ['visibility'] in unique identity-constraint 'uniqueField'.
-Element 'field': No match found for key-sequence ['tableSource'] of keyref 'sourceReference'.
-Element 'field': No match found for key-sequence ['handler'] of keyref 'handlerReference'.
-Element 'field': The attribute 'dataType' is required but missing.
-Element 'field', attribute '{http://www.w3.org/2001/XMLSchema-instance}type': The QName value 'any'" .
-                " of the xsi:type attribute does not resolve to a type definition.
-Element 'field', attribute 'dataType': [facet 'enumeration'] The value 'string' is not an element" .
-                " of the set {'int', 'float', 'varchar'}.
-Element 'field', attribute 'dataType': 'string' is not a valid value of the atomic type 'dataType'.
-Element 'field': The attribute 'dataType' is required but missing."
-            )
-        );
-        parent::testSchemaUsingInvalidXml($expectedErrors);
+        return '/app/code/Magento/Indexer/etc/indexer.xml';
     }
 }

@@ -7,10 +7,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Indexer/etc/indexer.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Indexer/etc/indexer_merged.xsd">
     <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="NotAClass">
         <title translate="true">Test Indexer Declaration</title>
-        <description translate="true">Invalid class attribute value</description>
+        <description translate="true">Invalid provider attribute value</description>
     </indexer>
     <indexer id="indexer_0" view_id="catalogsearch_fulltext" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
@@ -23,80 +23,65 @@
     <indexer id="indexer_11" view_id="catalogsearch_fulltext_11" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Empty fields</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default"/>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default"/>
     </indexer>
     <indexer id="indexer_1" view_id="catalogsearch_fulltext_1" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid handler attribute value</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="filterable" dataType="int" />
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="Magento\Framework\Search\Index\Field\Handler\Class" xsi:type="filterable" dataType="int" />
         </fieldset>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_2" view_id="catalogsearch_fulltext_2" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Duplicate field declaration</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="filterable" dataType="int" />
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="both">
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable" dataType="int" />
+            <field name="visibility" handler="defaultHandler">
                 <filter class="Magento\Framework\Search\Index\Filter\StopWordsFilter"/>
             </field>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_3" view_id="catalogsearch_fulltext_3" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid source attribute value</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="both"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler"/>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
     </indexer>
     <indexer id="indexer_4" view_id="catalogsearch_fulltext_4" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid field handler attribute value</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="handler" xsi:type="filterable" dataType="int"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="handler" xsi:type="filterable" dataType="int"/>
         </fieldset>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_5" view_id="catalogsearch_fulltext_5" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid field type</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="any"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="any"/>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_6" view_id="catalogsearch_fulltext_6" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">No dataType attribute for 'filterable' type field</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="filterable"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable"/>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_12" view_id="catalogsearch_fulltext_12" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">Invalid field dataType attribute value</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="filterable" dataType="string"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable" dataType="string"/>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
     <indexer id="indexer_13" view_id="catalogsearch_fulltext_13" class="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <title translate="true">Test Indexer Declaration</title>
         <description translate="true">No dataType attribute for 'filterable' type field</description>
-        <fieldset class="Magento\Framework\Search\Index\Fieldset\Default" name="default">
-            <field name="visibility" source="tableSource" handler="defaultHandler" xsi:type="filterable"/>
+        <fieldset provider="Magento\Framework\Search\Index\Fieldset\Default" name="default">
+            <field name="visibility" handler="defaultHandler" xsi:type="filterable"/>
         </fieldset>
-        <handler class="Magento\Framework\Search\Index\Fields\Handler" name="defaultHandler"/>
-        <source class="Magento\Framework\Search\Index\Source" name="tableSource"/>
     </indexer>
 </config>
