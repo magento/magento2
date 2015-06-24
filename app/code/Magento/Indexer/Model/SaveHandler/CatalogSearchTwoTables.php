@@ -57,19 +57,18 @@ class TwoTables implements IndexerInterface
      */
     public function saveIndex(Dimension $dimension, \Traversable $documents)
     {
-        $indexDocuments = [];
         foreach ($this->batch->getItems($documents) as $batchDocuments) {
+            $indexDocuments = [];
             foreach ($batchDocuments as $documentName => $documentValue) {
-                foreach ($documentValue as $fieldName => $fieldValue) {
-                    $type = $this->getTypeByFieldName($fieldName);
-                    $indexDocuments[$type][$documentName][$fieldName] = $fieldValue;
+                foreach ($this->data['fields'] as $fieldName => $fieldValue) {
+                    if (isset ($documentValue[$fieldName])) {
+                        $indexDocuments[$fieldValue['type']][$documentName][$fieldName] = $documentValue[$fieldName];
+                    }
                 }
             }
-        }
-
-
-        foreach ($this->dataTypes as $dataType) {
-            $this->getAdapter()->insertMultiple($this->getTableName($dataType), $indexDocuments[$dataType]);
+            foreach ($this->dataTypes as $dataType) {
+                $this->insertDocuments($dataType, $indexDocuments);
+            }
         }
     }
 
@@ -132,11 +131,38 @@ class TwoTables implements IndexerInterface
     }
 
     /**
-     * @param string $fieldName
-     * @return string
+     * @param string $dataType
+     * @param array $documents
+     * @return void
      */
-    private function getTypeByFieldName($fieldName)
+    private function insertDocuments($dataType, array $documents)
     {
-        return $this->data['fields'][$fieldName]['type'];
+        if ($dataType === 'searchable') {
+            $documents = $this->insertSearchable($documents);
+        }
+        $this->getAdapter()->insertMultiple($this->getTableName($dataType), $documents[$dataType]);
+    }
+
+    /**
+     * @param array $documents
+     * @return array
+     */
+    private function insertSearchable(array $documents)
+    {
+        $insertDocuments = [];
+        foreach ($documents as $document) {
+            $entityId = $document['id'];
+            unset($document['id']);
+            foreach ($document as $fieldName => $fieldValue) {
+                $attributeId = $fieldName;
+                $insertDocuments[] = [
+                    'entity_id' => $entityId,
+                    'attribute_id' => $attributeId,
+                    'data_index' => $fieldValue,
+                ];
+            }
+        }
+
+        return $insertDocuments;
     }
 }
