@@ -255,10 +255,16 @@ class Full
     protected function rebuildIndex($productIds = null)
     {
         $storeIds = array_keys($this->storeManager->getStores());
+        $engine = $this->engineProvider->get();
         foreach ($storeIds as $storeId) {
-            $this->deleteIndex($storeId, $productIds);
-            $this->rebuildStoreIndex($storeId, $productIds);
+            $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
+            $engine->deleteIndex([$dimension], $this->getIterator($productIds));
+            $engine->saveIndex(
+                [$dimension],
+                $this->rebuildStoreIndex($storeId, $productIds)
+            );
         }
+        $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();
     }
 
@@ -267,11 +273,12 @@ class Full
      *
      * @param int $storeId Store View Id
      * @param int|array $productIds Product Entity Id
-     * @return void
+     * @return \Generator
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function rebuildStoreIndex($storeId, $productIds = null)
+    public function rebuildStoreIndex($storeId, $productIds = null)
     {
         // prepare searchable attributes
         $staticFields = [];
@@ -313,7 +320,6 @@ class Full
                 }
             }
 
-            $productIndexes = [];
             $productAttributes = $this->getProductAttributes($storeId, $productAttributes, $dynamicFields);
             foreach ($products as $productData) {
                 if (!isset($productAttributes[$productData['entity_id']])) {
@@ -357,13 +363,9 @@ class Full
 
                 $index = $this->prepareProductIndex($productIndex, $productData, $storeId);
 
-                $productIndexes[$productData['entity_id']] = $index;
+                yield $productData['entity_id'] => $index;
             }
-
-            $this->saveProductIndexes($storeId, $productIndexes);
         }
-
-        $this->fulltextResource->resetSearchResults();
     }
 
     /**
@@ -418,7 +420,7 @@ class Full
     protected function cleanIndex($storeId)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->engineProvider->get()->cleanIndex($dimension);
+        $this->engineProvider->get()->cleanIndex([$dimension]);
     }
 
     /**
@@ -431,7 +433,7 @@ class Full
     protected function deleteIndex($storeId = null, $productIds = null)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->engineProvider->get()->deleteIndex($dimension, $this->getIterator($productIds));
+        $this->engineProvider->get()->deleteIndex([$dimension], $this->getIterator($productIds));
     }
 
     /**
@@ -742,21 +744,6 @@ class Full
         $value = preg_replace('/\\s+/siu', ' ', trim(strip_tags($value)));
 
         return $value;
-    }
-
-    /**
-     * Save Multiply Product indexes
-     *
-     * @param int $storeId
-     * @param array $productIndexes
-     * @return $this
-     */
-    protected function saveProductIndexes($storeId, array $productIndexes)
-    {
-        $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->engineProvider->get()->saveIndex($dimension, $this->getIterator($productIndexes));
-
-        return $this;
     }
 
     /**

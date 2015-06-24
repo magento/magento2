@@ -84,9 +84,10 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex(Dimension $dimension, \Traversable $documents)
+    public function saveIndex($dimensions, \Traversable $documents)
     {
         $data = [];
+        $dimension = current($dimensions);
         $storeId = $dimension->getName() == self::SCOPE_FIELD_NAME ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
         foreach ($documents as $entityId => $productAttributes) {
             foreach ($productAttributes as $attributeId => $indexValue) {
@@ -183,8 +184,9 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function deleteIndex(Dimension $dimension, \Traversable $documents)
+    public function deleteIndex($dimensions, \Traversable $documents)
     {
+        $dimension = current($dimensions);
         $where = [];
         $entityIds = iterator_to_array($documents);
         if ($entityIds !== null) {
@@ -202,7 +204,7 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * @inheritdoc
      */
-    public function cleanIndex(Dimension $dimension)
+    public function cleanIndex($dimension)
     {
         $storeId = $dimension->getName() == self::SCOPE_FIELD_NAME ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
         $this->_getWriteAdapter()->delete($this->getMainTable($storeId));
