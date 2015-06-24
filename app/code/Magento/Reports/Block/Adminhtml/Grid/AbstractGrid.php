@@ -71,6 +71,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Pseudo constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -86,6 +88,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get resource collection name
+     *
      * @codeCoverageIgnore
      *
      * @return string

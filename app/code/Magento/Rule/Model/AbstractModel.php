@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Abstract Rule entity data model
  */
@@ -63,16 +61,22 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     abstract public function getActionsInstance();
 
     /**
+     * Form factory
+     *
      * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     /**
+     * Timezone instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory

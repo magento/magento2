@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Model\Resource\Order;
 
 use Magento\Framework\DB\Select;
@@ -40,26 +38,36 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_scopeConfig;
 
     /**
+     * Store manager instance
+     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Locale date instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
+     * Order config instance
+     *
      * @var \Magento\Sales\Model\Order\Config
      */
     protected $_orderConfig;
 
     /**
+     * Reports order factory
+     *
      * @var \Magento\Sales\Model\Resource\Report\OrderFactory
      */
     protected $_reportOrderFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -162,7 +170,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     protected function _getSalesAmountExpression()
     {
-        if (is_null($this->_salesAmountExpression)) {
+        if (null === $this->_salesAmountExpression) {
             $adapter = $this->getConnection();
             $expressionTransferObject = new \Magento\Framework\Object(
                 [
@@ -257,8 +265,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Prepare report summary from aggregated data
      *
      * @param string $range
-     * @param mixed $customStart
-     * @param mixed $customEnd
+     * @param string|null $customStart
+     * @param string|null $customEnd
      * @return $this
      */
     protected function _prepareSummaryAggregated($range, $customStart, $customEnd)
@@ -271,13 +279,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $rangePeriod = $this->_getRangeExpressionForAttribute($range, 'main_table.period');
 
         $tableName = $this->getConnection()->quoteIdentifier('main_table.period');
-        $rangePeriod2 = str_replace($tableName, "MIN({$tableName})", $rangePeriod);
+        $rangePeriodAggregateStmt = str_replace($tableName, "MIN({$tableName})", $rangePeriod);
 
         $this->getSelect()->columns(
             [
                 'revenue' => 'SUM(main_table.total_revenue_amount)',
                 'quantity' => 'SUM(main_table.orders_count)',
-                'range' => $rangePeriod2,
+                'range' => $rangePeriodAggregateStmt,
             ]
         )->order(
             'range'
@@ -349,8 +357,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param string $range
      * @param string $attribute
-     * @param mixed $from
-     * @param mixed $to
+     * @param string|null $from
+     * @param string|null $to
      * @return string
      */
     protected function _getTZRangeOffsetExpression($range, $attribute, $from = null, $to = null)
@@ -665,7 +673,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Set store filter collection
      *
-     * @param array $storeIds
+     * @param int[] $storeIds
      * @return $this
      */
     public function setStoreIds($storeIds)
@@ -778,16 +786,15 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     public function addSumAvgTotals($storeId = 0)
     {
-        $adapter = $this->getConnection();
-        $baseSubtotalRefunded = $adapter->getIfNullSql('main_table.base_subtotal_refunded', 0);
-        $baseSubtotalCanceled = $adapter->getIfNullSql('main_table.base_subtotal_canceled', 0);
-        $baseDiscountCanceled = $adapter->getIfNullSql('main_table.base_discount_canceled', 0);
-
         /**
          * calculate average and total amount
          */
-        $expr = $storeId ==
-            0 ? "(main_table.base_subtotal -\n            {$baseSubtotalRefunded} - {$baseSubtotalCanceled} - ABS(main_table.base_discount_amount) -\n            {$baseDiscountCanceled}) * main_table.base_to_global_rate" : "main_table.base_subtotal - {$baseSubtotalCanceled} - {$baseSubtotalRefunded} -\n            ABS(main_table.base_discount_amount) - {$baseDiscountCanceled}";
+        $expr = $this->getTotalsExpression(
+            $storeId,
+            $this->getConnection()->getIfNullSql('main_table.base_subtotal_refunded', 0),
+            $this->getConnection()->getIfNullSql('main_table.base_subtotal_canceled', 0),
+            $this->getConnection()->getIfNullSql('main_table.base_discount_canceled', 0)
+        );
 
         $this->getSelect()->columns(
             ['orders_avg_amount' => "AVG({$expr})"]
@@ -796,6 +803,28 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         );
 
         return $this;
+    }
+
+    /**
+     * Get SQL expression for totals
+     *
+     * @param int $storeId
+     * @param string $baseSubtotalRefunded
+     * @param string $baseSubtotalCanceled
+     * @param string $baseDiscountCanceled
+     * @return string
+     */
+    protected function getTotalsExpression(
+        $storeId,
+        $baseSubtotalRefunded,
+        $baseSubtotalCanceled,
+        $baseDiscountCanceled
+    ) {
+        $template = ($storeId != 0)
+            ? 'main_table.base_subtotal - %2$s - %1$s - ABS(main_table.base_discount_amount) - %3$s'
+            : '(main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) - %3$s) '
+                . ' * main_table.base_to_global_rate';
+        return sprintf($template, $baseSubtotalRefunded, $baseSubtotalCanceled, $baseDiscountCanceled);
     }
 
     /**
@@ -869,6 +898,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Initialize initial fields to select
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _initInitialFieldsToSelect()
     {

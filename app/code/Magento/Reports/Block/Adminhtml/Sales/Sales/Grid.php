@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
 
 /**
@@ -17,12 +15,14 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
+     * GROUP BY criteria
+     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
-     * @return void
+     * {@inheritdoc}
      */
     protected function _construct()
     {
@@ -31,18 +31,18 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourceCollectionName()
     {
-        return $this->getFilterData()->getData(
-            'report_type'
-        ) ==
-            'updated_at_order' ? 'Magento\Sales\Model\Resource\Report\Order\Updatedat\Collection' : 'Magento\Sales\Model\Resource\Report\Order\Collection';
+        return $this->getFilterData()->getData('report_type') == 'updated_at_order'
+            ? 'Magento\Sales\Model\Resource\Report\Order\Updatedat\Collection'
+            : 'Magento\Sales\Model\Resource\Report\Order\Collection';
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
