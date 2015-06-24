@@ -41,6 +41,7 @@ define([
                 return this;
             },
             modal: modal({
+                responsive: true,
                 innerScroll: true,
                 buttons: []
             }),
