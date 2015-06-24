@@ -306,12 +306,6 @@
                                                             <item name="title" xsi:type="string">Cart Subtotal</item>
                                                         </item>
                                                     </item>
-                                                    <item name="discount" xsi:type="array">
-                                                        <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/discount</item>
-                                                        <item name="config" xsi:type="array">
-                                                            <item name="title" xsi:type="string">Discount</item>
-                                                        </item>
-                                                    </item>
                                                     <item name="shipping" xsi:type="array">
                                                         <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                         <item name="config" xsi:type="array">

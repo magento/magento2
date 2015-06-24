@@ -37,12 +37,11 @@
                                     <item name="children" xsi:type="array">
                                         <item name="totals" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="customerbalance" xsi:type="array">
-                                                    <item name="component"  xsi:type="string">Magento_CustomerBalance/js/view/summary/customer-balance</item>
+                                                <item name="discount" xsi:type="array">
+                                                    <item name="component"  xsi:type="string">Magento_SalesRule/js/view/summary/discount</item>
                                                     <item name="config" xsi:type="array">
-                                                        <item name="title" xsi:type="string">Store Credit</item>
+                                                        <item name="title" xsi:type="string">Discount</item>
                                                     </item>
-                                                    <item name="sortOrder" xsi:type="string">95</item>
                                                 </item>
                                             </item>
                                         </item>
