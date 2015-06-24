@@ -151,7 +151,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         array $data = []
     ) {
         $this->_directoryData = $directoryData;
-        $data = $this->_implodeStreetField($data);
+        $data = $this->_implodeArrayField($data);
         $this->_eavConfig = $eavConfig;
         $this->_addressConfig = $addressConfig;
         $this->_regionFactory = $regionFactory;
@@ -262,36 +262,39 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
-            $key = $this->_implodeStreetField($key);
-        } elseif ($key == 'street') {
-            $value = $this->_implodeStreetValue($value);
+            $key = $this->_implodeArrayField($key);
+        } elseif (is_array($value)) {
+            $value = $this->_implodeArrayValues($value);
         }
         return parent::setData($key, $value);
     }
 
     /**
-     * Implode value of the street field, if it is present among other fields
+     * Implode value of the array field, if it is present among other fields
      *
      * @param array $data
      * @return array
      */
-    protected function _implodeStreetField(array $data)
+    protected function _implodeArrayField(array $data)
     {
-        if (array_key_exists('street', $data)) {
-            $data['street'] = $this->_implodeStreetValue($data['street']);
-        }
+       foreach ($data as $key => $value) {
+           if (is_array($value)) {
+               $data[$key] = $this->_implodeArrayValues($data[$key]);
+           }
+       }
+
         return $data;
     }
 
     /**
-     * Combine values of street lines into a single string
+     * Combine values of field lines into a single string
      *
      * @param string[]|string $value
      * @return string
      */
-    protected function _implodeStreetValue($value)
+    protected function _implodeArrayValues($value)
     {
-        if (is_array($value)) {
+        if (is_array($value) && count($value)) {
             $value = trim(implode("\n", $value));
         }
         return $value;
