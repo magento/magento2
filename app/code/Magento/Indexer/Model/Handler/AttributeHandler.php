@@ -8,7 +8,7 @@ namespace Magento\Indexer\Model\Handler;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Indexer\Model\HandlerInterface;
 
-class DefaultHandler implements HandlerInterface
+class AttributeHandler implements HandlerInterface
 {
     /**
      * @param SourceProviderInterface $source
@@ -17,10 +17,7 @@ class DefaultHandler implements HandlerInterface
      */
     public function prepareSql(SourceProviderInterface $source, $fieldInfo)
     {
-        $source->addFieldToSelect(
-            isset($fieldInfo['origin']) ? $fieldInfo['origin'] :  $fieldInfo['name'],
-            $fieldInfo['name']
-        );
+        $source->addAttributeToSelect($fieldInfo['name']);
     }
 
     /**
