@@ -11,6 +11,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
@@ -50,6 +51,11 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected $localeFormat;
 
     /**
+     * @var FormKey
+     */
+    protected $formKey;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\GiftMessage\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\GiftMessage\Api\ItemRepositoryInterface $itemRepository
@@ -65,7 +71,8 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         HttpContext $httpContext,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        LocaleFormat $localeFormat
+        LocaleFormat $localeFormat,
+        FormKey $formKey
     ) {
         $this->scopeConfiguration = $context->getScopeConfig();
         $this->cartRepository = $cartRepository;
@@ -74,6 +81,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $this->httpContext = $httpContext;
         $this->storeManager = $storeManager;
         $this->localeFormat = $localeFormat;
+        $this-> formKey = $formKey;
     }
 
     /**
@@ -107,6 +115,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         );
         $configuration['storeCode'] = $this->getStoreCode();
         $configuration['isCustomerLoggedIn'] = $this->isCustomerLoggedIn();
+        $configuration['formKey'] = $this->formKey->getFormKey();
         $store = $this->storeManager->getStore();
         $configuration['baseUrl'] = $store->isFrontUrlSecure()
                 ? $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)
