@@ -20,13 +20,14 @@ define(
     ],
     function (ko, $, quote, urlManager, paymentService, errorList, storage, getTotalsAction) {
         'use strict';
-        return function (isApplied) {
+        return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getCancelCouponUrl(quoteId);
             return storage.delete(
                 url
             ).done(
                 function (response) {
+                    isLoading(false);
                     var deferred = $.Deferred();
 
                     getTotalsAction([], deferred);
@@ -39,6 +40,7 @@ define(
                 }
             ).error(
                 function (response) {
+                    isLoading(false);
                     var error = JSON.parse(response.responseText);
                     errorList.add(error);
                 }
