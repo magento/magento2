@@ -248,7 +248,7 @@ class Form extends FormInterface
             }
         } while ($count < self::MAX_TRY_COUNT);
 
-        throw new \Exception("Multiple rewrites detected:\n" . $e);
+        throw new \Exception($e);
     }
 
     /**
