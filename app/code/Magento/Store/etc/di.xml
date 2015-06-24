@@ -281,6 +281,7 @@
                 <item name="less" xsi:type="array">
                     <item name="css" xsi:type="array">
                         <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
+                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
                         <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
                     </item>
                     <item name="less" xsi:type="array">
@@ -290,6 +291,7 @@
                 </item>
                 <item name="css" xsi:type="array">
                     <item name="css" xsi:type="array">
+                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
                         <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
                     </item>
                 </item>
