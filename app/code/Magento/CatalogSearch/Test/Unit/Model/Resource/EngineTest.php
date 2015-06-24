@@ -102,23 +102,19 @@ class EngineTest extends \PHPUnit_Framework_TestCase
                     [
                         'product_id' => 28,
                         'attribute_id' => 123,
-                        'store_id' => 13,
                         'data_index' => 'Value of 123'
                     ],
                     [
                         'product_id' => 28,
                         'attribute_id' => 845,
-                        'store_id' => 13,
                         'data_index' => 'Value of 845'
                     ],
                     [
-                    'product_id' => 28,
-                    'attribute_id' => 0,
-                    'store_id' => 13,
-                    'data_index' => 'Some | Index | Value'
+                        'product_id' => 28,
+                        'attribute_id' => 0,
+                        'data_index' => 'Some | Index | Value'
+                   ]
                 ]
-
-            ]
             ]
         ];
     }

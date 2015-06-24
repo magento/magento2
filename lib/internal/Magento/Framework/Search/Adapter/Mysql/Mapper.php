@@ -23,7 +23,7 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Mapper
 {
-    const SQL_ENTITIES_LIMIT = 10000;
+    const SQL_ENTITIES_MATCH_LIMIT = 10000;
     /**
      * @var ScoreBuilder
      */
@@ -33,11 +33,6 @@ class Mapper
      * @var Filter\Builder
      */
     private $filterBuilder;
-
-    /**
-     * @var Dimensions
-     */
-    private $dimensionsBuilder;
 
     /**
      * @var ConditionManager
@@ -67,7 +62,6 @@ class Mapper
     /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param Builder $filterBuilder
-     * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
      * @param Resource|Resource $resource
      * @param EntityMetadata $entityMetadata
@@ -77,7 +71,6 @@ class Mapper
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
         Builder $filterBuilder,
-        Dimensions $dimensionsBuilder,
         ConditionManager $conditionManager,
         Resource $resource,
         EntityMetadata $entityMetadata,
@@ -86,7 +79,6 @@ class Mapper
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
         $this->filterBuilder = $filterBuilder;
-        $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
         $this->resource = $resource;
         $this->entityMetadata = $entityMetadata;
@@ -125,9 +117,7 @@ class Mapper
             BoolQuery::QUERY_CONDITION_MUST,
             $queryContainer
         );
-        $select = $this->processDimensions($request, $select);
         $select->columns($scoreBuilder->build());
-        $select->limit(self::SQL_ENTITIES_LIMIT);
 
         $filtersCount = $queryContainer->getFiltersCount();
         if ($filtersCount > 1) {
@@ -136,7 +126,6 @@ class Mapper
         }
 
         $select = $this->createAroundSelect($select, $scoreBuilder);
-        $select->limit($request->getSize());
 
         $matchQueries = $queryContainer->getDerivedQueries();
 
@@ -163,6 +152,7 @@ class Mapper
             }
         }
 
+        $select->limit($request->getSize());
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }
@@ -341,28 +331,6 @@ class Mapper
                 break;
         }
         $scoreBuilder->endQuery($query->getBoost());
-        return $select;
-    }
-
-    /**
-     * Add filtering by dimensions
-     *
-     * @param RequestInterface $request
-     * @param Select $select
-     * @return \Magento\Framework\DB\Select
-     */
-    private function processDimensions(RequestInterface $request, Select $select)
-    {
-        $dimensions = [];
-        foreach ($request->getDimensions() as $dimension) {
-            $dimensions[] = $this->dimensionsBuilder->build($dimension);
-        }
-
-        $query = $this->conditionManager->combineQueries($dimensions, Select::SQL_OR);
-        if (!empty($query)) {
-            $select->where($this->conditionManager->wrapBrackets($query));
-        }
-
         return $select;
     }
 }
