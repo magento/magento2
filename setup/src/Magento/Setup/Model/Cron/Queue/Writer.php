@@ -32,7 +32,7 @@ class Writer extends Reader
     /**
      * Write JSON string into queue
      *
-     * @param $data
+     * @param string $data
      * @return void
      */
     public function write($data)

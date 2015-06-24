@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Setup\Model\Cron;
+
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -75,7 +76,24 @@ class Status
     ) {
         $this->baseReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->varReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->initializePaths($statusFilePath, $logFilePath, $updateInProgressFlagFilePath, $updateErrorFlagFilePath);
+    }
 
+    /**
+     * Initialize paths
+     *
+     * @param string|null $statusFilePath
+     * @param string|null $logFilePath
+     * @param string|null $updateInProgressFlagFilePath
+     * @param string|null $updateErrorFlagFilePath
+     * @return void
+     */
+    private function initializePaths(
+        $statusFilePath = null,
+        $logFilePath = null,
+        $updateInProgressFlagFilePath = null,
+        $updateErrorFlagFilePath = null
+    ) {
         $this->statusFilePath = $statusFilePath ? $statusFilePath : 'update/var/.update_status.txt';
         $this->logFilePath = $logFilePath ? $logFilePath : 'update/var/update_status.log';
         $this->updateInProgressFlagFilePath = $updateInProgressFlagFilePath
@@ -93,7 +111,7 @@ class Status
      */
     public function getStatusFilePath()
     {
-        return $this->statusFilePath;
+        return $this->baseReaderWriter->getAbsolutePath($this->statusFilePath);
     }
 
     /**
@@ -103,7 +121,7 @@ class Status
      */
     public function getLogFilePath()
     {
-        return $this->logFilePath;
+        return $this->baseReaderWriter->getAbsolutePath($this->logFilePath);
     }
 
     /**
@@ -135,7 +153,7 @@ class Status
     protected function writeMessageToFile($text, $filePath)
     {
         $isNewFile = !$this->baseReaderWriter->isExist($filePath);
-        if (!$isNewFile && $this->baseReaderWriter->read($filePath)) {
+        if (!$isNewFile && $this->baseReaderWriter->readFile($filePath)) {
             $text = "\n{$text}";
         }
         try {
