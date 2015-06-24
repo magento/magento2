@@ -27,13 +27,13 @@
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation3">
             <data name="createProduct" xsi:type="string">configurable</data>
-            <data name="product" xsi:type="string">catalogProductSimple::default</data>
+            <data name="product" xsi:type="string">catalogProductSimple::product_without_category</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnCreationTestVariation4">
             <data name="createProduct" xsi:type="string">configurable</data>
-            <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+            <data name="product" xsi:type="string">catalogProductVirtual::required_fields</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>

@@ -20,7 +20,7 @@ define([
          *
          * @returns {Number|String}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var value = this._super();
 
             return _.isString(value) ? value.split(',') : value;
