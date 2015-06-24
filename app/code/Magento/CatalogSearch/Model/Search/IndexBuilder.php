@@ -9,14 +9,18 @@ namespace Magento\CatalogSearch\Model\Search;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
+use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Build base Query for Index
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilder implements IndexBuilderInterface
 {
@@ -34,17 +38,34 @@ class IndexBuilder implements IndexBuilderInterface
      * @var StoreManagerInterface
      */
     private $storeManager;
+    /**
+     * @var IndexScopeResolver
+     */
+    private $scopeResolver;
+    /**
+     * @var ConditionManager
+     */
+    private $conditionManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
+     * @param ConditionManager $conditionManager
+     * @param IndexScopeResolver $scopeResolver
      */
-    public function __construct(Resource $resource, ScopeConfigInterface $config, StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        Resource $resource,
+        ScopeConfigInterface $config,
+        StoreManagerInterface $storeManager,
+        ConditionManager $conditionManager,
+        IndexScopeResolver $scopeResolver
+    ) {
         $this->resource = $resource;
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->conditionManager = $conditionManager;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -55,16 +76,15 @@ class IndexBuilder implements IndexBuilderInterface
      */
     public function build(RequestInterface $request)
     {
-        $tableName = [$request->getIndex(), 'index_default'];
+        $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
         $select = $this->getSelect()
             ->from(
-                ['search_index' => $this->resource->getTableName($tableName)],
+                ['search_index' => $searchIndexTable],
                 ['entity_id' => 'product_id']
             )
             ->joinLeft(
                 ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                'search_index.product_id = category_index.product_id'
-                . ' AND search_index.store_id = category_index.store_id',
+                'search_index.product_id = category_index.product_id',
                 []
             )
             ->joinLeft(
@@ -77,6 +97,8 @@ class IndexBuilder implements IndexBuilderInterface
                 'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
                 []
             );
+
+        $select = $this->processDimensions($request, $select);
 
         $isShowOutOfStock = $this->config->isSetFlag(
             'cataloginventory/options/show_out_of_stock',
@@ -96,6 +118,46 @@ class IndexBuilder implements IndexBuilderInterface
         }
 
         return $select;
+    }
+
+    /**
+     * Add filtering by dimensions
+     *
+     * @param RequestInterface $request
+     * @param Select $select
+     * @return \Magento\Framework\DB\Select
+     */
+    private function processDimensions(RequestInterface $request, Select $select)
+    {
+        $dimensions = $this->prepareDimensions($request->getDimensions());
+
+        $query = $this->conditionManager->combineQueries($dimensions, Select::SQL_OR);
+        if (!empty($query)) {
+            $select->where($this->conditionManager->wrapBrackets($query));
+        }
+
+        return $select;
+    }
+
+    /**
+     * @param Dimension[] $dimensions
+     * @return string[]
+     */
+    private function prepareDimensions(array $dimensions)
+    {
+        $preparedDimensions = [];
+        foreach ($dimensions as $dimension) {
+            if ('scope' === $dimension->getName()) {
+                continue;
+            }
+            $preparedDimensions[] = $this->conditionManager->generateCondition(
+                $dimension->getName(),
+                '=',
+                $dimension->getValue()
+            );
+        }
+
+        return $preparedDimensions;
     }
 
     /**
