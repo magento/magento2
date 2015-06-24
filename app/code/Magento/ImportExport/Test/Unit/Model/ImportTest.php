@@ -98,6 +98,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_varDirectory;
 
+    /**
+     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_driver;
+
     public function setUp()
     {
         $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
@@ -155,6 +160,17 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_varDirectory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->_driver = $this->getMockBuilder('\Magento\Framework\Filesystem\DriverInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->_driver
+            ->expects($this->any())
+            ->method('fileGetContents')
+            ->willReturn('');
+        $this->_varDirectory
+            ->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($this->_driver);
         $this->import = $this->getMockBuilder('\Magento\ImportExport\Model\Import')
             ->setConstructorArgs([
                 $logger,
@@ -550,13 +566,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('getRelativePath')
             ->with(\Magento\ImportExport\Model\Import::IMPORT_DIR . $fileName)
             ->willReturn($sourceFileRelativeNew);
-        $this->_varDirectory
-            ->expects($this->once())
-            ->method('copyFile')
-            ->with(
-                $sourceFileRelativeNew,
-                $copyFile
-            );
         $this->dateTime
             ->expects($this->once())
             ->method('gmtTimestamp')
@@ -600,13 +609,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_varDirectory
             ->expects($this->never())
             ->method('getRelativePath');
-        $this->_varDirectory
-            ->expects($this->once())
-            ->method('copyFile')
-            ->with(
-                $sourceFileRelative,
-                $copyFile
-            );
         $this->dateTime
             ->expects($this->once())
             ->method('gmtTimestamp')
@@ -648,13 +650,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_varDirectory
             ->expects($this->never())
             ->method('getRelativePath');
-        $this->_varDirectory
-            ->expects($this->once())
-            ->method('copyFile')
-            ->with(
-                $sourceFileRelative,
-                $copyFile
-            );
         $this->dateTime
             ->expects($this->once())
             ->method('gmtTimestamp')
@@ -697,9 +692,9 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getRelativePath');
         $phrase = $this->getMock('\Magento\Framework\Phrase', [], [], '', false);
-        $this->_varDirectory
-            ->expects($this->once())
-            ->method('copyFile')
+        $this->_driver
+            ->expects($this->any())
+            ->method('fileGetContents')
             ->willReturnCallback(function () use ($phrase) {
                 throw new \Magento\Framework\Exception\FileSystemException($phrase);
             });
@@ -707,10 +702,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn($gmtTimestamp);
-        $this->historyModel
-            ->expects($this->never())
-            ->method('addReport');
-
         $args = [
             $sourceFileRelative,
             $entity,
