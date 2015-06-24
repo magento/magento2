@@ -70,11 +70,8 @@ class Snapshot
         if (!isset($this->snapshotData[get_class($entity)][$entity->getId()])) {
             return true;
         }
-
-        $data = array_intersect_key($entity->getData(), $this->metadata->getFields($entity));
-
-        foreach ($data as $field => $value) {
-            if ($this->snapshotData[get_class($entity)][$entity->getId()][$field] != $value) {
+        foreach ($this->snapshotData[get_class($entity)][$entity->getId()] as $field => $value) {
+            if ($entity->getDataByKey($field) != $value) {
                 return true;
             }
         }
