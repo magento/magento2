@@ -26,6 +26,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        echo "Tesst name:" . $this->getName() . "\n";
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
