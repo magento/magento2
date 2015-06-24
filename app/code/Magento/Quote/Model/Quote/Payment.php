@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Payment\Model\Method\AbstractMethod;
+
 /**
  * Quote payment information
  *
@@ -209,7 +211,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getOrderPlaceRedirectUrl()
     {
         $method = $this->getMethodInstance();
-        if ($method) {
+        if ($method && $method instanceof AbstractMethod) {
             return $method->getOrderPlaceRedirectUrl();
         }
         return '';
