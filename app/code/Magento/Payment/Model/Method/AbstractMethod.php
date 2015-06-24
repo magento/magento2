@@ -841,7 +841,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     protected function _debug($debugData)
     {
-        $this->logger->debug($debugData, $this->getDebugReplacePrivateDataKeys(), $this->getDebugFlag());
+        $this->logger->debug(
+            $debugData,
+            $this->getDebugReplacePrivateDataKeys(),
+            $this->getDebugFlag()
+        );
     }
 
     /**
