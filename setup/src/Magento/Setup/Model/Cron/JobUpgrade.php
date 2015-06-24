@@ -41,7 +41,7 @@ class JobUpgrade extends AbstractJob
      * @param MaintenanceMode $maintenanceMode
      * @param OutputInterface $output
      * @param Status $status
-     * @param string $name
+     * @param $name
      * @param array $params
      */
     public function __construct(

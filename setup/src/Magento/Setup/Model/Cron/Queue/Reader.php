@@ -52,7 +52,7 @@ class Reader
         if ($queueFileContent) {
             json_decode($queueFileContent);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException(sprintf('Content of "%s" must a valid JSON.', $this->queueFileBasename));
+                throw new \RuntimeException(sprintf('Content of "%s" must be a valid JSON.', $this->queueFileBasename));
             }
             $queue = $queueFileContent;
         }
