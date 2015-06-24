@@ -20,7 +20,7 @@
             <argument name="configData" xsi:type="object">Magento\Indexer\Model\Config\Data\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Indexer\Model\Action\Base">
+    <type name="Magento\Indexer\Model\HandlerPool">
         <arguments>
             <argument name="defaultHandler" xsi:type="object">Magento\Indexer\Model\Handler\DefaultHandler</argument>
         </arguments>

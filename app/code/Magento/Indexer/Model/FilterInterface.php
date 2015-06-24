@@ -10,5 +10,5 @@ interface FilterInterface
     /**
      * @return void
      */
-    public function modify();
+    public function apply();
 }
