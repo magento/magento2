@@ -39,9 +39,10 @@ class IndexStructure
     ];
 
     /**
-     * @param Resource $resource
+     * @param Resource|Resource $resource
      * @param IndexScopeResolver $indexScopeResolver
      * @param FlatScopeResolver $flatScopeResolver
+     * @param array $columnTypesMap
      */
     public function __construct(
         Resource $resource,
