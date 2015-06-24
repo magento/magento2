@@ -49,14 +49,12 @@ class IndexStructure
     }
 
     /**
-     * @param string $table
-     * @param array $filterFields
+     * @param string $index
      * @param Dimension[] $dimensions
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function create($table, array $dimensions)
+    public function create($index, array $dimensions)
     {
-        $this->createFulltextIndex($this->indexScopeResolver->resolve($table, $dimensions));
+        $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
     }
 
     /**
