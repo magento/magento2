@@ -172,42 +172,24 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $groupMock3->expects($this->any())->method('getLabel')->will($this->returnValue('Group_3_Label'));
         $filedMock->expects($this->any())->method('getLabel')->will($this->returnValue('Field_1_Label'));
 
-        $this->_configStructureMock->expects(
-            $this->any()
-        )->method(
-            'getElement'
-        )->with(
-            'section1'
-        )->will(
-            $this->returnValue($sectionMock)
-        );
+        $this->_configStructureMock->expects($this->any())
+            ->method('getElement')
+            ->with('section1')
+            ->will($this->returnValue($sectionMock));
 
-        $this->_configStructureMock->expects(
-            $this->any()
-        )->method(
-            'getElementByPathParts'
-        )->will(
-            $this->returnValueMap($map)
-        );
+        $this->_configStructureMock->expects($this->any())
+            ->method('getElementByPathParts')
+            ->will($this->returnValueMap($map));
 
         $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', [], [], '', false, false);
-        $templateMock->expects(
-            $this->once()
-        )->method(
-            'getSystemConfigPathsWhereUsedCurrently'
-        )->will(
-            $this->returnValue($this->_fixtureConfigPath)
-        );
+        $templateMock->expects($this->once())
+            ->method('getSystemConfigPathsWhereUsedCurrently')
+            ->will($this->returnValue($this->_fixtureConfigPath));
 
-        $this->_registryMock->expects(
-            $this->once()
-        )->method(
-            'registry'
-        )->with(
-            'current_email_template'
-        )->will(
-            $this->returnValue($templateMock)
-        );
+        $this->_registryMock->expects($this->once())
+            ->method('registry')
+            ->with('current_email_template')
+            ->will($this->returnValue($templateMock));
 
         $actual = $this->_block->getUsedCurrentlyForPaths(false);
         $expected = [
@@ -216,7 +198,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => __('Title'), 'url' => 'adminhtml/system_config/'],
                 ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
                 ['title' => 'Group_1_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')],
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')],
             ],
             [
                 ['title' => __('Title')],
@@ -224,7 +206,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')]
             ],
             [
                 ['title' => __('Title')],
@@ -233,7 +215,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
                 ['title' => 'Group_3_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')]
             ],
         ];
         $this->assertEquals($expected, $actual);
