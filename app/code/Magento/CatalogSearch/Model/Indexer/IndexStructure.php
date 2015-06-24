@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model;
-
+namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Search\Model\ScopeResolver\FlatScopeResolver;
 use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 
 class IndexStructure
@@ -24,24 +22,17 @@ class IndexStructure
      * @var IndexScopeResolver
      */
     private $indexScopeResolver;
-    /**
-     * @var FlatScopeResolver
-     */
-    private $flatScopeResolver;
 
     /**
      * @param Resource $resource
      * @param IndexScopeResolver $indexScopeResolver
-     * @param FlatScopeResolver $flatScopeResolver
      */
     public function __construct(
         Resource $resource,
-        IndexScopeResolver $indexScopeResolver,
-        FlatScopeResolver $flatScopeResolver
+        IndexScopeResolver $indexScopeResolver
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;
-        $this->flatScopeResolver = $flatScopeResolver;
     }
 
     /**
@@ -51,21 +42,21 @@ class IndexStructure
     public function delete($index, array $dimensions)
     {
         $adapter = $this->getAdapter();
-        $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
-        $this->dropTable($adapter, $this->flatScopeResolver->resolve($index, $dimensions));
+        $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
+        if ($adapter->isTableExists($tableName)) {
+            $adapter->dropTable($tableName);
+        }
     }
 
     /**
      * @param string $table
      * @param array $filterFields
      * @param Dimension[] $dimensions
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function create($table, array $filterFields, array $dimensions)
+    public function create($table, array $dimensions)
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($table, $dimensions));
-        if ($filterFields) {
-            $this->createFlatIndex($this->flatScopeResolver->resolve($table, $dimensions), $filterFields);
-        }
     }
 
     /**
@@ -75,27 +66,18 @@ class IndexStructure
     protected function createFulltextIndex($tableName)
     {
         $adapter = $this->getAdapter();
-        $table = $this->configureFulltextTable($adapter->newTable($tableName));
-        $adapter->createTable($table);
-    }
-
-    /**
-     * @param Table $table
-     * @return mixed
-     */
-    protected function configureFulltextTable(Table $table)
-    {
-        $table->addColumn(
+        $table = $adapter->newTable($tableName)
+            ->addColumn(
                 'entity_id',
                 Table::TYPE_INTEGER,
                 10,
                 ['unsigned' => true, 'nullable' => false],
                 'Entity ID'
             )->addColumn(
-                'attribute_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false]
+                'attribute_code',
+                Table::TYPE_TEXT,
+                255,
+                ['unsigned' => true, 'nullable' => true]
             )->addColumn(
                 'data_index',
                 Table::TYPE_TEXT,
@@ -111,24 +93,6 @@ class IndexStructure
                 ['data_index'],
                 ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
             );
-        return $table;
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $fields
-     * @throws \Zend_Db_Exception
-     */
-    protected function createFlatIndex($tableName, array $fields)
-    {
-        $adapter = $this->getAdapter();
-        $table = $adapter->newTable($tableName);
-        foreach ($fields as $field) {
-            $name = $field['name'];
-            $type = $field['type'];
-            $size = $field['size'];
-            $table->addColumn($name, $type, $size);
-        }
         $adapter->createTable($table);
     }
 
@@ -139,16 +103,5 @@ class IndexStructure
     {
         $adapter = $this->resource->getConnection('write');
         return $adapter;
-    }
-
-    /**
-     * @param AdapterInterface $adapter
-     * @param string $tableName
-     */
-    private function dropTable(AdapterInterface $adapter, $tableName)
-    {
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->dropTable($tableName);
-        }
     }
 }
