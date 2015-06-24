@@ -5,6 +5,8 @@
  */
 namespace Magento\Indexer\Model\SaveHandler;
 
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
@@ -39,17 +41,29 @@ class TwoTables implements IndexerInterface
     private $batch;
 
     /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
      * @param IndexStructure $indexStructure
      * @param Resource|Resource $resource
+     * @param Config $eavConfig
      * @param Batch $batch
      * @param array $data
      */
-    public function __construct(IndexStructure $indexStructure, Resource $resource, Batch $batch, array $data)
-    {
+    public function __construct(
+        IndexStructure $indexStructure,
+        Resource $resource,
+        Config $eavConfig,
+        Batch $batch,
+        array $data
+    ) {
         $this->indexStructure = $indexStructure;
         $this->data = $data;
         $this->resource = $resource;
         $this->batch = $batch;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -154,7 +168,7 @@ class TwoTables implements IndexerInterface
             $entityId = $document['id'];
             unset($document['id']);
             foreach ($document as $fieldName => $fieldValue) {
-                $attributeId = $fieldName;
+                $attributeId = $this->eavConfig->getAttribute(Product::ENTITY, $fieldName)->getAttributeId();
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
                     'attribute_id' => $attributeId,
