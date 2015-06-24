@@ -23,7 +23,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Dear %name," name=$order.getBillingAddress().getName()}}</h1>
+<p class="greeting">{{trans "%name," name=$order.getBillingAddress().getName()}}</p>
 <p>
     {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
     {{trans "Once your package ships we will send an email with a link to track your order."}}

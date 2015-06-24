@@ -24,7 +24,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Dear %name," name=$billing.getName()}}</h1>
+<p class="greeting">{{trans "%name," name=$billing.getName()}}</p>
 <p>
     {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
     {{trans
