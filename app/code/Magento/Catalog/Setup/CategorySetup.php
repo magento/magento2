@@ -389,6 +389,9 @@ class CategorySetup extends EavSetup
                         'is_html_allowed_on_front' => true,
                         'visible_in_advanced_search' => true,
                         'used_in_product_listing' => true,
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'price' => [
                         'type' => 'decimal',
@@ -416,6 +419,9 @@ class CategorySetup extends EavSetup
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'special_from_date' => [
                         'type' => 'datetime',
@@ -428,6 +434,9 @@ class CategorySetup extends EavSetup
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'special_to_date' => [
                         'type' => 'datetime',
@@ -440,6 +449,9 @@ class CategorySetup extends EavSetup
                         'used_in_product_listing' => true,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'cost' => [
                         'type' => 'decimal',
@@ -452,6 +464,9 @@ class CategorySetup extends EavSetup
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'weight' => [
                         'type' => 'decimal',
@@ -461,6 +476,9 @@ class CategorySetup extends EavSetup
                         'input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
                         'sort_order' => 5,
                         'apply_to' => 'simple,virtual',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'manufacturer' => [
                         'type' => 'int',
@@ -473,6 +491,9 @@ class CategorySetup extends EavSetup
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
                         'apply_to' => Type::TYPE_SIMPLE,
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'meta_title' => [
                         'type' => 'varchar',
@@ -482,6 +503,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 20,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Meta Information',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'meta_keyword' => [
                         'type' => 'text',
@@ -491,6 +515,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 30,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Meta Information',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'meta_description' => [
                         'type' => 'varchar',
@@ -502,6 +529,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 40,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Meta Information',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'image' => [
                         'type' => 'varchar',
@@ -557,6 +587,9 @@ class CategorySetup extends EavSetup
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
                         'apply_to' => 'simple,virtual',
                         'group' => 'Prices',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'tier_price' => [
                         'type' => 'decimal',
@@ -579,7 +612,10 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE])
+                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE]),
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'news_from_date' => [
                         'type' => 'datetime',
@@ -590,6 +626,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 7,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'news_to_date' => [
                         'type' => 'datetime',
@@ -600,6 +639,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 8,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
                         'used_in_product_listing' => true,
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'gallery' => [
                         'type' => 'varchar',
@@ -648,6 +690,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 1,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Design',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'custom_design_from' => [
                         'type' => 'datetime',
@@ -658,6 +703,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 2,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Design',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'custom_design_to' => [
                         'type' => 'datetime',
@@ -668,6 +716,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 3,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Design',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'custom_layout_update' => [
                         'type' => 'text',
@@ -688,6 +739,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 5,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                         'group' => 'Design',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'category_ids' => [
                         'type' => 'static',
@@ -786,12 +840,15 @@ class CategorySetup extends EavSetup
                         'unique' => false,
                         'apply_to' => 'simple,bundle',
                         'group' => 'General',
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
                     ],
                     'quantity_and_stock_status' => [
                         'group' => 'General',
                         'type' => 'int',
                         'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
-                        'label' => 'Quantity',
+                        'label' => 'Stock Status',
                         'input' => 'select',
                         'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
                         'source' => 'Magento\\CatalogInventory\\Model\\Source\\Stock',
@@ -804,6 +861,10 @@ class CategorySetup extends EavSetup
                         'filterable' => false,
                         'comparable' => false,
                         'unique' => false,
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => true,
+
                     ],
                 ],
             ]

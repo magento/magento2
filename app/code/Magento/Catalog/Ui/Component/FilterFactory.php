@@ -18,6 +18,7 @@ class FilterFactory
     protected  $filterMap = [
         'default' => 'filterInput',
         'select' => 'filterSelect',
+        'boolean' => 'filterSelect',
         'multiselect' => 'filterSelect',
         'date' => 'filterDate',
     ];

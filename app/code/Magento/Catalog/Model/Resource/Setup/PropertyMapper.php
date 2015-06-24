@@ -40,7 +40,10 @@ class PropertyMapper extends PropertyMapperAbstract
             'used_for_sort_by' => $this->_getValue($input, 'used_for_sort_by', 0),
             'apply_to' => $this->_getValue($input, 'apply_to'),
             'position' => $this->_getValue($input, 'position', 0),
-            'is_used_for_promo_rules' => $this->_getValue($input, 'used_for_promo_rules', 0)
+            'is_used_for_promo_rules' => $this->_getValue($input, 'used_for_promo_rules', 0),
+            'is_used_in_grid' => $this->_getValue($input, 'is_used_in_grid', 0),
+            'is_visible_in_grid' => $this->_getValue($input, 'is_visible_in_grid', 0),
+            'is_filterable_in_grid' => $this->_getValue($input, 'is_filterable_in_grid', 0),
         ];
     }
 }

@@ -167,10 +167,28 @@ class Advanced extends Generic
             'select',
             [
                 'name' => 'is_used_in_grid',
-                'label' => __('To Show attribute in grid'),
-                'title' => __('To Show attribute in grid'),
+                'label' => __('To Show Attribute In Grid'),
+                'title' => __('To Show Attribute In Grid'),
                 'values' => $yesno,
                 'value' => $attributeObject->getData('is_used_in_grid') ?: 1,
+            ]
+        );
+
+        $fieldset->addField(
+            'is_visible_in_grid',
+            'hidden',
+            [
+                'name' => 'is_visible_in_grid',
+                'value' => $attributeObject->getData('is_visible_in_grid') ?: 1,
+            ]
+        );
+
+        $fieldset->addField(
+            'is_filterable_in_grid',
+            'hidden',
+            [
+                'name' => 'is_filterable_in_grid',
+                'value' => $attributeObject->getData('is_filterable_in_grid') ?: 1,
             ]
         );
 
