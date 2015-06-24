@@ -20,7 +20,8 @@ class MagentoImport implements PreProcessorInterface
     /**
      * PCRE pattern that matches @magento_import LESS instruction
      */
-    const REPLACE_PATTERN = '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
+    const REPLACE_PATTERN =
+        '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
      * @var DesignInterface
