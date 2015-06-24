@@ -367,24 +367,6 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     * Get paths of where current template is used as default
-     *
-     * @param bool $asJSON
-     * @return string
-     */
-    public function getUsedDefaultForPaths($asJSON = true)
-    {
-        /** @var $template \Magento\Email\Model\BackendTemplate */
-        $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedAsDefault();
-        $pathsParts = $this->_getSystemConfigPathsParts($paths);
-        if ($asJSON) {
-            return $this->jsonHelper->jsonEncode($pathsParts);
-        }
-        return $pathsParts;
-    }
-
-    /**
      * Get paths of where current template is currently used
      *
      * @param bool $asJSON
@@ -404,7 +386,6 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
 
     /**
      * Convert xml config paths to decorated names
-     * TODO: Add support to show appropriate "scope" value for theme-specific template files
      *
      * @param array $paths
      * @return array
@@ -413,7 +394,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     protected function _getSystemConfigPathsParts($paths)
     {
         $result = $urlParams = $prefixParts = [];
-        $scopeLabel = __('GLOBAL');
+        $scopeLabel = __('Default Config');
         if ($paths) {
             /** @var $menu \Magento\Backend\Model\Menu */
             $menu = $this->_menuConfig->getMenu();

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\TemplateTypesInterface;
 
 /**
  * Test class for \Magento\Email\Block\Adminhtml\Template\Edit\Form
@@ -15,10 +17,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var string[] */
     protected $expectedFields;
 
-    /** @var Magento\Email\Model\Template */
+    /** @var \Magento\Email\Model\Template */
     protected $template;
 
-    /** @var Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
     /** @var \Magento\Framework\Registry */
@@ -44,10 +46,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'template_styles'
         ];
 
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->template = $this->objectManager->get('Magento\Email\Model\Template')
             ->setId(1)
-            ->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_HTML);
+            ->setTemplateType(TemplateTypesInterface::TYPE_HTML);
         $this->registry = $this->objectManager->get('Magento\Framework\Registry');
         if ($this->registry->registry('current_email_template') == null) {
             $this->registry->register('current_email_template', $this->template);
@@ -66,16 +68,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testPrepareFormWithTemplateId()
     {
         $this->expectedFields[] = 'used_currently_for';
-        $this->runTest();
-    }
-
-    /**
-     * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form::_prepareForm
-     */
-    public function testPrepareFormWithoutTemplateId()
-    {
-        $this->template->setId(null);
-        $this->expectedFields[] = 'used_default_for';
         $this->runTest();
     }
 

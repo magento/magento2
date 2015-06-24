@@ -86,7 +86,6 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php echo $block->getUsedDefaultForPaths(); ?>, 'used_default_for');
             this.renderPaths(<?php echo $block->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
         },
 
@@ -194,13 +193,13 @@ require([
                                   $('convert_button').show();
                               }
                           }
-                          if (pair.key == 'orig_template_used_default_for') {
+                          if (pair.key == 'orig_template_used_currently_for') {
                                if(pair.value.length){
-                                   $('used_default_for').show();
-                                   this.renderPaths(pair.value, 'used_default_for');
+                                   $('used_currently_for').show();
+                                   this.renderPaths(pair.value, 'used_currently_for');
                                }
                                else{
-                                   $('used_default_for').hide();
+                                   $('used_currently_for').hide();
                                }
                           }
                        }.bind(this));
