@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['Magento_Ui/js/lib/component/provider', 'underscore'],
-    function (provider, _) {
+define(['Magento_Ui/js/lib/component/provider', 'underscore', 'mage/url'],
+    function (provider, _, url) {
         "use strict";
         return function (itemId) {
             var model = {
@@ -65,12 +65,18 @@ define(['Magento_Ui/js/lib/component/provider', 'underscore'],
                 },
                 getAfterSubmitCallbacks: function() {
                     var callbacks = [];
+                    callbacks.push(this.afterSubmit);
                     _.each(this.additionalOptions, function(option) {
                         if (_.isFunction(option.afterSubmit)) {
                             callbacks.push(option.afterSubmit);
                         }
                     });
                     return callbacks;
+                },
+                afterSubmit: function() {
+                    window.location.href = url.build('checkout/cart/updatePost')
+                        + '?form_key=' + window.giftOptionsConfig.giftMessage.formKey
+                        + '&cart[]';
                 },
                 getSubmitParams: function(remove) {
                     var params = {},
