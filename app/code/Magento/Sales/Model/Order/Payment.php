@@ -187,6 +187,40 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * Sets transaction id for current payment
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->setData('transaction_id', $transactionId);
+        return $this;
+    }
+
+    /**
+     * Sets transaction close flag
+     *
+     * @param bool $isClosed
+     * @return $this
+     */
+    public function setIsTransactionClosed($isClosed)
+    {
+        $this->setData('is_transaction_closed', (bool)$isClosed);
+        return $this;
+    }
+
+    /**
+     * Returns transaction parent
+     *
+     * @return string
+     */
+    public function getParentTransactionId()
+    {
+        return $this->getData('parent_transaction_id');
+    }
+
+    /**
      * Check order payment capture action availability
      *
      * @return bool

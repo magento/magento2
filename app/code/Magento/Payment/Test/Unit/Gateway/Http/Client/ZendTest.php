@@ -65,7 +65,11 @@ class ZendTest extends \PHPUnit_Framework_TestCase
         $this->transferObjectMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferInterface')
             ->getMockForAbstractClass();
 
-        $this->model = new Zend($this->zendClientFactoryMock, $this->converterMock, $this->loggerMock);
+        $this->model = new Zend(
+            $this->zendClientFactoryMock,
+            $this->loggerMock,
+            $this->converterMock
+        );
     }
 
     public function testPlaceRequest()

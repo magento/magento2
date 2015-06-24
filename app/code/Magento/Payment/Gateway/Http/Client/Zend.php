@@ -19,7 +19,7 @@ class Zend implements ClientInterface
     private $clientFactory;
 
     /**
-     * @var ConverterInterface
+     * @var ConverterInterface | null
      */
     private $converter;
 
@@ -30,13 +30,13 @@ class Zend implements ClientInterface
 
     /**
      * @param ZendClientFactory $clientFactory
-     * @param ConverterInterface $converter
      * @param Logger $logger
+     * @param ConverterInterface $converter
      */
     public function __construct(
         ZendClientFactory $clientFactory,
-        ConverterInterface $converter,
-        Logger $logger
+        Logger $logger,
+        ConverterInterface $converter = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->converter = $converter;
@@ -77,7 +77,9 @@ class Zend implements ClientInterface
         try {
             $response = $client->request();
 
-            $result = $this->converter->convert($response->getBody());
+            $result = $this->converter
+                ? $this->converter->convert($response->getBody())
+                : $response->getBody();
             $log['response'] = $result;
         } catch (\Zend_Http_Client_Exception $e) {
             throw new \Magento\Payment\Gateway\Http\ClientException(__($e->getMessage()));
