@@ -72,47 +72,6 @@ class BackendTemplate extends Template
     }
 
     /**
-     * Collect all system config paths where current template is used as default
-     *
-     * @return array
-     */
-    public function getSystemConfigPathsWhereUsedAsDefault()
-    {
-        $templateCode = $this->getOrigTemplateCode();
-        if (!$templateCode) {
-            return [];
-        }
-
-        $configData = $this->_scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-        $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
-        return $paths;
-    }
-
-    /**
-     * Find nodes which are using $templateCode value
-     *
-     * @param string $code
-     * @param array $data
-     * @param string $path
-     * @return array
-     */
-    protected function _findEmailTemplateUsages($code, array $data, $path)
-    {
-        $output = [];
-        foreach ($data as $key => $value) {
-            $configPath = $path ? $path . '/' . $key : $key;
-            if (is_array($value)) {
-                $output = array_merge($output, $this->_findEmailTemplateUsages($code, $value, $configPath));
-            } else {
-                if ($value == $code) {
-                    $output[] = ['path' => $configPath];
-                }
-            }
-        }
-        return $output;
-    }
-
-    /**
      * Collect all system config paths where current template is currently used
      *
      * @return array
