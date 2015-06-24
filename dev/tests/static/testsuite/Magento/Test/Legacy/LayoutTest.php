@@ -349,7 +349,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setWrapperClass',
             'unsetChild',
             'unsetChildren',
-            'updateButton'
+            'updateButton',
+            'setIsProductListingContext'
         ];
     }
 }
