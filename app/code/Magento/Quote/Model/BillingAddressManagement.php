@@ -67,6 +67,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
         $quote = $this->quoteRepository->getActive($cartId);
+
         $this->addressValidator->validate($address);
         $customerAddressId = $address->getCustomerAddressId();
         $shippingAddress = null;
@@ -87,6 +88,8 @@ class BillingAddressManagement implements BillingAddressManagementInterface
                 $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData);
                 $shippingAddress->setSaveInAddressBook($saveInAddressBook);
             }
+        } elseif ($quote->getCustomerId()) {
+            $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSaveInAddressBook($saveInAddressBook);
         $quote->setBillingAddress($address);
