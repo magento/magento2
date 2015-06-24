@@ -33,6 +33,8 @@ class ComponentUpgrade extends AbstractActionController
     }
 
     /**
+     * Index page action
+     *
      * @return ViewModel
      */
     public function indexAction()
@@ -42,12 +44,19 @@ class ComponentUpgrade extends AbstractActionController
         return $view;
     }
 
+    /**
+     * Update action
+     *
+     * @return JsonModel
+     */
     public function updateAction()
     {
         $package = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $errorMessage = '';
         if (isset($package['name']) && isset($package['version'])) {
-            $errorMessage .= $this->updater->createUpdaterTask([['package_name' => $package['name'], 'package_version' => $package['version']]]);
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [['package_name' => $package['name'], 'package_version' => $package['version']]]
+            );
         } else {
             $errorMessage .= 'Missing package information';
         }

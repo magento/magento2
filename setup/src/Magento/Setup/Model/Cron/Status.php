@@ -5,6 +5,9 @@
  */
 
 namespace Magento\Setup\Model\Cron;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class which provides access to the current status of the Magento setup application.
@@ -45,27 +48,42 @@ class Status
     protected $updateErrorFlagFilePath;
 
     /**
+     * @var Filesystem\Directory\WriteInterface
+     */
+    protected $baseReaderWriter;
+
+    /**
+     * @var Filesystem\Directory\WriteInterface
+     */
+    protected $varReaderWriter;
+
+    /**
      * Constructor
      *
+     * @param Filesystem $filesystem
      * @param string $statusFilePath
      * @param string $logFilePath
      * @param string $updateInProgressFlagFilePath
      * @param string $updateErrorFlagFilePath
      */
     public function __construct(
+        Filesystem $filesystem,
         $statusFilePath = null,
         $logFilePath = null,
         $updateInProgressFlagFilePath = null,
         $updateErrorFlagFilePath = null
     ) {
-        $this->statusFilePath = $statusFilePath ? $statusFilePath : BP . '/update/var/.update_status.txt';
-        $this->logFilePath = $logFilePath ? $logFilePath : BP . '/update/var/update_status.log';
+        $this->baseReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->varReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+
+        $this->statusFilePath = $statusFilePath ? $statusFilePath : 'update/var/.update_status.txt';
+        $this->logFilePath = $logFilePath ? $logFilePath : 'update/var/update_status.log';
         $this->updateInProgressFlagFilePath = $updateInProgressFlagFilePath
             ? $updateInProgressFlagFilePath
-            : BP . '/var/.update_in_progress.flag';
+            : '.update_in_progress.flag';
         $this->updateErrorFlagFilePath = $updateErrorFlagFilePath
             ? $updateErrorFlagFilePath
-            : BP . '/var/.update_error.flag';
+            : '.update_error.flag';
     }
 
     /**
@@ -116,11 +134,13 @@ class Status
      */
     protected function writeMessageToFile($text, $filePath)
     {
-        $isNewFile = !file_exists($filePath);
-        if (!$isNewFile && file_get_contents($filePath)) {
+        $isNewFile = !$this->baseReaderWriter->isExist($filePath);
+        if (!$isNewFile && $this->baseReaderWriter->read($filePath)) {
             $text = "\n{$text}";
         }
-        if (false === file_put_contents($filePath, $text, FILE_APPEND)) {
+        try {
+            $this->baseReaderWriter->writeFile($filePath, $text, 'a+');
+        } catch (FileSystemException $e) {
             throw new \RuntimeException(sprintf('Cannot add status information to "%s"', $filePath));
         }
         if ($isNewFile) {
@@ -136,7 +156,7 @@ class Status
      */
     public function isUpdateInProgress()
     {
-        return file_exists($this->updateInProgressFlagFilePath);
+        return $this->varReaderWriter->isExist($this->updateInProgressFlagFilePath);
     }
 
     /**
@@ -157,7 +177,7 @@ class Status
      */
     public function isUpdateError()
     {
-        return file_exists($this->updateErrorFlagFilePath);
+        return $this->varReaderWriter->isExist($this->updateErrorFlagFilePath);
     }
 
     /**
@@ -181,13 +201,13 @@ class Status
     protected function setFlagValue($pathToFlagFile, $value)
     {
         if ($value) {
-            $updateInProgressFlagFile = fopen($pathToFlagFile, 'w');
-            if (!$updateInProgressFlagFile) {
+            try {
+                $this->varReaderWriter->touch($pathToFlagFile);
+            } catch (FileSystemException $e) {
                 throw new \RuntimeException(sprintf('"%s" cannot be created.', $pathToFlagFile));
             }
-            fclose($updateInProgressFlagFile);
-        } else if (file_exists($pathToFlagFile)) {
-            unlink($pathToFlagFile);
+        } else if ($this->varReaderWriter->isExist($pathToFlagFile)) {
+            $this->varReaderWriter->delete($pathToFlagFile);
         }
         return $this;
     }

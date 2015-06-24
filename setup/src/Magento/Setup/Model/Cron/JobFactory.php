@@ -46,18 +46,19 @@ class JobFactory
     {
         switch ($name) {
             case self::NAME_UPGRADE:
+                $statusStream = fopen(
+                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Status')->getStatusFilePath(),
+                    'a+'
+                );
+                $logStream = fopen(
+                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Status')->getLogFilePath(),
+                    'a+'
+                );
                 return new JobUpgrade(
                     $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
                     $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
                     $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
-                    new MultipleStreamOutput(
-                        [
-                            fopen($this->serviceLocator->get('Magento\Setup\Model\Cron\Status')
-                                ->getStatusFilePath(), 'a+'),
-                            fopen($this->serviceLocator->get('Magento\Setup\Model\Cron\Status')
-                                ->getLogFilePath(), 'a+'),
-                        ]
-                    ),
+                    new MultipleStreamOutput([$statusStream, $logStream]),
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Status'),
                     $name,
                     $params

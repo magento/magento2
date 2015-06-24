@@ -65,7 +65,7 @@ class CronRunCommand extends AbstractSetupCommand
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage());
-            exit();
+            return;
         }
 
         try {

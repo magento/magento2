@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron\Queue;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Queue content file reader.
@@ -11,18 +13,25 @@ namespace Magento\Setup\Model\Cron\Queue;
 class Reader
 {
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    protected $reader;
+
+    /**
      * @var string
      */
-    protected $queueFilePath;
+    protected $queueFileBasename;
 
     /**
      * Initialize reader.
      *
-     * @param string|null $queueFilePath
+     * @param Filesystem $filesystem
+     * @param string|null $queueFileBasename
      */
-    public function __construct($queueFilePath = null)
+    public function __construct(Filesystem $filesystem, $queueFileBasename = null)
     {
-        $this->queueFilePath = $queueFilePath ? $queueFilePath : BP . '/var/.update_queue.json';
+        $this->reader = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->queueFileBasename = $queueFileBasename ? $queueFileBasename : '.update_queue.json';
     }
 
     /**
@@ -34,35 +43,17 @@ class Reader
     public function read()
     {
         $queue = '';
-        if (!file_exists($this->queueFilePath)) {
+        if (!$this->reader->isExist($this->queueFileBasename)) {
             return $queue;
         }
-        $queueFileContent = file_get_contents($this->queueFilePath);
+        $queueFileContent = $this->reader->readFile($this->queueFileBasename);
         if ($queueFileContent) {
             json_decode($queueFileContent);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException(sprintf('Content of "%s" must a valid JSON.', $this->queueFilePath));
+                throw new \RuntimeException(sprintf('Content of "%s" must a valid JSON.', $this->queueFileBasename));
             }
             $queue = $queueFileContent;
         }
         return $queue;
-    }
-
-    /**
-     * Clear content of the Magento updater application jobs queue file.
-     *
-     * @return void
-     * @throws \RuntimeException If queue file exists but cannot be cleared
-     */
-    public function clearQueue()
-    {
-        if (file_exists($this->queueFilePath)) {
-            $isClearedSuccessfully = (false !== file_put_contents($this->queueFilePath, ''));
-            if (!$isClearedSuccessfully) {
-                throw new \RuntimeException(
-                    sprintf('Magento updater application jobs queue file "%s" cannot be cleared.', $this->queueFilePath)
-                );
-            }
-        }
     }
 }

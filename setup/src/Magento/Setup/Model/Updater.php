@@ -31,10 +31,10 @@ class Updater
     /**
      * Constructor
      *
-     * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
      */
-    public function __construct(DirectoryList $directoryList, Filesystem $filesystem){
+    public function __construct(Filesystem $filesystem)
+    {
         $this->queueFilePath = '.update_queue.json';
         $this->write = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->write->touch($this->queueFilePath);
@@ -46,7 +46,8 @@ class Updater
      * @param array $packages
      * @return string
      */
-    public function createUpdaterTask($packages){
+    public function createUpdaterTask($packages)
+    {
         try {
             // write to .update_queue.json file
             $existingQueue = $this->readQueue();
@@ -63,11 +64,12 @@ class Updater
      *
      * @return array
      */
-    private function readQueue(){
+    private function readQueue()
+    {
         try {
             $queueFileContent = $this->write->readFile($this->queueFilePath);
             return json_decode($queueFileContent, true);
-        } catch (FileSystemException $e){
+        } catch (FileSystemException $e) {
             return [];
         }
     }
