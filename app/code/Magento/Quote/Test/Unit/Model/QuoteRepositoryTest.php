@@ -133,7 +133,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('load')
@@ -150,7 +150,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('load')
@@ -169,7 +169,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->once())
             ->method('setSharedStoreIds')
             ->with($sharedStoreIds)
@@ -191,7 +191,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('loadByCustomer')
@@ -213,7 +213,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('load')
@@ -235,7 +235,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('load')
@@ -253,7 +253,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('load')
@@ -273,7 +273,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->once())
             ->method('setSharedStoreIds')
             ->with($sharedStoreIds)
@@ -296,7 +296,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('getId')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('loadByCustomer')
