@@ -4,17 +4,21 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<!-- ko if: sortable -->
-    <th
-        class="data-grid-th _sortable"
-        data-bind="css: sortClass, click: sort, visible: visible">
-        <span data-bind="text: label"></span>
-    </th>
-<!-- /ko -->
-
-<!-- ko ifnot: sortable -->
-    <th class="data-grid-th" data-bind="visible: visible">
-        <span data-bind="text: label"></span>
-    </th>
-<!-- /ko -->
+<th
+    class="data-grid-th"
+    data-bind="
+        afterRender: draggable && $parent.dndConfig.enabled ?
+            (function (elem) { $parent.dnd('addColumn', elem); }) :
+            false,
+        css: {
+            '_sortable': sortable,
+            '_draggable': draggable,
+            '_ascend': sorting() === 'asc',
+            '_descend': sorting() === 'desc',
+            '_dragover-left': dragover() === 'right',
+            '_dragover-right': dragover() === 'left'
+        },
+        click: sort,
+        visible: visible">
+    <span data-bind="text: label"></span>
+</th>
