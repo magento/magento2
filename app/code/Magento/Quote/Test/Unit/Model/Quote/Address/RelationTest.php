@@ -24,7 +24,12 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->modelMock = $this->getMock(
             'Magento\Framework\Model\AbstractModel',
-            ['getItemsCollection', 'getShippingRatesCollection'],
+            [
+                'getItemsCollection',
+                'getShippingRatesCollection',
+                'itemsCollectionWasSet',
+                'shippingRatesCollectionWasSet'
+            ],
             [],
             '',
             false
@@ -48,7 +53,9 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->modelMock->expects($this->once())->method('itemsCollectionWasSet')->willReturn(true);
         $this->modelMock->expects($this->once())->method('getItemsCollection')->willReturn($itemsCollection);
+        $this->modelMock->expects($this->once())->method('shippingRatesCollectionWasSet')->willReturn(true);
         $this->modelMock->expects($this->once())
             ->method('getShippingRatesCollection')
             ->willReturn($shippingRatesCollection);

@@ -45,6 +45,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->quoteMock->expects($this->once())->method('addressCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($addressCollectionMock);
         $addressCollectionMock->expects($this->once())->method('save');
 
@@ -56,6 +57,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->quoteMock->expects($this->once())->method('itemsCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getItemsCollection')->willReturn($itemsCollectionMock);
         $itemsCollectionMock->expects($this->once())->method('save');
 
@@ -66,10 +68,12 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->quoteMock->expects($this->once())->method('paymentsCollectionWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getPaymentsCollection')->willReturn($paymentCollectionMock);
         $paymentCollectionMock->expects($this->once())->method('save');
 
         $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $this->quoteMock->expects($this->once())->method('currentPaymentWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('save');
 
