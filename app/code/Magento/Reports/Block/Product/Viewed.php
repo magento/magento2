@@ -6,13 +6,13 @@
 
 namespace Magento\Reports\Block\Product;
 
+use \Magento\Framework\Object\IdentityInterface;
 /**
  * Reports Recently Viewed Products Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
-    implements \Magento\Framework\Object\IdentityInterface
+class Viewed extends AbstractProduct implements IdentityInterface
 {
     /**
      * Config path to recently viewed product count

@@ -237,7 +237,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     protected function _resetConditions($conditions = null)
     {
-        if (is_null($conditions)) {
+        if (null === $conditions) {
             $conditions = $this->getConditionsInstance();
         }
         $conditions->setRule($this)->setId('1')->setPrefix('conditions');
@@ -254,7 +254,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     protected function _resetActions($actions = null)
     {
-        if (is_null($actions)) {
+        if (null === $actions) {
             $actions = $this->getActionsInstance();
         }
         $actions->setRule($this)->setId('1')->setPrefix('actions');

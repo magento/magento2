@@ -66,7 +66,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue(null));
 
-        $this->assertTrue(is_null($this->_helper->isEnabled()));
+        $this->assertTrue(null === $this->_helper->isEnabled());
     }
 
     public function testGetUserNameNotLoggedIn()
