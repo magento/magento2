@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
-class ColumnFactory
+class FilterFactory
 {
     /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
@@ -15,21 +15,11 @@ class ColumnFactory
     /**
      * @var array
      */
-    protected $jsComponentMap = [
-        'text' => 'Magento_Ui/js/grid/columns/sortable',
-        'select' => 'Magento_Ui/js/grid/columns/select',
-        'date' => 'Magento_Ui/js/grid/columns/date',
-    ];
-
-    /**
-     * @var array
-     */
-    protected $dataTypeMap = [
-        'default' => 'text',
-        'text' => 'text',
-        'select' => 'select',
-        'multiselect' => 'select',
-        'date' => 'date',
+    protected  $filterMap = [
+        'default' => 'filterInput',
+        'select' => 'filterSelect',
+        'multiselect' => 'filterSelect',
+        'date' => 'filterDate',
     ];
 
     /**
@@ -49,45 +39,31 @@ class ColumnFactory
     {
         $columnName = $attribute->getAttributeCode();
         $config = [
+            'dataScope' => $columnName,
             'label' => __($attribute->getDefaultFrontendLabel()),
-            'dataType' => $this->getDataType($attribute),
-            'sorting' => 'asc',
-            'align' => 'left',
-            'add_field' => true,
         ];
-
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
+            $config['caption'] = __('Select...');
         }
         $arguments = [
             'data' => [
-                'js_config' => [
-                    'component' => $this->getJsComponent($config['dataType']),
-                ],
                 'config' => $config,
             ],
             'context' => $context,
         ];
-        return $this->componentFactory->create($columnName, 'column', $arguments);
-    }
 
-    /**
-     * @param string $dataType
-     * @return string
-     */
-    protected function getJsComponent($dataType)
-    {
-        return $this->jsComponentMap[$dataType];
+        return $this->componentFactory->create($columnName, $this->getFilterType($attribute), $arguments);
     }
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return string
      */
-    protected function getDataType($attribute)
+    protected function getFilterType($attribute)
     {
-        return isset($this->dataTypeMap[$attribute->getFrontendInput()])
-            ? $this->dataTypeMap[$attribute->getFrontendInput()]
-            : $this->dataTypeMap['default'];
+        return isset($this->filterMap[$attribute->getFrontendInput()])
+            ? $this->filterMap[$attribute->getFrontendInput()]
+            : $this->filterMap['default'];
     }
 }
