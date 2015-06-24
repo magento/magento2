@@ -22,7 +22,9 @@ class BackupRollbackFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManagerInterface', [], '',
+            'Magento\Framework\ObjectManagerInterface',
+            [],
+            '',
             false
         );
         $this->factory = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
