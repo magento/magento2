@@ -16,28 +16,28 @@ interface IndexerInterface
     /**
      * Add entities data to index
      *
-     * @param Dimension $dimension
+     * @param Dimension[] $dimension
      * @param \Traversable $documents
      * @return IndexerInterface
      */
-    public function saveIndex(Dimension $dimension, \Traversable $documents);
+    public function saveIndex($dimensions, \Traversable $documents);
 
     /**
      * Remove entities data from index
      *
-     * @param Dimension $dimension
+     * @param Dimension[] $dimension
      * @param \Traversable $documents
      * @return IndexerInterface
      */
-    public function deleteIndex(Dimension $dimension, \Traversable $documents);
+    public function deleteIndex($dimensions, \Traversable $documents);
 
     /**
      * Remove all data from index
      *
-     * @param Dimension $dimension
+     * @param Dimension[] $dimension
      * @return IndexerInterface
      */
-    public function cleanIndex(Dimension $dimension);
+    public function cleanIndex($dimensions);
 
     /**
      * Define if engine is available

@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\SaveHandler;
+namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Indexer\Model\IndexStructure;
+use Magento\Indexer\Model\SaveHandler\BatchFactory;
 
-class TwoTables implements IndexerInterface
+class IndexerHandler implements IndexerInterface
 {
     /**
      * @var string[]
@@ -36,9 +36,9 @@ class TwoTables implements IndexerInterface
     private $resource;
 
     /**
-     * @var Batch
+     * @var batchFactory->create(self::BATCH_SIZE)
      */
-    private $batch;
+    private $batchFactory;
 
     /**
      * @var Config
@@ -49,29 +49,29 @@ class TwoTables implements IndexerInterface
      * @param IndexStructure $indexStructure
      * @param Resource|Resource $resource
      * @param Config $eavConfig
-     * @param Batch $batch
+     * @param batchFactory->create(self::BATCH_SIZE) $batch
      * @param array $data
      */
     public function __construct(
         IndexStructure $indexStructure,
         Resource $resource,
         Config $eavConfig,
-        Batch $batch,
+        BatchFactory $batchFactory,
         array $data
     ) {
         $this->indexStructure = $indexStructure;
         $this->data = $data;
         $this->resource = $resource;
-        $this->batch = $batch;
+        $this->batchFactory = $batchFactory;
         $this->eavConfig = $eavConfig;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function saveIndex(Dimension $dimension, \Traversable $documents)
+    public function saveIndex($dimension, \Traversable $documents)
     {
-        foreach ($this->batch->getItems($documents) as $batchDocuments) {
+        foreach ($this->batchFactory->create(self::BATCH_SIZE)->getItems($documents) as $batchDocuments) {
             $indexDocuments = [];
             foreach ($batchDocuments as $documentName => $documentValue) {
                 foreach ($this->data['fields'] as $fieldName => $fieldValue) {
@@ -89,10 +89,10 @@ class TwoTables implements IndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteIndex(Dimension $dimension, \Traversable $documents)
+    public function deleteIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->dataTypes as $dataType) {
-            foreach ($this->batch->getItems($documents) as $batchDocuments) {
+            foreach ($this->batchFactory->create(self::BATCH_SIZE)->getItems($documents) as $batchDocuments) {
                 $documentsId = array_column($batchDocuments, 'id');
                 $this->getAdapter()->delete($this->getTableName($dataType), ['id' => $documentsId]);
             }
@@ -102,7 +102,7 @@ class TwoTables implements IndexerInterface
     /**
      * {@inheritdoc}
      */
-    public function cleanIndex(Dimension $dimension)
+    public function cleanIndex($dimension)
     {
         foreach ($this->dataTypes as $dataType) {
             $tableName = $this->getTableName($dataType);
@@ -125,13 +125,13 @@ class TwoTables implements IndexerInterface
      */
     private function getTableName($dataType)
     {
-        return $this->getIndexName() . $dataType . '_scope';
+        return $this->getIndexId() . $dataType . '_scope';
     }
 
     /**
      * @return string
      */
-    private function getIndexName()
+    private function getIndexId()
     {
         return $this->data['indexer_id'];
     }

@@ -5,6 +5,11 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
+use Magento\CatalogSearch\Model\Indexer\IndexerHandler;
+use Magento\Framework\Search\Request\DimensionFactory;
+use Magento\Store\Model\StoreManagerInterface;
+
 class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -12,32 +17,44 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
      */
     const INDEXER_ID = 'catalogsearch_fulltext';
 
+    /** @var array index structure */
+    protected $data;
+
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory
+     * @var IndexerHandler
      */
-    protected $fullActionFactory;
-
+    private $indexerHandlerFactory;
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\RowsFactory
+     * @var StoreManagerInterface
      */
-    protected $rowsActionFactory;
-
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
-    protected $indexerRegistry;
+    private $storeManager;
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
+    /**
+     * @var Full
+     */
+    private $fullAction;
 
     /**
-     * @param Fulltext\Action\FullFactory $fullActionFactory
-     * @param Fulltext\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param Full $fullAction
+     * @param IndexerHandlerFactory $indexerHandlerFactory
+     * @param StoreManagerInterface $storeManager
+     * @param array $data
      */
     public function __construct(
-        Fulltext\Action\FullFactory $fullActionFactory,
-        Fulltext\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+        Full $fullAction,
+        IndexerHandlerFactory $indexerHandlerFactory,
+        StoreManagerInterface $storeManager,
+        DimensionFactory $dimensionFactory,
+        array $data
     ) {
-        $this->fullActionFactory = $fullActionFactory;
-        $this->rowsActionFactory = $rowsActionFactory;
-        $this->indexerRegistry = $indexerRegistry;
+        $this->indexerHandlerFactory = $indexerHandlerFactory;
+        $this->data = $data;
+        $this->storeManager = $storeManager;
+        $this->dimensionFactory = $dimensionFactory;
+        $this->fullAction = $fullAction;
     }
 
     /**
@@ -48,11 +65,19 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
      */
     public function execute($ids)
     {
-        $this->indexerRegistry->get(self::INDEXER_ID);
-
-        /** @var Fulltext\Action\Rows $action */
-        $action = $this->rowsActionFactory->create();
-        $action->reindex($ids);
+        $ids = ($ids !== null) ? new \ArrayObject($ids) : $ids;
+        $storeIds = array_keys($this->storeManager->getStores());
+        $saveHandler = $this->indexerHandlerFactory->create([
+            'data' => $this->data
+        ]);
+        foreach ($storeIds as $storeId) {
+            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
+            $saveHandler->deleteIndex([$dimension], $ids);
+            $saveHandler->saveIndex(
+                [$dimension],
+                $this->fullAction->rebuildStoreIndex($storeId, $ids)
+            );
+        }
     }
 
     /**
@@ -62,7 +87,21 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
      */
     public function executeFull()
     {
-        $this->fullActionFactory->create()->reindexAll();
+        $storeIds = array_keys($this->storeManager->getStores());
+        $saveHandler = $this->indexerHandlerFactory->create([
+            'data' => $this->data
+        ]);
+        foreach ($storeIds as $storeId) {
+            $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
+            $saveHandler->cleanIndex([$dimension]);
+            $saveHandler->saveIndex(
+                [$dimension],
+                $this->fullAction->rebuildStoreIndex($storeId)
+            );
+        }
+       // $this->fulltextResource->resetSearchResults();
+       // $this->searchRequestConfig->reset();
+
     }
 
     /**
