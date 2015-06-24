@@ -712,11 +712,18 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $fileName = $result['name'];
             } elseif (!is_null($extension)) {
                 $fileName = $entity . $extension;
+            } else {
+                $fileName = basename($sourceFileRelative);
             }
             $copyName = $this->localeDate->gmtTimestamp() . '_' . $fileName;
             $copyFile = self::IMPORT_HISTORY_DIR . $copyName;
             try {
-                $this->_varDirectory->copyFile($sourceFileRelative, $copyFile);
+                if ($this->_varDirectory->isExist($sourceFileRelative)) {
+                    $this->_varDirectory->copyFile($sourceFileRelative, $copyFile);
+                } else {
+                    $content = $this->_varDirectory->getDriver()->fileGetContents($sourceFileRelative);
+                    $this->_varDirectory->writeFile($copyFile, $content);
+                }
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Source file coping failed'));
             }
