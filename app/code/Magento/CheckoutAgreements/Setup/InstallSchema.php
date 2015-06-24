@@ -70,12 +70,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['nullable' => false, 'default' => '0'],
             'Is Html'
-        )->addColumn(
-            'is_auto_approved',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['nullable' => false, 'default' => '1'],
-            'Cosumer Approval'
         )->setComment(
             'Checkout Agreement'
         );

@@ -98,18 +98,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField(
-            'is_auto_approved',
-            'select',
-            [
-                'label' => __('Consumer Approval'),
-                'title' => __('Consumer Approval'),
-                'name' => 'is_auto_approved',
-                'required' => true,
-                'options' => [0 => __('Manual'), 1 => __('Auto-approve')]
-            ]
-        );
-
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
                 'store_id',

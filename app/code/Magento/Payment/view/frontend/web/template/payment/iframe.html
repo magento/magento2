@@ -22,6 +22,11 @@
 <!-- /ko -->
 </form>
 <div class="actions-toolbar" id="review-buttons-container">
+    <div>
+        <!-- ko foreach: $parent.getRegion('before-place-order') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+    </div>
     <div class="primary">
         <button data-role="review-save" type="submit"
                 data-bind="attr: {title: $t('Place order')}"
