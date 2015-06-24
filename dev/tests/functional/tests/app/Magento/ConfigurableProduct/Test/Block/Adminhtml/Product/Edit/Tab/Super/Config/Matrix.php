@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
