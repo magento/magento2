@@ -10,13 +10,15 @@
 define(
     [
         'ko',
+        'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Ui/js/model/errorlist',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Checkout/js/action/get-totals'
     ],
-    function (ko, quote, urlManager, paymentService, errorList, storage) {
+    function (ko, $, quote, urlManager, paymentService, errorList, storage, getTotalsAction) {
         'use strict';
         return function (couponCode, isApplied) {
             var quoteId = quote.getQuoteId();
@@ -25,10 +27,17 @@ define(
                 url
             ).done(
                 function (response) {
-                    isApplied(true);
-                    paymentService.setPaymentMethods(
-                        paymentService.getAvailablePaymentMethods()
-                    );
+                    if (response) {
+                        isApplied(true);
+                        var deferred = $.Deferred();
+
+                        getTotalsAction([], deferred);
+                        $.when(deferred).done(function() {
+                            paymentService.setPaymentMethods(
+                                paymentService.getAvailablePaymentMethods()
+                            );
+                        });
+                    }
                 }
             ).error(
                 function (response) {
