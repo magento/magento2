@@ -198,21 +198,5 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getIsAutoApproved()
-    {
-        return $this->getData(self::IS_AUTO_APPROVED);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setIsAutoApproved($isAutoApproved)
-    {
-        return $this->setData(self::IS_AUTO_APPROVED, $isAutoApproved);
-    }
     //@codeCoverageIgnoreEnd
 }
