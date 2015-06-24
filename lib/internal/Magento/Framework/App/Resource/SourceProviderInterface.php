@@ -12,7 +12,6 @@ interface SourceProviderInterface
      * validated by db adapter
      *
      * @return string
-     * @api
      */
     public function getMainTable();
 
@@ -21,7 +20,29 @@ interface SourceProviderInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
-     * @api
      */
     public function getIdFieldName();
+
+    /**
+     * @param string $fieldName
+     * @param string $alias
+     * @return void
+     */
+    public function addFieldToSelect($fieldName, $alias);
+
+    /**
+     * Get \Magento\Framework\DB\Select instance and applies fields to select if needed
+     *
+     * @return \Magento\Framework\DB\Select
+     */
+    public function getSelect();
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param mixed $attribute
+     * @param mixed $condition
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function addFieldToFilter($attribute, $condition = null);
 }

@@ -6,23 +6,20 @@
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\App\Resource\SourceProviderInterface;
-use Magento\Framework\DB\Select;
 
 interface HandlerInterface
 {
     /**
-     * @param Select $select
      * @param SourceProviderInterface $source
      * @param array $fieldInfo
      * @return void
      */
-    public function prepareSql(Select $select, SourceProviderInterface $source, $fieldInfo);
+    public function prepareSql(SourceProviderInterface $source, $fieldInfo);
 
     /**
-     * @param Select $select
      * @param SourceProviderInterface $source
      * @param array $fieldInfo
      * @return void
      */
-    public function prepareData(Select $select, SourceProviderInterface $source, $fieldInfo);
+    public function prepareData(SourceProviderInterface $source, $fieldInfo);
 }

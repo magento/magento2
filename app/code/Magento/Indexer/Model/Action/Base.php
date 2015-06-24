@@ -141,8 +141,8 @@ class Base implements ActionInterface
         $this->prepareSchema();
         $this->prepareIndexes();
         $this->deleteItems();
-        $this->prepareQuery(
-            $this->prepareSelect($ids)
+        $this->saveData(
+            $this->prepareDataSource($ids)
         );
     }
 
@@ -204,7 +204,7 @@ class Base implements ActionInterface
      * @param array|int|null $ids
      * @return Select
      */
-    protected function prepareSelect($ids = null)
+    protected function prepareDataSource($ids = null)
     {
         $select = $this->createResultSelect();
         if (is_array($ids)) {
@@ -231,7 +231,7 @@ class Base implements ActionInterface
      * @param Select $select
      * @return void
      */
-    protected function prepareQuery(Select $select)
+    protected function saveData(Select $select)
     {
         $this->saveHandlerPool->get($this->data['saveHandler'])->save($select, $this->getTableName());
     }
@@ -244,6 +244,16 @@ class Base implements ActionInterface
     protected function getPrimaryResource()
     {
         return $this->data['fieldsets'][0]['source'];
+    }
+
+    /**
+     * Return primary fieldset
+     *
+     * @return []
+     */
+    protected function getPrimaryFieldset()
+    {
+        return $this->data['fieldsets'][0];
     }
 
     /**
@@ -310,8 +320,8 @@ class Base implements ActionInterface
      */
     protected function createResultSelect()
     {
-        $select = $this->connection->select();
-        $select->from($this->getPrimaryResource()->getMainTable(), $this->getPrimaryResource()->getIdFieldName());
+        $select = $this->getPrimaryResource()->getSelect();
+        $select->columns($this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldset) {
             if (isset($fieldset['references'])) {
                 foreach ($fieldset['references'] as $reference) {
@@ -333,7 +343,7 @@ class Base implements ActionInterface
             foreach ($fieldset['fields'] as $field) {
                 $handler = $field['handler'];
                 /** @var HandlerInterface $handler */
-                $handler->prepareSql($select, $fieldset['source'], $field);
+                $handler->prepareSql($fieldset['source'], $field);
             }
         }
 
