@@ -12,7 +12,13 @@ $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
 $collection = $objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
-$collection->addAttributeToSelect('id')->load()->delete();
+$collection->addAttributeToSelect('id')->load();
+echo "++++++++++++++++Collection count: ";
+var_dump($collection->count());
+echo "++++++++++++++++";
+if ($collection->count() > 0) {
+    $collection->delete();
+}
 
 
 $registry->unregister('isSecureArea');

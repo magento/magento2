@@ -93,7 +93,6 @@ class Engine extends AbstractDb implements EngineInterface
                 $data[] = [
                     'product_id' => (int)$entityId,
                     'attribute_id' =>(int)$attributeId,
-                    'store_id' => (int)$storeId,
                     'data_index' => $indexValue
                 ];
             }

@@ -10,13 +10,13 @@ use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\Fieldset\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
+use Magento\Indexer\Model\SaveHandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\SaveHandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,6 +66,7 @@ class Base implements ActionInterface
         'mediumtext' => ['type' => Table::TYPE_TEXT, 'size' => 16777216],
         'text'       => ['type' => Table::TYPE_TEXT, 'size' => 65536],
     ];
+
     /**
      * @var array
      */
@@ -87,9 +88,9 @@ class Base implements ActionInterface
     protected $handlerPool;
 
     /**
-     * @var string
+     * @var SaveHandlerPool
      */
-    protected $defaultHandler;
+    protected $saveHandlerPool;
 
     /**
      * @var String
@@ -105,18 +106,18 @@ class Base implements ActionInterface
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param HandlerPool $handlerPool
+     * @param SaveHandlerPool $saveHandlerPool
      * @param FieldsetPool $fieldsetPool
-     * @param String $string
-     * @param string $defaultHandler
+     * @param StdString $string
      * @param array $data
      */
     public function __construct(
         AppResource $resource,
         SourcePool $sourcePool,
         HandlerPool $handlerPool,
+        SaveHandlerPool $saveHandlerPool,
         FieldsetPool $fieldsetPool,
-        String $string,
-        $defaultHandler = 'Magento\Indexer\Model\Handler\DefaultHandler',
+        StdString $string,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -124,7 +125,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourcePool = $sourcePool;
         $this->handlerPool = $handlerPool;
-        $this->defaultHandler = $defaultHandler;
+        $this->saveHandlerPool = $saveHandlerPool;
         $this->string = $string;
     }
 
@@ -232,9 +233,7 @@ class Base implements ActionInterface
      */
     protected function prepareQuery(Select $select)
     {
-        $saveHandler = $this->data['saveHandler'];
-        /** @var SaveHandlerInterface $saveHandler */
-        $saveHandler->save($select, $this->getTableName());
+        $this->saveHandlerPool->get($this->data['saveHandler'])->save($select, $this->getTableName());
     }
 
     /**
@@ -244,7 +243,7 @@ class Base implements ActionInterface
      */
     protected function getPrimaryResource()
     {
-        return $this->data['fieldsets'][$this->data['primary']]['source'];
+        return $this->data['fieldsets'][0]['source'];
     }
 
     /**
@@ -386,18 +385,15 @@ class Base implements ActionInterface
      */
     protected function prepareFields()
     {
-        $defaultHandler = $this->handlerPool->get($this->defaultHandler);
         foreach ($this->data['fieldsets'] as $fieldsetName => $fieldset) {
             $this->data['fieldsets'][$fieldsetName]['source'] = $this->sourcePool->get($fieldset['source']);
             if (isset($fieldset['class'])) {
                 $fieldsetObject = $this->fieldsetPool->get($fieldset['class']);
-                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->update($fieldset);
+                $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->addDynamicData($fieldset);
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
-                    isset($field['handler'])
-                        ? $this->handlerPool->get($field['handler'])
-                        : $defaultHandler;
+                    $this->handlerPool->get($field['handler']);
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
                     isset($field['dataType']) ? $field['dataType'] : 'varchar';
             }
