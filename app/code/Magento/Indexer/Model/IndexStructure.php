@@ -137,7 +137,7 @@ class IndexStructure
         foreach ($fields as $field) {
             $columnMap = isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => Table::TYPE_TEXT, 'size' => Table::DEFAULT_TEXT_SIZE];
+                : ['type' => $field['type'], 'size' => 10];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
