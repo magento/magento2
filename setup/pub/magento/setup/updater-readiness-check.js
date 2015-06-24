@@ -47,6 +47,11 @@ angular.module('updater-readiness-check', [])
             processed: false,
             expanded: false
         };
+        $scope.updater = {
+            visible: false,
+            processed: false,
+            expanded: false
+        };
 
         $scope.items = {
             'php-version': {
@@ -100,13 +105,27 @@ angular.module('updater-readiness-check', [])
                     $scope.updateOnProcessed($scope.permissions.responseType);
                     $scope.stopProgress();
                 }
+            },
+            'updater-application': {
+                url:'index.php/environment/updater-application',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.updater.visible = true;
+                },
+                process: function(data) {
+                    $scope.updater.processed = true;
+                    angular.extend($scope.updater, data);
+                    $scope.updateOnProcessed($scope.updater.responseType);
+                    $scope.stopProgress();
+                }
             }
         };
 
         $scope.isCompleted = function() {
             return $scope.version.processed
                 && $scope.extensions.processed
-                && $scope.permissions.processed;
+                && $scope.permissions.processed
+                && $scope.updater.processed;
         };
 
         $scope.updateOnProcessed = function(value) {
