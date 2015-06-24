@@ -135,6 +135,27 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
                 ],
                 "@import 'Magento_Module::some/file.css';\n@import 'Magento_Two::some/file.css';\n",
             ],
+            'non-modular reference notation' => [
+                '//@magento_import (reference) "some/file.css";',
+                'some/file.css',
+                'some/file.css',
+                [
+                    ['module' => null, 'filename' => 'some/file.css'],
+                    ['module' => null, 'filename' => 'theme/some/file.css'],
+                ],
+                "@import (reference) 'some/file.css';\n@import (reference) 'some/file.css';\n",
+            ],
+            'modular reference' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                ],
+                "@import (reference) 'Magento_Module::some/file.css';\n" .
+                "@import (reference) 'Magento_Two::some/file.css';\n",
+            ],
         ];
     }
 
