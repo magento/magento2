@@ -65,7 +65,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param IndexStructure $indexStructure
-     * @param Resource|Resource $resource
+     * @param Resource $resource
      * @param Config $eavConfig
      * @param Batch $batch
      * @param IndexScopeResolver $indexScopeResolver
@@ -175,7 +175,11 @@ class IndexerHandler implements IndexerInterface
         if ($dataType === $this->dataTypes[0]) {
             $documents = $this->prepareSearchableFields($documents);
         }
-        $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents);
+        $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getTableName($dataType, $dimensions),
+            $documents,
+            ['data_index']
+        );
     }
 
     /**
@@ -185,7 +189,7 @@ class IndexerHandler implements IndexerInterface
     private function prepareSearchableFields(array $documents)
     {
         $insertDocuments = [];
-        foreach ($documents as  $entityId => $document) {
+        foreach ($documents as $entityId => $document) {
             foreach ($document as $attributeId => $fieldValue) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
