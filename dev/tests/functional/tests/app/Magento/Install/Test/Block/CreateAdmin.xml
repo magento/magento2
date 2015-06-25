@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<mapping strict="0">
+<mapping strict="1">
     <fields>
         <username>
             <selector>[name='adminUsername']</selector>
