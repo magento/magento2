@@ -24,7 +24,7 @@ define(
                 if (!this.getTotals()) {
                     return false;
                 }
-                return stepNavigator.isProcessed('shipping');
+                return !stepNavigator.isAvailable('shipping') || stepNavigator.isProcessed('shipping');
             }
         });
     }
