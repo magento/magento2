@@ -38,6 +38,7 @@ class IndexStructure
     /**
      * @param string $index
      * @param Dimension[] $dimensions
+     * @return void
      */
     public function delete($index, array $dimensions)
     {
@@ -51,6 +52,7 @@ class IndexStructure
     /**
      * @param string $index
      * @param Dimension[] $dimensions
+     * @return void
      */
     public function create($index, array $dimensions)
     {
@@ -60,6 +62,7 @@ class IndexStructure
     /**
      * @param string $tableName
      * @throws \Zend_Db_Exception
+     * @return void
      */
     protected function createFulltextIndex($tableName)
     {

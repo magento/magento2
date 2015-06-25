@@ -15,9 +15,4 @@ interface FieldsetInterface
      * @return array
      */
     public function addDynamicData(array $data);
-
-    /**
-     * @return string
-     */
-//    public function getDefaultHandler();
 }
