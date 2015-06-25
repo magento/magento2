@@ -24,18 +24,16 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            <?php $i = 0; foreach ($_items as $_item): ?>
+        <?php foreach ($_items as $_item): ?>
+            <tbody>
                 <?php
                     if ($_item->getParentItem()) {
                         continue;
-                    } else {
-                        $i++;
                     }
                 ?>
                 <?= $this->getItemHtml($_item) ?>
-            <?php endforeach; ?>
-        </tbody>
+            </tbody>
+        <?php endforeach; ?>
     </table>
     <table class="order-totals" cellspacing="0" cellpadding="0" border="0">
         <?= $block->getChildHtml('order_totals') ?>

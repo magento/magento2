@@ -17,7 +17,7 @@ $_order = $_item->getOrder();
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
-            <dl>
+            <dl class="item-options">
             <?php foreach ($block->getItemOptions() as $option): ?>
                 <dt><strong><em><?= $option['label'] ?></em></strong></dt>
                 <dd>
