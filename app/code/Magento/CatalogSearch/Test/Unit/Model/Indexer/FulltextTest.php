@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
+use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
+use Magento\Framework\Search\Request\Config as SearchRequestConfig;
+use Magento\Framework\Search\Request\DimensionFactory;
+
 class FulltextTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,82 +17,143 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $fullMock;
+    protected $fullAction;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\RowsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rowsMock;
+    protected $storeManager;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Dimension|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerMock;
+    protected $dimension;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    protected $saveHandler;
 
+    /**
+     * @var \Magento\CatalogSearch\Model\Resource\Fulltext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fulltextResource;
+
+    /**
+     * @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchRequestConfig;
+
+    /**
+     *
+     */
     protected function setUp()
     {
-        $this->fullMock = $this->getMock(
-            'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory',
+        $this->fullAction = $this->getClassMock('Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full');
+        $this->saveHandler = $this->getClassMock('\Magento\CatalogSearch\Model\Indexer\IndexerHandler');
+        $indexerHandlerFactory = $this->getMock(
+            '\Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory',
             ['create'],
             [],
             '',
             false
         );
+        $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
 
-        $this->rowsMock = $this->getMock(
-            'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\RowsFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-
-        $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+        $this->storeManager = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             false,
             false,
             true,
-            ['getId', 'load', 'isInvalid', 'isWorking', '__wakeup']
+            []
         );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
-
-        $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(
-            $this->fullMock,
-            $this->rowsMock,
-            $this->indexerRegistryMock
-        );
-    }
-
-    public function testExecuteWithIndexer()
-    {
-        $ids = [1, 2, 3];
-
-        $this->indexerRegistryMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
-
-        $rowMock = $this->getMock(
-            'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Rows',
-            ['reindex'],
+        $this->dimension = $this->getClassMock('\Magento\Framework\Search\Request\Dimension');
+        $dimensionFactory = $this->getMock('\Magento\Framework\Search\Request\DimensionFactory',
+            ['create'],
             [],
             '',
             false
         );
-        $rowMock->expects($this->once())->method('reindex')->with($ids)->will($this->returnSelf());
+        $dimensionFactory->expects($this->any())->method('create')->willReturn($this->dimension);
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->fulltextResource = $this->getClassMock('\Magento\CatalogSearch\Model\Resource\Fulltext');
+        $this->searchRequestConfig = $this->getClassMock('Magento\Framework\Search\Request\Config');
+
+        $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(
+            $this->fullAction,
+            $indexerHandlerFactory,
+            $this->storeManager,
+            $dimensionFactory,
+            $this->fulltextResource,
+            $this->searchRequestConfig,
+            []
+        );
+    }
+
+    /**
+     * @param string $className
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getClassMock($className)
+    {
+        return $this->getMock($className, [], [], '', false);
+    }
+
+    public function testExecute()
+    {
+        $ids = [1, 2, 3];
+        $stores = [0 => 'Store 1', 1 => 'Store 2'];
+        $indexData = new \ArrayObject([]);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
 
         $this->model->execute($ids);
+    }
+
+    public function testExecuteFull()
+    {
+        $stores = [0 => 'Store 1', 1 => 'Store 2'];
+        $indexData = new \ArrayObject([]);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+        $this->fulltextResource->expects($this->once())->method('resetSearchResults');
+        $this->searchRequestConfig->expects($this->once())->method('reset');
+
+        $this->model->executeFull();
+    }
+
+    public function testExecuteList()
+    {
+        $ids = [1, 2, 3];
+        $stores = [0 => 'Store 1', 1 => 'Store 2'];
+        $indexData = new \ArrayObject([]);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+
+        $this->model->executeList($ids);
+    }
+
+    public function testExecuteRow()
+    {
+        $id = 1;
+        $stores = [0 => 'Store 1', 1 => 'Store 2'];
+        $indexData = new \ArrayObject([]);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+
+        $this->model->executeRow($id);
     }
 }

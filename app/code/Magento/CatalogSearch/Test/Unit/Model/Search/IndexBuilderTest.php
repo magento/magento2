@@ -16,8 +16,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Framework\Search\Adapter\Mysql\ConditionManager|MockObject */
     private $conditionManager;
+
     /** @var  \Magento\Search\Model\IndexScopeResolver|MockObject */
     private $scopeResolver;
+
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject */
     private $adapter;
 
@@ -77,7 +79,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder('\Magento\Search\Model\IndexScopeResolver')
+        $this->scopeResolver = $this->getMockBuilder('\Magento\Search\Model\ScopeResolver\IndexScopeResolver')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -114,15 +116,15 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resource,
                 'config' => $this->config,
                 'storeManager' => $this->storeManager,
-                'scopeResolver' => $this->scopeResolver,
                 'conditionManager' => $this->conditionManager,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
     }
 
     public function testBuildWithOutOfStock()
     {
-        $tableSuffix = 'index_default';
+        $tableSuffix = '';
         $index = 'test_name_of_index';
 
         $this->mockBuild($index, $tableSuffix);
@@ -143,7 +145,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithoutOutOfStock()
     {
         $scopeId = '113';
-        $tableSuffix = 'index_113';
+        $tableSuffix = 'scope113_someNamesomeValue';
         $index = 'test_index_name';
 
         $dimensions = [
@@ -208,8 +210,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('resolve')
             ->will(
                 $this->returnCallback(
-                    function ($index, $suffix) {
-                        return $index . '_' . ($suffix ? 'index_' . $suffix : 'index_default');
+                    function ($index, $dimensions) {
+                        $tableNameParts = [];
+                        foreach ($dimensions as $dimension) {
+                            $tableNameParts[] = $dimension->getName() . $dimension->getValue();
+                        }
+                        return $index . '_' . implode('_', $tableNameParts);
                     }
                 )
             );

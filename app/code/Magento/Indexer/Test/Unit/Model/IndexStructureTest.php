@@ -19,14 +19,17 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Search\Model\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $indexScopeResolver;
+
     /**
      * @var \Magento\Search\Model\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $flatScopeResolver;
+
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
+
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -117,6 +120,24 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 'name' => 'fieldName3',
                 'type' => 'fieldType3',
                 'size' => 'fieldSize3',
+            ],
+            [
+                'name' => 'fieldName3',
+                'dataType' => 'varchar',
+                'type' => 'text',
+                'size' => '255',
+            ],
+            [
+                'name' => 'fieldName3',
+                'dataType' => 'mediumtext',
+                'type' => 'text',
+                'size' => '16777216',
+            ],
+            [
+                'name' => 'fieldName3',
+                'dataType' => 'text',
+                'type' => 'text',
+                'size' => '65536',
             ]
         ];
         $index = 'index_name';
@@ -144,6 +165,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $name
      * @param string $value
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createDimensionMock($name, $value)
     {

@@ -140,9 +140,9 @@ class IndexStructure
         $adapter = $this->getAdapter();
         $table = $adapter->newTable($tableName);
         foreach ($fields as $field) {
-            $columnMap = isset($this->columnTypesMap[$field['dataType']])
+            $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => $field['type'], 'size' => 10];
+                : ['type' => $field['type'], 'size' => $field['size']];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
