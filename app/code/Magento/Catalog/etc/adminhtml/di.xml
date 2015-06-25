@@ -70,8 +70,7 @@
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Ui\DataProvider\AddFieldToEavCollection</item>
-                <!-- Temporary disabled: collection load issue -->
-                <!--<item name="websites" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddWebsitesFieldToCollection</item>-->
+                <item name="websites" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddWebsitesFieldToCollection</item>
                 <item name="store" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
             </argument>
         </arguments>
