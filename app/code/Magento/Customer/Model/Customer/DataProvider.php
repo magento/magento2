@@ -16,7 +16,7 @@ use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollec
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
+class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * @var Collection

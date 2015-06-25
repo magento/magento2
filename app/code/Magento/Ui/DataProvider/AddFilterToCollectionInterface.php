@@ -14,9 +14,8 @@ interface AddFilterToCollectionInterface
 {
     /**
      * @param Collection $collection
-     * @param $field
-     * @param null $condition
-     * @return mixed
+     * @param string $field
+     * @param string|null $condition
      */
     public function addFilter(Collection $collection, $field, $condition = null);
 }

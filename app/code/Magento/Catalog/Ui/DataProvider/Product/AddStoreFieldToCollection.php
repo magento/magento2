@@ -33,9 +33,8 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
-        $storeId = isset($condition['eq'])  ? $condition['eq'] : null;
-        if ($storeId) {
-            $collection->addStoreFilter($this->storeManager->getStore($storeId));
+        if (isset($condition['eq']) && $condition['eq']) {
+            $collection->addStoreFilter($this->storeManager->getStore($condition['eq']));
         }
     }
 }
