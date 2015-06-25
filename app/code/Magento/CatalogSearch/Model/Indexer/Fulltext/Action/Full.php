@@ -269,6 +269,24 @@ class Full
     }
 
     /**
+     * Get parents IDs of product IDs to be re-indexed
+     *
+     * @param int[] $entityIds
+     * @return int[]
+     */
+    protected function getProductIdsFromParents(array $entityIds)
+    {
+        return $this->getWriteAdapter()
+            ->select()
+            ->from($this->getTable('catalog_product_relation'), 'parent_id')
+            ->distinct(true)
+            ->where('child_id IN (?)', $entityIds)
+            ->where('parent_id NOT IN (?)', $entityIds)
+            ->query()
+            ->fetchAll(\Zend_Db::FETCH_COLUMN);
+    }
+
+    /**
      * Regenerate search index for specific store
      *
      * @param int $storeId Store View Id
@@ -280,6 +298,9 @@ class Full
      */
     public function rebuildStoreIndex($storeId, $productIds = null)
     {
+        if ($productIds !== null) {
+            $productIds = array_unique(array_merge($productIds, $this->getProductIdsFromParents($productIds)));
+        }
         // prepare searchable attributes
         $staticFields = [];
         foreach ($this->getSearchableAttributes('static') as $attribute) {
