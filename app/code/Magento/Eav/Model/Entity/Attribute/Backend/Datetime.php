@@ -74,8 +74,17 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             $date = (new \DateTime())->setTimestamp($date);
             // international format
         } elseif (!($date instanceof \DateTime)) {
-            $date = new \DateTime($date);
+            $formatter = new \IntlDateFormatter(
+                $this->_localeDate->_localeResolver->getLocale(),
+                \IntlDateFormatter::SHORT,
+                (strpos($date, ' ') !== false) ? \IntlDateFormatter::NONE : \IntlDateFormatter::SHORT,
+                null,
+                null,
+                $this->_localeDate->getDateFormat()
+            );
             // parse this date in current locale, do not apply GMT offset
+            $timestamp=$formatter->parse($date);
+            $date = (new \DateTime())->setTimestamp($timestamp);
         }
         return $date->format('Y-m-d H:i:s');
     }
