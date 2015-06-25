@@ -180,5 +180,4 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             [true, true, true]
         ];
     }
-
 }

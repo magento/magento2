@@ -161,6 +161,7 @@ class ContextPlugin
     }
 
     /*
+     * @param string $basedOn
      * @return array
      */
     protected function getWeeeTaxRegion($basedOn)
