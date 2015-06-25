@@ -11,14 +11,31 @@
     <div style="padding-bottom: 10px">
         <span><?= __('Here are all the products you are going to create. ') ?></span>
     </div>
-    <div data-bind="foreach:sections">
-        <div data-bind="text: label"></div>
-        <div data-bind="text: type"></div>
-        <div data-bind="text: value"></div>
-        <div data-bind="text: ko.toJSON(attribute)"></div>
-    </div>
-    <h2>Attributes</h2>
-    <div data-bind="text: ko.toJSON(attributes)"></div>
+
+    <table style="border: 3px solid white;">
+        <thead>
+            <tr>
+                <!-- ko foreach: attributesName -->
+                <th style="
+                    border: none;
+                    text-transform: capitalize;
+                    background-color: gray;
+                    color: white;
+                    padding: 13px;
+                    font-size: small;
+                " data-bind="text: $data"></th>
+                <!-- /ko -->
+            </tr>
+            <tr style="height: 5px;"></tr>
+        </thead>
+        <tbody data-bind="foreach: grid">
+            <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
+                <!-- ko foreach: $data -->
+                <td style="padding: 10px;text-align: center;border-left: 2px solid grey;"><span data-bind='text: $data'></span></td>
+                <!-- /ko -->
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <script type="text/x-magento-init">
@@ -27,7 +44,7 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                     "<?= $block->getComponentName()?>": {
-                        "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
+                        "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
                         "appendTo": "<?= $block->getParentComponentName()?>"
                     }
                 }
