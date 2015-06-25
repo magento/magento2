@@ -678,10 +678,10 @@ abstract class AbstractEntity
     }
 
     /**
-    * Is import need to log in history.
-    *
-    * @return bool
-    */
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
     public function isNeedToLogInHistory()
     {
         return $this->logInHistory;
