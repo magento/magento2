@@ -266,9 +266,9 @@ class BackupRollback
             $this->directoryList->getPath(DirectoryList::MEDIA),
             $this->directoryList->getPath(DirectoryList::STATIC_VIEW),
             $this->directoryList->getPath(DirectoryList::VAR_DIR),
-            $this->directoryList->getRoot() . 'update',
-            $this->directoryList->getRoot() . 'node_modules',
-            $this->directoryList->getRoot() . '.grunt',
+            $this->directoryList->getRoot() . '/update',
+            $this->directoryList->getRoot() . '/node_modules',
+            $this->directoryList->getRoot() . '/.grunt',
             $this->directoryList->getRoot() . '/.idea',
             $this->directoryList->getRoot() . '/.svn',
             $this->directoryList->getRoot() . '/.git'
