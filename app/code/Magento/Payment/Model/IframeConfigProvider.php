@@ -11,10 +11,21 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Payment\Model\Method\TransparentInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class IframeConfigProvider implements ConfigProviderInterface
+/**
+ * Class IframeConfigProvider
+ * @package Magento\Payment\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class IframeConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * Default length of Cc year field
+     */
+    const DEFAULT_YEAR_LENGTH = 2;
+
     /**
      * @var Repository
      */
@@ -53,19 +64,22 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
      * @param UrlInterface $urlBuilder
      * @param LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
+     * @param string $methodCode
      */
     public function __construct(
         Repository $assetRepo,
         RequestInterface $request,
         UrlInterface $urlBuilder,
         LoggerInterface $logger,
-        PaymentHelper $paymentHelper
+        PaymentHelper $paymentHelper,
+        $methodCode
     ) {
         $this->assetRepo = $assetRepo;
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
-        $this->method = $paymentHelper->getMethodInstance($this->methodCode);
+        $this->methodCode = $methodCode;
+        $this->method = $paymentHelper->getMethodInstance($methodCode);
     }
 
     /**
@@ -83,8 +97,9 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],
                     'saveOrderUrl' => [$this->methodCode => $this->getSaveOrderUrl()],
-                ],
-            ],
+                    'expireYearLength' => [$this->methodCode => $this->getExpireDateYearLength()]
+                ]
+            ]
         ];
     }
 
@@ -104,6 +119,16 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
         }
 
         return  $result;
+    }
+
+    /**
+     * Returns Cc expire year length
+     *
+     * @return int
+     */
+    protected function getExpireDateYearLength()
+    {
+         return (int)$this->getMethodConfigData('cc_year_length') ?: self::DEFAULT_YEAR_LENGTH;
     }
 
     /**
@@ -197,6 +222,9 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
      */
     protected function getMethodConfigData($fieldName)
     {
-        return $this->method->getConfigInterface()->getConfigValue($fieldName);
+        if ($this->method instanceof TransparentInterface) {
+            return $this->method->getConfigInterface()->getValue($fieldName);
+        }
+        return $this->method->getConfigData($fieldName);
     }
 }

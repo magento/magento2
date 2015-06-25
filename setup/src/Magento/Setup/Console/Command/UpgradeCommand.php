@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 
 /**
  * Command for updating installed application after the code base has changed
@@ -40,8 +40,7 @@ class UpgradeCommand extends AbstractSetupCommand
     {
         $this->setName('setup:upgrade')
             ->setDescription(
-                'Upgrades installed application after the code base has changed, '
-                . 'including DB schema and data'
+                'Upgrades the Magento application, DB data, and schema'
             );
         parent::configure();
     }

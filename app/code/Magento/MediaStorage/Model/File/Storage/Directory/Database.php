@@ -40,7 +40,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param DatabaseFactory $directoryFactory
      * @param \Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param null $connectionName
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -53,7 +53,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database $resource,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $connectionName = null,
         array $data = []
     ) {

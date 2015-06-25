@@ -164,8 +164,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             'gender' => 'm',
         ];
         return [
-            [array_diff_key($data, ['firstname' => '']), ['The first name cannot be empty.']],
-            [array_diff_key($data, ['lastname' => '']), ['The last name cannot be empty.']],
+            [array_diff_key($data, ['firstname' => '']), ['Please enter a first name.']],
+            [array_diff_key($data, ['lastname' => '']), ['Please enter a last name.']],
             [array_diff_key($data, ['email' => '']), ['Please correct this email address: "".']],
             [
                 array_merge($data, ['email' => 'wrong@email']),
