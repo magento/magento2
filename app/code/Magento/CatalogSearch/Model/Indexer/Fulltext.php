@@ -100,8 +100,6 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
                 $this->fullAction->rebuildStoreIndex($storeId)
             );
         }
-       // $this->fulltextResource->resetSearchResults();
-       // $this->searchRequestConfig->reset();
     }
 
     /**
