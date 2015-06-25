@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
+
 class SuggestedAttributeList
 {
     /**
