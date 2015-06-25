@@ -50,7 +50,7 @@ class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
     /**
      * {@inheritdoc}
      */
-    public function update(array $data)
+    public function addDynamicData(array $data)
     {
         $searchableAttributes = $this->getSearchableAttributes();
 

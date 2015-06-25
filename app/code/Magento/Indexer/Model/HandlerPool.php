@@ -5,18 +5,29 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\ObjectManagerInterface;
+
 class HandlerPool
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @var HandlerInterface
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
+    protected $defaultHandler;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param HandlerInterface $defaultHandler
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        HandlerInterface $defaultHandler
+    ) {
+        $this->defaultHandler = $defaultHandler;
         $this->objectManager = $objectManager;
     }
 
@@ -27,8 +38,12 @@ class HandlerPool
      * @throws \InvalidArgumentException
      * @return HandlerInterface
      */
-    public function get($handlerClass)
+    public function get($handlerClass = null)
     {
+        if ($handlerClass === null) {
+            return $this->defaultHandler;
+        }
+
         $handler = $this->objectManager->get($handlerClass);
         if (!$handler instanceof HandlerInterface) {
             throw new \InvalidArgumentException(
