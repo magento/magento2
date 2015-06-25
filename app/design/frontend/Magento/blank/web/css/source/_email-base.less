@@ -155,16 +155,16 @@ body {
 }
 
 .header {
-    padding: @email-content__padding @email-content__padding 0 @email-content__padding;
+    padding: @email-body__padding @email-body__padding 0;
 }
 
 .content {
     background-color: @email-content__background-color;
-    padding: @email-content__padding;
+    padding: @email-body__padding;
 }
 
 .footer {
-    padding: @email-content__padding;
+    padding: @email-body__padding;
 }
 
 //  Layout (Mobile)
@@ -183,7 +183,7 @@ body {
     }
 
     .content {
-        padding: @email-content__padding !important;
+        padding: @email-body__padding !important;
     }
 }
 
@@ -201,12 +201,12 @@ body {
 .message-gift {
     background-color: @message__background__email;
     border: 1px solid @message__border-color__email;
-    margin: @email-content__padding 0;
+    margin: @email-content__padding__base 0;
     width: 100%;
 
     td {
         color: @message__color;
-        padding: @email-content__padding;
+        padding: @email-content__padding__base;
         margin: 0;
 
         a {

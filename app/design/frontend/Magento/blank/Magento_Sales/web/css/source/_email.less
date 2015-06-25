@@ -40,11 +40,11 @@
     > tbody {
         > tr {
             > th {
-                padding: @indent__s;
+                padding: @email-content__padding__base;
             }
 
             > td {
-                padding: @indent__s @indent__s 0;
+                padding: @email-content__padding__base @email-content__padding__base 0;
 
                 &.message-gift {
                     border-top: none;
@@ -70,12 +70,12 @@
 
     .product-name {
         font-weight: @font-weight__bold;
-        margin-bottom: @indent__xs;
+        margin-bottom: @email-content__padding__s;
     }
 
     .item-info {
         dl {
-            margin-bottom: @indent__s;
+            margin-bottom: @email-content__padding__base;
 
             dt,
             dd {
@@ -83,7 +83,7 @@
             }
 
             dd {
-                padding-left: @email-content__padding;
+                padding-left: @email-content__padding__base;
             }
         }
     }
@@ -98,7 +98,7 @@
 
     .item-extra {
         .message-gift {
-            margin: 0 0 @email-content__padding;
+            margin: 0 0 @email-content__padding__base;
         }
     }
 }
@@ -131,7 +131,7 @@
 
         > th,
         > td {
-            padding: @indent__xs @indent__s;
+            padding: @email-content__padding__s @email-content__padding__base;
             text-align: right;
         }
     }
