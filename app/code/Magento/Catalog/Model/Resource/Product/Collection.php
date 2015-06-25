@@ -720,9 +720,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * {@inheritdoc}
      */
-    public function load()
+    public function load($printQuery = false, $logQuery = false)
     {
-        parent::load();
+        if ($this->isLoaded()) {
+            return $this;
+        }
+        parent::load($printQuery = false, $logQuery = false);
 
         if ($this->needToAddWebsiteNamesToResult) {
             $this->doAddWebsiteNamesToResult();
