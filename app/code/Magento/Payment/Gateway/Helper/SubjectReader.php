@@ -20,7 +20,7 @@ class SubjectReader
         if (!isset($subject['payment'])
             || !$subject['payment'] instanceof PaymentDataObjectInterface
         ) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Payment data object should be provided');
         }
 
         return $subject['payment'];
@@ -34,8 +34,9 @@ class SubjectReader
      */
     public static function readAmount(array $subject)
     {
-        if (!isset($subject['amount']) && !is_numeric($subject['amount'])) {
-            throw new \InvalidArgumentException();
+        if (!isset($subject['amount'])
+            || $subject['amount'] && !is_numeric($subject['amount'])) {
+            throw new \InvalidArgumentException('Amount should be provided');
         }
 
         return $subject['amount'];
