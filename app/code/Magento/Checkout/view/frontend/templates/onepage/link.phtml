@@ -5,20 +5,36 @@
  */
 
 // @codingStandardsIgnoreFile
-
-/**
- * @deprecated
- * @removeCandidate
- */
 ?>
 <?php if ($block->isPossibleOnepageCheckout()):?>
     <button type="button"
+            data-role="proceed-to-checkout"
             title="<?php echo __('Proceed to Checkout') ?>"
             class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
-            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>
-            onclick="window.location='<?php echo $block->getCheckoutUrl() ?>';">
-                <span><?php echo __('Proceed to Checkout') ?></span>
+            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
+        <span><?php echo __('Proceed to Checkout') ?></span>
     </button>
-    <!-- /Temp MAGETWO-36239 markup -->
-    <button type="button" class="action secondary proceed-to-checkout" href="#"><span><?php echo __('Sign in and Checkout') ?></span></button>
+
+    <script>
+        require(
+            [
+                'jquery',
+                'Magento_Checkout/js/model/cart/authentication-popup',
+                'Magento_Customer/js/customer-data'
+            ],
+            function($, authenticationPopup, customerData) {
+                $('button[data-role="proceed-to-checkout"]').click(function(event) {
+                    event.preventDefault();
+                    var cart = customerData.get('cart'),
+                        customer = customerData.get('customer');
+
+                    if (customer() == false && !cart().isGuestCheckoutAllowed) {
+                        authenticationPopup.showModal();
+                        return false;
+                    }
+                    location.href = window.checkout.checkoutUrl;
+                });
+            }
+        );
+    </script>
 <?php endif?>

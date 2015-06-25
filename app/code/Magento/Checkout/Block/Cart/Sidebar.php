@@ -139,4 +139,24 @@ class Sidebar extends AbstractCart
     {
         return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
     }
+
+    /**
+     * Get customer register url
+     *
+     * @return string
+     */
+    public function getCustomerRegisterUrlUrl()
+    {
+        return $this->getUrl('customer/account/create');
+    }
+
+    /**
+     * Get customer forgot password url
+     *
+     * @return string
+     */
+    public function getCustomerForgotPasswordUrl()
+    {
+        return $this->getUrl('customer/account/forgotpassword');
+    }
 }

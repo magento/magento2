@@ -22,25 +22,12 @@ define(
             registerUrl: checkoutConfig.registerUrl,
             forgotPasswordUrl: checkoutConfig.forgotPasswordUrl,
             defaults: {
-                template: 'Magento_Checkout/authentication',
-                visible: false
-            },
-
-            /** Initialize observable properties */
-            initObservable: function () {
-                this._super()
-                    .observe('visible');
-                return this;
+                template: 'Magento_Checkout/authentication'
             },
 
             /** Is login form enabled for current customer */
             isActive: function() {
                 return !customer.isLoggedIn();
-            },
-
-            /** Toggle login form visibility */
-            toggleForm: function() {
-                this.visible(!this.visible());
             },
 
             /** Provide login action */

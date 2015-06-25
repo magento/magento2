@@ -6,9 +6,10 @@
 define([
     "jquery",
     "mage/template",
-    "jquery/ui"
+    "jquery/ui",
+    "Magento_Payment/js/model/credit-card-validation/validator"
 ], function($, mageTemplate){
-    "use strict";
+    'use strict';
 
     $.widget('mage.transparent', {
         options: {

@@ -47,7 +47,9 @@
             checkoutUrl: '<?=$block->getCheckoutUrl()?>',
             updateItemQtyUrl: '<?=$block->getUpdateItemQtyUrl()?>',
             removeItemUrl: '<?=$block->getRemoveItemUrl()?>',
-            imageTemplate: '<?= $block->getImageHtmlTemplate()?>'
+            imageTemplate: '<?= $block->getImageHtmlTemplate()?>',
+            customerRegisterUrl: '<?= $block->getCustomerRegisterUrlUrl()?>',
+            customerForgotPasswordUrl: '<?= $block->getCustomerForgotPasswordUrl()?>'
         };
     </script>
     <script type="text/x-magento-init">
@@ -56,6 +58,13 @@
             "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
         }
     }
+    </script>
+    <script>
+        require([
+            'Magento_Ui/js/block-loader'
+        ], function(blockLoader) {
+            blockLoader("<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
+        })
     </script>
 </div>
 

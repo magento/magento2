@@ -7,14 +7,15 @@ define(
     [
         'jquery',
         'mage/storage',
-        'Magento_Ui/js/model/messageList'
+        'Magento_Ui/js/model/messageList',
+        'Magento_Customer/js/customer-data'
     ],
-    function($, storage, messageList) {
+    function($, storage, messageList, customerData) {
         'use strict';
         var callbacks = [],
             action = function(loginData, redirectUrl) {
                 return storage.post(
-                    'customer/ajax/login',
+                    '/customer/ajax/login',
                     JSON.stringify(loginData)
                 ).done(function (response) {
                     if (response.errors) {
@@ -26,6 +27,7 @@ define(
                         callbacks.forEach(function(callback) {
                             callback(loginData);
                         });
+                        customerData.invalidate(['customer']);
                         if (redirectUrl) {
                             window.location.href = redirectUrl;
                         } else {
