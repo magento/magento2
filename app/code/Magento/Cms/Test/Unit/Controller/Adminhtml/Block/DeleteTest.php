@@ -139,7 +139,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('The block has been deleted.'));
+            ->with(__('You deleted the block.'));
         $this->messageManagerMock->expects($this->never())
             ->method('addError');
 
