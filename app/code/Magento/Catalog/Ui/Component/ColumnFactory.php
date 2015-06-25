@@ -8,6 +8,11 @@ namespace Magento\Catalog\Ui\Component;
 class ColumnFactory
 {
     /**
+     * @var int
+     */
+    private $columnSortOrder = 0;
+
+    /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
      */
     protected $componentFactory;
@@ -44,10 +49,12 @@ class ColumnFactory
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+     * @param int $columnsAmount
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context)
+    public function create($attribute, $context, $columnsAmount)
     {
+        $this->columnSortOrder += 1;
         $columnName = $attribute->getAttributeCode();
         $config = [
             'label' => __($attribute->getDefaultFrontendLabel()),
@@ -56,6 +63,7 @@ class ColumnFactory
             'align' => 'left',
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
+            'sortOrder' => $this->columnSortOrder + $columnsAmount,
         ];
 
         if ($attribute->usesSource()) {

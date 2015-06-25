@@ -5,16 +5,11 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
+use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
-/**
- * Class AddStoreFieldToCollection
- */
-class AddStoreFieldToCollection implements AddFieldToCollectionInterface
+class AddStoreFieldToCollection implements AddFilterToCollectionInterface
 {
     /**
      * Store manager
@@ -24,44 +19,23 @@ class AddStoreFieldToCollection implements AddFieldToCollectionInterface
     protected $storeManager;
 
     /**
-     * Request
-     *
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * Construct
      *
      * @param StoreManagerInterface $storeManager
-     * @param RequestInterface $request
      */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        RequestInterface $request
-    ) {
+    public function __construct(StoreManagerInterface $storeManager)
+    {
         $this->storeManager = $storeManager;
-        $this->request = $request;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addField(Collection $collection, $field, $alias = null)
+    public function addFilter(Collection $collection, $field, $condition = null)
     {
-        $store = $this->getStore();
-        if ($store->getId()) {
-            $collection->addStoreFilter($store);
+        $storeId = isset($condition['eq'])  ? $condition['eq'] : null;
+        if ($storeId) {
+            $collection->addStoreFilter($this->storeManager->getStore($storeId));
         }
-    }
-
-    /**
-     * Get store
-     *
-     * @return Store
-     */
-    protected function getStore()
-    {
-        return $this->storeManager->getStore($this->request->getParam('store', Store::DEFAULT_STORE_ID));
     }
 }

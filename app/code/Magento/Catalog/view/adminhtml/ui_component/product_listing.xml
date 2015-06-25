@@ -113,6 +113,9 @@
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string"></item>
+                        </item>
                     </item>
                 </argument>
             </filterSelect>
@@ -199,7 +202,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">entity_id</item>
-                    <item name="appendTo" xsi:type="string"></item>
+                    <item name="sortOrder" xsi:type="number">0</item>
                 </item>
             </argument>
         </column>
@@ -213,6 +216,7 @@
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="sortOrder" xsi:type="number">1</item>
                 </item>
             </argument>
         </column>
@@ -230,6 +234,7 @@
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Thumbnail</item>
+                    <item name="sortOrder" xsi:type="number">2</item>
                 </item>
             </argument>
         </column>
@@ -244,6 +249,7 @@
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
+                    <item name="sortOrder" xsi:type="number">3</item>
                 </item>
             </argument>
         </column>
@@ -257,6 +263,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Type</item>
+                    <item name="sortOrder" xsi:type="number">4</item>
                 </item>
             </argument>
         </column>
@@ -270,6 +277,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Attribute Set</item>
+                    <item name="sortOrder" xsi:type="number">5</item>
                 </item>
             </argument>
         </column>
@@ -283,6 +291,7 @@
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">SKU</item>
+                    <item name="sortOrder" xsi:type="number">6</item>
                 </item>
             </argument>
         </column>
@@ -297,6 +306,7 @@
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
+                    <item name="sortOrder" xsi:type="number">7</item>
                 </item>
             </argument>
         </column>
@@ -311,6 +321,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Visibility</item>
+                    <item name="sortOrder" xsi:type="number">8</item>
                 </item>
             </argument>
         </column>
@@ -325,6 +336,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="sortOrder" xsi:type="number">9</item>
                 </item>
             </argument>
         </column>
@@ -332,34 +344,21 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Store\Model\Resource\Website\Collection</item>
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Websites</item>
-                </item>
-            </argument>
-        </column>
-        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </column>
         <column name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">200</item>
                     <item name="dataType" xsi:type="string">actions</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Action</item>

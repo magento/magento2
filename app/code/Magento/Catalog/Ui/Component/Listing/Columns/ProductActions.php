@@ -49,7 +49,7 @@ class ProductActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl('catalog/*/edit', ['id' => $item['entity_id']]),
+                    'href' => $this->urlBuilder->getUrl('catalog/product/edit', ['id' => $item['entity_id']]),
                     'label' => __('Edit'),
                     'hidden' => false,
                 ];
