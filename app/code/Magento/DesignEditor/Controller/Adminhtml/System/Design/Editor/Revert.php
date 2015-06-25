@@ -34,13 +34,13 @@ class Revert extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             switch ($revertTo) {
                 case 'last_saved':
                     $copyService->copy($virtualTheme, $stagingTheme);
-                    $message = __('Theme "%1" reverted to last saved state', $virtualTheme->getThemeTitle());
+                    $message = __('Theme "%1" reverted to last saved state.', $virtualTheme->getThemeTitle());
                     break;
 
                 case 'physical':
                     $physicalTheme = $virtualTheme->getDomainModel(ThemeInterface::TYPE_VIRTUAL)->getPhysicalTheme();
                     $copyService->copy($physicalTheme, $stagingTheme);
-                    $message = __('Theme "%1" reverted to last default state', $virtualTheme->getThemeTitle());
+                    $message = __('Theme "%1" reverted to last default state.', $virtualTheme->getThemeTitle());
                     break;
 
                 default:
@@ -51,7 +51,7 @@ class Revert extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             $response = ['message' => $message];
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $response = ['error' => true, 'message' => __('Unknown error')];
+            $response = ['error' => true, 'message' => __('Something went wrong. That\'s all we know.')];
         }
         /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
         $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');

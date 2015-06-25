@@ -20,7 +20,7 @@ class Delete extends \Magento\Customer\Controller\Address
                 $address = $this->_addressRepository->getById($addressId);
                 if ($address->getCustomerId() === $this->_getSession()->getCustomerId()) {
                     $this->_addressRepository->deleteById($addressId);
-                    $this->messageManager->addSuccess(__('The address has been deleted.'));
+                    $this->messageManager->addSuccess(__('You deleted the address.'));
                 } else {
                     $this->messageManager->addError(__('We can\'t delete the address right now.'));
                 }
