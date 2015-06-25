@@ -182,6 +182,7 @@ class Currencysymbol
                 unset($symbols[$code]);
             }
         }
+        $value = [];
         if ($symbols) {
             $value['options']['fields']['customsymbol']['value'] = serialize($symbols);
         } else {
@@ -319,6 +320,6 @@ class Currencysymbol
                 }
             }
         }
-        return ksort($allowedCurrencies);
+        return array_unique($allowedCurrencies);
     }
 }
