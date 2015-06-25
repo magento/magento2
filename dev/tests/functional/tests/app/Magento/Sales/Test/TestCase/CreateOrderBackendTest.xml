@@ -10,8 +10,8 @@
         <variation name="CreateOrderBackendTestVariation1">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Cash on Delivery payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -31,8 +31,8 @@
         <variation name="CreateOrderBackendTestVariation2">
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Check/Money Order payment method</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="billingAddress/dataSet" xsi:type="string">UK_address_without_email</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">10.00</item>
             </data>
@@ -49,8 +49,8 @@
         <variation name="CreateOrderBackendTestVariation3">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Bank Transfer payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -71,8 +71,8 @@
             <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Bank Transfer payment method</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="billingAddress/dataSet" xsi:type="string">UK_address_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">10.00</item>
@@ -91,9 +91,9 @@
             <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Purchase Order payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">No</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -114,10 +114,10 @@
             <data name="description" xsi:type="string">MAGETWO-12395 - Create Offline Order for Registered Customer in Admin</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -132,10 +132,10 @@
             <data name="description" xsi:type="string">MAGETWO-12520 - Create Order for New Customer in Admin with Offline Payment Method</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">Yes</data>
             <data name="checkoutMethod" xsi:type="string">register</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">

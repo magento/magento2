@@ -4,17 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Product;
+
+use \Magento\Framework\Object\IdentityInterface;
 
 /**
  * Reports Recently Viewed Products Block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class Viewed extends AbstractProduct implements IdentityInterface
 {
+    /**
+     * Config path to recently viewed product count
+     */
     const XML_PATH_RECENTLY_VIEWED_COUNT = 'catalog/recently_products/viewed_count';
 
     /**
@@ -34,7 +37,10 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \
         if ($this->hasData('page_size')) {
             return $this->getData('page_size');
         }
-        return $this->_scopeConfig->getValue(self::XML_PATH_RECENTLY_VIEWED_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_RECENTLY_VIEWED_COUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

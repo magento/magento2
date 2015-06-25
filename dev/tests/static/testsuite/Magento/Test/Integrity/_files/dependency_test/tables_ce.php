@@ -90,7 +90,6 @@ return [
     'cataloginventory_stock_status'               => 'Magento\CatalogInventory',
     'cataloginventory_stock_status_idx'           => 'Magento\CatalogInventory',
     'cataloginventory_stock_status_tmp'           => 'Magento\CatalogInventory',
-    'catalogrule_affected_product'                => 'Magento\CatalogRule',
     'catalogrule_customer_group'                  => 'Magento\CatalogRule',
     'catalogrule'                                 => 'Magento\CatalogRule',
     'catalogrule_group_website'                   => 'Magento\CatalogRule',
