@@ -94,6 +94,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),
             'extra_actions' => $this->layout->createBlock('Magento\Catalog\Block\ShortcutButtons')->toHtml(),
+            'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
         ];
     }
 
@@ -172,5 +173,15 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             return $this->getCustomQuote()->getAllVisibleItems();
         }
         return $this->getQuote()->getAllVisibleItems();
+    }
+
+    /**
+     * Check if guest checkout is allowed
+     *
+     * @return bool
+     */
+    public function isGuestCheckoutAllowed()
+    {
+        return $this->checkoutHelper->isAllowedGuestCheckout($this->checkoutSession->getQuote());
     }
 }
