@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
-class ProductFieldset implements \Magento\Indexer\Model\Fieldset\FieldsetInterface
+class ProductFieldset implements \Magento\Indexer\Model\FieldsetInterface
 {
     /**
      * @var Config

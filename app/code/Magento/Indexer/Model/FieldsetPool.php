@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Fieldset;
+namespace Magento\Indexer\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 
@@ -37,7 +37,6 @@ class FieldsetPool
                 $fieldsetClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
             );
         }
-
         return $handler;
     }
 }
