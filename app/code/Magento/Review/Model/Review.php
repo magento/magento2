@@ -6,6 +6,7 @@
 namespace Magento\Review\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Object\IdentityInterface;
 use Magento\Review\Model\Resource\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
 
@@ -21,7 +22,7 @@ use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
  * @method \Magento\Review\Model\Review setStatusId(int $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Review extends \Magento\Framework\Model\AbstractModel
+class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
     /**
      * Event prefix for observer
@@ -120,7 +121,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -135,7 +136,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->productCollectionFactory = $productFactory;
@@ -358,5 +359,19 @@ class Review extends \Magento\Framework\Model\AbstractModel
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $tags = [];
+        if ($this->isApproved() && $this->getEntityPkValue()) {
+            $tags[] = Product::CACHE_TAG . '_' . $this->getEntityPkValue();
+        }
+        return $tags;
     }
 }

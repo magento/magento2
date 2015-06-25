@@ -23,6 +23,10 @@ class Save extends AbstractAction
      */
     const CURRENT_IDENTIFIER = 'current';
 
+    const ACTIVE_IDENTIFIER = 'activeIndex';
+
+    const VIEWS_IDENTIFIER = 'views';
+
     /**
      * @var BookmarkRepositoryInterface
      */
@@ -75,30 +79,37 @@ class Save extends AbstractAction
     {
         $bookmark = $this->bookmarkFactory->create();
         $data = $this->_request->getParam('data');
-        if (isset($data['views'])) {
-            foreach ($data['views'] as $identifier => $data) {
-                $updateBookmark = $this->checkBookmark($identifier);
-                if ($updateBookmark !== false) {
-                    $bookmark = $updateBookmark;
-                }
+        $action = key($data);
+        switch($action) {
+            case self::ACTIVE_IDENTIFIER:
+                $this->updateCurrentBookmark($data[$action]);
+                break;
 
+            case self::CURRENT_IDENTIFIER:
                 $this->updateBookmark(
                     $bookmark,
-                    $identifier,
-                    (isset($data['label']) ? $data['label'] : ''),
-                    $data
+                    $action,
+                    $bookmark->getTitle(),
+                    $data[$action]
                 );
-            }
-        } else {
-            $identifier = isset($data['activeIndex'])
-                ? $data['activeIndex']
-                : (isset($data[self::CURRENT_IDENTIFIER]) ? self::CURRENT_IDENTIFIER : '');
-            $updateBookmark = $this->checkBookmark($identifier);
-            if ($updateBookmark !== false) {
-                $bookmark = $updateBookmark;
-            }
 
-            $this->updateBookmark($bookmark, $identifier, '', $data[$identifier]);
+                break;
+
+            case self::VIEWS_IDENTIFIER:
+                foreach ($data[$action] as $identifier => $data) {
+                    $this->updateBookmark(
+                        $bookmark,
+                        $identifier,
+                        isset($data['label']) ? $data['label'] : '',
+                        $data
+                    );
+                    $this->updateCurrentBookmark($identifier);
+                }
+
+                break;
+
+            default:
+                throw new \LogicException(__('Unsupported bookmark action.'));
         }
     }
 
@@ -114,20 +125,35 @@ class Save extends AbstractAction
     protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = [])
     {
         $this->filterVars($config);
+
+        $updateBookmark = $this->checkBookmark($identifier);
+        if ($updateBookmark !== false) {
+            $bookmark = $updateBookmark;
+        }
+
         $bookmark->setUserId($this->userContext->getUserId())
             ->setNamespace($this->_request->getParam('namespace'))
             ->setIdentifier($identifier)
             ->setTitle($title)
-            ->setConfig($config)
-            ->setCurrent($identifier !== self::CURRENT_IDENTIFIER);
+            ->setConfig($config);
         $this->bookmarkRepository->save($bookmark);
+    }
 
+    /**
+     * Update current bookmark
+     *
+     * @param string $identifier
+     * @return void
+     */
+    protected function updateCurrentBookmark($identifier)
+    {
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
         foreach ($bookmarks->getItems() as $bookmark) {
             if ($bookmark->getIdentifier() == $identifier) {
-                continue;
+                $bookmark->setCurrent(true);
+            } else {
+                $bookmark->setCurrent(false);
             }
-            $bookmark->setCurrent(false);
             $this->bookmarkRepository->save($bookmark);
         }
     }

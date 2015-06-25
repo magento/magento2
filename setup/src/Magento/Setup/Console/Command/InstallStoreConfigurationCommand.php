@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,6 +22,9 @@ use Magento\Framework\Validator\Timezone;
 use Magento\Framework\Validator\Currency;
 use Magento\Framework\Url\Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
     /**
@@ -67,7 +70,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('setup:store-config:set')
-            ->setDescription('Installs store configuration')
+            ->setDescription('Installs the store configuration')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }

@@ -148,7 +148,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass,

@@ -257,7 +257,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation15">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with tax class and group price</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -317,7 +316,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-35342</data>
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -456,7 +454,7 @@
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/qty" xsi:type="string">1</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>

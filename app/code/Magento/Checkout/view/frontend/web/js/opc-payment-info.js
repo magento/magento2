@@ -132,7 +132,7 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please specify payment method.'));
+            alert($.mage.__('Please choose a payment method.'));
 
             return false;
         },

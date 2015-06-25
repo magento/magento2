@@ -11,15 +11,12 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Activate Integration Entity
- *
- * Test Flow:
  * Preconditions:
- * 1. Integration is created
+ * 1. Integration is created.
  *
  * Steps:
  * 1. Log in to backend as admin user.
- * 2. Navigate to System > Extensions > Integrations
+ * 2. Navigate to System > Extensions > Integrations.
  * 3. Click on the "Activate" link near required integration.
  * 4. Perform all assertions.
  *
@@ -34,14 +31,14 @@ class ActivateIntegrationEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Integration grid page
+     * Integration grid page.
      *
      * @var IntegrationIndex
      */
     protected $integrationIndexPage;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param IntegrationIndex $integrationIndex
      * @return void
@@ -52,7 +49,7 @@ class ActivateIntegrationEntityTest extends Injectable
     }
 
     /**
-     * Activate Integration Entity Test
+     * Activate Integration Entity Test.
      *
      * @param Integration $integration
      * @return void

@@ -35,6 +35,10 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Region ID.
      */
     const REGION_ID = 'region_id';
+    /**
+     * Region code.
+     */
+    const KEY_REGION_CODE = 'region_code';
     /*
      * Customer ID.
      */
@@ -137,7 +141,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the company for the order address.
      *
-     * @return string Company.
+     * @return string|null Company.
      */
     public function getCompany();
 
@@ -151,28 +155,28 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the country address ID for the order address.
      *
-     * @return int Country address ID.
+     * @return int|null Country address ID.
      */
     public function getCustomerAddressId();
 
     /**
      * Gets the customer ID for the order address.
      *
-     * @return int Customer ID.
+     * @return int|null Customer ID.
      */
     public function getCustomerId();
 
     /**
      * Gets the email address for the order address.
      *
-     * @return string Email address.
+     * @return string|null Email address.
      */
     public function getEmail();
 
     /**
      * Gets the ID for the order address.
      *
-     * @return int Order address ID.
+     * @return int|null Order address ID.
      */
     public function getEntityId();
 
@@ -187,7 +191,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the fax number for the order address.
      *
-     * @return string Fax number.
+     * @return string|null Fax number.
      */
     public function getFax();
 
@@ -208,14 +212,14 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the middle name for the order address.
      *
-     * @return string Middle name.
+     * @return string|null Middle name.
      */
     public function getMiddlename();
 
     /**
      * Gets the parent ID for the order address.
      *
-     * @return int Parent ID.
+     * @return int|null Parent ID.
      */
     public function getParentId();
 
@@ -229,28 +233,35 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the prefix for the order address.
      *
-     * @return string Prefix.
+     * @return string|null Prefix.
      */
     public function getPrefix();
 
     /**
      * Gets the quote address ID for the order address.
      *
-     * @return int Quote address ID.
+     * @return int|null Quote address ID.
      */
     public function getQuoteAddressId();
 
     /**
      * Gets the region for the order address.
      *
-     * @return string Region.
+     * @return string|null Region.
      */
     public function getRegion();
 
     /**
+     * Gets the region code for the order address
+     *
+     * @return string|null Region code.
+     */
+    public function getRegionCode();
+
+    /**
      * Gets the region ID for the order address.
      *
-     * @return int Region ID.
+     * @return int|null Region ID.
      */
     public function getRegionId();
 
@@ -264,7 +275,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the suffix for the order address.
      *
-     * @return string Suffix.
+     * @return string|null Suffix.
      */
     public function getSuffix();
 
@@ -278,35 +289,35 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the VAT ID for the order address.
      *
-     * @return string VAT ID.
+     * @return string|null VAT ID.
      */
     public function getVatId();
 
     /**
      * Gets the VAT-is-valid flag value for the order address.
      *
-     * @return int VAT-is-valid flag value.
+     * @return int|null VAT-is-valid flag value.
      */
     public function getVatIsValid();
 
     /**
      * Gets the VAT request date for the order address.
      *
-     * @return string VAT request date.
+     * @return string|null VAT request date.
      */
     public function getVatRequestDate();
 
     /**
      * Gets the VAT request ID for the order address.
      *
-     * @return string VAT request ID.
+     * @return string|null VAT request ID.
      */
     public function getVatRequestId();
 
     /**
      * Gets the VAT-request-success flag value for the order address.
      *
-     * @return int VAT-request-success flag value.
+     * @return int|null VAT-request-success flag value.
      */
     public function getVatRequestSuccess();
 
@@ -493,6 +504,14 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return $this
      */
     public function setVatRequestId($id);
+
+    /**
+     * Set region code
+     *
+     * @param string $regionCode
+     * @return $this
+     */
+    public function setRegionCode($regionCode);
 
     /**
      * Sets the VAT request date for the order address.
