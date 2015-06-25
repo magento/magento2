@@ -14,6 +14,7 @@ define(
 
         return {
             steps: steps,
+            stepCodes: [],
             registerStep: function(code, title, isVisible, sortOrder) {
                 steps.push({
                     code: code,
@@ -21,6 +22,7 @@ define(
                     isVisible: isVisible,
                     sortOrder: sortOrder
                 });
+                this.stepCodes.push(code);
             },
 
             sortItems: function(itemOne, itemTwo) {
@@ -35,6 +37,16 @@ define(
                     }
                 });
                 return activeIndex;
+            },
+
+            isAvailable: function(code) {
+                var flag = false;
+                this.stepCodes.forEach(function(element){
+                    if (element.code == code) {
+                        flag = true;
+                    }
+                });
+                return flag;
             },
 
             isProcessed: function(code) {
