@@ -18,11 +18,6 @@ use Magento\Search\Model\ScopeResolver\IndexScopeResolver;
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * @var string[]
-     */
-    private $dataTypes = ['searchable'];
-
-    /**
      * @var IndexStructure
      */
     private $indexStructure;
@@ -58,9 +53,9 @@ class IndexerHandler implements IndexerInterface
     private $batchSize;
 
     /**
-     * @var IndexScopeResolverInterface[]
+     * @var IndexScopeResolverInterface
      */
-    private $scopeResolvers;
+    private $indexScopeResolver;
 
     /**
      * @param IndexStructure $indexStructure
@@ -79,18 +74,18 @@ class IndexerHandler implements IndexerInterface
         IndexScopeResolver $indexScopeResolver,
         array $data,
         $batchSize = 100
-    ) {
+    )
+    {
+        $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;
         $this->resource = $resource;
         $this->batch = $batch;
         $this->eavConfig = $eavConfig;
-        $this->scopeResolvers['searchable'] = $indexScopeResolver;
         $this->data = $data;
         $this->fields = [];
 
         $this->prepareFields();
         $this->batchSize = $batchSize;
-        $this->indexScopeResolver = $indexScopeResolver;
     }
 
     /**
@@ -99,7 +94,7 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $this->insertDocuments('searchable', $batchDocuments, $dimensions);
+            $this->insertDocuments($batchDocuments, $dimensions);
         }
     }
 
@@ -108,11 +103,9 @@ class IndexerHandler implements IndexerInterface
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
-        foreach ($this->dataTypes as $dataType) {
-            foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-                $documentsId = array_column($batchDocuments, 'id');
-                $this->getAdapter()->delete($this->getTableName($dataType, $dimensions), ['id' => $documentsId]);
-            }
+        foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
+            $documentsId = array_column($batchDocuments, 'id');
+            $this->getAdapter()->delete($this->getTableName($dimensions), ['id' => $documentsId]);
         }
     }
 
@@ -134,13 +127,12 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @param string $dataType
      * @param Dimension[] $dimensions
      * @return string
      */
-    private function getTableName($dataType, $dimensions)
+    private function getTableName($dimensions)
     {
-        return $this->scopeResolvers[$dataType]->resolve($this->getIndexName(), $dimensions);
+        return $this->indexScopeResolver->resolve($this->getIndexName(), $dimensions);
     }
 
     /**
@@ -160,15 +152,14 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @param string $dataType
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
      */
-    private function insertDocuments($dataType, array $documents, array $dimensions)
+    private function insertDocuments(array $documents, array $dimensions)
     {
         $documents = $this->prepareSearchableFields($documents);
-        $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents);
+        $this->getAdapter()->insertMultiple($this->getTableName($dimensions), $documents);
     }
 
     /**
@@ -178,7 +169,7 @@ class IndexerHandler implements IndexerInterface
     private function prepareSearchableFields(array $documents)
     {
         $insertDocuments = [];
-        foreach ($documents as  $entityId => $document) {
+        foreach ($documents as $entityId => $document) {
             foreach ($document as $attributeId => $fieldValue) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
