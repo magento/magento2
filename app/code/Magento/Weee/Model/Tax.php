@@ -332,4 +332,15 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         }
         return $result;
     }
+
+    /**
+     * @param int $countryId
+     * @param int $regionId
+     * @param int $websiteId
+     * @return boolean
+     */
+    public function isWeeeInLocation($countryId, $regionId, $websiteId)
+    {
+        return $this->getResource()->isWeeeInLocation($countryId, $regionId, $websiteId);
+    }
 }

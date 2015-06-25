@@ -5,6 +5,12 @@
  */
 namespace Magento\Weee\Test\Unit\App\Action;
 
+/**
+ * Class ContextPluginTest
+ *
+ * @package Magento\Weee\Test\Unit\App\Action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ContextPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -69,7 +75,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeTaxMock = $this->getMockBuilder('\Magento\Weee\Model\Resource\Tax')
+        $this->weeeTaxMock = $this->getMockBuilder('\Magento\Weee\Model\Tax')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,7 +86,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId', 'getWebsiteId'
+                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
+                'getWebsiteId', 'isLoggedIn'
             ])
             ->getMock();
 
@@ -118,132 +125,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundDispatchBasedOnDefault()
     {
-        $this->moduleManagerMock->expects($this->once())
-            ->method('isEnabled')
-            ->with('Magento_PageCache')
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
             ->willReturn(true);
 
-        $this->cacheConfigMock->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
-
-        $this->weeeHelperMock->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
-
-        $this->taxHelperMock->expects($this->once())
-            ->method('getTaxBasedOn')
-            ->willReturn('default');
-
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $storeMock->expects($this->once())
-            ->method('getWebsiteId')
-            ->willReturn(1);
-
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
-
-        $this->scopeConfigMock->expects($this->at(0))
-            ->method('getValue')
-            ->with(\Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null)
-            ->willReturn('US');
-
-        $this->scopeConfigMock->expects($this->at(1))
-            ->method('getValue')
-            ->with(\Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null)
-            ->willReturn(0);
-
-        $this->weeeTaxMock->expects($this->once())
-            ->method('isWeeeInLocation')
-            ->with('US', 0, 1)
-            ->willReturn(true);
-
-        $this->httpContextMock->expects($this->any())
-            ->method('setValue')
-            ->with('weee_taxes', ['countryId' => 'US', 'regionId' => 0], 0);
-
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
-    }
-
-    public function testAroundDispatchBasedOnOrigin()
-    {
-        $this->moduleManagerMock->expects($this->once())
-            ->method('isEnabled')
-            ->with('Magento_PageCache')
-            ->willReturn(true);
-
-        $this->cacheConfigMock->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
-
-        $this->weeeHelperMock->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
-
-        $this->taxHelperMock->expects($this->once())
-            ->method('getTaxBasedOn')
-            ->willReturn('origin');
-
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $storeMock->expects($this->once())
-            ->method('getWebsiteId')
-            ->willReturn(1);
-
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
-
-        $this->scopeConfigMock->expects($this->at(2))
-            ->method('getValue')
-            ->with(\Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null)
-            ->willReturn('US');
-
-        $this->scopeConfigMock->expects($this->at(3))
-            ->method('getValue')
-            ->with(\Magento\Shipping\Model\Config::XML_PATH_ORIGIN_REGION_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null)
-            ->willReturn(0);
-
-        $this->weeeTaxMock->expects($this->once())
-            ->method('isWeeeInLocation')
-            ->with('US', 0, 1)
-            ->willReturn(true);
-
-        $this->httpContextMock->expects($this->any())
-            ->method('setValue')
-            ->with('weee_taxes', ['countryId' => 'US', 'regionId' => 0], 0);
-
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
-    }
-
-    public function testAroundDispatchBasedOnBilling()
-    {
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_PageCache')
@@ -273,18 +158,139 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn('US');
+
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn(0);
+
+        $this->weeeTaxMock->expects($this->once())
+            ->method('isWeeeInLocation')
+            ->with('US', 0, 1)
+            ->willReturn(true);
+
+        $this->httpContextMock->expects($this->once())
+            ->method('setValue')
+            ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 0], 0);
+
+        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
+        $expectedResult = 'expectedResult';
+        $proceed = function ($request) use ($expectedResult) {
+            return $expectedResult;
+        };
+        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+    }
+
+    public function testAroundDispatchBasedOnOrigin()
+    {
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->willReturn(true);
+
+        $this->cacheConfigMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->weeeHelperMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->taxHelperMock->expects($this->once())
+            ->method('getTaxBasedOn')
+            ->willReturn('origin');
+
+        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
+        $expectedResult = 'expectedResult';
+        $proceed = function ($request) use ($expectedResult) {
+            return $expectedResult;
+        };
+        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+    }
+
+    public function testAroundDispatchBasedOnBilling()
+    {
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->willReturn(true);
+
+        $this->cacheConfigMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->weeeHelperMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $this->taxHelperMock->expects($this->once())
+            ->method('getTaxBasedOn')
+            ->willReturn('billing');
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(1);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn('US');
+
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn(0);
+
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxBillingAddress')
-            ->willReturn(['country_id' => 'US', 'region_id' => 1, 'postcode' => 11111]);
+            ->willReturn(['country_id' => 'US', 'region_id' => 1]);
 
         $this->weeeTaxMock->expects($this->once())
             ->method('isWeeeInLocation')
             ->with('US', 1, 1)
             ->willReturn(true);
 
-        $this->httpContextMock->expects($this->any())
+        $this->httpContextMock->expects($this->once())
             ->method('setValue')
-            ->with('weee_taxes', ['countryId' => 'US', 'regionId' => 1], 0);
+            ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
@@ -297,6 +303,10 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundDispatchBasedOnShipping()
     {
+        $this->customerSessionMock->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_PageCache')
@@ -326,18 +336,36 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn('US');
+
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn(0);
+
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxShippingAddress')
-            ->willReturn(['country_id' => 'US', 'region_id' => 1, 'postcode' => 11111]);
+            ->willReturn(['country_id' => 'US', 'region_id' => 1]);
 
         $this->weeeTaxMock->expects($this->once())
             ->method('isWeeeInLocation')
             ->with('US', 1, 1)
             ->willReturn(true);
 
-        $this->httpContextMock->expects($this->any())
+        $this->httpContextMock->expects($this->once())
             ->method('setValue')
-            ->with('weee_taxes', ['countryId' => 'US', 'regionId' => 1], 0);
+            ->with('weee_tax_region', ['countryId' => 'US', 'regionId' => 1], 0);
 
         $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
