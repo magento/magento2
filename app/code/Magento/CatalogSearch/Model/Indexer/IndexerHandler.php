@@ -10,7 +10,6 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
-use Magento\CatalogSearch\Model\Indexer\IndexStructure;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Indexer\Model\SaveHandler\Batch;
