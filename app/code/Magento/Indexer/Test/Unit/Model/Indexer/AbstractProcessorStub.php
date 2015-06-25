@@ -10,5 +10,5 @@ class AbstractProcessorStub extends \Magento\Indexer\Model\Indexer\AbstractProce
     /**
      * Indexer ID
      */
-    const INDEXER_ID = \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+    const INDEXER_ID = 'stub_indexer_id';
 }

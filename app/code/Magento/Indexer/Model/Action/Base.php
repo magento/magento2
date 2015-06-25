@@ -377,12 +377,6 @@ class Base implements ActionInterface
                             'size' => $columnMap['size'],
                         ];
                         break;
-                    default:
-                        $this->columns[] = [
-                            'name' => $fieldName,
-                            'type' => $columnMap['type'],
-                            'size' => $columnMap['size'],
-                        ];
                 }
             }
         }

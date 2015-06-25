@@ -134,7 +134,7 @@ class Preprocessor implements PreprocessorInterface
             }
         }
 
-        return 'search_index.product_id IN (
+        return 'search_index.entity_id IN (
             select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
             )';
     }

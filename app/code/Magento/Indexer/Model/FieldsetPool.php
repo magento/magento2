@@ -37,7 +37,6 @@ class FieldsetPool
                 $fieldsetClass . ' doesn\'t implement \Magento\Indexer\Model\FieldsetInterface'
             );
         }
-
         return $handler;
     }
 }

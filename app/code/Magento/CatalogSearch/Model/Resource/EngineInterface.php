@@ -9,29 +9,8 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-interface EngineInterface
+interface EngineInterface extends \Magento\Framework\IndexerInterface
 {
-    /**
-     * Add entity data to fulltext search table
-     *
-     * @param int $entityId
-     * @param int $storeId
-     * @param array $index
-     * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
-     */
-    public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product');
-
-    /**
-     * Multi add entities data to fulltext search table
-     *
-     * @param int $storeId
-     * @param array $entityIndexes
-     * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
-     */
-    public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product');
-
     /**
      * Retrieve allowed visibility values for current engine
      *
@@ -55,15 +34,6 @@ interface EngineInterface
      */
     public function processAttributeValue($attribute, $value);
 
-    /**
-     * Remove entity data from fulltext search table
-     *
-     * @param int $storeId
-     * @param int $entityId
-     * @param string $entity 'product'|'cms'
-     * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
-     */
-    public function cleanIndex($storeId = null, $entityId = null, $entity = 'product');
 
     /**
      * Prepare index array as a string glued by separator
@@ -73,11 +43,4 @@ interface EngineInterface
      * @return string
      */
     public function prepareEntityIndex($index, $separator = ' ');
-
-    /**
-     * Define if engine is available
-     *
-     * @return bool
-     */
-    public function test();
 }
