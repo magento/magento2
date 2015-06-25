@@ -36,13 +36,13 @@
 </div>
 <!-- /Temp MAGETWO-36025 markup -->
 
-<!-- ko foreach: getRegion('errors') -->
-<!-- ko template: getTemplate() --><!-- /ko -->
+<!-- ko foreach: getRegion('messages') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 <div class="opc-wrapper">
     <ol class="opc" id="checkoutSteps">
     <!-- ko foreach: getRegion('steps') -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
     </ol>
 </div>
@@ -60,11 +60,11 @@
         'overlayClass': 'modal-custom-overlay',
         'buttons': []
     }}">
-    <div class="opc-block-summary">
-        <!-- ko foreach: getRegion('summary') -->
+
+    <!-- ko foreach: getRegion('summary') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-    </div>
+    <!--/ko-->
+
     <div class="opc-block-shipping-information">
         <!-- ko foreach: getRegion('shipping-information') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

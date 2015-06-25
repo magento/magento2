@@ -11,7 +11,7 @@ define([
 
         /**
          * Provides an empty div to force load template into.
-         * @todo Refactor this as soon as modal component is updated to support ko view models.
+         * @todo MAGETWO-39170 Refactor this as soon as modal component is updated to support ko view models.
          * @returns {HTMLElement}
          */
         function createTemporayContainer() {
