@@ -70,20 +70,24 @@ class Recurring implements InstallSchemaInterface
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1') >= 0) {
+            $stateIndexers = [];
             $states = $this->statesFactory->create();
-            foreach (array_keys($this->config->getIndexers()) as $indexerId) {
-                $indexerConfig = $this->config->getIndexer($indexerId);
-                foreach ($states->getItems() as $state) {
-                    /** @var State $state */
-                    $expectedHashConfig = $this->encryptor->hash(
-                        $this->encoder->encode($indexerConfig),
-                        Encryptor::HASH_VERSION_MD5
-                    );
-                    if ($state->getIndexerId() == $indexerId && $state->getHashConfig() != $expectedHashConfig) {
-                        $state->setStatus(State::STATUS_INVALID);
-                        $state->setHashConfig($expectedHashConfig);
-                        $state->save();
-                    }
+            foreach ($states->getItems() as $state) {
+                /** @var \Magento\Indexer\Model\Indexer\State $state */
+                $stateIndexers[$state->getIndexerId()] = $state;
+            }
+
+            foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+                $expectedHashConfig = $this->encryptor->hash(
+                    $this->encoder->encode($indexerConfig),
+                    Encryptor::HASH_VERSION_MD5
+                );
+
+                if (isset($stateIndexers[$indexerId])
+                    && $stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
+                    $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
+                    $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
+                    $stateIndexers[$indexerId]->save();
                 }
             }
         }
