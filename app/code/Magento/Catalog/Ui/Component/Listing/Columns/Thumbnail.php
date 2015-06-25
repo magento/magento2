@@ -12,6 +12,8 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
 {
     const NAME = 'thumbnail';
 
+    const ALT_FIELD = 'name';
+
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory

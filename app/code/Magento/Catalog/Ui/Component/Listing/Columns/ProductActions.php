@@ -46,10 +46,14 @@ class ProductActions extends Column
      */
     public function prepareDataSource(array &$dataSource)
     {
+        $storeId = $this->context->getFilterParam('store_id');
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl('catalog/product/edit', ['id' => $item['entity_id']]),
+                    'href' => $this->urlBuilder->getUrl(
+                        'catalog/product/edit',
+                        ['id' => $item['entity_id'], 'store' => $storeId]
+                    ),
                     'label' => __('Edit'),
                     'hidden' => false,
                 ];
