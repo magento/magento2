@@ -34,20 +34,18 @@
 .order-items {
     .table(@table__width, 0);
     .table-background-color();
-    .table-bordered(@_table_type: horizontal);
-    .css(border, @table__border-width @table__border-style @table__border-color);
 
     > thead,
-    > tbody,
-    > tfoot {
+    > tbody {
+        border: @table__border-width @table__border-style @table__border-color;
+
         > tr {
             > th {
-                padding-bottom: @indent__s;
+                padding: @indent__s;
             }
 
-            > th,
             > td {
-                padding-top: @indent__s;
+                padding: @indent__s @indent__s 0;
 
                 &.message-gift {
                     border-top: none;
@@ -57,9 +55,32 @@
         }
     }
 
+    > tfoot {
+        padding-top: @indent__xs;
+
+        > tr {
+            &.subtotal {
+                > th,
+                > td {
+                    padding-top: @indent__base;
+                }
+            }
+
+            > th {
+                font-weight: @font-weight__regular;
+            }
+
+            > th,
+            > td {
+                padding: @indent__xs @indent__s;
+                text-align: right;
+            }
+        }
+    }
+
     .product-name {
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-weight: @font-weight__bold;
+        margin-bottom: @indent__xs;
     }
 
     .item-info {

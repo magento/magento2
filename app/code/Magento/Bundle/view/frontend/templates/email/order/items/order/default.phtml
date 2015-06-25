@@ -27,8 +27,8 @@
     <?php if ($_item->getParentItem()): ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
-            <tr>
-                <td class="bundle-item" colspan="3">
+            <tr class="bundle-option-label">
+                <td colspan="3">
                     <strong><em><?= $attributes['option_label'] ?></em></strong>
                 </td>
             </tr>
@@ -49,7 +49,7 @@
             </td>
         </tr>
     <?php else: ?>
-        <tr class="bundle-item bundle-details">
+        <tr class="bundle-item bundle-option-value">
             <td class="item-info" colspan="3">
                 <p><?= $block->getValueHtml($_item)?></p>
             </td>
