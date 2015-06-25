@@ -220,6 +220,11 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($region));
     }
 
+    /**
+     * Test for setData method
+     *
+     * @return void
+     */
     public function testSetData()
     {
         $key = [
@@ -230,6 +235,11 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($key, $this->model->getData());
     }
 
+    /**
+     * Test for setData method with multidimensional array in "key" argument
+     *
+     * @return void
+     */
     public function testSetDataWithMultidimensionalArray()
     {
         $expected = [
@@ -248,6 +258,11 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getData());
     }
 
+    /**
+     * Test for setData method with "value" argument
+     *
+     * @return void
+     */
     public function testSetDataWithValue()
     {
         $value = [
