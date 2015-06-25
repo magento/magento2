@@ -177,12 +177,12 @@ define([
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
-            } else if (typeof callback != 'function') {
+            } else if (!_.isFunction(callback)) {
                 callback = this.defaultCallback.bind(this);
             }
 
             return function () {
-                callback.apply(null, args);
+                callback.apply(callback, args);
             };
         },
 

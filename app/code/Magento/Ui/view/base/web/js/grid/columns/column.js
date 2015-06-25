@@ -4,9 +4,10 @@
  */
 define([
     'underscore',
+    'uiRegistry',
     'mageUtils',
     'uiComponent'
-], function (_, utils, Component) {
+], function (_, registry, utils, Component) {
     'use strict';
 
     return Component.extend({
@@ -17,6 +18,9 @@ define([
             sorting: false,
             visible: true,
             draggable: true,
+            templates: {
+                fieldAction: false
+            },
             links: {
                 visible: '${ $.storageConfig.path }.visible',
                 sorting: '${ $.storageConfig.path }.sorting'
@@ -49,7 +53,7 @@ define([
          *
          * @param {String} state - Defines what state should be used: saved or default.
          * @param {String} [property] - Defines what columns' property should be applied.
-         *      If not specfied, than all collumns stored properties will be used.
+         *      If not specfied, then all columns stored properties will be used.
          * @returns {Column} Chainable.
          */
         applyState: function (state, property) {
@@ -73,19 +77,15 @@ define([
          * @returns {Column} Chainable.
          */
         sort: function (enable) {
-            var direction;
+            var direction = false;
 
             if (!this.sortable) {
                 return this;
             }
 
-            enable = enable !== false ? true : false;
-
-            direction = enable ?
-                this.sorting() ?
-                    this.toggleDirection() :
-                    'asc' :
-                false;
+            if (enable !== false) {
+                direction = this.toggleDirection();
+            }
 
             this.sorting(direction);
 
@@ -110,7 +110,7 @@ define([
         },
 
         /**
-         * Toggles sorting direcction.
+         * Toggles sorting direction.
          *
          * @returns {String} New direction.
          */
@@ -120,19 +120,78 @@ define([
                 'asc';
         },
 
-        getClickUrl: function (row) {
-            var field = row[this.actionField],
-                action = field && field[this.clickAction];
-
-            return action ? action.href : '';
+        /**
+         * Checks if column has an assigned action that will
+         * be performed when clicking on one of its' fields.
+         *
+         * @returns {Boolean}
+         */
+        hasFieldAction: function () {
+            return !!this.templates.fieldAction;
         },
 
-        isClickable: function (row) {
-            return !!this.getClickUrl(row);
+        /**
+         * Applies action described in a 'fieldAction' property.
+         *
+         * @param {Number} rowIndex - Index of a row which initiates action.
+         * @returns {Column} Chainable.
+         *
+         * @example Example of fieldAction definition, which is equivalent to
+         *      referencing to external component named 'listing.multiselect'
+         *      and calling its' method 'toggleSelect' with params [rowIndex, true] =>
+         *
+         *      {
+         *          provider: 'listing.multiselect',
+         *          target: 'toggleSelect',
+         *          params: ['${ $.$data.rowIndex }', true]
+         *      }
+         */
+        applyFieldAction: function (rowIndex) {
+            var action = this.templates.fieldAction,
+                callback;
+
+            if (!this.hasFieldAction()) {
+                return this;
+            }
+
+            action = utils.template(action, {
+                column: this,
+                rowIndex: rowIndex
+            }, true);
+
+            callback = this._getFieldCallback(action);
+
+            if (_.isFunction(callback)) {
+                callback();
+            }
+
+            return this;
         },
 
-        redirect: function (url) {
-            window.location.href = url;
+        /**
+         * Creates action callback based on its' data.
+         *
+         * @param {Object} action - Actions' object.
+         * @returns {Function|Boolean} Callback function or false
+         *      value if it was imposible create a callback.
+         */
+        _getFieldCallback: function (action) {
+            var args     = action.params || [],
+                callback = action.target;
+
+            if (action.provider && action.target) {
+                args.unshift(action.target);
+
+                callback = registry.async(action.provider);
+            }
+
+            if (!_.isFunction(callback)) {
+                return false;
+            }
+
+            return function () {
+                callback.apply(callback, args);
+            };
         },
 
         /**

@@ -17,7 +17,7 @@
         <a
             class="action-menu-item"
             data-bind="
-                text: value,
+                text: $data[$parent.labelKey],
                 click: $parent.select.bind($parent, $data),
                 css: {
                     _selected: $index() === $parent.navigated()
