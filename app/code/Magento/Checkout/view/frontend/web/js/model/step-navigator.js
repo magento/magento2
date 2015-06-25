@@ -37,6 +37,15 @@ define(
                 return activeIndex;
             },
 
+            isAvailable: function(code) {
+                for (var i in this.steps()) {
+                    if (this.steps()[i].code == code) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+
             isProcessed: function(code) {
                 var activeItemIndex = this.getActiveItemIndex();
                 var sortedItems = steps.sort(this.sortItems);
@@ -67,6 +76,7 @@ define(
             },
 
             next: function() {
+                console.log('next');
                 var activeIndex = 0;
                 steps.sort(this.sortItems).forEach(function(element, index) {
                     if (element.isVisible()) {
