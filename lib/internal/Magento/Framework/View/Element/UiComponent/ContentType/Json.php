@@ -9,7 +9,7 @@ use Magento\Framework\Json\Encoder;
 use Magento\Framework\View\FileSystem;
 use Magento\Framework\View\TemplateEnginePool;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\Layout\Generator\Structure;
+use Magento\Framework\View\Layout\Generator\Structure;
 
 /**
  * Class Json
@@ -19,6 +19,8 @@ class Json extends AbstractContentType
     private $structure;
 
     /**
+     * Encoder
+     *
      * @var Encoder
      */
     private $encoder;
@@ -29,6 +31,7 @@ class Json extends AbstractContentType
      * @param FileSystem $filesystem
      * @param TemplateEnginePool $templateEnginePool
      * @param Encoder $encoder
+     * @param Structure $structure
      */
     public function __construct(
         FileSystem $filesystem,
