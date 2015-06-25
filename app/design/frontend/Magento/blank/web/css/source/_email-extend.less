@@ -13,7 +13,10 @@
 //  Custom fonts are declared here, rather than in _email-base.less, as @font-face declarations can't be overridden.
 //  This means that a custom theme can add custom styles/fonts to a _email-extend.less file and replace the fonts
 //  declared here.
-.email-non-inline() {
+//  These declarations are also wrapped in an otherwise useless media query in order to prevent them from causing
+//  problems in Microsoft Outlook email clients.
+
+@media screen {
     .font-face(
         @family-name: @font-family-name__base,
         @font-path: '@{baseUrl}fonts/opensans/light/opensans-300',
