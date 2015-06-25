@@ -156,7 +156,7 @@ define([
 
                     this.element.find(this.options.checkout.registerCustomerPasswordSelector).show();
                 } else {
-                    alert($.mage.__('You can create an account or check out as a guest.'));
+                    alert($.mage.__('Please create an account or check out as a guest.'));
 
                     return false;
                 }
@@ -427,7 +427,7 @@ define([
             var methods = this.element.find('[name="shipping_method"]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t ship to this address. Please enter another address or edit this one.'));
+                alert($.mage.__('We can\'t ship to this address. Please choose another address or edit the current one.'));
 
                 return false;
             }
@@ -551,7 +551,7 @@ define([
             var methods = this.element.find('[name^="payment["]');
 
             if (methods.length === 0) {
-                alert($.mage.__("We can't complete your order because you don't have a payment method available."));
+                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
 
                 return false;
             }

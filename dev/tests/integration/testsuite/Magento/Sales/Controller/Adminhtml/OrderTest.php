@@ -100,7 +100,7 @@ class OrderTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             [
                 'status' => 'processing',
                 'comment' => '',
-                'response' => '{"error":true,"message":"Comment text cannot be empty."}'
+                'response' => '{"error":true,"message":"Please enter a comment."}'
             ]
         ];
     }

@@ -106,14 +106,14 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $data
         );
 
-        $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Website is not specified'));
-        $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, __('E-mail is not specified'));
-        $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE, __("Invalid value in website column"));
-        $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, __('E-mail is invalid'));
-        $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED, __("Required attribute '%s' has an empty value"));
+        $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
+        $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, __('Please specify an email.'));
+        $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE, __('We found an invalid value in a website column.'));
+        $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, __('Please enter a valid email.'));
+        $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED, __('Please make sure attribute "%s" is not empty.'));
         $this->addMessageTemplate(
             self::ERROR_CUSTOMER_NOT_FOUND,
-            __("Customer with such email and website code doesn't exist")
+            __('We can\'t find a customer who matches this email and website code.')
         );
 
         $this->_initCustomers($data)->_initWebsites(true);

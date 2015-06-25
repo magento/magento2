@@ -397,8 +397,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected function _checkDdlTransaction($sql)
     {
         if (is_string($sql) && $this->getTransactionLevel() > 0) {
-            $startSql = strtolower(substr(ltrim($sql), 0, 3));
-            if (in_array($startSql, $this->_ddlRoutines)) {
+            $sqlMessage = explode(' ', $sql, 3);
+            $startSql = strtolower(substr(ltrim($sqlMessage[0]), 0, 3));
+            if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
                 trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
@@ -1999,6 +2000,24 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
         );
+
+        return $this->query($sql);
+    }
+
+    /**
+     * Create temporary table like
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Statement_Pdo
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
+    {
+        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
+        $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
+        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
 
         return $this->query($sql);
     }

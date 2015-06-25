@@ -67,7 +67,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_addButtonLabel = __('Add New Review');
+        $this->_addButtonLabel = __('New Review');
         parent::_construct();
 
         $this->_blockGroup = 'Magento_Review';
