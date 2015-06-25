@@ -6,27 +6,9 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot */
-$entitySnapshot = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('EavVersionControlSnapshot');
-
-/** @var \Magento\Customer\Model\Resource\Address $addressResource */
-$addressResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(
-        'Magento\Customer\Model\Resource\Address',
-        [
-            'entitySnapshot' => $entitySnapshot
-        ]
-    );
-
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(
-        'Magento\Customer\Model\Address',
-        [
-            'resource' => $addressResource
-        ]
-    );
+    ->create('Magento\Customer\Model\Address');
 
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
