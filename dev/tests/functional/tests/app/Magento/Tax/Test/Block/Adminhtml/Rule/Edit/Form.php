@@ -248,7 +248,7 @@ class Form extends FormInterface
             }
         } while ($count < self::MAX_TRY_COUNT);
 
-        throw new \Exception($e);
+        throw new \Exception("Input for new tax class name isn't display.\n" . $e);
     }
 
     /**
