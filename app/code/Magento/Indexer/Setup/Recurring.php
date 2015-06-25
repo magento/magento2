@@ -56,7 +56,6 @@ class Recurring implements InstallSchemaInterface
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder
-
     ) {
         $this->statesFactory = $statesFactory;
         $this->config = $config;
