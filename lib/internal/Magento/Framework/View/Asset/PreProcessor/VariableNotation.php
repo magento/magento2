@@ -11,11 +11,8 @@ use Magento\Framework\View\Asset\NotationResolver;
 use Magento\Framework\View\Url\CssResolver;
 
 /**
- * Support of notation "{{var}}::file/path.ext" in CSS-files
- *
- * This exists such that a CSS file may refer to another file without knowing where the referenced file will
- * ultimately reside from when loaded, and no URL to . Context of
- * this url path can be known ONLY when the CSS is being procsessed since it is dependent on the design config.
+ * Class VariableNotation
+ * @package Magento\Framework\View\Asset\PreProcessor
  */
 class VariableNotation implements Asset\PreProcessorInterface
 {
