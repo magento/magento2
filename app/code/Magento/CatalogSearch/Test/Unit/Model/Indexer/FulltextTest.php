@@ -73,7 +73,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->dimension = $this->getClassMock('\Magento\Framework\Search\Request\Dimension');
-        $dimensionFactory = $this->getMock('\Magento\Framework\Search\Request\DimensionFactory',
+        $dimensionFactory = $this->getMock(
+            '\Magento\Framework\Search\Request\DimensionFactory',
             ['create'],
             [],
             '',
