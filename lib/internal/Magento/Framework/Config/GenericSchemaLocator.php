@@ -1,0 +1,67 @@
+<?php
+
+namespace Magento\Framework\Config;
+
+use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
+
+/**
+ * Class GenericSchemaLocator
+ */
+class GenericSchemaLocator implements SchemaLocatorInterface
+{
+    /**
+     * @var ModuleDirReader
+     */
+    private $moduleDirReader;
+    
+    /**
+     * @var string
+     */
+    private $moduleName;
+    
+    /**
+     * @var string
+     */
+    private $perFileSchema;
+    
+    /**
+     * @var string|null
+     */
+    private $schema;
+
+    /**
+     * @param ModuleDirReader $reader
+     * @param string $moduleName
+     * @param string $schema
+     * @param string|null $perFileSchema
+     */
+    public function __construct(ModuleDirReader $reader, $moduleName, $schema, $perFileSchema = null)
+    {
+        $this->moduleDirReader = $reader;
+        $this->moduleName = $moduleName;
+        $this->schema = $schema;
+        $this->perFileSchema = $perFileSchema;
+    }
+
+    /**
+     * Get path to merged config schema
+     *
+     * @return string|null
+     */
+    public function getSchema()
+    {
+        return $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->schema;
+    }
+
+    /**
+     * Get path to per file validation schema
+     *
+     * @return string|null
+     */
+    public function getPerFileSchema()
+    {
+        return is_null($this->perFileSchema) ?
+            null :
+            $this->moduleDirReader->getModuleDir('etc', $this->moduleName) . '/' . $this->perFileSchema;
+    }
+}
