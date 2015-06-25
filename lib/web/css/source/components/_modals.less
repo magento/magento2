@@ -28,6 +28,8 @@
 
 @modal-slide-header__padding-vertical: 2.1rem;
 
+@modal-popup-confirm__width: 50rem;
+
 //
 //  Utilities
 //  ---------------------------------------------
@@ -183,6 +185,16 @@ body._has-modal {
         margin-top: auto;
         padding-top: @modal-popup__padding;
         padding-bottom: @modal-popup__padding;
+    }
+    &.confirm {
+        .modal-inner-wrap {
+            margin-left: -(@modal-popup-confirm__width/2);
+            left: 50%;
+            width: @modal-popup-confirm__width;
+        }
+        .modal-footer {
+            text-align: right;
+        }
     }
 }
 
