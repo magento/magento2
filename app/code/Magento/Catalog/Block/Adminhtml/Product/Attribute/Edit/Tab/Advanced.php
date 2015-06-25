@@ -167,10 +167,11 @@ class Advanced extends Generic
             'select',
             [
                 'name' => 'is_used_in_grid',
-                'label' => __('To Show Attribute In Grid'),
-                'title' => __('To Show Attribute In Grid'),
+                'label' => __('Add to Column Options'),
+                'title' => __('Add to Column Options'),
                 'values' => $yesno,
                 'value' => $attributeObject->getData('is_used_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of column options in the product grid.'),
             ]
         );
 
@@ -185,10 +186,14 @@ class Advanced extends Generic
 
         $fieldset->addField(
             'is_filterable_in_grid',
-            'hidden',
+            'select',
             [
                 'name' => 'is_filterable_in_grid',
+                'label' => __('Use in Filter Options'),
+                'title' => __('Use in Filter Options'),
+                'values' => $yesno,
                 'value' => $attributeObject->getData('is_filterable_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of filter options in the product grid.'),
             ]
         );
 
