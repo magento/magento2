@@ -18,7 +18,7 @@ interface OrderSearchResultInterface
     /**
      * Gets collection items.
      *
-     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface[] Array of collection items.
+     * @return \Magento\Sales\Api\Data\OrderInterface[] Array of collection items.
      */
     public function getItems();
 }
