@@ -62,7 +62,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['The newsletter queue has been saved.']),
+            $this->equalTo(['You saved the newsletter queue.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }

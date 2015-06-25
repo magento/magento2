@@ -2257,5 +2257,10 @@ return [
     ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    [
+        'getConfigureUrl',
+        'Magento\Checkout\Block\Cart\Item\Renderer',
+        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+    ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
 ];

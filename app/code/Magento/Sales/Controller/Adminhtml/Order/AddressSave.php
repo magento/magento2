@@ -28,7 +28,7 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong updating the order address.'));
+                $this->messageManager->addException($e, __('We can\'t update the order address right now.'));
             }
             return $resultRedirect->setPath('sales/*/address', ['address_id' => $address->getId()]);
         } else {
