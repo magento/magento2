@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Resource\Product\CollectionFactory;
 /**
  * Class ProductDataProvider
  */
-class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
+class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
      * Product collection
@@ -46,8 +46,8 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        array $addFieldStrategies,
-        array $addFilterStrategies,
+        array $addFieldStrategies = [],
+        array $addFilterStrategies = [],
         array $meta = [],
         array $data = []
     ) {
@@ -94,9 +94,9 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     public function addField($field, $alias = null)
     {
         if (isset($this->addFieldStrategies[$field])) {
-            $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias = null);
+            $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias);
         } else {
-            $this->addFieldStrategies['default']->addField($this->getCollection(), $field, $alias = null);
+            parent::addField($field, $alias);
         }
     }
 

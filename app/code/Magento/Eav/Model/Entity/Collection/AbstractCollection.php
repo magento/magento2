@@ -1558,4 +1558,36 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         }
         return parent::removeItemByKey($key);
     }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function addFieldToSelect($field)
+    {
+        return $this->addAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @param string $field
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeFieldFromSelect($field)
+    {
+        return $this->removeAttributeToSelect($field);
+    }
+
+    /**
+     * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
+     *
+     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     */
+    public function removeAllFieldsFromSelect()
+    {
+        return $this->removeAttributeToSelect();
+    }
 }
