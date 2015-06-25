@@ -34,6 +34,7 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         }
 
         $this->showAdvancedSettings();
+        $this->getTab('variations')->showContent();
         return $this->fillTabs($tabs, $element);
     }
 }

@@ -11,9 +11,9 @@
             <data name="description" xsi:type="string">Checkout as guest using FedEx with US shipping origin and UK customer</data>
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="address/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataSet" xsi:type="string">default</data>
+            <data name="address/dataSet" xsi:type="string">UK_address</data>
+            <data name="billingAddress/dataSet" xsi:type="string">UK_address</data>
             <data name="shipping/shipping_service" xsi:type="string">Federal Express</data>
             <data name="shipping/shipping_method" xsi:type="string">International Economy</data>
             <data name="cart/data/shipping_method" xsi:type="string">International Economy</data>

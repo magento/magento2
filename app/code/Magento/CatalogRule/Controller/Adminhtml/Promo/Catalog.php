@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Backend Catalog Price Rules controller
  *
@@ -36,11 +34,15 @@ class Catalog extends Action
     protected $_coreRegistry = null;
 
     /**
+     * Date filter instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
+     * Constructor
+     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
@@ -53,6 +55,8 @@ class Catalog extends Action
     }
 
     /**
+     * Init action
+     *
      * @return $this
      */
     protected function _initAction()
@@ -68,6 +72,8 @@ class Catalog extends Action
     }
 
     /**
+     * Is access to section allowed
+     *
      * @return bool
      */
     protected function _isAllowed()
@@ -94,7 +100,8 @@ class Catalog extends Action
     public function getDirtyRulesNoticeMessage()
     {
         $defaultMessage = __(
-            'There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.'
+            'There are rules that have been changed but were not applied. '
+            . 'Please, click Apply Rules in order to see immediate effect in the catalog.'
         );
         return $this->_dirtyRulesNoticeMessage ? $this->_dirtyRulesNoticeMessage : $defaultMessage;
     }
