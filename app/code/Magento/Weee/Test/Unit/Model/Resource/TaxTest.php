@@ -85,7 +85,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $this->selectMock->expects($this->any())
             ->method('from')
-            ->with('table_name','value')
+            ->with('table_name', 'value')
             ->willReturn($this->selectMock);
 
         $this->model->isWeeeInLocation('US', 0, 1);
