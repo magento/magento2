@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Layout\Generator;
+namespace Magento\Framework\View\Layout\Generator;
 
-use Magento\Ui\Component\Layout\LayoutPool;
+use Magento\Framework\View\Layout\Pool as LayoutPool;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 

@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Layout;
+namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 
 /**
- * Class LayoutPool
+ * Class Pool
  */
-class LayoutPool
+class Pool
 {
-    const DEFAULT_CLASS = 'Magento\Ui\Component\Layout\Generic';
+    const DEFAULT_CLASS = 'Magento\Framework\View\Layout\Generic';
 
     /**
      * Layouts pool
