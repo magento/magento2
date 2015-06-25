@@ -66,7 +66,7 @@
                     <div class="control">
                         <select name="payment[cc_exp_year]"
                                 class="select select-year"
-                                data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
+                                data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true, 'validate-card-year':'#' + getCode() + '_expiration_yr'})},
                                            enable: isActive($parents),
                                            options: getCcYearsValues(),
                                            optionsValue: 'value',
