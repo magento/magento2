@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 /**
  * @magentoAppArea adminhtml
  */
-class AttributeTest extends \Magento\Backend\Utility\Controller
+class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute

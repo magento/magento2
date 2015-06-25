@@ -3657,5 +3657,6 @@ return [
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsValidCcTest'],
     ['Magento\Centinel\CreateOrderTest'],
     ['Magento\Payment\Model\Checks\PaymentMethodChecksInterface', 'Magento\Payment\Model\MethodInterface'],
+    ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
 ];
