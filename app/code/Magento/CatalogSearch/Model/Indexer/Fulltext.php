@@ -41,6 +41,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
      * @param Full $fullAction
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param StoreManagerInterface $storeManager
+     * @param DimensionFactory $dimensionFactory
      * @param array $data
      */
     public function __construct(
@@ -101,7 +102,6 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         }
        // $this->fulltextResource->resetSearchResults();
        // $this->searchRequestConfig->reset();
-
     }
 
     /**

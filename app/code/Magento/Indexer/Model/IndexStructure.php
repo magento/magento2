@@ -59,6 +59,7 @@ class IndexStructure
     /**
      * @param string $index
      * @param Dimension[] $dimensions
+     * @return void
      */
     public function delete($index, array $dimensions)
     {
@@ -71,6 +72,7 @@ class IndexStructure
      * @param string $index
      * @param array $filterFields
      * @param Dimension[] $dimensions
+     * @return void
      */
     public function create($index, array $filterFields, array $dimensions)
     {
@@ -83,6 +85,7 @@ class IndexStructure
     /**
      * @param string $tableName
      * @throws \Zend_Db_Exception
+     * @return void
      */
     protected function createFulltextIndex($tableName)
     {
@@ -93,36 +96,36 @@ class IndexStructure
 
     /**
      * @param Table $table
-     * @return mixed
+     * @return Table
      */
     protected function configureFulltextTable(Table $table)
     {
         $table->addColumn(
-                'entity_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false],
-                'Entity ID'
-            )->addColumn(
-                'attribute_id',
-                Table::TYPE_TEXT,
-                255,
-                ['unsigned' => true, 'nullable' => true]
-            )->addColumn(
-                'data_index',
-                Table::TYPE_TEXT,
-                '4g',
-                ['nullable' => true],
-                'Data index'
-            )->addIndex(
-                'idx_primary',
-                ['entity_id', 'attribute_id'],
-                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
-            )->addIndex(
-                'FTI_FULLTEXT_DATA_INDEX',
-                ['data_index'],
-                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-            );
+            'entity_id',
+            Table::TYPE_INTEGER,
+            10,
+            ['unsigned' => true, 'nullable' => false],
+            'Entity ID'
+        )->addColumn(
+            'attribute_id',
+            Table::TYPE_TEXT,
+            255,
+            ['unsigned' => true, 'nullable' => true]
+        )->addColumn(
+            'data_index',
+            Table::TYPE_TEXT,
+            '4g',
+            ['nullable' => true],
+            'Data index'
+        )->addIndex(
+            'idx_primary',
+            ['entity_id', 'attribute_id'],
+            ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
+        )->addIndex(
+            'FTI_FULLTEXT_DATA_INDEX',
+            ['data_index'],
+            ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+        );
         return $table;
     }
 
@@ -130,6 +133,7 @@ class IndexStructure
      * @param string $tableName
      * @param array $fields
      * @throws \Zend_Db_Exception
+     * @return void
      */
     protected function createFlatIndex($tableName, array $fields)
     {
@@ -159,6 +163,7 @@ class IndexStructure
     /**
      * @param AdapterInterface $adapter
      * @param string $tableName
+     * @return void
      */
     private function dropTable(AdapterInterface $adapter, $tableName)
     {

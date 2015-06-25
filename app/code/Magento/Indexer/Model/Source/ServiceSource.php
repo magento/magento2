@@ -6,6 +6,7 @@
 namespace Magento\Indexer\Model\Source;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -51,25 +52,25 @@ class ServiceSource implements DataInterface
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
-        /** @var \Magento\Framework\Api\SearchResults $list */
+        /** @var SearchResults $list */
         $list = $service->getList($searchCriteria);
 
         return $this->getRequestedFields($list, $fieldsData);
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchResults $list
+     * @param SearchResults $list
      * @param array $fields
      * @return array
      * @throws NotFoundException
      */
-    private function getRequestedFields(\Magento\Framework\Api\SearchResults $list, array $fields)
+    private function getRequestedFields(SearchResults $list, array $fields)
     {
         $requestedData = [];
-        foreach($list->getItems() as $key => $item) {
-            foreach($fields as $fieldName => $fieldDetails) {
+        foreach ($list->getItems() as $key => $item) {
+            foreach (array_keys($fields) as $fieldName) {
                 if (!isset($item[$fieldName])) {
-                    throw new NotFoundException("Field {$fieldName} not found");
+                    throw new NotFoundException(__("Field {$fieldName} not found"));
                 }
 
                 $requestedData[$key][$fieldName] = $item[$fieldName];

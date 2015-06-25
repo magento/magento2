@@ -127,7 +127,7 @@ class IndexerHandler implements IndexerInterface
     public function cleanIndex($dimensions)
     {
         $this->indexStructure->delete($this->getIndexName(), $dimensions);
-        $this->indexStructure->create($this->getIndexName(), $this->fields,  $dimensions);
+        $this->indexStructure->create($this->getIndexName(), $this->fields, $dimensions);
     }
 
     /**
@@ -185,7 +185,7 @@ class IndexerHandler implements IndexerInterface
     private function prepareSearchableFields(array $documents)
     {
         $insertDocuments = [];
-        foreach ($documents as  $entityId => $document) {
+        foreach ($documents as $entityId => $document) {
             foreach ($document as $attributeId => $fieldValue) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
@@ -208,4 +208,3 @@ class IndexerHandler implements IndexerInterface
         }
     }
 }
-

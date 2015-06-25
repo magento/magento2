@@ -74,8 +74,7 @@ class IndexerHandler implements IndexerInterface
         IndexScopeResolver $indexScopeResolver,
         array $data,
         $batchSize = 100
-    )
-    {
+    ) {
         $this->indexScopeResolver = $indexScopeResolver;
         $this->indexStructure = $indexStructure;
         $this->resource = $resource;

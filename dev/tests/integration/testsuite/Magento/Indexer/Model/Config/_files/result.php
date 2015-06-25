@@ -24,7 +24,7 @@ return [
                                     'title_alias' =>
                                         [
                                             'name' => 'title_alias',
-                                            'handler' => NULL,
+                                            'handler' => null,
                                             'origin' => 'title',
                                             'dataType' => 'text',
                                             'type' => 'searchable',
@@ -40,7 +40,7 @@ return [
                                             'name' => 'identifier',
                                             'handler' => 'Magento\\Framework\\Search\\Index\\Handler',
                                             'origin' => 'identifier',
-                                            'dataType' => NULL,
+                                            'dataType' => null,
                                             'type' => 'filterable',
                                             'filters' =>
                                                 [],
@@ -52,15 +52,15 @@ return [
                     'second' =>
                         [
                             'source' => 'MagentoModule\\ServiceClassOrRepositoryClass',
-                            'provider' => NULL,
+                            'provider' => null,
                             'fields' =>
                                 [
                                     'title' =>
                                         [
                                             'name' => 'title',
-                                            'handler' => NULL,
+                                            'handler' => null,
                                             'origin' => 'title',
-                                            'dataType' => NULL,
+                                            'dataType' => null,
                                             'type' => 'searchable',
                                             'filters' =>
                                                 [],
