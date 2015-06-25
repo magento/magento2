@@ -3,10 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Model\Fieldset;
-
-use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\Source\DataInterface;
+namespace Magento\Indexer\Model;
 
 interface FieldsetInterface
 {
@@ -15,4 +12,9 @@ interface FieldsetInterface
      * @return array
      */
     public function addDynamicData(array $data);
+
+    /**
+     * @return string
+     */
+    public function getDefaultHandler();
 }

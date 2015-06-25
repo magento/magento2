@@ -12,7 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
-use Magento\Indexer\Model\Fieldset\FieldsetPool;
+use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\SaveHandlerPool;
 use Magento\Framework\App\Resource\SourcePool;
