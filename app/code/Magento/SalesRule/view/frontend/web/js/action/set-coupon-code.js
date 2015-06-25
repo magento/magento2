@@ -14,17 +14,19 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
-        'Magento_Ui/js/model/errorlist',
+        'Magento_Ui/js/model/messageList',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals'
     ],
-    function (ko, $, quote, urlManager, paymentService, errorList, storage, getTotalsAction) {
+    function (ko, $, quote, urlManager, paymentService, messageList, storage, getTotalsAction) {
         'use strict';
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
             return storage.put(
-                url
+                url,
+                {},
+                false
             ).done(
                 function (response) {
                     if (response) {
@@ -44,7 +46,7 @@ define(
                 function (response) {
                     isLoading(false);
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error);
+                    messageList.addErrorMessage(error);
                 }
             );
         };

@@ -7,9 +7,9 @@ define(
     [
         'jquery',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist'
+        'Magento_Ui/js/model/messageList'
     ],
-    function($, storage, errorlist) {
+    function($, storage, messageList) {
         'use strict';
         var callbacks = [],
             action = function(loginData, redirectUrl) {
@@ -18,7 +18,7 @@ define(
                     JSON.stringify(loginData)
                 ).done(function (response) {
                     if (response.errors) {
-                        errorlist.add(response);
+                        messageList.addErrorMessage(response);
                         callbacks.forEach(function(callback) {
                             callback(loginData);
                         });
@@ -33,7 +33,7 @@ define(
                         }
                     }
                 }).fail(function () {
-                    errorlist.add({'message': 'Could not authenticate. Please try again later'});
+                    messageList.addErrorMessage({'message': 'Could not authenticate. Please try again later'});
                     callbacks.forEach(function(callback) {
                         callback(loginData);
                     });
