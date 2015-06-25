@@ -8,9 +8,10 @@ define(
     [
         'underscore',
         'Magento_Checkout/js/view/payment/default',
+        'Magento_Payment/js/model/credit-card-validation/credit-card-data',
         'mage/translate'
     ],
-    function (_, Component, $t) {
+    function (_, Component, creditCardData, $t) {
         return Component.extend({
             defaults: {
                 creditCardType: '',
@@ -34,6 +35,31 @@ define(
                     ]);
                 return this;
             },
+
+            initialize: function() {
+                this._super();
+
+                //Set credit card number to credit card data object
+                this.creditCardNumber.subscribe(function(value) {
+                    console.log(value);
+                });
+
+                //Set expiration year to credit card data object
+                this.creditCardExpYear.subscribe(function(value) {
+                    creditCardData.expirationYear = value;
+                });
+
+                //Set expiration month to credit card data object
+                this.creditCardExpMonth.subscribe(function(value) {
+                    creditCardData.expirationYear = value;
+                });
+
+                //Set cvv code to credit card data object
+                this.creditCardVerificationNumber.subscribe(function(value) {
+                    creditCardData.cvvCode = value;
+                });
+            },
+
             getCode: function() {
                 return 'cc';
             },
