@@ -6,7 +6,7 @@
  */
 -->
 <mapping strict="0">
-    <wrapper>creditmemo</wrapper>
+    <wrapper>shipment</wrapper>
     <fields>
         <comment_text />
         <shipping_amount />
