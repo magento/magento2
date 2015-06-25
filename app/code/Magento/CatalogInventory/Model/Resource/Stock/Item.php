@@ -123,6 +123,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
         parent::_afterSave($object);
         /** @var StockItemInterface $object */
         if ($this->processIndexEvents) {
+            $this->stockIndexerProcessor->markIndexerAsInvalid();
             $this->stockIndexerProcessor->reindexRow($object->getProductId());
         }
         return $this;

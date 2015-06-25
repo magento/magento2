@@ -130,6 +130,16 @@ interface AdapterInterface
     public function createTemporaryTable(Table $table);
 
     /**
+     * Create temporary table from other table
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false);
+
+    /**
      * Drop temporary table from database
      *
      * @param string $tableName
