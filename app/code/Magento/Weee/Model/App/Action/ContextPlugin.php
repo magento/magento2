@@ -160,7 +160,7 @@ class ContextPlugin
         return $proceed($request);
     }
 
-    /*
+    /**
      * @param string $basedOn
      * @return array
      */
