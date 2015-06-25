@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class GroupTest extends \Magento\Backend\Utility\Controller
+class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     const TAX_CLASS_ID = 3;
     const TAX_CLASS_NAME = 'Retail Customer';

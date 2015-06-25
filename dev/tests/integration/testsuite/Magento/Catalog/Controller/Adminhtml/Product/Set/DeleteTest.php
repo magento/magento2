@@ -7,7 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
 use Magento\Framework\Message\MessageInterface;
 
-class DeleteTest extends \Magento\Backend\Utility\Controller
+class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Eav/_files/empty_attribute_set.php

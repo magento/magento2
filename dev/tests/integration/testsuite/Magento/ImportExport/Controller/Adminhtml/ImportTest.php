@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class ImportTest extends \Magento\Backend\Utility\Controller
+class ImportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testGetFilterAction()
     {

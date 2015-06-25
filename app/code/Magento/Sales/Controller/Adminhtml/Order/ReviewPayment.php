@@ -53,4 +53,12 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
         return $resultRedirect;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::review_payment');
+    }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-class FetchRatesTest extends \Magento\Backend\Utility\Controller
+class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Test fetch action without service

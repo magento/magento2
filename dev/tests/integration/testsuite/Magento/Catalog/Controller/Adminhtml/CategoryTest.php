@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class CategoryTest extends \Magento\Backend\Utility\Controller
+class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php

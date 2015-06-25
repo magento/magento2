@@ -167,8 +167,7 @@ class Http extends File
             'Host: ' .
             $hostname .
             "\r\n" .
-            'User-Agent: Magento ver/' .
-            \Magento\Framework\AppInterface::VERSION .
+            'User-Agent: Magento' .
             "\r\n" .
             'Connection: close' .
             "\r\n" .
