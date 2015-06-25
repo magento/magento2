@@ -30,6 +30,7 @@ class Flag extends \Magento\Framework\Flag
 
     /**
      * Setter for flag code
+     * @codeCoverageIgnore
      *
      * @param string $code
      * @return $this
