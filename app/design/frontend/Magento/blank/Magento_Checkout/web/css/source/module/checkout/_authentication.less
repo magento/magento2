@@ -53,7 +53,7 @@
         }
         .actions-toolbar {
             margin-bottom: @indent__xs;
-            & > .secondary {
+            > .secondary {
                 padding-top: @indent__m;
                 text-align: left;
             }
@@ -87,7 +87,7 @@
                     .css(min-width, @block-auth__or-label__size);
                     background: @color-white;
                     border-radius: 50%;
-                    border: .1rem solid @color-gray-light5;
+                    border: 1px solid @color-gray-light5;
                     box-sizing: border-box;
                     color: @color-gray-light5;
                     content: attr(data-label);
@@ -117,12 +117,12 @@
         text-align: left;
         top: 100%;
         transform-origin: 0 0;
-        transform:  scale(1,0);
+        transform: scale(1,0);
         transition: transform linear .1s;
         width: 100%;
         &._show {
             .css(z-index, @dropdown-list__z-index);
-            transform:  scale(1,1);
+            transform: scale(1,1);
         }
     }
     .authentication-wrapper {
@@ -136,7 +136,7 @@
             margin-bottom: @indent__m;
         }
         .actions-toolbar {
-            & > .primary {
+            > .primary {
                 display: inline;
                 float: right;
                 margin-right: 0;
@@ -144,7 +144,7 @@
                     margin-right: 0;
                 }
             }
-            & > .secondary {
+            > .secondary {
                 float: left;
                 margin-right: 2rem;
                 padding-top: 1rem;
