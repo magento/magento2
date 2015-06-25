@@ -60,6 +60,8 @@ define(
 
             addressOptions: addressOptions,
 
+            customerHasAddresses: addressOptions.length > 1,
+
             addressOptionsText: function(address) {
                 return address.getAddressInline();
             },
@@ -82,6 +84,10 @@ define(
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix);
+
+                        if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
+                            this.saveInAddressBook = true;
+                        }
                         addressData.save_in_address_book = this.saveInAddressBook;
 
                         // New address must be selected as a billing address
