@@ -410,6 +410,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             if (!$this->isModified($object)) {
                 $this->processNotModifiedSave($object);
                 $this->commit();
+                $object->setHasDataChanges(false);
                 return $this;
             }
             $object->validateBeforeSave();
