@@ -7,7 +7,7 @@
 define([
     "jquery",
     "jquery/ui",
-    'Magento_Ui/js/dialog/dialog',
+    'Magento_Ui/js/modal/modal',
     "mage/translate"
 ], function($){
     "use strict";
@@ -15,7 +15,7 @@ define([
         options: {
             url:     null,
             message: null,
-            dialog:  null
+            modal:  null
         },
 
         /**
@@ -26,10 +26,10 @@ define([
         },
 
         /**
-         * Show dialog
+         * Show modal
          */
         showDialog: function() {
-            this.options.dialog.html(this.options.message).trigger('openDialog');
+            this.options.dialog.html(this.options.message).modal('openModal');
         },
 
         /**
@@ -40,11 +40,24 @@ define([
         },
 
         /**
-         * Prepare dialog
+         * Prepare modal
          * @protected
          */
         _prepareDialog: function() {
-            this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').dialog();
+            var self = this;
+
+            this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').modal({
+                type: 'popup',
+                modalClass: 'edit-order-popup',
+                title: $.mage.__('Edit Order'),
+                buttons: [{
+                    text: $.mage.__('Ok'),
+                    'class': 'action-primary',
+                    click: function(){
+                        self.redirect();
+                    }
+                }]
+            });
         }
     });
 
