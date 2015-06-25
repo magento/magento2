@@ -103,8 +103,7 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $documentsId = array_column($batchDocuments, 'id');
-            $this->getAdapter()->delete($this->getTableName($dimensions), ['id' => $documentsId]);
+            $this->getAdapter()->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
         }
     }
 
@@ -158,7 +157,11 @@ class IndexerHandler implements IndexerInterface
     private function insertDocuments(array $documents, array $dimensions)
     {
         $documents = $this->prepareSearchableFields($documents);
-        $this->getAdapter()->insertMultiple($this->getTableName($dimensions), $documents);
+        $this->getAdapter()->insertOnDuplicate(
+            $this->getTableName($dimensions),
+            $documents,
+            ['data_index']
+        );
     }
 
     /**
@@ -170,7 +173,7 @@ class IndexerHandler implements IndexerInterface
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {
             foreach ($document as $attributeId => $fieldValue) {
-                $insertDocuments[] = [
+                $insertDocuments[$entityId . '_' . $attributeId] = [
                     'entity_id' => $entityId,
                     'attribute_id' => $attributeId,
                     'data_index' => $fieldValue,
