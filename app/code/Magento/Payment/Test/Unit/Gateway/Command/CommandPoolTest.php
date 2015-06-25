@@ -13,9 +13,23 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
     {
         $commandI = $this->getMockBuilder('Magento\Payment\Gateway\CommandInterface')
             ->getMockForAbstractClass();
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => ['Magento\Payment\Gateway\CommandInterface'],
+                    'type' => 'Magento\Payment\Gateway\CommandInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('offsetExists')
             ->with('command')
@@ -25,7 +39,7 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
             ->with('command')
             ->willReturn($commandI);
 
-        $pool = new CommandPool($tMap);
+        $pool = new CommandPool(['Magento\Payment\Gateway\CommandInterface'], $tMapFactory);
 
         static::assertSame($commandI, $pool->get('command'));
     }
@@ -33,15 +47,30 @@ class CommandPoolTest extends \PHPUnit_Framework_TestCase
     public function testGetException()
     {
         $this->setExpectedException('Magento\Framework\Exception\NotFoundException');
+
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [],
+                    'type' => 'Magento\Payment\Gateway\CommandInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('offsetExists')
             ->with('command')
             ->willReturn(false);
 
-        $pool = new CommandPool($tMap);
+        $pool = new CommandPool([], $tMapFactory);
         $pool->get('command');
     }
 }
