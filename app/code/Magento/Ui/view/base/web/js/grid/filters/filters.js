@@ -40,12 +40,8 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
-            applied: {
-                placeholder: true
-            },
-            filters: {
-                placeholder: true
-            },
+            applied: {},
+            filters: {},
             chipsConfig: {
                 name: '${ $.name }_chips',
                 provider: '${ $.chipsConfig.name }',
