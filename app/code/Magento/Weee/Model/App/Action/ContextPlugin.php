@@ -127,6 +127,7 @@ class ContextPlugin
             return $proceed($request);
         } else if ($countryId && !$regionId) {
             // country exist and region does not exist
+            $regionId = 0;
             $exist = $this->weeeTax->isWeeeInLocation(
                 $countryId,
                 $regionId,
