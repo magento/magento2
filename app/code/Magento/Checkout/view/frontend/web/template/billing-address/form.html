@@ -13,7 +13,7 @@
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
-            <!-- ko if: (isCustomerLoggedIn) -->
+            <!-- ko if: (isCustomerLoggedIn && customerHasAddresses) -->
             <div class="choice field">
                 <input type="checkbox" class="checkbox" id="billing-save-in-address-book" data-bind="checked: saveInAddressBook" />
                 <label class="label" for="billing-save-in-address-book">
