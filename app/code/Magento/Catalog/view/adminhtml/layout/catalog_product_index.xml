@@ -6,6 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
     <body>
         <referenceBlock name="menu">
             <action method="setActive">
@@ -17,21 +18,9 @@
                 <argument name="class" xsi:type="string">complex</argument>
             </action>
         </referenceBlock>
-        <referenceContainer name="page.main.actions">
-            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
-                <action method="setUseConfirm">
-                    <argument name="params" xsi:type="string">1</argument>
-                </action>
-            </block>
-        </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="product_listing"/>
             <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
-        </referenceContainer>
-        <referenceContainer name="product.grid">
-            <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
-                <block class="Magento\Catalog\Block\Adminhtml\Rss\Grid\Link" name="grid.rss.link"/>
-            </block>
         </referenceContainer>
     </body>
 </page>

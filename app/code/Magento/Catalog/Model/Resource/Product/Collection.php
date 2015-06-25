@@ -725,7 +725,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         if ($this->isLoaded()) {
             return $this;
         }
-        parent::load($printQuery = false, $logQuery = false);
+        parent::load($printQuery, $logQuery);
 
         if ($this->needToAddWebsiteNamesToResult) {
             $this->doAddWebsiteNamesToResult();

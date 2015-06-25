@@ -25,6 +25,11 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
     protected $addFieldStrategies;
 
     /**
+     * @var \Magento\Ui\DataProvider\AddFilterToCollectionInterface[]
+     */
+    protected $addFilterStrategies;
+
+    /**
      * Construct
      *
      * @param string $name
@@ -32,6 +37,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
      */
@@ -41,12 +47,14 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
         $requestFieldName,
         CollectionFactory $collectionFactory,
         array $addFieldStrategies,
+        array $addFilterStrategies,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->addFieldStrategies = $addFieldStrategies;
+        $this->addFilterStrategies = $addFilterStrategies;
     }
 
     /**
@@ -89,6 +97,18 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvid
             $this->addFieldStrategies[$field]->addField($this->getCollection(), $field, $alias = null);
         } else {
             $this->addFieldStrategies['default']->addField($this->getCollection(), $field, $alias = null);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addFilter($field, $condition = null)
+    {
+        if (isset($this->addFilterStrategies[$field])) {
+            $this->addFilterStrategies[$field]->addFilter($this->getCollection(), $field, $condition);
+        } else {
+            parent::addFilter($field, $condition);
         }
     }
 }
