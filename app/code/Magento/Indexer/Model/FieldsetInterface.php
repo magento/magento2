@@ -11,7 +11,7 @@ interface FieldsetInterface
      * @param array $data
      * @return array
      */
-    public function update(array $data);
+    public function addDynamicData(array $data);
 
     /**
      * @return string

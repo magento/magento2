@@ -89,6 +89,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_cachedSkuToProducts = [];
 
     /**
+     * Array of queries selecting cached options.
+     *
+     * @var array
+     */
+    protected $_cachedOptionSelectQuery = [];
+
+    /**
      * Column names that holds values with particular meaning.
      *
      * @var string[]

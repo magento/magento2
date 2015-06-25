@@ -55,7 +55,6 @@ class UpgradeData implements UpgradeDataInterface
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder
-
     ) {
         $this->statesFactory = $statesFactory;
         $this->config = $config;
