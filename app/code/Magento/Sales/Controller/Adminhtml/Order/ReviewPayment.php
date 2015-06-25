@@ -48,8 +48,6 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $order->save();
                 $this->messageManager->addSuccess($message);
             }
-            $resultRedirect->setPath('sales/*/');
-            return $resultRedirect;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
