@@ -253,6 +253,10 @@
                     <label>European Union Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
+                <field id="destinations" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Top destinations</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                </field>
             </group>
             <group id="locale" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Locale Options</label>
