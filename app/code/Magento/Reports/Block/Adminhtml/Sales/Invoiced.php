@@ -13,12 +13,14 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
 class Invoiced extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Template file
+     *
      * @var string
      */
     protected $_template = 'report/grid/container.phtml';
 
     /**
-     * @return void
+     * {@inheritdoc}
      */
     protected function _construct()
     {
@@ -35,6 +37,8 @@ class Invoiced extends \Magento\Backend\Block\Widget\Grid\Container
     }
 
     /**
+     * Get filter URL
+     *
      * @return string
      */
     public function getFilterUrl()

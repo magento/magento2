@@ -54,6 +54,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

@@ -16,21 +16,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Report type options
      *
-     * @var []
+     * @var array
      */
     protected $_reportTypeOptions = [];
 
     /**
      * Report field visibility
      *
-     * @var []
+     * @var array
      */
     protected $_fieldVisibility = [];
 
     /**
      * Report field opions
      *
-     * @var []
+     * @var array
      */
     protected $_fieldOptions = [];
 
@@ -94,6 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $key
      * @param string $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addReportTypeOption($key, $value)
     {
