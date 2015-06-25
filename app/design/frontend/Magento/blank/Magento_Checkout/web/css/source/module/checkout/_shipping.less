@@ -276,6 +276,9 @@
             .css(max-width, @checkout-shipping-address__max-width);
         }
     }
+    .table-checkout-shipping-method {
+        width: auto;
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
@@ -311,5 +314,8 @@
                 }
             }
         }
+    }
+    .table-checkout-shipping-method {
+        min-width: 500px;
     }
 }
