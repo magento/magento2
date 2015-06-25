@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Theme\Plugin;
 
-use Magento\Framework\App\Action\Action;
+use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use Magento\Framework\Exception\LocalizedException;
@@ -41,14 +41,14 @@ class Registration
     /**
      * Add new theme from filesystem
      *
-     * @param Action $subject
+     * @param AbstractAction $subject
      * @param RequestInterface $request
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(
-        Action $subject,
+        AbstractAction $subject,
         RequestInterface $request
     ) {
         try {

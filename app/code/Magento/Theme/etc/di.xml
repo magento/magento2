@@ -76,7 +76,4 @@
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="themeRegistrationFromFilesystem" type="Magento\Theme\Model\Theme\Plugin\Registration"/>
-    </type>
 </config>
