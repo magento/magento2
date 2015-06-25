@@ -34,9 +34,9 @@
                 <?= $this->getItemHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>
-        <tfoot class="order-totals">
-            <?= $block->getChildHtml('order_totals') ?>
-        </tfoot>
+    </table>
+    <table class="order-totals" cellspacing="0" cellpadding="0" border="0">
+        <?= $block->getChildHtml('order_totals') ?>
     </table>
     <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
         <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>

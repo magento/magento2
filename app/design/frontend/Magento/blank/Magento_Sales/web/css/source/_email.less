@@ -34,11 +34,10 @@
 .order-items {
     .table(@table__width, 0);
     .table-background-color();
+    border: @table__border-width @table__border-style @table__border-color;
 
     > thead,
     > tbody {
-        border: @table__border-width @table__border-style @table__border-color;
-
         > tr {
             > th {
                 padding: @indent__s;
@@ -55,25 +54,16 @@
         }
     }
 
-    > tfoot {
-        padding-top: @indent__xs;
-
+    > tbody {
         > tr {
-            &.subtotal {
-                > th,
-                > td {
-                    padding-top: @indent__base;
-                }
-            }
-
-            > th {
-                font-weight: @font-weight__regular;
-            }
-
-            > th,
             > td {
-                padding: @indent__xs @indent__s;
-                text-align: right;
+                border-top: @table__border-width @table__border-style @table__border-color;
+            }
+
+            & + tr {
+                > td {
+                    border-top: 0;
+                }
             }
         }
     }
@@ -116,5 +106,33 @@
 .email-non-inline() {
     .order-items {
         .table-overflow();
+    }
+}
+
+.order-totals {
+    .table(@table__width, 0);
+    padding-top: @indent__xs;
+
+    > tr {
+        &.subtotal {
+            > th,
+            > td {
+                padding-top: @indent__base;
+            }
+        }
+
+        > th {
+            font-weight: @font-weight__regular;
+        }
+
+        > td {
+            width: @indent__xl * 2.5;
+        }
+
+        > th,
+        > td {
+            padding: @indent__xs @indent__s;
+            text-align: right;
+        }
     }
 }
