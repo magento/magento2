@@ -80,11 +80,11 @@ class IndexBuilder implements IndexBuilderInterface
         $select = $this->getSelect()
             ->from(
                 ['search_index' => $searchIndexTable],
-                ['entity_id' => 'product_id']
+                ['entity_id' => 'entity_id']
             )
             ->joinLeft(
                 ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                'search_index.product_id = category_index.product_id',
+                'search_index.entity_id = category_index.product_id',
                 []
             )
             ->joinLeft(
@@ -94,7 +94,7 @@ class IndexBuilder implements IndexBuilderInterface
             )
             ->joinLeft(
                 ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
                 []
             );
 
@@ -107,7 +107,7 @@ class IndexBuilder implements IndexBuilderInterface
         if ($isShowOutOfStock === false) {
             $select->joinLeft(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
-                'search_index.product_id = stock_index.product_id'
+                'search_index.entity_id = stock_index.product_id'
                 . $this->getReadConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
                     $this->storeManager->getWebsite()->getId()
