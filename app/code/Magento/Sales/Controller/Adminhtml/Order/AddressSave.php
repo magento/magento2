@@ -35,4 +35,12 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
             return $resultRedirect->setPath('sales/*/');
         }
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
+    }
 }

@@ -10,7 +10,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 /**
  * @magentoAppArea adminhtml
  */
-class ValidateTest extends \Magento\Backend\Utility\Controller
+class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @backupGlobals enabled
