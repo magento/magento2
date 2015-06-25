@@ -26,7 +26,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        echo "Tesst name:" . $this->getName() . "\n";
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
@@ -84,14 +83,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     private function reindexAll()
     {
-        /** @var \Magento\Indexer\Model\Indexer[] $indexerList */
-        $indexerList = $this->objectManager->get('Magento\Indexer\Model\Indexer\CollectionFactory')
+        /** @var \Magento\Indexer\Model\Indexer $indexer */
+        $indexer = $this->objectManager->get('Magento\Indexer\Model\Indexer\CollectionFactory')
             ->create()
-            ->getItems();
-
-        foreach ($indexerList as $indexer) {
-            $indexer->reindexAll();
-        }
+            ->getItemByColumnValue('indexer_id', 'catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**

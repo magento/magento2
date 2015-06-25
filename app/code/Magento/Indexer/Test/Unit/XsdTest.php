@@ -31,7 +31,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
-        $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualError = $this->_xsdValidator->validate(
+            BP . '/app/code/Magento/Indexer/etc/indexer_merged.xsd',
+            $xmlString
+        );
         $this->assertEquals($expectedError, $actualError);
     }
 
