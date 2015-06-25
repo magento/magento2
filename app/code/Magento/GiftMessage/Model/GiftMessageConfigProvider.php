@@ -63,6 +63,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      * @param HttpContext $httpContext
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param LocaleFormat $localeFormat
+     * @param FormKey $formKey
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
