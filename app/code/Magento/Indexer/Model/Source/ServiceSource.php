@@ -47,7 +47,6 @@ class ServiceSource implements DataInterface
      */
     public function getData(array $fieldsData)
     {
-        /** @var \Magento\Cms\Api\PageRepositoryInterface $service */
         $service = $this->getService();
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -80,7 +79,7 @@ class ServiceSource implements DataInterface
     }
 
     /**
-     * @return Object
+     * @return mixed
      */
     private function getService()
     {

@@ -5,8 +5,6 @@
  */
 namespace Magento\Indexer\Model\SaveHandler;
 
-use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\IndexerInterface;
@@ -49,11 +47,6 @@ class IndexerHandler implements IndexerInterface
     private $batch;
 
     /**
-     * @var Config
-     */
-    private $eavConfig;
-
-    /**
      * @var int
      */
     private $batchSize;
@@ -66,7 +59,6 @@ class IndexerHandler implements IndexerInterface
     /**
      * @param IndexStructure $indexStructure
      * @param Resource $resource
-     * @param Config $eavConfig
      * @param Batch $batch
      * @param IndexScopeResolver $indexScopeResolver
      * @param FlatScopeResolver $flatScopeResolver
@@ -76,7 +68,6 @@ class IndexerHandler implements IndexerInterface
     public function __construct(
         IndexStructure $indexStructure,
         Resource $resource,
-        Config $eavConfig,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,
         FlatScopeResolver $flatScopeResolver,
@@ -86,7 +77,6 @@ class IndexerHandler implements IndexerInterface
         $this->indexStructure = $indexStructure;
         $this->resource = $resource;
         $this->batch = $batch;
-        $this->eavConfig = $eavConfig;
         $this->scopeResolvers[$this->dataTypes[0]] = $indexScopeResolver;
         $this->scopeResolvers[$this->dataTypes[1]] = $flatScopeResolver;
         $this->data = $data;
