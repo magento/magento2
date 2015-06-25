@@ -78,7 +78,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId', 'getWebsiteId'
+                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
+                'getWebsiteId', 'isLoggedIn'
             ])
             ->getMock();
 
@@ -108,11 +109,15 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $cache
      * @param bool $taxEnabled
-     * @param bool $weeeEnabled
+     * @param bool $loggedIn
      * @dataProvider dataProviderAroundDispatch
      */
-    public function testAroundDispatch($cache, $taxEnabled, $weeeEnabled)
+    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
     {
+        $this->customerSessionMock->expects($this->any())
+            ->method('isLoggedIn')
+            ->willReturn($loggedIn);
+
         $this->moduleManagerMock->expects($this->any())
             ->method('isEnabled')
             ->with('Magento_PageCache')
@@ -122,7 +127,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn($cache);
 
-        if ($cache) {
+        if ($cache && $loggedIn) {
             $this->taxHelperMock->expects($this->any())
                 ->method('isCatalogPriceDisplayAffectedByTax')
                 ->willReturn($taxEnabled);
@@ -170,6 +175,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         return [
             [false, false, false],
             [true, true, false],
+            [true, true, true],
             [true, false, true],
             [true, true, true]
         ];

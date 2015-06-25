@@ -8,6 +8,7 @@ namespace Magento\Weee\Model\App\Action;
 
 /**
  * Class ContextPlugin
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ContextPlugin
 {
@@ -37,7 +38,7 @@ class ContextPlugin
     protected $moduleManager;
 
     /**
-     * @var \Magento\Weee\Model\Resource\Tax
+     * @var \Magento\Weee\Model\Tax
      */
     protected $weeeTax;
 
@@ -59,7 +60,7 @@ class ContextPlugin
     /**
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Weee\Model\Resource\WeeeTax $weeeTax
+     * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -70,7 +71,7 @@ class ContextPlugin
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Weee\Model\Resource\Tax $weeeTax,
+        \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Framework\Module\Manager $moduleManager,
@@ -95,21 +96,77 @@ class ContextPlugin
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aroundDispatch(
         \Magento\Framework\App\Action\Action $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$this->moduleManager->isEnabled('Magento_PageCache') ||
-            !$this->cacheConfig->isEnabled() ||
-            !$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled() ||
+            !$this->customerSession->isLoggedIn() ||
+            !$this->moduleManager->isEnabled('Magento_PageCache') ||
+            !$this->cacheConfig->isEnabled()) {
             return $proceed($request);
         }
 
         $basedOn = $this->taxHelper->getTaxBasedOn();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        if ($basedOn != 'shipping' && $basedOn != 'billing') {
+            return $proceed($request);
+        }
 
+        $weeeTaxRegion = $this->getWeeeTaxRegion($basedOn);
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $countryId = $weeeTaxRegion['countryId'];
+        $regionId = $weeeTaxRegion['regionId'];
+
+        if (!$countryId && !$regionId) {
+            // country and region does not exist
+            return $proceed($request);
+        } else if ($countryId && !$regionId) {
+            // country exist and region does not exist
+            $exist = $this->weeeTax->isWeeeInLocation(
+                $countryId,
+                $regionId,
+                $websiteId
+            );
+        } else {
+            // country and region exist
+            $exist = $this->weeeTax->isWeeeInLocation(
+                $countryId,
+                $regionId,
+                $websiteId
+            );
+            if (!$exist) {
+                // just check the country for weee
+                $regionId = 0;
+                $exist = $this->weeeTax->isWeeeInLocation(
+                    $countryId,
+                    $regionId,
+                    $websiteId
+                );
+            }
+        }
+
+        if ($exist) {
+            $this->httpContext->setValue(
+                'weee_tax_region',
+                ['countryId' => $countryId, 'regionId' => $regionId],
+                0
+            );
+        }
+        return $proceed($request);
+    }
+
+    /*
+     * @return array
+     */
+    protected function getWeeeTaxRegion($basedOn)
+    {
+        $countryId = null;
+        $regionId = null;
         $defaultCountryId = $this->scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -121,21 +178,7 @@ class ContextPlugin
             null
         );
 
-        if ($basedOn == 'default') {
-            $countryId = $defaultCountryId;
-            $regionId = $defaultRegionId;
-        } else if ($basedOn == 'origin') {
-            $countryId = $this->scopeConfig->getValue(
-                \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null
-            );
-            $regionId = $this->scopeConfig->getValue(
-                \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_REGION_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null
-            );
-        } else if ($basedOn == 'shipping') {
+        if ($basedOn == 'shipping') {
             $defaultShippingAddress = $this->customerSession->getDefaultTaxShippingAddress();
             if (empty($defaultShippingAddress)) {
                 $countryId = $defaultCountryId;
@@ -155,55 +198,6 @@ class ContextPlugin
                 $regionId = $defaultBillingAddress['region_id'];
             }
         }
-
-        if (!$countryId && !$regionId) {
-            // country and region does not exist
-            return $proceed($request);
-        } else if ($countryId && !$regionId) {
-            // country exist and region does not exist
-            $exist = $this->weeeTax->isWeeeInLocation(
-                $countryId,
-                $regionId,
-                $websiteId
-            );
-            if ($exist) {
-                $this->httpContext->setValue(
-                    'weee_taxes',
-                    ['countryId' => $countryId, 'regionId' => $regionId],
-                    0
-                );
-            }
-        } else {
-            // country and region exist
-            $exist = $this->weeeTax->isWeeeInLocation(
-                $countryId,
-                $regionId,
-                $websiteId
-            );
-            if ($exist) {
-                $this->httpContext->setValue(
-                    'weee_taxes',
-                    ['countryId' => $countryId, 'regionId' => $regionId],
-                    0
-                );
-            } else {
-                // just check the country for weee
-                $regionId = 0;
-                $exist = $this->weeeTax->isWeeeInLocation(
-                    $countryId,
-                    $regionId,
-                    $websiteId
-                );
-                if ($exist) {
-                    $this->httpContext->setValue(
-                        'weee_taxes',
-                        ['countryId' => $countryId, 'regionId' => $regionId],
-                        0
-                    );
-                }
-            }
-        }
-
-        return $proceed($request);
+        return ['countryId' => $countryId, 'regionId' => $regionId];
     }
 }
