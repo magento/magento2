@@ -31,14 +31,12 @@
             </item>
         </argument>
     </dataSource>
-
     <container name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
             </item>
         </argument>
-
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -52,7 +50,6 @@
                 </item>
             </argument>
         </bookmark>
-
         <container name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -61,7 +58,6 @@
                 </item>
             </argument>
         </container>
-
         <filters name="listing_filters" class="Magento\Catalog\Ui\Component\Listing\Filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -108,6 +104,18 @@
                     </argument>
                 </filterInput>
             </filterRange>
+            <filterSelect name="store_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">store_id</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Store View</item>
+                    </item>
+                </argument>
+            </filterSelect>
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
@@ -118,20 +126,20 @@
                             <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>
                             <item name="type" xsi:type="string">delete</item>
                             <item name="label" xsi:type="string" translate="true">Delete</item>
-                            <item name="url" xsi:type="string">cms/page/massDelete</item>
+                            <item name="url" xsi:type="string">catalog/*/massDelete</item>
                         </item>
                         <item name="disable" xsi:type="array">
-                            <item name="type" xsi:type="string">disable</item>
-                            <item name="label" xsi:type="string" translate="true">Disable</item>
-                            <item name="url" xsi:type="string">cms/page/massDisable</item>
+                            <item name="type" xsi:type="string">status</item>
+                            <item name="label" xsi:type="string" translate="true">Change status</item>
+                            <item name="url" xsi:type="string">catalog/*/massStatus</item>
                         </item>
                         <item name="enable" xsi:type="array">
-                            <item name="type" xsi:type="string">enable</item>
-                            <item name="label" xsi:type="string" translate="true">Enable</item>
-                            <item name="url" xsi:type="string">cms/page/massEnable</item>
+                            <item name="type" xsi:type="string">attributes</item>
+                            <item name="label" xsi:type="string" translate="true">Update attributes</item>
+                            <item name="url" xsi:type="string">catalog/product_action_attribute/edit</item>
                         </item>
                     </item>
-                    <item name="indexField" xsi:type="string">page_id</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
         </massaction>
@@ -169,7 +177,6 @@
             </argument>
         </paging>
     </container>
-
     <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -332,6 +339,33 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Websites</item>
+                </item>
+            </argument>
+        </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                </item>
+            </argument>
+        </column>
+        <column name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">actions</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Action</item>
+                    <item name="data_type" xsi:type="string">actions</item>
+                    <item name="filterable" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
