@@ -829,54 +829,70 @@
 //  ## Structure
 //  <pre>
 //    <table>
+//        <tr>
+//            <th class="vars_head">Variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th></th>
+//        </tr>
 //      <tr>
-//          <th colspan="2" class="vars_section">Predefined variables for handle global Z-axis positioning</th>
+//          <th colspan="3" class="vars_section">Predefined variables for handle global Z-axis positioning</th>
 //      </tr>
 //      <tr>
 //        <th>@z-index-1</th>
 //        <td class="vars_value">100</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-2</th>
 //        <td class="vars_value">200</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-3</th>
 //        <td class="vars_value">300</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-4</th>
 //        <td class="vars_value">400</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-5</th>
 //        <td class="vars_value">500</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-6</th>
 //        <td class="vars_value">600</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-7</th>
 //        <td class="vars_value">700</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-8</th>
 //        <td class="vars_value">800</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-9</th>
 //        <td class="vars_value">900</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
 //        <th>@z-index-10</th>
 //        <td class="vars_value">1000</td>
+//        <td class="vars_value">constant</td>
 //      </tr>
 //      <tr>
-//      <th colspan="2" class="vars_section">Nesting example</th>
+//      <th colspan="3" class="vars_section">Nesting example</th>
 //      <tr>
 //        <th>@modal__z-index</th>
 //        <td class="vars_value">@z-index-9</td>
+//        <td class="vars_value">@z-index-N</td>
 //      </tr>
 //    </table>
 //  </pre>
@@ -6023,17 +6039,29 @@
 //  ### Cross Components variables
 //  <pre>
 //    <table>
+//        <tr>
+//            <th class="vars_head">Variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
 //      <tr>
 //        <th>@component__shadow-size__base</th>
 //        <td class="vars_value">5px</td>
+//        <td class="vars_value">constant</td>
+//        <td>Shadow size, cross all components. Use to count overlay zones sizes</td>
 //      </tr>
 //      <tr>
 //        <th>@component__box-shadow__base</th>
 //        <td class="vars_value">1px 1px @component__shadow-size__base rgba(0, 0, 0, .5)</td>
+//        <td class="vars_value">constant</td>
+//        <td>Shadow style</td>
 //      </tr>
 //      <tr>
 //        <th>@component-modal__opacity</th>
 //        <td class="vars_value">.98</td>
+//        <td class="vars_value">constant</td>
+//        <td>Default opacity for stacked components</td>
 //      </tr>
 //    </table>
 //  </pre>
