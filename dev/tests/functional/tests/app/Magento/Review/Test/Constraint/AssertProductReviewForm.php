@@ -48,8 +48,8 @@ class AssertProductReviewForm extends AbstractAssertForm
 
         $fixtureData = $review->getData();
         $formData = $reviewEdit->getReviewForm()->getData();
-        if (isset($fixtureData['customer'])) {
-            $formData['customer'] = $reviewEdit->getReviewForm()->getPostedBy();
+        if (isset($fixtureData['type'])) {
+            $formData['type'] = $reviewEdit->getReviewForm()->getPostedBy();
         }
 
         $error = $this->verifyData($fixtureData, $formData);
