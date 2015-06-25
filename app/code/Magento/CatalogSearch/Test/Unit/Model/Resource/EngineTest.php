@@ -17,48 +17,36 @@ class EngineTest extends \PHPUnit_Framework_TestCase
     private $target;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resource;
-
-    /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $connection;
-    /**
-     * @var \Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $context;
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resource = $resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
-            ->getMock();
-        $this->context->expects($this->once())
-            ->method('getResources')
-            ->willReturn($this->resource);
         $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getIfNullSql'])
             ->getMockForAbstractClass();
+        $resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection', 'getTableName'])
+            ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
             ->with(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
             ->will($this->returnValue($this->connection));
 
+        $resource->expects($this->any())
+            ->method('getTableName')
+            ->will($this->returnArgument(0));
+
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
             '\Magento\CatalogSearch\Model\Resource\Engine',
             [
-                'context' => $this->context,
+                'resource' => $resource,
             ]
         );
-        $this->target;
     }
 
     /**
@@ -78,7 +66,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
                 ->with(null, $expected, ['data_index'])
                 ->willReturnSelf();
         }
-        $this->target->saveIndex($dimension, $entityIndexes);
+        $this->target->saveIndex([$dimension], $entityIndexes);
     }
 
     public function saveDataProvider()
