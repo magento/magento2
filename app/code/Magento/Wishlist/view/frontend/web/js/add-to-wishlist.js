@@ -51,8 +51,6 @@ define([
                     return;
                 }
                 if ($(element).is('input[type=file]') && $(element).val()) {
-                    var hidden = $('input[name=' + $(element).attr('name') + '_action]');
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(hidden));
                     isFileUploaded = true;
                 }
             });
