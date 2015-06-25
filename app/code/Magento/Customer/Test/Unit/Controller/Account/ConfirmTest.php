@@ -317,8 +317,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [1, 1, false, null, __('Thank you for registering with')],
-            [1, 1, true, Address::TYPE_BILLING, __('enter you billing address for proper VAT calculation')],
-            [1, 1, true, Address::TYPE_SHIPPING, __('enter you shipping address for proper VAT calculation')],
+            [1, 1, true, Address::TYPE_BILLING, __('enter your billing address for proper VAT calculation')],
+            [1, 1, true, Address::TYPE_SHIPPING, __('enter your shipping address for proper VAT calculation')],
         ];
     }
 

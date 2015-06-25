@@ -62,7 +62,7 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/import/validate');
 
         $this->assertContains('File is valid', $this->getResponse()->getBody());
-        $this->assertNotContains('File was not uploaded', $this->getResponse()->getBody());
+        $this->assertNotContains('The file was not uploaded.', $this->getResponse()->getBody());
         $this->assertNotRegExp(
             '/clear[^\[]*\[[^\]]*(import_file|import_image_archive)[^\]]*\]/m',
             $this->getResponse()->getBody()
