@@ -76,7 +76,6 @@ define(
             },
 
             next: function() {
-                console.log('next');
                 var activeIndex = 0;
                 steps.sort(this.sortItems).forEach(function(element, index) {
                     if (element.isVisible()) {
