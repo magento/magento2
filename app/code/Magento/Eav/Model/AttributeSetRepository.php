@@ -47,24 +47,32 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     private $searchResultsFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param AttributeSetResource $attributeSetResource
      * @param AttributeSetFactory $attributeSetFactory
      * @param CollectionFactory $collectionFactory
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
         AttributeSetFactory $attributeSetFactory,
         CollectionFactory $collectionFactory,
         EavConfig $eavConfig,
-        \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
+        \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;
         $this->collectionFactory = $collectionFactory;
         $this->eavConfig = $eavConfig;
         $this->searchResultsFactory = $searchResultFactory;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -87,6 +95,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     {
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
         $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
 
         /** The only possible/meaningful search criteria for attribute set is entity type code */
         $entityTypeCode = $this->getEntityTypeCode($searchCriteria);

@@ -1,3 +1,42 @@
+0.74.0-beta14
+=============
+* Framework improvements:
+    * Introduced an ability to uninstall modules which were installed via composer (bin/magento module:uninstall <moduleName>)
+    * Introduced an ability to uninstall themes (bin/magento theme:uninstall <themeName>)
+    * Introduced an ability to backup and rollback DB and Media via CLI (bin/magento setup:backup, options are --code, --db or --media)
+    * Introduced an ability to uninstall language packages (bin/magento i18n:uninstall <languagePack>)
+    * Introduced API notation for the following modules: Backend, Backup, Cron, Log, PageCache 
+    * Added join processors to search services, joined config for services with extension attributes
+    * Renamed hidden_tax to discount_tax_compensation 
+    * The customer address entity table was transformed from EAV into a flat model to minimize database operations
+* Fixed bugs:
+    * Fixed an issue where Setup Wizard failed on readiness check when Magento was deployed by composer create-project
+    * Fixed the local file path disclosure when trying to browse image cache directory  
+    * Fixed an issue where development errors resulted in too many redirects 
+    * Fixed an integration test failure in Reports ViewedTest 
+    * Fixed an issue where it was impossible to save existent Grouped Product with no child items 
+    * Fixed an issue where message "We don't have as many "conf1" as you requested" appeared 
+    * Fixed an issue where second product from bundle product was ordered as separate item after checkout 
+    * Fixed an issue where configs for payments and shippings were not encrypted 
+    * Fixed an issue where Table Rates shipping method did not work 
+    * Fixed an issue where admin could not set locale properly on Account page 
+    * Fixed incomplete generated results of single tenant compiler 
+    * Fixed an issue with full page caching where one set of prices was cached for all customers 
+    * Fixed incorrect urls for private content 
+    * Fixed an issue where it was not possible to assign a product link to another product using API 
+    * Fixed an issue where zipcode was not displayed as required field on Create New Order page 
+    * Fixed the Sample Data re-installation 
+    * Fixed random fails on inventory tab for test CreateSimpleProductEntityTest
+* Tests:
+    * Covered various modules with unit tests 
+    * Functional tests fixed and maintained
+* GitHub issues:
+    * [#1156](https://github.com/magento/magento2/pull/1156) -- Moves common code to all auto-generated Interceptor classes into a trait
+    * [#1206](https://github.com/magento/magento2/pull/1206) -- Allow modules to live outside of app/code directory
+    * [#1245](https://github.com/magento/magento2/pull/1245) -- Unable to save product per website wise
+    * [#1347](https://github.com/magento/magento2/pull/1347) -- Fixed failing Install during integration tests (MAGETWO-38482)
+    * [#1368](https://github.com/magento/magento2/pull/1368) -- Fix typo in getCurrentCategoryKey
+    
 0.74.0-beta13
 =============
 * Framework improvements:
@@ -112,7 +151,7 @@
     * Fixed an issue where first store could not be selected on frontend
     * Fixed an issue with performance toolkit category creation
     * Fixed an issue when columns 'Interval', 'Price Rule' had incorrect values in Coupon Usage report
-    * Fixed an issue where fatal error occured on Abandoned Carts report grid
+    * Fixed an issue where fatal error occurred on Abandoned Carts report grid
     * Fixed an issue where it was not possible to add product to shopping cart if Use Secure URLs in Frontend = Yes
     * Fixed an issue where email was not required during Guest Checkout 
     * Fixed broken ability to skip reindex in `bin/magento setup:performance:generate-fixtures` command
@@ -2699,7 +2738,7 @@
   * Fixed an issue with status and visibility settings of a related product on the backend
   * Fixed an issue with unused DB indexes, which used resources, but did not contribute to higher performance
   * Fixed an issue where it was possible to create a downloadable product without specifying a link or a file
-  * Fixed an issue where a fatal error occured when opening a fixed bundle product with custom options page on the frontend
+  * Fixed an issue where a fatal error occurred when opening a fixed bundle product with custom options page on the frontend
   * Fixed an issue where the was a wrong config key for backend cataloginventory
 * Processed GitHub requests:
   * [#548] (https://github.com/magento/magento2/issues/548) -- Console installer doesn't checks filesystem permissions

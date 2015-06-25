@@ -87,6 +87,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int|int[] $websiteIds
      * @return $this
+     * @api
      */
     public function addWebsiteFilter($websiteIds)
     {
