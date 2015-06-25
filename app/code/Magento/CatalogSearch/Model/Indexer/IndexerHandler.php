@@ -167,7 +167,7 @@ class IndexerHandler implements IndexerInterface
      */
     private function insertDocuments($dataType, array $documents, array $dimensions)
     {
-        $documents = $this->insertSearchable($documents);
+        $documents = $this->prepareSearchableFields($documents);
         $this->getAdapter()->insertMultiple($this->getTableName($dataType, $dimensions), $documents);
     }
 
@@ -175,7 +175,7 @@ class IndexerHandler implements IndexerInterface
      * @param array $documents
      * @return array
      */
-    private function insertSearchable(array $documents)
+    private function prepareSearchableFields(array $documents)
     {
         $insertDocuments = [];
         foreach ($documents as  $entityId => $document) {
