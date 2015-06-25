@@ -38,6 +38,8 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/search/options',
+            valueKey: 'value',
+            labelKey: 'label',
             navigated: -1,
             options: [],
             providerConfig: {
@@ -150,7 +152,7 @@ define([
 
             this.close();
 
-            model.set(target.select, option.value);
+            model.set(target.select, option[this.valueKey]);
 
             return this;
         },
@@ -165,14 +167,19 @@ define([
          */
         navigate: function (offset, isIndex) {
             var index   = this._calculateIndex(offset, isIndex),
-                option  = this.options()[index],
                 target  = this.target,
-                model   = target.model;
+                model   = target.model,
+                option;
 
-            this._scrollTo(index)
-                .navigated(index);
+            this.navigated(index);
 
-            model.set(target.navigate, option.value);
+            if (~index) {
+                option = this.options()[index];
+
+                this._scrollTo(index);
+
+                model.set(target.navigate, option[this.valueKey]);
+            }
 
             return this;
         },
@@ -272,7 +279,9 @@ define([
             var total = this.options().length,
                 index = isIndex ? offset : this.navigated() + offset;
 
-            if (index === total) {
+            if (!total) {
+                index = -1;
+            } else if (total === index) {
                 index = 0;
             } else if (index < 0) {
                 index = total - 1;

@@ -78,7 +78,7 @@
                     <item name="chipsProvider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters_chips</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
+                        <item name="namespace" xsi:type="string">current.search</item>
                     </item>
                 </item>
             </argument>
@@ -302,13 +302,21 @@
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="fieldAction" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.cms_block_columns.actions</item>
+                            <item name="target" xsi:type="string">applyAction</item>
+                            <item name="params" xsi:type="array">
+                                <item name="0" xsi:type="string">edit</item>
+                                <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                            </item>
+                        </item>
+                    </item>
                     <item name="controlVisibility" xsi:type="boolean">true</item>
-                    <item name="actionField" xsi:type="string">actions</item>
-                    <item name="clickAction" xsi:type="string">edit</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
                     </item>
                 </item>
             </item>

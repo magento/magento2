@@ -70,20 +70,101 @@ define([
 
         /**
          * Toggles menu with a list of select actions.
+         *
+         * @returns {Multiselect} Chainable.
          */
         toggleMenu: function () {
             this.menuVisible(!this.menuVisible());
+
+            return this;
         },
 
         /**
          * Hides menu with a list of select actions.
+         *
+         * @returns {Multiselect} Chainable.
          */
         hideMenu: function () {
             this.menuVisible(false);
+
+            return this;
         },
 
         /**
-         * Selects all grid records, even those that
+         * Selects specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        select: function (id, isIndex) {
+            this._setSelection(id, isIndex, true);
+
+            return this;
+        },
+
+        /**
+         * Deselects specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        deselect: function (id, isIndex) {
+            this._setSelection(id, isIndex, false);
+
+            return this;
+        },
+
+        /**
+         * Toggles selection of a specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        toggleSelect: function (id, isIndex) {
+            this._setSelection(id, isIndex, !this.isSelected(id, isIndex));
+
+            return this;
+        },
+
+        /**
+         * Checks if specified record is selected.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Boolean}
+         */
+        isSelected: function (id, isIndex) {
+            id = this.getId(id, isIndex);
+
+            return this.selected.contains(id);
+        },
+
+        /**
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {Boolean} select
+         * @returns {Multiselect} Chainable.
+         */
+        _setSelection: function (id, isIndex, select) {
+            var selected = this.selected;
+
+            id = this.getId(id, isIndex);
+
+            if (!select && this.isSelected(id)) {
+                selected.remove(id);
+            } else if (select) {
+                selected.push(id);
+            }
+
+            return this;
+        },
+
+        /**
+         * Selects all records, even those that
          * are not visible on the page.
          *
          * @returns {Multiselect} Chainable.
@@ -98,15 +179,15 @@ define([
         },
 
         /**
-         * Deselects all grid records.
+         * Deselects all records.
          *
          * @returns {Multiselect} Chainable.
          */
         deselectAll: function () {
             this.excludeMode(false);
 
-            this.clearExcluded()
-                .selected.removeAll();
+            this.clearExcluded();
+            this.selected.removeAll();
 
             return this;
         },
@@ -174,8 +255,26 @@ define([
                 ids = _.pluck(items, this.indexField);
 
             return exclude ?
-                    _.difference(ids, this.excluded()) :
-                    ids;
+                _.difference(ids, this.excluded()) :
+                ids;
+        },
+
+        /**
+         * Returns identifier of a record.
+         *
+         * @param {(Number|String)} id - Id of a record or its' index in a rows array.
+         * @param {Boolean} [isIndex=false] - Flag that specifies whith what
+         *      kind of identifier we are dealing with.
+         * @returns {*}
+         */
+        getId: function (id, isIndex) {
+            var record = this.rows()[id];
+
+            if (isIndex && record) {
+                id = record[this.indexField];
+            }
+
+            return id;
         },
 
         /**
@@ -198,8 +297,8 @@ define([
         },
 
         /**
-         * Calculates number of the selected records.
-         * Changes value of `totalSelected`.
+         * Calculates number of selected records and
+         * updates 'totalSelected' property.
          *
          * @returns {Multiselect} Chainable.
          */
@@ -232,38 +331,40 @@ define([
         },
 
         /**
-         * Defines if provided select/deselect action is relevant.
+         * Defines if provided select/deselect actions is relevant.
+         * E.g. there is no need in a 'select page' action if only one
+         * page is available.
          *
          * @param {String} actionId - Id of the action to be checked.
          * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
-            var pageIds = this.getIds().length,
-                multiplePages = pageIds < this.totalRecords(),
-                result = true;
+            var pageIds         = this.getIds().length,
+                multiplePages   = pageIds < this.totalRecords(),
+                relevant        = true;
 
             switch (actionId) {
                 case 'selectPage':
-                    result = multiplePages && !this.isPageSelected(true);
+                    relevant = multiplePages && !this.isPageSelected(true);
                     break;
 
                 case 'deselectPage':
-                    result =  multiplePages && this.isPageSelected();
+                    relevant =  multiplePages && this.isPageSelected();
                     break;
 
                 case 'selectAll':
-                    result = !this.allSelected();
+                    relevant = !this.allSelected();
                     break;
 
                 case 'deselectAll':
-                    result = this.totalSelected() > 0;
+                    relevant = this.totalSelected() > 0;
             }
 
-            return result;
+            return relevant;
         },
 
         /**
-         * Defines if current page has selected records on it.
+         * Checks if current page has selected records.
          *
          * @param {Boolean} [all=false] - If set to 'true' checks that every
          *      record on the page is selected. Otherwise checks that
@@ -313,7 +414,7 @@ define([
             }
 
             this.allSelected(allSelected);
-            this.indetermine(totalSelected > 0 && !allSelected);
+            this.indetermine(totalSelected && !allSelected);
 
             return this;
         },

@@ -8,6 +8,9 @@ define([
 ], function (_, utils) {
     'use strict';
 
+    /**
+     * Checks if string has a '_super' substring.
+     */
     var superReg = /\b_super\b/;
 
     /**
@@ -93,33 +96,51 @@ define([
     }
 
     /**
-     * Constructor, which calls initialize with passed arguments.
+     * Constructor.
      */
     function Class() {
         this.initialize.apply(this, arguments);
     }
 
-    Class.prototype.initialize = function (options) {
-        this.initConfig(options);
+    _.extend(Class.prototype, {
+        /**
+         * Starts initialization of an instance.
+         *
+         * @param {Object} options
+         * @returns {Class} Chainable.
+         */
+        initialize: function (options) {
+            this.initConfig(options);
 
-        return this;
-    };
+            return this;
+        },
 
-    Class.prototype.initConfig = function (options) {
-        var defaults = this.constructor.defaults,
-            config = utils.extend({}, defaults, options),
-            templates = config.templates;
+        /**
+         * Recursively extends data specified in constructors' 'defaults'
+         * property with a provided options object.
+         *
+         * @param {Object} options
+         * @returns {Class} Chainable.
+         */
+        initConfig: function (options) {
+            var defaults        = this.constructor.defaults,
+                config          = utils.extend({}, defaults, options),
+                templates       = config.templates,
+                childDefaults   = config.childDefaults;
 
-        delete config.templates;
+            delete config.templates;
+            delete config.childDefaults;
 
-        config = utils.template(config, this);
+            config = utils.template(config, this);
 
-        config.templates = templates;
+            config.templates = templates;
+            config.childDefaults = childDefaults;
 
-        _.extend(this, config);
+            _.extend(this, config);
 
-        return this;
-    };
+            return this;
+        }
+    });
 
     Class.extend = extend;
     Class.defaults = {};
