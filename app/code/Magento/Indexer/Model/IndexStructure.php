@@ -68,15 +68,15 @@ class IndexStructure
     }
 
     /**
-     * @param string $table
+     * @param string $index
      * @param array $filterFields
      * @param Dimension[] $dimensions
      */
-    public function create($table, array $filterFields, array $dimensions)
+    public function create($index, array $filterFields, array $dimensions)
     {
-        $this->createFulltextIndex($this->indexScopeResolver->resolve($table, $dimensions));
+        $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
         if ($filterFields) {
-            $this->createFlatIndex($this->flatScopeResolver->resolve($table, $dimensions), $filterFields);
+            $this->createFlatIndex($this->flatScopeResolver->resolve($index, $dimensions), $filterFields);
         }
     }
 
