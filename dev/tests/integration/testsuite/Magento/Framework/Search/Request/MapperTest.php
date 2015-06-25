@@ -14,7 +14,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        echo "Tesst name:" . $this->getName() . "\n";
         $config = include __DIR__ . '/../_files/search_request_config.php';
         $request = reset($config);
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
