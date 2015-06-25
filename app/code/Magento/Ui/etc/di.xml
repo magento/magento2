@@ -12,7 +12,7 @@
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
-    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Ui\Component\Layout\Generic"/>
+    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\Resource\BookmarkRepository"/>
@@ -153,11 +153,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\Component\Layout\LayoutPool">
+    <type name="Magento\Framework\View\Layout\Pool">
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="generic" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Generic</item>
+                    <item name="class" xsi:type="string">Magento\Framework\View\Layout\Generic</item>
                     <item name="template" xsi:type="string">templates/layout/generic</item>
                 </item>
                 <item name="tabs" xsi:type="array">
