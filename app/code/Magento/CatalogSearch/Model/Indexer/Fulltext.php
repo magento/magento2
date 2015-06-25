@@ -6,7 +6,6 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
-use Magento\CatalogSearch\Model\Indexer\IndexerHandler;
 use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
 use \Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
@@ -65,13 +64,13 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         SearchRequestConfig $searchRequestConfig,
         array $data
     ) {
+        $this->fullAction = $fullAction;
         $this->indexerHandlerFactory = $indexerHandlerFactory;
-        $this->data = $data;
         $this->storeManager = $storeManager;
         $this->dimensionFactory = $dimensionFactory;
-        $this->fullAction = $fullAction;
         $this->fulltextResource = $fulltextResource;
         $this->searchRequestConfig = $searchRequestConfig;
+        $this->data = $data;
     }
 
     /**
@@ -105,6 +104,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
     public function executeFull()
     {
         $storeIds = array_keys($this->storeManager->getStores());
+        /** @var IndexerHandler $saveHandler */
         $saveHandler = $this->indexerHandlerFactory->create([
             'data' => $this->data
         ]);
