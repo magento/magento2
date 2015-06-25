@@ -85,6 +85,22 @@ interface ContextInterface
     public function getRequestParam($key, $defaultValue = null);
 
     /**
+     * Get filters
+     *
+     * @return array
+     */
+    public function getFiltersParams();
+
+    /**
+     * Get filter params according to the key
+     *
+     * @param string $key
+     * @param null|string $defaultValue
+     * @return mixed|null
+     */
+    public function getFilterParam($key, $defaultValue = null);
+
+    /**
      * Get root layout
      *
      * @return PageLayoutInterface
