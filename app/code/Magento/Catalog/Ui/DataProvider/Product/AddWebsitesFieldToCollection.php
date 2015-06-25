@@ -9,7 +9,7 @@ use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
- * Class AddFieldToCollection
+ * Class AddWebsitesFieldToCollection
  */
 class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
 {

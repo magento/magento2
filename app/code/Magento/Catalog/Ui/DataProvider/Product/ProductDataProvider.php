@@ -6,11 +6,9 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\Resource\Product\CollectionFactory;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class GridDataProvider
+ * Class ProductDataProvider
  */
 class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
 {

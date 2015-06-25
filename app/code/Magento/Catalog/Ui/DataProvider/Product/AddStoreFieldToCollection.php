@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
- * Class AddFieldToCollection
+ * Class AddStoreFieldToCollection
  */
 class AddStoreFieldToCollection implements AddFieldToCollectionInterface
 {
