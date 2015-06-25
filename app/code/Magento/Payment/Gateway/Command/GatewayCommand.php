@@ -78,7 +78,9 @@ class GatewayCommand implements CommandInterface
 
         $response = $this->client->placeRequest($transferO);
         if ($this->validator) {
-            $result = $this->validator->validate(array_merge($commandSubject, ['response' => $response]));
+            $result = $this->validator->validate(
+                array_merge($commandSubject, ['response' => $response])
+            );
             if (!$result->isValid()) {
                 throw new CommandException;
             }
