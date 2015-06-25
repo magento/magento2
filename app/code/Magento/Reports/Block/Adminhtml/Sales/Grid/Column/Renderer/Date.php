@@ -35,22 +35,19 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            try {
-                $dataBundle = new DataBundle();
-                $resourceBundle = $dataBundle->get($this->_localeResolver->getLocale());
-                $formats = $resourceBundle['calendar']['gregorian']['availableFormats'];
-                switch ($this->getColumn()->getPeriodType()) {
-                    case 'month':
-                        $format = $formats['yM'];
-                        break;
-                    case 'year':
-                        $format = $formats['y'];
-                        break;
-                    default:
-                        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
-                        break;
-                }
-            } catch (\Exception $e) {
+            $dataBundle = new DataBundle();
+            $resourceBundle = $dataBundle->get($this->_localeResolver->getLocale());
+            $formats = $resourceBundle['calendar']['gregorian']['availableFormats'];
+            switch ($this->getColumn()->getPeriodType()) {
+                case 'month':
+                    $format = $formats['yM'];
+                    break;
+                case 'year':
+                    $format = $formats['y'];
+                    break;
+                default:
+                    $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
+                    break;
             }
         }
         return $format;
