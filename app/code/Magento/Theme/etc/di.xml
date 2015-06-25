@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
+    <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -75,5 +76,7 @@
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="themeRegistrationFromFilesystem" type="Magento\Theme\Model\Theme\Plugin\Registration"/>
+    </type>
 </config>
