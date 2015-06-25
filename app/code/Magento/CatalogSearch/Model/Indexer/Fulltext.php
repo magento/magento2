@@ -7,6 +7,8 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandler;
+use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
+use \Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -21,7 +23,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
     protected $data;
 
     /**
-     * @var IndexerHandler
+     * @var IndexerHandlerFactory
      */
     private $indexerHandlerFactory;
     /**
@@ -36,12 +38,22 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
      * @var Full
      */
     private $fullAction;
+    /**
+     * @var FulltextResource
+     */
+    private $fulltextResource;
+    /**
+     * @var SearchRequestConfig
+     */
+    private $searchRequestConfig;
 
     /**
      * @param Full $fullAction
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param StoreManagerInterface $storeManager
      * @param DimensionFactory $dimensionFactory
+     * @param FulltextResource $fulltextResource
+     * @param SearchRequestConfig $searchRequestConfig
      * @param array $data
      */
     public function __construct(
@@ -49,6 +61,8 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         IndexerHandlerFactory $indexerHandlerFactory,
         StoreManagerInterface $storeManager,
         DimensionFactory $dimensionFactory,
+        FulltextResource $fulltextResource,
+        SearchRequestConfig $searchRequestConfig,
         array $data
     ) {
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -56,6 +70,8 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         $this->storeManager = $storeManager;
         $this->dimensionFactory = $dimensionFactory;
         $this->fullAction = $fullAction;
+        $this->fulltextResource = $fulltextResource;
+        $this->searchRequestConfig = $searchRequestConfig;
     }
 
     /**
@@ -68,6 +84,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
     {
         $ids = ($ids !== null) ? new \ArrayObject($ids) : $ids;
         $storeIds = array_keys($this->storeManager->getStores());
+        /** @var IndexerHandler $saveHandler */
         $saveHandler = $this->indexerHandlerFactory->create([
             'data' => $this->data
         ]);
@@ -100,6 +117,8 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
                 $this->fullAction->rebuildStoreIndex($storeId)
             );
         }
+        $this->fulltextResource->resetSearchResults();
+        $this->searchRequestConfig->reset();
     }
 
     /**
