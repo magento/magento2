@@ -156,10 +156,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
 
     /**
      * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -167,13 +167,15 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param Template\FilterFactory $emailFilterFactory
      * @param Template\Config $emailConfig
      * @param array $data
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
-        \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         StoreManagerInterface $storeManager,
         \Magento\Framework\Filesystem $filesystem,
@@ -182,7 +184,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
@@ -190,7 +194,16 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $this->_viewFileSystem = $viewFileSystem;
         $this->_emailFilterFactory = $emailFilterFactory;
         $this->_emailConfig = $emailConfig;
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $design,
+            $appEmulation,
+            $storeManager,
+            $data,
+            $resource,
+            $resourceCollection
+        );
     }
 
     /**

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Backend Catalog Price Rules controller
  *
@@ -36,11 +34,15 @@ class Catalog extends Action
     protected $_coreRegistry = null;
 
     /**
+     * Date filter instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
+     * Constructor
+     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
@@ -53,6 +55,8 @@ class Catalog extends Action
     }
 
     /**
+     * Init action
+     *
      * @return $this
      */
     protected function _initAction()
@@ -68,6 +72,8 @@ class Catalog extends Action
     }
 
     /**
+     * Is access to section allowed
+     *
      * @return bool
      */
     protected function _isAllowed()
