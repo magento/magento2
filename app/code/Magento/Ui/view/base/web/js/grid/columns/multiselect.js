@@ -143,10 +143,11 @@ define([
         },
 
         /**
+         * Selects/deselects specified record base on a 'select' parameter value.
          *
          * @param {*} id - See definition of 'getId' method.
          * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
-         * @param {Boolean} select
+         * @param {Boolean} select - Whether to select/deselect record.
          * @returns {Multiselect} Chainable.
          */
         _setSelection: function (id, isIndex, select) {
@@ -262,7 +263,7 @@ define([
         /**
          * Returns identifier of a record.
          *
-         * @param {(Number|String)} id - Id of a record or its' index in a rows array.
+         * @param {*} id - Id of a record or its' index in a rows array.
          * @param {Boolean} [isIndex=false] - Flag that specifies whith what
          *      kind of identifier we are dealing with.
          * @returns {*}
