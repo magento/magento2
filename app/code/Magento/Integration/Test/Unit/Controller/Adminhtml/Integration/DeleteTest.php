@@ -33,8 +33,9 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->resultRedirectFactory->expects($this->any())
+        $this->resultFactory->expects($this->any())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
     }
 
@@ -133,10 +134,6 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->integrationController->execute();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Integration with ID '1' doesn't exist.
-     */
     public function testDeleteActionForServiceIntegrationException()
     {
         $intData = $this->_getSampleIntegrationData();
@@ -154,15 +151,11 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);
-        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->once())->method('addError');
 
         $this->integrationController->execute();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Integration with ID '1' doesn't exist.
-     */
     public function testDeleteActionForServiceGenericException()
     {
         $intData = $this->_getSampleIntegrationData();
