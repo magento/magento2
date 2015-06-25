@@ -14,6 +14,7 @@ The library provides the ability to customize all of the following user interfac
 * actions-toolbar
 * breadcrumbs
 * buttons
+* components
 * drop-downs
 * forms
 * icons
@@ -49,6 +50,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    │    ├── actions-toolbar.less
     │    │    │    ├── breadcrumbs.less
     │    │    │    ├── buttons.less
+    │    │    │    ├── components.less
     │    │    │    ├── docs.less
     │    │    │    ├── dropdowns.less
     │    │    │    ├── forms.less
@@ -73,6 +75,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    ├─── actions-toolbar.html
     │    │    ├─── breadcrumbs.html
     │    │    ├─── buttons.html
+    │    │    ├─── components.html
     │    │    ├─── docs.css
     │    │    ├─── docs.html
     │    │    ├─── dropdowns.html
