@@ -374,6 +374,30 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Returns assigned invoice
+     *
+     * @return Invoice|null
+     */
+    public function getInvoice()
+    {
+        return $this->getData('invoice') instanceof Invoice
+            ? $this->getData('invoice')
+            : null;
+    }
+
+    /**
+     * Sets invoice
+     *
+     * @param Invoice $invoice
+     * @return $this
+     */
+    public function setInvoice(Invoice $invoice)
+    {
+        $this->setData('invoice', $invoice);
+        return $this;
+    }
+
+    /**
      * Check creditmemo cancel action availability
      *
      * @return bool

@@ -690,6 +690,30 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * Sets creditmemo for current payment
+     *
+     * @param Creditmemo $creditmemo
+     * @return $this
+     */
+    public function setCreditmemo(Creditmemo $creditmemo)
+    {
+        $this->setData('creditmemo', $creditmemo);
+        return $this;
+    }
+
+    /**
+     * Returns Creditmemo assigned for this payment
+     *
+     * @return Creditmemo|null
+     */
+    public function getCreditmemo()
+    {
+        return $this->getData('creditmemo') instanceof Creditmemo
+            ? $this->getData('creditmemo')
+            : null;
+    }
+
+    /**
      * Refund payment online or offline, depending on whether there is invoice set in the creditmemo instance
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
