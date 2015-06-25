@@ -141,7 +141,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessPrice()
     {
-        $expectedResult = 'search_index.product_id IN (select entity_id from (TEST QUERY PART) as filter)';
+        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT table.price FROM catalog_product_entity';
@@ -209,7 +209,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessStaticAttribute()
     {
-        $expectedResult = 'search_index.product_id IN (select entity_id from (TEST QUERY PART) as filter)';
+        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';
@@ -250,7 +250,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessNotStaticAttribute()
     {
-        $expectedResult = 'search_index.product_id IN (select entity_id from (TEST QUERY PART) as filter)';
+        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT field FROM table';

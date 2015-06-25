@@ -174,7 +174,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['stock_index' => 'cataloginventory_stock_status'],
-                'search_index.product_id = stock_index.product_id'
+                'search_index.entity_id = stock_index.product_id'
                 . ' AND stock_index.website_id = 1',
                 []
             )
@@ -218,7 +218,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->with(
                 ['search_index' => $index . '_' . $tableSuffix],
-                ['entity_id' => 'product_id']
+                ['entity_id' => 'entity_id']
             )
             ->will($this->returnSelf());
 
@@ -226,7 +226,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['category_index' => 'catalog_category_product_index'],
-                'search_index.product_id = category_index.product_id',
+                'search_index.entity_id = category_index.product_id',
                 []
             )
             ->will($this->returnSelf());
@@ -243,7 +243,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                'search_index.product_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
                 []
             )
             ->willReturnSelf();
