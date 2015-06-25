@@ -136,6 +136,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Retrieve is live flag for rep
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isLive()
     {

@@ -346,10 +346,10 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * StoreIds setter
-     * @codeCoverageIgnore
      *
      * @param array $storeIds
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreIds($storeIds)
     {
@@ -404,6 +404,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Object $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     protected function _addCustomFilter($collection, $filterData)
     {

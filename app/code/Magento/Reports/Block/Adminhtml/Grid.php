@@ -30,14 +30,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Filters array
      *
-     * @var []
+     * @var array
      */
     protected $_filters = [];
 
     /**
      * Default filters values
      *
-     * @var []
+     * @var array
      */
     protected $_defaultFilters = ['report_from' => '', 'report_to' => '', 'report_period' => 'day'];
 
@@ -51,7 +51,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Errors messages aggregated array
      *
-     * @var []
+     * @var array
      */
     protected $_errors = [];
 
@@ -65,7 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Filter values array
      *
-     * @var []
+     * @var array
      */
     protected $_filterValues;
 
@@ -236,10 +236,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Set visibility of date filter
-     * @codeCoverageIgnore
      *
      * @param bool $visible
      * @return void
+     * @codeCoverageIgnore
      */
     public function setDateFilterVisibility($visible = true)
     {
@@ -302,11 +302,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Set filter
-     * @codeCoverageIgnore
      *
      * @param string $name
      * @param string $value
      * @return void
+     * @codeCoverageIgnore
      */
     public function setFilter($name, $value)
     {
@@ -332,10 +332,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Set sub-report rows count
-     * @codeCoverageIgnore
      *
      * @param int $size
      * @return void
+     * @codeCoverageIgnore
      */
     public function setSubReportSize($size)
     {
@@ -355,9 +355,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Retrieve errors
-     * @codeCoverageIgnore
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getErrors()
     {

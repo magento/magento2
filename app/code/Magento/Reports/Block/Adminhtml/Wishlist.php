@@ -14,6 +14,8 @@ namespace Magento\Reports\Block\Adminhtml;
 class Wishlist extends \Magento\Backend\Block\Template
 {
     /**
+     * Template file
+     *
      * @var string
      */
     protected $_template = 'report/wishlist.phtml';

@@ -394,6 +394,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * Check availability to delete rule
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isDeleteable()
     {
@@ -405,6 +406,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsDeleteable($value)
     {
@@ -416,6 +418,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * Check if rule is readonly
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isReadonly()
     {
@@ -427,6 +430,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsReadonly($value)
     {
