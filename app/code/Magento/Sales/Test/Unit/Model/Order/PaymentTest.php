@@ -133,7 +133,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'denyPayment',
                     'fetchTransactionInfo',
                     'canCapture',
-                    'canRefund'
+                    'canRefund',
+                    'canOrder',
                 ]
             )
             ->getMock();
