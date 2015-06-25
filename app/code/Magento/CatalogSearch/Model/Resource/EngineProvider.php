@@ -74,9 +74,13 @@ class EngineProvider
                     $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
                 );
             }
-            if ($engine && $engine->test()) {
-                $this->engine = $engine;
+
+            if ($engine && !$engine->isAvailable()) {
+                throw new \LogicException(
+                    'Engine is not available: ' . $currentEngine
+                );
             }
+            $this->engine = $engine;
         }
 
         return $this->engine;

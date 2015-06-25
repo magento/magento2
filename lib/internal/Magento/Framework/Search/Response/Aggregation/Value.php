@@ -31,6 +31,7 @@ class Value
      * Get aggregation
      *
      * @return string|array
+     * @codeCoverageIgnore
      */
     public function getValue()
     {
@@ -41,6 +42,7 @@ class Value
      * Get metrics
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getMetrics()
     {

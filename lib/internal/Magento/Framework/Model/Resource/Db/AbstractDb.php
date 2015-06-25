@@ -627,6 +627,7 @@ abstract class AbstractDb extends AbstractResource
      * @return $this
      * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -642,13 +643,13 @@ abstract class AbstractDb extends AbstractResource
 
             foreach ($fields as $unique) {
                 $select->reset(\Zend_Db_Select::WHERE);
-
-                if (is_array($unique['field'])) {
-                    foreach ($unique['field'] as $field) {
-                        $select->where($field . '=?', trim($data->getData($field)));
+                foreach ((array)$unique['field'] as $field) {
+                    $value = $data->getData($field);
+                    if ($value === null) {
+                        $select->where($field . ' IS NULL');
+                    } else {
+                        $select->where($field . '=?', trim($value));
                     }
-                } else {
-                    $select->where($unique['field'] . '=?', trim($data->getData($unique['field'])));
                 }
 
                 if ($object->getId() || $object->getId() === '0') {

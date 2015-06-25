@@ -29,6 +29,7 @@ class Bucket
     /**
      * @param string $name
      * @param Value[] $values
+     * @codeCoverageIgnore
      */
     public function __construct($name, $values)
     {
@@ -40,6 +41,7 @@ class Bucket
      * Get field name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -50,6 +52,7 @@ class Bucket
      * Get field values
      *
      * @return Value[]
+     * @codeCoverageIgnore
      */
     public function getValues()
     {
