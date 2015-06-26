@@ -121,7 +121,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      * Returns Custom currency symbol properties
      *
      * @return array
-     * @codeCoverageIgnore
      */
     public function getCurrencySymbolsData()
     {
