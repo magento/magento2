@@ -25,7 +25,7 @@
                 </strong>
             </p>
             <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())): ?>
-            <p><small><?= $shortDescription ?></small></p>
+                <p><small><?= $shortDescription ?></small></p>
             <?php endif; ?>
             <p><?= $block->getProductPriceHtml(
                     $_product,
@@ -37,7 +37,7 @@
                 );
                 ?>
             </p>
-            <p><small><a href="<?= $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?= $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= __('Unsubscribe from alerts for this product') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>

@@ -28,7 +28,7 @@
             <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())): ?>
                 <p><small><?= $shortDescription ?></small></p>
             <?php endif; ?>
-            <p><?= $block->getProductPriceHtml(
+            <?= $block->getProductPriceHtml(
                     $_product,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_EMAIL,
@@ -37,8 +37,7 @@
                     ]
                 );
                 ?>
-            </p>
-            <p><small><a href="<?= $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?= $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?= __('Unsubscribe from alerts for this product') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>
