@@ -126,7 +126,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error happened while deleting role and permissions. Check exception log for details.
+     * @expectedExceptionMessage Something went wrong while deleting roles and permissions.
      */
     public function testRemovePermissionsException()
     {
@@ -190,7 +190,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error happened while granting permissions. Check exception log for details.
+     * @expectedExceptionMessage Sorry, something went wrong granting permissions.
      */
     public function testGrantPermissionsException()
     {

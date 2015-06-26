@@ -40,7 +40,7 @@ class AbstractCartItem extends Block
      *
      * @var string
      */
-    protected $qty = './/input[@type="number" and @title="Qty"]';
+    protected $qty = './/input[@type="number" and @title="Quantity"]';
 
     /**
      * Cart item sub-total xpath selector

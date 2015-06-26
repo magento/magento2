@@ -14,12 +14,15 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Coupons;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
+     * GROUP BY criteria
+     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
-     * @return void
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -29,7 +32,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourceCollectionName()
     {
@@ -41,7 +44,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()

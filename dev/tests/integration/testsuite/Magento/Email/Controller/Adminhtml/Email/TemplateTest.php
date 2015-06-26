@@ -8,7 +8,7 @@ namespace Magento\Email\Controller\Adminhtml\Email;
 /**
  * @magentoAppArea adminhtml
  */
-class TemplateTest extends \Magento\Backend\Utility\Controller
+class TemplateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testDefaultTemplateAction()
     {
