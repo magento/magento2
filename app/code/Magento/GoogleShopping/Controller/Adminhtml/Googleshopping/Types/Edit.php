@@ -44,7 +44,7 @@ class Edit extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
             return $resultPage;
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->messageManager->addError(__("We can't edit Attribute Set Mapping."));
+            $this->messageManager->addError(__('We can\'t edit Attribute Set Mapping right now.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setPath('adminhtml/*/index');

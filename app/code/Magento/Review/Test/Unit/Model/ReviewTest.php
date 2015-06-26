@@ -6,6 +6,7 @@
 
 namespace Magento\Review\Test\Unit\Model;
 
+use \Magento\Catalog\Model\Product;
 use \Magento\Review\Model\Review;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -269,5 +270,16 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($entityCode))
             ->will($this->returnValue($result));
         $this->assertSame($result, $this->review->getEntityIdByCode($entityCode));
+    }
+
+    public function testGetIdentities()
+    {
+        $this->review->setStatusId(Review::STATUS_PENDING);
+        $this->assertEmpty($this->review->getIdentities());
+
+        $productId = 1;
+        $this->review->setEntityPkValue($productId);
+        $this->review->setStatusId(Review::STATUS_APPROVED);
+        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
     }
 }

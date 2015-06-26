@@ -43,10 +43,10 @@ class Curl extends Conditions implements CatalogRuleInterface
      */
     protected $mappingData = [
         'simple_action' => [
-            'By Percentage of the Original Price' => 'by_percent',
-            'By Fixed Amount' => 'by_fixed',
-            'To Percentage of the Original Price' => 'to_percent',
-            'To Fixed Amount' => 'to_fixed',
+            'Apply as percentage of original' => 'by_percent',
+            'Apply as fixed amount' => 'by_fixed',
+            'Adjust final price to this percentage' => 'to_percent',
+            'Adjust final price to discount value' => 'to_fixed',
         ],
         'is_active' => [
             'Active' => 1,

@@ -18,6 +18,7 @@
                     <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards" before="checkout.cart.form"/>
                     <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml">
                         <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
+                        <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
                     </block>
                     <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
                     <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml"/>
