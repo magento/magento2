@@ -105,6 +105,10 @@ define(
 
             getBillingAddressFormName: function() {
                 return 'billing-address-form-' + this.item.code;
+            },
+
+            disposeSubscriptions: function () {
+                // dispose all active subscriptions
             }
         });
     }
