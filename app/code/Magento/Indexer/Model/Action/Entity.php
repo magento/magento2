@@ -19,7 +19,7 @@ class Entity extends Base
     protected function prepareDataSource($ids = null)
     {
         $collection = $this->getPrimaryResource();
-        foreach ($this->getPrimaryFieldset() as $field) {
+        foreach ($this->getPrimaryFieldset()['fields'] as $field) {
             $handler = $field['handler'];
             /** @var HandlerInterface $handler */
             $handler->prepareSql($collection, $field);
