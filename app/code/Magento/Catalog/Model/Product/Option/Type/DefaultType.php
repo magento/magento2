@@ -208,7 +208,7 @@ class DefaultType extends \Magento\Framework\Object
 
         $option = $this->getOption();
         if (!isset($values[$option->getId()]) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         } elseif (isset($values[$option->getId()])) {
             $this->setUserValue($values[$option->getId()]);
             $this->setIsValid(true);
@@ -240,7 +240,7 @@ class DefaultType extends \Magento\Framework\Object
             return $this->getUserValue();
         }
         throw new LocalizedException(
-            __('We couldn\'t add the product to the cart because of an option validation issue.')
+            __('We can\'t add the product to the cart because of an option validation issue.')
         );
     }
 

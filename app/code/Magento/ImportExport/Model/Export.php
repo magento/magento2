@@ -99,7 +99,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Please enter a correct entity model')
+                        __('Please enter a correct entity model.')
                     );
                 }
                 if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\Entity\AbstractEntity &&
@@ -107,7 +107,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'Entity adapter object must be an instance of %1 or %2',
+                            'The entity adapter object must be an instance of %1 or %2.',
                             'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
                             'Magento\ImportExport\Model\Export\AbstractEntity'
                         )
@@ -145,13 +145,13 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Please enter a correct entity model')
+                        __('Please enter a correct entity model.')
                     );
                 }
                 if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'Adapter object must be an instance of %1',
+                            'The adapter object must be an instance of %1.',
                             'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
                         )
                     );
@@ -176,10 +176,10 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
             $countRows = substr_count(trim($result), "\n");
             if (!$countRows) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for export'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for the export.'));
             }
             if ($result) {
-                $this->addLogComment([__('Exported %1 rows.', $countRows), __('Export has been done.')]);
+                $this->addLogComment([__('Exported %1 rows.', $countRows), __('The export is finished.')]);
             }
             return $result;
         } else {
@@ -219,7 +219,9 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         } elseif ($attribute->isStatic()) {
             return self::getStaticAttributeFilterType($attribute);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot determine attribute filter type'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t determine the attribute filter type.')
+            );
         }
     }
 
@@ -295,7 +297,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     public function getFileFormat()
     {
         if (empty($this->_data['file_format'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('File format is unknown'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t identify this file format.'));
         }
         return $this->_data['file_format'];
     }

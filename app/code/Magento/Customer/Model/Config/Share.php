@@ -108,7 +108,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
                 //@codingStandardsIgnoreStart
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.'
+                        'We can\'t share customer accounts globally when the accounts share identical email addresses on more than one website.'
                     )
                 );
                 //@codingStandardsIgnoreEnd
