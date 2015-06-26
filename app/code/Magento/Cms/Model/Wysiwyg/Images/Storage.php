@@ -186,6 +186,7 @@ class Storage extends \Magento\Framework\Object
 
     /**
      * @param string $path
+     * @return void
      */
     protected function createSubDirectories($path)
     {
