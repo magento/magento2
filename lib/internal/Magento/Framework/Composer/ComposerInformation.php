@@ -31,7 +31,7 @@ class ComposerInformation
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @param BufferIO $io
+     * @param MagentoComposerApplication $application
      * @throws \Exception
      */
     public function __construct(
