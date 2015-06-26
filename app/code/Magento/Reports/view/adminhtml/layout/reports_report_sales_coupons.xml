@@ -26,16 +26,16 @@
                 <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form\Coupon" name="grid.filter.form">
                     <action method="addReportTypeOption">
                         <argument name="key" xsi:type="string">created_at_order</argument>
-                        <argument translate="true" name="value" xsi:type="string">Order Created Date</argument>
+                        <argument translate="true" name="value" xsi:type="string">Order Created</argument>
                     </action>
                     <action method="addReportTypeOption">
                         <argument name="key" xsi:type="string">updated_at_order</argument>
-                        <argument translate="true" name="value" xsi:type="string">Order Updated Date</argument>
+                        <argument translate="true" name="value" xsi:type="string">Order Updated</argument>
                     </action>
                     <action method="setFieldOption">
                         <argument name="field" xsi:type="string">report_type</argument>
                         <argument name="option" xsi:type="string">note</argument>
-                        <argument translate="true" name="value" xsi:type="string">The Order Updated Date report is displayed in real-time, and does not need to be refreshed.</argument>
+                        <argument translate="true" name="value" xsi:type="string">The Order Updated report is created in real time and does not require a refresh.</argument>
                     </action>
                 </block>
             </block>
