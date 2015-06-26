@@ -10,6 +10,9 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 class Price extends \Magento\Ui\Component\Listing\Columns\Column
 {
+    /**
+     * Column name
+     */
     const NAME = 'price';
 
     /**
@@ -46,13 +49,14 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      */
     public function prepareDataSource(array & $dataSource)
     {
-        $store = $this->storeManager->getStore(
-            $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-        );
-        $currencyCode = $store->getCurrentCurrencyCode();
-        $currencyRate = $store->getCurrentCurrencyRate();
-        $currency = $this->localeCurrency->getCurrency($currencyCode);
         if (isset($dataSource['data']['items'])) {
+            $store = $this->storeManager->getStore(
+                $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+            );
+            $currencyCode = $store->getCurrentCurrencyCode();
+            $currencyRate = $store->getCurrentCurrencyRate();
+            $currency = $this->localeCurrency->getCurrency($currencyCode);
+
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName] * $currencyRate));

@@ -8,11 +8,6 @@ namespace Magento\Catalog\Ui\Component;
 class ColumnFactory
 {
     /**
-     * @var int
-     */
-    private $columnSortOrder = 0;
-
-    /**
      * @var \Magento\Framework\View\Element\UiComponentFactory
      */
     protected $componentFactory;
@@ -49,22 +44,20 @@ class ColumnFactory
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-     * @param int $columnsAmount
+     * @param array $config
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
      */
-    public function create($attribute, $context, $columnsAmount)
+    public function create($attribute, $context, array $config = [])
     {
-        $this->columnSortOrder += 1;
         $columnName = $attribute->getAttributeCode();
-        $config = [
+        $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
             'sorting' => 'asc',
             'align' => 'left',
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
-            'sortOrder' => $this->columnSortOrder + $columnsAmount,
-        ];
+        ], $config);
 
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();

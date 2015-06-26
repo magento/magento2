@@ -17,7 +17,6 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Quantity</item>
-                    <item name="sortOrder" xsi:type="number">8</item>
                 </item>
             </argument>
         </column>
