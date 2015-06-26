@@ -12,8 +12,8 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $composerApp = $this->getMock(
-            'Composer\Console\Application',
-            ['setAutoExit', 'resetComposer', 'run'],
+            'Magento\Composer\MagentoComposerApplication',
+            ['setConfig', 'runComposerCommand'],
             [],
             '',
             false
@@ -24,6 +24,12 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(BP . '/app/etc');
+
+        $directoryList->expects($this->once())
+            ->method('getPath')
+            ->with(DirectoryList::ROOT)
+            ->willReturn(BP . '/app/etc');
+
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
         $composerApp->expects($this->once())->method('run');
         $remove = new Remove($composerApp, $directoryList);

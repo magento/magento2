@@ -231,7 +231,7 @@ class ThemeUninstallCommand extends Command
             foreach ($themePaths as $themePath) {
                 $themePackages[] = $this->getPackageName($themePath);
             }
-            $this->remove->remove($themePackages);
+            $output->writeln($this->remove->remove($themePackages));
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
