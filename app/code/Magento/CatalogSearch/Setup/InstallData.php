@@ -28,7 +28,7 @@ class InstallData implements InstallDataInterface
     }
 
     /**
-     * @param $indexerId
+     * @param string $indexerId
      * @return \Magento\Indexer\Model\IndexerInterface
      */
     private function getIndexer($indexerId)
@@ -42,6 +42,7 @@ class InstallData implements InstallDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
