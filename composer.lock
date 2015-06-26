@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "daa84b5d3ea8eabcd1bb1f33c07e08dd",
+    "hash": "e9c949389df8f6a23b4f4dd689e486f6",
     "packages": [
         {
             "name": "composer/composer",
@@ -139,6 +139,35 @@
                 "schema"
             ],
             "time": "2015-06-14 20:01:28"
+        },
+        {
+            "name": "magento/composer",
+            "version": "dev-MAGETWO-34697-component-management-package-update",
+            "source": {
+                "type": "git",
+                "url": "git@github.corp.ebay.com:magento-ogre/composer-lib.git",
+                "reference": "827ba1e36a07b10fd604ddf2078fd2818691f11b"
+            },
+            "require": {
+                "composer/composer": "1.0.0-alpha10",
+                "php": "~5.5.0|~5.6.0",
+                "symfony/console": "~2.3 <2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Magento\\": "app/code/Magento/"
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "Magento composer library helps to instantiate Composer application and run Symfony commands.",
+            "time": "2015-06-26 14:13:26"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -3576,6 +3605,7 @@
     "minimum-stability": "alpha",
     "stability-flags": {
         "composer/composer": 15,
+        "magento/composer": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
