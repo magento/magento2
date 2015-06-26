@@ -57,6 +57,9 @@ class View extends Block
      */
     public function getGiftMessage($itemName)
     {
+        if (!$this->giftMessageButtonIsVisible($itemName)) {
+            return [];
+        }
         $message = [];
         $labelsToSkip = [];
         $this->clickGiftMessageButton($itemName);
@@ -87,5 +90,20 @@ class View extends Block
             sprintf($this->giftMessageButtonSelector, $itemName),
             Locator::SELECTOR_XPATH
         )->click();
+    }
+
+    /**
+     * Click "Gift Message" for special item.
+     *
+     * @param string $itemName
+     * @return bool
+     */
+    protected function giftMessageButtonIsVisible($itemName)
+    {
+        $isVisible = $this->_rootElement->find(
+            sprintf($this->giftMessageButtonSelector, $itemName),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
+        return $isVisible;
     }
 }
