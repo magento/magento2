@@ -19,6 +19,7 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
@@ -2732,14 +2733,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             'to'            => "{{fieldName}} <= ?",
             'seq'           => null,
             'sneq'          => null,
+            'ntoa'          => "INET_NTOA({{fieldName}}) LIKE ?",
         ];
 
         $query = '';
         if (is_array($condition)) {
-            if (isset($condition['field_expr'])) {
-                $fieldName = str_replace('#?', $this->quoteIdentifier($fieldName), $condition['field_expr']);
-                unset($condition['field_expr']);
-            }
             $key = key(array_intersect_key($condition, $conditionKeyMap));
 
             if (isset($condition['from']) || isset($condition['to'])) {
@@ -3137,47 +3135,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Minus superfluous characters from hash.
-     *
-     * @param  string $hash
-     * @param  string $prefix
-     * @param  int $maxCharacters
-     * @return string
-     */
-    protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
-    {
-        $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
-        $superfluous = $diff / 2;
-        $odd         = $diff % 2;
-        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
-        return $hash;
-    }
-
-    /**
-     * Retrieve valid table name
-     * Check table name length and allowed symbols
+     * Returns a compressed version of the table name if it is too long
      *
      * @param string $tableName
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTableName($tableName)
     {
-        $prefix = 't_';
-        if (strlen($tableName) > self::LENGTH_TABLE_NAME) {
-            $shortName = ExpressionConverter::shortName($tableName);
-            if (strlen($shortName) > self::LENGTH_TABLE_NAME) {
-                $hash = md5($tableName);
-                if (strlen($prefix . $hash) > self::LENGTH_TABLE_NAME) {
-                    $tableName = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_TABLE_NAME);
-                } else {
-                    $tableName = $prefix . $hash;
-                }
-            } else {
-                $tableName = $shortName;
-            }
-        }
+        return ExpressionConverter::shortenEntityName($tableName, 't_');
+    }
 
-        return $tableName;
+    /**
+     * Build a trigger name based on table name and trigger details
+     *
+     * @param string $tableName  The table which is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     * @codeCoverageIgnore
+     */
+
+    public function getTriggerName($tableName, $time, $event)
+    {
+        $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;
+        return ExpressionConverter::shortenEntityName($triggerName, 'trg_');
     }
 
     /**
@@ -3198,35 +3180,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         switch (strtolower($indexType)) {
             case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $prefix = 'unq_';
-                $shortPrefix = 'u_';
                 break;
             case AdapterInterface::INDEX_TYPE_FULLTEXT:
                 $prefix = 'fti_';
-                $shortPrefix = 'f_';
                 break;
             case AdapterInterface::INDEX_TYPE_INDEX:
             default:
                 $prefix = 'idx_';
-                $shortPrefix = 'i_';
         }
-
-        $hash = $tableName . '_' . $fields;
-
-        if (strlen($hash) + strlen($prefix) > self::LENGTH_INDEX_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_INDEX_NAME) {
-                $hash = md5($hash);
-                if (strlen($hash) + strlen($shortPrefix) > self::LENGTH_INDEX_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $shortPrefix, self::LENGTH_INDEX_NAME);
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        return strtoupper(ExpressionConverter::shortenEntityName($tableName . '_' . $fields, $prefix));
     }
 
     /**
@@ -3238,28 +3200,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @return string
+     * @codeCoverageIgnore
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        $prefix = 'fk_';
-        $hash = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
-        if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_FOREIGN_NAME) {
-                $hash = md5($hash);
-                if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_FOREIGN_NAME);
-                } else {
-                    $hash = $prefix . $hash;
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        $fkName = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
+        return strtoupper(ExpressionConverter::shortenEntityName($fkName, 'fk_'));
     }
 
     /**

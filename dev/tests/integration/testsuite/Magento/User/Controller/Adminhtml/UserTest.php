@@ -10,7 +10,7 @@ use Magento\TestFramework\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class UserTest extends \Magento\Backend\Utility\Controller
+class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testIndexAction()
     {

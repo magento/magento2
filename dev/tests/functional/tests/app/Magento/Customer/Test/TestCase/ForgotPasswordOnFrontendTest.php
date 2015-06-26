@@ -16,7 +16,7 @@ use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
  *
  * Steps:
  * 1. Open forgot password page.
- * 2. Fill e-mail.
+ * 2. Fill email.
  * 3. Click forgot password button.
  * 4. Check forgot password message.
  *
