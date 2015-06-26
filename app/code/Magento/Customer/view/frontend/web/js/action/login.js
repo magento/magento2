@@ -15,7 +15,7 @@ define(
         var callbacks = [],
             action = function(loginData, redirectUrl) {
                 return storage.post(
-                    '/customer/ajax/login',
+                    'customer/ajax/login',
                     JSON.stringify(loginData)
                 ).done(function (response) {
                     if (response.errors) {

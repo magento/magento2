@@ -10,31 +10,9 @@
     <button type="button"
             data-role="proceed-to-checkout"
             title="<?php echo __('Proceed to Checkout') ?>"
+            data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{}}'
             class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
             <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
         <span><?php echo __('Proceed to Checkout') ?></span>
     </button>
-
-    <script>
-        require(
-            [
-                'jquery',
-                'Magento_Checkout/js/model/cart/authentication-popup',
-                'Magento_Customer/js/customer-data'
-            ],
-            function($, authenticationPopup, customerData) {
-                $('button[data-role="proceed-to-checkout"]').click(function(event) {
-                    event.preventDefault();
-                    var cart = customerData.get('cart'),
-                        customer = customerData.get('customer');
-
-                    if (customer() == false && !cart().isGuestCheckoutAllowed) {
-                        authenticationPopup.showModal();
-                        return false;
-                    }
-                    location.href = window.checkout.checkoutUrl;
-                });
-            }
-        );
-    </script>
 <?php endif?>
