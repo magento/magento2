@@ -160,7 +160,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
 
         $this->notificationInterface->expects($this->once())->method('addNotice')
             ->with(
-                'Product synchronization with Google Shopping completed',
+                'The product synchronization with Google Shopping is finished.',
                 'A total of 0 items(s) have been deleted; a total of 1 items(s) have been updated.'
             )->will($this->returnSelf());
 
@@ -182,9 +182,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()
             ->setMethods(['getName', '__sleep', '__wakeup'])->getMock();
-        $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
+        $product->expects($this->any())->method('getName')->will($this->returnValue('Product Name'));
 
-        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
         $iterator = new \ArrayIterator([$item]);
         $collection->expects($this->once())->method('getIterator')->will($this->returnValue($iterator));
 
@@ -192,8 +192,11 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
 
         $this->notificationInterface->expects($this->once())->method('addMajor')
             ->with(
-                'Errors happened during synchronization with Google Shopping',
-                ['We cannot update 1 items.', 'The item "Product Name" hasn\'t been updated.']
+                'Something went wrong during synchronization with Google Shopping.',
+                [
+                    __('We can\'t update %1 item(s).', [1]),
+                    __('We can\'t update item "%1" right now.', [$item->getProduct()->getName()]),
+                ]
             )->will($this->returnSelf());
         $this->massOperations->synchronizeItems([1]);
     }
@@ -218,8 +221,8 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
 
         $this->notificationInterface->expects($this->once())->method('addNotice')
             ->with(
-                'Google Shopping item removal process succeded',
-                'Total of 1 items(s) have been removed from Google Shopping.'
+                'The Google Shopping item removal process succeeded.',
+                'You removed 1 items(s) from Google Shopping.'
             )->will($this->returnSelf());
 
         $this->massOperations->deleteItems([1]);
@@ -232,10 +235,10 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()
             ->setMethods(['getName', '__sleep', '__wakeup'])->getMock();
-        $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
+        $product->expects($this->any())->method('getName')->will($this->returnValue('Product Name'));
 
         $item = $this->getMockBuilder('Magento\GoogleShopping\Model\Item')->disableOriginalConstructor()->getMock();
-        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
         $item->expects($this->once())->method('deleteItem')
             ->will($this->throwException(new \Exception('Test exception')));
 
@@ -250,8 +253,8 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
 
         $this->notificationInterface->expects($this->once())->method('addMajor')
             ->with(
-                'Errors happened while deleting items from Google Shopping',
-                ['The item "Product Name" hasn\'t been deleted.']
+                'Something went wrong while deleting items from Google Shopping.',
+                [__('We can\'t update item "%1" right now.', [$item->getProduct()->getName()])]
             )->will($this->returnSelf());
         $this->massOperations->deleteItems([1]);
     }
