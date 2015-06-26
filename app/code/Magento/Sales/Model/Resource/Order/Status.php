@@ -17,7 +17,7 @@ use \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb
 {
     /**
      * Status labels table
