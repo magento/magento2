@@ -10,20 +10,19 @@ use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info as OrderInformationBlock;
 
 /**
- * Class OrderForm
  * Order view tabs
  */
 class OrderForm extends FormTabs
 {
     /**
-     * Order information block
+     * Order information block.
      *
      * @var string
      */
     protected $orderInfoBlock = '[data-ui-id="sales-order-tabs-tab-content-order-info"]';
 
     /**
-     * Get order information block
+     * Get order information block.
      *
      * @return OrderInformationBlock
      */
