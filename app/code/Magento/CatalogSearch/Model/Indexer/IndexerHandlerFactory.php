@@ -56,7 +56,7 @@ class IndexerHandlerFactory
      * @param array $data
      * @return IndexerInterface
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         $currentEngine = $this->scopeConfig->getValue(EngineProvider::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
         $object = $this->_objectManager->create($this->handlers[$currentEngine], $data);
