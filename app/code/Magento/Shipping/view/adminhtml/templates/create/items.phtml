@@ -104,9 +104,10 @@
                         <span><?php echo __('Email Copy of Shipment') ?></span></label>
                 </div>
             <?php endif; ?>
-
+            <?php echo $block->getChildHtml('submit_before') ?>
             <div class="order-history-comments-actions actions">
                 <?php echo $block->getChildHtml('submit_button') ?>
+                <?php echo $block->getChildHtml('submit_after') ?>
             </div>
         </div>
     </div>
