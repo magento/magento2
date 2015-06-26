@@ -77,4 +77,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="uninstall_language" xsi:type="object">Magento\Translation\Console\Command\UninstallLanguageCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

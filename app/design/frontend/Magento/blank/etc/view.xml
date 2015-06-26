@@ -185,6 +185,14 @@
         <var name="product_stock_alert_email_product_image:width">76</var>
         <var name="product_stock_alert_email_product_image:ratio">1</var>
         <var name="product_stock_alert_email_product_image:height">76</var>
+
+        <var name="swatch_image:width">30</var>
+        <var name="swatch_image:ratio">0.8</var>
+        <var name="swatch_image:height">20</var>
+
+        <var name="swatch_thumb:width">110</var>
+        <var name="swatch_thumb:ratio">0.8</var>
+        <var name="swatch_thumb:height">90</var>
     </vars>
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->

@@ -77,7 +77,7 @@ interface AccountManagementInterface
     public function isReadonly($customerId);
 
     /**
-     * Activate a customer account using a key that was sent in a confirmation e-mail.
+     * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @api
      * @param string $email
@@ -88,7 +88,7 @@ interface AccountManagementInterface
     public function activate($email, $confirmationKey);
 
     /**
-     * Activate a customer account using a key that was sent in a confirmation e-mail.
+     * Activate a customer account using a key that was sent in a confirmation email.
      *
      * @api
      * @param int $customerId
