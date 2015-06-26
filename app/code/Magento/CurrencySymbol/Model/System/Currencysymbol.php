@@ -285,7 +285,6 @@ class Currencysymbol
             )
         );
 
-        /* @var $storeModel \Magento\Store\Model\System\Store */
         $storeModel = $this->_systemStore;
         /** @var \Magento\Store\Model\Website $website */
         foreach ($storeModel->getWebsiteCollection() as $website) {
