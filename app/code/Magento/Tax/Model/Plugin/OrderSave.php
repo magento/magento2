@@ -7,8 +7,6 @@
 
 namespace Magento\Tax\Model\Plugin;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-
 class OrderSave
 {
     /**
