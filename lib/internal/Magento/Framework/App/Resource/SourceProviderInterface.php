@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Resource;
 
-interface SourceProviderInterface
+interface SourceProviderInterface extends \Traversable
 {
     /**
      * Returns main table name - extracted from "module/table" style and

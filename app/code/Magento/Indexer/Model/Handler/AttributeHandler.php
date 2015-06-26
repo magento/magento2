@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Model\Handler;
 
+use Magento\Framework\App\Resource\EavProviderInterface;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Indexer\Model\HandlerInterface;
 
@@ -17,6 +18,7 @@ class AttributeHandler implements HandlerInterface
      */
     public function prepareSql(SourceProviderInterface $source, $fieldInfo)
     {
+        /** @var $source EavProviderInterface */
         $source->addAttributeToSelect($fieldInfo['name']);
     }
 
