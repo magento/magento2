@@ -52,7 +52,7 @@ class AssertSalesReportIntervalResult extends AbstractAssertSalesReportResult
     {
         $data = [];
         foreach ($salesResult as $key => $result) {
-            $data[$key] = str_replace('.00', '', $result);
+            $data[$key] = intval($result);
         }
 
         return $data;
