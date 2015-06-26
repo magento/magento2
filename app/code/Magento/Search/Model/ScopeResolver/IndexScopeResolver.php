@@ -8,6 +8,7 @@ namespace Magento\Search\Model\ScopeResolver;
 
 
 use Magento\Framework\App\Resource;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
@@ -19,11 +20,20 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     private $resource;
 
     /**
-     * @param Resource $resource
+     * @var ScopeResolverInterface
      */
-    public function __construct(Resource $resource)
-    {
+    private $scopeResolver;
+
+    /**
+     * @param Resource|Resource $resource
+     * @param ScopeResolverInterface $scopeResolver
+     */
+    public function __construct(
+        Resource $resource,
+        ScopeResolverInterface $scopeResolver
+    ) {
         $this->resource = $resource;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -35,7 +45,14 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     {
         $tableNameParts = [$index];
         foreach ($dimensions as $dimension) {
-            $tableNameParts[] = $dimension->getName() . $dimension->getValue();
+            switch ($dimension->getName()) {
+                case 'scope':
+                    $tableNameParts[] = $dimension->getName() .
+                        $this->scopeResolver->getScope($dimension->getValue())->getId();
+                    break;
+                default:
+                    $tableNameParts[] = $dimension->getName() . $dimension->getValue();
+            }
         }
         return $this->resource->getTableName(implode('_', $tableNameParts));
     }
