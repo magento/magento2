@@ -77,7 +77,7 @@ class Save extends \Magento\Backend\App\Action
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Credit memo\'s total must be positive.')
+                        __('The credit memo\'s total must be positive.')
                     );
                 }
 
@@ -138,7 +138,7 @@ class Save extends \Magento\Backend\App\Action
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->messageManager->addError(__('Cannot save the credit memo.'));
+            $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;

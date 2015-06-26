@@ -53,7 +53,7 @@ class JsonProductInfo extends ProductController
             $response->setError(0);
         } else {
             $response->setError(1);
-            $response->setMessage(__('We can\'t get the product ID.'));
+            $response->setMessage(__('We can\'t retrieve the product ID.'));
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);

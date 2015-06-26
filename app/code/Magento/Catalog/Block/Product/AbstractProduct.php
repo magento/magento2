@@ -598,4 +598,48 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
+
+    /**
+     * Retrieve product details html
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return mixed
+     */
+    public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
+    {
+        $renderer = $this->getDetailsRenderer($product->getTypeId());
+        if ($renderer) {
+            $renderer->setProduct($product);
+            return $renderer->toHtml();
+        }
+        return '';
+    }
+
+    /**
+     * @param null $type
+     * @return bool|\Magento\Framework\View\Element\AbstractBlock
+     */
+    public function getDetailsRenderer($type = null)
+    {
+        if ($type === null) {
+            $type = 'default';
+        }
+        $rendererList = $this->getDetailsRendererList();
+        if ($rendererList) {
+            return $rendererList->getRenderer($type, 'default');
+        }
+        return null;
+    }
+
+    /**
+     * @return \Magento\Framework\View\Element\RendererList
+     */
+    protected function getDetailsRendererList()
+    {
+        return $this->getDetailsRendererListName() ? $this->getLayout()->getBlock(
+            $this->getDetailsRendererListName()
+        ) : $this->getChildBlock(
+            'details.renderers'
+        );
+    }
 }
