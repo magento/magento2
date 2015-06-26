@@ -75,6 +75,46 @@
                     </item>
                 </item>
             </argument>
+            <filterInput name="name">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">name</item>
+                        <item name="label" xsi:type="string" translate="true">Name</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterSelect name="type_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Type</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">type_id</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Type</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="attribute_set_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\AttributeSet\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">attribute_set_id</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Attribute Set</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterInput name="sku">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">sku</item>
+                        <item name="label" xsi:type="string" translate="true">SKU</item>
+                    </item>
+                </argument>
+            </filterInput>
             <filterRange name="price">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -104,6 +144,30 @@
                     </argument>
                 </filterInput>
             </filterRange>
+            <filterSelect name="visibility">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Visibility</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">visibility</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Visibility</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="status">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Source\Status</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">status</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Status</item>
+                    </item>
+                </argument>
+            </filterSelect>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
@@ -270,7 +334,7 @@
         </column>
         <column name="attribute_set_id">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection</item>
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Product\AttributeSet\Options</item>
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
