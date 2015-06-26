@@ -19,6 +19,7 @@ define([
     var viewModel;
     viewModel = Component.extend({
         attributes: ko.observableArray([]),
+        newProductsCount: ko.observable(),
         imagesSection: ko.observableArray([
             {
                 label: 'Images',
@@ -65,11 +66,14 @@ define([
         ]),
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
+            var count = 1;
             this.attributes.each(function (attribute) {
+                count *= attribute.chosen.length;
                 attribute.chosen.each(function (option) {
                     option.sections = ko.observable({images:'',pricing:'',inventory:''});
                 });
             });
+            this.newProductsCount(count);
             this.bindGalleries();
         },
         force: function (wizard) {
