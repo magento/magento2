@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Gateway\Http\Client;
 
+use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -23,14 +24,23 @@ class Soap implements ClientInterface
     private $converter;
 
     /**
+     * @var ClientFactory
+     */
+    private $clientFactory;
+
+    /**
      * @param Logger $logger
+     * @param ClientFactory $clientFactory
+     * @param ConverterInterface | null $converter
      */
     public function __construct(
         Logger $logger,
+        ClientFactory $clientFactory,
         ConverterInterface $converter = null
     ) {
         $this->logger = $logger;
         $this->converter = $converter;
+        $this->clientFactory = $clientFactory;
     }
 
     /**
@@ -46,16 +56,24 @@ class Soap implements ClientInterface
     {
         $this->logger->debug(['request' => $transferObject->getBody()]);
 
-        $client = new \SoapClient($transferObject->getClientConfig()['wsdl'], ['trace' => true]);
+        $client = $this->clientFactory->create(
+            $transferObject->getClientConfig()['wsdl'],
+            ['trace' => true]
+        );
 
         try {
             $client->__setSoapHeaders($transferObject->getHeaders());
 
+            $response = $client->__soapCall(
+                $transferObject->getMethod(),
+                [$transferObject->getBody()]
+            );
+
             $result = $this->converter
                 ? $this->converter->convert(
-                    $client->__soapCall($transferObject->getMethod(), [$transferObject->getBody()])
+                    $response
                 )
-                : null;
+                : [$response];
 
             $this->logger->debug(['response' => $result]);
         } catch (\Exception $e) {

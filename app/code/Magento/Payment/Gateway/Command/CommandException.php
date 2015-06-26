@@ -5,7 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Command;
 
-class CommandException extends \Exception
+use Magento\Framework\Exception\LocalizedException;
+
+class CommandException extends LocalizedException
 {
 
 }

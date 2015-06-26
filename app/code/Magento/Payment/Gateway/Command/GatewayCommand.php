@@ -82,7 +82,9 @@ class GatewayCommand implements CommandInterface
                 array_merge($commandSubject, ['response' => $response])
             );
             if (!$result->isValid()) {
-                throw new CommandException;
+                throw new CommandException(
+                    __(implode("\n", $result->getFailsDescription()))
+                );
             }
         }
 

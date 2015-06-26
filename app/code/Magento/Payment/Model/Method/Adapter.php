@@ -580,6 +580,7 @@ class Adapter implements MethodInterface
 
     /**
      * {inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
