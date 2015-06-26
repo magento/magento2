@@ -208,12 +208,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCreateSuccessMessageByType($type)
     {
         $messagesMap = [
-            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('The system backup has been created.'),
+            \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => __('You created the system backup.'),
             \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => __(
-                'The system backup (excluding media) has been created.'
+                'You created the system backup (excluding media).'
             ),
-            \Magento\Framework\Backup\Factory::TYPE_MEDIA => __('The database and media backup has been created.'),
-            \Magento\Framework\Backup\Factory::TYPE_DB => __('The database backup has been created.'),
+            \Magento\Framework\Backup\Factory::TYPE_MEDIA => __('You created the database and media backup.'),
+            \Magento\Framework\Backup\Factory::TYPE_DB => __('You created the database backup.'),
         ];
 
         if (!isset($messagesMap[$type])) {
