@@ -57,19 +57,13 @@ class ToOrderConverter
         if ($extensionAttributes == null) {
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
-        if (is_array($taxes)) {
-            if (is_array($order->getAppliedTaxes())) {
-                $taxes = array_merge($order->getAppliedTaxes(), $taxes);
-            }
+        if (!empty($taxes)) {
             $extensionAttributes->setAppliedTaxes($taxes);
             $extensionAttributes->setConvertingFromQuote(true);
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
-        if (is_array($itemAppliedTaxes)) {
-            if (is_array($order->getItemAppliedTaxes())) {
-                $itemAppliedTaxes = array_merge($order->getItemAppliedTaxes(), $itemAppliedTaxes);
-            }
+        if (!empty($itemAppliedTaxes)) {
             $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxes);
         }
         $order->setExtensionAttributes($extensionAttributes);
