@@ -10,7 +10,8 @@
 ?>
 <?php if (!$block->isVirtual()): ?>
     <div id="gift-options-cart-item-<?php echo $block->getItem()->getId() ?>"
-        data-bind="scope:'giftOptionsCartItem-<?php echo $block->getItem()->getId() ?>'">
+        data-bind="scope:'giftOptionsCartItem-<?php echo $block->getItem()->getId() ?>'"
+        class="gift-options-cart-item">
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
             {
