@@ -31,7 +31,6 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
-     * @codeCoverageIgnore
      */
     public function currencyDisplayOptions(\Magento\Framework\Event\Observer $observer)
     {
