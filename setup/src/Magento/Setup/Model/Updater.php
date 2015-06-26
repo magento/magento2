@@ -6,11 +6,8 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Model\Cron\Queue;
-use Magento\Setup\Model\Cron\Queue\Reader;
 
 /**
  * Class Updater passes information to the updater application
@@ -18,29 +15,17 @@ use Magento\Setup\Model\Cron\Queue\Reader;
 class Updater
 {
     /**
-     * Path to Magento var directory
-     *
-     * @var string
+     * @var Queue
      */
-    private $queueFilePath;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    private $write;
-
     private $queue;
 
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
+     * @param Queue $queue
      */
-    public function __construct(Filesystem $filesystem, Queue $queue)
+    public function __construct(Queue $queue)
     {
-        $this->queueFilePath = '.update_queue.json';
-        $this->write = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->write->touch($this->queueFilePath);
         $this->queue = $queue;
     }
 

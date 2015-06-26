@@ -7,9 +7,6 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobFactory;
 
-/**
- * @SuppressWarning(PHPMD.UnusedFormalParameter)
- */
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -83,6 +80,9 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;
 
+/**
+ * @SuppressWarning(PHPMD.UnusedFormalParameter)
+ */
 function fopen($path, $mode)
 {
     return 'filestream';
