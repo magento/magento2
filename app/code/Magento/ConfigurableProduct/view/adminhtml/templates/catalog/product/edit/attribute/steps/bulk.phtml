@@ -10,8 +10,7 @@
 <div data-bind="scope: '<?= $block->getComponentName()?>'" class="admin__scope-old" data-role="bulk-step">
     <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Bulk Images, Pricing, and Inventory') ?></h1>
     <div style="padding-bottom: 10px">
-        <span><?= __('Based on your selections 24 new products will be created. Use this step to customize images
-        and pricing for your new products.') ?></span>
+        <span><?= __('Based on your selections <span data-bind="text:newProductsCount"></span> new products will be created. Use this step to customize images and pricing for your new products.') ?></span>
     </div>
 
     <div data-bind="foreach:imagesSection">
