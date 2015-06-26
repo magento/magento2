@@ -18,6 +18,8 @@ use Magento\Framework\Filesystem;
  * Class Environment
  *
  * Provides information and checks about the environment.
+ *
+ * * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Environment extends AbstractActionController
 {
