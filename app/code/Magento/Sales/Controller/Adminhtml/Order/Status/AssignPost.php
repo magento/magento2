@@ -26,14 +26,14 @@ class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
             if ($status && $status->getStatus()) {
                 try {
                     $status->assignState($state, $isDefault, $visibleOnFront);
-                    $this->messageManager->addSuccess(__('You have assigned the order status.'));
+                    $this->messageManager->addSuccess(__('You assigned the order status.'));
                     return $resultRedirect->setPath('sales/*/');
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
                     $this->messageManager->addException(
                         $e,
-                        __('An error occurred while assigning order status. Status has not been assigned.')
+                        __('Something went wrong while assigning the order status.')
                     );
                 }
             } else {
