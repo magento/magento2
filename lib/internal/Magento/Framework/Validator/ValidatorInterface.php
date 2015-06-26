@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 interface ValidatorInterface extends \Zend_Validate_Interface
 {
     /**
