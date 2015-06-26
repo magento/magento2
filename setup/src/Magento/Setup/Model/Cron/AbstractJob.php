@@ -42,7 +42,7 @@ abstract class AbstractJob
      * @param string $name
      * @param array $params
      */
-    public function __construct(OutputInterface $output, Status $status,$name, array $params = [])
+    public function __construct(OutputInterface $output, Status $status, $name, array $params = [])
     {
         $this->output = $output;
         $this->status = $status;
