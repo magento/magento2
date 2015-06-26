@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class DashboardTest extends \Magento\Backend\Utility\Controller
+class DashboardTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testAjaxBlockAction()
     {

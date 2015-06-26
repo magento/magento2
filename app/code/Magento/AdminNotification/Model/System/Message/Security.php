@@ -135,8 +135,8 @@ class Security implements \Magento\Framework\Notification\MessageInterface
     public function getText()
     {
         return __(
-            'Your web server is configured incorrectly. As a result, configuration files '
-            . ' with sensitive information are accessible from the outside. Please contact your hosting provider.'
+            'Your web server is set up incorrectly and allows unauthorized access to sensitive files. '
+            . 'Please contact your hosting provider.'
         );
     }
 
