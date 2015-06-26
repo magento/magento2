@@ -42,7 +42,10 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     protected $_eventManager = null;
 
     /**
+     * Class constructor
+     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -50,6 +53,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
@@ -57,7 +61,27 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        parent::__construct($context, $eavConfig, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $eavConfig, $resourcePrefix);
+    }
+
+    /**
+     * Get Table strategy
+     *
+     * @return \Magento\Indexer\Model\Indexer\Table\StrategyInterface
+     */
+    public function getTableStrategy()
+    {
+        return $this->tableStrategy;
+    }
+
+    /**
+     * Get write connection
+     *
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getWriteConnection()
+    {
+        return $this->_getWriteAdapter();
     }
 
     /**
@@ -129,7 +153,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->reindex();
@@ -176,10 +200,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getDefaultFinalPriceTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_final_idx');
-        }
-        return $this->getTable('catalog_product_index_price_final_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_final');
     }
 
     /**
@@ -330,10 +351,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getCustomOptionAggregateTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_opt_agr_idx');
-        }
-        return $this->getTable('catalog_product_index_price_opt_agr_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt_agr');
     }
 
     /**
@@ -343,10 +361,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getCustomOptionPriceTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_opt_idx');
-        }
-        return $this->getTable('catalog_product_index_price_opt_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_opt');
     }
 
     /**
@@ -630,10 +645,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getIdxTable($table = null)
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_idx');
-        }
-        return $this->getTable('catalog_product_index_price_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price');
     }
 
     /**

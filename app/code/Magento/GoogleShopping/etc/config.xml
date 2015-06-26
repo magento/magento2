@@ -187,7 +187,7 @@
                             <required>1</required>
                         </gender>
                         <mpn translate="name">
-                            <name>Manufacturer\'s Part Number (MPN)</name>
+                            <name>Manufacturer Part Number (MPN)</name>
                             <required>1</required>
                         </mpn>
                         <online_only translate="name">
