@@ -13,45 +13,43 @@ use \Magento\Framework\Mview\View\Subscription;
 class SubscriptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\View\Subscription
-     */
-    protected $model;
-
-    /**
      * Mysql PDO DB adapter mock
      *
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $connectionMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Resource
-     */
+    /** @var \Magento\Framework\Mview\View\Subscription */
+    protected $model;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Resource */
     protected $resourceMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Ddl\TriggerFactory
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Ddl\TriggerFactory */
     protected $triggerFactoryMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\View\CollectionInterface
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\View\CollectionInterface */
     protected $viewCollectionMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\ViewInterface
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\ViewInterface */
     protected $viewMock;
+
+    /** @var  string */
+    private $tableName;
 
     protected function setUp()
     {
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
 
-        $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource', ['getConnection', 'getTableName'], [], '', false, false
-        );
-        $this->mockGetConnection($this->connectionMock);
+        $this->connectionMock->expects($this->any())
+            ->method('quoteIdentifier')
+            ->will($this->returnArgument(0));
+
+        $this->resourceMock->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+
         $this->triggerFactoryMock = $this->getMock(
             'Magento\Framework\DB\Ddl\TriggerFactory', [], [], '', false, false
         );
@@ -62,16 +60,16 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Mview\ViewInterface', [], '', false, false, true, []
         );
 
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->resourceMock->expects($this->any())
+            ->method('getTableName')
+            ->willReturn($this->tableName);
 
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
             $this->viewCollectionMock,
             $this->viewMock,
-            'tableName',
+            $this->tableName,
             'columnName'
         );
     }
@@ -83,7 +81,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTableName()
     {
-        $this->assertEquals('tableName', $this->model->getTableName());
+        $this->assertEquals($this->tableName, $this->model->getTableName());
     }
 
     public function testGetColumnName()
@@ -93,11 +91,14 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->mockGetTableName();
-
-        $triggerMock = $this->getMock('Magento\Framework\DB\Ddl\Trigger', [], [], '', false, false);
+        $triggerName = 'trigger_name';
+        $this->resourceMock->expects($this->atLeastOnce())->method('getTriggerName')->willReturn($triggerName);
+        $triggerMock = $this->getMockBuilder('Magento\Framework\DB\Ddl\Trigger')
+            ->disableOriginalConstructor()
+            ->getMock();
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
+            ->with($triggerName)
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(3))
             ->method('getName')
@@ -111,7 +112,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with('tableName')
+            ->with($this->tableName)
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(6))
             ->method('addStatement')
@@ -153,7 +154,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('other_id'));
         $otherViewMock->expects($this->exactly(1))
             ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => 'tableName'], ['name' => 'otherTableName']]));
+            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
             ->will($this->returnValue($otherChangelogMock));
@@ -182,8 +183,6 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->mockGetTableName();
-
         $triggerMock = $this->getMock('Magento\Framework\DB\Ddl\Trigger', [], [], '', false, false);
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
@@ -200,7 +199,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with('tableName')
+            ->with($this->tableName)
             ->will($this->returnSelf());
         $triggerMock->expects($this->exactly(3))
             ->method('addStatement')
@@ -228,7 +227,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('other_id'));
         $otherViewMock->expects($this->exactly(1))
             ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => 'tableName'], ['name' => 'otherTableName']]));
+            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
             ->will($this->returnValue($otherChangelogMock));
@@ -258,22 +257,5 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->with($triggerMock);
 
         $this->model->remove();
-    }
-
-    /**
-     * @param $connection
-     */
-    protected function mockGetConnection($connection)
-    {
-        $this->resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
-    }
-
-    protected function mockGetTableName()
-    {
-        $this->resourceMock->expects($this->any())
-            ->method('getTableName')
-            ->will($this->returnArgument(0));
     }
 }
