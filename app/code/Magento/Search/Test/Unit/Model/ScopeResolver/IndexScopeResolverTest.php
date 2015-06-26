@@ -62,7 +62,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolve($indexName, array $dimensions, $expected)
     {
         $dimensions = array_map(
-            function($demension) {
+            function ($demension) {
                 return $this->createDimension($demension[0], $demension[1]);
             },
             $dimensions

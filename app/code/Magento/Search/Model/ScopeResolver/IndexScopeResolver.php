@@ -25,7 +25,7 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     private $scopeResolver;
 
     /**
-     * @param Resource|Resource $resource
+     * @param Resource $resource
      * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
