@@ -63,7 +63,6 @@ class JobFactory
                 break;
             case self::DB_ROLLBACK:
                 return new JobRollback(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\RollbackCommand'),
                     $objectManagerProvider,
                     $maintenanceMode,
                     $multipleStreamOutput,

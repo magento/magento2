@@ -14,50 +14,48 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $jobFactory;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
-     */
-    private $serviceManager;
-
     public function setUp()
     {
-        $this->serviceManager = $this->getMockForAbstractClass(
-            'Zend\ServiceManager\ServiceLocatorInterface',
-            [],
-            '',
-            false
-        );
+        $serviceManager = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', [], '', false);
 
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
-        $command = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 
+        $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
+        $rollbackCommand = $this->getMock('Magento\Setup\Console\Command\RollbackCommand', [], [], '', false);
+
         $returnValueMap =[
             ['Magento\Setup\Model\Cron\Status', $status],
-            ['Magento\Setup\Console\Command\UpgradeCommand', $command],
+            ['Magento\Setup\Console\Command\UpgradeCommand', $upgradeCommand],
+            ['Magento\Setup\Console\Command\RollbackCommand', $rollbackCommand],
             ['Magento\Framework\App\MaintenanceMode', $maintenanceMode],
             ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider]
         ];
 
-        $this->serviceManager->expects($this->any())
+        $serviceManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($returnValueMap));
 
-        $this->jobFactory = new JobFactory($this->serviceManager);
+        $this->jobFactory = new JobFactory($serviceManager);
     }
 
-    public function testCreate()
+    public function testUpgrade()
     {
-
-
         $this->assertInstanceOf('Magento\Setup\Model\Cron\AbstractJob', $this->jobFactory->create('setup:upgrade', []));
     }
 
+    public function testRollback()
+    {
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\AbstractJob',
+            $this->jobFactory->create('setup:rollback', [])
+        );
+    }
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage job is not supported
