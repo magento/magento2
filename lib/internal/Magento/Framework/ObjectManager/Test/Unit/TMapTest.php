@@ -22,20 +22,12 @@ class TMapTest extends \PHPUnit_Framework_TestCase
      */
     private $omConfig;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Code\Reader\ClassReaderInterface
-     */
-    private $cReader;
-
     public function setUp()
     {
         $this->om = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->getMockForAbstractClass();
 
         $this->omConfig = $this->getMockBuilder('Magento\Framework\ObjectManager\ConfigInterface')
-            ->getMockForAbstractClass();
-
-        $this->cReader = $this->getMockBuilder('Magento\Framework\Code\Reader\ClassReaderInterface')
             ->getMockForAbstractClass();
     }
 
@@ -154,19 +146,10 @@ class TMapTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->cReader->expects(static::exactly($exactlyCalls))
-            ->method('getParents')
-            ->willReturnMap(
-                [
-                    ['TClass', ['TInterface']]
-                ]
-            );
-
         return new TMap(
             'TInterface',
             $this->om,
             $this->omConfig,
-            $this->cReader,
             $testClasses
         );
     }

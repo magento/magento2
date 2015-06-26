@@ -233,7 +233,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionList()
     {
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $this->_renderer->setItem($itemMock);
         $this->productConfigMock->expects($this->once())->method('getOptions')->with($itemMock);
         $this->_renderer->getOptionList();

@@ -111,7 +111,7 @@
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
                         <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Purchase Date</argument>
+                            <argument name="header" xsi:type="string" translate="true">Purchased</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
                             <argument name="index" xsi:type="string">created_at</argument>
                             <argument name="id" xsi:type="string">created_at</argument>

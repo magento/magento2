@@ -644,7 +644,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify the product's option(s).
+     * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testCheckProductBuyStateException()
     {
