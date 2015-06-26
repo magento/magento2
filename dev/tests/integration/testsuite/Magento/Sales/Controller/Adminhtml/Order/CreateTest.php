@@ -110,7 +110,9 @@ class CreateTest extends \Magento\Backend\Utility\Controller
     public function testGetAclResource($actionName, $reordered, $expectedResult)
     {
         $this->_objectManager->get('Magento\Backend\Model\Session\Quote')->setReordered($reordered);
-        $orderController = $this->_objectManager->get('Magento\Sales\Controller\Adminhtml\Order\Create');
+        $orderController = $this->_objectManager->get(
+            'Magento\Sales\Controller\Adminhtml\Order\Stub\OrderCreateStub'
+        );
 
         $this->getRequest()->setActionName($actionName);
 
