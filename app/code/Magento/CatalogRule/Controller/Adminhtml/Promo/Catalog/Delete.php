@@ -23,7 +23,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $model->load($id);
                 $model->delete();
                 $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
-                $this->messageManager->addSuccess(__('The rule has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the rule.'));
                 $this->_redirect('catalog_rule/*/');
                 return;
             } catch (LocalizedException $e) {
@@ -37,7 +37,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 return;
             }
         }
-        $this->messageManager->addError(__('Unable to find a rule to delete.'));
+        $this->messageManager->addError(__('We can\'t find a rule to delete.'));
         $this->_redirect('catalog_rule/*/');
     }
 }

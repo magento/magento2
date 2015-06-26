@@ -19,6 +19,8 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * Command for uninstalling language and backup-code feature
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UninstallLanguageCommand extends Command
 {
@@ -151,7 +153,7 @@ class UninstallLanguageCommand extends Command
      */
     private function validate($package)
     {
-        $installedPackages = $this->composerInfo->getRootRequiredPackagesAndTypes();
+        $installedPackages = $this->composerInfo->getRootRequiredPackageTypesByName();
 
         if (isset($installedPackages[$package]) && $installedPackages[$package] === 'magento2-language') {
             return true;
