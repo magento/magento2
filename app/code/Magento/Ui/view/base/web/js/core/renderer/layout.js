@@ -102,9 +102,12 @@ define([
         },
 
         build: function (parent, node, name) {
-            var defaults = parent && parent.childDefaults || {},
-                children = node.children,
-                type = getNodeType(parent, node);
+            var defaults    = parent && parent.childDefaults || {},
+                children    = node.children,
+                type        = getNodeType(parent, node),
+                dataScope   = getDataScope(parent, node);
+
+            name = getNodeName(parent, node, name);
 
             node.children = false;
 
@@ -113,8 +116,10 @@ define([
 
             _.extend(node, node.config || {}, {
                 index: node.name || name,
-                name: getNodeName(parent, node, name),
-                dataScope: getDataScope(parent, node)
+                name: name,
+                dataScope: dataScope,
+                parentName: utils.getPart(name, -2),
+                parentScope: utils.getPart(dataScope, -2)
             });
 
             node.children = children;

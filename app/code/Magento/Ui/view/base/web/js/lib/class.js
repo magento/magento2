@@ -102,6 +102,15 @@ define([
         this.initialize.apply(this, arguments);
     }
 
+    _.extend(Class, {
+        extend: extend,
+        defaults: {
+            tmplsIgnore: {
+                templates: true
+            }
+        }
+    });
+
     _.extend(Class.prototype, {
         /**
          * Starts initialization of an instance.
@@ -123,27 +132,22 @@ define([
          * @returns {Class} Chainable.
          */
         initConfig: function (options) {
-            var defaults        = this.constructor.defaults,
-                config          = utils.extend({}, defaults, options),
-                templates       = config.templates,
-                childDefaults   = config.childDefaults;
-
-            delete config.templates;
-            delete config.childDefaults;
+            var defaults    = this.constructor.defaults,
+                config      = utils.extend({}, defaults, options),
+                ignored     = config.tmplsIgnore || {},
+                cached      = utils.omit(config, ignored);
 
             config = utils.template(config, this);
 
-            config.templates = templates;
-            config.childDefaults = childDefaults;
+            _.each(cached, function (value, key) {
+                utils.nested(config, key, value);
+            });
 
             _.extend(this, config);
 
             return this;
         }
     });
-
-    Class.extend = extend;
-    Class.defaults = {};
 
     return Class;
 });

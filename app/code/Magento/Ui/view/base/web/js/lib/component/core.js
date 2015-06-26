@@ -14,11 +14,12 @@ define([
     return {
         defaults: {
             template: 'ui/collection',
-            parentName: '${ $.$data.getPart( $.name, -2) }',
-            parentScope: '${ $.$data.getPart( $.dataScope, -2) }',
             containers: [],
             _elems: [],
             elems: [],
+            tmplsIgnore: {
+                childDefaults: true
+            },
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
@@ -42,8 +43,8 @@ define([
                 .initObservable()
                 .initModules()
                 .initUnique()
-                .initLinks()
-                .setListners(this.listens);
+                .setListners(this.listens)
+                .initLinks();
 
             return this;
         },
@@ -153,24 +154,6 @@ define([
          */
         getTemplate: function () {
             return this.template;
-        },
-
-        /**
-         * Splits incoming string and returns its' part specified by offset.
-         *
-         * @param {String} parts
-         * @param {Number} [offset]
-         * @param {String} [delimiter=.]
-         * @returns {String}
-         */
-        getPart: function (parts, offset, delimiter) {
-            delimiter = delimiter || '.';
-            parts = parts.split(delimiter);
-            offset = utils.formatOffset(parts, offset);
-
-            parts.splice(offset, 1);
-
-            return parts.join(delimiter) || '';
         },
 
         /**
