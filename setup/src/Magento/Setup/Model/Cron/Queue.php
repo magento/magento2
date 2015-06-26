@@ -118,7 +118,7 @@ class Queue
             $this->validateJobDeclaration($job);
             $queue = json_decode($this->reader->read(), true);
             $queue[self::KEY_JOBS][] = $job;
-            $this->writer->write(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
+            $this->writer->write(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
     }
 

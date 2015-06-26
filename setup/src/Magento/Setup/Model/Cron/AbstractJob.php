@@ -30,7 +30,8 @@ abstract class AbstractJob
      * @param string $name
      * @param array $params
      */
-    public function __construct($name, array $params = []) {
+    public function __construct($name, array $params = [])
+    {
         $this->name = $name;
         $this->params = $params;
     }
