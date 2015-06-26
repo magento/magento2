@@ -44,44 +44,42 @@ define([
         generateGrid: function (variations) {
             //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
             return _.map(variations, function (options) {
-                //sku
-                var variation;
-                var pricing;
-                var inventory;
-                var images;
-                var sku;
-                var other;
-                var needNames;
-                sku = _.reduce(options, function (memo, option) {
-                    return memo + option.label;
-                }, '');
+                var variation = [],
+                    pricing,
+                    inventory,
+                    images;
                 //images
                 images = _.find(options, function (option) {
                     return !_.isEmpty(option.sections().images);
                 });
-                images = images
+                variation.push(images
                     ? images.sections().images
-                    : _.findWhere(this.sections(), {label:'images'}).value();
+                    : _.findWhere(this.sections(), {label:'images'}).value()
+                );
+                //sku
+                variation.push(_.reduce(options, function (memo, option) {
+                    return memo + '-' + option.label;
+                }, '').substring(1));
                 //inventory
                 inventory = _.find(options, function (option) {
                     return !_.isEmpty(option.sections().inventory);
                 });
-                inventory = inventory
+                variation.push(inventory
                     ? inventory.sections().inventory
-                    : _.findWhere(this.sections(), {label:'inventory'}).value();
+                    : _.findWhere(this.sections(), {label:'inventory'}).value()
+                );
+                //attributes
+                _.each(options, function (option) {
+                    variation.push(option.label);
+                });
                 //pricing
                 pricing = _.find(options, function (option) {
                     return !_.isEmpty(option.sections().pricing);
                 });
-                pricing = pricing
+                variation.push(pricing
                     ? pricing.sections().pricing
-                    : _.findWhere(this.sections(), {label:'pricing'}).value();
-
-                variation = [images, sku, inventory, pricing];
-
-                _.each(options, function (option, index) {
-                    variation.splice(3 + index, 0, option.label);
-                }, this);
+                    : _.findWhere(this.sections(), {label:'pricing'}).value()
+                );
 
                 //result
                 return variation;
