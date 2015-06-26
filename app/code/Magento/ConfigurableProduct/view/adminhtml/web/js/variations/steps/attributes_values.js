@@ -81,7 +81,7 @@ define([
             $.ajax({
                 type: "POST",
                 url: this.options_url,
-                data: {attributes: wizard.data.attributes()},
+                data: {attributes: wizard.data.attributesIds()},
                 showLoader: true
             }).done(function(attributes){
                 this.attributes(_.map(attributes, this.createAttribute, this));
@@ -93,7 +93,7 @@ define([
             wizard.data.attributes = this.attributes;
         },
         back: function(wizard) {
-            wizard.data.attributes(viewModel.prototype.attributes().pluck('id'));
+            wizard.data.attributesIds(viewModel.prototype.attributes().pluck('id'));
         }
     });
     return viewModel;

@@ -47,9 +47,9 @@ define([
             this.selectedAttributes(labels.join(', '));
         },
         force: function (wizard) {
-            wizard.data.attributes = this.multiselect().selected;
+            wizard.data.attributesIds = this.multiselect().selected;
 
-            if (!wizard.data.attributes() || wizard.data.attributes().length === 0) {
+            if (!wizard.data.attributesIds() || wizard.data.attributesIds().length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
         },
