@@ -9,7 +9,7 @@
 /** @var $block \Magento\ProductAlert\Block\Email\Price */
 ?>
 <?php if ($_products = $block->getProducts()): ?>
-<p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the prices for the following products changed:') ?></p>
+<p><?php echo __('Price change alert! We wanted you to know that prices have changed for these products:') ?></p>
 <table>
 <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
 <?php foreach ($_products as $_product): ?>
@@ -38,7 +38,7 @@
                 );
                 ?>
             </p>
-            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here to stop alerts for this product.') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>

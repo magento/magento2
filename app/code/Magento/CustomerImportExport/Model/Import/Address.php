@@ -288,12 +288,12 @@ class Address extends AbstractCustomer
         $this->addMessageTemplate(self::ERROR_ADDRESS_ID_IS_EMPTY, __('Customer address id column is not specified'));
         $this->addMessageTemplate(
             self::ERROR_ADDRESS_NOT_FOUND,
-            __("Customer address for such customer doesn't exist")
+            __('We can\'t find that customer address.')
         );
-        $this->addMessageTemplate(self::ERROR_INVALID_REGION, __('Region is invalid'));
+        $this->addMessageTemplate(self::ERROR_INVALID_REGION, __('Please enter a valid region.'));
         $this->addMessageTemplate(
             self::ERROR_DUPLICATE_PK,
-            __('Row with such email, website and address id combination was already found.')
+            __('We found another row with this email, website and address ID combination.')
         );
 
         $this->_initAttributes();

@@ -53,7 +53,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 
             $template->save();
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-            $this->messageManager->addSuccess(__('The email template has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get(
