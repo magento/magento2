@@ -14,7 +14,7 @@ define(
         var types = [
             {
                 niceType: 'Visa',
-                type: 'visa',
+                type: 'VI',
                 pattern: '^4\\d*$',
                 gaps: [4, 8, 12],
                 lengths: [16],
@@ -25,7 +25,7 @@ define(
             },
             {
                 niceType: 'MasterCard',
-                type: 'master-card',
+                type: 'MC',
                 pattern: '^5([1-5]\\d*)?$',
                 gaps: [4, 8, 12],
                 lengths: [16],
@@ -36,7 +36,7 @@ define(
             },
             {
                 niceType: 'American Express',
-                type: 'american-express',
+                type: 'AE',
                 pattern: '^3([47]\\d*)?$',
                 isAmex: true,
                 gaps: [4, 10],
@@ -47,8 +47,8 @@ define(
                 }
             },
             {
-                niceType: 'DinersClub',
-                type: 'diners-club',
+                niceType: 'Diners',
+                type: 'DN',
                 pattern: '^3((0([0-5]\\d*)?)|[689]\\d*)?$',
                 gaps: [4, 10],
                 lengths: [14],
@@ -59,7 +59,7 @@ define(
             },
             {
                 niceType: 'Discover',
-                type: 'discover',
+                type: 'DI',
                 pattern: '^6(0|01|011\\d*|5\\d*|4|4[4-9]\\d*)?$',
                 gaps: [4, 8, 12],
                 lengths: [16],
@@ -70,7 +70,7 @@ define(
             },
             {
                 niceType: 'JCB',
-                type: 'jcb',
+                type: 'JC',
                 pattern: '^((2|21|213|2131\\d*)|(1|18|180|1800\\d*)|(3|35\\d*))$',
                 gaps: [4, 8, 12],
                 lengths: [16],
@@ -81,7 +81,7 @@ define(
             },
             {
                 niceType: 'UnionPay',
-                type: 'unionpay',
+                type: 'UN',
                 pattern: '^6(2\\d*)?$',
                 gaps: [4, 8, 12],
                 lengths: [16, 17, 18, 19],
@@ -92,8 +92,8 @@ define(
             },
             {
                 niceType: 'Maestro',
-                type: 'maestro',
-                pattern: '^((5((0|[6-9])\\d*)?)|(6|6[37]\\d*))$',
+                type: 'SM',
+                pattern: '(^(5[0678])[0-9]{11,18}$)|(^(6[^05])[0-9]{11,18}$)|(^(601)[^1][0-9]{9,16}$)|(^(6011)[0-9]{9,11}$)|(^(6011)[0-9]{13,16}$)|(^(65)[0-9]{11,13}$)|(^(65)[0-9]{15,18}$)|(^(49030)[2-9]([0-9]{10}$|[0-9]{12,13}$))|(^(49033)[5-9]([0-9]{10}$|[0-9]{12,13}$))|(^(49110)[1-2]([0-9]{10}$|[0-9]{12,13}$))|(^(49117)[4-9]([0-9]{10}$|[0-9]{12,13}$))|(^(49118)[0-2]([0-9]{10}$|[0-9]{12,13}$))|(^(4936)([0-9]{12}$|[0-9]{14,15}$))',
                 gaps: [4, 8, 12],
                 lengths: [12, 13, 14, 15, 16, 17, 18, 19],
                 code: {
@@ -102,7 +102,6 @@ define(
                 }
             }
         ];
-
         return {
             getCardTypes: function (cardNumber) {
                 var i, value,

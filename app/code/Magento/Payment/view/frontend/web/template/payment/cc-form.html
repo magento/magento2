@@ -5,6 +5,12 @@
  */
 -->
 
+<style>
+    .credit-card-types div.active{
+        font-weight: bold;
+    }
+</style>
+
 <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
     <!-- ko if: (isShowLegend())-->
     <legend class="legend">
@@ -16,18 +22,18 @@
             <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
         </label>
         <div class="control">
-            <select name="payment[cc_type]" class="select"
-                    data-bind="attr: {id: getCode() + '_cc_type',
-                               'data-container': getCode() + '-cc-type',
-                               'data-validate': JSON.stringify({required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'})},
-                               mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
-                               enable: isActive($parents),
-                               options: getCcAvailableTypesValues(),
-                               optionsValue: 'value',
-                               optionsText: 'type',
-                               optionsCaption: $t('Please Select'),
-                               value: creditCardType">
-            </select>
+            <div class="credit-card-types">
+                <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
+                <div data-bind="css: {active: $parent.selectedCardType() == item.value} ">
+                    <!-- ko text: item.type --><!-- /ko -->
+                </div>
+                <!--/ko-->
+                <input type="hidden"
+                       name="payment[cc_number]"
+                       class="input-text"
+                       value=""
+                       data-bind="attr: {id: getCode() + '_cc_type'}, value: creditCardType">
+            </div>
         </div>
     </div>
     <div class="field number required">
@@ -36,10 +42,14 @@
         </label>
         <div class="control">
             <input type="text" name="payment[cc_number]" class="input-text" value=""
-                   data-bind="attr: {id: getCode() + '_cc_number', title: $t('Credit Card Number'), 'data-container': getCode() + '-cc-number', 'data-validate': JSON.stringify({'required-number':true, 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
+                   data-bind="attr: {
+                                    id: getCode() + '_cc_number',
+                                    title: $t('Credit Card Number'),
+                                    'data-container': getCode() + '-cc-number',
+                                    'data-validate': JSON.stringify({'required-number':true, 'validate-card-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                               enable: isActive($parents),
                               value: creditCardNumber,
-                              valueUpdate: 'keyup',"/>
+                              valueUpdate: 'keyup' "/>
         </div>
     </div>
     <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
