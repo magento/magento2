@@ -14,35 +14,57 @@
 
 <!-- Temp MAGETWO-36025 markup -->
 <div class="opc-estimated-wrapper">
+<!-- Markup for MAGETWO-38644 -->
     <div class="estimated-block">
         <span class="estimated-label" data-bind="text: $t('Estimated Total')"></span>
         <span class="estimated-price">$100.00</span>
     </div>
     <div class="minicart-wrapper">
-        <a class="action showcart" href="javascript:void(0);">
+        <button type="button" class="action showcart" data-toggle="opc-summary">
             <span class="counter qty">
                 <span class="counter-number">6</span>
             </span>
-        </a>
+        </button>
     </div>
+    <!-- Temp MAGETWO-36025 markup
+    <button
+        type="button"
+        class="action showcart"
+        data-toggle="opc-summary">
+        <span data-bind="text: $t('View order summary')"></span>
+    </button>-->
 </div>
 <!-- /Temp MAGETWO-36025 markup -->
 
 <!-- ko foreach: getRegion('messages') -->
-<!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 <div class="opc-wrapper">
     <ol class="opc" id="checkoutSteps">
     <!-- ko foreach: getRegion('steps') -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
     </ol>
 </div>
 
-<div class="opc-sidebar">
-        <!-- ko foreach: getRegion('summary') -->
+<div id="opc-sidebar"
+    data-bind="mageInit: {
+    'Magento_Ui/js/modal/modal':{
+        'type': 'custom',
+        'modalClass': 'opc-sidebar opc-summary-wrapper',
+        'trigger': '[data-toggle=opc-summary]',
+        'wrapperClass': 'checkout-container',
+        'parentModalClass': '_has-modal-custom',
+        'responsive': true,
+        'responsiveClass': 'custom-slide',
+        'overlayClass': 'modal-custom-overlay',
+        'buttons': []
+    }}">
+
+    <!-- ko foreach: getRegion('summary') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
+    <!--/ko-->
+
     <div class="opc-block-shipping-information">
         <!-- ko foreach: getRegion('shipping-information') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

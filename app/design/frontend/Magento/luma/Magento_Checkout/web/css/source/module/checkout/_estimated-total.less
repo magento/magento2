@@ -34,8 +34,10 @@
         }
 
         .minicart-wrapper {
-            .action {
-                &.showcart {
+            button {
+                // todo ui: Change .action.showcart to .action-showcart
+                &.action.showcart {
+                    .button-reset();
                     &:before {
                         .css(color, @primary__color);
                     }

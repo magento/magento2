@@ -295,6 +295,9 @@
             .css(padding-bottom, @checkout-step-title__margin-bottom);
         }
     }
+    .table-checkout-shipping-method {
+        width: auto;
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
@@ -330,5 +333,8 @@
                 }
             }
         }
+    }
+    .table-checkout-shipping-method {
+        min-width: 500px;
     }
 }

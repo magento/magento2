@@ -70,7 +70,7 @@
         //
         //  Items list
         //  ---------------------------------------------
-        
+
         //  Block title
         .items-in-cart {
             > .title {
@@ -111,7 +111,7 @@
                 position: relative;
             }
         }
-        
+
         //  Cart items
         .minicart-items-wrapper {
             .css(margin, 0 -(@checkout-summary-items__padding) 0 0);
@@ -169,6 +169,20 @@
         }
         .totals {
             &:extend(.abs-sidebar-totals-mobile all);
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .opc-summary-wrapper {
+        .modal-header {
+            .action-close {
+                display: none;
+            }
         }
     }
 }
