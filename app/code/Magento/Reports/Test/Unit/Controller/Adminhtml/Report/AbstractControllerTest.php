@@ -6,6 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
