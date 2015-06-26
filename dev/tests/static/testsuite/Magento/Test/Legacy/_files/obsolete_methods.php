@@ -2245,7 +2245,7 @@ return [
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
-    ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['getFilePath', 'Magento\MediaStorage\Model\File\Storage\Request'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['getDataSetDefault', 'Magento\Framework\Object'],

@@ -3811,7 +3811,7 @@
       </xs:simpleType>
       <xs:simpleType name="ReturnEMailAllowedSpecialServiceType">
         <xs:annotation>
-          <xs:documentation>These values are used to control the availability of certain special services at the time when a customer uses the e-mail label link to create a return shipment.</xs:documentation>
+          <xs:documentation>These values are used to control the availability of certain special services at the time when a customer uses the email label link to create a return shipment.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
           <xs:enumeration value="SATURDAY_DELIVERY"/>
@@ -4410,7 +4410,7 @@
           </xs:element>
           <xs:element name="PendingShipmentDetail" type="ns:PendingShipmentDetail" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>This field should be populated for pending shipments (e.g. e-mail label) It is required by a PENDING_SHIPMENT special service type.</xs:documentation>
+              <xs:documentation>This field should be populated for pending shipments (e.g. email label) It is required by a PENDING_SHIPMENT special service type.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="ShipmentDryIceDetail" type="ns:ShipmentDryIceDetail" minOccurs="0">
@@ -4490,7 +4490,7 @@
           </xs:element>
           <xs:element name="EMailDetail" type="ns:ShippingDocumentEMailDetail" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>Specifies how to e-mail document images.</xs:documentation>
+              <xs:documentation>Specifies how to email document images.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="PrintDetail" type="ns:ShippingDocumentPrintDetail" minOccurs="0">
@@ -4516,17 +4516,17 @@
       </xs:simpleType>
       <xs:complexType name="ShippingDocumentEMailDetail">
         <xs:annotation>
-          <xs:documentation>Specifies how to e-mail shipping documents.</xs:documentation>
+          <xs:documentation>Specifies how to email shipping documents.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="EMailRecipients" type="ns:ShippingDocumentEMailRecipient" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>Provides the roles and email addresses for e-mail recipients.</xs:documentation>
+              <xs:documentation>Provides the roles and email addresses for email recipients.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="Grouping" type="ns:ShippingDocumentEMailGroupingType" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>Identifies the convention by which documents are to be grouped as e-mail attachments.</xs:documentation>
+              <xs:documentation>Identifies the convention by which documents are to be grouped as email attachments.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -4539,7 +4539,7 @@
       </xs:simpleType>
       <xs:complexType name="ShippingDocumentEMailRecipient">
         <xs:annotation>
-          <xs:documentation>Specifies an individual recipient of e-mailed shipping document(s).</xs:documentation>
+          <xs:documentation>Specifies an individual recipient of emailed shipping document(s).</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="RecipientType" type="ns:EMailNotificationRecipientType" minOccurs="0">

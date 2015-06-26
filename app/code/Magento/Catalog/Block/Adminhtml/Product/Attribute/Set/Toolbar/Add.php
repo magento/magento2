@@ -30,7 +30,7 @@ class Add extends \Magento\Backend\Block\Template
                 'save_button',
                 'Magento\Backend\Block\Widget\Button',
                 [
-                    'label' => __('Save Attribute Set'),
+                    'label' => __('Save'),
                     'class' => 'save primary save-attribute-set',
                     'data_attribute' => [
                         'mage-init' => ['button' => ['event' => 'save', 'target' => '#set-prop-form']],
@@ -57,7 +57,7 @@ class Add extends \Magento\Backend\Block\Template
      */
     protected function _getHeader()
     {
-        return __('Add New Attribute Set');
+        return __('Add New Product Template');
     }
 
     /**
