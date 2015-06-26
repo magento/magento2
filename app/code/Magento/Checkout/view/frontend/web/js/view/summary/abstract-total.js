@@ -14,17 +14,25 @@ define(
     function (Component, quote, priceUtils, totals, stepNavigator) {
         "use strict";
         return Component.extend({
+            shippingAvailableFlag: undefined,
             getFormattedPrice: function (price) {
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getTotals: function() {
                 return totals.totals();
             },
+            isShippingAvailable: function() {
+                if (undefined !== this.shippingAvailableFlag) {
+                    return this.shippingAvailableFlag;
+                }
+                this.shippingAvailableFlag = stepNavigator.isAvailable('shipping');
+                return this.shippingAvailableFlag;
+            },
             isFullMode: function() {
                 if (!this.getTotals()) {
                     return false;
                 }
-                return !stepNavigator.isAvailable('shipping') || stepNavigator.isProcessed('shipping');
+                return !this.isShippingAvailable() || stepNavigator.isProcessed('shipping');
             }
         });
     }

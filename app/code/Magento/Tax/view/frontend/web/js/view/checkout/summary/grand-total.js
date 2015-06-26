@@ -7,9 +7,11 @@
 define(
     [
         'Magento_Checkout/js/view/summary/abstract-total',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/totals'
     ],
-    function (Component, quote) {
+    function (Component, quote, priceUtils, totals) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -24,7 +26,7 @@ define(
             getValue: function() {
                 var price = 0;
                 if (this.totals()) {
-                    price = this.totals().grand_total;
+                    price = totals.getSegment('grand_total').value;
                 }
                 return this.getFormattedPrice(price);
             },
@@ -33,7 +35,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().base_grand_total;
                 }
-                return this.getFormattedPrice(price);
+                return priceUtils.formatPrice(price, quote.getBasePriceFormat());
             },
             getGrandTotalExclTax: function() {
                 var totals = this.totals();

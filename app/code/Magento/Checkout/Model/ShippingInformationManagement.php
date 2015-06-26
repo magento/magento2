@@ -145,7 +145,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         try {
             $address->save();
-            $address->collectShippingRates();
+            $address->collectTotals();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));

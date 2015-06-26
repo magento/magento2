@@ -29,7 +29,7 @@
             function (number) {
                 return creditCardNumberValidator(number).isValid;
             },
-            'Please enter a valid credit card number11.'
+            'Please enter a valid credit card number.'
         ],
         'validate-card-date': [
             /**
@@ -40,7 +40,7 @@
                 function (date) {
                 return monthValidator(date).isValid;
             },
-            'Incorrect credit card expiration date11.'
+            'Incorrect credit card expiration month.'
         ],
         'validate-card-cvv': [
             /**
@@ -51,7 +51,18 @@
                 function (cvv) {
                 return cvvValidator(cvv).isValid;
             },
-            'Please enter a valid credit card verification number11.'
+            'Please enter a valid credit card verification number.'
+        ],
+        'validate-card-year': [
+            /**
+             * Validate credit card number based on mod 10
+             * @param date - month
+             * @return {boolean}
+             */
+                function (date) {
+                return monthValidator(date).isValid;
+            },
+            'Incorrect credit card expiration year.'
         ]
 
     }, function (i, rule) {
