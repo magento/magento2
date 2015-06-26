@@ -7,17 +7,18 @@
 angular.module('component-upgrade', ['ngStorage'])
     .controller('componentUpgradeController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
         // TODO: hardcode it right now
-        $localStorage.packages = [
-            {name: 'symfony/console', version: '2.5'}
-        ];
-        if ($localStorage.packages) {
-            $scope.packages = $localStorage.packages;
+        $localStorage.package = {
+            name: 'composer/composer',
+            version: 'dev-master'
+        };
+        if ($localStorage.package) {
+            $scope.package = $localStorage.package;
         }
         $scope.started = false;
         $scope.errorMessage = '';
         $scope.upgrade = function() {
             $scope.started = true;
-            $http.post('index.php/component-upgrade/update', $scope.packages)
+            $http.post('index.php/component-upgrade/update', $scope.package)
                 .success(function (data) {
                     if (data['success']) {
                         $window.location.href = '../update/index.php';
