@@ -9,11 +9,10 @@ define(
         'jquery',
         'ko',
         'uiComponent',
-        'Magento_Customer/js/model/customer',
         'Magento_Captcha/js/model/captcha',
         'Magento_Captcha/js/model/captchaList'
     ],
-    function ($, ko, Component, customer, Captcha, captchaList) {
+    function ($, ko, Component, Captcha, captchaList) {
         "use strict";
         var captchaConfig = window.checkoutConfig.captcha;
         return Component.extend({

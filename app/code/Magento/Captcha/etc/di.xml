@@ -23,7 +23,7 @@
         <arguments>
             <argument name="formIds" xsi:type="array">
                 <item name="user_login" xsi:type="string">user_login</item>
-                <item name="checkout_email" xsi:type="string">checkout_email</item>
+                <item name="guest_checkout" xsi:type="string">guest_checkout</item>
             </argument>
         </arguments>
     </type>

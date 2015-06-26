@@ -36,6 +36,9 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
+        <!-- ko foreach: getRegion('before') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
         <div class="block-content" aria-labelledby="block-customer-login-heading">
             <form class="form form-login"
                   method="post"
@@ -62,7 +65,12 @@
                                    data-validate="{required:true, 'validate-password':true}">
                         </div>
                     </div>
+                    <!-- ko foreach: getRegion('additional-login-form-fields') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
+                    </div>
                     <div class="actions-toolbar">
+                        <input name="context" type="hidden" value="checkout" />
                         <div class="primary">
                             <button type="submit" class="action action-login secondary" name="send" id="send2">
                                 <span data-bind="text: $t('Sign In')"></span>
