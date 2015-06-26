@@ -16,6 +16,9 @@
                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                                 <item name="config" xsi:type="array">
                                     <item name="provider" xsi:type="string">checkoutProvider</item>
+                                    <item name="deps" xsi:type="array">
+                                        <item name="0" xsi:type="string">checkoutProvider</item>
+                                    </item>
                                     <item name="template" xsi:type="string">ui/form/field</item>
                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                 </item>
@@ -60,6 +63,9 @@
                                             <item name="billingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                <item name="deps" xsi:type="array">
+                                                    <item name="0" xsi:type="string">checkoutProvider</item>
+                                                </item>
                                                 <item name="sortOrder" xsi:type="string">2</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="billing-address-fieldset" xsi:type="array">
@@ -116,6 +122,9 @@
                                                                     <item name="customScope" xsi:type="string">customerDetails</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Email</item>
+                                                                <item name="deps" xsi:type="array">
+                                                                    <item name="0" xsi:type="string">checkoutProvider</item>
+                                                                </item>
                                                                 <item name="dataScope" xsi:type="string">customerDetails.email</item>
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                 <item name="sortOrder" xsi:type="string">45</item>
@@ -131,6 +140,9 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                                                                 </item>
                                                                 <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="deps" xsi:type="array">
+                                                                    <item name="0" xsi:type="string">checkoutProvider</item>
+                                                                </item>
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                 <item name="dataScope" xsi:type="string">billingAddress.save_in_address_book</item>
                                                             </item>
@@ -147,6 +159,9 @@
                                             </item>
                                             <item name="shippingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                                <item name="deps" xsi:type="array">
+                                                    <item name="0" xsi:type="string">checkoutProvider</item>
+                                                </item>
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="sortOrder" xsi:type="string">3</item>
                                                 <item name="children" xsi:type="array">
@@ -209,6 +224,9 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                                                                 </item>
                                                                 <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="deps" xsi:type="array">
+                                                                    <item name="0" xsi:type="string">checkoutProvider</item>
+                                                                </item>
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                 <item name="dataScope" xsi:type="string">shippingAddress.save_in_address_book</item>
                                                             </item>
