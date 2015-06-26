@@ -18,8 +18,8 @@ define([
             sorting: false,
             visible: true,
             draggable: true,
-            templates: {
-                fieldAction: false
+            tmplsIgnore: {
+                fieldAction: true
             },
             links: {
                 visible: '${ $.storageConfig.path }.visible',
@@ -127,7 +127,7 @@ define([
          * @returns {Boolean}
          */
         hasFieldAction: function () {
-            return !!this.templates.fieldAction;
+            return !!this.fieldAction;
         },
 
         /**
@@ -147,7 +147,7 @@ define([
          *      }
          */
         applyFieldAction: function (rowIndex) {
-            var action = this.templates.fieldAction,
+            var action = this.fieldAction,
                 callback;
 
             if (!this.hasFieldAction()) {
