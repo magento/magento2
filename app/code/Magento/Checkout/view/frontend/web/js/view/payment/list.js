@@ -110,6 +110,7 @@ define([
             var items = this.getRegion('payment-method-items');
             _.find(items(), function (value) {
                 if (value.item.code === paymentMethodCode) {
+                    value.disposeSubscriptions();
                     this.removeChild(value);
                 }
             }, this);
