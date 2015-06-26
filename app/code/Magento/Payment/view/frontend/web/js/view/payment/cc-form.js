@@ -9,9 +9,10 @@ define(
         'underscore',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Payment/js/model/credit-card-validation/credit-card-data',
+        'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
         'mage/translate'
     ],
-    function (_, Component, creditCardData, $t) {
+    function (_, Component, creditCardData, cardNumberValidator, $t) {
         return Component.extend({
             defaults: {
                 creditCardType: '',
@@ -20,8 +21,10 @@ define(
                 creditCardNumber: '',
                 creditCardSsStartMonth: '',
                 creditCardSsStartYear: '',
-                creditCardVerificationNumber: ''
+                creditCardVerificationNumber: '',
+                selectedCardType: null
             },
+
             initObservable: function () {
                 this._super()
                     .observe([
@@ -31,17 +34,38 @@ define(
                         'creditCardNumber',
                         'creditCardVerificationNumber',
                         'creditCardSsStartMonth',
-                        'creditCardSsStartYear'
+                        'creditCardSsStartYear',
+                        'selectedCardType'
                     ]);
                 return this;
             },
 
             initialize: function() {
+                var self = this;
                 this._super();
 
                 //Set credit card number to credit card data object
                 this.creditCardNumber.subscribe(function(value) {
-                    console.log(value);
+                    var result;
+                    self.selectedCardType(null);
+
+                    if (value == '' || value == null) {
+                        return false;
+                    }
+                    result = cardNumberValidator(value);
+
+                    if (!result.isPotentiallyValid && !result.isValid) {
+                        return false;
+                    }
+                    if (result.card !== null) {
+                        self.selectedCardType(result.card.type);
+                        creditCardData.creditCard = result.card;
+                    }
+
+                    if (result.isValid) {
+                        creditCardData.creditCardNumber = value;
+                        self.creditCardType(result.card.type);
+                    }
                 });
 
                 //Set expiration year to credit card data object
