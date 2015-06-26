@@ -27,7 +27,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
             ]
         );
 
-        $message = __('Cache storage may contain additional data. Are you sure that you want flush it?');
+        $message = __('The cache storage may contain additional data. Are you sure that you want to flush it?');
         $this->buttonList->add(
             'flush_system',
             [
