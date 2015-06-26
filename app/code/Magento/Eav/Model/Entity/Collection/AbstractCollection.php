@@ -1569,7 +1569,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      */
     public function getMainTable()
     {
-        return $this->getSelect()->getPart(Select::FROM)['tableName'];
+        return $this->getSelect()->getPart(Select::FROM)['e']['tableName'];
     }
 
     /**
