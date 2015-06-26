@@ -17,11 +17,6 @@ class ValidatorComposite extends AbstractValidator
     private $validators;
 
     /**
-     * @var ResultInterfaceFactory
-     */
-    private $resultFactory;
-
-    /**
      * @param ResultInterfaceFactory $resultFactory
      * @param array $validators
      * @param TMapFactory $tmapFactory
