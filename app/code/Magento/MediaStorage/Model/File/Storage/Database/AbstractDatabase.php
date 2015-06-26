@@ -11,11 +11,9 @@ namespace Magento\MediaStorage\Model\File\Storage\Database;
 abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Store media base directory path
-     *
-     * @var string
+     * Default connection
      */
-    protected $_mediaBaseDirectory = null;
+    const CONNECTION_DEFAULT = 'default_setup';
 
     /**
      * Core file storage database
@@ -35,6 +33,13 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_configuration;
+
+    /**
+     * Connection name
+     *
+     * @var string
+     */
+    private $connectionName = self::CONNECTION_DEFAULT;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -81,7 +86,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
                 'default'
             );
         if (empty($connectionName)) {
-            $connectionName = 'default_setup';
+            $connectionName = self::CONNECTION_DEFAULT;
         }
         return $connectionName;
     }
@@ -120,10 +125,20 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
     public function setConnectionName($connectionName)
     {
         if (!empty($connectionName)) {
-            $this->setData('connection_name', $connectionName);
-            $this->_getResource()->setConnectionName($connectionName);
+            $this->connectionName = $connectionName;
+            $this->_getResource()->setConnectionName($this->connectionName);
         }
 
         return $this;
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return null|string
+     */
+    public function getConnectionName()
+    {
+        return $this->connectionName;
     }
 }
