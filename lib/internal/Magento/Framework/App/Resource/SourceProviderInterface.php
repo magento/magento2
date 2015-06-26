@@ -26,7 +26,7 @@ interface SourceProviderInterface extends \Traversable
     /**
      * @param string $fieldName
      * @param string $alias
-     * @return void
+     * @return $this
      */
     public function addFieldToSelect($fieldName, $alias);
 

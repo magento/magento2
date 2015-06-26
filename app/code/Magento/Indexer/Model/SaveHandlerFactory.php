@@ -6,9 +6,9 @@
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\IndexerInterface;
+use Magento\Framework\IndexerInterface as SaveHandlerInterface;
 
-class SaveHandlerPool
+class SaveHandlerFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -27,13 +27,14 @@ class SaveHandlerPool
      * Get handler class instance
      *
      * @param string $saveHandlerClass
+     * @param array $arguments
      * @throws \InvalidArgumentException
      * @return IndexerInterface
      */
-    public function get($saveHandlerClass)
+    public function create($saveHandlerClass, $arguments = [])
     {
-        $handler = $this->objectManager->get($saveHandlerClass);
-        if (!$handler instanceof IndexerInterface) {
+        $handler = $this->objectManager->create($saveHandlerClass, $arguments);
+        if (!$handler instanceof SaveHandlerInterface) {
             throw new \InvalidArgumentException(
                 $saveHandlerClass . ' doesn\'t implement \Magento\Framework\IndexerInterface'
             );

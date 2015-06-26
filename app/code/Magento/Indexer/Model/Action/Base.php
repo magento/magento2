@@ -9,14 +9,13 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\DB\Select;
 use Magento\Framework\IndexerInterface;
 use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
 use Magento\Indexer\Model\IndexStructure;
-use Magento\Indexer\Model\SaveHandlerPool;
+use Magento\Indexer\Model\SaveHandlerFactory;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
 
@@ -90,9 +89,9 @@ class Base implements ActionInterface
     protected $handlerPool;
 
     /**
-     * @var SaveHandlerPool
+     * @var SaveHandlerFactory
      */
-    protected $saveHandlerPool;
+    protected $saveHandlerFactory;
 
     /**
      * @var String
@@ -115,10 +114,15 @@ class Base implements ActionInterface
     protected $searchable = [];
 
     /**
+     * @var IndexerInterface
+     */
+    protected $saveHandler;
+
+    /**
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param HandlerPool $handlerPool
-     * @param SaveHandlerPool $saveHandlerPool
+     * @param SaveHandlerFactory $saveHandlerFactory
      * @param FieldsetPool $fieldsetPool
      * @param StdString $string
      * @param IndexStructure $indexStructure
@@ -128,7 +132,7 @@ class Base implements ActionInterface
         AppResource $resource,
         SourcePool $sourcePool,
         HandlerPool $handlerPool,
-        SaveHandlerPool $saveHandlerPool,
+        SaveHandlerFactory $saveHandlerFactory,
         FieldsetPool $fieldsetPool,
         StdString $string,
         IndexStructure $indexStructure,
@@ -139,7 +143,7 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourcePool = $sourcePool;
         $this->handlerPool = $handlerPool;
-        $this->saveHandlerPool = $saveHandlerPool;
+        $this->saveHandlerFactory = $saveHandlerFactory;
         $this->string = $string;
         $this->indexStructure = $indexStructure;
     }
@@ -199,7 +203,9 @@ class Base implements ActionInterface
      */
     protected function prepareDataSource($ids = null)
     {
-        return $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
+        return is_null($ids)
+            ? $this->createResultCollection()
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
     }
 
     /**
@@ -219,7 +225,10 @@ class Base implements ActionInterface
      */
     protected function getSaveHandler()
     {
-        $this->saveHandlerPool->get($this->data['saveHandler']);
+        if ($this->saveHandler === null) {
+            $this->saveHandler = $this->saveHandlerFactory->create($this->data['saveHandler'], ['data' => $this->data]);
+        }
+        return $this->saveHandler;
     }
 
     /**
