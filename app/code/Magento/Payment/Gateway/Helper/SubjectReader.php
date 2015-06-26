@@ -30,7 +30,7 @@ class SubjectReader
      * Reads amount from subject
      *
      * @param array $subject
-     * @return int|double|string
+     * @return mixed
      */
     public static function readAmount(array $subject)
     {

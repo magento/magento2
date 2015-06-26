@@ -380,9 +380,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getInvoice()
     {
-        return $this->getData('invoice') instanceof Invoice
-            ? $this->getData('invoice')
-            : null;
+        return $this->getData('invoice');
     }
 
     /**
