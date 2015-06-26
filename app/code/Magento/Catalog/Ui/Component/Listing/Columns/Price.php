@@ -59,7 +59,9 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
 
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName] * $currencyRate));
+                if (isset($item[$fieldName])) {
+                    $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName] * $currencyRate));
+                }
             }
         }
     }
