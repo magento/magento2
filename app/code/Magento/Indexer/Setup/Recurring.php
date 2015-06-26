@@ -14,6 +14,7 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Indexer\Model\ConfigInterface;
 use Magento\Indexer\Model\Indexer\State;
+use Magento\Indexer\Model\Indexer\StateFactory;
 use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
 
 /**
@@ -44,20 +45,28 @@ class Recurring implements InstallSchemaInterface
     private $encoder;
 
     /**
+     * @var StateFactory
+     */
+    private $stateFactory;
+
+    /**
      * Init
      *
      * @param CollectionFactory $statesFactory
+     * @param StateFactory $stateFactory
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
      */
     public function __construct(
         CollectionFactory $statesFactory,
+        StateFactory $stateFactory,
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder
     ) {
         $this->statesFactory = $statesFactory;
+        $this->stateFactory = $stateFactory;
         $this->config = $config;
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
@@ -82,11 +91,19 @@ class Recurring implements InstallSchemaInterface
                     Encryptor::HASH_VERSION_MD5
                 );
 
-                if (isset($stateIndexers[$indexerId])
-                    && $stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
-                    $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
-                    $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
-                    $stateIndexers[$indexerId]->save();
+                if (isset($stateIndexers[$indexerId])) {
+                    if ($stateIndexers[$indexerId]->getHashConfig() != $expectedHashConfig) {
+                        $stateIndexers[$indexerId]->setStatus(State::STATUS_INVALID);
+                        $stateIndexers[$indexerId]->setHashConfig($expectedHashConfig);
+                        $stateIndexers[$indexerId]->save();
+                    }
+                } else {
+                    /** @var \Magento\Indexer\Model\Indexer\State $state */
+                    $state = $this->stateFactory->create();
+                    $state->loadByIndexer($indexerId);
+                    $state->setHashConfig($expectedHashConfig);
+                    $state->setStatus(State::STATUS_INVALID);
+                    $state->save();
                 }
             }
         }
