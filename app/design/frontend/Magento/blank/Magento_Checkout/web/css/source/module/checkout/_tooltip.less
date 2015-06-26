@@ -26,8 +26,9 @@
 @checkout-tooltip-content__width: 270px;
 @checkout-tooltip-content__active__border-color: darken(@checkout-tooltip-content__border-color, 20%);
 
-@checkout-tooltip-content-mobile__top: 30px + @checkout-tooltip-icon-arrow__font-size;
+@checkout-tooltip-content-mobile-popup__width: 200px;
 @checkout-tooltip-content-mobile__right: -(@indent__s);
+@checkout-tooltip-content-mobile__top: 30px + @checkout-tooltip-icon-arrow__font-size;
 
 //
 //  Common
@@ -116,6 +117,16 @@
 //
 //  Mobile
 //  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .modal-popup {
+        .field-tooltip {
+            .field-tooltip-content {
+                .css(width, @checkout-tooltip-content-mobile-popup__width);
+            }
+        }
+    }
+}
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @checkout-tooltip-breakpoint__screen-m) {
     .field-tooltip {
