@@ -91,6 +91,19 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock->expects($this->never())->method('save');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->with($this->equalTo('Magento\Catalog\Model\Resource\Eav\Attribute'))
+            ->willReturn($attributeMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->will($this->returnValue($objectManagerMock));
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

@@ -52,6 +52,18 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
+        $cacheInterfaceMock->expects($this->never())->method('clean');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('get')
+            ->willReturn($cacheInterfaceMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
