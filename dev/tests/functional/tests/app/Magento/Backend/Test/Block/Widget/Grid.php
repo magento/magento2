@@ -179,7 +179,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $noRecords = '[data-role="row"] .empty-text';
+    protected $noRecords = '.empty-text';
 
     /**
      * Get backend abstract block
