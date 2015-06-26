@@ -16,6 +16,7 @@ class JobFactory
      * Name of jobs
      */
     const NAME_UPGRADE = 'setup:upgrade';
+    const DB_ROLLBACK = 'setup:rollback';
 
     /**
      * @var ServiceLocatorInterface
@@ -42,22 +43,31 @@ class JobFactory
      */
     public function create($name, array $params = [])
     {
+        $cronStatus = $this->serviceLocator->get('Magento\Setup\Model\Cron\Status');
+        $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
+        $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
+        $multipleStreamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
+        $maintenanceMode = $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode');
+        $objectManagerProvider = $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider');
         switch ($name) {
             case self::NAME_UPGRADE:
-                $statusStream = fopen(
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Status')->getStatusFilePath(),
-                    'a+'
-                );
-                $logStream = fopen(
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Status')->getLogFilePath(),
-                    'a+'
-                );
                 return new JobUpgrade(
                     $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
-                    $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
-                    $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
-                    new MultipleStreamOutput([$statusStream, $logStream]),
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Status'),
+                    $objectManagerProvider,
+                    $maintenanceMode,
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
+                break;
+            case self::DB_ROLLBACK:
+                return new JobRollback(
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\RollbackCommand'),
+                    $objectManagerProvider,
+                    $maintenanceMode,
+                    $multipleStreamOutput,
+                    $cronStatus,
                     $name,
                     $params
                 );

@@ -6,8 +6,8 @@
 'use strict';
 angular.module('component-upgrade-success', ['ngStorage'])
     .controller('componentUpgradeSuccessController', ['$scope', '$state', '$localStorage', '$window', function ($scope, $state, $localStorage, $window) {
-        if ($localStorage.packages) {
-            $scope.packages = $localStorage.packages;
+        if ($localStorage.package) {
+            $scope.package = $localStorage.package;
         }
         $scope.back = function () {
             $window.location.href = '';

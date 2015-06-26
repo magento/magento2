@@ -52,7 +52,7 @@ abstract class AbstractJob
      */
     public function __toString()
     {
-        return '<' . $this->name . '>' . json_encode($this->params);
+        return $this->name . ' ' . json_encode($this->params);
     }
 
     /**
