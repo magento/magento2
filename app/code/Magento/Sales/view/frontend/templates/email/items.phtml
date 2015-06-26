@@ -25,12 +25,12 @@
             </tr>
         </thead>
         <?php foreach ($_items as $_item): ?>
+            <?php
+                if ($_item->getParentItem()) {
+                    continue;
+                }
+            ?>
             <tbody>
-                <?php
-                    if ($_item->getParentItem()) {
-                        continue;
-                    }
-                ?>
                 <?= $this->getItemHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>

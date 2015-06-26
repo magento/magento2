@@ -33,8 +33,17 @@
 
 .order-items {
     .table(@table__width, 0);
-    .table-background-color();
     border: @table__border-width @table__border-style @table__border-color;
+
+    thead,
+    tfoot {
+        > tr {
+            > th,
+            > td {
+                background-color: @color-gray95
+            }
+        }
+    }
 
     > thead,
     > tbody {
@@ -44,7 +53,7 @@
             }
 
             > td {
-                padding: @email-content__padding__base @email-content__padding__base 0;
+                padding: @email-content__padding__base;
 
                 &.message-gift {
                     border-top: none;
@@ -71,25 +80,32 @@
         }
     }
 
+    p {
+        margin-bottom: 0;
+    }
+
     .product-name {
         font-weight: @font-weight__bold;
-        margin-bottom: 0;
-        padding-bottom: @email-content__padding__s;
+        margin-bottom: @email-content__padding__s;
+    }
+
+    .has-extra .sku {
+        margin-bottom: @email-content__padding__base;
     }
 
     .item-info {
         dl {
-            margin: 0;
-            padding-bottom: @email-content__padding__base;
+            margin-bottom: 0;
+            padding-left: @email-content__padding__base * 2;
 
             dt,
             dd {
-                margin: 0;
+                margin-bottom: 0;
                 padding-bottom: 0;
             }
 
             dd {
-                padding-left: @email-content__padding__base;
+                padding-left: @email-content__padding__base * 2;
             }
         }
     }
@@ -103,9 +119,7 @@
     }
 
     .item-extra {
-        .message-gift {
-            margin: 0 0 @email-content__padding__base;
-        }
+        padding-top: 0;
     }
 
     .order-totals {

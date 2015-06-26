@@ -13,7 +13,7 @@ $_item = $block->getItem();
 $_order = $_item->getOrder();
 ?>
 <tr>
-    <td class="item-info">
+    <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>

@@ -12,14 +12,19 @@
 //  ---------------------------------------------
 
 .order-items {
-    .bundle-option-label,
+    .bundle-option-label {
+        > td {
+            padding: 0 @email-content__padding__base 0 @email-content__padding__base * 3;
+        }
+    }
+
     .bundle-option-value {
         > td {
-            padding: 0 @email-content__padding__base;
-
-            > p {
-                padding-left: @email-content__padding__base;
-            }
+            padding: 0 @email-content__padding__base 0 @email-content__padding__base * 5;
         }
+    }
+
+    tr.bundle-option-value + tr > td.item-extra {
+        padding-top: @email-content__padding__base;
     }
 }
