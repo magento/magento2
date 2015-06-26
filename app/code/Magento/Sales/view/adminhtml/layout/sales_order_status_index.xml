@@ -64,7 +64,7 @@
                         </block>
                         <block class="Magento\Backend\Block\Widget\Grid\Column" as="visible_on_front">
                             <arguments>
-                                <argument name="header" xsi:type="string" translate="true">Visible On Frontend</argument>
+                                <argument name="header" xsi:type="string" translate="true">Visible On Storefront</argument>
                                 <argument name="index" xsi:type="string">visible_on_front</argument>
                                 <argument name="type" xsi:type="string">options</argument>
                                 <argument name="sortable" xsi:type="string">0</argument>

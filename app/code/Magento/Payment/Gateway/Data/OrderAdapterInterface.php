@@ -41,4 +41,18 @@ interface OrderAdapterInterface
      * @return AddressAdapterInterface
      */
     public function getShippingAddress();
+
+    /**
+     * Returns order store id
+     *
+     * @return int
+     */
+    public function getStoreId();
+
+    /**
+     * Returns order id
+     *
+     * @return int
+     */
+    public function getId();
 }

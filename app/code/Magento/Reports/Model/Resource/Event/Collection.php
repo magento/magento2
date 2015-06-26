@@ -32,6 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
     /**
      * Add store ids filter
+     * @codeCoverageIgnore
      *
      * @param array $storeIds
      * @return $this

@@ -112,7 +112,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
                 'label' => __('Synchronize'),
                 'url' => $this->getUrl('adminhtml/*/refresh', ['_current' => true]),
                 'confirm' => __(
-                    'This action will update items\' attributes and remove items that are not available in Google Content. If an attribute was deleted from the mapping, it will also be deleted from Google. Do you want to continue?'
+                    'Are you sure you want to synchronize Google Content? This action will delete all items and attributes from Google Content that were deleted in Magento Admin so that the content is identical.'
                 )
             ]
         );

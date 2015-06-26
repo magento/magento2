@@ -97,14 +97,14 @@ class EditPost extends \Magento\Customer\Controller\Account
                         } catch (\Exception $e) {
                             $this->messageManager->addException(
                                 $e,
-                                __('A problem was encountered trying to change password.')
+                                __('Something went wrong while changing the password.')
                             );
                         }
                     } else {
-                        $this->messageManager->addError(__('Confirm your new password'));
+                        $this->messageManager->addError(__('Confirm your new password.'));
                     }
                 } else {
-                    $this->messageManager->addError(__('New password field cannot be empty.'));
+                    $this->messageManager->addError(__('Please enter new password.'));
                 }
             }
 
@@ -117,7 +117,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,
-                    __('Cannot save the customer.') . $e->getMessage() . '<pre>' . $e->getTraceAsString() . '</pre>'
+                    __('We can\'t save the customer.') . $e->getMessage() . '<pre>' . $e->getTraceAsString() . '</pre>'
                 );
             }
 
@@ -127,7 +127,7 @@ class EditPost extends \Magento\Customer\Controller\Account
                 return $resultRedirect;
             }
 
-            $this->messageManager->addSuccess(__('The account information has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the account information.'));
             $resultRedirect->setPath('customer/account');
             return $resultRedirect;
         }
