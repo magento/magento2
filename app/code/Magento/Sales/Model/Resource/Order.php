@@ -140,8 +140,6 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var \Magento\Sales\Model\Order $object */
-        $this->stateHandler->check($object);
         if (!$object->getId()) {
             /** @var \Magento\Store\Model\Store $store */
             $store = $object->getStore();
@@ -162,5 +160,15 @@ class Order extends SalesResource implements OrderResourceInterface
             $object->setCustomerId($object->getCustomer()->getId());
         }
         return parent::_beforeSave($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order $object */
+        $this->stateHandler->check($object);
+        return parent::save($object);
     }
 }
