@@ -11,7 +11,7 @@
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder() ?>
 <tr>
-    <td class="item-info">
+    <td class="item-info has-extra">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
         <p class="sku"><?= __('SKU'); ?>: <?= $this->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
