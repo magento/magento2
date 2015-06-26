@@ -14,6 +14,6 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      */
     public function getCaption()
     {
-        return __('Bulk Images &amp; Prising');
+        return __('Bulk Images &amp; Pricing');
     }
 }

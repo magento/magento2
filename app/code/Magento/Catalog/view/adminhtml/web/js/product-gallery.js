@@ -16,7 +16,7 @@ define([
     $.widget('mage.productGallery', {
         options: {
             imageSelector: '[data-role=image]',
-            template: '.image-template',
+            template: '[data-template=image]',
             types: null,
             initialized: false
         },
@@ -140,7 +140,6 @@ define([
             });
 
             element = $(element).data('imageData', imageData);
-
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
@@ -246,7 +245,10 @@ define([
 
         _create: function () {
             this._super();
-            this.dialogTmpl = mageTemplate(this.element.find(this.options.dialogTemplate).html());
+            var template = this.element.find(this.options.dialogTemplate);
+            if (template.length) {
+                this.dialogTmpl = mageTemplate(template.html());
+            }
         },
 
         /**
@@ -320,7 +322,7 @@ define([
             }
             this.element.find('[data-role=dialog]').trigger('close');
 
-            if (!dialogElement) {
+            if (!dialogElement && this.dialogTmpl) {
                 var $template = this.dialogTmpl({
                         data: imageData
                     }),
@@ -367,7 +369,9 @@ define([
 
                 $imageContainer.data('dialog', dialogElement);
             }
-            dialogElement.trigger('open');
+            if (dialogElement) {
+                dialogElement.trigger('open');
+            }
         },
 
         /**
