@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-class SaveRatesTest extends \Magento\Backend\Utility\Controller
+class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
 
     /** @var \Magento\Directory\Model\Currency $currencyRate */
