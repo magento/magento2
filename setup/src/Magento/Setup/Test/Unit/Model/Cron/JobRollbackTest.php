@@ -54,7 +54,7 @@ class JobRollbackTest extends \PHPUnit_Framework_TestCase
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;
 
-function scandir($inputDir, $sorting_order)
+function scandir($inputDir)
 {
     if ($inputDir == 'some/path/backups' ) {
         return ['file1_code', 'file2_db'];
