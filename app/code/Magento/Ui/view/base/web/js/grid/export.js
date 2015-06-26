@@ -8,30 +8,15 @@ define([
     'Magento_Ui/js/lib/collapsible'
 ], function ($, _, Collapsible) {
     'use strict';
-    console.log('one');
+
     return Collapsible.extend({
 
         defaults: {
-            template: 'ui/grid/exportButton',
-            listens: {
-                actionValue: 'applyOption'
-            }
+            template: 'ui/grid/exportButton'
         },
 
-        initObservable: function () {
-            this._super()
-                .observe('actionValue');
-
-            return this;
-        },
-
-        applyOption: function (actionId) {
-            var action = this.getAction(actionId);
+        applyOption: function (action) {
             location.href = action.url;
-        },
-
-        getAction: function (value) {
-            return _.findWhere(this.options, {value: value});
         }
     });
 });
