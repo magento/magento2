@@ -553,8 +553,16 @@ class Adapter implements MethodInterface
             return $this->getConfiguredValue($field);
         }
 
+        $subject = [
+            'field' => $field
+        ];
+
+        if ($this->getInfoInstance()) {
+            $subject['payment'] = $this->paymentDataObjectFactory->create($this->getInfoInstance());
+        }
+
         $handler = $this->valueHandlerPool->get($field);
-        return $handler->handle($field, (int)$storeId);
+        return $handler->handle($subject, (int)$storeId);
     }
 
     /**
