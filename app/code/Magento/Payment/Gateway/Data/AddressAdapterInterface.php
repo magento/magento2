@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Data;
 
+/**
+ * Interface AddressAdapterInterface
+ */
 interface AddressAdapterInterface
 {
     /**
@@ -90,4 +93,32 @@ interface AddressAdapterInterface
      * @return string
      */
     public function getEmail();
+
+    /**
+     * Returns street
+     *
+     * @return string
+     */
+    public function getStreet();
+
+    /**
+     * Returns region
+     *
+     * @return string
+     */
+    public function getRegion();
+
+    /**
+     * Returns name prefix
+     *
+     * @return string
+     */
+    public function getPrefix();
+
+    /**
+     * Returns name suffix
+     *
+     * @return string
+     */
+    public function getSuffix();
 }

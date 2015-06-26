@@ -5,10 +5,14 @@
  */
 namespace Magento\Payment\Gateway\Data\Quote;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
+/**
+ * Class QuoteAdapter
+ */
 class QuoteAdapter implements OrderAdapterInterface
 {
     /**
@@ -105,5 +109,47 @@ class QuoteAdapter implements OrderAdapterInterface
     public function getId()
     {
         return $this->quote->getId();
+    }
+
+    /**
+     * Returns order increment id
+     *
+     * @return string
+     *
+     */
+    public function getIncrementId()
+    {
+        return $this->quote->getReservedOrderId();
+    }
+
+    /**
+     * Returns quote id
+     *
+     * @return int
+     */
+    public function getQuoteId()
+    {
+        return $this->quote->getId();
+    }
+
+    /**
+     * Returns order grand total
+     *
+     * @return float
+     * @throws LocalizedException
+     */
+    public function getGrandTotal()
+    {
+        throw new LocalizedException(__('This method cannot be implemented in this class "' . __CLASS__ . '"'));
+    }
+
+    /**
+     * Returns base currency code
+     *
+     * @return string
+     */
+    public function getBaseCurrencyCode()
+    {
+        return $this->quote->getCurrency()->getBaseCurrencyCode();
     }
 }
