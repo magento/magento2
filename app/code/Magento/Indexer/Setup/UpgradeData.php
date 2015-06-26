@@ -49,6 +49,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
+     * @internal param StateFactory $stateFactory
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -79,10 +80,9 @@ class UpgradeData implements UpgradeDataInterface
             }
 
             foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+                $hash = $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5);
                 if (isset($stateIndexers[$indexerId])) {
-                    $stateIndexers[$indexerId]->setHashConfig(
-                        $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5)
-                    );
+                    $stateIndexers[$indexerId]->setHashConfig($hash);
                     $stateIndexers[$indexerId]->save();
                 }
             }
