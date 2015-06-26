@@ -127,6 +127,7 @@ define([
         /**
          * Recursively extends data specified in constructors' 'defaults'
          * property with a provided options object.
+         * Evaluates resulting object using string templates (see: mage/utils/template.js).
          *
          * @param {Object} options
          * @returns {Class} Chainable.

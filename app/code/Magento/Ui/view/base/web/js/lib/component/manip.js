@@ -10,6 +10,12 @@ define([
 ], function (ko, _, utils, registry) {
     'use strict';
 
+    /**
+     * Removes non plain object items from the specfied array.
+     *
+     * @param {Array} container - Array whose value should be filtered.
+     * @returns {Array}
+     */
     function compact(container) {
         return container.filter(utils.isObject);
     }
@@ -51,39 +57,29 @@ define([
          * Requests specified components to insert
          * them into 'elems' array starting from provided position.
          *
-         * @param {String} elems - Name of the component to insert.
+         * @param {(String|Array)} elems - Name of the component to insert.
          * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Component} Chainable.
          */
         insertChild: function (elems, position) {
             var container = this._elems,
-                update = false,
-                newItems = [],
-                newItem;
+                update;
 
-            if (Array.isArray(elems)) {
-                newItems = elems.map(function (item) {
-                    newItem = item.elem ?
-                        utils.insert(item.elem, container, item.position) :
-                        utils.insert(item, container, position);
-
-                    return newItem;
-                });
-            } else {
-                newItems.push(utils.insert(elems, container, position));
+            if (!Array.isArray(elems)) {
+                elems = [elems];
             }
 
-            newItems.forEach(function (item) {
-                if (!item) {
-                    return;
-                }
-
+            elems.map(function (item) {
+                return item.elem ?
+                    utils.insert(item.elem, container, item.position) :
+                    utils.insert(item, container, position);
+            }).forEach(function (item) {
                 if (item === true) {
                     update = true;
-                } else {
-                    _.isString(item) ?
-                        registry.get(item, this._insert) :
-                        this._insert(item);
+                } else if (_.isString(item)) {
+                    registry.get(item, this._insert);
+                } else if (utils.isObject(item)) {
+                    this._insert(item);
                 }
             }, this);
 
