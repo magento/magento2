@@ -49,8 +49,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->addTab(
             'front',
             [
-                'label' => __('Frontend Properties'),
-                'title' => __('Frontend Properties'),
+                'label' => __('Storefront Properties'),
+                'title' => __('Storefront Properties'),
                 'content' => $this->getChildHtml('front')
             ]
         );

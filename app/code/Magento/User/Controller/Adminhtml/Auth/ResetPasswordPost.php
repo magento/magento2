@@ -41,7 +41,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
         $user->setRpTokenCreatedAt(null);
         try {
             $user->save();
-            $this->messageManager->addSuccess(__('Your password has been updated.'));
+            $this->messageManager->addSuccess(__('You updated your password.'));
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );

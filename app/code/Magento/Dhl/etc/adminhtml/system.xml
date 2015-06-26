@@ -50,7 +50,7 @@
                 </field>
                 <field id="divide_order_weight" translate="label comment" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Divide Order Weight</label>
-                    <comment>This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.</comment>
+                    <comment>Select this to allow DHL to optimize shipping charges by splitting the order if it exceeds 70 kg.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="unit_of_measure" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">

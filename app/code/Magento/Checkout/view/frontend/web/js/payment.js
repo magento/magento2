@@ -79,7 +79,7 @@ define([
                 isValid = false;
 
             if (methods.length === 0) {
-                alert($.mage.__("We can't complete your order because you don't have a payment method available."));
+                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
             } else if (this.options.checkoutPrice < this.options.minBalance) {
                 isValid = true;
             } else if (methods.filter('input:radio:checked').length) {
