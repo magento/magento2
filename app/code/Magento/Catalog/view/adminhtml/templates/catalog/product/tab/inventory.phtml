@@ -61,7 +61,7 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
 
 <div class="field">
     <label class="label" for="inventory_min_qty">
-        <span><?php echo __('Qty for Item\'s Status to Become Out of Stock') ?></span>
+        <span><?php echo __('Out-of-Stock Threshold') ?></span>
     </label>
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][min_qty]" value="<?php echo $block->getFieldValue('min_qty') * 1 ?>" <?php echo $_readonly;?>>
@@ -154,7 +154,7 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
         <?php if (!$block->isVirtual()) : ?>
         <div class="field">
             <label class="label" for="inventory_is_decimal_divided">
-                <span><?php echo __('Can be Divided into Multiple Boxes for Shipping') ?></span>
+                <span><?php echo __('Allow Multiple Boxes for Shipping.') ?></span>
             </label>
             <div class="control">
                 <select id="inventory_is_decimal_divided" name="<?php echo $block->getFieldSuffix() ?>[stock_data][is_decimal_divided]" <?php echo $_readonly;?>>

@@ -134,12 +134,12 @@ class Save extends \Magento\Backend\App\Action
                 ->prepareInvoice($invoiceItems);
 
             if (!$invoice) {
-                throw new LocalizedException(__('We can\'t save the invoice.'));
+                throw new LocalizedException(__('We can\'t save the invoice right now.'));
             }
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot create an invoice without products.')
+                    __('You can\'t create an invoice without products.')
                 );
             }
             $this->registry->register('current_invoice', $invoice);
@@ -199,7 +199,7 @@ class Save extends \Magento\Backend\App\Action
                 }
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->messageManager->addError(__('We can\'t send the invoice email.'));
+                $this->messageManager->addError(__('We can\'t send the invoice email right now.'));
             }
             if ($shipment) {
                 try {
@@ -208,7 +208,7 @@ class Save extends \Magento\Backend\App\Action
                     }
                 } catch (\Exception $e) {
                     $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                    $this->messageManager->addError(__('We can\'t send the shipment.'));
+                    $this->messageManager->addError(__('We can\'t send the shipment right now.'));
                 }
             }
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
@@ -216,7 +216,7 @@ class Save extends \Magento\Backend\App\Action
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t save the invoice.'));
+            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);
