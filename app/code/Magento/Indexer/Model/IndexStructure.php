@@ -61,7 +61,7 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function delete($index, array $dimensions)
+    public function delete($index, array $dimensions = [])
     {
         $adapter = $this->getAdapter();
         $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
@@ -74,7 +74,7 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function create($index, array $filterFields, array $dimensions)
+    public function create($index, array $filterFields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
         if ($filterFields) {

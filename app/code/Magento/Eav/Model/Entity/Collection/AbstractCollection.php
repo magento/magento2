@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
+use Magento\Framework\App\Resource\EavProviderInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -14,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb implements EavProviderInterface
 {
     /**
      * Array of items with item id key
