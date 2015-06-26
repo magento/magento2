@@ -95,7 +95,7 @@ abstract class AbstractControllerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->abstractBlockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
-            ->setMethods(['getCsvFile', 'getExcelFile'])
+            ->setMethods(['getCsvFile', 'getExcelFile', 'setSaveParametersInSession', 'getCsv', 'getExcel'])
             ->disableOriginalConstructor()
             ->getMock();
 
