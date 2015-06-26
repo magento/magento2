@@ -63,12 +63,12 @@ class View extends AbstractPlugin
         $needInvalidation = $store->isObjectNew();
         $result = $proceed($store);
         if ($needInvalidation) {
-            $configData = $this->indexerConfig->getIndexer(Fulltext::INDEXER_ID);
-            /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
-            $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
             $dimensions = [
                 $this->dimensionFactory->create(['name' => 'scope', 'value' => $store->getId()])
             ];
+            $configData = $this->indexerConfig->getIndexer(Fulltext::INDEXER_ID);
+            /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
+            $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
             $indexHandler->cleanIndex($dimensions);
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
