@@ -9,6 +9,9 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Class OrderAdapter
+ */
 class OrderAdapter implements OrderAdapterInterface
 {
     /**
@@ -105,5 +108,46 @@ class OrderAdapter implements OrderAdapterInterface
     public function getId()
     {
         return $this->order->getEntityId();
+    }
+
+    /**
+     * Returns order increment id
+     *
+     * @return string
+     *
+     */
+    public function getIncrementId()
+    {
+        return $this->order->getIncrementId();
+    }
+
+    /**
+     * Returns quote id
+     *
+     * @return int
+     */
+    public function getQuoteId()
+    {
+        return $this->order->getQuoteId();
+    }
+
+    /**
+     * Returns order grand total
+     *
+     * @return float
+     */
+    public function getGrandTotal()
+    {
+        return $this->order->getGrandTotal();
+    }
+
+    /**
+     * Returns base currency code
+     *
+     * @return string
+     */
+    public function getBaseCurrencyCode()
+    {
+        return $this->order->getBaseCurrencyCode();
     }
 }

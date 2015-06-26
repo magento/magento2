@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Data;
 
+/**
+ * Interface OrderAdapterInterface
+ */
 interface OrderAdapterInterface
 {
     /**
@@ -55,4 +58,33 @@ interface OrderAdapterInterface
      * @return int
      */
     public function getId();
+
+    /**
+     * Returns order increment id
+     *
+     * @return string
+     *
+     */
+    public function getIncrementId();
+
+    /**
+     * Returns quote id
+     *
+     * @return int
+     */
+    public function getQuoteId();
+
+    /**
+     * Returns order grand total
+     *
+     * @return float
+     */
+    public function getGrandTotal();
+
+    /**
+     * Returns base currency code
+     *
+     * @return string
+     */
+    public function getBaseCurrencyCode();
 }
