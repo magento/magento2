@@ -68,6 +68,7 @@ class Main extends Generic implements TabInterface
      * Prepare content for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -78,6 +79,7 @@ class Main extends Generic implements TabInterface
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -88,6 +90,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab can be showed or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -98,6 +101,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
