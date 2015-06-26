@@ -65,7 +65,7 @@ abstract class Reorder extends Action\Action
                 }
                 return $resultRedirect->setPath('*/*/history');
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t add this item to your cart right now.'));
+                $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
                 return $resultRedirect->setPath('checkout/cart');
             }
         }

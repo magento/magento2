@@ -163,7 +163,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
-            return __('Attribute does not has options, so filtering is impossible');
+            return __('We can\'t filter an attribute with no attribute options.');
         }
     }
 
@@ -246,7 +246,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
-            return __('Attribute does not has options, so filtering is impossible');
+            return __('We can\'t filter an attribute with no attribute options.');
         }
     }
 
