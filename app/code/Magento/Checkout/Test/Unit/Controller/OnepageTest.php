@@ -85,9 +85,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManager);
-
+        
         $this->controller = $objectManager->getObject(
-            'Magento\Checkout\Controller\Onepage',
+            'Magento\Checkout\Test\Unit\Controller\Stub\OnepageStub',
             [
                 'context' => $context
             ]

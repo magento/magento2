@@ -31,13 +31,6 @@ abstract class AbstractAction extends Action implements UiActionInterface
     }
 
     /**
-     * Execute action
-     *
-     * @return mixed
-     */
-    abstract public function execute();
-
-    /**
      * Getting name
      *
      * @return mixed
@@ -55,5 +48,15 @@ abstract class AbstractAction extends Action implements UiActionInterface
     protected function getComponent()
     {
         return $this->_request->getParam('component');
+    }
+
+    /**
+     * Action for AJAX request
+     *
+     * @return void
+     */
+    public function executeAjaxRequest()
+    {
+        $this->execute();
     }
 }

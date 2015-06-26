@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * GoogleShopping Admin Items Controller
  */
-class Items extends \Magento\Backend\App\Action
+abstract class Items extends \Magento\Backend\App\Action
 {
     /**
      * @var NotifierInterface

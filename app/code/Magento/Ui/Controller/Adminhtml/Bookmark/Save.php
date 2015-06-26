@@ -71,7 +71,7 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    public function execute()
+    protected function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
         $data = $this->_request->getParam('data');

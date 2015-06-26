@@ -10,7 +10,7 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class File extends \Magento\Backend\App\Action
+abstract class File extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Downloadable\Model\Link

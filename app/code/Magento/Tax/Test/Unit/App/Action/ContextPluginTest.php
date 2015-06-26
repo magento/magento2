@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with('tax_rates', [], 0);
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+        $action = $this->objectManager->getObject('Magento\Tax\Test\Unit\App\Action\Stub\ActionStub');
         $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
         $expectedResult = 'expectedResult';
         $proceed = function ($request) use ($expectedResult) {

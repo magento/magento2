@@ -12,7 +12,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
-class Attribute extends \Magento\Backend\App\Action
+abstract class Attribute extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Cache\FrontendInterface

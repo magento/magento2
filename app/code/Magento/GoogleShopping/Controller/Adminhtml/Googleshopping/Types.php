@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * GoogleShopping Admin Item Types Controller
  */
-class Types extends \Magento\Backend\App\Action
+abstract class Types extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
