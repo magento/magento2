@@ -14,6 +14,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractJob
 {
     /**
+     * @var AbstractSetupCommand
+     */
+    protected $command;
+
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * @var string
      */
     protected $name;
@@ -27,11 +37,15 @@ abstract class AbstractJob
     /**
      * Constructor
      *
+     * @param OutputInterface $output
+     * @param Status $status
      * @param string $name
      * @param array $params
      */
-    public function __construct($name, array $params = [])
+    public function __construct(OutputInterface $output, Status $status,$name, array $params = [])
     {
+        $this->output = $output;
+        $this->status = $status;
         $this->name = $name;
         $this->params = $params;
     }

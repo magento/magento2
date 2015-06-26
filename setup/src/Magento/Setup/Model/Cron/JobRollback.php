@@ -9,7 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\BackupRollbackFactory;
-use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,16 +36,14 @@ class JobRollback extends AbstractJob
     /**
      * Constructor
      *
-     * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param MaintenanceMode $maintenanceMode
      * @param OutputInterface $output
      * @param Status $status
-     * @param $name
+     * @param string $name
      * @param array $params
      */
     public function __construct(
-        AbstractSetupCommand $command,
         ObjectManagerProvider $objectManagerProvider,
         MaintenanceMode $maintenanceMode,
         OutputInterface $output,
@@ -58,7 +55,7 @@ class JobRollback extends AbstractJob
         $this->directoryList  = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
         $this->backupRollbackFactory = $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
         $this->maintenanceMode = $maintenanceMode;
-        parent::__construct($command, $output, $status, $name, $params);
+        parent::__construct($output, $status, $name, $params);
     }
 
     /**

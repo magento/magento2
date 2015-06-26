@@ -38,16 +38,6 @@ class JobUpgrade extends AbstractJob
     protected $status;
 
     /**
-     * @var AbstractSetupCommand
-     */
-    protected $command;
-
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
-
-    /**
      * Constructor
      *
      * @param AbstractSetupCommand $command
@@ -74,12 +64,13 @@ class JobUpgrade extends AbstractJob
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
-        parent::__construct($name, $params);
+        parent::__construct($output, $status, $name, $params);
     }
 
     /**
      * Execute job
      *
+     * @throws \RuntimeException
      * @return void
      */
     public function execute()
