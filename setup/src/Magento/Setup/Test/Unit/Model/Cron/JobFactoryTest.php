@@ -7,6 +7,9 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobFactory;
 
+/**
+ * @SuppressWarning(PHPMD.UnusedFormalParameter)
+ */
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

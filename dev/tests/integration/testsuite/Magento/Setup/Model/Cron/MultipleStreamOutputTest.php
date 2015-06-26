@@ -34,7 +34,7 @@ class MultipleStreamOutputTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateException()
     {
-        $this->multipleStreamOutput = new MultipleStreamOutput(['a', 'b',]);
+        $this->multipleStreamOutput = new MultipleStreamOutput(['a', 'b']);
     }
 
     public function testWriteln()

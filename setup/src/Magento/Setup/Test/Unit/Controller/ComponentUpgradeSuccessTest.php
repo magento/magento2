@@ -19,5 +19,4 @@ class ComponentUpgradeSuccessTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
-
 }
