@@ -31,10 +31,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     public function prepare()
     {
-        $columnsAmount = count($this->components);
+        $columnSortOrder = count($this->components);
         foreach ($this->attributeRepository->getList() as $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])) {
-                $column = $this->columnFactory->create($attribute, $this->getContext(), $columnsAmount);
+                $config['sortOrder'] = ++$columnSortOrder;
+                $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
                 $column->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $column);
             }

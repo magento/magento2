@@ -85,7 +85,7 @@ interface ContextInterface
     public function getRequestParam($key, $defaultValue = null);
 
     /**
-     * Get filters
+     * Get filters params
      *
      * @return array
      */
