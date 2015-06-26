@@ -6,26 +6,24 @@
 
 /**
  * Currency Symbol Observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Model;
+
+use Magento\Framework\Locale\Currency;
 
 class Observer
 {
     /**
-     * Currency symbol data
-     *
-     * @var \Magento\CurrencySymbol\Helper\Data
+     * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
      */
-    protected $_currencySymbolData = null;
+    protected $symbolFactory;
 
     /**
-     * @param \Magento\CurrencySymbol\Helper\Data $currencySymbolData
+     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
      */
-    public function __construct(\Magento\CurrencySymbol\Helper\Data $currencySymbolData)
+    public function __construct(\Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory)
     {
-        $this->_currencySymbolData = $currencySymbolData;
+        $this->symbolFactory = $symbolFactory;
     }
 
     /**
@@ -39,8 +37,28 @@ class Observer
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();
-        $currencyOptions->setData($this->_currencySymbolData->getCurrencyOptions($baseCode));
+        $currencyOptions->setData($this->getCurrencyOptions($baseCode));
 
         return $this;
+    }
+
+    /**
+     * Get currency display options
+     *
+     * @param string $baseCode
+     * @return array
+     */
+    protected function getCurrencyOptions($baseCode)
+    {
+        $currencyOptions = [];
+        if ($baseCode) {
+            $customCurrencySymbol = $this->symbolFactory->create()->getCurrencySymbol($baseCode);
+            if ($customCurrencySymbol) {
+                $currencyOptions[Currency::CURRENCY_OPTION_SYMBOL] = $customCurrencySymbol;
+                $currencyOptions[Currency::CURRENCY_OPTION_DISPLAY] = \Magento\Framework\Currency::USE_SYMBOL;
+            }
+        }
+
+        return $currencyOptions;
     }
 }
