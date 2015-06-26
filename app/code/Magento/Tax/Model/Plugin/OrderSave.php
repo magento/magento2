@@ -47,6 +47,13 @@ class OrderSave
         return $order;
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function saveOrderTax(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         $extensionAttribute = $order->getExtensionAttributes();
@@ -57,12 +64,12 @@ class OrderSave
         }
 
         $taxes = $extensionAttribute->getAppliedTaxes();
-        if (is_null($taxes)) {
+        if ($taxes == null) {
             $taxes = [];
         }
 
         $taxesForItems = $extensionAttribute->getItemAppliedTaxes();
-        if (is_null($taxesForItems)) {
+        if ($taxesForItems == null) {
             $taxesForItems = [];
         }
 
@@ -84,8 +91,8 @@ class OrderSave
                 } else {
                     $percentSum = 0;
                     foreach ($rates['rates'] as $rate) {
-                        $real_amount = $rates['amount'] * $rate['percent'] / $rates['percent'];
-                        $real_base_amount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
+                        $realAmount = $rates['amount'] * $rate['percent'] / $rates['percent'];
+                        $realBaseAmount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
                         $ratesIdQuoteItemId[$rates['id']][] = [
                             'id' => $rates['item_id'],
                             'percent' => $rate['percent'],
@@ -94,8 +101,8 @@ class OrderSave
                             'item_type' => $rates['item_type'],
                             'amount' => $rates['amount'],
                             'base_amount' => $rates['base_amount'],
-                            'real_amount' => $real_amount,
-                            'real_base_amount' => $real_base_amount,
+                            'real_amount' => $realAmount,
+                            'real_base_amount' => $realBaseAmount,
                         ];
                         $percentSum += $rate['percent'];
                     }
@@ -106,7 +113,7 @@ class OrderSave
         foreach ($taxes as $row) {
             $id = $row['id'];
             foreach ($row['rates'] as $tax) {
-                if (is_null($row['percent'])) {
+                if ($row['percent'] == null) {
                     $baseRealAmount = $row['base_amount'];
                 } else {
                     if ($row['percent'] == 0 || $tax['percent'] == 0) {
@@ -172,5 +179,6 @@ class OrderSave
         }
 
         $order->setAppliedTaxIsSaved(true);
+        return $this;
     }
 }
