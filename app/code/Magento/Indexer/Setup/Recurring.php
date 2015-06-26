@@ -100,7 +100,7 @@ class Recurring implements InstallSchemaInterface
                 } else {
                     /** @var \Magento\Indexer\Model\Indexer\State $state */
                     $state = $this->stateFactory->create();
-                    $state->loadByIndexer($indexerId);
+                    $state->setIndexerId($indexerId);
                     $state->setHashConfig($expectedHashConfig);
                     $state->setStatus(State::STATUS_INVALID);
                     $state->save();
