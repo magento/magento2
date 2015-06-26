@@ -7,7 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
 use Magento\Framework\Message\MessageInterface;
 
-class DeleteTest extends \Magento\Backend\Utility\Controller
+class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Eav/_files/empty_attribute_set.php
@@ -21,7 +21,7 @@ class DeleteTest extends \Magento\Backend\Utility\Controller
 
         $this->assertNull($this->getAttributeSetByName('empty_attribute_set'));
         $this->assertSessionMessages(
-            $this->equalTo(['The attribute set has been removed.']),
+            $this->equalTo(['The product template has been removed.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('catalog/product_set/index/'));

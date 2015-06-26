@@ -17,7 +17,7 @@ class AssertReviewCreationSuccessMessage extends AbstractConstraint
     /**
      * Text of success message after review created
      */
-    const SUCCESS_MESSAGE = 'Your review has been accepted for moderation.';
+    const SUCCESS_MESSAGE = 'You submitted your review for moderation.';
 
     /**
      * Assert that success message is displayed after review created

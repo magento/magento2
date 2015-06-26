@@ -22,6 +22,7 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default';
     const CONFIG_PATH_DB_CONNECTIONS = 'db/connection';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
+    const CONFIG_PATH_X_FRAME_OPT = 'x-frame-options';
     /**#@-*/
 
     /**#@+
@@ -67,7 +68,7 @@ class ConfigOptionsListConstants
     const KEY_INIT_STATEMENTS = 'initStatements';
     const KEY_ACTIVE = 'active';
     /**#@-*/
-    
+
     /**
      * Db config key
      */

@@ -1038,7 +1038,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _parseXmlTrackingResponse($trackingvalue, $response)
     {
-        $errorTitle = __('Unable to retrieve tracking');
+        $errorTitle = __('For some reason we can\'t retrieve tracking info right now.');
         $resultArr = [];
         if (strlen(trim($response)) > 0) {
             if (strpos(trim($response), '<?xml') === 0) {
