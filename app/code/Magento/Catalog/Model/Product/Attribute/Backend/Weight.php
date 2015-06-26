@@ -19,6 +19,10 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected $localeFormat;
 
+
+    /**
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     */
     public function __construct(
         \Magento\Framework\Locale\FormatInterface $localeFormat
     ) {
