@@ -27,43 +27,34 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
+        $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
+        $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
+        $command = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
+        $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
+
+        $returnValueMap =[
+            ['Magento\Setup\Model\Cron\Status', $status],
+            ['Magento\Setup\Console\Command\UpgradeCommand', $command],
+            ['Magento\Framework\App\MaintenanceMode', $maintenanceMode],
+            ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider]
+        ];
+
+        $this->serviceManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($returnValueMap));
+
         $this->jobFactory = new JobFactory($this->serviceManager);
     }
 
     public function testCreate()
     {
-        $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
-        $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
-        $this->serviceManager->expects($this->at(0))
-            ->method('get')
-            ->with('Magento\Setup\Model\Cron\Status')
-            ->willReturn($status);
-        $this->serviceManager->expects($this->at(1))
-            ->method('get')
-            ->with('Magento\Setup\Model\Cron\Status')
-            ->willReturn($status);
-        $command = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
-        $this->serviceManager->expects($this->at(2))
-            ->method('get')
-            ->with('Magento\Setup\Console\Command\UpgradeCommand')
-            ->willReturn($command);
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $this->serviceManager->expects($this->at(3))
-            ->method('get')
-            ->with('Magento\Setup\Model\ObjectManagerProvider')
-            ->willReturn($objectManagerProvider);
-        $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->serviceManager->expects($this->at(4))
-            ->method('get')
-            ->with('Magento\Framework\App\MaintenanceMode')
-            ->willReturn($maintenanceMode);
-        $this->serviceManager->expects($this->at(5))
-            ->method('get')
-            ->with('Magento\Setup\Model\Cron\Status')
-            ->willReturn($status);
+
+
         $this->assertInstanceOf('Magento\Setup\Model\Cron\AbstractJob', $this->jobFactory->create('setup:upgrade', []));
     }
 
