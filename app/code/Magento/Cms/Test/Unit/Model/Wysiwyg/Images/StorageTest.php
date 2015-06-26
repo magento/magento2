@@ -10,6 +10,7 @@ use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
