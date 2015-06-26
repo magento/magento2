@@ -16,7 +16,8 @@ define([
             template: 'ui/group/group',
             fieldTemplate: 'ui/form/field',
             breakLine: true,
-            validateWholeGroup: false
+            validateWholeGroup: false,
+            additionalClasses: {}
         },
 
         /**
@@ -24,7 +25,10 @@ define([
          * Then calls initObservable, iniListenes and extractData methods.
          */
         initialize: function () {
-            return this._super();
+            this._super()
+                ._setClasses();
+
+            return this;
         },
 
         /**
@@ -36,6 +40,21 @@ define([
         initObservable: function () {
             this._super()
                 .observe('visible required');
+
+            return this;
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
+         */
+        _setClasses: function () {
+            _.extend(this.additionalClasses, {
+                required:   this.required,
+                _error:     this.error,
+                _disabled:  this.disabled
+            });
 
             return this;
         },
