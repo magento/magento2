@@ -159,4 +159,14 @@ class Sidebar extends AbstractCart
     {
         return $this->getUrl('customer/account/forgotpassword');
     }
+
+    /**
+     * Return base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
+    }
 }
