@@ -51,9 +51,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subjectMock = $this->getMockBuilder('\Magento\Sales\Api\Data\Order\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subjectMock = $this->getMockForAbstractClass('\Magento\Sales\Api\OrderRepositoryInterface');
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -84,14 +82,15 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setupExtensionAttributeMock()
     {
-        $orderExtensionAttributeMock = $this->getMockForAbstractClass(
-            '\Magento\Sales\Api\Data\OrderExtensionInterface',
-            [
-                'getAppliedTaxes',
-                'getConvertingFromQuote',
-                'getItemAppliedTaxes'
-            ]
-        );
+        $orderExtensionAttributeMock = $this->getMockBuilder('\Magento\Sales\Api\Data\OrderExtensionInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getAppliedTaxes',
+                    'getConvertingFromQuote',
+                    'getItemAppliedTaxes',
+                ]
+            )->getMock();
 
         return $orderExtensionAttributeMock;
     }

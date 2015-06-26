@@ -60,6 +60,20 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function setupOrderExtensionAttributeMock()
+    {
+        $orderExtensionAttributeMock = $this->getMockBuilder('\Magento\Sales\Api\Data\OrderExtensionInterface')
+            ->setMethods(
+                [
+                    'setAppliedTaxes',
+                    'setConvertingFromQuote',
+                    'setItemAppliedTaxes'
+                ]
+            )->getMock();
+
+        return $orderExtensionAttributeMock;
+    }
+
     /**
      * @dataProvider afterConvertDataProvider
      */
@@ -74,19 +88,11 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsAppliedTaxes')
             ->willReturn($itemsAppliedTaxes);
 
-        $orderExtensionAttributeMock = $this->getMockForAbstractClass(
-            '\Magento\Sales\Api\Data\OrderExtensionInterface',
-            [
-                'setAppliedTaxes',
-                'setConvertingFromQuote',
-                'setItemAppliedTaxes'
-            ]
-        );
-
-
         $orderMock = $this->getMockBuilder('\Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $orderExtensionAttributeMock = $this->setupOrderExtensionAttributeMock();
 
         $orderMock->expects($this->once())
             ->method('getExtensionAttributes')
@@ -122,16 +128,8 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsAppliedTaxes')
             ->willReturn($itemsAppliedTaxes);
 
-        $orderExtensionAttributeMock = $this->getMockForAbstractClass(
-            '\Magento\Sales\Api\Data\OrderExtensionInterface',
-            [
-                'setAppliedTaxes',
-                'setConvertingFromQuote',
-                'setItemAppliedTaxes'
-            ]
-        );
-
-
+        $orderExtensionAttributeMock = $this->setupOrderExtensionAttributeMock();
+        
         $orderMock = $this->getMockBuilder('\Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
