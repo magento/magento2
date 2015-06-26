@@ -118,7 +118,7 @@ $id = $block->escapeHtml($attribute['attribute_id']);
                                                 <div class="fields-group-2">
                                                     <div class="field field-pricing-value">
                                                         <div class="control">
-                                                            <input type="text" class="pricing-value validate-number"
+                                                            <input type="text" <?php if (!$block->getCanEditPrice()): ?> disabled="disabled";<?php endif; ?> class="pricing-value validate-number"
                                                                    name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][pricing_value]"
                                                                    value="<?php echo $block->escapeHtml($pricingValue);
                                 ?>">
@@ -128,7 +128,7 @@ $id = $block->escapeHtml($attribute['attribute_id']);
                                                         <div class="actions dropdown actions-select">
                                                             <input name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][is_percent]" type="hidden" value="<?php echo $isPercent ? 1 : 0;
                                 ?>"/>
-                                                            <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
+                                                            <button type="button" class="action toggle" <?php if (!$block->getCanEditPrice()): ?> disabled="disabled" <?php endif; ?> data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                                                 <span><?php echo $isPercent ? __('%') : $block->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
                                                             <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>

@@ -86,4 +86,24 @@ class OrderAdapter implements OrderAdapterInterface
             ['address' => $this->order->getShippingAddress()]
         );
     }
+
+    /**
+     * Returns order store id
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        return $this->order->getStoreId();
+    }
+
+    /**
+     * Returns order id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->order->getEntityId();
+    }
 }

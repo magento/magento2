@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Sales\Invoiced;
 
 /**
@@ -17,12 +15,15 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Invoiced;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
+     * GROUP BY condition
+     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
-     * @return void
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -31,18 +32,17 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourceCollectionName()
     {
-        return $this->getFilterData()->getData(
-            'report_type'
-        ) ==
-            'created_at_invoice' ? 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Invoiced' : 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Order';
+        return ($this->getFilterData()->getData('report_type')) == 'created_at_invoice'
+            ? 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Invoiced'
+            : 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Order';
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
      */
     protected function _prepareColumns()
     {

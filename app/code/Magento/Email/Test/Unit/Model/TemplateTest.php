@@ -139,8 +139,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs(
                 [
                     $this->context,
-                    $this->design,
                     $this->registry,
+                    $this->design,
                     $this->appEmulation,
                     $this->storeManager,
                     $this->filesystem,
@@ -750,8 +750,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->setConstructorArgs(
             [
                 $this->getMock('Magento\Framework\Model\Context', [], [], '', false),
-                $this->getMock('Magento\Theme\Model\View\Design', [], [], '', false),
                 $this->getMock('Magento\Framework\Registry', [], [], '', false),
+                $this->getMock('Magento\Theme\Model\View\Design', [], [], '', false),
                 $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false),
                 $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false),
                 $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
