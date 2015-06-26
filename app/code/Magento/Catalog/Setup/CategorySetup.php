@@ -848,7 +848,7 @@ class CategorySetup extends EavSetup
                         'group' => 'General',
                         'type' => 'int',
                         'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
-                        'label' => 'Stock Status',
+                        'label' => 'Quantity',
                         'input' => 'select',
                         'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
                         'source' => 'Magento\\CatalogInventory\\Model\\Source\\Stock',
@@ -861,10 +861,6 @@ class CategorySetup extends EavSetup
                         'filterable' => false,
                         'comparable' => false,
                         'unique' => false,
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => true,
-
                     ],
                 ],
             ]

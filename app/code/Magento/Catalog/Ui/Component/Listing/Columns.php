@@ -8,6 +8,11 @@ namespace Magento\Catalog\Ui\Component\Listing;
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
+     * Default columns max order
+     */
+    const DEFAULT_COLUMNS_MAX_ORDER = 100;
+
+    /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
@@ -31,7 +36,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     public function prepare()
     {
-        $columnSortOrder = count($this->components);
+        $columnSortOrder = self::DEFAULT_COLUMNS_MAX_ORDER;
         foreach ($this->attributeRepository->getList() as $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])) {
                 $config['sortOrder'] = ++$columnSortOrder;
