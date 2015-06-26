@@ -134,25 +134,11 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 'result' => '12/2030'
             ],
             [
-                'data' => '2016-12',
-                'index' => 'period',
-                'locale' => 'uk_UA',
-                'period' => 'month',
-                'result' => '12.2016'
-            ],
-            [
                 'data' => '2014-06-25',
                 'index' => 'period',
                 'locale' => 'en_US',
                 'period' => 'day',
                 'result' => 'Jun 25, 2014'
-            ],
-            [
-                'data' => '2014-06-25',
-                'index' => 'period',
-                'locale' => 'uk_UA',
-                'period' => 'day',
-                'result' => '25 Jun 2014'
             ]
         ];
     }
