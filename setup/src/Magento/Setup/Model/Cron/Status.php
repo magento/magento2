@@ -53,11 +53,6 @@ class Status
     /**
      * @var Filesystem\Directory\WriteInterface
      */
-    protected $baseReaderWriter;
-
-    /**
-     * @var Filesystem\Directory\WriteInterface
-     */
     protected $varReaderWriter;
 
     /**
@@ -76,10 +71,9 @@ class Status
         $updateInProgressFlagFilePath = null,
         $updateErrorFlagFilePath = null
     ) {
-        $this->baseReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->varReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->statusFilePath = $statusFilePath ? $statusFilePath : 'update/var/.update_status.txt';
-        $this->logFilePath = $logFilePath ? $logFilePath : 'update/var/update_status.log';
+        $this->statusFilePath = $statusFilePath ? $statusFilePath : '.update_status.txt';
+        $this->logFilePath = $logFilePath ? $logFilePath : 'update_status.log';
         $this->updateInProgressFlagFilePath = $updateInProgressFlagFilePath
             ? $updateInProgressFlagFilePath
             : '.update_in_progress.flag';
@@ -95,7 +89,7 @@ class Status
      */
     public function getStatusFilePath()
     {
-        return $this->baseReaderWriter->getAbsolutePath($this->statusFilePath);
+        return $this->varReaderWriter->getAbsolutePath($this->statusFilePath);
     }
 
     /**
@@ -105,7 +99,7 @@ class Status
      */
     public function getLogFilePath()
     {
-        return $this->baseReaderWriter->getAbsolutePath($this->logFilePath);
+        return $this->varReaderWriter->getAbsolutePath($this->logFilePath);
     }
 
     /**
@@ -136,12 +130,12 @@ class Status
      */
     protected function writeMessageToFile($text, $filePath)
     {
-        $isNewFile = !$this->baseReaderWriter->isExist($filePath);
-        if (!$isNewFile && $this->baseReaderWriter->readFile($filePath)) {
+        $isNewFile = !$this->varReaderWriter->isExist($filePath);
+        if (!$isNewFile && $this->varReaderWriter->readFile($filePath)) {
             $text = "\n{$text}";
         }
         try {
-            $this->baseReaderWriter->writeFile($filePath, $text, 'a+');
+            $this->varReaderWriter->writeFile($filePath, $text, 'a+');
         } catch (FileSystemException $e) {
             throw new \RuntimeException(sprintf('Cannot add status information to "%s"', $filePath));
         }
