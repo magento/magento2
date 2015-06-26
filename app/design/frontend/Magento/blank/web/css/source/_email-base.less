@@ -69,8 +69,8 @@ table {
     table,
     td,
     a {
-        -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
     }
 
     //  Allow smoother rendering of resized images in Internet Explorer (such as high-resolution logo)
@@ -171,15 +171,15 @@ body {
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     html,
     body {
-        width: 100% !important;
         // Change background/foreground to same color
         background-color: @email-content__background-color;
+        width: 100% !important;
     }
 
     .main {
-        width: auto !important;
         max-width: 100% !important;
         min-width: 240px;
+        width: auto !important;
     }
 
     .content {
@@ -206,8 +206,8 @@ body {
 
     td {
         color: @message__color;
-        padding: @email-content__padding__base;
         margin: 0;
+        padding: @email-content__padding__base;
 
         a {
             color: @message-link__color__email;
