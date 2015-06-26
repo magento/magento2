@@ -5,18 +5,12 @@
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class SynchronizationTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Test fir synchronize method
-     */
     public function testSynchronize()
     {
         $content = 'content';
         $relativeFileName = 'config.xml';
-        $filePath = realpath(__DIR__ . '/_files/');
 
         $storageFactoryMock = $this->getMock(
             'Magento\MediaStorage\Model\File\Storage\DatabaseFactory',
@@ -49,33 +43,13 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())->method('write')->with($content);
         $file->expects($this->once())->method('unlock');
         $file->expects($this->once())->method('close');
-        $directory = $this->getMock(
-            'Magento\Framework\Filesystem\Direcoty\Write',
-            ['openFile', 'getRelativePath'],
-            [],
-            '',
-            false
-        );
-        $directory->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
-        $directory->expects($this->once())->method('openFile')->with($filePath)->will($this->returnValue($file));
-        $filesystem = $this->getMock(
-            'Magento\Framework\Filesystem',
-            ['getDirectoryWrite'],
-            [],
-            '',
-            false
-        );
-        $filesystem->expects(
-            $this->once()
-        )->method(
-            'getDirectoryWrite'
-        )->with(
-            DirectoryList::PUB
-        )->will(
-            $this->returnValue($directory)
-        );
+        $directory = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $directory->expects($this->once())
+            ->method('openFile')
+            ->with($relativeFileName)
+            ->will($this->returnValue($file));
 
-        $model = new \Magento\MediaStorage\Model\File\Storage\Synchronization($storageFactoryMock, $filesystem);
-        $model->synchronize($relativeFileName, $filePath);
+        $model = new \Magento\MediaStorage\Model\File\Storage\Synchronization($storageFactoryMock, $directory);
+        $model->synchronize($relativeFileName);
     }
 }

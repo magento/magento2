@@ -407,7 +407,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
                 AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED,
                 false,
                 Address::TYPE_SHIPPING,
-                'Account confirmation is required',
+                'An account confirmation is required',
             ],
             [
                 1,

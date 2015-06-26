@@ -35,4 +35,12 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
         }
         $this->_redirect('adminhtml/*/');
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_AdminNotification::adminnotification_remove');
+    }
 }
