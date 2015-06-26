@@ -8,7 +8,7 @@ angular.module('component-upgrade', ['ngStorage'])
     .controller('componentUpgradeController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
         // TODO: hardcode it right now
         $localStorage.packages = [
-            {name: 'composer/composer', version: 'dev-master'}
+            {name: 'symfony/console', version: '2.5'}
         ];
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
