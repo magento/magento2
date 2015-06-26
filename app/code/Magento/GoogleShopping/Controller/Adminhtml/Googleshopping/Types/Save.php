@@ -60,7 +60,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
                 }
             }
 
-            $this->messageManager->addSuccess(__('The attribute mapping has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the attribute mapping.'));
             if (!empty($requiredAttributes)) {
                 $this->messageManager->addSuccess(
                     $this->_objectManager->get('Magento\GoogleShopping\Helper\Category')->getMessage()

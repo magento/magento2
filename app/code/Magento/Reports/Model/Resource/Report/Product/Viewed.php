@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Most viewed product report aggregate resource model
  *
@@ -31,16 +29,22 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     const AGGREGATION_YEARLY = 'report_viewed_product_aggregated_yearly';
 
     /**
+     * Product resource instance
+     *
      * @var \Magento\Catalog\Model\Resource\Product
      */
     protected $_productResource;
 
     /**
+     * Resource helper instance
+     *
      * @var \Magento\Reports\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
