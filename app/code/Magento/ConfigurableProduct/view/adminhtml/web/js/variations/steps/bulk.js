@@ -20,50 +20,26 @@ define([
     viewModel = Component.extend({
         attributes: ko.observableArray([]),
         newProductsCount: ko.observable(),
-        imagesSection: ko.observableArray([
-            {
-                label: 'Images',
-                type: ko.observable('none'),
-                value: ko.observable(),
-                attribute: ko.observable()
-            }
-        ]),
-        pricingSection: ko.observableArray([
-            {
-                label: 'Pricing',
-                type: ko.observable('none'),
-                value: ko.observable(),
-                attribute: ko.observable()
-            }
-        ]),
-        inventorySection: ko.observableArray([
-            {
-                label: 'Inventory',
-                type: ko.observable('none'),
-                value: ko.observable(),
-                attribute: ko.observable()
-            }
-        ]),
-        sections: ko.observableArray([
-            {
+        sections: ko.observable({
+            images: {
                 label: 'images',
                 type: ko.observable('none'),
                 value: ko.observable(),
                 attribute: ko.observable()
             },
-            {
+            pricing: {
                 label: 'pricing',
                 type: ko.observable('none'),
                 value: ko.observable(),
                 attribute: ko.observable()
             },
-            {
+            inventory: {
                 label: 'inventory',
                 type: ko.observable('none'),
                 value: ko.observable(),
                 attribute: ko.observable()
             }
-        ]),
+        }),
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
             var count = 1;
@@ -82,8 +58,7 @@ define([
         back: function (wizard) {
         },
         bindGalleries: function () {
-            var baseElement = $('[data-role=bulk-step]');
-            baseElement.find('[data-role=gallery]').each(function (index, element) {
+            $('[data-role=bulk-step] [data-role=gallery]').each(function (index, element) {
                 var gallery = $(element),
                     uploadInput = $(gallery.find('[name=image]'));
 
@@ -117,6 +92,16 @@ define([
 
                     uploadInput.fileupload({
                         dataType: 'json',
+                        process: [{
+                            action: 'load',
+                            fileTypes: /^image\/(gif|jpeg|png)$/
+                        }, {
+                            action: 'resize',
+                            maxWidth: 1920 ,
+                            maxHeight: 1200
+                        }, {
+                            action: 'save'
+                        }],
                         formData: {form_key: FORM_KEY},
                         sequentialUploads: true,
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -170,18 +155,6 @@ define([
                                 .hide('highlight')
                                 .remove();
                         }
-                    });
-                    uploadInput.fileupload('option', {
-                        process: [{
-                            action: 'load',
-                            fileTypes: /^image\/(gif|jpeg|png)$/
-                        }, {
-                            action: 'resize',
-                            maxWidth: 1920 ,
-                            maxHeight: 1200
-                        }, {
-                            action: 'save'
-                        }]
                     });
                     gallery.data('gallery-initialized', 1);
                 }

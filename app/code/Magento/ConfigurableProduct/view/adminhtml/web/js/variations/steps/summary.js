@@ -54,7 +54,7 @@ define([
                 });
                 variation.push(images
                     ? images.sections().images
-                    : _.findWhere(this.sections(), {label:'images'}).value()
+                    : this.sections().images.value()
                 );
                 //sku
                 variation.push(_.reduce(options, function (memo, option) {
@@ -66,7 +66,7 @@ define([
                 });
                 variation.push(inventory
                     ? inventory.sections().inventory
-                    : _.findWhere(this.sections(), {label:'inventory'}).value()
+                    : this.sections().inventory.value()
                 );
                 //attributes
                 _.each(options, function (option) {
@@ -78,7 +78,7 @@ define([
                 });
                 variation.push(pricing
                     ? pricing.sections().pricing
-                    : _.findWhere(this.sections(), {label:'pricing'}).value()
+                    : this.sections().pricing.value()
                 );
 
                 //result

@@ -13,7 +13,7 @@
         <span><?= __('Based on your selections <span data-bind="text:newProductsCount"></span> new products will be created. Use this step to customize images and pricing for your new products.') ?></span>
     </div>
 
-    <div data-bind="foreach:imagesSection">
+    <div data-bind="with: sections().images">
         <div data-role="section" style="margin-top: 20px;clear:both">
             <div style="float: left; border: 0px" data-bind="text: label"></div>
             <div style="border-bottom: 1px solid gray; clear: both;"></div>
@@ -220,9 +220,7 @@
                     value: attribute,
                     optionsCaption: 'Select'"
                 ></select>
-                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey"
-                    data-bind="if:attribute"
-                >
+                <ul style="list-style-type: none;margin-top: 10px" data-bind="if:attribute">
                     <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
                     <li style="margin-left: 15px;clear:both">
                         <label>
@@ -331,9 +329,11 @@
                                                     <span>Alt Text</span>
                                                 </label>
                                                 <div class="control">
-                            <textarea id="image-description"
-                                      rows="3"
-                                      name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                                    <textarea
+                                                        id="image-description"
+                                                        rows="3"
+                                                        name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %>
+                                                    </textarea>
                                                 </div>
                                             </div>
 
@@ -401,7 +401,7 @@
         </div>
     </div>
 
-    <div data-bind="foreach:pricingSection">
+    <div data-bind="with: sections().pricing">
         <div data-role="section" style="margin-top: 20px;clear:both">
             <div style="float: left; border: 0px" data-bind="text: label"></div>
             <div style="border-bottom: 1px solid gray; clear: both;"></div>
@@ -428,7 +428,7 @@
                 </li>
             </ul>
             <div data-bind="visible: type() == 'single'"
-                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                 style="list-style-type: none;margin-top: 10px;"
             >
                 <label>
                     <span data-bind="text:label"></span>
@@ -442,7 +442,7 @@
                     value: attribute,
                     optionsCaption: 'Select'"
                     ></select>
-                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                <ul style="list-style-type: none;margin-top: 10px;"
                     data-bind="if:attribute"
                     >
                     <!-- ko foreach: attribute().chosen -->
@@ -458,7 +458,7 @@
         </div>
     </div>
 
-    <div data-bind="foreach:inventorySection">
+    <div data-bind="with: sections().inventory">
         <div data-role="section" style="margin-top: 20px;clear:both">
             <div style="float: left; border: 0px" data-bind="text: label"></div>
             <div style="border-bottom: 1px solid gray; clear: both;"></div>
@@ -485,7 +485,7 @@
                 </li>
             </ul>
             <div data-bind="visible: type() == 'single'"
-                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                 style="list-style-type: none;margin-top: 10px;"
                 >
                 <label>
                     <span data-bind="text:label"></span>
@@ -499,7 +499,7 @@
                     value: attribute,
                     optionsCaption: 'Select'"
                 ></select>
-                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                <ul style="list-style-type: none;margin-top: 10px;"
                     data-bind="if:attribute"
                     >
                     <!-- ko foreach: attribute().chosen -->
