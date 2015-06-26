@@ -10,7 +10,7 @@ namespace Magento\User\Controller\Adminhtml;
  *
  * @magentoAppArea adminhtml
  */
-class AuthTest extends \Magento\Backend\Utility\Controller
+class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Test form existence

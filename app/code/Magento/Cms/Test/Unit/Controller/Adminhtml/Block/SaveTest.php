@@ -210,7 +210,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('The block has been saved.'));
+            ->with(__('You saved the block.'));
 
         $this->sessionMock->expects($this->atLeastOnce())->method('setFormData')->with(false);
 
@@ -294,7 +294,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('The block has been saved.'));
+            ->with(__('You saved the block.'));
 
         $this->sessionMock->expects($this->atLeastOnce())->method('setFormData')->with(false);
 
@@ -341,7 +341,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->any())
             ->method('addSuccess')
-            ->with(__('The block has been saved.'));
+            ->with(__('You saved the block.'));
         $this->messageManagerMock->expects($this->once())
             ->method('addError');
 
