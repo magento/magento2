@@ -9,7 +9,7 @@
     novalidate
     name="component-upgrade"
     >
-    <div>
+    <div ng-repeat="package in packages">
         <div>{{package.name}} version {{package.version}} is ready to be installed</div>
     </div>
     <br/>
@@ -17,7 +17,7 @@
         class="btn btn-large btn-prime"
         ng-click="upgrade()"
         type="button"
-        >Install</button>
+        >Upgrade</button>
     <br/>
     <div ng-show="started">{{errorMessage}}</div>
 </form>
