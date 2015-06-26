@@ -139,4 +139,31 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}, {"name": "job B", "params" : []}]}');
         $this->assertFalse($this->queue->isEmpty());
     }
+
+    public function testAddJobs()
+    {
+        $queue = ['jobs' => []];
+        $this->reader->expects($this->at(0))->method('read')->willReturn('');
+        $queue['jobs'][] = ['name' => 'job A', 'params' => []];
+        $this->writer->expects($this->at(0))
+            ->method('write')
+            ->with(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->reader->expects($this->at(1))
+            ->method('read')
+            ->willReturn(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $queue['jobs'][] = ['name' => 'job B', 'params' => []];
+        $this->writer->expects($this->at(1))
+            ->method('write')
+            ->with(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->queue->addJobs([['name' => 'job A', 'params' => []], ['name' => 'job B', 'params' => []]]);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage field is missing for one or more jobs
+     */
+    public function testAddJobsInvalidJobs()
+    {
+        $this->queue->addJobs([['no_name' => 'no job', 'no_params' => []]]);
+    }
 }

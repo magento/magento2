@@ -109,6 +109,20 @@ class Queue
     }
 
     /**
+     * @param array $jobs
+     * @return void
+     */
+    public function addJobs(array $jobs)
+    {
+        foreach ($jobs as $job) {
+            $this->validateJobDeclaration($job);
+            $queue = json_decode($this->reader->read(), true);
+            $queue[self::KEY_JOBS][] = $job;
+            $this->writer->write(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ));
+        }
+    }
+
+    /**
      * Make sure job declaration is correct.
      *
      * @param object $job

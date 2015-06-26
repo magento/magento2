@@ -9,7 +9,8 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\Cron\Queue;
+use Magento\Setup\Model\Cron\Queue\Reader;
 
 /**
  * Class Updater passes information to the updater application
@@ -28,16 +29,19 @@ class Updater
      */
     private $write;
 
+    private $queue;
+
     /**
      * Constructor
      *
      * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, Queue $queue)
     {
         $this->queueFilePath = '.update_queue.json';
         $this->write = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->write->touch($this->queueFilePath);
+        $this->queue = $queue;
     }
 
     /**
@@ -50,27 +54,10 @@ class Updater
     {
         try {
             // write to .update_queue.json file
-            $existingQueue = $this->readQueue();
-            $existingQueue['jobs'][] = ['name' => 'update', 'params' => ['require' => $packages]];
-            $this->write->writeFile($this->queueFilePath, json_encode($existingQueue, JSON_PRETTY_PRINT), 'w');
+            $this->queue->addJobs([['name' => 'update', 'params' => ['require' => $packages]]]);
             return '';
         } catch (\Exception $e) {
             return $e->getMessage();
-        }
-    }
-
-    /**
-     * Read the job queue
-     *
-     * @return array
-     */
-    private function readQueue()
-    {
-        try {
-            $queueFileContent = $this->write->readFile($this->queueFilePath);
-            return json_decode($queueFileContent, true);
-        } catch (FileSystemException $e) {
-            return [];
         }
     }
 }
