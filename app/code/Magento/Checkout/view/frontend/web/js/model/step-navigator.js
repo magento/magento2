@@ -42,7 +42,7 @@ define(
             isAvailable: function(code) {
                 var flag = false;
                 this.stepCodes.forEach(function(element){
-                    if (element.code == code) {
+                    if (element == code) {
                         flag = true;
                     }
                 });
