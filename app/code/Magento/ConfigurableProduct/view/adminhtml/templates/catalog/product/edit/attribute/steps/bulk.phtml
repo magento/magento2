@@ -100,15 +100,12 @@
                             </ul>
                             <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                             <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-                            <div class="actions" >
+                            <div class="actions">
                                 <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
                                     <span>Delete image</span>
                                 </button>
-                                <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
-                                    <span>Make Base</span >
-                                </button >
-                                <div class="draggable-handle" ></div >
-                            </div >
+                                <div class="draggable-handle"></div>
+                            </div>
                             <div class="image-label"></div>
                             <div class="image-fade"><span>Hidden</span></div>
                         </div>
@@ -126,13 +123,92 @@
                                 <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
                                     <span>Delete image</span>
                                 </button>
-                                <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
-                                    <span>Make Base</span>
-                                </button>
                                 <div class="draggable-handle"></div>
                             </div>
                             <div class="image-label"></div>
                             <div class="image-fade"><span>Hidden</span></div>
+                        </div>
+                    </script>
+
+                    <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
+                        <div class="image-panel" data-role="dialog">
+                            <div class="image-panel-preview">
+                                <img src="<%- data.url %>" alt="<%- data.label %>" />
+                            </div>
+                            <div class="image-panel-controls">
+                                <strong class="image-name"><%- data.label %></strong>
+
+                                <button type="button" class="action-remove"
+                                        title="Remove Image">
+                                    <span>Remove Image</span>
+                                </button>
+
+                                <fieldset class="fieldset fieldset-image-panel">
+                                    <div class="field field-image-description">
+                                        <label class="label" for="image-description">
+                                            <span>Alt Text</span>
+                                        </label>
+                                        <div class="control">
+                            <textarea id="image-description"
+                                      rows="3"
+                                      name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="field field-image-role">
+                                        <label class="label">
+                                            <span>Role</span>
+                                        </label>
+                                        <div class="control">
+                                            <ul class="multiselect-alt">
+                                                <li class="item">
+                                                    <label>
+                                                        <input class="image-type"
+                                                               data-role="type-selector"
+                                                               type="checkbox"
+                                                               value="image"
+                                                            />
+                                                        Base Image                                        </label>
+                                                </li>
+                                                <li class="item">
+                                                    <label>
+                                                        <input class="image-type"
+                                                               data-role="type-selector"
+                                                               type="checkbox"
+                                                               value="small_image"
+                                                            />
+                                                        Small Image                                        </label>
+                                                </li>
+                                                <li class="item">
+                                                    <label>
+                                                        <input class="image-type"
+                                                               data-role="type-selector"
+                                                               type="checkbox"
+                                                               value="thumbnail"
+                                                            />
+                                                        Thumbnail                                        </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="field field-image-hide">
+                                        <label class="label">
+                                            <input type="checkbox"
+                                                   data-role="visibility-trigger"
+                                                   value="1"
+                                                   name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                            <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+                                            <span>Hide from Product Page</span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <button type="button" class="action-close" data-role="close-panel" title="Close panel">
+                                <span>Close panel</span>
+                            </button>
+                            <div class="image-pointer"></div>
                         </div>
                     </script>
                 </div>
@@ -211,9 +287,6 @@
                                         <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
                                             <span>Delete image</span>
                                         </button>
-                                        <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
-                                            <span>Make Base</span >
-                                        </button >
                                         <div class="draggable-handle" ></div >
                                     </div >
                                     <div class="image-label"></div>
@@ -233,13 +306,92 @@
                                         <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
                                             <span>Delete image</span>
                                         </button>
-                                        <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
-                                            <span>Make Base</span>
-                                        </button>
                                         <div class="draggable-handle"></div>
                                     </div>
                                     <div class="image-label"></div>
                                     <div class="image-fade"><span>Hidden</span></div>
+                                </div>
+                            </script>
+
+                            <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
+                                <div class="image-panel" data-role="dialog">
+                                    <div class="image-panel-preview">
+                                        <img src="<%- data.url %>" alt="<%- data.label %>" />
+                                    </div>
+                                    <div class="image-panel-controls">
+                                        <strong class="image-name"><%- data.label %></strong>
+
+                                        <button type="button" class="action-remove"
+                                                title="Remove Image">
+                                            <span>Remove Image</span>
+                                        </button>
+
+                                        <fieldset class="fieldset fieldset-image-panel">
+                                            <div class="field field-image-description">
+                                                <label class="label" for="image-description">
+                                                    <span>Alt Text</span>
+                                                </label>
+                                                <div class="control">
+                            <textarea id="image-description"
+                                      rows="3"
+                                      name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="field field-image-role">
+                                                <label class="label">
+                                                    <span>Role</span>
+                                                </label>
+                                                <div class="control">
+                                                    <ul class="multiselect-alt">
+                                                        <li class="item">
+                                                            <label>
+                                                                <input class="image-type"
+                                                                       data-role="type-selector"
+                                                                       type="checkbox"
+                                                                       value="image"
+                                                                    />
+                                                                Base Image                                        </label>
+                                                        </li>
+                                                        <li class="item">
+                                                            <label>
+                                                                <input class="image-type"
+                                                                       data-role="type-selector"
+                                                                       type="checkbox"
+                                                                       value="small_image"
+                                                                    />
+                                                                Small Image                                        </label>
+                                                        </li>
+                                                        <li class="item">
+                                                            <label>
+                                                                <input class="image-type"
+                                                                       data-role="type-selector"
+                                                                       type="checkbox"
+                                                                       value="thumbnail"
+                                                                    />
+                                                                Thumbnail                                        </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="field field-image-hide">
+                                                <label class="label">
+                                                    <input type="checkbox"
+                                                           data-role="visibility-trigger"
+                                                           value="1"
+                                                           name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                                    <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+                                                    <span>Hide from Product Page</span>
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <button type="button" class="action-close" data-role="close-panel" title="Close panel">
+                                        <span>Close panel</span>
+                                    </button>
+                                    <div class="image-pointer"></div>
                                 </div>
                             </script>
                         </div>
