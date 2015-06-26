@@ -6,14 +6,309 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 ?>
-<div data-bind="scope: '<?= $block->getComponentName()?>'">
+
+<div data-bind="scope: '<?= $block->getComponentName()?>'" class="admin__scope-old" data-role="bulk-step">
     <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Bulk Images, Pricing, and Inventory') ?></h1>
     <div style="padding-bottom: 10px">
         <span><?= __('Based on your selections 24 new products will be created. Use this step to customize images
         and pricing for your new products.') ?></span>
     </div>
-    <div data-bind="foreach:sections">
-        <div data-role="section" style="margin-top: 20px;">
+
+    <div data-bind="foreach:imagesSection">
+        <div data-role="section" style="margin-top: 20px;clear:both">
+            <div style="float: left; border: 0px" data-bind="text: label"></div>
+            <div style="border-bottom: 1px solid gray; clear: both;"></div>
+            <ul style="list-style-type: none; margin-top: 10px;">
+                <li>
+                    <label>
+                        <input type="radio" value="single"
+                               data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Apply single set of images to all SKUs') ?></span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" value="each" data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Apply unique images by attribute to each SKU') ?></span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" value="none" checked
+                               data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Skip image uploading at this time') ?></span>
+                    </label>
+                </li>
+            </ul>
+            <div data-bind="visible: type() == 'single'"
+                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+            >
+                <label>
+                    <span data-bind="text:label"></span>
+                </label>
+
+                <div data-role="gallery" class="gallery" data-images="[]">
+                    <div class="image image-placeholder">
+                        <div data-role="uploader" class="uploader">
+                            <div class="fileinput-button form-buttons button">
+                                <span>Browse Files...</span>
+                                <input type="file" name="image" multiple="multiple"
+                                       data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                        <p class="image-placeholder-text">Click here or drag and drop to add images</p>
+                    </div>
+                    <input name="product[image]"
+                           class="image-image"
+                           type="hidden"
+                           value=""/>
+                    <input name="product[small_image]"
+                           class="image-small_image"
+                           type="hidden"
+                           value=""/>
+                    <input name="product[thumbnail]"
+                           class="image-thumbnail"
+                           type="hidden"
+                           value=""/>
+
+                    <script data-template="uploader" type="text/x-magento-template">
+                        <div id="<%- data.id %>" class="file-row">
+                            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+                            <div class="progressbar-container">
+                                <div class="progressbar upload-progress" style="width: 0%;"></div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </script>
+
+                    <script data-template="gallery-content" type="text/x-magento-template">
+                        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
+                             data-role="image">
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
+                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                            <ul class="type-labels" style="display: none">
+                                <li class="type-image">Base Image</li>
+                                <li class="type-small_image">Small Image</li>
+                                <li class="type-thumbnail">Thumbnail</li>
+                            </ul>
+                            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                            <div class="actions" >
+                                <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
+                                    <span>Delete image</span>
+                                </button>
+                                <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
+                                    <span>Make Base</span >
+                                </button >
+                                <div class="draggable-handle" ></div >
+                            </div >
+                            <div class="image-label"></div>
+                            <div class="image-fade"><span>Hidden</span></div>
+                        </div>
+                    </script>
+
+                    <script data-template="image" type="text/x-magento-template">
+                        <div class="image">
+                            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                            <img
+                                class="product-image"
+                                src="<%- data.url %>"
+                                data-position="<%- data.position %>"
+                                alt="<%- data.label %>" />
+                            <div class="actions">
+                                <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
+                                    <span>Delete image</span>
+                                </button>
+                                <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
+                                    <span>Make Base</span>
+                                </button>
+                                <div class="draggable-handle"></div>
+                            </div>
+                            <div class="image-label"></div>
+                            <div class="image-fade"><span>Hidden</span></div>
+                        </div>
+                    </script>
+                </div>
+
+            </div>
+            <div data-bind="visible: type() == 'each'">
+                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
+                    options: $parent.attributes,
+                    optionsText: 'label',
+                    value: attribute,
+                    optionsCaption: 'Select'"
+                ></select>
+                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey"
+                    data-bind="if:attribute"
+                >
+                    <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
+                    <li style="margin-left: 15px;clear:both">
+                        <label>
+                            <span data-bind="text:label"></span>
+                        </label>
+
+                        <div data-role="gallery" class="gallery" data-images="[]">
+                            <div class="image image-placeholder">
+                                <div data-role="uploader" class="uploader">
+                                    <div class="fileinput-button form-buttons button">
+                                        <span>Browse Files...</span>
+                                        <input type="file" name="image" multiple="multiple"
+                                               data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+
+                                <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                                <p class="image-placeholder-text">Click here or drag and drop to add images</p>
+                            </div>
+                            <input name="product[image]"
+                                   class="image-image"
+                                   type="hidden"
+                                   value=""/>
+                            <input name="product[small_image]"
+                                   class="image-small_image"
+                                   type="hidden"
+                                   value=""/>
+                            <input name="product[thumbnail]"
+                                   class="image-thumbnail"
+                                   type="hidden"
+                                   value=""/>
+
+                            <script data-template="uploader" type="text/x-magento-template">
+                                <div id="<%- data.id %>" class="file-row">
+                                    <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+                                    <div class="progressbar-container">
+                                        <div class="progressbar upload-progress" style="width: 0%;"></div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </script>
+
+                            <script data-template="gallery-content" type="text/x-magento-template">
+                                <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
+                                     data-role="image">
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
+                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                                    <ul class="type-labels" style="display: none">
+                                        <li class="type-image">Base Image</li>
+                                        <li class="type-small_image">Small Image</li>
+                                        <li class="type-thumbnail">Thumbnail</li>
+                                    </ul>
+                                    <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                                    <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                                    <div class="actions" >
+                                        <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
+                                            <span>Delete image</span>
+                                        </button>
+                                        <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
+                                            <span>Make Base</span >
+                                        </button >
+                                        <div class="draggable-handle" ></div >
+                                    </div >
+                                    <div class="image-label"></div>
+                                    <div class="image-fade"><span>Hidden</span></div>
+                                </div>
+                            </script>
+
+                            <script data-template="image" type="text/x-magento-template">
+                                <div class="image">
+                                    <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                                    <img
+                                        class="product-image"
+                                        src="<%- data.url %>"
+                                        data-position="<%- data.position %>"
+                                        alt="<%- data.label %>" />
+                                    <div class="actions">
+                                        <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
+                                            <span>Delete image</span>
+                                        </button>
+                                        <button type="button" class="action-make-base" data-role="make-base-button" title="Make Base">
+                                            <span>Make Base</span>
+                                        </button>
+                                        <div class="draggable-handle"></div>
+                                    </div>
+                                    <div class="image-label"></div>
+                                    <div class="image-fade"><span>Hidden</span></div>
+                                </div>
+                            </script>
+                        </div>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="foreach:pricingSection">
+        <div data-role="section" style="margin-top: 20px;clear:both">
+            <div style="float: left; border: 0px" data-bind="text: label"></div>
+            <div style="border-bottom: 1px solid gray; clear: both;"></div>
+            <ul style="list-style-type: none; margin-top: 10px;">
+                <li>
+                    <label>
+                        <input type="radio" value="single"
+                               data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Apply single price to all SKUs') ?></span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" value="each" data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" value="none" checked
+                               data-bind="attr:{name:label}, checked:type">
+                        <span><?= __('Skip pricing at this time') ?></span>
+                    </label>
+                </li>
+            </ul>
+            <div data-bind="visible: type() == 'single'"
+                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+            >
+                <label>
+                    <span data-bind="text:label"></span>
+                    <input type="text" data-bind="value:value">
+                </label>
+            </div>
+            <div data-bind="visible: type() == 'each'">
+                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
+                    options: $parent.attributes,
+                    optionsText: 'label',
+                    value: attribute,
+                    optionsCaption: 'Select'"
+                    ></select>
+                <ul style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
+                    data-bind="if:attribute"
+                    >
+                    <!-- ko foreach: attribute().chosen -->
+                    <li style="margin-left: 15px;">
+                        <label>
+                            <span data-bind="text:label"></span>
+                            <input type="text" data-bind="value:sections()[$parent.label]">
+                        </label>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="foreach:inventorySection">
+        <div data-role="section" style="margin-top: 20px;clear:both">
             <div style="float: left; border: 0px" data-bind="text: label"></div>
             <div style="border-bottom: 1px solid gray; clear: both;"></div>
             <ul style="list-style-type: none; margin-top: 10px;">
@@ -69,18 +364,17 @@
         </div>
     </div>
 </div>
-
 <script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_Ui/js/core/app": {
-                "components": {
-                    "<?= $block->getComponentName()?>": {
-                        "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
-                        "appendTo": "<?= $block->getParentComponentName()?>"
-                    }
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "<?= $block->getComponentName()?>": {
+                    "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
+                    "appendTo": "<?= $block->getParentComponentName()?>"
                 }
             }
         }
     }
+}
 </script>

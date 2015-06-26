@@ -100,10 +100,10 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         <img class="spacer" src="{$spacerImage}"/>
         <p class="image-placeholder-text">{$imagePlaceholderText}</p>
     </div>
-    <script id="{$htmlId}-template" class="image-template" type="text/x-magento-template">
+    <script id="{$htmlId}-template" data-template="image" type="text/x-magento-template">
         <div class="image">
             <img class="spacer" src="{$spacerImage}"/>
-            <img 
+            <img
                 class="product-image"
                 src="<%- data.url %>"
                 data-position="<%- data.position %>"

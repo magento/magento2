@@ -26,7 +26,8 @@ $elementName = $block->getElement()->getName() . '[images]';
             <p class="image-placeholder-text"><?php echo __('Click here or drag and drop to add images');
     ?></p>
         </div>
-    <?php 
+    <?php
+
 } ?>
     <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
@@ -34,9 +35,9 @@ $elementName = $block->getElement()->getName() . '[images]';
                class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
-    <?php 
-} ?>
+    <?php
 
+} ?>
 
     <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
@@ -53,7 +54,8 @@ $elementName = $block->getElement()->getName() . '[images]';
                     <li class="type-<?php echo $block->escapeHtml(
                         $typeData['code']
                     ) ?>"><?php echo $block->escapeHtml($typeData['label']) ?></li>
-                <?php 
+                <?php
+
 } ?>
             </ul>
             <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
@@ -114,7 +116,8 @@ $elementName = $block->getElement()->getName() . '[images]';
                                             <?php echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                         </label>
                                     </li>
-                                <?php 
+                                <?php
+
 } ?>
                             </ul>
                         </div>
