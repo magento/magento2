@@ -39,7 +39,7 @@
             <data name="invoiceReport/from" xsi:type="string">m/d/Y</data>
             <data name="invoiceReport/to" xsi:type="string">m/d/Y</data>
             <data name="invoiceReport/show_order_statuses" xsi:type="string">Specified</data>
-            <data name="invoiceReport/data/order_statuses" xsi:type="string">Processing</data>
+            <data name="invoiceReport/order_statuses" xsi:type="string">Processing</data>
             <data name="invoiceReport/show_empty_rows" xsi:type="string">No</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportIntervalResult" />
             <constraint name="Magento\Reports\Test\Constraint\AssertInvoiceReportTotalResult" />
