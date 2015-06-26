@@ -10,23 +10,6 @@ use \Magento\Setup\Fixtures\OrdersFixture;
 
 class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 {
-    private $mockObjectNames = [
-        'Magento\Quote\Model\Resource\Quote',
-        'Magento\Quote\Model\Resource\Quote\Address',
-        'Magento\Quote\Model\Resource\Quote\Item',
-        'Magento\Quote\Model\Resource\Quote\Item\Option',
-        'Magento\Quote\Model\Resource\Quote\Payment',
-        'Magento\Quote\Model\Resource\Quote\Address\Rate',
-        'Magento\Reports\Model\Resource\Event',
-        'Magento\Sales\Model\Resource\Order',
-        'Magento\Sales\Model\Resource\Order\Grid',
-        'Magento\Sales\Model\Resource\Order\Item',
-        'Magento\Sales\Model\Resource\Order\Payment',
-        'Magento\Sales\Model\Resource\Order\Status\History',
-        '\Magento\Eav\Model\Resource\Entity\Store'
-    ];
-
-    private $mockObjects;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
@@ -51,7 +34,24 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        foreach ($this->mockObjectNames as $mockObjectName) {
+        $mockObjectNames = [
+            'Magento\Quote\Model\Resource\Quote',
+            'Magento\Quote\Model\Resource\Quote\Address',
+            'Magento\Quote\Model\Resource\Quote\Item',
+            'Magento\Quote\Model\Resource\Quote\Item\Option',
+            'Magento\Quote\Model\Resource\Quote\Payment',
+            'Magento\Quote\Model\Resource\Quote\Address\Rate',
+            'Magento\Reports\Model\Resource\Event',
+            'Magento\Sales\Model\Resource\Order',
+            'Magento\Sales\Model\Resource\Order\Grid',
+            'Magento\Sales\Model\Resource\Order\Item',
+            'Magento\Sales\Model\Resource\Order\Payment',
+            'Magento\Sales\Model\Resource\Order\Status\History',
+            '\Magento\Eav\Model\Resource\Entity\Store'
+        ];
+        $mockObjects = [];
+
+        foreach ($mockObjectNames as $mockObjectName) {
             $mockObject = $this->getMock($mockObjectName, [], [], '', false);
             $path = explode('\\', $mockObjectName);
             $name = array_pop($path);
@@ -64,7 +64,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
                     ->method('getTable')
                     ->willReturn(strtolower($name) . '_table_name');
             }
-            $this->mockObjects[] = [$mockObjectName, $mockObject];
+            $mockObjects[] = [$mockObjectName, $mockObject];
         }
 
         $adapterInterfaceMock = $this->getMockForAbstractClass(
@@ -182,7 +182,7 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturn([1, 1]);
 
         array_push(
-            $this->mockObjects,
+            $mockObjects,
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
             ['Magento\Catalog\Model\Category', $categoryMock],
             ['Magento\Catalog\Model\Product', $productMock],
@@ -193,10 +193,10 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->exactly(32))
             ->method('get')
-            ->will($this->returnValueMap($this->mockObjects));
+            ->will($this->returnValueMap($mockObjects));
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap($this->mockObjects));
+            ->will($this->returnValueMap($mockObjects));
 
         $this->fixtureModelMock
             ->expects($this->once())
@@ -212,6 +212,34 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $adapterInterfaceMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            '',
+            true,
+            true,
+            true,
+            []
+        );
+        $adapterInterfaceMock->expects($this->never())
+            ->method('query');
+
+        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceMock->expects($this->never())
+            ->method('getConnection')
+            ->with($this->equalTo('write'))
+            ->willReturn($adapterInterfaceMock);
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('get')
+            ->with($this->equalTo('Magento\Framework\App\Resource'))
+            ->willReturn($resourceMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManagerMock')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

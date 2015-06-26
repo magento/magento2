@@ -83,7 +83,7 @@ namespace Magento\Setup\Fixtures;
  * The method is used in FixtureModel. loadConfig in an if statement. By overriding this method we are able to test
  * both of the possible cases based on the return value of is_readable.
  *
- * @param $filename
+ * @param string $filename
  * @return bool
  */
 function is_readable($filename)

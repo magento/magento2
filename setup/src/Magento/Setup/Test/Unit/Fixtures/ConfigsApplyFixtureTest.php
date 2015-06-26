@@ -52,6 +52,18 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $configMock = $this->getMock('\Magento\Framework\App\Config\ValueInterface', [], [], '', false);
+        $configMock->expects($this->never())->method('save');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->willReturn($configMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->will($this->returnValue($objectManagerMock));
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

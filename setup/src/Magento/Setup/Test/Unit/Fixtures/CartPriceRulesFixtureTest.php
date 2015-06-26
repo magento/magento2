@@ -109,6 +109,19 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $ruleMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
+        $ruleMock->expects($this->never())->method('save');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('get')
+            ->with($this->equalTo('Magento\SalesRule\Model\Rule'))
+            ->willReturn($ruleMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

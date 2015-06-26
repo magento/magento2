@@ -121,6 +121,19 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock->expects($this->never())->method('save');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->with($this->equalTo('Magento\Catalog\Model\Category'))
+            ->willReturn($categoryMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

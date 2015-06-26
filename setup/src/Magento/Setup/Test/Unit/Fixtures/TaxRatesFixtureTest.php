@@ -72,6 +72,24 @@ class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $csvImportHandlerMock = $this->getMock(
+            'Magento\TaxImportExport\Model\Rate\CsvImportHandler',
+            [],
+            [],
+            '',
+            false
+        );
+        $csvImportHandlerMock->expects($this->never())->method('importFromCsvFile');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->willReturn($csvImportHandlerMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

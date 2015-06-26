@@ -108,6 +108,20 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock->expects($this->never())->method('validateSource');
+        $importMock->expects($this->never())->method('importSource');
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->with($this->equalTo('Magento\ImportExport\Model\Import'))
+            ->willReturn($importMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->will($this->returnValue($objectManagerMock));
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

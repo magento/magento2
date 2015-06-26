@@ -138,6 +138,24 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock->expects($this->never())->method('save');
+
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock->expects($this->never())
+            ->method('getDefaultStoreView')
+            ->willReturn($storeMock);
+
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->never())
+            ->method('create')
+            ->with($this->equalTo('Magento\Store\Model\StoreManager'))
+            ->willReturn($storeManagerMock);
+
+        $this->fixtureModelMock
+            ->expects($this->never())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->exactly(3))
             ->method('getValue')
