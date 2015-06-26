@@ -182,6 +182,13 @@ abstract class Grid extends Block
     protected $noRecords = '[data-role="row"] .empty-text';
 
     /**
+     * Base part of row locator template for getRow() method.
+     *
+     * @var string
+     */
+    protected $rowPattern = '//tr[%s]';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -355,7 +362,7 @@ abstract class Grid extends Block
         foreach ($filter as $value) {
             $rows[] = sprintf($rowTemplate, $value);
         }
-        $location = '//tr[' . implode(' and ', $rows) . ']';
+        $location = sprintf($this->rowPattern, implode(' and ', $rows));
         return $this->_rootElement->find($location, Locator::SELECTOR_XPATH);
     }
 

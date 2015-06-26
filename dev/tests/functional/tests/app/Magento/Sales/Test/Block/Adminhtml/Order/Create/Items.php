@@ -59,6 +59,7 @@ class Items extends Block
             }
         );
         $this->_rootElement->find($this->addProducts, Locator::SELECTOR_XPATH)->click();
+        $this->getTemplateBlock()->waitLoader();
     }
 
     /**

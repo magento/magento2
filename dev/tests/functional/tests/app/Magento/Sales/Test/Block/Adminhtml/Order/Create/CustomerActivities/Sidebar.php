@@ -19,14 +19,14 @@ abstract class Sidebar extends Block
      *
      * @var string
      */
-    protected $addToOrder = '//tr[td[.="%s"]]//input[contains(@name,"add")]';
+    protected $addToOrder = './/tr[td[.="%s"]]//input[contains(@name,"add")]';
 
     /**
      * 'Add to order' checkbox.
      *
      * @var string
      */
-    protected $addToOrderProductName = '//tr/td[.="%s"]';
+    protected $addToOrderProductName = './/tr/td[.="%s"]';
 
     /**
      * Add productz to order.

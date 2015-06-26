@@ -13,5 +13,5 @@ use Magento\Mtf\Block\Form;
  */
 class Account extends Form
 {
-
+    //
 }
