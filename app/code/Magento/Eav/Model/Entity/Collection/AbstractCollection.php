@@ -17,6 +17,11 @@ use Magento\Framework\Exception\LocalizedException;
 abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
 {
     /**
+     * Attribute table alias prefix
+     */
+    const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
+
+    /**
      * Array of items with item id key
      *
      * @var array
@@ -1247,7 +1252,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      */
     protected function _getAttributeTableAlias($attributeCode)
     {
-        return $this->getConnection()->getTableName('at_' . $attributeCode);
+        return $this->getConnection()->getTableName(self::ATTRIBUTE_TABLE_ALIAS_PREFIX . $attributeCode);
     }
 
     /**
