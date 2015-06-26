@@ -51,14 +51,18 @@ class ComponentUpgrade extends AbstractActionController
     {
         $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $errorMessage = '';
-        foreach ($packages as $package) {
-            if (!isset($package['name']) || !isset($package['version'])) {
-                $errorMessage .= 'Missing package information';
-                break;
+        if (is_array($packages)) {
+            foreach ($packages as $package) {
+                if (!isset($package['name']) || !isset($package['version'])) {
+                    $errorMessage .= 'Missing package information';
+                    break;
+                }
             }
-        }
-        if (empty($errorMessage)) {
-            $errorMessage .= $this->updater->createUpdaterTask($packages);
+            if (empty($errorMessage)) {
+                $errorMessage .= $this->updater->createUpdaterTask($packages);
+            }
+        } else {
+            $errorMessage .= 'Invalid request';
         }
         $success = empty($errorMessage) ? true : false;
         return new JsonModel(['success' => $success, 'message' => $errorMessage]);
