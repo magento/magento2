@@ -5,12 +5,14 @@
 define(
     [
         'ko',
+        'jquery',
         'uiComponent',
         'Magento_Checkout/js/action/place-order',
         'Magento_Checkout/js/action/select-payment-method',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        'Magento_Customer/js/model/customer'
     ],
-    function (ko, Component, placeOrderAction, selectPaymentMethodAction, quote) {
+    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer) {
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
@@ -37,7 +39,13 @@ define(
              * Place order.
              */
             placeOrder: function () {
-                if (this.validate()) {
+                var emailValidationResult = customer.isLoggedIn(),
+                    loginFormSelector = 'form[data-role=email-with-possible-login]';
+                if (!customer.isLoggedIn()) {
+                    $(loginFormSelector).validation();
+                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
+                }
+                if (emailValidationResult && this.validate()) {
                     placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
                 }
             },
