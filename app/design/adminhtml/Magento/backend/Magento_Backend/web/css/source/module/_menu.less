@@ -52,7 +52,7 @@
 //  ---------------------------------------------
 
 .menu-wrapper {
-    float: left;
+    display: inline-block;
     position: relative;
     width: @menu__width;
     z-index: @menu__z-index;
@@ -205,7 +205,7 @@
             min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
-            top: -@menu-logo__outer-size;
+            top: 0;
             transform: translateX(-100%);
             transition-property: transform, visibility;
             transition-duration: .3s;

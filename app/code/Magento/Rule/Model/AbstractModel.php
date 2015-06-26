@@ -111,7 +111,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid discount amount.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please choose a valid discount amount.'));
             }
         }
 
@@ -377,13 +377,13 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         if ($object->hasWebsiteIds()) {
             $websiteIds = $object->getWebsiteIds();
             if (empty($websiteIds)) {
-                $result[] = __('Websites must be specified.');
+                $result[] = __('Please specify a website.');
             }
         }
         if ($object->hasCustomerGroupIds()) {
             $customerGroupIds = $object->getCustomerGroupIds();
             if (empty($customerGroupIds)) {
-                $result[] = __('Customer Groups must be specified.');
+                $result[] = __('Please specify Customer Groups.');
             }
         }
 
