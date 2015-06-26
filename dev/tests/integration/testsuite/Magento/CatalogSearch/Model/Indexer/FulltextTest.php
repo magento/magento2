@@ -88,7 +88,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $this->dimension = Bootstrap::getObjectManager()->create(
             '\Magento\Framework\Search\Request\Dimension',
-            ['name' => 'store_id', 'value' => '0']
+            ['name' => 'scope', 'value' => '1']
         );
 
         $this->productApple = $this->getProductBySku('fulltext-1');
@@ -100,7 +100,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     public function testReindexAll()
     {
-        $this->engine->cleanIndex($this->dimension);
+        $this->engine->cleanIndex([$this->dimension]);
 
         $this->indexer->reindexAll();
 
