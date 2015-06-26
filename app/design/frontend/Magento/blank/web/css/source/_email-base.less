@@ -146,11 +146,13 @@ body {
 }
 
 .wrapper-inner {
+    padding-bottom: @email-content__padding__l;
     width: 100%;
 }
 
 .main {
     margin: 0 auto;
+    text-align: left; // Necessary to prevent all text from centering in Outlook 2003
     width: @email-body__width;
 }
 
@@ -164,7 +166,7 @@ body {
 }
 
 .footer {
-    padding: 0 @email-body__padding @email-body__padding; // Reduce space between body of email and closing text
+    padding: @email-body__padding;
 }
 
 //  Layout (Mobile)
@@ -197,9 +199,14 @@ body {
 //  Messages
 //  ---------------------------------------------
 
+.message-wrapper td {
+    padding-top: @email-content__padding__l;
+    width: @table__width;
+}
+
 .message-info,
 .message-gift {
-    width: 100%;
+    width: @table__width;
 
     td {
         background-color: @message__background__email;
@@ -210,6 +217,15 @@ body {
 
         a {
             color: @message-link__color__email;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin-top: 0;
         }
     }
 }
