@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\Entity\Collection;
 
 use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -15,8 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Array of items with item id key
@@ -370,7 +370,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      *
      * @param mixed $attribute
      * @param mixed $condition
-     * @return $this|\Magento\Framework\Data\Collection\AbstractDb
+     * @return $this|AbstractDb
      */
     public function addFieldToFilter($attribute, $condition = null)
     {

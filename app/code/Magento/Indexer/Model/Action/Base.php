@@ -21,6 +21,7 @@ use Magento\Indexer\Model\HandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Base implements ActionInterface
 {
@@ -203,7 +204,7 @@ class Base implements ActionInterface
      */
     protected function prepareDataSource($ids = null)
     {
-        return is_null($ids)
+        return $ids === null
             ? $this->createResultCollection()
             : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
     }
@@ -315,6 +316,7 @@ class Base implements ActionInterface
      * Save field by type
      *
      * @param array $field
+     * @return void
      */
     protected function saveFieldByType($field)
     {
