@@ -21,7 +21,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
 
     const CURRENCY_OPTION_NAME = 'name';
 
-    const CURRENCY_OPTION_DISPLAY = 'name';
+    const CURRENCY_OPTION_DISPLAY = 'display';
 
     /**
      * @var array
