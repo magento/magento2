@@ -23,16 +23,18 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         $resourcePrefix = null
     ) {
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $resourcePrefix);
     }
 
     /**

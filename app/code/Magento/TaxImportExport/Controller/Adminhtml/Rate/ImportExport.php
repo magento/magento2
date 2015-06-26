@@ -30,4 +30,12 @@ class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $resultPage->getConfig()->getTitle()->prepend(__('Import and Export Tax Rates'));
         return $resultPage;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_TaxImportExport::import_export');
+    }
 }
