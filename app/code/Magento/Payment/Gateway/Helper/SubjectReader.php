@@ -34,8 +34,7 @@ class SubjectReader
      */
     public static function readAmount(array $subject)
     {
-        if (!isset($subject['amount'])
-            || $subject['amount'] && !is_numeric($subject['amount'])) {
+        if (!isset($subject['amount']) || !is_numeric($subject['amount'])) {
             throw new \InvalidArgumentException('Amount should be provided');
         }
 
@@ -50,7 +49,7 @@ class SubjectReader
      */
     public static function readField(array $subject)
     {
-        if (!isset($subject['field']) && !is_string($subject['field'])) {
+        if (!isset($subject['field']) || !is_string($subject['field'])) {
             throw new \InvalidArgumentException();
         }
 
