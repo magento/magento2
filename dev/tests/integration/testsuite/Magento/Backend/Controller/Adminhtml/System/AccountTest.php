@@ -10,7 +10,7 @@ use Magento\TestFramework\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class AccountTest extends \Magento\Backend\Utility\Controller
+class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @dataProvider saveDataProvider
