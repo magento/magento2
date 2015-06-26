@@ -5,9 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Setup\Model\Cron\Status;
 
 class StatusTest extends \PHPUnit_Framework_TestCase

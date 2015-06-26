@@ -8,18 +8,11 @@ namespace Magento\Setup\Model\Cron;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Abstract class for jobs run by setup:cron:run command
+ */
 abstract class AbstractJob
 {
-    /**
-     * @var AbstractSetupCommand
-     */
-    protected $command;
-
-    /**
-     * @var OutputInterface
-     */
-    protected $output;
-
     /**
      * @var string
      */
@@ -30,32 +23,16 @@ abstract class AbstractJob
      */
     protected $params;
 
-    /**
-     * @var Status
-     */
-    protected $status;
 
     /**
      * Constructor
      *
-     * @param AbstractSetupCommand $command
-     * @param OutputInterface $output
-     * @param Status $status
      * @param string $name
      * @param array $params
      */
-    public function __construct(
-        AbstractSetupCommand $command,
-        OutputInterface $output,
-        Status $status,
-        $name,
-        $params = []
-    ) {
-        $this->command = $command;
-        $this->output = $output;
+    public function __construct($name, array $params = []) {
         $this->name = $name;
         $this->params = $params;
-        $this->status = $status;
     }
 
     /**

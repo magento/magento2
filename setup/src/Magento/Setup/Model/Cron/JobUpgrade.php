@@ -7,7 +7,6 @@ namespace Magento\Setup\Model\Cron;
 
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -34,6 +33,21 @@ class JobUpgrade extends AbstractJob
     private $cleanupFiles;
 
     /**
+     * @var Status
+     */
+    protected $status;
+
+    /**
+     * @var AbstractSetupCommand
+     */
+    protected $command;
+
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * Constructor
      *
      * @param AbstractSetupCommand $command
@@ -57,7 +71,10 @@ class JobUpgrade extends AbstractJob
         $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $this->cache = $objectManager->get('Magento\Framework\App\Cache');
         $this->maintenanceMode = $maintenanceMode;
-        parent::__construct($command, $output, $status, $name, $params);
+        $this->command = $command;
+        $this->output = $output;
+        $this->status = $status;
+        parent::__construct($name, $params);
     }
 
     /**
