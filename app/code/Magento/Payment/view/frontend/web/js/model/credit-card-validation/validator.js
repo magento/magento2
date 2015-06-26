@@ -11,12 +11,13 @@
             'Magento_Payment/js/model/credit-card-validation/cvv-validator',
             'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
             'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-year-validator',
-            'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator'
+            'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/expiration-month-validator',
+            'Magento_Payment/js/model/credit-card-validation/credit-card-data'
         ], factory);
     } else {
         factory(jQuery);
     }
-}(function ($, cvvValidator, creditCardNumberValidator, expirationDateValidator, monthValidator) {
+}(function ($, cvvValidator, creditCardNumberValidator, expirationDateValidator, monthValidator, creditCardData) {
     "use strict";
 
     $.each({
@@ -49,7 +50,8 @@
              * @return {boolean}
              */
                 function (cvv) {
-                return cvvValidator(cvv).isValid;
+                var maxLength = creditCardData.creditCard ? creditCardData.creditCard.code.size : 3;
+                return cvvValidator(cvv, maxLength).isValid;
             },
             'Please enter a valid credit card verification number.'
         ],
