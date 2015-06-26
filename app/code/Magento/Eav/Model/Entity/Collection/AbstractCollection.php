@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
-use Magento\Framework\App\Resource\EavProviderInterface;
+use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -15,7 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb implements EavProviderInterface
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
+    implements SourceProviderInterface
 {
     /**
      * Array of items with item id key
@@ -1558,5 +1559,26 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             unset($this->_itemsById[$this->_items[$key]->getId()]);
         }
         return parent::removeItemByKey($key);
+    }
+
+    /**
+     * Returns main table name - extracted from "module/table" style and
+     * validated by db adapter
+     *
+     * @return string
+     */
+    public function getMainTable()
+    {
+        return $this->getSelect()->getPart(Select::FROM)['tableName'];
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $alias
+     * @return $this
+     */
+    public function addFieldToSelect($fieldName, $alias)
+    {
+        return $this->addAttributeToSelect($fieldName);
     }
 }
