@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
@@ -25,6 +26,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
+     * @var \Magento\Indexer\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $config;
+
+    /**
+     * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerHandler;
+
+    /**
      * @var View
      */
     protected $model;
@@ -42,7 +53,35 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
-        $this->model = new View($this->indexerRegistryMock);
+
+        $this->indexerHandler = $this->getMock('Magento\CatalogSearch\Model\Indexer\IndexerHandler', [], [], '', false);
+        $indexerHandlerFactory = $this->getMock(
+            'Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->indexerHandler);
+
+        $dimension = $this->getMock('Magento\Framework\Search\Request\Dimension', [], [], '', false);
+        $dimensionFactory = $this->getMock(
+            'Magento\Framework\Search\Request\DimensionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $dimensionFactory->expects($this->any())->method('create')->willReturn($dimension);
+
+        $this->config = $this->getMock('Magento\Indexer\Model\ConfigInterface', [], [], '', false);
+
+        $this->model = new View(
+            $this->indexerRegistryMock,
+            $this->config,
+            $indexerHandlerFactory,
+            $dimensionFactory
+        );
     }
 
     /**
@@ -67,8 +106,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             return $this->subjectMock;
         };
 
-        $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
+        $this->config->expects($this->exactly($invalidateCounter))->method('getIndexer')->willReturn([]);
+        $this->indexerHandler->expects($this->exactly($invalidateCounter))->method('cleanIndex');
+
         $this->prepareIndexer($invalidateCounter);
+        $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
 
         $this->assertEquals(
             $this->subjectMock,
@@ -108,7 +150,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
+            ->with(Fulltext::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
     }
 }

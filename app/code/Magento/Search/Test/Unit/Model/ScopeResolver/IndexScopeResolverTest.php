@@ -15,6 +15,11 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeResolver;
+
+    /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
@@ -30,9 +35,12 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getTableName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource->expects($this->once())
-            ->method('getTableName')
-            ->willReturnArgument(0);
+
+
+        $this->scopeResolver = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
 
         $objectManager = new ObjectManager($this);
 
@@ -40,6 +48,7 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
             '\Magento\Search\Model\ScopeResolver\IndexScopeResolver',
             [
                 'resource' => $this->resource,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
     }
@@ -52,6 +61,23 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolve($indexName, array $dimensions, $expected)
     {
+        $dimensions = array_map(
+            function ($demension) {
+                return $this->createDimension($demension[0], $demension[1]);
+            },
+            $dimensions
+        );
+        $scope = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $scope->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->resource->expects($this->once())
+            ->method('getTableName')
+            ->willReturnArgument(0);
+
+        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
         $result = $this->target->resolve($indexName, $dimensions);
         $this->assertEquals($expected, $result);
     }
@@ -69,17 +95,17 @@ class IndexScopeResolverTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'index' => 'index_name',
-                'dimensions' => [$this->createDimension('scope', 'name')],
-                'expected' => 'index_name_scopename'
+                'dimensions' => [['scope', 'name']],
+                'expected' => 'index_name_scope1'
             ],
             [
                 'index' => 'index_name',
-                'dimensions' => [$this->createDimension('index', 20)],
+                'dimensions' => [['index', 20]],
                 'expected' => 'index_name_index20'
             ],
             [
                 'index' => 'index_name',
-                'dimensions' => [$this->createDimension('dimension', 10), $this->createDimension('dimension', 20)],
+                'dimensions' => [['dimension', 10], ['dimension', 20]],
                 // actually you will get exception here thrown in ScopeResolverInterface
                 'expected' => 'index_name_dimension10_dimension20'
             ]
