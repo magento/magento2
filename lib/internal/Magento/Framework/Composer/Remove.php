@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Composer;
 
-use Composer\Console\Application;
+use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Console\Input\ArrayInput;
 
@@ -31,11 +31,13 @@ class Remove
     /**
      * Constructor
      *
-     * @param Application $composerApp
+     * @param MagentoComposerApplication $composerApp
      * @param DirectoryList $directoryList
      */
-    public function __construct(Application $composerApp, DirectoryList $directoryList)
-    {
+    public function __construct(
+        MagentoComposerApplication $composerApp,
+        DirectoryList $directoryList
+    ) {
         $this->composerApp = $composerApp;
         $this->directoryList = $directoryList;
     }
@@ -44,21 +46,31 @@ class Remove
      * Run 'composer remove'
      *
      * @param array $packages
+     * @throws \Exception
+     *
      * @return void
      */
     public function remove(array $packages)
     {
-        $this->composerApp->resetComposer();
-        $this->composerApp->setAutoExit(false);
-        $vendor = include $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-        $this->composerApp->run(
-            new ArrayInput(
-                [
-                    'command' => 'remove',
-                    'packages' => $packages,
-                    '--working-dir' => $this->directoryList->getRoot() . '/' . $vendor . '/..'
-                ]
-            )
+        $vendorDir = include $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
+
+        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . "/{$vendorDir}/../composer.json";
+
+        $composerHomePath = $this->directoryList->getPath(DirectoryList::COMPOSER_HOME);
+
+        $composerJsonRealPath = realpath($composerJson);
+
+        if ($composerJsonRealPath === false) {
+            throw new \Exception('Composer file not found: ' . $composerJson);
+        }
+
+        $this->composerApp->setConfig($composerHomePath, $composerJson);
+
+        return $this->composerApp->runComposerCommand(
+            [
+                'command' => 'remove',
+                'packages' => $packages
+            ]
         );
     }
 }
