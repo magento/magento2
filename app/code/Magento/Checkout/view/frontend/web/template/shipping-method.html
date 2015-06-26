@@ -16,7 +16,7 @@
          aria-hidden="false"
          data-bind="fadeVisible: isVisible() && quoteHasShippingAddress()">
         <!-- ko if: rates().length == 0 -->
-        <!-- ko text: $t('Sorry, no quotes are available for this order at this time')--><!-- /ko -->
+        <!-- ko text: $t('Sorry, no quotes are available for this order right now.')--><!-- /ko -->
         <!-- /ko -->
         <!-- ko if: rates().length  -->
         <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">

@@ -9,7 +9,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class CreateTest extends \Magento\Backend\Utility\Controller
+class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testLoadBlockAction()
     {

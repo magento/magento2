@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-class FetchRatesTest extends \Magento\Backend\Utility\Controller
+class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Test fetch action without service
@@ -51,7 +51,7 @@ class FetchRatesTest extends \Magento\Backend\Utility\Controller
         $this->runActionWithMockedImportService(['We can\'t retrieve a rate from url']);
 
         $this->assertSessionMessages(
-            $this->contains('All possible rates were fetched, please click on "Save" to apply'),
+            $this->contains('Click "Save" to apply the rates we found.'),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }
@@ -64,7 +64,7 @@ class FetchRatesTest extends \Magento\Backend\Utility\Controller
         $this->runActionWithMockedImportService();
 
         $this->assertSessionMessages(
-            $this->contains('All rates were fetched, please click on "Save" to apply'),
+            $this->contains('Click "Save" to apply the rates we found.'),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
