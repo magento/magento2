@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Composer;
 
-use Magento\Composer\MagentoComposerApplication;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -31,12 +30,12 @@ class ComposerInformation
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @param MagentoComposerApplication $application
+     * @param MagentoComposerApplicationFactory $applicationFactory
      * @throws \Exception
      */
     public function __construct(
         Filesystem $filesystem,
-        MagentoComposerApplication $application
+        MagentoComposerApplicationFactory $applicationFactory
     ) {
         // composer.json is in same directory as vendor
         $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
@@ -50,11 +49,11 @@ class ComposerInformation
         }
 
         // Create Composer
-        $application->setConfig(
+        $application = $applicationFactory->create(
             $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath(),
             $composerJsonRealPath
         );
-        $this->composer = $application->getComposer();
+        $this->composer = $application->createComposer();
         $this->locker = $this->composer->getLocker();
     }
 
