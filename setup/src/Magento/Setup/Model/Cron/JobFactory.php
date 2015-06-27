@@ -73,11 +73,6 @@ class JobFactory
                             'params' => $params
                         ]
                     );
-//                return new JobDbRollback(
-//                    $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList'),
-//                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
-//
-//                );
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
