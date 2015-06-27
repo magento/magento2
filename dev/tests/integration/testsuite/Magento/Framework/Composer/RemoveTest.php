@@ -11,28 +11,27 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
 {
     public function testRemove()
     {
-        $composerApp = $this->getMock(
-            'Magento\Composer\MagentoComposerApplication',
-            ['setConfig', 'runComposerCommand'],
+        $composerAppFactory = $this->getMock(
+            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
+            [],
             [],
             '',
             false
         );
-        $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $directoryList->expects($this->once())->method('getRoot');
-        $directoryList->expects($this->once())
-            ->method('getPath')
-            ->with(DirectoryList::CONFIG)
-            ->willReturn(BP . '/app/etc');
 
-        $directoryList->expects($this->once())
-            ->method('getPath')
-            ->with(DirectoryList::ROOT)
-            ->willReturn(BP . '/app/etc');
+        $composerApp = $this->getMock(
+            'Magento\Composer\MagentoComposerApplication',
+            [],
+            [],
+            '',
+            false
+        );
 
-        $composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $composerApp->expects($this->once())->method('run');
-        $remove = new Remove($composerApp, $directoryList);
+        $composerApp->expects($this->once())->method('runComposerCommand');
+
+        $composerAppFactory->expects($this->once())->method('create')->willReturn($composerApp);
+
+        $remove = new Remove($composerAppFactory);
         $remove->remove(['magento/package-a', 'magento/package-b']);
     }
 }

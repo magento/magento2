@@ -6,35 +6,22 @@
 
 namespace Magento\Framework\Composer;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Tests Magento\Framework\ComposerInformation
  */
 class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
-    private $directoryReadMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
-     */
-    private $filesystemMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Composer\IO\BufferIO
-     */
-    private $ioMock;
+    private $directoryList;
 
     public function setUp()
     {
-        $this->directoryReadMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->filesystemMock
-            ->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryReadMock));
-        $this->ioMock = $this->getMock('Composer\IO\BufferIO', [], [], '', false);
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+
     }
 
     /**
@@ -44,14 +31,14 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     private function setupDirectoryMock($composerDir)
     {
-        $valueMap =                 [
-            ['vendor_path.php', null, __DIR__ . '/_files/vendor_path.php'],
-            [null, null,  __DIR__ . '/_files/' . $composerDir],
+        $valueMap = [
+            [DirectoryList::CONFIG, __DIR__ . '/_files/'],
+            [DirectoryList::ROOT, __DIR__ . '/_files/' . $composerDir],
+            [DirectoryList::CONFIG, __DIR__ . '/_files/' . $composerDir],
         ];
 
-        $this->directoryReadMock
-            ->expects($this->any())
-            ->method('getAbsolutePath')
+        $this->directoryList->expects($this->any())
+            ->method('getPath')
             ->will($this->returnValueMap($valueMap));
     }
 
@@ -63,7 +50,9 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredPhpVersion($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->ioMock);
+
+        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+
         $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
     }
 
@@ -75,7 +64,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->ioMock);
+        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
@@ -92,7 +81,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->ioMock);
+        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
 
         $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
@@ -121,6 +110,6 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testNoLock()
     {
         $this->setupDirectoryMock('notARealDirectory');
-        new ComposerInformation($this->filesystemMock, $this->ioMock);
+        new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
     }
 }
