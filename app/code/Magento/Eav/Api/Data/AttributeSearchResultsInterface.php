@@ -21,5 +21,5 @@ interface AttributeSearchResultsInterface extends \Magento\Framework\Api\SearchR
      * @param \Magento\Eav\Api\Data\AttributeInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

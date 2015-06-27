@@ -27,5 +27,5 @@ interface ShipmentCommentSearchResultInterface extends \Magento\Framework\Api\Se
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
