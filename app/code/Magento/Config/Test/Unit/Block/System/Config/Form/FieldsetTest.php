@@ -175,7 +175,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $this->_helperMock->expects($this->any())->method('getScript')->will($this->returnArgument(0));
         $fieldMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Text')
-            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId' , 'getIsNested', 'getExpanded'])
+            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId', 'getIsNested', 'getExpanded'])
             ->disableOriginalConstructor()
             ->getMock();
         $fieldMock->expects($this->any())->method('getId')->will($this->returnValue('test_field_id'));
@@ -184,7 +184,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $fieldMock->expects($this->any())->method('getHtmlId')->willReturn('test_field_HTML_id');
 
         $fieldSetMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Fieldset')
-            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId' , 'getIsNested', 'getExpanded'])
+            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId', 'getIsNested', 'getExpanded'])
             ->disableOriginalConstructor()
             ->getMock();
         $fieldSetMock->expects($this->any())->method('getId')->will($this->returnValue('test_fieldset_id'));

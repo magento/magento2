@@ -66,7 +66,7 @@ class DwstreeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->object = $objectManager->getObject(
-            'Magento\Config\Block\System\Config\Dwstree' ,
+            'Magento\Config\Block\System\Config\Dwstree',
             ['context' => $this->context]
         );
     }
@@ -81,11 +81,12 @@ class DwstreeTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValueMap(
+            ->will(
+                $this->returnValueMap(
                     [
                         ['section', $section],
                         ['website', $website['expected']['code']],
-                        ['store',   $store['expected']['code']],
+                        ['store', $store['expected']['code']],
                     ]
                 )
             );
