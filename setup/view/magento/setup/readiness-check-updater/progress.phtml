@@ -37,7 +37,7 @@
 
 <div id="php-version" class="rediness-check-item" ng-show="version.visible">
 
-    <h3 class="updater-readiness-check-title" ng-hide="version.processed">
+    <h3 class="readiness-check-title" ng-hide="version.processed">
         Checking PHP Version...
     </h3>
 
@@ -45,10 +45,10 @@
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
 
-            <span class="updater-readiness-check-icon icon-success-round"></span>
+            <span class="readiness-check-icon icon-success-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">PHP Version Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Version Check</h3>
                 <p>
                     Your PHP version is correct ({{version.data.current}}).
                 </p>
@@ -56,17 +56,17 @@
 
         </div>
 
-        <div class="updater-readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
 
             <div class="rediness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
             </div>
 
-            <span class="updater-readiness-check-icon icon-failed-round"></span>
+            <span class="readiness-check-icon icon-failed-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">PHP Version Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Version Check</h3>
                 <p>
                     Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
                     <a href="#php-version" ng-click="updateOnExpand(version)">
@@ -88,7 +88,7 @@
 
 <div id="php-settings" class="rediness-check-item" ng-show="settings.visible">
 
-    <h3 class="updater-readiness-check-title" ng-hide="settings.processed">
+    <h3 class="readiness-check-title" ng-hide="settings.processed">
         Checking PHP Settings...
     </h3>
 
@@ -96,10 +96,10 @@
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(settings)">
 
-            <span class="updater-readiness-check-icon icon-success-round"></span>
+            <span class="readiness-check-icon icon-success-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">PHP Settings Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
                 <p>
                     Your PHP settings are correct.
                 </p>
@@ -107,17 +107,17 @@
 
         </div>
 
-        <div class="updater-readiness-check-item" ng-switch-default ng-init="updateOnError(settings)">
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(settings)">
 
-            <span class="updater-readiness-check-icon icon-failed-round"></span>
-            <h3 class="updater-readiness-check-title">PHP Settings Check</h3>
+            <span class="readiness-check-icon icon-failed-round"></span>
+            <h3 class="readiness-check-title">PHP Settings Check</h3>
 
             <div ng-repeat="setting in settings.data">
                 <div ng-show="setting.error && setting.helpUrl" class="rediness-check-side">
                     <p class="side-title">Need Help?</p>
                     <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
                 </div>
-                <div ng-show="setting.error" class="updater-readiness-check-content">
+                <div ng-show="setting.error" class="readiness-check-content">
                     <p>
                         {{setting.message}}
                     </p>
@@ -131,7 +131,7 @@
 
 <div id="php-extensions" class="rediness-check-item" ng-show="extensions.visible">
 
-    <h3 ng-hide="extensions.processed" class="updater-readiness-check-title">
+    <h3 ng-hide="extensions.processed" class="readiness-check-title">
         Checking PHP Extensions...
     </h3>
 
@@ -139,10 +139,10 @@
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(extensions)">
 
-            <span class="updater-readiness-check-icon icon-success-round"></span>
+            <span class="readiness-check-icon icon-success-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">PHP Extensions Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Extensions Check</h3>
                 <p>
                     You meet {{extensions.data.required.length}} out of {{extensions.data.required.length}} PHP extensions requirements.
                     <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
@@ -174,10 +174,10 @@
                     <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
                 </div>
 
-                <span class="updater-readiness-check-icon icon-failed-round"></span>
+                <span class="readiness-check-icon icon-failed-round"></span>
 
-                <div class="updater-readiness-check-content">
-                    <h3 class="updater-readiness-check-title">PHP Extensions Check</h3>
+                <div class="readiness-check-content">
+                    <h3 class="readiness-check-title">PHP Extensions Check</h3>
                     <p>
                         {{extensions.data.missing.length}} missing PHP extensions.
                         <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
@@ -216,7 +216,7 @@
 
 <div class="rediness-check-item" id="php-permissions" ng-show="permissions.visible">
 
-    <h3 class="updater-readiness-check-title" ng-hide="permissions.processed">
+    <h3 class="readiness-check-title" ng-hide="permissions.processed">
         Checking File Permissions...
     </h3>
 
@@ -224,10 +224,10 @@
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(permissions)">
 
-            <span class="updater-readiness-check-icon icon-success-round"></span>
+            <span class="readiness-check-icon icon-success-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">File Permission Check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">File Permission Check</h3>
                 <p>
                     You meet {{permissions.data.current.length}} out of {{permissions.data.required.length}} writable file permission requirements.
                     <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
@@ -251,11 +251,11 @@
                 <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a>
             </div>
 
-            <span class="updater-readiness-check-icon icon-failed-round"></span>
+            <span class="readiness-check-icon icon-failed-round"></span>
 
-            <div class="updater-readiness-check-content">
+            <div class="readiness-check-content">
 
-                <h3 class="updater-readiness-check-title">File Permission Check</h3>
+                <h3 class="readiness-check-title">File Permission Check</h3>
                 <p>
                     {{permissions.data.required.length - permissions.data.current.length}} file permission not met.
                     <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
@@ -293,7 +293,7 @@
 
 <div id="updater-application" class="rediness-check-item" ng-show="updater.visible">
 
-    <h3 class="updater-readiness-check-title" ng-hide="updater.processed">
+    <h3 class="readiness-check-title" ng-hide="updater.processed">
         Checking Updater application availability...
     </h3>
 
@@ -301,10 +301,10 @@
 
         <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
 
-            <span class="updater-readiness-check-icon icon-success-round"></span>
+            <span class="readiness-check-icon icon-success-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">Check Updater Application Availability</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Updater Application Availability</h3>
                 <p>
                     Updater application is available.
                 </p>
@@ -312,12 +312,12 @@
 
         </div>
 
-        <div class="updater-readiness-check-item" ng-switch-default ng-init="updateOnError(updater)">
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(updater)">
 
-            <span class="updater-readiness-check-icon icon-failed-round"></span>
+            <span class="readiness-check-icon icon-failed-round"></span>
 
-            <div class="updater-readiness-check-content">
-                <h3 class="updater-readiness-check-title">Updater application availability check</h3>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Updater application availability check</h3>
                 <p>
                     Updater application is not available.
                     <a href="#php-version" ng-click="updateOnExpand(updater)">

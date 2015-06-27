@@ -4,9 +4,9 @@
  */
 
 'use strict';
-angular.module('readiness-check', [])
+angular.module('readiness-check-installer', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
+    .controller('readinessCheckInstallerController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
@@ -149,7 +149,7 @@ angular.module('readiness-check', [])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if (nextState.id == 'root.readiness-check.progress') {
+            if (nextState.id == 'root.readiness-check-installer.progress') {
                 $scope.progress();
             }
         });

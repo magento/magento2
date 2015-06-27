@@ -6,18 +6,18 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\UpdaterReadinessCheck;
+use \Magento\Setup\Controller\ReadinessCheckUpdater;
 
-class UpdaterReadinessCheckTest extends \PHPUnit_Framework_TestCase
+class ReadinessCheckUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UpdaterReadinessCheck
+     * @var ReadinessCheckUpdater
      */
     private $controller;
 
     public function setUp()
     {
-        $this->controller = new UpdaterReadinessCheck();
+        $this->controller = new ReadinessCheckUpdater();
     }
 
     public function testIndexAction()
@@ -32,6 +32,6 @@ class UpdaterReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $viewModel = $this->controller->progressAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/updater-readiness-check/progress.phtml', $viewModel->getTemplate());
+        $this->assertSame('/magento/setup/readiness-check-updater/progress.phtml', $viewModel->getTemplate());
     }
 }

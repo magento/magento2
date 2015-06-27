@@ -3,12 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\AppInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class UpdaterReadinessCheck extends AbstractActionController
+/**
+ * Controller for Updater Landing page
+ */
+class LandingUpdater extends AbstractActionController
 {
     /**
      * @return array|ViewModel
@@ -17,17 +22,9 @@ class UpdaterReadinessCheck extends AbstractActionController
     {
         $view = new ViewModel;
         $view->setTerminal(true);
-        return $view;
-    }
-
-    /**
-     * @return array|ViewModel
-     */
-    public function progressAction()
-    {
-        $view = new ViewModel;
-        $view->setTemplate('/magento/setup/updater-readiness-check/progress.phtml');
-        $view->setTerminal(true);
+        $view->setVariable('languages', $this->serviceLocator->get('config')['languages']);
+        $view->setVariable('location', 'en_US');
+        $view->setVariable('version', AppInterface::VERSION);
         return $view;
     }
 }

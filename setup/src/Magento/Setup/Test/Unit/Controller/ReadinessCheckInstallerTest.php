@@ -6,18 +6,18 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\ReadinessCheck;
+use \Magento\Setup\Controller\ReadinessCheckInstaller;
 
-class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
+class ReadinessCheckInstallerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ReadinessCheck
+     * @var ReadinessCheckInstaller
      */
     private $controller;
 
     public function setUp()
     {
-        $this->controller = new ReadinessCheck();
+        $this->controller = new ReadinessCheckInstaller();
     }
 
     public function testIndexAction()
@@ -32,6 +32,6 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $viewModel = $this->controller->progressAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/readiness-check/progress.phtml', $viewModel->getTemplate());
+        $this->assertSame('/magento/setup/readiness-check-installer/progress.phtml', $viewModel->getTemplate());
     }
 }

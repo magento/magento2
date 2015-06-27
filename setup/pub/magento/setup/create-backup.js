@@ -10,8 +10,7 @@ angular.module('create-backup', ['ngStorage'])
             options: {
                 code: false,
                 media: false,
-                db: false,
-                none: false               
+                db: false
             },
             backupFiles: ''            
         };
@@ -28,7 +27,7 @@ angular.module('create-backup', ['ngStorage'])
 
         $scope.takeBackup = function () {
             $scope.loading = true;
-            $http.post('index.php/take-backup', $scope.backupInfo)
+            $http.post('index.php/create-backup/create', $scope.backupInfo)
                 .success(function (data) {
                     $scope.takeBackup.result = data;
                     if ($scope.takeBackup.result.success) {

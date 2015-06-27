@@ -51,13 +51,13 @@
             </label>
             <label class="form-label">
                 <p>This backup can be found in Magento Admin's backup management.</p>
-                <p>The backup file(s) are located in:</p>
+                <p>The backup files are located in:</p>
                 <p> {{files}} </p>
             </label>
         </div>
-        <div ng-show="backupinfo.options.none || (!backupinfo.options.code && !backupinfo.options.media && !backupinfo.options.db && !backupinfo.options.none)">
+        <div ng-show="!backupinfo.options.code && !backupinfo.options.media && !backupinfo.options.db">
             <label class="form-label" color="#088A08">
-                <p><b> You didn't take any backup </b></p>
+                <p><b> You didn't take any backup. It is suggested to take backup, so that in case of failure we can roll back to the latest stable state.</b></p>
                 <p></p>
             </label>
             <label class="form-label" color="#04B431">
