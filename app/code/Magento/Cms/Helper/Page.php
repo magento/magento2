@@ -174,11 +174,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
             $contentHeadingBlock->setContentHeading($contentHeading);
         }
 
-        /* @TODO: Move catalog and checkout storage types to appropriate modules */
-        $messageBlock = $resultPage->getLayout()->getMessagesBlock();
-        $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
-        $messageBlock->addMessages($this->messageManager->getMessages(true));
-
         return $resultPage;
     }
 

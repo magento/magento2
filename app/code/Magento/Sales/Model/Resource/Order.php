@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
 
@@ -41,11 +40,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $stateHandler;
 
     /**
-     * @var AddressHandler
-     */
-    protected $addressHandler;
-
-    /**
      * Model Initialization
      *
      * @return void
@@ -60,22 +54,28 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param AddressHandler $addressHandler
+     * @param EntityRelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param null $resourcePrefix
+     * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        AddressHandler $addressHandler,
+        EntityRelationComposite $entityRelationComposite,
         StateHandler $stateHandler,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
-        $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
+        parent::__construct(
+            $context,
+            $attribute,
+            $sequenceManager,
+            $entitySnapshot,
+            $entityRelationComposite,
+            $resourcePrefix
+        );
     }
 
     /**
@@ -89,21 +89,22 @@ class Order extends SalesResource implements OrderResourceInterface
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
         $adapter = $this->getReadConnection();
-        $select = $adapter->select()->from(
-            ['o' => $this->getTable('sales_order_item')],
-            ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
-        )->joinInner(
-            ['p' => $this->getTable('catalog_product_entity')],
-            'o.product_id=p.entity_id',
-            []
-        )->where(
-            'o.order_id=?',
-            $orderId
-        )->group(
-            'o.product_type'
-        );
+        $select = $adapter->select()
+            ->from(
+                ['o' => $this->getTable('sales_order_item')],
+                ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
+            )
+            ->where('o.order_id=?', $orderId)
+            ->where('o.product_id IS NOT NULL')
+            ->group('o.product_type');
         if ($productTypeIds) {
-            $select->where(sprintf('(o.product_type %s (?))', $isProductTypeIn ? 'IN' : 'NOT IN'), $productTypeIds);
+            $select->where(
+                sprintf(
+                    '(o.product_type %s (?))',
+                    $isProductTypeIn ? 'IN' : 'NOT IN'
+                ),
+                $productTypeIds
+            );
         }
         return $adapter->fetchPairs($select);
     }
@@ -138,7 +139,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->removeEmptyAddresses($object);
         $this->stateHandler->check($object);
         if (!$object->getId()) {
             /** @var \Magento\Store\Model\Store $store */
@@ -148,7 +148,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getGroup()->getName(),
                 $store->getName(),
             ];
-            $object->setStoreName(implode("\n", $name));
+            $object->setStoreName(implode(PHP_EOL, $name));
             $object->setTotalItemCount($this->calculateItems($object));
         }
         $object->setData(
@@ -160,47 +160,5 @@ class Order extends SalesResource implements OrderResourceInterface
             $object->setCustomerId($object->getCustomer()->getId());
         }
         return parent::_beforeSave($object);
-    }
-
-    /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
-    {
-        /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->process($object);
-
-        if (null !== $object->getItems()) {
-            /** @var \Magento\Sales\Model\Order\Item $item */
-            foreach ($object->getItems() as $item) {
-                $item->setOrderId($object->getId());
-                $item->setOrder($object);
-                $item->save();
-            }
-        }
-        if (null !== $object->getPayments()) {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            foreach ($object->getPayments() as $payment) {
-                $payment->setParentId($object->getId());
-                $payment->setOrder($object);
-                $payment->save();
-            }
-        }
-        if (null !== $object->getStatusHistories()) {
-            /** @var \Magento\Sales\Model\Order\Status\History $statusHistory */
-            foreach ($object->getStatusHistories() as $statusHistory) {
-                $statusHistory->setParentId($object->getId());
-                $statusHistory->save();
-                $statusHistory->setOrder($object);
-            }
-        }
-        if (null !== $object->getRelatedObjects()) {
-            foreach ($object->getRelatedObjects() as $relatedObject) {
-                $relatedObject->save();
-                $relatedObject->setOrder($object);
-            }
-        }
-        return parent::processRelations($object);
     }
 }

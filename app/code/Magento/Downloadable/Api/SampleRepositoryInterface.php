@@ -7,8 +7,28 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Downloadable\Api\Data\SampleInterface;
 
+/**
+ * Interface SampleRepositoryInterface
+ * @api
+ */
 interface SampleRepositoryInterface
 {
+    /**
+     * List of samples for downloadable product
+     *
+     * @param string $sku
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getList($sku);
+
+    /**
+     * List of links with associated samples
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product);
+
     /**
      * Update downloadable sample of the given product
      *

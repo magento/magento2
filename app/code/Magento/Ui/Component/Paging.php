@@ -13,85 +13,12 @@ class Paging extends AbstractComponent
     const NAME = 'paging';
 
     /**
-     * Get component name
+     * Default component data
      *
-     * @return string
+     * @var array
      */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
-     * Register component and apply paging settings to Data Provider
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $this->prepareConfiguration();
-        $this->prepareOptions();
-
-        $paging = $this->getContext()->getRequestParam('paging');
-
-        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging), $this->getSize($paging));
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
-
-    /**
-     * Get offset
-     *
-     * @param array|null $paging
-     * @return int
-     */
-    protected function getOffset($paging)
-    {
-        $defaultPage = $this->getData('config/current') ?: 1;
-        return (int) (isset($paging['current']) ? $paging['current'] : $defaultPage);
-    }
-
-    /**
-     * Get size
-     *
-     * @param array|null $paging
-     * @return int
-     */
-    protected function getSize($paging)
-    {
-        $defaultLimit = $this->getData('config/pageSize') ?: 20;
-        return (int) (isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit);
-    }
-
-    /**
-     * Prepare paging options
-     *
-     * @return void
-     */
-    protected function prepareOptions()
-    {
-        $config = $this->getData('config');
-        if (isset($config['options'])) {
-            $config['options'] = array_values($config['options']);
-            foreach ($config['options'] as &$item) {
-                $item['value'] = (int) $item['value'];
-            }
-            unset($item);
-            $this->setData('config', $config);
-        }
-    }
-
-    /**
-     * Get default parameters
-     *
-     * @return array
-     */
-    protected function getDefaultConfiguration()
-    {
-        return  [
+    protected $_data = [
+        'config' => [
             'options' => [
                 '20' => [
                     'value' => 20,
@@ -116,6 +43,72 @@ class Paging extends AbstractComponent
             ],
             'pageSize' => 20,
             'current' => 1
-        ];
+        ]
+    ];
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
+    /**
+     * Register component and apply paging settings to Data Provider
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        $this->prepareOptions();
+        $paging = $this->getContext()->getRequestParam('paging');
+        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging), $this->getSize($paging));
+
+        parent::prepare();
+    }
+
+    /**
+     * Prepare paging options
+     *
+     * @return void
+     */
+    protected function prepareOptions()
+    {
+        $config = $this->getData('config');
+        if (isset($config['options'])) {
+            $config['options'] = array_values($config['options']);
+            foreach ($config['options'] as &$item) {
+                $item['value'] = (int) $item['value'];
+            }
+            unset($item);
+            $this->setData('config', $config);
+        }
+    }
+
+    /**
+     * Get offset
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getOffset($paging)
+    {
+        $defaultPage = $this->getData('config/current') ?: 1;
+        return (int) (isset($paging['current']) ? $paging['current'] : $defaultPage);
+    }
+
+    /**
+     * Get size
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getSize($paging)
+    {
+        $defaultLimit = $this->getData('config/pageSize') ?: 20;
+        return (int) (isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit);
     }
 }

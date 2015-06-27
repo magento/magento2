@@ -70,17 +70,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportStockItemAttributesAreFilled()
     {
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $fileWrite = $this->getMock('Magento\Framework\Filesystem\File\Write', [], [], '', false);
         $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-
-        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
-
         $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
-
         $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
-
         $directoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
-
         $directoryMock->expects(
             $this->any()
         )->method(
@@ -88,6 +82,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('some string read from file')
         );
+        $directoryMock->expects($this->once())->method('openFile')->will($this->returnValue($fileWrite));
+
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
 

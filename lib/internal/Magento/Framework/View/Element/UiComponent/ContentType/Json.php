@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\ContentType;
 
+use Magento\Framework\Json\Encoder;
 use Magento\Framework\View\FileSystem;
 use Magento\Framework\View\TemplateEnginePool;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -15,16 +16,24 @@ use Magento\Framework\View\Element\UiComponentInterface;
 class Json extends AbstractContentType
 {
     /**
+     * @var Encoder
+     */
+    private $encoder;
+
+    /**
      * Constructor
      *
      * @param FileSystem $filesystem
      * @param TemplateEnginePool $templateEnginePool
+     * @param Encoder $encoder
      */
     public function __construct(
         FileSystem $filesystem,
-        TemplateEnginePool $templateEnginePool
+        TemplateEnginePool $templateEnginePool,
+        Encoder $encoder
     ) {
         parent::__construct($filesystem, $templateEnginePool);
+        $this->encoder = $encoder;
     }
 
     /**
@@ -34,12 +43,13 @@ class Json extends AbstractContentType
      * @param string $template
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(UiComponentInterface $component, $template = '')
     {
-        $data = $component->getDataSourceData();
+        $data = $component->getContext()->getDataSourceData($component);
         $data = reset($data);
 
-        return json_encode($data['config']['data']);
+        return $this->encoder->encode($data['config']['data']);
     }
 }

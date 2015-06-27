@@ -11,7 +11,7 @@ define([
 
     return Abstract.extend({
         defaults: {
-            dateFormat: 'MM/DD/YYYY',
+            dateFormat: 'MM/dd/YYYY',
             options: {}
         },
 
@@ -26,7 +26,7 @@ define([
          *
          * @returns {String}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var value = this._super();
 
             if (value) {

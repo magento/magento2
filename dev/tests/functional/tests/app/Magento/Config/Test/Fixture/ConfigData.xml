@@ -6,29 +6,29 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="configData" 
-           module="Magento_Config"
-           type="flat"
-           entity_type="core_config_data"
-           collection="Magento\Config\Model\Resource\Config\Data\Collection"
-           repository_class="Magento\Config\Test\Repository\ConfigData"
-           handler_interface="Magento\Config\Test\Handler\ConfigData\ConfigDataInterface"
-           class="Magento\Config\Test\Fixture\ConfigData">
-    <field name="section"/>
-    <field name="config_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="scope" is_required="">
-      <default_value xsi:type="string">default</default_value>
-    </field>
-    <field name="scope_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="path" is_required="">
-      <default_value xsi:type="string">general</default_value>
-    </field>
-    <field name="value" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-  </fixture>
+    <fixture name="configData"
+             module="Magento_Config"
+             type="flat"
+             entity_type="core_config_data"
+             collection="Magento\Config\Model\Resource\Config\Data\Collection"
+             repository_class="Magento\Config\Test\Repository\ConfigData"
+             handler_interface="Magento\Config\Test\Handler\ConfigData\ConfigDataInterface"
+             class="Magento\Config\Test\Fixture\ConfigData">
+        <field name="section" />
+        <field name="config_id" is_required="1">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="scope" is_required="">
+            <default_value xsi:type="string">default</default_value>
+        </field>
+        <field name="scope_id" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="path" is_required="">
+            <default_value xsi:type="string">general</default_value>
+        </field>
+        <field name="value" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+    </fixture>
 </config>

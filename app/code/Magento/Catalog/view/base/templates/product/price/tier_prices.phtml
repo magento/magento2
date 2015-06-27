@@ -58,25 +58,26 @@ $product = $block->getSaleableItem();
                    data-tier-price="<?php echo $block->escapeHtml($block->jsonEncode($tierPriceData)); ?>">
                     <?php echo __('Click for price'); ?></a>
                 <?php else:
-                    echo __(
-                        'Buy %1 for %2',
-                        $price['price_qty'],
-                        $block->renderAmount(
-                            $price['price'],
-                            [
-                                'price_id'          => $index,
-                                'id_suffix'         => '-' . $index,
-                                'include_container' => true,
-                                'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
-                            ]
-                        )
+                    $priceAmountBlock = $block->renderAmount(
+                        $price['price'],
+                        [
+                            'price_id'          => $index,
+                            'id_suffix'         => '-' . $index,
+                            'include_container' => true,
+                            'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
+                        ]
                     );
-                ?><?php echo __('each') ?>
-                <?php if ($block->getShowDetailedPrice() !== false): ?>
-                    &nbsp;<?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
-                        <span class="percent tier-<?php echo $index ?>">&nbsp;<?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
-                    </strong>
-                <?php endif ?>
+                ?>
+                <?php echo ($block->getShowDetailedPrice() !== false)
+                        ? __(
+                            'Buy %1 for %2 each and <strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
+                            $price['price_qty'],
+                            $priceAmountBlock,
+                            $index,
+                            $tierPriceModel->getSavePercent($price['price'])
+                        )
+                        : __('Buy %1 for %2 each', $price['price_qty'], $priceAmountBlock);
+                ?>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>

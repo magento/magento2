@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\Event\Observer;
 
 class Import
 {
@@ -41,49 +42,54 @@ class Import
     }
 
     /**
-     * @param ImportProduct $import
-     * @param bool $result
-     * @return bool
+     * Action after data import.
+     * Save new url rewrites and remove old if exist.
+     *
+     * @param Observer $observer
+     *
+     * @return void
      */
-    public function afterImportData(ImportProduct $import, $result)
+    public function afterImportData(Observer $observer)
     {
-        if ($import->getAffectedEntityIds()) {
-            foreach ($import->getAffectedEntityIds() as $productId) {
-                $product = $this->productRepository->getById($productId);
-                $productUrls = $this->productUrlRewriteGenerator->generate($product);
-                if ($productUrls) {
-                    $this->urlPersist->replace($productUrls);
-                }
+        $import = $observer->getEvent()->getAdapter();
+        if ($products = $observer->getEvent()->getBunch()) {
+            $productUrls = [];
+            foreach ($products as $product) {
+                $productObject = $import->_populateToUrlGeneration($product);
+                $productUrls = array_merge($productUrls, $this->productUrlRewriteGenerator->generate($productObject));
             }
-        } elseif (ImportExport::BEHAVIOR_DELETE == $import->getBehavior()) {
-            $this->clearProductUrls($import);
+            if ($productUrls) {
+                $this->urlPersist->replace($productUrls);
+            }
         }
-
-        return $result;
     }
 
     /**
-     * @param ImportProduct $import
+     * Clear product urls.
+     *
+     * @param Observer $observer
+     *
      * @return void
      */
-    protected function clearProductUrls(ImportProduct $import)
+    public function clearProductUrls(Observer $observer)
     {
-        $oldSku = $import->getOldSku();
-        while ($bunch = $import->getNextBunch()) {
+        $oldSku = $observer->getEvent()->getAdapter()->getOldSku();
+        if ($products = $observer->getEvent()->getBunch()) {
             $idToDelete = [];
-            foreach ($bunch as $rowNum => $rowData) {
-                if ($import->validateRow($rowData, $rowNum)
-                    && ImportProduct::SCOPE_DEFAULT == $import->getRowScope($rowData)
-                ) {
-                    $idToDelete[] = $oldSku[$rowData[ImportProduct::COL_SKU]]['entity_id'];
+            foreach ($products as $product) {
+                if (!isset($oldSku[$product[ImportProduct::COL_SKU]])) {
+                    continue;
                 }
+                $productData = $oldSku[$product[ImportProduct::COL_SKU]];
+                $idToDelete[] = $productData['entity_id'];
             }
-            foreach ($idToDelete as $productId) {
+            if (!empty($idToDelete)) {
                 $this->urlPersist->deleteByData([
-                    UrlRewrite::ENTITY_ID => $productId,
+                    UrlRewrite::ENTITY_ID => $idToDelete,
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]);
             }
+
         }
     }
 }

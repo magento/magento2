@@ -6,9 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
-use Magento\Framework\Exception\InputException;
-
 class MimeTypeExtensionMap
 {
     /**

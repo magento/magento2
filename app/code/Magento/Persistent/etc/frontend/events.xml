@@ -18,6 +18,9 @@
     <event name="controller_action_predispatch_customer_account_loginPost">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
     </event>
+    <event name="controller_action_predispatch_customer_ajax_login">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeStatusForAjaxLogin" />
+    </event>
     <event name="controller_action_predispatch_customer_account_createpost">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
         <observer name="persistent_authenticate" instance="Magento\Persistent\Model\Observer\CustomerAuthenticatedEvent" method="execute" />

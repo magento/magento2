@@ -38,6 +38,10 @@ table {
     }
 }
 
+.admin__table-wrapper {
+    .table-overflow();
+}
+
 .admin__table-primary,
 .admin__table-secondary {
     width: 100%;
@@ -91,27 +95,24 @@ table {
         margin-bottom: .75em;
         text-align: left;
     }
+    thead {
+        th {
+            background-color: transparent;
+            font-weight: @font-weight__semibold;
+        }
+    }
     tbody {
         th {
             vertical-align: top;
         }
-    }
-    tr {
-        &:nth-child(odd) {
-            th,
-            td {
-                background-color: @admin__table-secondary-cell__odd__color;
+        tr {
+            &:nth-child(odd) {
+                th,
+                td {
+                    background-color: @admin__table-secondary-cell__odd__color;
+                }
             }
         }
-    }
-    th,
-    td {
-        padding: @admin__table-secondary__padding-horizontal @admin__table-secondary__padding-vertical;
-        text-align: left;
-    }
-    th {
-        color: @admin__table-secondary-th__color;
-        font-weight: @font-weight__regular;
     }
     tfoot {
         tr {
@@ -126,7 +127,13 @@ table {
             }
         }
     }
-    .admin__total-amount {
-        text-align: right;
+    th,
+    td {
+        padding: @admin__table-secondary__padding-horizontal @admin__table-secondary__padding-vertical;
+        text-align: left;
+    }
+    th {
+        color: @admin__table-secondary-th__color;
+        font-weight: @font-weight__regular;
     }
 }

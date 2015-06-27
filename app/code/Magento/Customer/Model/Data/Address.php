@@ -70,6 +70,16 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
+     * Get region ID
+     *
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->_get(self::REGION_ID);
+    }
+
+    /**
      * Get country id
      *
      * @return string|null
@@ -260,6 +270,17 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     public function setRegion(RegionInterface $region = null)
     {
         return $this->setData(self::REGION, $region);
+    }
+
+    /**
+     * Set region ID
+     *
+     * @param int $regionId
+     * @return $this
+     */
+    public function setRegionId($regionId)
+    {
+        return $this->setData(self::REGION_ID, $regionId);
     }
 
     /**

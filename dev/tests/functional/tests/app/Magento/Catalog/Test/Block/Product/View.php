@@ -113,7 +113,7 @@ class View extends AbstractConfigureBlock
     protected $clickAddToCompare = '.action.tocompare';
 
     /**
-     * "Add to Wishlist" button.
+     * Locator value for "Add to Wish List" button.
      *
      * @var string
      */
@@ -209,6 +209,7 @@ class View extends AbstractConfigureBlock
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckout, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->paypalCheckout);
     }
 
     /**
@@ -352,7 +353,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click "Add to Wishlist" button.
+     * Click "Add to Wish List".
      *
      * @return void
      */

@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Resolves query parameters in a URL.
+ *
+ * @api
+ */
 interface QueryParamsResolverInterface
 {
     /**

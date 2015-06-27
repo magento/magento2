@@ -6,7 +6,7 @@
 namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
-use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
+use Magento\Integration\Api\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
 use Magento\Integration\Model\IntegrationConfig;
 
 /**
@@ -25,7 +25,7 @@ class Manager
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Service\V1\IntegrationInterface
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
      */
     protected $_integrationService;
 
@@ -39,12 +39,12 @@ class Manager
      *
      * @param IntegrationConfig $integrationConfig
      * @param IntegrationAuthorizationInterface $integrationAuthorizationService
-     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      */
     public function __construct(
         IntegrationConfig $integrationConfig,
         IntegrationAuthorizationInterface $integrationAuthorizationService,
-        \Magento\Integration\Service\V1\IntegrationInterface $integrationService
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService
     ) {
         $this->_integrationConfig = $integrationConfig;
         $this->integrationAuthorizationService = $integrationAuthorizationService;

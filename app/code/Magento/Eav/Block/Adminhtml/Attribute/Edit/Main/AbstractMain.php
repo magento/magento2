@@ -32,9 +32,9 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_eavData = null;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Config
+     * @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker
      */
-    protected $_attributeConfig;
+    protected $propertyLocker;
 
     /**
      * @var \Magento\Config\Model\Config\Source\YesnoFactory
@@ -53,7 +53,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Eav\Helper\Data $eavData
      * @param \Magento\Config\Model\Config\Source\YesnoFactory $yesnoFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory
-     * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
+     * @param \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker
      * @param array $data
      */
     public function __construct(
@@ -63,13 +63,13 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Eav\Helper\Data $eavData,
         \Magento\Config\Model\Config\Source\YesnoFactory $yesnoFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory,
-        \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
+        \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker,
         array $data = []
     ) {
         $this->_eavData = $eavData;
         $this->_yesnoFactory = $yesnoFactory;
         $this->_inputTypeFactory = $inputTypeFactory;
-        $this->_attributeConfig = $attributeConfig;
+        $this->propertyLocker = $propertyLocker;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -148,7 +148,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass,
@@ -257,6 +257,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
+        $this->propertyLocker->lock($form);
         $this->setForm($form);
 
         return parent::_prepareForm();
@@ -275,27 +276,6 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         );
         $this->getForm()->addValues($this->getAttributeObject()->getData());
         return parent::_initFormValues();
-    }
-
-    /**
-     * This method is called before rendering HTML
-     *
-     * @return $this
-     */
-    protected function _beforeToHtml()
-    {
-        parent::_beforeToHtml();
-        $attributeObject = $this->getAttributeObject();
-        if ($attributeObject->getId()) {
-            $form = $this->getForm();
-            foreach ($this->_attributeConfig->getLockedFields($attributeObject) as $field) {
-                if ($element = $form->getElement($field)) {
-                    $element->setDisabled(1);
-                    $element->setReadonly(1);
-                }
-            }
-        }
-        return $this;
     }
 
     /**

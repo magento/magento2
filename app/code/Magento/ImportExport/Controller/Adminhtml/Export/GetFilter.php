@@ -1,27 +1,29 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-class GetFilter extends \Magento\ImportExport\Controller\Adminhtml\Export
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Magento\Framework\Controller\ResultFactory;
+
+class GetFilter extends ExportController
 {
     /**
      * Get grid-filter of entity attributes action.
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getParams();
         if ($this->getRequest()->isXmlHttpRequest() && $data) {
             try {
-                $this->_view->loadLayout();
-
+                /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+                $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
                 /** @var $attrFilterBlock \Magento\ImportExport\Block\Adminhtml\Export\Filter */
-                $attrFilterBlock = $this->_view->getLayout()->getBlock('export.filter');
+                $attrFilterBlock = $resultLayout->getLayout()->getBlock('export.filter');
                 /** @var $export \Magento\ImportExport\Model\Export */
                 $export = $this->_objectManager->create('Magento\ImportExport\Model\Export');
                 $export->setData($data);
@@ -29,14 +31,16 @@ class GetFilter extends \Magento\ImportExport\Controller\Adminhtml\Export
                 $export->filterAttributeCollection(
                     $attrFilterBlock->prepareCollection($export->getEntityAttributeCollection())
                 );
-                $this->_view->renderLayout();
-                return;
+                return $resultLayout;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent.'));
+            $this->messageManager->addError(__('Please correct the data sent value.'));
         }
-        $this->_redirect('adminhtml/*/index');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath('adminhtml/*/index');
+        return $resultRedirect;
     }
 }

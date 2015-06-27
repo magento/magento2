@@ -15,7 +15,7 @@
     </div>
 
     <?php if (count($_items)) : ?>
-    <div class="grid">
+    <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>
                 <tr class="headings">
@@ -45,10 +45,10 @@
             <?php endif; ?>
             <?php $i = 0; foreach ($_items as $_item): ?>
                 <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
+                continue;
+            } else {
+                $i++;
+            } ?>
                 <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
                     <?php echo $block->getItemHtml($_item) ?>
                     <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
@@ -84,7 +84,8 @@
             <div id="history_form" class="admin__fieldset-wrapper-content">
                 <div class="admin__field">
                     <label class="normal admin__field-label"
-                           for="creditmemo_comment_text"><?php echo __('Comment Text') ?></label>
+                           for="creditmemo_comment_text">
+                        <span><?php echo __('Comment Text') ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="creditmemo_comment_text"
                                   class="admin__control-textarea"

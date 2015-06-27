@@ -1,12 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-class Delete extends \Magento\Search\Controller\Adminhtml\Term
+use Magento\Search\Controller\Adminhtml\Term as TermController;
+use Magento\Framework\Controller\ResultFactory;
+
+class Delete extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -15,20 +17,23 @@ class Delete extends \Magento\Search\Controller\Adminhtml\Term
     {
         $id = $this->getRequest()->getParam('id');
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
                 $model = $this->_objectManager->create('Magento\Search\Model\Query');
                 $model->setId($id);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the search.'));
-                return $redirectResult->setPath('search/*/');
+                $resultRedirect->setPath('search/*/');
+                return $resultRedirect;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                return $redirectResult->setPath('search/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+                $resultRedirect->setPath('search/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+                return $resultRedirect;
             }
         }
         $this->messageManager->addError(__('We can\'t find a search term to delete.'));
-        return $redirectResult->setPath('search/*/');
+        $resultRedirect->setPath('search/*/');
+        return $resultRedirect;
     }
 }

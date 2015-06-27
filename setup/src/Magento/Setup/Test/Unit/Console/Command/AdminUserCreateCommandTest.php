@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->installerFactoryMock = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->command = new AdminUserCreateCommand($this->installerFactoryMock);
+        $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
     }
 
     public function testExecute()
@@ -50,7 +51,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
         $installerMock->expects($this->once())->method('installAdminUser')->with($data);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
         $commandTester->execute($options);
-        $this->assertEquals('Created admin user user' . PHP_EOL, $commandTester->getDisplay());
+        $this->assertEquals('Created Magento administrator user named user' . PHP_EOL, $commandTester->getDisplay());
     }
 
     public function testGetOptionsList()
@@ -81,12 +82,36 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     public function validateDataProvider()
     {
         return [
-            [[false, true, true, true, true], ['Missing option ' . AdminAccount::KEY_USER]],
+            [[null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], ['First Name is a required field.']],
             [
-                [true, false, false, true, true],
-                ['Missing option ' . AdminAccount::KEY_PASSWORD, 'Missing option ' . AdminAccount::KEY_EMAIL],
+                ['John', null, null, 'test@test.com', '123123q', '123123q'],
+                ['User Name is a required field.', 'Last Name is a required field.'],
             ],
-            [[true, true, true, true, true], []],
+            [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
+            [
+                ['John', 'Doe', 'admin', 'test', '123123q', '123123q'],
+                ["'test' is not a valid email address in the basic format local-part@hostname"]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', '', ''],
+                [
+                    'Password is required field.',
+                    'Your password must be at least 7 characters.',
+                    'Your password must include both numeric and alphabetic characters.'
+                ]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', '123123', '123123'],
+                [
+                    'Your password must be at least 7 characters.',
+                    'Your password must include both numeric and alphabetic characters.'
+                ]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', '1231231', '1231231'],
+                ['Your password must include both numeric and alphabetic characters.']
+            ],
+            [['John', 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], []],
         ];
     }
 }

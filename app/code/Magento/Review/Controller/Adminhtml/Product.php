@@ -5,10 +5,16 @@
  */
 namespace Magento\Review\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Review\Model\RatingFactory;
+
 /**
  * Reviews admin controller
  */
-class Product extends \Magento\Backend\App\Action
+class Product extends Action
 {
     /**
      * Array of actions which can be processed without secret key validation
@@ -22,21 +28,21 @@ class Product extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
      * Review model factory
      *
      * @var \Magento\Review\Model\ReviewFactory
      */
-    protected $_reviewFactory;
+    protected $reviewFactory;
 
     /**
      * Rating model factory
      *
      * @var \Magento\Review\Model\RatingFactory
      */
-    protected $_ratingFactory;
+    protected $ratingFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -45,14 +51,14 @@ class Product extends \Magento\Backend\App\Action
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Model\RatingFactory $ratingFactory
+        Context $context,
+        Registry $coreRegistry,
+        ReviewFactory $reviewFactory,
+        RatingFactory $ratingFactory
     ) {
-        $this->_coreRegistry = $coreRegistry;
-        $this->_reviewFactory = $reviewFactory;
-        $this->_ratingFactory = $ratingFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->reviewFactory = $reviewFactory;
+        $this->ratingFactory = $ratingFactory;
         parent::__construct($context);
     }
 

@@ -7,8 +7,10 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\BrowserInterface;
@@ -84,10 +86,9 @@ class FormTabs extends Form
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($tabs as $tabName => $tabFields) {
-            $tabElement = $this->getTabElement($tabName);
+            $tab = $this->getTab($tabName);
             $this->openTab($tabName);
-            $tabElement->fillFormTab(array_merge($tabFields, $this->unassignedFields), $context);
-            $this->updateUnassignedFields($tabElement);
+            $tab->fillFormTab($tabFields, $context);
         }
         if (!empty($this->unassignedFields)) {
             $this->fillMissedFields($tabs);
@@ -97,33 +98,24 @@ class FormTabs extends Form
     }
 
     /**
-     * Update array with fields which aren't assigned to any tab
-     *
-     * @param Tab $tabElement
-     */
-    protected function updateUnassignedFields(Tab $tabElement)
-    {
-        $this->unassignedFields = array_diff_key(
-            $this->unassignedFields,
-            array_intersect_key($this->unassignedFields, $tabElement->setFields)
-        );
-    }
-
-    /**
      * Fill fields which weren't found on filled tabs
      *
-     * @param array $tabs
      * @throws \Exception
-     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function fillMissedFields(array $tabs)
+    protected function fillMissedFields()
     {
-        foreach (array_diff_key($this->tabs, $tabs) as $tabName => $tabData) {
-            $tabElement = $this->getTabElement($tabName);
-            if ($this->openTab($tabName)) {
-                $tabElement->fillFormTab($this->unassignedFields, $this->_rootElement);
-                $this->updateUnassignedFields($tabElement);
+        foreach ($this->tabs as $tabName => $tabData) {
+            $tab = $this->getTab($tabName);
+            if ($this->openTab($tabName) && $this->isTabVisible($tabName)) {
+                $mapping = $tab->dataMapping($this->unassignedFields);
+                foreach ($mapping as $fieldName => $data) {
+                    $element = $tab->_rootElement->find($data['selector'], $data['strategy'], $data['input']);
+                    if ($element->isVisible()) {
+                        $element->setValue($data['value']);
+                        unset($this->unassignedFields[$fieldName]);
+                    }
+                }
                 if (empty($this->unassignedFields)) {
                     break;
                 }
@@ -154,7 +146,7 @@ class FormTabs extends Form
         if (null === $fixture) {
             foreach ($this->tabs as $tabName => $tab) {
                 $this->openTab($tabName);
-                $tabData = $this->getTabElement($tabName)->getDataFormTab();
+                $tabData = $this->getTab($tabName)->getDataFormTab();
                 $data = array_merge($data, $tabData);
             }
         } else {
@@ -162,7 +154,7 @@ class FormTabs extends Form
             $tabsFields = $isHasData ? $this->getFieldsByTabs($fixture) : [];
             foreach ($tabsFields as $tabName => $fields) {
                 $this->openTab($tabName);
-                $tabData = $this->getTabElement($tabName)->getDataFormTab($fields, $this->_rootElement);
+                $tabData = $this->getTab($tabName)->getDataFormTab($fields, $this->_rootElement);
                 $data = array_merge($data, $tabData);
             }
         }
@@ -249,41 +241,61 @@ class FormTabs extends Form
     }
 
     /**
-     * Get tab element
+     * Get tab class.
      *
      * @param string $tabName
      * @return Tab
      * @throws \Exception
      */
-    public function getTabElement($tabName)
+    public function getTab($tabName)
     {
         $tabClass = $this->tabs[$tabName]['class'];
-        /** @var Tab $tabElement */
-        $tabElement = $this->blockFactory->create($tabClass, ['element' => $this->_rootElement]);
-        if (!$tabElement instanceof Tab) {
+        /** @var Tab $tab */
+        $tab = $this->blockFactory->create($tabClass, ['element' => $this->_rootElement]);
+        if (!$tab instanceof Tab) {
             throw new \Exception('Wrong Tab Class.');
         }
-        $tabElement->setWrapper(isset($this->tabs[$tabName]['wrapper']) ? $this->tabs[$tabName]['wrapper'] : '');
-        $tabElement->setMapping(isset($this->tabs[$tabName]['fields']) ? (array)$this->tabs[$tabName]['fields'] : []);
+        $tab->setWrapper(isset($this->tabs[$tabName]['wrapper']) ? $this->tabs[$tabName]['wrapper'] : '');
+        $tab->setMapping(isset($this->tabs[$tabName]['fields']) ? (array)$this->tabs[$tabName]['fields'] : []);
 
-        return $tabElement;
+        return $tab;
     }
 
     /**
-     * Open tab
+     * Get tab element.
      *
      * @param string $tabName
-     * @return Tab
+     * @return ElementInterface
      */
-    public function openTab($tabName)
+    protected function getTabElement($tabName)
     {
         $selector = $this->tabs[$tabName]['selector'];
         $strategy = isset($this->tabs[$tabName]['strategy'])
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
-        $tab = $this->_rootElement->find($selector, $strategy);
-        $tab->click();
+        return $this->_rootElement->find($selector, $strategy);
+    }
 
+    /**
+     * Open tab.
+     *
+     * @param string $tabName
+     * @return FormTabs
+     */
+    public function openTab($tabName)
+    {
+        $this->getTabElement($tabName)->click();
         return $this;
+    }
+
+    /**
+     * Check whether tab is visible.
+     *
+     * @param string $tabName
+     * @return bool
+     */
+    public function isTabVisible($tabName)
+    {
+        return $this->getTabElement($tabName)->isVisible();
     }
 }

@@ -4,9 +4,10 @@
 //  */
 
 //
-//    Tables
-// --------------------------------------
-table {
+//  Tables
+//  --------------------------------------
+
+table:not(.data-grid .admin__control-table) {
     > caption {
         margin-bottom: 5px;
     }
@@ -281,7 +282,6 @@ td.col-updated_at,
 td.col-customer_since,
 td.col-session_start_time,
 td.col-time,
-td.col-sku,
 td.col-type {
     &:extend(.nowrap all);
 }

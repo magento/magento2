@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing\Object;
 
 /**
  * Interface SaleableInterface
+ *
+ * @api
  */
 interface SaleableInterface
 {

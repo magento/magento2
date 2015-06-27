@@ -9,21 +9,24 @@
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 
-<?php $_cartQty = (float) $block->getSummaryCount() ?>
-<div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>">
+<div data-block="minicart" class="minicart-wrapper" >
+    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>"
+       data-bind="scope: 'minicart_content'">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="counter qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>">
-            <span class="counter-number">
-                <?php echo $_cartQty;?>
-            </span>
+        <span class="counter qty empty"
+              data-bind="css: { empty: cart().summary_count == 0 }">
+            <span class="counter-number"><!-- ko text: cart().summary_count --><!-- /ko --></span>
             <span class="counter-label">
-                <?php echo $block->getSummaryText($_cartQty); ?>
+            <!-- ko if: cart().summary_count -->
+                <!-- ko text: cart().summary_count --><!-- /ko -->
+                <!-- ko text: $t('items') --><!-- /ko -->
+            <!-- /ko -->
             </span>
         </span>
     </a>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>"
+        <div class="block block-minicart empty"
+             data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
                 "appendTo":"[data-block=minicart]",
                 "triggerTarget":".showcart",
@@ -33,43 +36,24 @@
                 "triggerClass":"active",
                 "parentClass":"active",
                 "buttons":[]}}'>
-            <div id="minicart-content-wrapper">
-                <?php echo $block->getChildHtml('minicart_content') ?>
+            <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
         </div>
     <?php endif ?>
+    <script>
+        window.checkout = {
+            shoppingCartUrl: '<?=$block->getShoppingCartUrl()?>',
+            checkoutUrl: '<?=$block->getCheckoutUrl()?>',
+            updateItemQtyUrl: '<?=$block->getUpdateItemQtyUrl()?>',
+            removeItemUrl: '<?=$block->getRemoveItemUrl()?>',
+            imageTemplate: '<?= $block->getImageHtmlTemplate()?>'
+        };
+    </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
-            "sidebar": {
-                "targetElement": "div.block.block-minicart",
-                "url": {
-                    "checkout": "<?php echo $block->getCheckoutUrl();?>",
-                    "update": "<?php echo $block->getUpdateItemQtyUrl(); ?>",
-                    "remove": "<?php echo $block->getRemoveItemUrl(); ?>"
-                },
-                "button": {
-                    "checkout": "#top-cart-btn-checkout",
-                    "remove": "#mini-cart a.action.delete",
-                    "close": "#btn-minicart-close"
-                },
-                "showcart": {
-                    "parent": "span.counter",
-                    "qty": "span.counter-number",
-                    "label": "span.counter-label"
-                },
-                "minicart": {
-                    "list": "#mini-cart",
-                    "content": "#minicart-content-wrapper",
-                    "qty": "div.items-total",
-                    "subtotal": "div.subtotal span.price"
-                },
-                "item": {
-                    "qty": ":input.cart-item-qty",
-                    "button": ":button.update-cart-item"
-                },
-                "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>"
-            }
+            "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
         }
     }
     </script>

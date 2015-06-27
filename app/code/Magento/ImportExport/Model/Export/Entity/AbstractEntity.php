@@ -190,9 +190,10 @@ abstract class AbstractEntity
     /**
      * Get entity collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @param bool $resetCollection
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    abstract protected function _getEntityCollection();
+    abstract protected function _getEntityCollection($resetCollection = false);
 
     /**
      * Get attributes codes which are appropriate for export.
@@ -441,7 +442,7 @@ abstract class AbstractEntity
             ) ? __(
                 $this->_messageTemplates[$errorCode]
             ) : __(
-                "Please correct the value for '%1' column",
+                'Please correct the value for "%1" column.',
                 $errorCode
             );
             $messages[$message] = $errorRows;
@@ -498,7 +499,7 @@ abstract class AbstractEntity
     public function getWriter()
     {
         if (!$this->_writer) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify writer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the writer.'));
         }
         return $this->_writer;
     }

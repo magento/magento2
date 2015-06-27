@@ -107,7 +107,7 @@ class InstallData implements InstallDataInterface
     <div class="message info">
         <span>
             Please replace this text with you Privacy Policy.
-            Please add any additional cookies your website uses below (e.g., Google Analytics)
+            Please add any additional cookies your website uses below (e.g. Google Analytics).
         </span>
     </div>
     <p>
@@ -253,8 +253,12 @@ class InstallData implements InstallDataInterface
                 <td>A flag, which indicates whether caching is disabled or not.</td>
             </tr>
             <tr>
+                <th>FORM_KEY</th>
+                <td>Stores form key used by page cache functionality.</td>
+            </tr>
+            <tr>
                 <th>FRONTEND</th>
-                <td>You sesssion ID on the server.</td>
+                <td>Your session ID on the server.</td>
             </tr>
             <tr>
                 <th>GUEST-VIEW</th>
@@ -302,11 +306,11 @@ class InstallData implements InstallDataInterface
             </tr>
             <tr>
                 <th>WISHLIST</th>
-                <td>An encrypted list of products added to your Wishlist.</td>
+                <td>An encrypted list of products added to your Wish List.</td>
             </tr>
             <tr>
                 <th>WISHLIST_CNT</th>
-                <td>The number of items in your Wishlist.</td>
+                <td>The number of items in your Wish List.</td>
             </tr>
         </tbody>
     </table>

@@ -61,7 +61,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -174,7 +173,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
             return __('You subscribe to our newsletter.');
         }
 
-        return __('You are currently not subscribed to our newsletter.');
+        return __('You don\'t subscribe to our newsletter.');
     }
 
     /**

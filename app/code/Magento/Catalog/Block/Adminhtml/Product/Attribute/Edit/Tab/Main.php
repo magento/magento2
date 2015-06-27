@@ -61,7 +61,6 @@ class Main extends AbstractMain
         $response = new \Magento\Framework\Object();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', ['response' => $response]);
-        $_disabledTypes = [];
         $_hiddenFields = [];
         foreach ($response->getTypes() as $type) {
             $additionalTypes[] = $type;

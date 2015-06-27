@@ -6,15 +6,9 @@
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
-    <argument name="context" xsi:type="configurableObject">
-        <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\Context</argument>
-        <argument name="namespace" xsi:type="string">cms_page_listing</argument>
-    </argument>
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
-            </item>
+            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
             <item name="deps" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">cms_page_columns</item>
@@ -30,22 +24,18 @@
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Cms\Model\Page\DataProvider</argument>
+            <argument name="name" xsi:type="string">cms_page_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">block_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="meta" xsi:type="array">
-                <item name="cms_block" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">CMS Block</item>
-                    </item>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 </item>
             </argument>
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-            <item name="config" xsi:type="array">
-                <item name="update_url" xsi:type="string">mui/index/render</item>
             </item>
         </argument>
     </dataSource>
@@ -55,17 +45,25 @@
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
             </item>
         </argument>
-        <container name="default_view">
+        <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/view</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
+                        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
+                        <item name="namespace" xsi:type="string">cms_page_listing</item>
+                    </item>
                 </item>
             </argument>
-        </container>
+        </bookmark>
         <container name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="columnsData" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns</item>
+                    </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
@@ -75,7 +73,17 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">params.filters</item>
+                    <item name="dataScope" xsi:type="string">filters</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                    <item name="childDefaults" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                        </item>
+                    </item>
                 </item>
             </argument>
             <filterRange name="page_id">
@@ -83,6 +91,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">page_id</item>
                         <item name="label" xsi:type="string" translate="true">ID</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterInput name="from">
@@ -157,7 +168,7 @@
                             </item>
                             <item name="enable" xsi:type="array">
                                 <item name="value" xsi:type="string">1</item>
-                                <item name="label" xsi:type="string" translate="true">Enabled</item>
+                                <item name="label" xsi:type="string" translate="true">Published</item>
                             </item>
                         </item>
                     </item>
@@ -168,6 +179,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">creation_time</item>
                         <item name="label" xsi:type="string" translate="true">Created</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterDate name="from">
@@ -176,6 +190,7 @@
                             <item name="dataScope" xsi:type="string">from</item>
                             <item name="label" xsi:type="string" translate="true">from</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -185,6 +200,7 @@
                             <item name="dataScope" xsi:type="string">to</item>
                             <item name="label" xsi:type="string" translate="true">to</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -194,6 +210,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">update_time</item>
                         <item name="label" xsi:type="string" translate="true">Modified</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterDate name="from">
@@ -202,6 +221,7 @@
                             <item name="dataScope" xsi:type="string">from</item>
                             <item name="label" xsi:type="string" translate="true">from</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -211,6 +231,7 @@
                             <item name="dataScope" xsi:type="string">to</item>
                             <item name="label" xsi:type="string" translate="true">to</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -219,13 +240,27 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="delete" xsi:type="array">
-                            <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>
                             <item name="type" xsi:type="string">delete</item>
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">cms/page/massDelete</item>
+                            <item name="confirm" xsi:type="array">
+                                <item name="title" xsi:type="string" translate="true">Delete items</item>
+                                <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                            </item>
+                        </item>
+                        <item name="disable" xsi:type="array">
+                            <item name="type" xsi:type="string">disable</item>
+                            <item name="label" xsi:type="string" translate="true">Disable</item>
+                            <item name="url" xsi:type="string">cms/page/massDisable</item>
+                        </item>
+                        <item name="enable" xsi:type="array">
+                            <item name="type" xsi:type="string">enable</item>
+                            <item name="label" xsi:type="string" translate="true">Enable</item>
+                            <item name="url" xsi:type="string">cms/page/massEnable</item>
                         </item>
                     </item>
                     <item name="indexField" xsi:type="string">page_id</item>
@@ -235,6 +270,11 @@
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                    <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -261,14 +301,23 @@
                 </item>
             </argument>
         </paging>
-    </container>    
+    </container>
     <columns name="cms_page_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
+                    <item name="namespace" xsi:type="string">current</item>
+                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">edit</item>
-                    <item name="appendTo" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.columns_controls</item>
+                    <item name="controlVisibility" xsi:type="boolean">true</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                    </item>
                 </item>
             </item>
         </argument>
@@ -278,15 +327,16 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">page_id</item>
-                    <item name="appendTo" xsi:type="string"></item>
+                    <item name="controlVisibility" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
         <column name="page_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -299,7 +349,7 @@
         <column name="title">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -311,7 +361,7 @@
         <column name="identifier">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -336,9 +386,10 @@
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -383,10 +434,94 @@
                 </item>
             </argument>
         </column>
+        <column name="custom_theme_from">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Custom design from</item>
+                    <item name="dateFormat" xsi:type="string">MMM d, y</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="custom_theme_to">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Custom design to</item>
+                    <item name="dateFormat" xsi:type="string">MMM d, y</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="custom_theme">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\Theme</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Custom Theme</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="custom_root_template">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\PageLayout</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Custom Layout</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="meta_keywords">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="meta_description">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Description</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
         <column name="actions" class="Magento\Cms\Ui\Component\Listing\Column\PageActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">actions</item>
+                    <item name="indexField" xsi:type="string">page_id</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Action</item>
                     <item name="data_type" xsi:type="string">actions</item>

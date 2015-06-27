@@ -6,6 +6,9 @@
  */
 namespace Magento\Catalog\Api\Data;
 
+/**
+ * @api
+ */
 interface ProductAttributeSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**

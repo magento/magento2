@@ -15,23 +15,18 @@
     <methods>
         <method name="banktransfer">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
         <method name="cashondelivery">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
         <method name="checkmo">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
         <method name="purchaseorder">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
         <method name="free">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
     </methods>
 </payment>

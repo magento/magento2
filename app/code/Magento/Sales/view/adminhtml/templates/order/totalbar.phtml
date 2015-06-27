@@ -8,7 +8,7 @@
 
 ?>
 <?php if (sizeof($block->getTotals()) > 0): ?>
-<table cellspacing="0" class="items-to-invoice">
+<table class="items-to-invoice">
     <tr>
     <?php foreach ($block->getTotals() as $_total): ?>
         <td <?php if ($_total['grand']): ?>class="grand-total"<?php endif; ?>>

@@ -9,6 +9,7 @@
     <entity type="catalog_product">
         <attribute code="url_key">
             <field code="is_unique" locked="true" />
+            <field code="is_searchable" locked="true" />
         </attribute>
     </entity>
 </config>

@@ -20,31 +20,35 @@ $numColumns = sizeof($block->getColumns());
     /* foreach ($block->getColumns() as $_column): ?>
         <col <?php echo $_column->getHtmlProperty() ?> />
     <?php endforeach; */ ?>
-    <?php if ($block->isHeaderVisible() || $block->isFilterVisible()): ?>
+    <?php if ($block->isHeaderVisible()): ?>
         <thead>
-            <?php if ($block->isHeaderVisible()): ?>
-                <tr class="headings">
+            <?php if ($block->isHeaderVisible() || $block->getFilterVisibility()): ?>
+                <tr>
                 <?php foreach ($block->getColumns() as $_column): ?>
                 <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
-                    <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
-                            <span><?php echo $_column->getHeaderHtml() ?></span>
-                    </th>
+                    <?php if ($_column->getHeaderHtml() == '&nbsp;'):?>
+                        <th class="data-grid-th" data-column="<?php echo $_column->getId() ?>"
+                            <?php echo $_column->getHeaderHtmlProperty() ?>>&nbsp;</th>
+                    <?php else: ?>
+                        <?php echo $_column->getHeaderHtml()?>
+                    <?php endif; ?>
                 <?php endforeach; ?>
                 </tr>
             <?php endif; ?>
             <?php if ($block->isFilterVisible()): ?>
-                <tr class="filter">
-                <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
-                    <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
-                        <?php echo $_column->getFilterHtml() ?>
-                    </th>
-                <?php endforeach; ?>
+                <tr class="data-grid-filters" data-role="filter-form">
+                    <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
+                        <td data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
+                            <?php echo $_column->getFilterHtml() ?>
+                        </td>
+                    <?php endforeach; ?>
                 </tr>
             <?php endif ?>
         </thead>
     <?php endif; ?>
 
     <tbody>
+
         <?php if ($block->getCollection()->getSize() > 0 && !$block->getIsCollapsed()): ?>
         <?php foreach ($block->getCollection() as $_index => $_item): ?>
             <?php if ($block->hasMultipleRows($_item)) :?>
@@ -56,7 +60,7 @@ $numColumns = sizeof($block->getColumns());
                             $_rowspan = $block->getRowspan($_item, $_column);
                           ?><td data-column="<?php echo $_column->getId() ?>"
                                 <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
-                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td><?php
@@ -76,7 +80,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr data-role="row">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns($_i) as $_column):
                             ?><td data-column="<?php echo $_column->getId() ?>"
-                            class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
+                            class="<?php echo $_column->getCssProperty() ?> <?php echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
                         >
                             <?php echo(($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td><?php
@@ -88,7 +92,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr class="subtotals">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns() as $_column): ?>
                             <td data-column="<?php echo $_column->getId() ?>"
-                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel()
                                     : $_column->getRowField($block->getSubTotals($_item));
@@ -104,7 +108,7 @@ $numColumns = sizeof($block->getColumns());
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
                         <?php if ($block->shouldRenderCell($_item, $_column)):?>
                             <td data-column="<?php echo $_column->getId() ?>"
-                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td>
@@ -122,10 +126,9 @@ $numColumns = sizeof($block->getColumns());
             <?php endif; ?>
         <?php endforeach; ?>
         <?php elseif ($block->getEmptyText()): ?>
-            <tr data-role="row">
+            <tr class="data-grid-tr-no-data" data-role="row">
                 <td class="<?php echo $block->getEmptyTextClass() ?>"
-                    colspan="<?php echo $numColumns ?>"
-                ><?php echo $block->getEmptyText() ?></td>
+                    colspan="<?php echo $numColumns ?>"><?php echo $block->getEmptyText() ?></td>
             </tr>
         <?php endif; ?>
     </tbody>

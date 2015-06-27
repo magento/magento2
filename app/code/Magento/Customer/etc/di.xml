@@ -89,4 +89,41 @@
             <argument name="groupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
         </arguments>
     </type>
+    <virtualType name="SectionInvalidationConfigReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/action" xsi:type="string">name</item>
+                <item name="/config/action/section" xsi:type="string">name</item>
+            </argument>
+            <argument name="fileName" xsi:type="string">sections.xml</argument>
+            <argument name="converter" xsi:type="object">\Magento\Customer\CustomerData\SectionConfigConverter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Customer\CustomerData\SchemaLocator</argument>
+            <argument name="defaultScope" xsi:type="string">frontend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SectionInvalidationConfigData" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">SectionInvalidationConfigReader</argument>
+            <argument name="cacheId" xsi:type="string">sections_invalidation_config</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface"
+                type="Magento\Customer\CustomerData\JsLayoutDataProviderPool"/>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+        <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="const">Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER</item>
+            </argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
+                    <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageContentInterface</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

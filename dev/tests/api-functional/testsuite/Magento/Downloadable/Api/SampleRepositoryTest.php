@@ -515,4 +515,56 @@ class SampleRepositoryTest extends WebapiAbstract
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
+     * @dataProvider getListForAbsentProductProvider
+     */
+    public function testGetList($urlTail, $method, $expectations)
+    {
+        $sku = 'downloadable-product';
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/' . $sku . $urlTail,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'downloadableSampleRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'downloadableSampleRepositoryV1' . $method,
+            ],
+        ];
+
+        $requestData = ['sku' => $sku];
+
+        $list = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals(1, count($list));
+
+        $link = reset($list);
+        foreach ($expectations['fields'] as $index => $value) {
+            $this->assertEquals($value, $link[$index]);
+        }
+    }
+
+    public function getListForAbsentProductProvider()
+    {
+        $sampleExpectation = [
+            'fields' => [
+                'title' => 'Downloadable Product Sample Title',
+                'sort_order' => 0,
+                'sample_file' => '/f/u/jellyfish_1_4.jpg',
+                'sample_type' => 'file'
+            ]
+        ];
+
+        return [
+            'samples' => [
+                '/downloadable-links/samples',
+                'GetList',
+                $sampleExpectation,
+            ],
+        ];
+    }
 }

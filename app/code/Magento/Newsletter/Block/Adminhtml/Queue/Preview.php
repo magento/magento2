@@ -11,22 +11,17 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue;
 
-class Preview extends \Magento\Backend\Block\Widget
+class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
 {
     /**
-     * @var \Magento\Newsletter\Model\TemplateFactory
+     * {@inheritdoc}
      */
-    protected $_templateFactory;
+    protected $profilerName = "newsletter_queue_proccessing";
 
     /**
      * @var \Magento\Newsletter\Model\QueueFactory
      */
     protected $_queueFactory;
-
-    /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory
-     */
-    protected $_subscriberFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -38,68 +33,26 @@ class Preview extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
-        \Magento\Newsletter\Model\QueueFactory $queueFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        \Magento\Newsletter\Model\QueueFactory $queueFactory,
         array $data = []
     ) {
-        $this->_templateFactory = $templateFactory;
         $this->_queueFactory = $queueFactory;
-        $this->_subscriberFactory = $subscriberFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $templateFactory, $subscriberFactory, $data);
     }
 
     /**
-     * Get html code
-     *
-     * @return string
+     * @param \Magento\Newsletter\Model\Template $template
+     * @param string $id
+     * @return $this
      */
-    protected function _toHtml()
+    protected function loadTemplate(\Magento\Newsletter\Model\Template $template, $id)
     {
-        /* @var $template \Magento\Newsletter\Model\Template */
-        $template = $this->_templateFactory->create();
-
-        if ($id = (int)$this->getRequest()->getParam('id')) {
-            $queue = $this->_queueFactory->create()->load($id);
-            $template->setTemplateType($queue->getNewsletterType());
-            $template->setTemplateText($queue->getNewsletterText());
-            $template->setTemplateStyles($queue->getNewsletterStyles());
-        } else {
-            $template->setTemplateType($this->getRequest()->getParam('type'));
-            $template->setTemplateText($this->getRequest()->getParam('text'));
-            $template->setTemplateStyles($this->getRequest()->getParam('styles'));
-        }
-
-        $storeId = (int)$this->getRequest()->getParam('store_id');
-        if (!$storeId) {
-            $defaultStore = $this->_storeManager->getDefaultStoreView();
-            if (!$defaultStore) {
-                $allStores = $this->_storeManager->getStores();
-                if (isset($allStores[0])) {
-                    $defaultStore = $allStores[0];
-                }
-            }
-            $storeId = $defaultStore ? $defaultStore->getId() : null;
-        }
-
-        \Magento\Framework\Profiler::start("newsletter_queue_proccessing");
-        $vars = [];
-
-        $vars['subscriber'] = $this->_subscriberFactory->create();
-
-        $template->emulateDesign($storeId);
-        $templateProcessed = $this->_appState->emulateAreaCode(
-            \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
-            [$template, 'getProcessedTemplate'],
-            [$vars, true]
-        );
-        $template->revertDesign();
-
-        if ($template->isPlain()) {
-            $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
-        }
-
-        \Magento\Framework\Profiler::stop("newsletter_queue_proccessing");
-
-        return $templateProcessed;
+        /** @var \Magento\Newsletter\Model\Queue $queue */
+        $queue = $this->_queueFactory->create()->load($id);
+        $template->setTemplateType($queue->getNewsletterType());
+        $template->setTemplateText($queue->getNewsletterText());
+        $template->setTemplateStyles($queue->getNewsletterStyles());
+        return $this;
     }
 }

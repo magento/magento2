@@ -48,7 +48,6 @@ class Create extends \Magento\Customer\Controller\Account
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }

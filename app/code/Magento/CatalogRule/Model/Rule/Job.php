@@ -45,6 +45,7 @@ class Job extends \Magento\Framework\Object
      * Dispatch event "catalogrule_apply_all" and set success or error message depends on result
      *
      * @return \Magento\CatalogRule\Model\Rule\Job
+     * @api
      */
     public function applyAll()
     {

@@ -7,6 +7,7 @@ namespace Magento\CatalogInventory\Api;
 
 /**
  * Interface StockItemCriteriaInterface
+ * @api
  */
 interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInterface
 {

@@ -6,6 +6,10 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     "jquery",
     "jquery/ui",
@@ -59,7 +63,7 @@ define([
         _validateShippingMethod: function() {
             var methods = this.element.find('[name="shipping_method"]');
             if (methods.length === 0) {
-                alert($.mage.__('We are not able to ship to the selected shipping address. Please choose another address or edit the current address.'));
+                alert($.mage.__('We can\'t ship to this address. Please enter another address or edit this one.'));
                 return false;
             }
             if (methods.filter(':checked').length) {

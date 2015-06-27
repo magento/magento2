@@ -23,25 +23,35 @@ define([
             template: 'ui/grid/paging',
             pageSize: 20,
             current: 1,
+            selectProvider: '',
 
             imports: {
-                totalSelected: '<%= provider %>:config.multiselect.total',
-                totalRecords: '<%= provider %>:data.totalRecords'
+                totalSelected: '${ $.selectProvider }:totalSelected',
+                totalRecords: '${ $.provider }:data.totalRecords'
             },
 
             exports: {
-                pageSize: '<%= provider %>:params.paging.pageSize',
-                current: '<%= provider %>:params.paging.current',
-                pages: '<%= provider %>:data.pages'
+                pageSize: '${ $.provider }:params.paging.pageSize',
+                current: '${ $.provider }:params.paging.current',
+                pages: '${ $.provider }:data.pages'
+            },
+
+            links: {
+                pageSize: '${ $.storageConfig.path }.pageSize'
             },
 
             listens: {
-                'pageSize': 'onSizeChange',
-                'pageSize current': 'reload',
-                'pageSize totalRecords': 'countPages'
+                'pages': 'onPagesChange',
+                'pageSize totalRecords': 'countPages',
+                '${ $.provider }:params.filters': 'goFirst'
             }
         },
 
+        /**
+         * Initializes paging component.
+         *
+         * @returns {Paging} Chainable.
+         */
         initialize: function () {
             this._super()
                 .countPages();
@@ -49,8 +59,20 @@ define([
             return this;
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Paging} Chainable.
+         */
         initObservable: function () {
-            this._super();
+            this._super()
+                .observe([
+                    'totalSelected',
+                    'totalRecords',
+                    'pageSize',
+                    'current',
+                    'pages'
+                ]);
 
             this._current = ko.pureComputed({
                 read: function () {
@@ -79,49 +101,65 @@ define([
         },
 
         /**
-         * Increments current observable prop by val and call reload method
-         * @param {String} val
+         * Goes to the first page.
+         *
+         * @returns {Paging} Chainable.
          */
-        go: function (val) {
-            var current = this.current;
+        goFirst: function () {
+            this.current(1);
 
-            current(current() + val);
+            return this;
         },
 
         /**
-         * Calls go method with 1 as agrument
+         * Goes to the last page.
+         *
+         * @returns {Paging} Chainable.
+         */
+        goLast: function () {
+            this.current(this.pages());
+
+            return this;
+        },
+
+        /**
+         * Increments current page value.
+         *
+         * @returns {Paging} Chainable.
          */
         next: function () {
-            this.go(1);
+            this.current(this.current() + 1);
+
+            return this;
         },
 
         /**
-         * Calls go method with -1 as agrument
+         * Decrements current page value.
+         *
+         * @returns {Paging} Chainable.
          */
         prev: function () {
-            this.go(-1);
+            this.current(this.current() - 1);
+
+            return this;
         },
 
         /**
-         * Compares current and pages observables and returns boolean result
+         * Checks if current page is the first page.
          *
-         * @returns {Boolean} is current equal to pages property
-         */
-        isLast: function () {
-            return this.current() === this.pages();
-        },
-
-        /**
-         * Compares current observable to 1.
-         *
-         * @returns {Boolean} is current page first
+         * @returns {Boolean}
          */
         isFirst: function () {
             return this.current() === 1;
         },
 
-        reload: function () {
-            this.source.reload();
+        /**
+         * Checks if current page is the last page.
+         *
+         * @returns {Boolean}
+         */
+        isLast: function () {
+            return this.current() === this.pages();
         },
 
         /**
@@ -134,15 +172,16 @@ define([
         },
 
         /**
-         * Is being triggered on user interaction with page size select.
-         * Resets current page to first if needed.
+         * Listens changes of the 'pages' property.
+         * Might change current page if its' value
+         * is greater than total amount of pages.
+         *
+         * @param {Number} pages - Total amount of pages.
          */
-        onSizeChange: function () {
-            var size = this.pageSize();
+        onPagesChange: function (pages) {
+            var current = this.current;
 
-            if (size * this.current() > this.totalRecords()) {
-                this.current(1);
-            }
+            current(getInRange(current(), pages));
         }
     });
 });

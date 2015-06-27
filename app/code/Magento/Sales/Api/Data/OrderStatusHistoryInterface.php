@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * An order is a document that a web store issues to a customer. Magento generates a sales order that lists the product
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
+ * @api
  */
 interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -60,7 +61,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the created-at timestamp for the order status history.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -75,7 +76,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the ID for the order status history.
      *
-     * @return int Order status history ID.
+     * @return int|null Order status history ID.
      */
     public function getEntityId();
 
@@ -90,7 +91,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the entity name for the order status history.
      *
-     * @return string Entity name.
+     * @return string|null Entity name.
      */
     public function getEntityName();
 
@@ -118,7 +119,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the status for the order status history.
      *
-     * @return string Status.
+     * @return string|null Status.
      */
     public function getStatus();
 

@@ -19,6 +19,8 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
  * Class Context
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context implements ContextInterface
 {
@@ -199,6 +201,32 @@ class Context implements ContextInterface
     }
 
     /**
+     * @param UiComponentInterface $component
+     * @return array
+     */
+    public function getDataSourceData(UiComponentInterface $component)
+    {
+        $dataSource = $component->getDataSourceData();
+        $this->prepareDataSource($dataSource, $component);
+        $dataProviderConfig = $this->getDataProvider()->getConfigData();
+        return [
+            $this->getDataProvider()->getName() => [
+                'type' => 'dataSource',
+                'name' => $this->getDataProvider()->getName(),
+                'dataScope' => $this->getNamespace(),
+                'config' => array_replace_recursive(
+                    array_merge($dataSource, $dataProviderConfig),
+                    [
+                        'params' => [
+                            'namespace' => $this->getNamespace()
+                        ],
+                    ]
+                )
+            ]
+        ];
+    }
+
+    /**
      * Get page layout
      *
      * @return PageLayoutInterface
@@ -298,5 +326,23 @@ class Context implements ContextInterface
     public function getUrl($route = '', $params = [])
     {
         return $this->urlBuilder->getUrl($route, $params);
+    }
+
+    /**
+     * Call `prepareData` method of all the components
+     *
+     * @param array $data
+     * @param UiComponentInterface $component
+     * @return void
+     */
+    protected function prepareDataSource(array & $data, UiComponentInterface $component)
+    {
+        $childComponents = $component->getChildComponents();
+        if (!empty($childComponents)) {
+            foreach ($childComponents as $child) {
+                $this->prepareDataSource($data, $child);
+            }
+        }
+        $component->prepareDataSource($data);
     }
 }

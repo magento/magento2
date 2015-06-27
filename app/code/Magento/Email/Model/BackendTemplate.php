@@ -38,8 +38,8 @@ class BackendTemplate extends Template
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
-        \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Filesystem $filesystem,
@@ -53,8 +53,8 @@ class BackendTemplate extends Template
     ) {
         parent::__construct(
             $context,
-            $design,
             $registry,
+            $design,
             $appEmulation,
             $storeManager,
             $filesystem,

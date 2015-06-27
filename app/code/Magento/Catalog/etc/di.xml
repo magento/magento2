@@ -35,7 +35,6 @@
     <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface" type="Magento\Catalog\Model\Product\Media\GalleryEntryContent" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -186,7 +185,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
-            <argument name="defaultPriceIndexer" xsi:type="string">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
+            <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Set">
@@ -474,6 +473,13 @@
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
+            </argument>
         </arguments>
     </type>
 </config>

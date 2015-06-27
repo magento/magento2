@@ -9,7 +9,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class CreateTest extends \Magento\Backend\Utility\Controller
+class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testLoadBlockAction()
     {
@@ -33,8 +33,8 @@ class CreateTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('<div id=\"sales_order_create_search_grid\">', $html);
-        $this->assertContains('<div id=\"order-billing_method_form\">', $html);
+        $this->assertContains('<div id=\"sales_order_create_search_grid\"', $html);
+        $this->assertContains('<div id=\"order-billing_method_form\"', $html);
         $this->assertContains('id=\"shipping-method-overlay\"', $html);
         $this->assertContains('id=\"coupons:code\"', $html);
     }
@@ -57,8 +57,8 @@ class CreateTest extends \Magento\Backend\Utility\Controller
             'shipping_method' => ['shipping_method', 'id=\"shipping-method-overlay\"'],
             'billing_method' => ['billing_method', '<div id=\"order-billing_method_form\">'],
             'newsletter' => ['newsletter', 'name=\"newsletter:subscribe\"'],
-            'search' => ['search', '<div id=\"sales_order_create_search_grid\">'],
-            'search_grid' => ['search', '<div id=\"sales_order_create_search_grid\">']
+            'search' => ['search', '<div id=\"sales_order_create_search_grid\"'],
+            'search_grid' => ['search', '<div id=\"sales_order_create_search_grid\"']
         ];
     }
 

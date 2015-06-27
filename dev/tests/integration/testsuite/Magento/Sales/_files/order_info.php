@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
     \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
 );
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->setTypeId('virtual')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -29,10 +31,7 @@ $product->load(1);
 
 $addressData = include __DIR__ . '/address_data.php';
 
-$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Quote\Model\Quote\Address',
-    ['data' => $addressData]
-);
+$billingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address', ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -40,13 +39,11 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 $shippingAddress->setShippingMethod('flatrate_flatrate');
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create('Magento\Quote\Model\Quote');
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
-    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
-    )->getStore()->getId()
+    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId()
 )->setReservedOrderId(
     '100000001'
 )->setBillingAddress(
@@ -67,34 +64,22 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-$quoteManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteManagement');
+$quoteManagement = $objectManager->create('Magento\Quote\Model\QuoteManagement');
 
 $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
-$orderItems = $order->getAllItems();
-
 /** @var $item \Magento\Sales\Model\Order\Item */
-$item = $orderItems[0];
+$item = $order->getAllItems()[0];
+
+/** @var \Magento\Sales\Model\Service\Order $orderService */
+$orderService = $objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order]);
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
-$invoice = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Service\Order',
-    ['order' => $order]
-)->prepareInvoice(
-    [$item->getId() => 10]
-);
-
+$invoice = $orderService->prepareInvoice([$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 
-$creditmemo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Service\Order',
-    ['order' => $order]
-)->prepareInvoiceCreditmemo(
-    $invoice,
-    ['qtys' => [$item->getId() => 5]]
-);
+$creditmemo = $orderService->prepareInvoiceCreditmemo($invoice, ['qtys' => [$item->getId() => 5]]);
 
 foreach ($creditmemo->getAllItems() as $creditmemoItem) {
     //Workaround to return items to stock
@@ -104,13 +89,10 @@ foreach ($creditmemo->getAllItems() as $creditmemoItem) {
 $creditmemo->register();
 $creditmemo->save();
 
-$transactionSave = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Framework\DB\Transaction'
-)->addObject(
-    $creditmemo
-)->addObject(
-    $creditmemo->getOrder()
-);
+/** @var \Magento\Framework\DB\Transaction $transactionSave */
+$transactionSave = $objectManager->create('Magento\Framework\DB\Transaction')
+    ->addObject($creditmemo)
+    ->addObject($creditmemo->getOrder());
 if ($creditmemo->getInvoice()) {
     $transactionSave->addObject($creditmemo->getInvoice());
 }

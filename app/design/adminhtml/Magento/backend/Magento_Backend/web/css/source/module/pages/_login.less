@@ -35,6 +35,8 @@
         background-color: @login-box__background-color;
         border: @login-box__border;
         box-shadow: @login-box__shadow;
+        display: block;
+        float: none;
         margin: auto;
         max-width: @login-box__max-width;
         min-height: @login-box__min-height;
@@ -61,13 +63,13 @@
         font-size: 2.6rem;
         font-weight: @font-weight__light;
         line-height: @line-height__s;
-        margin: -1rem 0 .5rem;
+        margin: -1rem 0 2.5rem;
     }
     .admin__field-info {
         margin-bottom: 3rem;
     }
     .admin__field {
-        .extend__field-rows();
+        &:extend(.abs-field-rows all);
     }
     .messages {
         margin-top: -1rem;

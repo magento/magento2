@@ -88,7 +88,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $massactionAction = '#massaction-select';
+    protected $massactionAction = '[data-menu="grid-mass-select"]';
 
     /**
      * Massaction 'Submit' button
@@ -103,13 +103,6 @@ abstract class Grid extends Block
      * @var string
      */
     protected $templateBlock = './ancestor::body';
-
-    /**
-     * Selector of element to wait for. If set by child will wait for element after action
-     *
-     * @var string
-     */
-    protected $waitForSelector;
 
     /**
      * Locator type of waitForSelector
@@ -133,13 +126,6 @@ abstract class Grid extends Block
     protected $option = '[name="status"]';
 
     /**
-     * Filter button
-     *
-     * @var string
-     */
-    protected $filterButton = '[data-action="grid-filter-expand"]';
-
-    /**
      * Active class
      *
      * @var string
@@ -151,7 +137,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $rowTemplate = 'td[contains(text(),normalize-space("%s"))]';
+    protected $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
 
     /**
      * Secondary part of row locator template for getRow() method with strict option
@@ -172,14 +158,14 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $actionNextPage = '.pager .action-next';
+    protected $actionNextPage = '[class*=data-grid-pager] .action-next';
 
     /**
      * Locator for disabled next page action
      *
      * @var string
      */
-    protected $actionNextPageDisabled = '.pager .action-next.disabled';
+    protected $actionNextPageDisabled = '[class*=data-grid-pager] .action-next.disabled';
 
     /**
      * First row selector
@@ -187,6 +173,13 @@ abstract class Grid extends Block
      * @var string
      */
     protected $firstRowSelector = '';
+
+    /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '[data-role="row"] .empty-text';
 
     /**
      * Get backend abstract block
@@ -206,7 +199,7 @@ abstract class Grid extends Block
      * @param array $filters
      * @throws \Exception
      */
-    private function prepareForSearch(array $filters)
+    protected function prepareForSearch(array $filters)
     {
         foreach ($filters as $key => $value) {
             if (isset($this->filters[$key])) {
@@ -231,7 +224,6 @@ abstract class Grid extends Block
      */
     public function search(array $filter)
     {
-        $this->openFilterBlock();
         $this->resetFilter();
         $this->prepareForSearch($filter);
         $this->_rootElement->find($this->searchButton, Locator::SELECTOR_CSS)->click();
@@ -246,12 +238,10 @@ abstract class Grid extends Block
      */
     public function searchAndOpen(array $filter)
     {
-        $this->openFilterBlock();
         $this->search($filter);
         $rowItem = $this->_rootElement->find($this->rowItem, Locator::SELECTOR_CSS);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink, Locator::SELECTOR_CSS)->click();
-            $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
         }
@@ -276,20 +266,6 @@ abstract class Grid extends Block
     }
 
     /**
-     * Method that waits for the configured selector using class attributes.
-     */
-    protected function waitForElement()
-    {
-        if (!empty($this->waitForSelector)) {
-            if ($this->waitForSelectorVisible) {
-                $this->getTemplateBlock()->waitForElementVisible($this->waitForSelector, $this->waitForSelectorType);
-            } else {
-                $this->getTemplateBlock()->waitForElementNotVisible($this->waitForSelector, $this->waitForSelectorType);
-            }
-        }
-    }
-
-    /**
      * Search for item and select it
      *
      * @param array $filter
@@ -297,7 +273,6 @@ abstract class Grid extends Block
      */
     public function searchAndSelect(array $filter)
     {
-        $this->openFilterBlock();
         $this->search($filter);
         $selectItem = $this->_rootElement->find($this->selectItem);
         if ($selectItem->isVisible()) {
@@ -312,8 +287,7 @@ abstract class Grid extends Block
      */
     public function resetFilter()
     {
-        $this->openFilterBlock();
-        $this->_rootElement->find($this->resetButton, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->resetButton)->click();
         $this->waitLoader();
     }
 
@@ -328,6 +302,9 @@ abstract class Grid extends Block
      */
     public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
+        if ($this->_rootElement->find($this->noRecords)->isVisible()) {
+            return;
+        }
         if (!is_array($action)) {
             $action = [$action => '-'];
         }
@@ -370,7 +347,6 @@ abstract class Grid extends Block
      */
     protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
     {
-        $this->openFilterBlock();
         if ($isSearchable) {
             $this->search($filter);
         }
@@ -428,33 +404,10 @@ abstract class Grid extends Block
      */
     public function sortGridByField($field, $sort = "desc")
     {
-        $this->openFilterBlock();
         $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $field, $sort));
         if ($sortBlock->isVisible()) {
             $sortBlock->click();
             $this->waitLoader();
-        }
-    }
-
-    /**
-     * Open Filter Block
-     *
-     * @return void
-     */
-    protected function openFilterBlock()
-    {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
-
-        $toggleFilterButton = $this->_rootElement->find($this->filterButton);
-        $searchButton = $this->_rootElement->find($this->searchButton);
-        if ($toggleFilterButton->isVisible() && !$searchButton->isVisible()) {
-            $toggleFilterButton->click();
-            $browser = $this->_rootElement;
-            $browser->waitUntil(
-                function () use ($searchButton) {
-                    return $searchButton->isVisible() ? true : null;
-                }
-            );
         }
     }
 

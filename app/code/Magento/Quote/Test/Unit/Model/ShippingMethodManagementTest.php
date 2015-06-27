@@ -98,6 +98,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
                 'requestShippingRates',
                 'setShippingMethod',
                 '__wakeup',
+                'getShippingRateByCode',
             ],
             [],
             '',
@@ -137,77 +138,35 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->get($cartId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Line "WrongShippingMethod" doesn't contain delimiter _
-     */
-    public function testGetMethodWhenShippingMethodIsInvalid()
-    {
-        $cartId = 884;
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(34));
-        $this->shippingAddressMock->expects($this->exactly(2))
-            ->method('getShippingMethod')
-            ->will($this->returnValue('WrongShippingMethod'));
-
-        $this->assertNull($this->model->get($cartId));
-    }
-
     public function testGetMethod()
     {
         $cartId = 666;
         $countryId = 1;
+        $currencyCode = 'US_dollar';
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getQuoteCurrencyCode')->willReturn($currencyCode);
         $this->shippingAddressMock->expects($this->any())
             ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddressMock->expects($this->any())
             ->method('getShippingMethod')->will($this->returnValue('one_two'));
+
+        $this->shippingAddressMock->expects($this->once())->method('collectShippingRates')->willReturnSelf();
+        $shippingRateMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
+
         $this->shippingAddressMock->expects($this->once())
-            ->method('getShippingDescription')->will($this->returnValue('carrier - method'));
-        $this->shippingAddressMock->expects($this->once())
-            ->method('getShippingAmount')->will($this->returnValue(123.56));
-        $this->shippingAddressMock->expects($this->once())
-            ->method('getBaseShippingAmount')->will($this->returnValue(100.06));
+            ->method('getShippingRateByCode')
+            ->with('one_two')
+            ->willReturn($shippingRateMock);
 
         $this->shippingMethodMock = $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
-
-        $this->methodDataFactoryMock->expects($this->once())
-            ->method('create')->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setCarrierCode')
-            ->with('one')
+        $this->converterMock->expects($this->once())
+            ->method('modelToDataObject')
+            ->with($shippingRateMock, $currencyCode)
             ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setMethodCode')
-            ->with('two')
-            ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setCarrierTitle')
-            ->with('carrier')
-            ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setMethodTitle')
-            ->with('method')
-            ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setAmount')
-            ->with('123.56')
-            ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setBaseAmount')
-            ->with('100.06')
-            ->willReturn($this->shippingMethodMock);
-        $this->shippingMethodMock->expects($this->once())
-            ->method('setAvailable')
-            ->with(true)
-            ->willReturn($this->shippingMethodMock);
-
         $this->model->get($cartId);
     }
 
@@ -421,7 +380,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(false));
+            ->method('getShippingRateByCode')->will($this->returnValue(false));
         $this->shippingAddressMock->expects($this->never())->method('save');
 
         $this->model->set($cartId, $carrierCode, $methodCode);
@@ -462,7 +421,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(true));
+            ->method('getShippingRateByCode')->will($this->returnValue(true));
         $exception = new \Exception('Custom Error');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())
@@ -523,7 +482,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(true));
+            ->method('getShippingRateByCode')->will($this->returnValue(true));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
 

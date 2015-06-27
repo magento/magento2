@@ -35,6 +35,11 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     protected $componentData = [];
 
     /**
+     * @var DataSourceInterface[]
+     */
+    protected $dataSources = [];
+
+    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -48,7 +53,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     ) {
         $this->context = $context;
         $this->components = $components;
-        parent::__construct($data);
+        $this->_data = array_replace_recursive($this->_data, $data);
     }
 
     /**
@@ -62,13 +67,32 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     }
 
     /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getData('name');
+    }
+
+    /**
      * Prepare component configuration
      *
      * @return void
      */
     public function prepare()
     {
-        //
+        $jsConfig = $this->getJsConfig($this);
+        if (isset($jsConfig['provider'])) {
+            unset($jsConfig['extends']);
+            $this->getContext()->addComponentDefinition($this->getName(), $jsConfig);
+        } else {
+            $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+        }
+        if ($this->hasData('buttons')) {
+            $this->getContext()->addButtons($this->getData('buttons'), $this);
+        }
     }
 
     /**
@@ -90,16 +114,6 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     {
         $result = $this->getContext()->getRenderEngine()->render($this, $this->getTemplate());
         return $result;
-    }
-
-    /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->getData('name');
     }
 
     /**
@@ -134,16 +148,6 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     }
 
     /**
-     * Get template
-     *
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->getData('template') . '.xhtml';
-    }
-
-    /**
      * Render child component
      *
      * @param string $name
@@ -156,6 +160,42 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
             $result = $this->components[$name]->render();
         }
         return $result;
+    }
+
+    /**
+     * Get template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->getData('template') . '.xhtml';
+    }
+
+    /**
+     * Get component configuration
+     *
+     * @return array
+     */
+    public function getConfiguration()
+    {
+        return (array) $this->getData('config');
+    }
+
+    /**
+     * Get configuration of related JavaScript Component
+     * (force extending the root component if component does not extend other component)
+     *
+     * @param UiComponentInterface $component
+     * @return array
+     */
+    public function getJsConfig(UiComponentInterface $component)
+    {
+        $jsConfig = (array) $component->getData('js_config');
+        if (!isset($jsConfig['extends'])) {
+            $jsConfig['extends'] = $component->getContext()->getNamespace();
+        }
+        return $jsConfig;
     }
 
     /**
@@ -183,79 +223,21 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     }
 
     /**
-     * Set component configuration
+     * Prepare Data Source
      *
+     * @param array $dataSource
      * @return void
      */
-    protected function prepareConfiguration()
+    public function prepareDataSource(array & $dataSource)
     {
-        $config = $this->getDefaultConfiguration();
-        if ($this->hasData('config')) {
-            $config = array_replace_recursive($config, $this->getData('config'));
-        }
-
-        $this->setData('config', $config);
+        //
     }
 
     /**
-     * Get default parameters
-     *
-     * @return array
-     */
-    protected function getDefaultConfiguration()
-    {
-        return [];
-    }
-
-    /**
-     * Get JS configuration
-     *
-     * @param UiComponentInterface $component
-     * @param null|string $extends
-     * @return array
-     */
-    protected function getConfiguration(UiComponentInterface $component, $extends = null)
-    {
-        $jsConfig = (array) $component->getData('js_config');
-        if (isset($jsConfig['extends'])) {
-            return $jsConfig;
-        } else if (null !== $extends) {
-            $jsConfig['extends'] = $extends;
-        } else {
-            $jsConfig['extends'] = $component->getContext()->getNamespace();
-        }
-
-        return $jsConfig;
-    }
-
-    /**
-     * Get JS config
-     *
-     * @return array|string
-     */
-    public function getJsConfig()
-    {
-        return (array) $this->getData('config');
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDataSourceData()
     {
-        $dataSources = [];
-        foreach ($this->getChildComponents() as $component) {
-            if ($component instanceof DataSourceInterface) {
-                $dataSources[] = [
-                    'type' => $component->getComponentName(),
-                    'name' => $component->getName(),
-                    'dataScope' => $component->getContext()->getNamespace(),
-                    'config' => [
-                        'data' => $component->getDataProvider()->getData()
-                    ]
-                ];
-            }
-        }
-        return $dataSources;
+        return [];
     }
 }

@@ -17,6 +17,14 @@ use Magento\Framework\Exception\LocalizedException;
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Bundle\Model\Resource\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bundleFactory;
+    /**
+     * @var \Magento\Bundle\Model\SelectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bundleModelSelection;
+    /**
      * @var \Magento\Bundle\Model\Product\Type
      */
     protected $model;
@@ -96,19 +104,20 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['convert'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $bundleModelSelection = $this->getMockBuilder('\Magento\Bundle\Model\SelectionFactory')
+        $this->bundleModelSelection = $this->getMockBuilder('Magento\Bundle\Model\SelectionFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\Resource\BundleFactory')
+        $this->bundleFactory = $this->getMockBuilder('\Magento\Bundle\Model\Resource\BundleFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
             'Magento\Bundle\Model\Product\Type',
             [
-                'bundleModelSelection' => $bundleModelSelection,
-                'bundleFactory' => $bundleFactory,
+                'bundleModelSelection' => $this->bundleModelSelection,
+                'bundleFactory' => $this->bundleFactory,
                 'bundleCollection' => $this->bundleCollection,
                 'bundleOption' => $this->bundleOptionFactory,
                 'catalogData' => $this->catalogData,
@@ -686,7 +695,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('We cannot add this item to your shopping cart.', $result);
+        $this->assertEquals('We can\'t add this item to your shopping cart right now.', $result);
     }
 
     /**
@@ -2426,5 +2435,73 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->catalogProduct->expects($this->once())
             ->method('getSkipSaleableCheck')
             ->willReturn(false);
+    }
+
+    public function testSave()
+    {
+        $options = [
+            'some_option' => ['option_id' => '', 'delete' => false],
+        ];
+        $selections = [
+            'some_option' => [
+                123 => ['selection_id' => '', 'delete' => false],
+            ]
+        ];
+
+        $resource = $this->getMockBuilder('Magento\Bundle\Model\Resource\Bundle')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->bundleFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($resource);
+
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(
+                [
+                    'getStoreId',
+                    'getOrigData',
+                    'getData',
+                    'getBundleOptionsData',
+                    'getBundleSelectionsData'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->once())
+            ->method('getBundleOptionsData')
+            ->willReturn($options);
+        $product->expects($this->once())
+            ->method('getBundleSelectionsData')
+            ->willReturn($selections);
+        $option = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+            ->setMethods(['setData', 'setParentId', 'setStoreId', 'isDeleted', 'save', 'getOptionId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $option->expects($this->once())->method('setData')->willReturnSelf();
+        $option->expects($this->once())->method('setParentId')->willReturnSelf();
+        $option->expects($this->once())->method('setStoreId')->willReturnSelf();
+        $this->bundleOptionFactory->expects($this->once())->method('create')->will($this->returnValue($option));
+
+        $selection = $this->getMockBuilder('Magento\Bundle\Model\Selection')
+            ->setMethods(['setData', 'setOptionId', 'setParentProductId', 'setWebsiteId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selection->expects($this->once())->method('setData')->willReturnSelf();
+        $selection->expects($this->once())->method('setOptionId')->willReturnSelf();
+        $selection->expects($this->once())->method('setParentProductId')->willReturnSelf();
+        $selection->expects($this->once())->method('setWebsiteId')->willReturnSelf();
+        $selection->expects($this->once())->method('setParentProductId')->willReturnSelf();
+        $this->bundleModelSelection->expects($this->once())->method('create')->willReturn($selection);
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->setMethods(['getWebsiteId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+        $store->expects($this->once())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+        $this->model->save($product);
     }
 }

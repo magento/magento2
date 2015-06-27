@@ -11,6 +11,7 @@ namespace Magento\Multishipping\Model\Checkout\Type;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Multishipping checkout model
@@ -453,6 +454,7 @@ class Multishipping extends \Magento\Framework\Object
      *
      * @param int $quoteItemId
      * @param array $data array('qty'=>$qty, 'address'=>$customerAddressId)
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -465,6 +467,10 @@ class Multishipping extends \Magento\Framework\Object
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {
+            if (!$this->isAddressIdApplicable($addressId)) {
+                throw new LocalizedException(__('Please check shipping address information.'));
+            }
+
             /**
              * Skip item processing if qty 0
              */
@@ -503,10 +509,14 @@ class Multishipping extends \Magento\Framework\Object
      * Reimport customer address info to quote shipping address
      *
      * @param int $addressId customer address id
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      */
     public function updateQuoteCustomerShippingAddress($addressId)
     {
+        if (!$this->isAddressIdApplicable($addressId)) {
+            throw new LocalizedException(__('Please check shipping address information.'));
+        }
         try {
             $address = $this->addressRepository->getById($addressId);
         } catch (\Exception $e) {
@@ -530,10 +540,14 @@ class Multishipping extends \Magento\Framework\Object
      * Reimport customer billing address to quote
      *
      * @param int $addressId customer address id
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      */
     public function setQuoteCustomerBillingAddress($addressId)
     {
+        if (!$this->isAddressIdApplicable($addressId)) {
+            throw new LocalizedException(__('Please check billing address information.'));
+        }
         try {
             $address = $this->addressRepository->getById($addressId);
         } catch (\Exception $e) {
@@ -579,10 +593,10 @@ class Multishipping extends \Magento\Framework\Object
     public function setPaymentMethod($payment)
     {
         if (!isset($payment['method'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment method is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('A payment method is not defined.'));
         }
         if (!$this->paymentSpecification->isSatisfiedBy($payment['method'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The requested Payment Method is not available for multishipping.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The requested payment method is not available for multishipping.'));
         }
         $quote = $this->getQuote();
         $quote->getPayment()->importData($payment);
@@ -930,5 +944,20 @@ class Multishipping extends \Magento\Framework\Object
     public function getCustomer()
     {
         return $this->_customerSession->getCustomerDataObject();
+    }
+
+    /**
+     * Check if specified address ID belongs to customer.
+     *
+     * @param $addressId
+     * @return bool
+     */
+    protected function isAddressIdApplicable($addressId)
+    {
+        $applicableAddressIds = array_map(function($address) {
+            /** @var \Magento\Customer\Api\Data\AddressInterface $address */
+            return $address->getId();
+        }, $this->getCustomer()->getAddresses());
+        return in_array($addressId, $applicableAddressIds);
     }
 }

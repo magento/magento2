@@ -44,7 +44,7 @@ class Backend extends \Magento\Framework\Validator\AbstractValidator
                 $result = $backend->validate($entity);
                 if (false === $result) {
                     $this->_messages[$attribute->getAttributeCode()][] = __(
-                        'The value of attribute "%1" is invalid',
+                        'The value of attribute "%1" is invalid.',
                         $attribute->getAttributeCode()
                     );
                 } elseif (is_string($result)) {

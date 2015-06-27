@@ -1,0 +1,95 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li id="opc-billing"
+    data-bind="visible: isActive(), attr: {'class': stepClassAttributes() }"
+    role="presentation"
+    data-collapsible="true">
+    <div class="step-title"
+         data-role="title"
+         data-bind="click: navigateToCurrentStep"
+         aria-controls="checkout-step-login"
+         role="tab">
+        <span class="number" data-bind="text: stepNumber()"></span>
+        <h2 data-bind="text: $t('Checkout Method')"></h2>
+    </div>
+    <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()" >
+        <!-- ko foreach: getRegion('before') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+        <div class="login-wrapper">
+            <!-- ko if: (isGuestCheckoutAllowed) -->
+            <div class="block block-guest">
+                <div class="block-title">
+                    <strong id="block-guest-heading" role="heading" aria-level="2">
+                    <!--ko text: $t('Check Out as a Guest')--><!--/ko-->
+                    </strong>
+                </div>
+                <div class="block-content" aria-labelledby="block-guest-heading">
+                    <div class="actions-toolbar">
+                        <div class="primary">
+                            <!-- ko if: (isGuestCheckoutAllowed)-->
+                            <button data-bind="visible: isGuestCheckoutAllowed, click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Continue')"></span></button>
+                            <!-- /ko -->
+                            <!-- ko ifnot: isGuestCheckoutAllowed -->
+                                <!-- ko if: isCustomerLoginRequired -->
+                                    <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
+                                    <button data-bind="click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"registerUrl"}'><span data-bind="text: $t('Create an Account')"></span></button>
+                                <!-- /ko -->
+                                <!-- ko ifnot: isCustomerLoginRequired -->
+                                    <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
+                                    <button data-bind="click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Create an Account')"></span></button>
+                                <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+            <div class="block block-customer-login">
+                <div class="block-title">
+                    <strong id="block-customer-login-heading" role="heading" aria-level="2" data-bind="text: $t('Login')"></strong>
+                </div>
+                <div class="block-content" aria-labelledby="block-customer-login-heading">
+                    <form class="form login" data-role="login"
+                          data-bind="submit:login"
+                          method="post"
+                          data-mage-init='{"validation":{}}'>
+                        <fieldset class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
+                            <div class="field note" data-bind="text: $t('Already registered? Please sign in below:')"></div>
+                            <div class="field email required">
+                                <label class="label" for="login-email"><span data-bind="text: $t('Email')"></span></label>
+                                <div class="control">
+                                    <input type="email" class="input-text" id="login-email" name="username" data-validate="{required:true, 'validate-email':true}" data-bind="value: username" />
+                                </div>
+                            </div>
+                            <div class="field password required">
+                                <label for="login-password" class="label"><span data-bind="text: $t('Password')"></span></label>
+                                <div class="control">
+                                    <input type="password" class="input-text" id="login-password" name="password" data-bind="value:password" data-validate="{required:true, 'validate-password':true}"/>
+                                </div>
+                            </div>
+                            <!-- ko foreach: getRegion('additional-login-form-fields') -->
+                            <!-- ko template: getTemplate() --><!-- /ko -->
+                            <!-- /ko -->
+                            <div class="actions-toolbar">
+                                <input name="context" type="hidden" value="checkout" />
+                                <div class="primary">
+                                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+                                </div>
+                                <div class="secondary">
+                                    <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
+                                        <span data-bind="text: $t('Forgot Your Password?')"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

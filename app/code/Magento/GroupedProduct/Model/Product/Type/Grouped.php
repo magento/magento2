@@ -378,7 +378,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         foreach ($associatedProducts as $subProduct) {
             $qty = $productsInfo[$subProduct->getId()];
-            if (!is_numeric($qty)) {
+            if (!is_numeric($qty) || empty($qty)) {
                 continue;
             }
 

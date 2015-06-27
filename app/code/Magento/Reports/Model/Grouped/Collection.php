@@ -5,7 +5,7 @@
  */
 namespace Magento\Reports\Model\Grouped;
 
-use Magento\Framework\Data\Collection\Db;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 
 class Collection extends \Magento\Framework\Data\Collection
 {
@@ -25,6 +25,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set column to group by
+     * @codeCoverageIgnore
      *
      * @param string $column
      * @return $this
@@ -61,8 +62,9 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Setter for resource collection
+     * @codeCoverageIgnore
      *
-     * @param Db $collection
+     * @param DbCollection $collection
      * @return $this
      */
     public function setResourceCollection($collection)

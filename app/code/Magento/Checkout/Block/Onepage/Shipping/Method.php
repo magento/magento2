@@ -9,6 +9,8 @@ namespace Magento\Checkout\Block\Onepage\Shipping;
  * One page checkout status
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @removeCandidate
  */
 class Method extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {

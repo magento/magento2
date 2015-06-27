@@ -56,7 +56,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setFirstname('John')
             ->setLastname('Smith')
             ->setCompany('CompanyName')
-            ->setCustomAttributes([]);
+            ->setRegionId(1);
 
         /* XXX: would it be better to have a clear method for this? */
         $address2 = $this->_addressFactory->create()
@@ -70,7 +70,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setTelephone('3234676')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setCustomAttributes([]);
+            ->setRegionId(1);
 
         $this->_expectedAddresses = [$address, $address2];
     }
@@ -316,7 +316,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
+        /** @var \Magento\Customer\Api\Data\AddressInterface $item */
         foreach ($searchResults->getItems() as $item) {
             $this->assertEquals(
                 $expectedResult[$item->getId()]['city'],

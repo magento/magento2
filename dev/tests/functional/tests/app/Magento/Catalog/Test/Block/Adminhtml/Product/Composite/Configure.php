@@ -13,45 +13,58 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 
 /**
- * Class Configure
- * Adminhtml catalog product composite configure block
+ * Adminhtml catalog product composite configure block.
  */
 class Configure extends AbstractConfigureBlock
 {
     /**
-     * Custom options CSS selector
+     * Configure form selector.
+     *
+     * @var string
+     */
+    protected $configureForm = '#product_composite_configure_form';
+
+    /**
+     * Custom options CSS selector.
      *
      * @var string
      */
     protected $customOptionsSelector = '#product_composite_configure_fields_options';
 
     /**
-     * Selector for "Ok" button
+     * Product quantity selector.
+     *
+     * @var string
+     */
+    protected $qty = '[name="qty"]';
+
+    /**
+     * Selector for "Ok" button.
      *
      * @var string
      */
     protected $okButton = '.ui-button.action-primary';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Set quantity
+     * Set quantity.
      *
      * @param int $qty
      * @return void
      */
     public function setQty($qty)
     {
-        $this->_fill($this->dataMapping(['qty' => $qty]));
+        $this->_rootElement->find($this->qty)->setValue($qty);
     }
 
     /**
-     * Fill in the option specified for the product
+     * Fill in the option specified for the product.
      *
      * @param FixtureInterface $product
      * @return void
@@ -61,15 +74,17 @@ class Configure extends AbstractConfigureBlock
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
 
+        $this->waitForFormVisible();
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
             $this->setQty($checkoutData['qty']);
         }
         $this->clickOk();
+        $this->waitForFormNotVisible();
     }
 
     /**
-     * Click "Ok" button
+     * Click "Ok" button.
      *
      * @return void
      */
@@ -80,7 +95,39 @@ class Configure extends AbstractConfigureBlock
     }
 
     /**
-     * Get backend abstract block
+     * Wait for form is visible.
+     *
+     * @return void
+     */
+    protected function waitForFormVisible()
+    {
+        $context = $this->_rootElement;
+        $selector = $this->configureForm;
+        $this->browser->waitUntil(
+            function () use ($context, $selector) {
+                return $context->find($selector)->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for form is not visible.
+     *
+     * @return void
+     */
+    protected function waitForFormNotVisible()
+    {
+        $context = $this->_rootElement;
+        $selector = $this->configureForm;
+        $this->browser->waitUntil(
+            function () use ($context, $selector) {
+                return $context->find($selector)->isVisible() ? null : true;
+            }
+        );
+    }
+
+    /**
+     * Get backend abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */

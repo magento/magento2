@@ -192,7 +192,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                             ],
                             'unit_price'        => $price,
                             'quantity'          => 1,
-                            'tax_included'      => 1,
+                            'is_tax_included'      => 1,
                             'short_description' => $name,
                         ],
                     ],

@@ -33,7 +33,7 @@
                            name="bundle_option[<?php echo $_option->getId() ?>]"<?php echo ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
                            value=""
                            onclick="ProductConfigure.bundleControl.changeSelection(this)" />
-                    <label class="label"
+                    <label class="admin__field-label"
                            for="bundle-option-<?php echo $_option->getId() ?>"><span><?php echo __('None') ?></span></label>
                 </div>
             <?php endif; ?>
@@ -49,7 +49,7 @@
                            onclick="ProductConfigure.bundleControl.changeSelection(this)"
                            price="<?php echo $block->getSelectionPrice($_selection) ?>"
                            qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input" />
-                    <label class="label"
+                    <label class="admin__field-label"
                            for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"><span><?php echo $block->getSelectionTitlePrice($_selection) ?></span></label>
                 <?php if ($_option->getRequired()): ?>
                     <?php echo $block->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container') ?>
@@ -60,7 +60,7 @@
         <?php endif; ?>
             <div class="field admin__field qty">
                 <label class="label admin__field-label"
-                       for="bundle-option-<?php echo $_option->getId() ?>-qty-input"><span><?php echo __('Qty:') ?></span></label>
+                       for="bundle-option-<?php echo $_option->getId() ?>-qty-input"><span><?php echo __('Quantity:') ?></span></label>
                 <div class="control admin__field-control"><input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
                         id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
                         class="input-text admin__control-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"

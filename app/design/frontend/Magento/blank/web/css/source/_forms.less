@@ -60,9 +60,15 @@ fieldset.field {
     border: 0;
     padding: 0;
 }
+
 .field {
     &.date {
         &:extend(.abs-field-date all);
+        .time-picker {
+            display: inline-block;
+            margin-top: @indent__s;
+            white-space: nowrap;
+        }
     }
 }
 

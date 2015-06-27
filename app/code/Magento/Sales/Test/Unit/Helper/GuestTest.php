@@ -139,10 +139,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             ->with(Guest::COOKIE_PATH)
             ->will($this->returnSelf());
         $metaDataMock->expects($this->once())
-            ->method('setDuration')
-            ->with(Guest::COOKIE_LIFETIME)
-            ->will($this->returnSelf());
-        $metaDataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
             ->will($this->returnSelf());
@@ -187,10 +183,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $metaDataMock->expects($this->once())
             ->method('setPath')
             ->with(Guest::COOKIE_PATH)
-            ->will($this->returnSelf());
-        $metaDataMock->expects($this->once())
-            ->method('setDuration')
-            ->with(Guest::COOKIE_LIFETIME)
             ->will($this->returnSelf());
         $metaDataMock->expects($this->once())
             ->method('setHttpOnly')

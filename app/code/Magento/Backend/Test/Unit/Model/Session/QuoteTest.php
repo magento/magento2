@@ -177,7 +177,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $this->orderFactoryMock = $this->getMock(
             'Magento\Sales\Model\OrderFactory',
-            [],
+            ['create'],
             [],
             '',
             false

@@ -21,7 +21,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     const KEY_TAX_CLASS_KEY        = 'tax_class_key';
     const KEY_UNIT_PRICE           = 'unit_price';
     const KEY_QUANTITY             = 'quantity';
-    const KEY_TAX_INCLUDED         = 'tax_included';
+    const KEY_IS_TAX_INCLUDED      = 'is_tax_included';
     const KEY_SHORT_DESCRIPTION    = 'short_description';
     const KEY_DISCOUNT_AMOUNT      = 'discount_amount';
     const KEY_PARENT_CODE          = 'parent_code';
@@ -72,9 +72,9 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     /**
      * {@inheritdoc}
      */
-    public function getTaxIncluded()
+    public function getIsTaxIncluded()
     {
-        return $this->getData(self::KEY_TAX_INCLUDED);
+        return $this->getData(self::KEY_IS_TAX_INCLUDED);
     }
 
     /**
@@ -180,7 +180,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setIsTaxIncluded($isTaxIncluded)
     {
-        return $this->setData(self::KEY_TAX_INCLUDED, $isTaxIncluded);
+        return $this->setData(self::KEY_IS_TAX_INCLUDED, $isTaxIncluded);
     }
 
     /**

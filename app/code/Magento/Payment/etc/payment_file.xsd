@@ -89,7 +89,6 @@
         </xs:annotation>
         <xs:all>
             <xs:element name="allow_multiple_address" type="xs:integer" minOccurs="0" />
-            <xs:element name="allow_multiple_with_3dsecure" type="xs:integer" minOccurs="0" />
         </xs:all>
         <xs:attribute name="name" type="xs:ID" use="required" />
     </xs:complexType>

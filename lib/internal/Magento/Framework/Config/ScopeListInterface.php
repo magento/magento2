@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Config scope list interface.
+ *
+ * @api
+ */
 interface ScopeListInterface
 {
     /**

@@ -1,14 +1,24 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-class JsonProductInfo extends \Magento\Review\Controller\Adminhtml\Product
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Review\Model\RatingFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Object;
+use Magento\Framework\Controller\ResultFactory;
+
+class JsonProductInfo extends ProductController
 {
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**
@@ -19,33 +29,35 @@ class JsonProductInfo extends \Magento\Review\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Model\RatingFactory $ratingFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        Context $context,
+        Registry $coreRegistry,
+        ReviewFactory $reviewFactory,
+        RatingFactory $ratingFactory,
+        ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $coreRegistry, $reviewFactory, $ratingFactory);
         $this->productRepository = $productRepository;
+        parent::__construct($context, $coreRegistry, $reviewFactory, $ratingFactory);
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new Object();
         $id = $this->getRequest()->getParam('id');
         if (intval($id) > 0) {
             $product = $this->productRepository->getById($id);
-
             $response->setId($id);
             $response->addData($product->getData());
             $response->setError(0);
         } else {
             $response->setError(1);
-            $response->setMessage(__('We can\'t get the product ID.'));
+            $response->setMessage(__('We can\'t retrieve the product ID.'));
         }
-        $this->getResponse()->representJson($response->toJSON());
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($response->toArray());
+        return $resultJson;
     }
 }

@@ -62,7 +62,6 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
             $data
         );
         $this->currentCustomer = $currentCustomer;
-        $this->_isScopePrivate = true;
     }
 
     /**

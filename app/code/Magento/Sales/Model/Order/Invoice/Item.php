@@ -45,11 +45,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
     protected $_eventObject = 'invoice_item';
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|null
-     */
-    protected $_invoice = null;
-
-    /**
      * @var \Magento\Sales\Model\Order\Item|null
      */
     protected $_orderItem = null;
@@ -66,7 +61,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -76,7 +71,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -104,23 +99,24 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Declare invoice instance
      *
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $invoice
      * @return $this
      */
-    public function setInvoice(\Magento\Sales\Model\Order\Invoice $invoice)
+    public function setInvoice(\Magento\Sales\Api\Data\InvoiceInterface $invoice)
     {
-        $this->_invoice = $invoice;
-        return $this;
+        return $this->setData(self::INVOICE, $invoice);
     }
 
     /**
      * Retrieve invoice instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Sales\Model\Order\Invoice
      */
     public function getInvoice()
     {
-        return $this->_invoice;
+        return $this->getData(self::INVOICE);
     }
 
     /**
@@ -156,31 +152,14 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Declare qty
      *
+     * @codeCoverageIgnore
+     *
      * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        $qtyToInvoice = sprintf("%F", $this->getOrderItem()->getQtyToInvoice());
-        $qty = sprintf("%F", $qty);
-        if ($qty <= $qtyToInvoice || $this->getOrderItem()->isDummy()) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to invoice item "%1".', $this->getName())
-            );
-        }
-        return $this;
+        return $this->setData(self::QTY, $qty);
     }
 
     /**
@@ -195,8 +174,12 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() + $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() + $this->getBaseTaxAmount());
-        $orderItem->setHiddenTaxInvoiced($orderItem->getHiddenTaxInvoiced() + $this->getHiddenTaxAmount());
-        $orderItem->setBaseHiddenTaxInvoiced($orderItem->getBaseHiddenTaxInvoiced() + $this->getBaseHiddenTaxAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced(
+            $orderItem->getDiscountTaxCompensationInvoiced() + $this->getDiscountTaxCompensationAmount()
+        );
+        $orderItem->setBaseDiscountTaxCompensationInvoiced(
+            $orderItem->getBaseDiscountTaxCompensationInvoiced() + $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() + $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() + $this->getBaseDiscountAmount());
@@ -218,8 +201,12 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() - $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() - $this->getBaseTaxAmount());
-        $orderItem->setHiddenTaxInvoiced($orderItem->getHiddenTaxInvoiced() - $this->getHiddenTaxAmount());
-        $orderItem->setBaseHiddenTaxInvoiced($orderItem->getBaseHiddenTaxInvoiced() - $this->getBaseHiddenTaxAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced(
+            $orderItem->getDiscountTaxCompensationInvoiced() - $this->getDiscountTaxCompensationAmount()
+        );
+        $orderItem->setBaseDiscountTaxCompensationInvoiced(
+            $orderItem->getBaseDiscountTaxCompensationInvoiced() - $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() - $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());
@@ -278,6 +265,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return false;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns additional_data
      *
@@ -309,13 +297,13 @@ class Item extends AbstractModel implements InvoiceItemInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceItemInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -389,13 +377,13 @@ class Item extends AbstractModel implements InvoiceItemInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceItemInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -508,7 +496,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
         return $this->getData(InvoiceItemInterface::TAX_AMOUNT);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
@@ -672,17 +659,17 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceItemInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceItemInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**

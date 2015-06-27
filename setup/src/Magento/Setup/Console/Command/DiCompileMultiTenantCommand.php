@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Store\Model\StoreManager;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,6 +45,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     const INPUT_KEY_GENERATION = 'generation';
     const INPUT_KEY_DI= 'di';
     const INPUT_KEY_EXCLUDE_PATTERN= 'exclude-pattern';
+    /**#@- */
+
+    /**#@+
+     * Possible values for serializer
+     */
+    const SERIALIZER_VALUE_SERIALIZE = 'serialize';
+    const SERIALIZER_VALUE_IGBINARY = 'igbinary';
     /**#@- */
 
     /**
@@ -109,7 +115,8 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 self::INPUT_KEY_SERIALIZER,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Serializer function that should be used (serialize|igbinary) default: serialize'
+                'Serializer function that should be used (' . self::SERIALIZER_VALUE_SERIALIZE . '|'
+                . self::SERIALIZER_VALUE_IGBINARY . ') default: ' . self::SERIALIZER_VALUE_SERIALIZE
             ),
             new InputOption(
                 self::INPUT_KEY_EXTRA_CLASSES_FILE,
@@ -150,6 +157,12 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $errors = $this->validate($input);
+        if ($errors) {
+            $output->writeln($errors);
+            return;
+        }
+
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $this->directoryList->getPath(DirectoryList::GENERATION);
         $testExcludePatterns = [
@@ -358,5 +371,78 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             mkdir(dirname($pluginDefFile), 0777, true);
         }
         file_put_contents($pluginDefFile, $outputContent);
+    }
+
+    /**
+     * Check if all option values provided by the user are valid
+     *
+     * @param InputInterface $input
+     * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function validate(InputInterface $input)
+    {
+        $errors = [];
+        $options = $input->getOptions();
+        foreach ($options as $key => $value) {
+            if (!$value) {
+                continue;
+            }
+            switch ($key) {
+                case self::INPUT_KEY_SERIALIZER:
+                    if (($value !== self::SERIALIZER_VALUE_SERIALIZE) && ($value !== self::SERIALIZER_VALUE_IGBINARY)) {
+                        $errors[] = '<error>Invalid value for command option \'' . self::INPUT_KEY_SERIALIZER
+                            . '\'. Possible values (' . self::SERIALIZER_VALUE_SERIALIZE . '|'
+                            . self::SERIALIZER_VALUE_IGBINARY . ').</error>';
+                    }
+                    break;
+                case self::INPUT_KEY_EXTRA_CLASSES_FILE:
+                    if (!file_exists($value)) {
+                        $errors[] = '<error>Path does not exist for the value of command option \''
+                            . self::INPUT_KEY_EXTRA_CLASSES_FILE . '\'.</error>';
+                    }
+                    break;
+                case self::INPUT_KEY_GENERATION:
+                    $errorMsg = $this->validateOutputPath($value, self::INPUT_KEY_GENERATION);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
+                    }
+                    break;
+                case self::INPUT_KEY_DI:
+                    $errorMsg = $this->validateOutputPath($value, self::INPUT_KEY_DI);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
+                    }
+                    break;
+                case self::INPUT_KEY_EXCLUDE_PATTERN:
+                    if (@preg_match($value, null) === false) {
+                        $errors[] = '<error>Invalid pattern for command option \'' . self::INPUT_KEY_EXCLUDE_PATTERN
+                            . '\'.</error>';
+                    }
+                    break;
+            }
+        }
+        return $errors;
+    }
+
+    /**
+     * Validate output path based on type
+     *
+     * @param string $value
+     * @param string $type
+     * @return string
+     */
+    private function validateOutputPath($value, $type)
+    {
+        $errorMsg = '';
+        if (!file_exists($value)) {
+            $errorMsg = '<error>Path does not exist for the value of command option \'' . $type . '\'.</error>';
+        }
+        if (file_exists($value) && !is_writeable($value)) {
+            $errorMsg .= '<error>Non-writable directory is provided by the value of command option \''
+                . $type . '\'.</error>';
+
+        }
+        return $errorMsg;
     }
 }

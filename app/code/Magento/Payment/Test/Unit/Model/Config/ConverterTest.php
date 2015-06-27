@@ -31,7 +31,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'credit_cards' => ['SO' => 'Solo', 'SM' => 'Switch/Maestro'],
             'groups' => ['any_payment' => 'Any Payment'],
-            'methods' => ['checkmo' => ['allow_multiple_address' => 1, 'allow_multiple_with_3dsecure' => 1]],
+            'methods' => ['checkmo' => ['allow_multiple_address' => 1]],
         ];
         $this->assertEquals($expectedResult, $this->_model->convert($dom), '', 0, 20);
     }

@@ -119,7 +119,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
-                $cliParam ? ['install', '--magento_init_params=' . $cliParam ] : ['install']
+                $cliParam ? ['install', '--magento-init-params=' . $cliParam ] : ['install']
             );
         $mvcApplication->expects($this->any())->method('getConfig')->willReturn(
             $zfAppConfig ? [InitParamListener::BOOTSTRAP_PARAM => $zfAppConfig]:[]

@@ -42,6 +42,8 @@ define([
             if (this.collapsible) {
                 this.opened(false);
             }
+
+            return this;
         }
     });
 });

@@ -6,6 +6,7 @@
 namespace Magento\Payment\Block\Transparent;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\Method\Adapter;
 use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Payment\Model\Config;
@@ -168,7 +169,11 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function getMethodConfigData($fieldName)
     {
-        return $this->getMethod()->getConfigInterface()->getConfigValue($fieldName);
+        $method = $this->getMethod();
+        if ($method instanceof TransparentInterface) {
+            return $method->getConfigInterface()->getValue($fieldName);
+        }
+        return $method->getConfigData($fieldName);
     }
 
     /**
@@ -181,7 +186,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
     {
         $method = parent::getMethod();
 
-        if (!$method instanceof TransparentInterface) {
+        if (!$method instanceof TransparentInterface && !$method instanceof Adapter) {
             throw new LocalizedException(
                 __('We cannot retrieve the transparent payment method model object.')
             );

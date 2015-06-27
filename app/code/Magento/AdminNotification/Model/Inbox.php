@@ -7,6 +7,7 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\Notification\NotifierInterface;
+use Magento\AdminNotification\Model\InboxInterface;
 
 /**
  * AdminNotification Inbox model
@@ -30,7 +31,7 @@ use Magento\Framework\Notification\NotifierInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface
+class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {
     /**
      * @return void
@@ -41,10 +42,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * Retrieve Severity collection array
-     *
-     * @param int|null $severity
-     * @return array|string|null
+     * {@inheritdoc}
      */
     public function getSeverities($severity = null)
     {
@@ -66,9 +64,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * Retrieve Latest Notice
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function loadLatestNotice()
     {
@@ -78,9 +74,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * Retrieve notice statuses
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getNoticeStatus()
     {

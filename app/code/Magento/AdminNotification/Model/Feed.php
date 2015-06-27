@@ -5,7 +5,7 @@
  */
 namespace Magento\AdminNotification\Model;
 
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * AdminNotification Feed model
@@ -73,7 +73,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,7 +87,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -137,7 +137,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $feedXml = $this->getFeedData();
 
-        $installDate = strtotime($this->_deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE));
+        $installDate = strtotime($this->_deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE));
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
@@ -239,6 +239,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve feed as XML element
+     *
      * @return \SimpleXMLElement
      */
     public function getFeedXml()

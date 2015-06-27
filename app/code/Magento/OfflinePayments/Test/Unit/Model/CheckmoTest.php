@@ -58,23 +58,4 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
             ->willReturn('blah@blah.com');
         $this->assertEquals('blah@blah.com', $this->_object->getMailingAddress());
     }
-
-    public function testAssignData()
-    {
-        $details['payable_to'] = 'payable';
-        $details['mailing_address'] = 'blah@blah.com';
-        $this->_object->setStore(1);
-        $this->_scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->willReturnMap([
-                ['payment/checkmo/payable_to', 'store', 1, 'payable'],
-                ['payment/checkmo/mailing_address', 'store', 1, 'blah@blah.com']
-            ]);
-        $instance = $this->getMock('Magento\Payment\Model\Info', ['setAdditionalData'], [], '', false);
-        $instance->expects($this->once())
-            ->method('setAdditionalData')
-            ->with(serialize($details));
-        $this->_object->setData('info_instance', $instance);
-        $this->_object->assignData('');
-    }
 }

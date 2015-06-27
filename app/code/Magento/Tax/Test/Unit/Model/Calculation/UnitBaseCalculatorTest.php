@@ -114,7 +114,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
-            ->method('getTaxIncluded')
+            ->method('getIsTaxIncluded')
             ->will($this->returnValue(true));
 
         $this->mockConfig->expects($this->once())
@@ -147,7 +147,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
-            ->method('getTaxIncluded')
+            ->method('getIsTaxIncluded')
             ->will($this->returnValue(false));
 
         $this->mockConfig->expects($this->once())

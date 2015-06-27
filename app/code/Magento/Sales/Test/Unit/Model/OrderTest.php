@@ -49,6 +49,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $historyCollectionFactoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -75,7 +80,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->item = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Item',
-            ['isDeleted', 'getQtyToInvoice', 'getParentItemId', 'getQuoteItemId'],
+            ['isDeleted', 'getQtyToInvoice', 'getParentItemId', 'getQuoteItemId', 'getLockedDoInvoice'],
             [],
             '',
             false
@@ -91,6 +96,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
+        $this->priceCurrency = $this->getMockForAbstractClass(
+            'Magento\Framework\Pricing\PriceCurrencyInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['round']
+        );
+
         $this->incrementId = '#00000001';
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $context = $this->getMock('Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
@@ -105,7 +120,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'orderItemCollectionFactory' => $this->orderItemCollectionFactoryMock,
                 'data' => ['increment_id' => $this->incrementId],
                 'context' => $context,
-                'historyCollectionFactory' => $this->historyCollectionFactoryMock
+                'historyCollectionFactory' => $this->historyCollectionFactoryMock,
+                'priceCurrency' => $this->priceCurrency
             ]
         );
     }
@@ -192,6 +208,102 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
         $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
         $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanInvoice()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->item->expects($this->any())
+            ->method('getLockedDoInvoice')
+            ->willReturn(false);
+
+        $this->assertTrue($this->order->canInvoice());
+    }
+
+    /**
+     * @param string $status
+     *
+     * @dataProvider notInvoicingStatesProvider
+     */
+    public function testCanNotInvoiceInSomeStates($status)
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->item->expects($this->any())
+            ->method('getLockedDoInvoice')
+            ->willReturn(false);
+        $this->order->setData('state', $status);
+        $this->assertFalse($this->order->canInvoice());
+    }
+
+    public function testCanNotInvoiceWhenActionInvoiceFlagIsFalse()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->item->expects($this->any())
+            ->method('getLockedDoInvoice')
+            ->willReturn(false);
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_INVOICE, false);
+        $this->assertFalse($this->order->canInvoice());
+    }
+
+    public function testCanNotInvoiceWhenLockedInvoice()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->item->expects($this->any())
+            ->method('getLockedDoInvoice')
+            ->willReturn(true);
+        $this->assertFalse($this->order->canInvoice());
+    }
+
+    public function testCanNotInvoiceWhenDidNotHaveQtyToInvoice()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(0);
+        $this->item->expects($this->any())
+            ->method('getLockedDoInvoice')
+            ->willReturn(false);
+        $this->assertFalse($this->order->canInvoice());
+    }
+
+    public function testCanCreditMemo()
+    {
+        $totalPaid = 10;
+        $this->order->setTotalPaid($totalPaid);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+        $this->assertTrue($this->order->canCreditmemo());
+    }
+
+    public function testCanNotCreditMemoWithTotalNull()
+    {
+        $totalPaid = 0;
+        $this->order->setTotalPaid($totalPaid);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+        $this->assertFalse($this->order->canCreditmemo());
+    }
+
+    /**
+     * @param string $state
+     *
+     * @dataProvider canNotCreditMemoStatesProvider
+     */
+    public function testCanNotCreditMemoWithSomeStates($state)
+    {
+        $this->order->setData('state', $state);
+        $this->assertFalse($this->order->canCreditmemo());
+    }
+
+    public function testCanNotCreditMemoWithForced()
+    {
+        $this->order->setData('forced_can_creditmemo', true);
+        $this->assertTrue($this->order->canCreditmemo());
     }
 
     public function testCanEditIfHasInvoices()
@@ -370,8 +482,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 $this->any()
             )->method(
                 'canVoid'
-            )->with(
-                new \PHPUnit_Framework_Constraint_IsIdentical($payment)
             )->will(
                 $this->returnValue($expected)
             );
@@ -541,13 +651,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             true,
             ['setOrder']
         );
-        $dbMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            ['setOrder'],
-            [],
-            '',
-            false
-        );
+        $dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+            ->setMethods(['setOrder'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $collectionMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Status\History\Collection',
             [
@@ -589,5 +696,24 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         for ($i = 10; --$i;) {
             $this->assertEquals($collectionItems, $this->order->getStatusHistories());
         }
+    }
+
+    public function notInvoicingStatesProvider()
+    {
+        return [
+            [\Magento\Sales\Model\Order::STATE_COMPLETE],
+            [\Magento\Sales\Model\Order::STATE_CANCELED],
+            [\Magento\Sales\Model\Order::STATE_CLOSED]
+        ];
+    }
+
+    public function canNotCreditMemoStatesProvider()
+    {
+        return [
+            [\Magento\Sales\Model\Order::STATE_HOLDED],
+            [\Magento\Sales\Model\Order::STATE_CANCELED],
+            [\Magento\Sales\Model\Order::STATE_CLOSED],
+            [\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW]
+        ];
     }
 }

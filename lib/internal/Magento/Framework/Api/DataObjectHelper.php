@@ -8,6 +8,11 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\Reflection\MethodsMap;
 
+/**
+ * Data object helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectHelper
 {
     /**
@@ -31,6 +36,11 @@ class DataObjectHelper
     protected $extensionFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @var MethodsMap
      */
     protected $methodsMapProcessor;
@@ -40,6 +50,7 @@ class DataObjectHelper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param MethodsMap $methodsMapProcessor
      */
     public function __construct(
@@ -47,16 +58,20 @@ class DataObjectHelper
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         MethodsMap $methodsMapProcessor
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
         $this->typeProcessor = $typeProcessor;
         $this->extensionFactory = $extensionFactory;
+        $this->joinProcessor = $joinProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
     }
 
     /**
+     * Populate data object using data in array format.
+     *
      * @param mixed $dataObject
      * @param array $data
      * @param string $interfaceName
@@ -64,6 +79,9 @@ class DataObjectHelper
      */
     public function populateWithArray($dataObject, array $data, $interfaceName)
     {
+        if ($dataObject instanceof ExtensibleDataInterface) {
+            $data = $this->joinProcessor->extractExtensionAttributes(get_class($dataObject), $data);
+        }
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
     }
@@ -110,10 +128,8 @@ class DataObjectHelper
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
-            } else {
-                if ($dataObject instanceof ExtensibleDataInterface) {
-                    $dataObject->setCustomAttribute($key, $value);
-                }
+            } elseif ($dataObject instanceof CustomAttributesDataInterface) {
+                $dataObject->setCustomAttribute($key, $value);
             }
         }
 
@@ -171,7 +187,7 @@ class DataObjectHelper
     /**
      * Merges second object onto the first
      *
-     * @param string                  $interfaceName
+     * @param string $interfaceName
      * @param mixed $firstDataObject
      * @param mixed $secondDataObject
      * @return $this
@@ -188,5 +204,26 @@ class DataObjectHelper
         $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $interfaceName);
         $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);
         return $this;
+    }
+
+    /**
+     * Filter attribute value objects for a provided data interface type from an array of custom attribute value objects
+     *
+     * @param AttributeValue[] $attributeValues Array of custom attribute
+     * @param string $type Data interface type
+     * @return AttributeValue[]
+     */
+    public function getCustomAttributeValueByType(array $attributeValues, $type)
+    {
+        $attributeValueArray = [];
+        if (empty($attributeValues)) {
+            return $attributeValueArray;
+        }
+        foreach ($attributeValues as $attributeValue) {
+            if ($attributeValue->getValue() instanceof $type) {
+                $attributeValueArray[] = $attributeValue;
+            }
+        }
+        return $attributeValueArray;
     }
 }

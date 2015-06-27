@@ -14,26 +14,28 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
 <div class="design_theme_ua_regexp" id="grid<?php echo $_htmlId; ?>">
-    <table cellspacing="0" class="data-table">
-        <thead>
-        <tr>
-            <?php foreach ($block->getColumns() as $columnName => $column): ?>
-            <th><?php echo $column['label']; ?></th>
-            <?php endforeach;?>
-            <th class="col-actions" colspan="<?php echo $_colspan; ?>">Action</th>
-        </tr>
-        </thead>
-        <tfoot>
-        <tr>
-            <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
-                <button id="addToEndBtn<?php echo $_htmlId; ?>" class="action- add" title="<?php echo __('Add'); ?>" type="button">
-                    <span><?php echo $block->getAddButtonLabel(); ?><?php echo __('Add'); ?></span>
-                </button>
-            </td>
-        </tr>
-        </tfoot>
-        <tbody id="addRow<?php echo $_htmlId; ?>"></tbody>
-    </table>
+    <div class="admin__control-table-wrapper">
+        <table class="admin__control-table">
+            <thead>
+            <tr>
+                <?php foreach ($block->getColumns() as $columnName => $column): ?>
+                    <th><?php echo $column['label']; ?></th>
+                <?php endforeach;?>
+                <th class="col-actions" colspan="<?php echo $_colspan; ?>">Action</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
+                    <button id="addToEndBtn<?php echo $_htmlId; ?>" class="action-add" title="<?php echo __('Add'); ?>" type="button">
+                        <span><?php echo $block->getAddButtonLabel(); ?><?php echo __('Add'); ?></span>
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+            <tbody id="addRow<?php echo $_htmlId; ?>"></tbody>
+        </table>
+    </div>
     <input type="hidden" name="<?php echo $block->getElement()->getName(); ?>[__empty]" value="" />
 
     <script>
@@ -54,10 +56,10 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                         <?php endforeach; ?>
 
                     <?php if ($block->isAddAfter()): ?>
-                            + '<td><button class="action- add" type="button" id="addAfterBtn<%- _id %>"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
+                            + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
                         <?php endif; ?>
 
-                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'<%- _id %>\')" class="action- delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
+                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'<%- _id %>\')" class="action-delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
                             +'<\/tr>'
             ),
 
@@ -73,6 +75,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                     templateValues = {
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <?php echo $columnName ?>: '',
+                        'option_extra_attrs': {},
                     <?php endforeach; ?>
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
                 };

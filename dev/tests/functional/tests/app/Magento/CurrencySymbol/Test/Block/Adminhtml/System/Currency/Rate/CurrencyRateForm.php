@@ -16,7 +16,42 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class CurrencyRateForm extends Form
 {
     /**
-     * Fill currency rate form.
+     * Locator value for "Messages" block.
+     *
+     * @var string
+     */
+    protected $message = '#messages';
+
+    /**
+     * Locator value for "Import" button.
+     *
+     * @var string
+     */
+    protected $importButton = '[data-ui-id$="import-button"]';
+
+    /**
+     * Click on the "Import" button.
+     *
+     * @throws \Exception
+     * @return void
+     */
+    public function clickImportButton()
+    {
+        $this->_rootElement->find($this->importButton)->click();
+
+        //Wait message
+        $browser = $this->browser;
+        $selector = $this->message;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $message = $browser->find($selector);
+                return $message->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Fill "Currency Rates" form.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element

@@ -52,13 +52,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
             null,
             ['nullable' => true, 'default' => null],
-            'From Date'
+            'From'
         )->addColumn(
             'to_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
             null,
             ['nullable' => true, 'default' => null],
-            'To Date'
+            'To'
         )->addColumn(
             'uses_per_customer',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -732,7 +732,7 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('salesrule_website', 'website_id', 'core/website', 'website_id'),
+            $installer->getFkName('salesrule_website', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $websitesTable,
             'website_id',

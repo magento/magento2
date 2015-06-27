@@ -1,16 +1,23 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\ProductAlert\Controller\Add as AddController;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class Stock extends \Magento\ProductAlert\Controller\Add
+class Stock extends AddController
 {
-    /** @var  \Magento\Catalog\Api\ProductRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
     /**
@@ -19,48 +26,50 @@ class Stock extends \Magento\ProductAlert\Controller\Add
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        Context $context,
+        CustomerSession $customerSession,
+        ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $customerSession);
         $this->productRepository = $productRepository;
+        parent::__construct($context, $customerSession);
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $backUrl = $this->getRequest()->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $backUrl = $this->getRequest()->getParam(Action::PARAM_NAME_URL_ENCODED);
         $productId = (int)$this->getRequest()->getParam('product_id');
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$backUrl || !$productId) {
-            $this->_redirect('/');
-            return;
+            $resultRedirect->setPath('/');
+            return $resultRedirect;
         }
 
         try {
+            /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
-
-            $model = $this->_objectManager->create(
-                'Magento\ProductAlert\Model\Stock'
-            )->setCustomerId(
-                $this->_customerSession->getCustomerId()
-            )->setProductId(
-                $product->getId()
-            )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
-            );
+            /** @var \Magento\ProductAlert\Model\Stock $model */
+            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
+                ->setCustomerId($this->customerSession->getCustomerId())
+                ->setProductId($product->getId())
+                ->setWebsiteId(
+                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()
+                        ->getWebsiteId()
+                );
             $model->save();
             $this->messageManager->addSuccess(__('Alert subscription has been saved.'));
         } catch (NoSuchEntityException $noEntityException) {
-            /* @var $product \Magento\Catalog\Model\Product */
             $this->messageManager->addError(__('There are not enough parameters.'));
-            $this->getResponse()->setRedirect($backUrl);
-            return;
+            $resultRedirect->setUrl($backUrl);
+            return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
+        return $resultRedirect;
     }
 }

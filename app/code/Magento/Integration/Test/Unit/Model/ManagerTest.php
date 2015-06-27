@@ -15,7 +15,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Service\V1\IntegrationInterface
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
      */
     protected $_integrationServiceMock;
 
@@ -42,9 +42,18 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->_integrationServiceMock = $this->getMockBuilder(
-            '\Magento\Integration\Service\V1\Integration'
+            '\Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
-            ['findByName', 'update', 'create']
+            [
+                'findByName',
+                'update',
+                'create',
+                'get',
+                'findByConsumerId',
+                'findActiveIntegrationByConsumerId',
+                'delete',
+                'getSelectedResources'
+            ]
         )->getMock();
 
         $this->_integrationManager = new \Magento\Integration\Model\ConfigBasedIntegrationManager(

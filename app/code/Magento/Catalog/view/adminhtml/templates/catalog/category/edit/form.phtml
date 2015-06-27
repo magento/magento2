@@ -33,7 +33,7 @@ $categoryId = $block->getCategoryId();
 <?php endif; ?>
 <iframe name="iframeSave" style="display:none; width:100%;"
         src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
-<form id="category_edit_form" action="<?php echo $block->getSaveUrl() ?>" method="post"
+<form id="category_edit_form" name="category-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>

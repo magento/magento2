@@ -9,15 +9,15 @@
 /** @var $block \Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels  */
 ?>
 
-<div class="fieldset-wrapper collapsable-wrapper opened" id="manage-titles-wrapper">
+<div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="manage-titles-wrapper">
     <div class="fieldset-wrapper-title">
-        <strong class="title" data-toggle="collapse" data-target="#manage-titles-content">
+        <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#manage-titles-content">
             <span><?php echo __('Manage Titles (Size, Color, etc.)') ?></span>
         </strong>
     </div>
     <div class="fieldset-wrapper-content in collapse" id="manage-titles-content">
         <fieldset class="fieldset">
-            <table class="data-table" id="attribute-labels-table">
+            <table class="admin__control-table" id="attribute-labels-table">
                 <thead>
                 <tr>
                     <?php foreach ($block->getStores() as $_store): ?>

@@ -46,13 +46,6 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     protected $_sidResolver;
 
     /**
-     * Translator
-     *
-     * @var \Magento\Framework\TranslateInterface
-     */
-    protected $_translator;
-
-    /**
      * Block name in layout
      *
      * @var string
@@ -65,6 +58,13 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
+
+    /**
+     * JS layout configuration
+     *
+     * @var array
+     */
+    protected $jsLayout = [];
 
     /**
      * Request
@@ -172,7 +172,6 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->_layout = $context->getLayout();
         $this->_eventManager = $context->getEventManager();
         $this->_urlBuilder = $context->getUrlBuilder();
-        $this->_translator = $context->getTranslator();
         $this->_cache = $context->getCache();
         $this->_design = $context->getDesignPackage();
         $this->_session = $context->getSession();
@@ -186,8 +185,22 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        if (isset($data['jsLayout'])) {
+            $this->jsLayout = $data['jsLayout'];
+            unset($data['jsLayout']);
+        }
         parent::__construct($data);
         $this->_construct();
+    }
+
+    /**
+     * Retrieve serialized JS layout configuration ready to use in template
+     *
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return json_encode($this->jsLayout);
     }
 
     /**
@@ -872,6 +885,17 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     public function escapeUrl($data)
     {
         return $this->_escaper->escapeUrl($data);
+    }
+
+    /**
+     * Escape xss in urls
+     *
+     * @param string $data
+     * @return string
+     */
+    public function escapeXssInUrl($data)
+    {
+        return $this->_escaper->escapeXssInUrl($data);
     }
 
     /**

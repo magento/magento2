@@ -6,139 +6,149 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-  <type name="Magento\Catalog\Test\Constraint\AssertProductInGrid">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductPage">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductCrossSells">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentCrossSells">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInGrid">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentRelatedProducts">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductUpSells">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentUpSells">
-    <arguments>
-      <argument name="severity" xsi:type="string">middle</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateOnProductForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessAddMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessRemoveAllProductsMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateGroupOnProductForm">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessDeleteMessage">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCrossSells">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentCrossSells">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentRelatedProducts">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductUpSells">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentUpSells">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessAddMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessRemoveAllProductsMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateGroupOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTypeOrderOnCreate">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
 </config>

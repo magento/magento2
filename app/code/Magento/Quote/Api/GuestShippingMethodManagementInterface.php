@@ -7,11 +7,12 @@ namespace Magento\Quote\Api;
 
 /**
  * Shipping method management interface for guest carts.
+ * @api
  */
 interface GuestShippingMethodManagementInterface
 {
     /**
-     * Sets the carrier and shipping methods codes for a specified cart.
+     * Set the carrier and shipping methods codes for a specified cart.
      *
      * @param string $cartId The shopping cart ID.
      * @param string $carrierCode The carrier code.
@@ -26,7 +27,7 @@ interface GuestShippingMethodManagementInterface
     public function set($cartId, $carrierCode, $methodCode);
 
     /**
-     * Returns selected shipping method for a specified quote.
+     * Return selected shipping method for a specified quote.
      *
      * @param string $cartId The shopping cart ID.
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method.
@@ -36,7 +37,7 @@ interface GuestShippingMethodManagementInterface
     public function get($cartId);
 
     /**
-     * Lists applicable shipping methods for a specified quote.
+     * List applicable shipping methods for a specified quote.
      *
      * @param string $cartId The shopping cart ID.
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.

@@ -10,7 +10,7 @@ use Magento\TestFramework\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class UserTest extends \Magento\Backend\Utility\Controller
+class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testIndexAction()
     {
@@ -245,6 +245,6 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains('Please correct this email address: \"example@domain.cim\"', $body);
+        $this->assertContains("'domain.cim' is not a valid hostname for email address 'example@domain.cim'", $body);
     }
 }

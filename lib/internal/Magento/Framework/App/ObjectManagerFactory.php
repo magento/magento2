@@ -12,8 +12,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\App\ObjectManager\Environment;
-use Magento\Framework\App\EnvironmentFactory;
-use Magento\Framework\App\EnvironmentInterface;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,6 +71,13 @@ class ObjectManagerFactory
     protected $driverPool;
 
     /**
+     * Configuration file pool
+     *
+     * @var ConfigFilePool
+     */
+    protected $configFilePool;
+
+    /**
      * Factory
      *
      * @var \Magento\Framework\ObjectManager\FactoryInterface
@@ -83,11 +89,13 @@ class ObjectManagerFactory
      *
      * @param DirectoryList $directoryList
      * @param DriverPool $driverPool
+     * @param ConfigFilePool $configFilePool
      */
-    public function __construct(DirectoryList $directoryList, DriverPool $driverPool)
+    public function __construct(DirectoryList $directoryList, DriverPool $driverPool, ConfigFilePool $configFilePool)
     {
         $this->directoryList = $directoryList;
         $this->driverPool = $driverPool;
+        $this->configFilePool = $configFilePool;
     }
 
     /**
@@ -100,7 +108,7 @@ class ObjectManagerFactory
      */
     public function create(array $arguments)
     {
-        $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $arguments);
+        $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
@@ -179,18 +187,22 @@ class ObjectManagerFactory
      * Creates deployment configuration object
      *
      * @param DirectoryList $directoryList
+     * @param ConfigFilePool $configFilePool
      * @param array $arguments
      * @return DeploymentConfig
      */
-    protected function createDeploymentConfig(DirectoryList $directoryList, array $arguments)
-    {
+    protected function createDeploymentConfig(
+        DirectoryList $directoryList,
+        ConfigFilePool $configFilePool,
+        array $arguments
+    ) {
         $customFile = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE]
             : null;
         $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
             : [];
-        $reader = new DeploymentConfig\Reader($directoryList, $customFile);
+        $reader = new DeploymentConfig\Reader($directoryList, $configFilePool, $customFile);
         return new DeploymentConfig($reader, $customData);
     }
 

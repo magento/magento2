@@ -1,42 +1,30 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-class Report extends \Magento\Reports\Controller\Adminhtml\Index
-{
-    /**
-     * Add reports to breadcrumb
-     *
-     * @return $this
-     */
-    public function _initAction()
-    {
-        $this->_view->loadLayout();
-        $this->_addBreadcrumb(__('Reports'), __('Reports'));
-        return $this;
-    }
+use Magento\Reports\Controller\Adminhtml\Index as ReportsIndexController;
+use Magento\Framework\Controller\ResultFactory;
 
+class Report extends ReportsIndexController
+{
     /**
      * Search terms report action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $this->_eventManager->dispatch('on_view_report', ['report' => 'search']);
-
-        $this->_initAction()->_setActiveMenu(
-            'Magento_Reports::report_search'
-        )->_addBreadcrumb(
-            __('Search Terms'),
-            __('Search Terms')
-        );
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('Search Terms Report'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Reports::report_search')
+            ->addBreadcrumb(__('Reports'), __('Reports'))
+            ->addBreadcrumb(__('Search Terms'), __('Search Terms'));
+        $resultPage->getConfig()->getTitle()->set(__('Search Terms Report'));
+        return $resultPage;
     }
 
     /**

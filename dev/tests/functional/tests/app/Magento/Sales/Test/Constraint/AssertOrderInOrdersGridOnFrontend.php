@@ -49,11 +49,11 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
             'id' => $order->hasData('id') ? $order->getId() : $orderId,
             'status' => $statusToCheck === null ? $status : $statusToCheck,
         ];
-        $customerLogin = $objectManager->create(
+
+        $objectManager->create(
             'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
             ['customer' => $customer]
-        );
-        $customerLogin->run();
+        )->run();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Orders');
         $errorMessage = implode(', ', $filter);
         \PHPUnit_Framework_Assert::assertTrue(

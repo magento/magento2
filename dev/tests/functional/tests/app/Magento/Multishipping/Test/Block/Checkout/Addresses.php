@@ -22,7 +22,7 @@ class Addresses extends Block
     protected $newAddress = '[data-role="add-new-address"]';
 
     /**
-     * 'Continue to Shipping Information' button.
+     * Locator value for "Go to Shipping Information" button.
      *
      * @var string
      */
@@ -48,7 +48,7 @@ class Addresses extends Block
     {
         foreach ($bindings as $key => $value) {
             $this->_rootElement->find(
-                '//tr[//a[text()="' . $key . '"]]/following-sibling::*//select',
+                '//tr[.//a[text()="' . $key . '"]]//select[contains(@name,"[address]")]',
                 Locator::SELECTOR_XPATH,
                 'select'
             )->setValue($value);

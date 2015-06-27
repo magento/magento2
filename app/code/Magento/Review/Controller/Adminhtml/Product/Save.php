@@ -1,21 +1,26 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-class Save extends \Magento\Review\Controller\Adminhtml\Product
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+
+class Save extends ProductController
 {
     /**
-     * @return mixed
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (($data = $this->getRequest()->getPostValue()) && ($reviewId = $this->getRequest()->getParam('id'))) {
-            $review = $this->_reviewFactory->create()->load($reviewId);
+            $review = $this->reviewFactory->create()->load($reviewId);
             if (!$review->getId()) {
                 $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
             } else {
@@ -23,38 +28,31 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
                     $review->addData($data)->save();
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', []);
-                    $votes = $this->_objectManager->create(
-                        'Magento\Review\Model\Rating\Option\Vote'
-                    )->getResourceCollection()->setReviewFilter(
-                        $reviewId
-                    )->addOptionInfo()->load()->addRatingOptions();
+                    /** @var \Magento\Review\Model\Rating\Option\Vote $votes */
+                    $votes = $this->_objectManager->create('Magento\Review\Model\Rating\Option\Vote')
+                        ->getResourceCollection()
+                        ->setReviewFilter($reviewId)
+                        ->addOptionInfo()
+                        ->load()
+                        ->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
-                            $this->_ratingFactory->create(
-                            )->setVoteId(
-                                $vote->getId()
-                            )->setReviewId(
-                                $review->getId()
-                            )->updateOptionVote(
-                                $optionId
-                            );
+                            $this->ratingFactory->create()
+                                ->setVoteId($vote->getId())
+                                ->setReviewId($review->getId())
+                                ->updateOptionVote($optionId);
                         } else {
-                            $this->_ratingFactory->create(
-                            )->setRatingId(
-                                $ratingId
-                            )->setReviewId(
-                                $review->getId()
-                            )->addOptionVote(
-                                $optionId,
-                                $review->getEntityPkValue()
-                            );
+                            $this->ratingFactory->create()
+                                ->setRatingId($ratingId)
+                                ->setReviewId($review->getId())
+                                ->addOptionVote($optionId, $review->getEntityPkValue());
                         }
                     }
 
                     $review->aggregate();
 
                     $this->messageManager->addSuccess(__('You saved the review.'));
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                } catch (LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
                     $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
@@ -62,12 +60,16 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
             }
 
             $nextId = (int)$this->getRequest()->getParam('next_item');
-            $url = $this->getUrl($this->getRequest()->getParam('ret') == 'pending' ? '*/*/pending' : '*/*/');
             if ($nextId) {
-                $url = $this->getUrl('review/*/edit', ['id' => $nextId]);
+                $resultRedirect->setPath('review/*/edit', ['id' => $nextId]);
+            } elseif ($this->getRequest()->getParam('ret') == 'pending') {
+                $resultRedirect->setPath('*/*/pending');
+            } else {
+                $resultRedirect->setPath('*/*/');
             }
-            return $this->getResponse()->setRedirect($url);
+            return $resultRedirect;
         }
-        $this->_redirect('review/*/');
+        $resultRedirect->setPath('review/*/');
+        return $resultRedirect;
     }
 }

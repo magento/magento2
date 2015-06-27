@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\Db;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Framework\Registry;
@@ -48,7 +48,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
      * @param QueryFactory $queryFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param AbstractResource $resource
-     * @param Db $resourceCollection
+     * @param DbCollection $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -57,7 +57,7 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
         QueryFactory $queryFactory,
         ScopeConfigInterface $scopeConfig,
         AbstractResource $resource = null,
-        Db $resourceCollection = null,
+        DbCollection $resourceCollection = null,
         array $data = []
     ) {
         $this->queryFactory = $queryFactory;

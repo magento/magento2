@@ -47,10 +47,11 @@
 
 //  Secondary button
 @button-secondary__background-color: @color-brownie;
-@button-secondary__border-color: @color-brownie;
+@button-secondary__border-color: @button-secondary__background-color;
 @button-secondary__color: @color-white;
 @button-secondary__active__background-color: @color-very-dark-gray-black2;
 @button-secondary__hover__background-color: @color-very-dark-gray-black2;
+@button-secondary__hover__border-color: @button-secondary__hover__background-color;
 
 //  Triangle marker
 @button-marker-triangle__height: .5rem;
@@ -73,6 +74,17 @@
     &:hover {
         background-color: transparent;
         border: none;
+        box-shadow: none;
+    }
+}
+
+.action-icon() {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    &:hover {
+        background-color: transparent;
+        border-color: transparent;
         box-shadow: none;
     }
 }
@@ -257,6 +269,7 @@ button {
     &:active,
     &:focus {
         background-color: @button-secondary__hover__background-color;
+        border-color: @button-secondary__hover__border-color;
         box-shadow: @button__hover__box-shadow;
         color: @button-secondary__color;
         text-decoration: none;

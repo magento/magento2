@@ -28,6 +28,7 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      *
      * @param  \Magento\Quote\Model\Quote\Address $address
      * @return $this
+     * @api
      */
     public function collect(\Magento\Quote\Model\Quote\Address $address)
     {

@@ -34,7 +34,7 @@
             content: @icon-systems__content;
             font-size: 1.8rem; // Static
             left: .3rem;
-            margin-right: .7rem;
+            margin-right: @action__outer-indent;
             vertical-align: top;
         }
     }
@@ -60,7 +60,7 @@
         }
     }
     .admin__action-dropdown-menu-content {
-        .extend__clearfix();
+        &:extend(.abs-clearfix all);
         max-height: (@data-grid-action-columns-menu-items-to-scroll / @data-grid-action-columns-menu-item__column) * (@data-grid-action-columns-menu-item__height + @data-grid-action-columns-menu-item__margin-bottom) + (@data-grid-action-columns-menu-item__height / 2 + @data-grid-action-columns-menu-item__margin-bottom);
         overflow-y: auto;
         padding-top: 1.5rem;

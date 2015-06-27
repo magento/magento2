@@ -86,9 +86,11 @@ lib/internal/Magento/Framework/Code/Test/Unit/Reader/_files/ClassesForArgumentsR
 lib/internal/Magento/Framework/Code/Test/Unit/Validator/_files/ClassesForArgumentSequence.php
 lib/internal/Magento/Framework/Code/Test/Unit/Validator/_files/ClassesForTypeDuplication.php
 dev/tests/static/testsuite/Magento/Test/Php/_files/phpcs/Magento/Sniffs/Annotations/RequireAnnotatedMethodsSniff.php
-dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Helper/Helper.php
-dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/Model.php
-dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/WithoutDependencies.php
+dev/tests/integration/testsuite/Magento/Setup/Module/Dependency/_files/code/Magento/FirstModule/Helper/Helper.php
+dev/tests/integration/testsuite/Magento/Setup/Module/Dependency/_files/code/Magento/FirstModule/Model/Model.php
+dev/tests/integration/testsuite/Magento/Setup/Module/Dependency/_files/code/Magento/FirstModule/Model/WithoutDependencies.php
+dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/A/Model/Foo.php
+dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/B/Model/Foo.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceFactory.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceInterceptor.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceProxy.php

@@ -11,10 +11,14 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
 
 class Front extends Generic
 {
@@ -24,28 +28,28 @@ class Front extends Generic
     protected $_yesNo;
 
     /**
-     * @var array
+     * @var PropertyLocker
      */
-    private $disableSearchable;
+    private $propertyLocker;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
      * @param Yesno $yesNo
+     * @param PropertyLocker $propertyLocker
      * @param array $data
-     * @param array $disableSearchable
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
         Yesno $yesNo,
-        array $data = [],
-        array $disableSearchable = []
+        PropertyLocker $propertyLocker,
+        array $data = []
     ) {
         $this->_yesNo = $yesNo;
-        $this->disableSearchable = $disableSearchable;
+        $this->propertyLocker = $propertyLocker;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -68,10 +72,9 @@ class Front extends Generic
 
         $fieldset = $form->addFieldset(
             'front_fieldset',
-            ['legend' => __('Frontend Properties'), 'collapsable' => $this->getRequest()->has('popup')]
+            ['legend' => __('Storefront Properties'), 'collapsable' => $this->getRequest()->has('popup')]
         );
 
-        $attrCode = $attributeObject->getAttributeCode();
         $fieldset->addField(
             'is_searchable',
             'select',
@@ -80,7 +83,6 @@ class Front extends Generic
                 'label'    => __('Use in Search'),
                 'title'    => __('Use in Search'),
                 'values'   => $yesnoSource,
-                'disabled' => isset($this->disableSearchable[$attrCode]) && $this->disableSearchable[$attrCode] ? 1 : 0
             ]
         );
 
@@ -100,8 +102,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_comparable',
-                'label' => __('Comparable on Frontend'),
-                'title' => __('Comparable on Frontend'),
+                'label' => __('Comparable on Storefront'),
+                'title' => __('Comparable on Storefront'),
                 'values' => $yesnoSource,
             ]
         );
@@ -135,8 +137,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_html_allowed_on_front',
-                'label' => __('Allow HTML Tags on Frontend'),
-                'title' => __('Allow HTML Tags on Frontend'),
+                'label' => __('Allow HTML Tags on Storefront'),
+                'title' => __('Allow HTML Tags on Storefront'),
                 'values' => $yesnoSource,
             ]
         );
@@ -149,8 +151,8 @@ class Front extends Generic
             'select',
             [
                 'name' => 'is_visible_on_front',
-                'label' => __('Visible on Catalog Pages on Frontend'),
-                'title' => __('Visible on Catalog Pages on Frontend'),
+                'label' => __('Visible on Catalog Pages on Storefront'),
+                'title' => __('Visible on Catalog Pages on Storefront'),
                 'values' => $yesnoSource
             ]
         );
@@ -222,8 +224,9 @@ class Front extends Generic
             )
         );
 
-        $form->setValues($attributeObject->getData());
         $this->setForm($form);
+        $form->setValues($attributeObject->getData());
+        $this->propertyLocker->lock($form);
         return parent::_prepareForm();
     }
 }

@@ -7,56 +7,40 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetCustomerName()
+    /** @var \Magento\Customer\Block\Account\Customer */
+    private $block;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $httpContext;
+
+    protected function setUp()
     {
-        $customerName = 'John Doe';
+        $this->httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
+            ->disableOriginalConstructor()->getMock();
 
-        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+            ->getObject('\Magento\Customer\Block\Account\Customer', ['httpContext' => $this->httpContext]);
+    }
 
-        $customerServiceMock = $this->getMockBuilder(
-            '\Magento\Customer\Api\CustomerRepositoryInterface'
-        )->disableOriginalConstructor()->getMock();
-        $customerServiceMock->expects($this->any())->method('getById')->will($this->returnValue($customer));
+    public function customerLoggedInDataProvider()
+    {
+        return [
+            [1, true],
+            [0, false],
+        ];
+    }
 
-        $viewHelperMock = $this->getMockBuilder(
-            'Magento\Customer\Helper\View'
-        )->disableOriginalConstructor()->getMock();
-        $viewHelperMock->expects($this->any())->method('getCustomerName')->will($this->returnValue($customerName));
+    /**
+     * @param $isLoggedIn
+     * @param $result
+     * @dataProvider customerLoggedInDataProvider
+     */
+    public function testCustomerLoggedIn($isLoggedIn, $result)
+    {
+        $this->httpContext->expects($this->once())->method('getValue')
+            ->with(\Magento\Customer\Model\Context::CONTEXT_AUTH)
+            ->willReturn($isLoggedIn);
 
-        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')->disableOriginalConstructor()->getMock();
-        $escaperMock->expects(
-            $this->any()
-        )->method(
-            'escapeHtml'
-        )->with(
-            $customerName
-        )->will(
-            $this->returnValue($customerName)
-        );
-
-        $contextMock = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Template\Context'
-        )->disableOriginalConstructor()->getMock();
-        $contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($escaperMock));
-
-        $httpContextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $currentCustomer = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $block = new \Magento\Customer\Block\Account\Customer(
-            $contextMock,
-            $customerServiceMock,
-            $viewHelperMock,
-            $httpContextMock,
-            $currentCustomer
-        );
-
-        $this->assertSame($customerName, $block->getCustomerName());
+        $this->assertSame($result, $this->block->customerLoggedIn($isLoggedIn));
     }
 }

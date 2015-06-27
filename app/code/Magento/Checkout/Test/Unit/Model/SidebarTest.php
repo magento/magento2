@@ -36,94 +36,32 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $error
-     * @param float $summaryQty
-     * @param array $totals
      * @param array $result
      *
      * @dataProvider dataProviderGetResponseData
      */
-    public function testGetResponseData($error, $summaryQty, $totals, $result)
+    public function testGetResponseData($error, $result)
     {
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->expects($this->any())
-            ->method('getTotals')
-            ->willReturn($totals);
-
-        $this->cartMock->expects($this->any())
-            ->method('getSummaryQty')
-            ->willReturn($summaryQty);
-        $this->cartMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($quoteMock);
-
-        $this->checkoutHelperMock->expects($this->any())
-            ->method('formatPrice')
-            ->willReturnArgument(0);
-
         $this->assertEquals($result, $this->sidebar->getResponseData($error));
     }
 
     public function dataProviderGetResponseData()
     {
-        $totalMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\Total')
-            ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
-            ->getMock();
-        $totalMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn(12.34);
-
         return [
             [
                 '',
-                0,
-                [],
-                [
-                    'success' => true,
-                    'data' => [
-                        'summary_qty' => 0,
-                        'summary_text' => __(' items'),
-                        'subtotal' => 0,
-                    ],
-                    'cleanup' => true,
-                ],
+                ['success' => true],
             ],
             [
                 '',
-                1,
-                [
-                    'subtotal' => $this->getMock('NonexistentClass'),
-                ],
-                [
-                    'success' => true,
-                    'data' => [
-                        'summary_qty' => 1,
-                        'summary_text' => __(' item'),
-                        'subtotal' => 0,
-                    ],
-                ],
+                ['success' => true],
             ],
             [
                 '',
-                2,
-                [
-                    'subtotal' => $totalMock,
-                ],
-                [
-                    'success' => true,
-                    'data' => [
-                        'summary_qty' => 2,
-                        'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
-                ],
+                ['success' => true],
             ],
             [
                 'Error',
-                0,
-                [],
                 [
                     'success' => false,
                     'error_message' => 'Error',

@@ -9,6 +9,14 @@
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
+    </type>
+    <type name="Magento\Framework\App\Response\XFrameOptPlugin">
+        <arguments>
+            <argument name="xFrameOpt" xsi:type="init_parameter">Magento\Framework\App\Response\XFrameOptPlugin::DEPLOYMENT_CONFIG_X_FRAME_OPT</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
@@ -52,7 +60,7 @@
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-    <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
+        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>

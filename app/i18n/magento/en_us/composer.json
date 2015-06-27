@@ -1,13 +1,13 @@
 {
     "name": "magento/language-en_us",
     "description": "English (United States) language",
-    "version": "0.74.0-beta7",
+    "version": "0.74.0-beta14",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "0.74.0-beta7",
+        "magento/framework": "0.74.0-beta14",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-language",

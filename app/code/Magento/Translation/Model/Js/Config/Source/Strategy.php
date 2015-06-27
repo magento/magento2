@@ -15,9 +15,8 @@ class Strategy implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['label' => __('None (Translation is disabled)'), 'value' => Config::NO_TRANSLATION],
-            ['label' => __('Dictionary (Translation on frontend side)'), 'value' => Config::DICTIONARY_STRATEGY],
-            ['label' => __('Embedded (Translation on backend side)'), 'value' => Config::EMBEDDED_STRATEGY]
+            ['label' => __('Dictionary (Translation on Storefront side)'), 'value' => Config::DICTIONARY_STRATEGY],
+            ['label' => __('Embedded (Translation on Admin side)'), 'value' => Config::EMBEDDED_STRATEGY]
         ];
     }
 }

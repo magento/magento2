@@ -14,41 +14,43 @@
         <span class="title"><?php echo __('%1', $_itemsGridLabel) ?></span>
     </div>
     <div class="admin__page-section-content grid">
-        <table class="data-table admin__table-primary order-invoice-tables">
-            <thead>
-                <tr class="headings">
-                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                    <th class="col-ordered-qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col-qty-invoice"><span><?php echo __('Qty to Invoice') ?></span></th>
-                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="col-tax"><span><?php echo __('Tax Amount') ?></span></th>
-                    <th class="col-discount"><span><?php echo __('Discount Amount') ?></span></th>
-                    <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
-                </tr>
-            </thead>
-            <?php if ($block->canEditQty()): ?>
-            <tfoot>
-                <tr>
-                    <td colspan="2">&nbsp;</td>
-                    <td colspan="3"><?php echo $block->getUpdateButtonHtml() ?></td>
-                    <td colspan="3">&nbsp;</td>
-                </tr>
-            </tfoot>
-            <?php endif; ?>
-            <?php $_items = $block->getInvoice()->getAllItems() ?>
-            <?php $_i = 0; foreach ($_items as $_item): ?>
-            <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $_i++;
-} ?>
-                <tbody class="<?php echo $_i%2 ? 'even' : 'odd' ?>">
-                    <?php echo $block->getItemHtml($_item) ?>
-                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
-                </tbody>
-            <?php endforeach; ?>
-        </table>
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary order-invoice-tables">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?php echo __('Product') ?></span></th>
+                        <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                        <th class="col-ordered-qty"><span><?php echo __('Qty') ?></span></th>
+                        <th class="col-qty-invoice"><span><?php echo __('Qty to Invoice') ?></span></th>
+                        <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                        <th class="col-tax"><span><?php echo __('Tax Amount') ?></span></th>
+                        <th class="col-discount"><span><?php echo __('Discount Amount') ?></span></th>
+                        <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
+                    </tr>
+                </thead>
+                <?php if ($block->canEditQty()): ?>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">&nbsp;</td>
+                        <td colspan="3"><?php echo $block->getUpdateButtonHtml() ?></td>
+                        <td colspan="3">&nbsp;</td>
+                    </tr>
+                </tfoot>
+                <?php endif; ?>
+                <?php $_items = $block->getInvoice()->getAllItems() ?>
+                <?php $_i = 0; foreach ($_items as $_item): ?>
+                <?php if ($_item->getOrderItem()->getParentItem()) {
+                    continue;
+                } else {
+                    $_i++;
+                } ?>
+                    <tbody class="<?php echo $_i%2 ? 'even' : 'odd' ?>">
+                        <?php echo $block->getItemHtml($_item) ?>
+                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    </tbody>
+                <?php endforeach; ?>
+            </table>
+        </div>
     </div>
 </section>
 
@@ -130,7 +132,7 @@
 </section>
 
 <script>
-require(['jquery', 'prototype'], function($){
+require(['jquery', 'prototype'], function(jQuery){
 
 //<![CDATA[
 var submitButtons = $$('.submit-button');
@@ -141,7 +143,7 @@ var fields = $$('.qty-input');
 updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
 
 for(var i=0;i<fields.length;i++){
-    $(fields[i]).on('keyup', checkButtonsRelation);
+    jQuery(fields[i]).on('keyup', checkButtonsRelation);
     fields[i].baseValue = fields[i].value;
 }
 

@@ -29,6 +29,15 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_importExportData = null;
 
     /**
+     * Local filters types base on attribute code
+     *
+     * @var \Magento\ImportExport\Helper\Data
+     */
+    protected $_filterTypeByAttrCode = [
+        'updated_at' => \Magento\ImportExport\Model\Export::FILTER_TYPE_DATE,
+    ];
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -76,7 +85,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $arguments = [
             'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-            'class' => 'input-text input-text-range-date',
+            'class' => 'admin__control-text',
             'date_format' => $this->_localeDate->getDateFormat(
                 \IntlDateFormatter::SHORT
             ),
@@ -94,17 +103,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __(
-            'From'
-        ) . ':</strong>&nbsp;' . $dateBlock->setValue(
-            $fromValue
-        )->getHtml() . '&nbsp;<strong>' . __(
-            'To'
-        ) . ':</strong>&nbsp;' . $dateBlock->setId(
-            $dateBlock->getId() . '_to'
-        )->setValue(
-            $toValue
-        )->getHtml();
+        return '<strong class="admin__control-support-text">' . __('From') . ':</strong>&nbsp;'
+            . $dateBlock->setValue($fromValue)->getHtml()
+            . '&nbsp;<strong class="admin__control-support-text">' . __('To') . ':</strong>&nbsp;'
+            . $dateBlock->setId($dateBlock->getId() . '_to')->setValue($toValue)->getHtml();
     }
 
     /**
@@ -161,7 +163,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
-            return __('Attribute does not has options, so filtering is impossible');
+            return __('We can\'t filter an attribute with no attribute options.');
         }
     }
 
@@ -182,7 +184,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __(
+        return '<strong class="admin__control-support-text">' . __(
             'From'
         ) .
         ':</strong>&nbsp;' .
@@ -192,7 +194,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ' value="' .
         $fromValue .
         '"/>&nbsp;' .
-        '<strong>' .
+        '<strong class="admin__control-support-text">' .
         __(
             'To'
         ) .
@@ -244,7 +246,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
-            return __('Attribute does not has options, so filtering is impossible');
+            return __('We can\'t filter an attribute with no attribute options.');
         }
     }
 
@@ -268,7 +270,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
                 'index' => 'attribute_id',
                 'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id'
+                'column_css_class' => 'col-id data-grid-checkbox-cell'
             ]
         );
         $this->addColumn(
@@ -332,7 +334,15 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         if (is_array($values) && isset($values[$row->getAttributeCode()])) {
             $value = $values[$row->getAttributeCode()];
         }
-        switch (\Magento\ImportExport\Model\Export::getAttributeFilterType($row)) {
+
+        $code = $row->getAttributeCode();
+        if (isset($this->_filterTypeByAttrCode[$code])) {
+            $filterType =$this->_filterTypeByAttrCode[$code];
+        } else {
+            $filterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($row);
+        }
+
+        switch ($filterType) {
             case \Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT:
                 $cell = $this->_getSelectHtmlWithValue($row, $value);
                 break;

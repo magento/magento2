@@ -29,7 +29,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
-        $quoteIdMask->load($quoteId);
+        $quoteIdMask->load($quoteId, 'quote_id');
         return $quoteIdMask->getMaskedId();
     }
 
@@ -45,12 +45,11 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
 
         $data = [
-            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_ID => (int)$address->getId(),
-            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
             AddressInterface::KEY_REGION => $address->getRegion(),
             AddressInterface::KEY_REGION_ID => $address->getRegionId(),
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
+            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_STREET => $address->getStreet(),
             AddressInterface::KEY_COMPANY => $address->getCompany(),
             AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
@@ -58,7 +57,11 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_EMAIL => $address->getEmail()
+            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
+            AddressInterface::KEY_EMAIL => $address->getEmail(),
+            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
+            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook(),
         ];
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
@@ -76,7 +79,11 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        asort($data);
+        asort($response);
+        $this->assertEquals($data, $response);
     }
 
     /**
@@ -105,7 +112,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
+            'email' => '',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -136,6 +143,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
         unset($addressData['street']);
+        unset($addressData['email']);
         $this->assertEquals('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {

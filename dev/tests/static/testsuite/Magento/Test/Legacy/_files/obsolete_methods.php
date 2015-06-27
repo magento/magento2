@@ -48,13 +48,13 @@ return [
     [
         '_checkCookieStore',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkCookieStore'
+        'Magento\Store\Model\StorageFactory::_checkCookieStore',
     ],
     ['_checkGetStore', 'Magento\Core\Model\App'],
     [
         '_checkGetStore',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkRequestStore'
+        'Magento\Store\Model\StorageFactory::_checkRequestStore',
     ],
     ['_checkUrlSettings', 'Magento\Backend\Controller\Adminhtml\Action'],
     ['_collectOrigData', 'Magento\Catalog\Model\Resource\AbstractResource'],
@@ -118,13 +118,13 @@ return [
     [
         '_getStoreByGroup',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByGroup'
+        'Magento\Store\Model\StorageFactory::_getStoreByGroup',
     ],
     ['_getStoreByWebsite', 'Magento\Core\Model\App'],
     [
         '_getStoreByWebsite',
         'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByWebsite'
+        'Magento\Store\Model\StorageFactory::_getStoreByWebsite',
     ],
     ['_getStoreTaxRequest', 'Magento\Tax\Model\Sales\Total\Quote\Shipping'],
     ['_getUploadMaxFilesize', 'Magento\Catalog\Model\Product\Option\Type\File'],
@@ -186,17 +186,17 @@ return [
     [
         'submitOrder',
         'Magento\Quote\Model\Service\Quote',
-        'Magento\Quote\Model\Service\Quote::submitOrderWithDataObject'
+        'Magento\Quote\Model\Service\Quote::submitOrderWithDataObject',
     ],
     [
         'submitAll',
         'Magento\Quote\Model\Service\Quote',
-        'Magento\Quote\Model\Service\Quote::submitAllWithDataObject'
+        'Magento\Quote\Model\Service\Quote::submitAllWithDataObject',
     ],
     [
         'exportCustomerAddress',
         'Magento\Quote\Model\Quote\Address',
-        'Magento\Quote\Model\Quote\Address::exportCustomerAddressData'
+        'Magento\Quote\Model\Quote\Address::exportCustomerAddressData',
     ],
     ['_toHtml', 'Magento\Backend\Block\Widget\Container'],
     ['_unhookQueries', 'Magento\Core\Model\Resource\Setup'],
@@ -247,23 +247,23 @@ return [
     [
         'addVisibleInCatalogFilterToCollection',
         '',
-        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInCatalogIds());'
+        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInCatalogIds());',
     ],
     [
         'addVisibleInSearchFilterToCollection',
         '',
-        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInSearchIds());'
+        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInSearchIds());',
     ],
     [
         'addVisibleInSiteFilterToCollection',
         '',
-        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInSiteIds());'
+        '$collection->setVisibility(\Magento\Catalog\Model\Product\Visibility->getVisibleInSiteIds());',
     ],
     ['addWishListSortOrder', 'Magento\Wishlist\Model\Resource\Item\Collection'],
     [
         'aggregateSalesReportShipmentData',
         '\Magento\Sales\Model\Observer',
-        '\Magento\Shipping\Model\Observer::aggregateSalesReportShipmentData'
+        '\Magento\Shipping\Model\Observer::aggregateSalesReportShipmentData',
     ],
     ['appendBundleSelectionData', 'Magento\Bundle\Model\Observer'],
     ['applyAllDataUpdates', 'Magento\Core\Model\Resource\Setup'],
@@ -284,7 +284,7 @@ return [
     [
         'canTestHeaders',
         'Magento\TestFramework\Bootstrap',
-        'Magento_TestFramework_Helper_Bootstrap::canTestHeaders'
+        'Magento_TestFramework_Helper_Bootstrap::canTestHeaders',
     ],
     ['catalogCategoryChangeProducts', 'Magento\Catalog\Model\Product\Flat\Observer'],
     ['catalog' . 'EventProductCollectionAfterLoad', 'Magento\GiftMessage\Model\Observer'],
@@ -304,13 +304,13 @@ return [
     [
         'cleanMergedJsCss',
         'Magento\Core\Model\Design\PackageInterface',
-        'Magento\Framework\View\Asset\MergeService'
+        'Magento\Framework\View\Asset\MergeService',
     ],
     ['cleanVarFolder', '', 'Magento\Framework\Filesystem\Io\File::rmdirRecursive()'],
     [
         'cleanVarSubFolders',
         '',
-        '\Magento\Framework\Filesystem::getDirectoryRead(\Magento\Framework\Filesystem::VAR_DIR)::search())'
+        '\Magento\Framework\Filesystem::getDirectoryRead(\Magento\Framework\Filesystem::VAR_DIR)::search())',
     ],
     ['collectRoutes', 'Magento\Backend\App\Router'],
     ['collectRoutes', 'Magento\Core\App\Router\Base'],
@@ -341,7 +341,7 @@ return [
     [
         'getIsMessagesAvailable',
         'Magento\GiftMessage\Helper\Message',
-        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed',
     ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
@@ -359,28 +359,28 @@ return [
     [
         'getProductTypes',
         'Magento\ImportExport\Model\Import\Config',
-        'Magento\ImportExport\Model\Import\Config::getEntityTypes()'
+        'Magento\ImportExport\Model\Import\Config::getEntityTypes()',
     ],
     [
         'getProductTypes',
         '\Magento\ImportExport\Model\Import\ConfigInterface',
-        '\Magento\ImportExport\Model\Import\ConfigInterface::getEntityTypes()'
+        '\Magento\ImportExport\Model\Import\ConfigInterface::getEntityTypes()',
     ],
     [
         'getProductTypes',
         'Magento\ImportExport\Model\Export\Config',
-        'Magento\ImportExport\Model\Export\Config::getEntityTypes()'
+        'Magento\ImportExport\Model\Export\Config::getEntityTypes()',
     ],
     [
         'getProductTypes',
         '\Magento\ImportExport\Model\Export\ConfigInterface',
-        '\Magento\ImportExport\Model\Export\ConfigInterface::getEntityTypes()'
+        '\Magento\ImportExport\Model\Export\ConfigInterface::getEntityTypes()',
     ],
     ['forsedSave'],
     [
         'formatCurrency',
         'Magento\Core\Helper\Data',
-        '\Magento\Framework\Pricing\PriceCurrencyInterface::convertAndFormat'
+        '\Magento\Framework\Pricing\PriceCurrencyInterface::convertAndFormat',
     ],
     ['formatPrice', 'Magento\Core\Helper\Data', '\Magento\Framework\Pricing\PriceCurrencyInterface::format'],
     ['generateBlocks', '', 'generateElements()'],
@@ -432,7 +432,7 @@ return [
     [
         'getDbVendorName',
         'Magento\TestFramework\Bootstrap',
-        'Magento_TestFramework_Helper_Bootstrap::getDbVendorName'
+        'Magento_TestFramework_Helper_Bootstrap::getDbVendorName',
     ],
     ['getDebug', 'Magento\Ogone\Model\Api'],
     ['getDebug', 'Magento\Paypal\Model\Api\AbstractApi'],
@@ -465,13 +465,13 @@ return [
     [
         'getInitParams',
         'Magento\TestFramework\Bootstrap',
-        'Magento_TestFramework_Helper_Bootstrap::getAppInitParams'
+        'Magento_TestFramework_Helper_Bootstrap::getAppInitParams',
     ],
     ['getInstallDate', 'Magento\Core\Model\Config'],
     [
         'getInstallDir',
         'Magento\TestFramework\Bootstrap',
-        'Magento_TestFramework_Helper_Bootstrap::getAppInstallDir'
+        'Magento_TestFramework_Helper_Bootstrap::getAppInstallDir',
     ],
     ['getInstance', 'Magento\TestFramework\Bootstrap', 'Magento_TestFramework_Helper_Bootstrap::getInstance'],
     ['getIsActiveAanalytics', '', 'getOnsubmitJs'],
@@ -504,7 +504,7 @@ return [
     [
         'getNumberDetail',
         'Magento\Sales\Model\Order\Shipment\Track',
-        'Magento\Shipping\Model\Order\Track::getNumberDetail()'
+        'Magento\Shipping\Model\Order\Track::getNumberDetail()',
     ],
     ['getOneBalanceTotal'],
     ['getOptimalCssUrls', 'Magento\Core\Model\Design\Package\Proxy', 'Magento\Framework\View\Asset\Merged'],
@@ -516,7 +516,7 @@ return [
     [
         'getOptions',
         'Magento\Core\Model\Design\Source\Design',
-        'Magento_Core_Model_Theme::getThemeCollectionOptionArray'
+        'Magento_Core_Model_Theme::getThemeCollectionOptionArray',
     ],
     ['getOptionValues', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
     ['getOrderHtml', 'Magento\GoogleAnalytics\Block\Ga'],
@@ -557,19 +557,19 @@ return [
     [
         'getResourceConfig',
         'Magento\Framework\Config\Model\Config',
-        'Magento_Config_Model_Config_Resource::getResourceConfig'
+        'Magento_Config_Model_Config_Resource::getResourceConfig',
     ],
     ['getResourceConfig', 'Magento\Core\Model\Config'],
     [
         'getResourceConnectionConfig',
         'Magento\Framework\Config\Model\Config',
-        'Magento_Config_Model_Config_Resource::getResourceConnectionConfig'
+        'Magento_Config_Model_Config_Resource::getResourceConnectionConfig',
     ],
     ['getResourceConnectionConfig', 'Magento\Core\Model\Config'],
     [
         'getResourceConnectionModel',
         'Magento\Framework\Config\Model\Config',
-        'Magento_Config_Model_Config_Resource::getResourceConnectionModel'
+        'Magento_Config_Model_Config_Resource::getResourceConnectionModel',
     ],
     ['getResourceConnectionModel', 'Magento\Core\Model\Config'],
     ['getResourceModel', 'Magento\Core\Model\Config'],
@@ -577,7 +577,7 @@ return [
     [
         'getResourceTypeConfig',
         'Magento\Framework\Config\Model\Config',
-        'Magento_Config_Model_Config_Resource::getResourceTypeConfig'
+        'Magento_Config_Model_Config_Resource::getResourceTypeConfig',
     ],
     ['getResourceTypeConfig', 'Magento\Core\Model\Config'],
     ['getResTreeJson', 'Magento\User\Block\Role\Tab\Edit', 'getTree'],
@@ -603,7 +603,7 @@ return [
     [
         '_getDefaultControllerName',
         'Magento\Framework\Url',
-        'Magento\Framework\UrlInterface::DEFAULT_CONTROLLER_NAME'
+        'Magento\Framework\UrlInterface::DEFAULT_CONTROLLER_NAME',
     ],
     ['_getDefaultUrlType', 'Magento\Framework\Url', 'Magento\Framework\UrlInterface::DEFAULT_URL_TYPE'],
     ['getSelectionFinalPrice', 'Magento\Bundle\Model\Product\Price'],
@@ -631,7 +631,7 @@ return [
     [
         'getTagsByType',
         'Magento\Framework\App\CacheInterface',
-        'Magento_Cache_Frontend_Decorator_TagScope::getTag()'
+        'Magento_Cache_Frontend_Decorator_TagScope::getTag()',
     ],
     ['getTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['getTaxRatesByProductClass', '', '_getAllRatesByProductClass'],
@@ -640,7 +640,7 @@ return [
     [
         'getTemplateProcessor',
         'Magento\Newsletter\Helper\Data',
-        'Use directly model \Magento\Newsletter\Model\Template\Filter'
+        'Use directly model \Magento\Newsletter\Model\Template\Filter',
     ],
     ['getTempVarDir', 'Magento\Core\Model\Config', 'Magento_Core_Model_Dir::getDir()'],
     ['getTestsDir', 'Magento\TestFramework\Bootstrap'],
@@ -648,7 +648,7 @@ return [
     [
         'getThemeOptions',
         'Magento\Core\Model\Design\Source\Design',
-        'Magento_Core_Model_Theme::getThemeCollectionOptionArray'
+        'Magento_Core_Model_Theme::getThemeCollectionOptionArray',
     ],
     ['getTotalModels', 'Magento\Quote\Model\Quote\Address'],
     ['importCustomerAddress', 'Magento\Quote\Model\Quote\Address'],
@@ -693,7 +693,7 @@ return [
     [
         'initCurrentStore',
         'Magento\Store\Model\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_reinitStores'
+        'Magento\Store\Model\StorageFactory::_reinitStores',
     ],
     ['_checkGetStore', 'Magento\Store\Model\Storage\Db'],
     ['_checkCookieStore', 'Magento\Store\Model\Storage\Db'],
@@ -746,19 +746,19 @@ return [
     [
         'map',
         'Magento\Framework\ObjectManager\Config\Mapper\Dom',
-        'Magento_ObjectManager_Config_Mapper_Dom::convert'
+        'Magento_ObjectManager_Config_Mapper_Dom::convert',
     ],
     ['mergeFiles', 'Magento\Core\Helper\Data', 'Magento\Framework\View\Asset\MergeStrategyInterface'],
     ['mergeFiles', 'Magento\Core\Model\Design\Package', 'Magento\Framework\View\Asset\MergeStrategyInterface'],
     [
         'mergeFiles',
         'Magento\Core\Model\Design\Package\Proxy',
-        'Magento\Framework\View\Asset\MergeStrategyInterface'
+        'Magento\Framework\View\Asset\MergeStrategyInterface',
     ],
     [
         'mergeFiles',
         'Magento\Core\Model\Design\PackageInterface',
-        'Magento\Framework\View\Asset\MergeStrategyInterface'
+        'Magento\Framework\View\Asset\MergeStrategyInterface',
     ],
     ['order_success_page_view', 'Magento\GoogleAnalytics\Model\Observer'],
     ['orderedAction', 'Magento\Backend\Controller\Report\Product'],
@@ -768,6 +768,11 @@ return [
     ['postDispatchMyAccountSave'],
     ['postDispatchSystemImportExportRun'],
     ['prepareAttributesForSave', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['getAffectedEntityIds', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['getCategoryWithRoot', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
+    ['getCategory', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
+    ['prepareGroupPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
+    ['prepareTierPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['prepareGoogleOptimizerScripts'],
     ['prepareRedirect', 'Magento\Core\Controller\Varien\Exception'],
     ['preparePriceAlertData', 'Magento\ProductAlert\Block\Product\View'],
@@ -785,6 +790,7 @@ return [
     ['regenerateSessionId', 'Magento\Core\Model\Session\AbstractSession'],
     ['reinitialize', 'Magento\TestFramework\Bootstrap', 'Magento_TestFramework_Helper_Bootstrap::reinitialize'],
     ['removeAuthLink', 'Magento\Customer\Block\Account\Link'],
+    ['getCustomerName', 'Magento\Customer\Block\Account'],
     ['removeItem', 'Magento\Theme\Block\Html\Head'],
     ['removeCustomerFromSegments'],
     ['removeHandle', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
@@ -868,11 +874,11 @@ return [
     ['_getOptionValuesCollection', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
     [
         ' _prepareSystemAttributeOptionValues',
-        'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'
+        'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions',
     ],
     [
         '_prepareUserDefinedAttributeOptionValues',
-        'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'
+        'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions',
     ],
     ['getLabelValues', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
     ['getStoreOptionValues', 'Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\AbstractOptions'],
@@ -880,32 +886,32 @@ return [
     [
         'substractQtyFromQuotes',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::subtractQtyFromQuotes'
+        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::subtractQtyFromQuotes',
     ],
     [
         'markQuotesRecollectOnCatalogRules',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_CatalogPriceRule::dispatch'
+        'Magento_Sales_Model_Observer_Backend_CatalogPriceRule::dispatch',
     ],
     [
         'catalogProductSaveAfter',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::catalogProductSaveAfter'
+        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::catalogProductSaveAfter',
     ],
     [
         'catalogProductStatusUpdate',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::catalogProductStatusUpdate'
+        'Magento_Sales_Model_Observer_Backend_CatalogProductQuote::catalogProductStatusUpdate',
     ],
     [
         'restrictAdminBillingAgreementUsage',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_BillingAgreement::dispatch'
+        'Magento_Sales_Model_Observer_Backend_BillingAgreement::dispatch',
     ],
     [
         'customerSaveAfter',
         'Magento\Sales\Model\Observer',
-        'Magento_Sales_Model_Observer_Backend_CustomerQuote::dispatch'
+        'Magento_Sales_Model_Observer_Backend_CustomerQuote::dispatch',
     ],
     ['_getUsers', 'Magento\Backend\Block\Api\Role\Grid\User', 'getUsers'],
     ['_getGridHtml', 'Magento\Backend\Block\Api\Tab\Rolesusers', 'getGridHtml'],
@@ -914,7 +920,7 @@ return [
     [
         '_getImageUploadUrl',
         'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config\Matrix',
-        'getImageUploadUrl'
+        'getImageUploadUrl',
     ],
     ['_getProduct', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config\Simple', 'getProduct'],
     ['_getProduct', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config', 'getProduct'],
@@ -925,7 +931,7 @@ return [
     [
         '_renderCellTemplate',
         'Magento\Backend\Block\System\Config\Form\Field\Array\AbstractArray',
-        'renderCellTemplate'
+        'renderCellTemplate',
     ],
     ['_showSingle', 'Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option', 'showSingle'],
     ['_getDefaultValues', 'Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option', 'getDefaultValues'],
@@ -933,7 +939,7 @@ return [
     [
         '_getProduct',
         'Magento\Catalog\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet',
-        'getProduct'
+        'getProduct',
     ],
     ['_getProduct', 'Magento\CatalogInventory\Block\Stockqty\AbstractStockqty', 'getProduct'],
     ['_getProduct', 'Magento\CatalogInventory\Block\Qtyincrements', 'getProduct'],
@@ -949,7 +955,7 @@ return [
     ['_getGridHtml', 'Magento\User\Block\Role\Tab\Users', 'getGridHtml'],
     ['_getSelectedRoles', 'Magento\User\Block\User\Edit\Tab\Roles', 'getSelectedRoles'],
     ['_prepareSelect', 'Magento\Framework\Model\Resource\Db\Collection\AbstractCollection'],
-    ['_prepareSelect', 'Magento\Framework\Data\Collection\Db'],
+    ['_prepareSelect', 'Magento\Framework\Data\Collection\AbstractDb'],
     ['_createOrderFromAddress', 'Magento\Checkout\Model\Type\AbstractType'],
     ['_addLoadAttributesSelectFields', 'Magento\Catalog\Model\Resource\AbstractResource'],
     ['attributeSelectFields', 'Magento\Catalog\Model\Resource\Helper'],
@@ -969,7 +975,7 @@ return [
     [
         'getDefaultTemplatesAsOptionsArray',
         'Magento\Email\Model\Template',
-        'Magento_Adminhtml_Block_System_Email_Template_Edit::_getDefaultTemplatesAsOptionsArray'
+        'Magento_Adminhtml_Block_System_Email_Template_Edit::_getDefaultTemplatesAsOptionsArray',
     ],
     ['getMetaTags', 'Magento\Theme\Block\Html\Head'],
     ['getMetaTagHtml', 'Magento\Theme\Block\Html\Head'],
@@ -991,7 +997,7 @@ return [
     [
         '_getResource',
         'Magento\Weee\Model\Attribute\Backend\Weee\Tax',
-        'Magento_Weee_Model_Attribute_Backend_Weee_Tax::$_attributeTax'
+        'Magento_Weee_Model_Attribute_Backend_Weee_Tax::$_attributeTax',
     ],
     ['getCouponMassGenerator', 'Magento\SalesRule\Model\Rule', 'Magento\SalesRule\Model\Coupon\Massgenerator'],
     ['_getHelper', 'Magento\Captcha\Model\DefaultModel'],
@@ -1012,7 +1018,7 @@ return [
     ['turnOnSerializableMode', 'Magento\Backup\Model\Resource\Db', 'prepareTransactionIsolationLevel'],
     ['turnOnMaintenanceMode', 'Magento\Backup\Helper\Data', 'Magento\Framework\App\MaintenanceMode::set'],
     ['turnOffMaintenanceMode', 'Magento\Backup\Helper\Data', 'Magento\Framework\App\MaintenanceMode::set'],
-    ['getMaintenanceFlagFilePath', 'Magento\Backup\Helper\Data',],
+    ['getMaintenanceFlagFilePath', 'Magento\Backup\Helper\Data'],
     ['_getResourceModel', '\Magento\Webapi\Model\Source\Acl\Role', '$this->_resource'],
     ['_getSession', '\Magento\GiftMessage\Model\Save', '$this->_session'],
     ['run', '\Magento\Framework\AppInterface'],
@@ -1056,7 +1062,7 @@ return [
     [
         'getMerchantCountryCode',
         '\Magento\Core\Helper\Data',
-        '\Magento\Customer\Helper\Data::getMerchantCountryCode'
+        '\Magento\Customer\Helper\Data::getMerchantCountryCode',
     ],
     ['getMerchantVatNumber', '\Magento\Core\Helper\Data', '\Magento\Customer\Helper\Data::getMerchantVatNumber'],
     ['isCountryInEU', '\Magento\Core\Helper\Data', '\Magento\Customer\Helper\Data::isCountryInEU'],
@@ -1069,7 +1075,7 @@ return [
     [
         'getProtectedFileExtensions',
         '\Magento\Core\Helper\Data',
-        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions',
     ],
     ['getStoreId', '\Magento\Core\Helper\Data'],
     ['getExactDivision', '\Magento\Core\Helper\Data', '\Magento\Framework\Math\Division::getExactDivision'],
@@ -1087,39 +1093,39 @@ return [
     [
         'getHttpAuthCredentials',
         '\Magento\Core\Helper\Http',
-        '\Magento\Framework\HTTP\Authentication::getCredentials'
+        '\Magento\Framework\HTTP\Authentication::getCredentials',
     ],
     [
         'failHttpAuthentication',
         '\Magento\Core\Helper\Http',
-        '\Magento\Framework\HTTP\Authentication::setAuthenticationFailed'
+        '\Magento\Framework\HTTP\Authentication::setAuthenticationFailed',
     ],
     ['getRequestUri', '\Magento\Core\Helper\Http', '\Magento\Framework\HTTP\Header::getRequestUri'],
     [
         'getRequiredAgreementIds',
         '\Magento\Checkout\Helper\Data',
-        '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds'
+        '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds',
     ],
     ['validateIpAddr', '\Magento\Core\Helper\Http', '\Zend_Validate_Ip::isValid'],
     [
         'getRemoteAddr',
         '\Magento\Core\Helper\Http',
-        'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::getRemoteAddress'
+        'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::getRemoteAddress',
     ],
     [
         'getServerAddr',
         '\Magento\Core\Helper\Http',
-        'Magento\Framework\HTTP\PhpEnvironment\ServerAddress::getServerAddress'
+        'Magento\Framework\HTTP\PhpEnvironment\ServerAddress::getServerAddress',
     ],
     [
         'formatDate',
         'Magento\Framework\Model\Resource\AbstractResource',
-        '\Magento\Framework\Stdlib\DateTime::formatDate'
+        '\Magento\Framework\Stdlib\DateTime::formatDate',
     ],
     [
         'mktime',
         'Magento\Framework\Model\Resource\AbstractResource',
-        '\Magento\Framework\Stdlib\DateTime::toTimestamp'
+        '\Magento\Framework\Stdlib\DateTime::toTimestamp',
     ],
     ['getPlainTemplateMode', '\Magento\Email\Model\Template\Filter'],
     ['getMessage', '\Magento\Core\Model\Session\Context', 'getMessageFactory'],
@@ -1132,7 +1138,7 @@ return [
     [
         '_getConfigTimezone',
         '\Magento\Framework\Stdlib\DateTime\DateTime',
-        '\Magento\Core\Model\Locale::getConfigTimezone'
+        '\Magento\Core\Model\Locale::getConfigTimezone',
     ],
     ['_filterPostData', '\Magento\Checkout\Controller\Onepage'],
     ['_filterPostData', '\Magento\Customer\Controller\Account'],
@@ -1144,12 +1150,12 @@ return [
     [
         'initLayoutMessages',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\View\Layout::initMessages'
+        '\Magento\Framework\View\Layout::initMessages',
     ],
     [
         '_initLayoutMessages',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\View\Layout::initMessages'
+        '\Magento\Framework\View\Layout::initMessages',
     ],
     ['preDispatch', '\Magento\Core\Controller\Varien\Action'],
     ['postDispatch', '\Magento\Core\Controller\Varien\Action'],
@@ -1157,44 +1163,44 @@ return [
     [
         '_startSession',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Core\App\Action\Plugin\Session::aroundDispatch'
+        '\Magento\Core\App\Action\Plugin\Session::aroundDispatch',
     ],
     [
         '_redirectSuccess',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\Response\RedirectInterface::success'
+        '\Magento\Framework\App\Response\RedirectInterface::success',
     ],
     [
         '_redirectUrl',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\Response\RedirectInterface::redirect'
+        '\Magento\Framework\App\Response\RedirectInterface::redirect',
     ],
     [
         '_redirectError',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\Response\RedirectInterface::error'
+        '\Magento\Framework\App\Response\RedirectInterface::error',
     ],
     ['_redirectReferer', '\Magento\Core\Controller\Varien\Action'],
     [
         '_validateFormKey',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Core\App\Action\FormKeyValidator::validate'
+        '\Magento\Core\App\Action\FormKeyValidator::validate',
     ],
     [
         '_getRefererUrl',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\Response\RedirectInterface::getRefererUrl'
+        '\Magento\Framework\App\Response\RedirectInterface::getRefererUrl',
     ],
     ['_isUrlInternal', '\Magento\Core\Controller\Varien\Action'],
     [
         '_filterDateTime',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\Stdlib\DateTime\Filter\DateTime::filter'
+        '\Magento\Framework\Stdlib\DateTime\Filter\DateTime::filter',
     ],
     [
         '_filterDates',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\Stdlib\DateTime\Filter\Date::filter'
+        '\Magento\Framework\Stdlib\DateTime\Filter\Date::filter',
     ],
     ['_initDesign', '\Magento\Core\Controller\Varien\Action', '\Magento\Core\Model\DesignLoader::load'],
     ['_firePreDispatchEvents', '\Magento\Core\Controller\Varien\Action'],
@@ -1207,38 +1213,38 @@ return [
     [
         'addPageLayoutHandles',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::loadLayout'
+        '\Magento\Framework\App\ViewInterface::loadLayout',
     ],
     [
         'getDefaultLayoutHandle',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::getDefaultLayoutHandle'
+        '\Magento\Framework\App\ViewInterface::getDefaultLayoutHandle',
     ],
     [
         'generateLayoutXml',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::generateLayoutXml'
+        '\Magento\Framework\App\ViewInterface::generateLayoutXml',
     ],
     [
         'renderLayout',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::renderLayout'
+        '\Magento\Framework\App\ViewInterface::renderLayout',
     ],
     ['getLayout', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ViewInterface::getLayout'],
     [
         'loadLayoutUpdates',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::loadLayoutUpdates'
+        '\Magento\Framework\App\ViewInterface::loadLayoutUpdates',
     ],
     [
         'generateLayoutBlocks',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::generateLayoutBlocks'
+        '\Magento\Framework\App\ViewInterface::generateLayoutBlocks',
     ],
     [
         'addActionLayoutHandles',
         '\Magento\Core\Controller\Varien\Action',
-        '\Magento\Framework\App\ViewInterface::addActionLayoutHandles'
+        '\Magento\Framework\App\ViewInterface::addActionLayoutHandles',
     ],
     ['getTranslator', '\Magento\Framework\App\Helper\Context'],
     ['getTranslator', '\Magento\Core\Helper\Data'],
@@ -1249,28 +1255,28 @@ return [
     [
         'changeQuoteCustomerGroupId',
         '\Magento\Sales\Model\Observer',
-        '\Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch'
+        '\Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch',
     ],
     [
         'getEncryptedSessionId',
         '\Magento\Core\Model\Session\AbstractSession',
-        '\Magento\Core\Model\Session\AbstractSession::getSessionId'
+        '\Magento\Core\Model\Session\AbstractSession::getSessionId',
     ],
     [
         'getSessionIdQueryParam',
         '\Magento\Core\Model\Session\AbstractSession',
-        '\Magento\Core\Model\Session\SidResolver::getSessionIdQueryParam'
+        '\Magento\Core\Model\Session\SidResolver::getSessionIdQueryParam',
     ],
     ['getCookie', '\Magento\Core\Model\Session\AbstractSession'],
     [
         'unsetAll',
         '\Magento\Core\Model\Session\AbstractSession',
-        '\Magento\Core\Model\Session\AbstractSession::clearStorage'
+        '\Magento\Core\Model\Session\AbstractSession::clearStorage',
     ],
     [
         'clear',
         '\Magento\Core\Model\Session\AbstractSession',
-        '\Magento\Core\Model\Session\AbstractSession::clearStorage'
+        '\Magento\Core\Model\Session\AbstractSession::clearStorage',
     ],
     ['delete', '\Magento\Framework\Stdlib\Cookie', '\Magento\Framework\Stdlib\Cookie::set'],
     ['setSkipSessionIdFlag', '\Magento\Core\Model\Session\AbstractSession'],
@@ -1360,49 +1366,49 @@ return [
     [
         '_initProductSave',
         '\Magento\Catalog\Controller\Adminhtml\Product',
-        '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize'
+        '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize',
     ],
     ['superGroupAction', '\Magento\Catalog\Controller\Adminhtml\Product'],
     [
         'superGroupPopupAction',
         '\Magento\Catalog\Controller\Adminhtml\Product',
-        '\Magento\GroupedProduct\Controller\Adminhtml\Edit::popupAction'
+        '\Magento\GroupedProduct\Controller\Adminhtml\Edit::popupAction',
     ],
     [
         'prepareProductSave',
         '\Magento\Bundle\Model\Observer',
-        '\Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle::afterInitialize'
+        '\Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle::afterInitialize',
     ],
     [
         'duplicateProduct',
         'Magento\Bundle\Model\Observer',
-        'Magento\Bundle\Model\Product\CopyConstructor\Bundle::build'
+        'Magento\Bundle\Model\Product\CopyConstructor\Bundle::build',
     ],
     [
         'prepareProductSave',
         '\Magento\Downloadable\Model\Observer',
-        '\Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable::afterInitialize'
+        '\Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable::afterInitialize',
     ],
     [
         'duplicateProduct',
         '\Magento\Downloadable\Model\Observer',
-        '\Magento\Downloadable\Model\Product\CopyConstructor\Downloadable::build'
+        '\Magento\Downloadable\Model\Product\CopyConstructor\Downloadable::build',
     ],
     [
         'catalogProductPrepareSave',
         '\Magento\PricePermissions\Model\Observer',
         '\Magento\PricePermissions\Controller\Adminhtml\Product\Initialization\Helper\Plugin\PricePermissions::' .
-        'afterInitialize'
+        'afterInitialize',
     ],
     [
         'getGroupedOptions',
         '\Magento\Catalog\Helper\Product\Configuration',
-        '\Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions'
+        '\Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions',
     ],
     [
         'copyInventoryData',
         'Magento\CatalogInventory\Model\Observer',
-        '\Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory::build'
+        '\Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory::build',
     ],
     ['getTrackingAjaxUrl', 'Magento\Shipping\Helper\Data'],
     ['isFreeMethod', 'Magento\Shipping\Helper\Data'],
@@ -1427,34 +1433,34 @@ return [
     [
         '_processArrayNode',
         'Magento\Framework\ObjectManager\Config\Mapper\Dom',
-        'Magento\Framework\Data\Argument\Interpreter\ArrayType'
+        'Magento\Framework\Data\Argument\Interpreter\ArrayType',
     ],
     [
         '_processValueNode',
         'Magento\Framework\ObjectManager\Config\Mapper\Dom',
-        'Magento\Framework\Data\Argument\Interpreter\Composite'
+        'Magento\Framework\Data\Argument\Interpreter\Composite',
     ],
     ['canSkipFilePublication', 'Magento\Framework\View\Publisher'],
     ['_getExtension', 'Magento\Framework\View\Publisher'],
     [
         '_buildPublishedFilePath',
         'Magento\Framework\View\Publisher',
-        'Magento\Framework\View\Publisher\FileInterface'
+        'Magento\Framework\View\Publisher\FileInterface',
     ],
     [
         '_buildPublicViewRedundantFilename',
         'Magento\Framework\View\Publisher',
-        'Magento\Framework\View\Publisher\File'
+        'Magento\Framework\View\Publisher\File',
     ],
     [
         '_buildPublicViewSufficientFilename',
         'Magento\Framework\View\Publisher',
-        'Magento\Framework\View\Publisher\File'
+        'Magento\Framework\View\Publisher\File',
     ],
     [
         '_buildPublicViewFilename',
         'Magento\Framework\View\Publisher',
-        'Magento\Framework\View\Publisher\FileInterface'
+        'Magento\Framework\View\Publisher\FileInterface',
     ],
     ['cleanAction', 'Magento\PageCache\Controller\Adminhtml\PageCache'],
     ['_isAllowed', 'Magento\PageCache\Controller\Adminhtml\PageCache'],
@@ -1462,7 +1468,7 @@ return [
     [
         '_processDatabaseFile',
         'Magento\Sales\Controller\Download',
-        '\Magento\Sales\Model\Download::_processDatabaseFile'
+        '\Magento\Sales\Model\Download::_processDatabaseFile',
     ],
     ['useDbCompatibleMode', 'Magento\Core\Helper\Data'],
     ['getFlag', 'Magento\Catalog\Helper\Product\Flat'],
@@ -1475,38 +1481,38 @@ return [
     [
         'getProductStatus',
         'Magento\Catalog\Model\Resource\Product\Status',
-        'Magento\CatalogInventory\Model\Resource\Stock\Status'
+        'Magento\CatalogInventory\Model\Resource\Stock\Status',
     ],
     ['updateProductStatus', 'Magento\Catalog\Model\Product\Status'],
     ['getProductStatus', 'Magento\Catalog\Model\Product\Status'],
     [
         'addValueSortToCollection',
         'Magento\Catalog\Model\Product\Status',
-        'Magento\CatalogInventory\Model\Resource\Stock\Status'
+        'Magento\CatalogInventory\Model\Resource\Stock\Status',
     ],
     ['catalogProductStatusUpdate', 'Magento\Sales\Model\Observer\Backend\CatalogProductQuote'],
     ['applyPermissionsAfterReindex', 'Magento\CatalogPermissions\Model\Adminhtml\Observer'],
     [
         'transitionProductType',
         'Magento\Catalog\Model\Observer',
-        'Magento\Catalog\Model\Product\TypeTransitionManager::processProduct'
+        'Magento\Catalog\Model\Product\TypeTransitionManager::processProduct',
     ],
     [
         'transitionProductType',
         'Magento\Downloadable\Model\Observer',
-        'Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable::aroundProcessProduct'
+        'Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable::aroundProcessProduct',
     ],
     [
         'isUsedBySuperProducts',
         'Magento\Catalog\Model\Resource\Attribute',
-        'Magento\ConfigurableProduct\Model\Attribute\LockValidator::validate'
+        'Magento\ConfigurableProduct\Model\Attribute\LockValidator::validate',
     ],
     ['_detectMimeType', 'Magento\Framework\File\Transfer\Adapter\Http', '\Magento\Framework\File\Mime::getMimeType()'],
     ['getPublishedFilePath', 'Magento\Framework\View\Publisher'],
     [
         'getPublicFilePath',
         'Magento\Framework\View\PublicFilesManagerInterface',
-        'Magento\Framework\View\AssetInterface'
+        'Magento\Framework\View\AssetInterface',
     ],
     ['getPublicFilePath', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\AssetInterface'],
     ['getPublicViewFile', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\AssetInterface'],
@@ -1535,7 +1541,7 @@ return [
     [
         'storeDate',
         'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
-        'Magento\Framework\Stdlib\DateTime\TimezoneInterface::scopeDate'
+        'Magento\Framework\Stdlib\DateTime\TimezoneInterface::scopeDate',
     ],
     ['utcDate', 'Magento\Core\Model\Locale'],
     ['storeTimeStamp', 'Magento\Core\Model\Locale', 'Magento\Framework\Stdlib\DateTime\Timezone::scopeTimeStamp'],
@@ -1560,13 +1566,13 @@ return [
     [
         'convertMeasureDimension',
         'Magento\Usa\Helper\Data',
-        'Magento\Shipping\Helper\Carrier::convertMeasureDimension'
+        'Magento\Shipping\Helper\Carrier::convertMeasureDimension',
     ],
     ['getMeasureWeightName', 'Magento\Usa\Helper\Data', 'Magento\Shipping\Helper\Carrier::getMeasureWeightName'],
     [
         'getMeasureDimensionName',
         'Magento\Usa\Helper\Data',
-        'Magento\Shipping\Helper\Carrier::getMeasureDimensionName'
+        'Magento\Shipping\Helper\Carrier::getMeasureDimensionName',
     ],
     ['displayGirthValue', 'Magento\Usa\Helper\Data', 'Magento\Usps\Helper\Data::displayGirthValue'],
     ['reindexProductPrices', '\Magento\Catalog\Model\Observer'],
@@ -1575,15 +1581,15 @@ return [
     [
         'getStoreConfig',
         'Magento\Framework\View\Element\Context',
-        '\Magento\Framework\View\Element\Context::getScopeConfig'
+        '\Magento\Framework\View\Element\Context::getScopeConfig',
     ],
     ['setConfig', 'Magento\Store\Model\Store'],
     ['getConfig', 'Magento\Store\Model\Store'],
     ['_compareSortOrder', 'Magento\Sales\Model\Config\Ordered'],
     [
         '_toOptionHashOptimized',
-        'Magento\Framework\Data\Collection\Db',
-        'Magento\Tax\Model\Resource\Calculation\Rate\Collection::toOptionHashOptimized'
+        'Magento\Framework\Data\Collection\AbstractDb',
+        'Magento\Tax\Model\Resource\Calculation\Rate\Collection::toOptionHashOptimized',
     ],
     ['getSwitchCurrencyUrl', 'Magento\Directory\Block\Currency'],
     ['getPageVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'],
@@ -1606,7 +1612,7 @@ return [
     [
         'reviewsAction',
         'Magento\Catalog\Controller\Adminhtml\Product',
-        'Magento\Review\Controller\Adminhtml\Product\Reviews::gridAction'
+        'Magento\Review\Controller\Adminhtml\Product\Reviews::gridAction',
     ],
     ['_insertInlineScriptsHtml', 'Magento\DesignEditor\Model\Translate\Inline', 'addInlineScript'],
     ['initializeTranslation', 'Magento\Backend\Model\Observer'],
@@ -1632,11 +1638,11 @@ return [
     [
         'isReservedAttribute',
         'Magento\Catalog\Model\Product',
-        'Magento\Catalog\Model\Product\ReservedAttributeList::isReservedAttribute'
+        'Magento\Catalog\Model\Product\ReservedAttributeList::isReservedAttribute',
     ],
     [
         'getRatingSummary',
-        'Magento\Catalog\Model\Product'
+        'Magento\Catalog\Model\Product',
     ],
     ['getCurrentStore', 'Magento\Store\Model\StoreManagerInterface'],
     ['getAnyStoreView', 'Magento\Store\Model\StoreManagerInterface'],
@@ -1678,6 +1684,7 @@ return [
     ['getVisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getVisibleOnFrontStatuses'],
     ['getInvisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getInvisibleOnFrontStatuses'],
     ['_authorize', 'Magento\Sales\Model\Order\Payment'],
+    ['registerPaymentReviewAction', 'Magento\Sales\Model\Order\Payment'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
@@ -1702,38 +1709,38 @@ return [
     [
         'convertModuleNotationToPath',
         'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-        'Magento\Framework\View\Asset\ModuleNotation\Resolver::convertModuleNotationToPath'
+        'Magento\Framework\View\Asset\ModuleNotation\Resolver::convertModuleNotationToPath',
     ],
     ['getViewFile', 'Magento\Framework\View\FileSystem', 'Magento\Framework\View\Asset\File::getSourceFile()'],
     [
         '_unserializeValue',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::unserializeValue'
+        'Magento\CatalogInventory\Helper\Minsaleqty::unserializeValue',
     ],
     [
         '_isEncodedArrayFieldValue',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::isEncodedArrayFieldValue'
+        'Magento\CatalogInventory\Helper\Minsaleqty::isEncodedArrayFieldValue',
     ],
     [
         '_serializeValue',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::serializeValue'
+        'Magento\CatalogInventory\Helper\Minsaleqty::serializeValue',
     ],
     [
         '_fixQty',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::fixQty'
+        'Magento\CatalogInventory\Helper\Minsaleqty::fixQty',
     ],
     [
         '_encodeArrayFieldValue',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::encodeArrayFieldValue'
+        'Magento\CatalogInventory\Helper\Minsaleqty::encodeArrayFieldValue',
     ],
     [
         '_decodeArrayFieldValue',
         'Magento\CatalogInventory\Helper\Minsaleqty',
-        'Magento\CatalogInventory\Helper\Minsaleqty::decodeArrayFieldValue'
+        'Magento\CatalogInventory\Helper\Minsaleqty::decodeArrayFieldValue',
     ],
     ['updateOrderAction', 'Magento\Paypal\Controller\Express\AbstractExpress'],
     ['updateOrder', 'Magento\Paypal\Model\Express\Checkout'],
@@ -1750,7 +1757,7 @@ return [
     [
         'getFlatColums',
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
-        'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::getFlatColumns'
+        'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::getFlatColumns',
     ],
     ['addProductAdvanced', '\Magento\Quote\Model\Quote'],
     ['translateArray', 'Magento\Framework\App\Helper\AbstractHelper'],
@@ -1764,14 +1771,14 @@ return [
     [
         'getWebsites',
         'Magento\CatalogInventory\Model\StockIndex',
-        'Magento\CatalogInventory\Model\StockIndex:getWebsitesWithDefaultStores'
+        'Magento\CatalogInventory\Model\StockIndex:getWebsitesWithDefaultStores',
     ],
     ['getProductType', 'Magento\CatalogInventory\Model\StockIndex'],
     ['getProductTypeInstance', 'Magento\CatalogInventory\Model\StockIndex'],
     [
         'getPriceHtml',
         '\Magento\Catalog\Block\Product\AbstractProduct',
-        '\Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml'
+        '\Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml',
     ],
     ['getDeleteUrl', '\Magento\Checkout\Block\Cart\Item\Renderer'],
     ['sendNewOrderEmail', 'Magento\Sales\Model\Order'],
@@ -1792,72 +1799,72 @@ return [
     [
         'rebuildIndex',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::rebuildIndex'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::rebuildIndex',
     ],
     [
         '_rebuildStoreIndex',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::rebuildStoreIndex'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::rebuildStoreIndex',
     ],
     [
         '_getSearchableProducts',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableProducts'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableProducts',
     ],
     [
         'cleanIndex',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::cleanIndex'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::cleanIndex',
     ],
     [
         'getEavConfig',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getEavConfig'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getEavConfig',
     ],
     [
         '_getSearchableAttributes',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableAttributes'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableAttributes',
     ],
     [
         '_getSearchableAttribute',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableAttribute'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getSearchableAttribute',
     ],
     [
         '_unifyField',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::unifyField'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::unifyField',
     ],
     [
         '_getProductAttributes',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductAttributes'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductAttributes',
     ],
     [
         '_getProductTypeInstance',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductTypeInstance'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductTypeInstance',
     ],
     [
         '_getProductChildIds',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductChildIds'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductChildIds',
     ],
     [
         '_getProductEmulator',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductEmulator'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getProductEmulator',
     ],
     [
         '_prepareProductIndex',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::prepareProductIndex'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::prepareProductIndex',
     ],
     [
         '_getAttributeValue',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getAttributeValue'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getAttributeValue',
     ],
     [
         '_saveProductIndex',
@@ -1866,12 +1873,12 @@ return [
     [
         '_saveProductIndexes',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::saveProductIndexes'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::saveProductIndexes',
     ],
     [
         '_getStoreDate',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
-        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getStoreDate'
+        'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::getStoreDate',
     ],
     [
         'updateCategoryIndex',
@@ -1894,12 +1901,12 @@ return [
     [
         'loadPreviousPrices',
         'Magento\Catalog\Model\Layer\Filter\Price',
-        'Magento\CatalogSearch\Model\Price\Interval::loadPrevious'
+        'Magento\CatalogSearch\Model\Price\Interval::loadPrevious',
     ],
     [
         'loadNextPrices',
         'Magento\Catalog\Model\Layer\Filter\Price',
-        'Magento\CatalogSearch\Model\Price\Interval::loadNext'
+        'Magento\CatalogSearch\Model\Price\Interval::loadNext',
     ],
     ['getQuery', 'Magento\CatalogSearch\Helper\Data', 'Magento\Search\Model\QueryFactory::get'],
     ['getQueryText', 'Magento\CatalogSearch\Helper\Data', 'Magento\Search\Model\Query::getQueryText'],
@@ -1984,7 +1991,7 @@ return [
     [
         'getRatesByCustomerAndProductTaxClassId',
         'Magento\Tax\Service\V1\TaxRuleServiceInterface',
-        'Magento\Tax\Api\TaxRateManagementInterface::getRatesByCustomerAndProductTaxClassId'
+        'Magento\Tax\Api\TaxRateManagementInterface::getRatesByCustomerAndProductTaxClassId',
     ],
     ['getProduct', 'Magento\Catalog\Helper\Product'],
     ['getCategoryModel', 'Magento\Catalog\Model\Resource\Url'],
@@ -2017,12 +2024,12 @@ return [
     [
         'isAutomaticCleaningAvailable',
         'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
-        'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::getCapabilities'
+        'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::getCapabilities',
     ],
     [
         'getNoteNotify',
         'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
-        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals',
     ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
@@ -2079,44 +2086,54 @@ return [
     [
         'render',
         'Magento\Framework\Webapi\ErrorProcessor',
-        'Magento\Framework\Webapi\ErrorProcessor::renderErrorMessage'
+        'Magento\Framework\Webapi\ErrorProcessor::renderErrorMessage',
     ],
     [
         'processServiceOutput',
         'Magento\Webapi\Controller\Rest\Response\DataObjectConverter',
-        'Magento\Framework\Webapi\ServiceOutputProcessor::process'
+        'Magento\Framework\Webapi\ServiceOutputProcessor::process',
     ],
     [
         'getInputData',
         'Magento\Webapi\Controller\ServiceArgsSerializer',
-        'Magento\Framework\Webapi\ServiceInputProcessor::process'
+        'Magento\Framework\Webapi\ServiceInputProcessor::process',
     ],
     [
         'getServiceName',
         'Magento\Webapi\Helper\Data',
-        'Magento\Webapi\Model\Soap\Config::getServiceName'
+        'Magento\Webapi\Model\Soap\Config::getServiceName',
     ],
     [
         'getServiceNameParts',
         'Magento\Webapi\Helper\Data',
-        'Magento\Webapi\Model\Soap\Config::getServiceNameParts'
+        'Magento\Webapi\Model\Soap\Config::getServiceNameParts',
     ],
     [
         'getSelectedResources',
         'Magento\Webapi\Helper\Data',
-        'Magento\Webapi\Model\Soap\Config::getSelectedResources'
+        'Magento\Webapi\Model\Soap\Config::getSelectedResources',
     ],
     [
         'validateCredentials',
         'Magento\Integration\Helper\Validator',
-        'Magento\Integration\Model\CredentialsValidator::validate'
+        'Magento\Integration\Model\CredentialsValidator::validate',
     ],
     ['getGlobalIcon', '\Magento\Backend\Block\Widget'],
     ['getSuccessRedirect', 'Magento\Customer\Controller\Account\CreatePost'],
     [
         'loginPostRedirect',
         'Magento\Customer\Controller\Account\LoginPost',
-        'Magento\Customer\Model\Account\Redirect::getRedirect'
+        'Magento\Customer\Model\Account\Redirect::getRedirect',
+    ],
+    [
+        'process',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::process'
+    ],
+    [
+        'extractExtensionAttributes',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::extractExtensionAttributes'
     ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],
@@ -2159,9 +2176,91 @@ return [
     ['addOrdersCount', 'Magento\Reports\Model\Resource\Customer\Collection'],
     ['addSumAvgTotals', 'Magento\Reports\Model\Resource\Customer\Collection'],
     ['orderByTotalAmount', 'Magento\Reports\Model\Resource\Customer\Collection'],
-    ['addOrdersCount', 'Magento\Reports\Model\Resource\Product\Collection'],
     ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
     ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
+    ['isStateProtected', 'Magento\Sales\Model\Order'],
+    ['_getBundleOptions', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
+    ['_getSelectionFinalPrice', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
+    ['_getSelectionQty', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
+    ['getItemCount', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getRecentItems', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getSubtotal', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getSummaryCount', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['isPossibleOnepageCheckout', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getItems', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getSummaryText', 'Magento\Checkout\Block\Cart\Sidebar', 'Moved to Magento\Checkout\CustomerData\Cart'],
+    ['getCacheKeyInfo', 'Magento\Checkout\Block\Cart\Sidebar'],
+    ['_serializeRenders', 'Magento\Checkout\Block\Cart\Sidebar'],
+    ['deserializeRenders', 'Magento\Checkout\Block\Cart\Sidebar'],
+    ['getIdentities', 'Magento\Checkout\Block\Cart\Sidebar'],
+    [
+        'validateMinimunAmount',
+        'Magento\Checkout\Block\Cart\ValidationMessages',
+        'Magento\Checkout\Block\Cart\ValidationMessages::validateMinimunAmount',
+    ],
+    ['getCustomerName', 'Magento\Customer\Block\Account\Customer', 'Moved to Magento\Customer\CustomerData'],
+    ['_prepareCollection', 'Magento\Wishlist\Block\Customer\Sidebar'],
+    ['_toHtml', 'Magento\Wishlist\Block\Customer\Sidebar'],
+    [
+        'getCanDisplayWishlist',
+        'Magento\Wishlist\Block\Customer\Sidebar',
+        'Moved to Magento\Wishlist\CustomerData\Wishlist',
+    ],
+    ['getWishlistItems', 'Magento\Wishlist\Block\Customer\Sidebar', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['getItemCount', 'Magento\Wishlist\Block\Customer\Sidebar', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['hasWishlistItems', 'Magento\Wishlist\Block\Customer\Sidebar', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['getIdentities', 'Magento\Wishlist\Block\Customer\Sidebar'],
+    [
+        'getAddAllToCartUrl',
+        'Magento\Wishlist\Block\Customer\Sidebar',
+        'Magento\Wishlist\Block\Customer\Sidebar::getAddAllToCartParams',
+    ],
+    [
+        'getItemAddToCartUrl',
+        'Magento\Wishlist\Block\AbstractBlock',
+        'Magento\Wishlist\Block\AbstractBlock::getItemAddToCartParams',
+    ],
+    ['getCounter', 'Magento\Wishlist\Block', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['_getItemCount', 'Magento\Wishlist\Block', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['_createCounter', 'Magento\Wishlist\Block', 'Moved to Magento\Wishlist\CustomerData\Wishlist'],
+    ['getTitle', 'Magento\Wishlist\Block'],
+    [
+        'initOrders',
+        'Magento\Sales\Block\Reorder\Sidebar',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
+    ],
+    ['getItems', 'Magento\Sales\Block\Reorder\Sidebar', 'Moved to \Magento\Sales\CustomerData\LastOrderedItems'],
+    [
+        'isItemAvailableForReorder',
+        'Magento\Sales\Block\Reorder\Sidebar',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
+    ],
+    [
+        'getLastOrder',
+        'Magento\Sales\Block\Reorder\Sidebar',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
+    ],
+    ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
+    ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
+    ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
+    ['getFilePath', 'Magento\MediaStorage\Model\File\Storage\Request'],
+    ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
+    ['getDataSetDefault', 'Magento\Framework\Object'],
+    ['isDeleted', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['hasDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setIdFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getIdFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    [
+        'getConfigureUrl',
+        'Magento\Checkout\Block\Cart\Item\Renderer',
+        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+    ],
+    ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
 ];

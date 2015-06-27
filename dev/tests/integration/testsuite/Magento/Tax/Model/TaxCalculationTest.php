@@ -180,7 +180,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 2,
             'unit_price' => 10.75,
             'tax_class_key' => 'DefaultProductClass',
-            'tax_included' => true,
+            'is_tax_included' => true,
         ];
         $oneProductInclTaxResults = $oneProductResults;
 
@@ -191,7 +191,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 2,
             'unit_price' => 11,
             'tax_class_key' => 'HigherProductClass',
-            'tax_included' => true,
+            'is_tax_included' => true,
         ];
         $oneProductInclTaxDiffRateResults = [
             'subtotal' => 20,
@@ -341,7 +341,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'unit_price' => 10.75,
                 'row_total' => 21.5,
                 'tax_class_key' => 'DefaultProductClass',
-                'tax_included' => true,
+                'is_tax_included' => true,
             ],
             [
                 'code' => 'sku_2',
@@ -350,7 +350,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'unit_price' => 11.83,
                 'row_total' => 236.6,
                 'tax_class_key' => 'DefaultProductClass',
-                'tax_included' => true,
+                'is_tax_included' => true,
             ],
         ];
         $twoProductInclTaxResults = $twoProductsResults;
@@ -502,7 +502,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                         'type' => 'type',
                         'quantity' => 1,
                         'unit_price' => 10.0,
-                        'tax_included' => false,
+                        'is_tax_included' => false,
                     ],
                 ],
                 'customer_tax_class_key' => 'DefaultCustomerClass',
@@ -522,7 +522,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'type' => 'type',
             'quantity' => 1,
             'unit_price' => 10.0,
-            'tax_included' => false,
+            'is_tax_included' => false,
         ];
 
         $quoteDetailAppliedTaxesBase = [
@@ -645,7 +645,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                         'type' => 'type',
                         'quantity' => 1,
                         'unit_price' => 10.0,
-                        'tax_included' => true,
+                        'is_tax_included' => true,
                     ],
                 ],
                 'customer_tax_class_key' => [
@@ -668,7 +668,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'type' => 'type',
             'quantity' => 1,
             'unit_price' => 10.0,
-            'tax_included' => true,
+            'is_tax_included' => true,
         ];
 
         $quoteDetailTaxInclItemWithDefaultProductTaxClass = $productTaxInclQuoteDetailItemBase;
@@ -794,7 +794,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                         'type' => 'type',
                         'quantity' => 2,
                         'unit_price' => 7.97,
-                        'tax_included' => false,
+                        'is_tax_included' => false,
                     ],
                 ],
                 'customer_tax_class_key' => 'DefaultCustomerClass',
@@ -814,7 +814,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'type' => 'type',
             'quantity' => 2,
             'unit_price' => 7.97,
-            'tax_included' => false,
+            'is_tax_included' => false,
         ];
 
         $quoteDetailItemWithDefaultProductTaxClass = $prodQuoteDetailItemBase;
@@ -1007,7 +1007,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 10,
             'unit_price' => 1.0,
             'tax_class_key' => 'DefaultProductClass',
-            'tax_included' => true,
+            'is_tax_included' => true,
         ];
         $oneProductInclTaxResults = [
             'subtotal' => 9.3,
@@ -1067,7 +1067,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
                 Key::KEY_VALUE => 'HigherProductClass',
             ],
-            'tax_included' => true,
+            'is_tax_included' => true,
         ];
         $oneProductInclTaxDiffRateResults = [
             'subtotal' => 2.73,
@@ -1216,7 +1216,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'quantity' => 10,
                 'unit_price' => 0.98,
                 'tax_class_key' => 'DefaultProductClass',
-                'tax_included' => true,
+                'is_tax_included' => true,
             ],
             [
                 'code' => 'sku_2',
@@ -1224,7 +1224,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                 'quantity' => 20,
                 'unit_price' => 11.99,
                 'tax_class_key' => 'DefaultProductClass',
-                'tax_included' => true,
+                'is_tax_included' => true,
             ],
         ];
         $twoProductInclTaxResults = [
@@ -1465,7 +1465,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 10,
             'unit_price' => 1.89,
             'tax_class_key' => 'MultipleRulesProductClass',
-            'tax_included' => true,
+            'is_tax_included' => true,
             'discount_amount' => 5,
         ];
         $baseQuote['items'][] = [
@@ -1474,7 +1474,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 5,
             'unit_price' => 14.99,
             'tax_class_key' => 'MultipleRulesProductClass',
-            'tax_included' => true,
+            'is_tax_included' => true,
             'discount_amount' => 10,
         ];
         $baseQuote['items'][] = [
@@ -1483,7 +1483,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 1,
             'unit_price' => 99.99,
             'tax_class_key' => 'MultipleRulesProductClass',
-            'tax_included' => false,
+            'is_tax_included' => false,
             'discount_amount' => 5,
         ];
 

@@ -16,7 +16,6 @@ class Index extends \Magento\Newsletter\Controller\Manage
     public function execute()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
 
         if ($block = $this->_view->getLayout()->getBlock('customer_newsletter')) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());

@@ -5,8 +5,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -14,7 +16,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * Saving edited user information
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -33,7 +34,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             ->setLastname($this->getRequest()->getParam('lastname', false))
             ->setEmail(strtolower($this->getRequest()->getParam('email', false)));
 
-        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($interfaceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($interfaceLocale)) {
             $user->setInterfaceLocale($interfaceLocale);
             /** @var \Magento\Backend\Model\Locale\Manager $localeManager */
             $localeManager = $this->_objectManager->get('Magento\Backend\Model\Locale\Manager');
@@ -56,25 +57,20 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             if ($password !== '') {
                 $user->sendPasswordResetNotificationEmail();
             }
-            $this->messageManager->addSuccess(__('The account has been saved.'));
-        } catch (\Magento\Framework\Validator\Exception $e) {
+            $this->messageManager->addSuccess(__('You saved the account.'));
+        } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while saving account.'));
         }
 
-        return $this->getDefaultResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function getDefaultResult()
-    {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath('*/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath("*/*/");
     }
 }

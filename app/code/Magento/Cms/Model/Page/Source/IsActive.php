@@ -34,10 +34,10 @@ class IsActive implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $options = [];
+        $options[] = ['label' => '', 'value' => ''];
         $availableOptions = $this->cmsPage->getAvailableStatuses();
         foreach ($availableOptions as $key => $value) {
-            $options[$key] = [
+            $options[] = [
                 'label' => $value,
                 'value' => $key,
             ];

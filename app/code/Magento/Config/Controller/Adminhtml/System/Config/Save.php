@@ -169,7 +169,7 @@ class Save extends AbstractConfig
         } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
-                __('An error occurred while saving this configuration:') . ' ' . $e->getMessage()
+                __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()
             );
         }
 

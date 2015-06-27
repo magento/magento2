@@ -38,6 +38,7 @@
                     </resource>
                     <resource id="Magento_Backend::tools" title="Tools" sortOrder="50">
                         <resource id="Magento_Backend::cache" title="Cache Management"  sortOrder="10" />
+                        <resource id="Magento_Backend::setup_wizard" title="Web Setup Wizard" sortOrder="20" />
                     </resource>
                     <resource id="Magento_Backend::system_other_settings" title="Other Settings"  sortOrder="80" />
                 </resource>

@@ -191,8 +191,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         //Expected outcomes
         $this->sessionMock->expects($this->once())->method('regenerateId');
-        $this->layoutMock->expects($this->once())
-            ->method('initMessages');
         $this->assertSame($this->resultPageMock, $this->model->execute());
     }
 

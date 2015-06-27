@@ -34,7 +34,7 @@ class OauthUserContextTest extends \PHPUnit_Framework_TestCase
     protected $oauthRequestHelper;
 
     /**
-     * @var \Magento\Integration\Service\V1\Integration
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
      */
     protected $integrationService;
 
@@ -52,9 +52,20 @@ class OauthUserContextTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getConsumerId'])
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder('Magento\Integration\Service\V1\Integration')
+        $this->integrationService = $this->getMockBuilder('Magento\Integration\Api\IntegrationServiceInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['findActiveIntegrationByConsumerId'])
+            ->setMethods(
+                [
+                    'findByName',
+                    'update',
+                    'create',
+                    'get',
+                    'findByConsumerId',
+                    'findActiveIntegrationByConsumerId',
+                    'delete',
+                    'getSelectedResources'
+                ]
+            )
             ->getMock();
 
         $this->oauthRequestHelper = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Request')

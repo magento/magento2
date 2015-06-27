@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Adjustment render interface
+ *
+ * @api
  */
 interface AdjustmentRenderInterface
 {

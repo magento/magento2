@@ -21,7 +21,6 @@ class Register extends \Magento\Multishipping\Controller\Checkout
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
 
         $registerForm = $this->_view->getLayout()->getBlock('customer_form_register');
         if ($registerForm) {

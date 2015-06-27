@@ -7,8 +7,8 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <img class="photo image"
-     style="width:<?php echo $block->getProductImageView()->getWidth()?>px;
-     height:<?php echo $block->getProductImageView()->getHeight()?>px;"
      <?php echo $block->getAddAttribute(); ?>
      src="<?php echo $block->getProductImageView()->getUrl() ?>"
+     width="<?php echo $block->getProductImageView()->getWidth();?>"
+     height="<?php echo $block->getProductImageView()->getHeight();?>"
      alt="<?php echo $block->stripTags($block->getProductImageView()->getLabel(), null, true) ?>" />

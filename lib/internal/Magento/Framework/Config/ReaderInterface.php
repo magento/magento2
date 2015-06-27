@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Config reader interface.
+ *
+ * @api
+ */
 interface ReaderInterface
 {
     /**

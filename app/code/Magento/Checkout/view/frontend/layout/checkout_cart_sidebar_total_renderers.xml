@@ -8,7 +8,30 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="minicart">
-            <block class="Magento\Checkout\Block\Cart\Sidebar" name="checkout.cart.minicart.totals" template="cart/minicart/totals.phtml"/>
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="minicart_content" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="subtotal.container" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="subtotal" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="subtotal.totals" xsi:type="array">
+                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="template" xsi:type="string">Magento_Checkout/minicart/subtotal/totals</item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
         </referenceBlock>
     </body>
 </page>

@@ -61,6 +61,14 @@ interface ContextInterface
     public function getDataProvider();
 
     /**
+     * Get Data Source array
+     *
+     * @param UiComponentInterface $component
+     * @return array
+     */
+    public function getDataSourceData(UiComponentInterface $component);
+
+    /**
      * Getting all request data
      *
      * @return mixed

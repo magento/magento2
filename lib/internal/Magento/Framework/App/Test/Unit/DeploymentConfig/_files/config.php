@@ -4,4 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-return ['foo', 'bar'];
+return ['fooKey' => 'foo', 'barKey' => 'bar'];

@@ -25,41 +25,38 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_helperPool;
 
-    /**
-     * @var \Magento\Framework\Data\Form\FormKey
-     */
-    protected $_formKey;
-
     /** @var \Magento\Customer\Helper\Session\CurrentCustomer */
     protected $currentCustomer;
 
     /**
+     * @var \Magento\Framework\Data\Helper\PostHelper
+     */
+    protected $postDataHelper;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
-     * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = []
     ) {
         parent::__construct(
             $context,
             $httpContext,
-            $productRepository,
             $data
         );
-        $this->_formKey = $formKey;
         $this->_helperPool = $helperPool;
         $this->currentCustomer = $currentCustomer;
+        $this->postDataHelper = $postDataHelper;
     }
 
     /**
@@ -205,14 +202,14 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * Get add all to cart url
+     * Get add all to cart params for POST request
      * @return string
      */
-    public function getAddAllToCartUrl()
+    public function getAddAllToCartParams()
     {
-        return $this->getUrl(
-            '*/*/allcart',
-            ['wishlist_id' => $this->getWishlistInstance()->getId(), 'form_key' => $this->_formKey->getFormKey()]
+        return $this->postDataHelper->getPostData(
+            $this->getUrl('wishlist/index/allcart'),
+            ['wishlist_id' => $this->getWishlistInstance()->getId()]
         );
     }
 

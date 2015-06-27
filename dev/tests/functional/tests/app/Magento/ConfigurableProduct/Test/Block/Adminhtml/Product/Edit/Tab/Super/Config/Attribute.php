@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\AttributeSelector;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -104,7 +104,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $attributeTitle = '.title > span';
+    protected $attributeTitle = '[data-toggle="collapse"]';
 
     /**
      * Selector for attribute content
@@ -247,7 +247,12 @@ class Attribute extends Form
                 $attributeBlock->find($this->addOption)->click();
             }
             $mapping = $this->dataMapping($option);
-            $this->_fill($mapping, $optionContainer);
+            foreach ($mapping as $field) {
+                $element = $this->getElement($optionContainer, $field);
+                if ($element->isVisible() && !$element->isDisabled()) {
+                    $element->setValue($field['value']);
+                }
+            }
         }
     }
 

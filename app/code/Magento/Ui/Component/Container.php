@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
+
 /**
  * Class Container
  */
@@ -20,19 +22,6 @@ class Container extends AbstractComponent
     public function getComponentName()
     {
         $type = $this->getData('type');
-        return static::NAME . (!empty($type) ? '.' . $type : '');
-    }
-
-    /**
-     * Register component
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+        return static::NAME . ($type ? ('.' . $type): '');
     }
 }

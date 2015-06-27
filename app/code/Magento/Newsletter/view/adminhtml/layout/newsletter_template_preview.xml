@@ -12,7 +12,7 @@
         <remove name="backend.page"/>
         <referenceContainer name="root">
             <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Newsletter::preview/iframeswitcher.phtml">
-                <block class="Magento\Newsletter\Block\Adminhtml\Queue\Preview\Form" name="preview_form"/>
+                <block class="Magento\Newsletter\Block\Adminhtml\Template\Preview\Form" name="preview_form"/>
                 <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="Magento_Backend::store/switcher.phtml"/>
             </block>
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>

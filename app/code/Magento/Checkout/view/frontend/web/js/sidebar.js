@@ -117,12 +117,6 @@ define([
          * @private
          */
         _updateItemQtyAfter: function(elem, response) {
-            if ($.type(response.data) === 'object') {
-                this._refreshQty(response.data.summary_qty, response.data.summary_text);
-                this._refreshSubtotal(response.data.subtotal);
-                this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
-                this._refreshItemQty(elem, response.data.summary_qty);
-            }
             this._hideItemButton(elem);
         },
 
@@ -141,16 +135,7 @@ define([
          * @private
          */
         _removeItemAfter: function(elem, response) {
-            if ($.type(response.data) === 'object') {
-                this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
-            }
-            $(this.options.minicart.content).html($.trim(response.content));
-            if (response.cleanup === true) {
-                $(this.options.showcart.parent).addClass('empty');
-            }
-            this._initContent();
         },
-
         /**
          * @param url - ajax url
          * @param data - post data for ajax call
@@ -185,44 +170,6 @@ define([
                     console.log(JSON.stringify(error));
                 });
         },
-
-        _refreshItemQty: function(elem, qty) {
-            if (qty != undefined) {
-                var itemId = elem.data('cart-item');
-                $('#cart-item-' + itemId + '-qty').data('item-qty', qty);
-            }
-        },
-
-        _refreshQty: function(qty, text) {
-            if (qty != undefined && text != undefined) {
-                var self = this;
-                $(this.options.minicart.qty).fadeOut('slow', function() {
-                    $(self.options.minicart.qty).html('<span class="count">' + qty + '</span>' + text);
-                }).fadeIn();
-            }
-        },
-
-        _refreshSubtotal: function(val) {
-            if (val != undefined) {
-                var self = this;
-                $(this.options.minicart.subtotal).fadeOut('slow', function() {
-                    $(self.options.minicart.subtotal).replaceWith(val);
-                }).fadeIn();
-            }
-        },
-
-        _refreshShowcart: function(qty, text) {
-            if (qty != undefined && text != undefined) {
-                var self = this;
-                $(this.options.showcart.qty).fadeOut('slow', function() {
-                    $(self.options.showcart.qty).text(qty);
-                }).fadeIn();
-                $(this.options.showcart.label).fadeOut('slow', function() {
-                    $(self.options.showcart.label).text(text);
-                }).fadeIn();
-            }
-        },
-
         /**
          * Calculate height of minicart list
          *

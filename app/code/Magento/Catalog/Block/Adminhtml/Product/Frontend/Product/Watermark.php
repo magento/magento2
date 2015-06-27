@@ -138,7 +138,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
         $html .= '<legend>' . $element->getLegend() . '</legend>';
 
         // field label column
-        $html .= '<table cellspacing="0"><colgroup class="label" /><colgroup class="value" />';
+        $html .= '<table><colgroup class="label" /><colgroup class="value" />';
         if (!$default) {
             $html .= '<colgroup class="use-default" />';
         }

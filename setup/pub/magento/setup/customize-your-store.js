@@ -7,10 +7,11 @@
 angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
     .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', '$http', '$sce', function ($scope, $localStorage, $state, $http, $sce) {
         $scope.store = {
-            timezone: 'America/Los_Angeles',
+            timezone: 'UTC',
             currency: 'USD',
             language: 'en_US',
             useSampleData: false,
+            cleanUpDatabase: false,
             loadedAllModules: false,
             showModulesControl: false,
             selectAll: true,
@@ -27,6 +28,16 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
         };
 
         $scope.loading = false;
+
+        if (!$localStorage.store) {
+            $http.get('index.php/customize-your-store/default-time-zone',{'responseType' : 'json'})
+                .success(function (data) {
+                    $scope.store.timezone = data.defaultTimeZone;
+                })
+                .error(function (data) {
+                    $scope.store.timezone = 'UTC';
+                });
+        }
 
         if ($localStorage.store) {
             $scope.store = $localStorage.store;

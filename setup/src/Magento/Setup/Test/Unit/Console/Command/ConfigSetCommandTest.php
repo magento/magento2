@@ -33,7 +33,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $option
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('db_host'));
+            ->will($this->returnValue('db-host'));
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->configModel
             ->expects($this->exactly(2))
@@ -53,9 +53,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->configModel
             ->expects($this->once())
             ->method('process')
-            ->with(['db_host' => 'host']);
+            ->with(['db-host' => 'host']);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['--db_host' => 'host']);
+        $commandTester->execute(['--db-host' => 'host']);
         $this->assertSame(
             'You saved the new configuration.' . PHP_EOL,
             $commandTester->getDisplay()
@@ -71,7 +71,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->configModel
             ->expects($this->once())
             ->method('process')
-            ->with(['db_host' => 'host']);
+            ->with(['db-host' => 'host']);
         $this->checkInteraction(true);
     }
 
@@ -112,7 +112,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->command->setHelperSet($helperSet);
 
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['--db_host' => 'host']);
+        $commandTester->execute(['--db-host' => 'host']);
         if ($interactionType) {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {

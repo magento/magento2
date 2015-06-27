@@ -98,8 +98,6 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
                 $typeAttr => 'object',
                 'value' => 'Magento\CustomerSegment\Model\Resource\Segment\Report\Detail\Collection'
             ],
-            [$typeAttr => 'helper', 'helper' => 'Magento\Pbridge\Helper\Data::getReviewButtonTemplate'],
-            [$typeAttr => 'helper', 'helper' => 'Magento\Pbridge\Helper\Data::getContinueButtonTemplate'],
             [$typeAttr => 'options', 'model' => 'Magento\Solr\Model\Adminhtml\Search\Grid\Options'],
             [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\ActionsGroup'],
             [$typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\Actions'],

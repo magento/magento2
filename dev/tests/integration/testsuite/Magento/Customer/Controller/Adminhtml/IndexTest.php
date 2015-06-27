@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class IndexTest extends \Magento\Backend\Utility\Controller
+class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Base controller URL
@@ -375,7 +375,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
          * Check that error message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['Customer with the same email already exists in associated website.']),
+            $this->equalTo(['A customer with the same email already exists in an associated website.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertEquals(
@@ -543,7 +543,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid1">', $body);
+        $this->assertContains('<div id="customer_cart_grid1"', $body);
     }
 
     /**
@@ -554,7 +554,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid">', $body);
+        $this->assertContains('<div id="reviwGrid"', $body);
     }
 
     /**
@@ -981,7 +981,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/customer/index/validate');
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('{"error":1,"html_message":', $body);
+        $this->assertContains('{"error":true,"messages":', $body);
         $this->assertContains('Please correct this email address: \"*\".', $body);
         $this->assertContains('\"First Name\" is a required value.', $body);
         $this->assertContains('\"Last Name\" is a required value.', $body);
@@ -1018,7 +1018,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
-            $this->equalTo(['Customer will receive an email with a link to reset password.']),
+            $this->equalTo(['The customer will receive an email with a link to reset password.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit'));

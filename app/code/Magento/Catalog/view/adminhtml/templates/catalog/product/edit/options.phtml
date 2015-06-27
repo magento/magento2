@@ -20,12 +20,12 @@
             <div class="messages">
                 <div class="message message-error" id="dynamic-price-warning" style="display: none;">
                     <div class="message-inner">
-                        <div class="message-content"><?php echo __('Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.') ?></div>
+                        <div class="message-content"><?php echo __('We can\'t save custom-defined options for bundles with dynamic pricing.') ?></div>
                     </div>
                 </div>
             </div>
 
-            <div id="product_options_container">
+            <div id="product_options_container" class="sortable-wrapper">
                 <div id="product_options_container_top"></div>
                 <?php echo $block->getOptionsBoxHtml() ?>
             </div>

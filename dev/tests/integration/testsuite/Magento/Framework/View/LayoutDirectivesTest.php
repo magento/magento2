@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\View\Layout\BuilderFactory;
+use Magento\Framework\App\State;
 
 class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,10 +26,16 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $this->objectManager->get('Magento\Framework\View\LayoutFactory');
+        $this->state = $this->objectManager->get('Magento\Framework\App\State');
     }
 
     /**
@@ -113,11 +119,11 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('arguments_object_type.xml');
         $this->assertInstanceOf(
-            'Magento\Framework\Data\Collection\Db',
+            'Magento\Framework\Data\Collection',
             $layout->getBlock('block_with_object_args')->getOne()
         );
         $this->assertInstanceOf(
-            'Magento\Framework\Data\Collection\Db',
+            'Magento\Framework\Data\Collection',
             $layout->getBlock('block_with_object_args')->getTwo()
         );
         $this->assertEquals(3, $layout->getBlock('block_with_object_args')->getThree());
@@ -223,11 +229,11 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->_getLayoutModel('move_alias_broken.xml');
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testRemoveBroken()
     {
+        if ($this->state->getMode() === State::MODE_DEVELOPER) {
+            $this->setExpectedException('OutOfBoundsException');
+        }
         $this->_getLayoutModel('remove_broken.xml');
     }
 

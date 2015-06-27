@@ -18,7 +18,7 @@ class ZeroTotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsApplicable($code, $total, $expectation)
     {
-        $paymentMethod = $this->getMockBuilder('Magento\Payment\Model\Checks\PaymentMethodChecksInterface')
+        $paymentMethod = $this->getMockBuilder('\Magento\Payment\Model\MethodInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

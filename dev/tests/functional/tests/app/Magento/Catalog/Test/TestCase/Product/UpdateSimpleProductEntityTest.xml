@@ -70,7 +70,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation5">
             <data name="description" xsi:type="string">Update stock to Out of Stock</data>
@@ -104,7 +103,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation7">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Update category</data>
             <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/presets" xsi:type="string">default</data>
@@ -137,6 +135,18 @@
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+        </variation>
+        <variation name="EditSimpleProductTestVariation10">
+            <data name="description" xsi:type="string">Edit product with enabled flat</data>
+            <data name="configData" xsi:type="string">product_flat</data>
+            <data name="initialProduct/dataSet" xsi:type="string">simple_10_dollar</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">sku_simple_product_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">1.99</data>
+            <data name="product/data/price/preset" xsi:type="string">-</data>
+            <data name="product/data/attribute_set_id/dataSet" xsi:type="string">default</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
     </testCase>
 </config>

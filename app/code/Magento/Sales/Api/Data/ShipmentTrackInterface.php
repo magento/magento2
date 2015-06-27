@@ -11,6 +11,7 @@ namespace Magento\Sales\Api\Data;
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package. Merchants and customers can track
  * shipments.
+ * @api
  */
 interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -72,7 +73,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the created-at timestamp for the shipment package.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
@@ -94,7 +95,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the ID for the shipment package.
      *
-     * @return int Shipment package ID.
+     * @return int|null Shipment package ID.
      */
     public function getEntityId();
 
@@ -144,7 +145,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the updated-at timestamp for the shipment package.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 

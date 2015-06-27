@@ -6,11 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 ?>
 <?php /** @var $block \Magento\Checkout\Block\Onepage\Shipping\Method\Available */ ?>
 <?php $_shippingRateGroups = $block->getShippingRates(); ?>
 <?php if (!$_shippingRateGroups): ?>
-    <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
+    <p><?php echo __('Sorry, no quotes are available for this order right now.') ?></p>
 <?php else: ?>
     <dl class="items methods-shipping">
     <?php $shippingCodePrice = []; ?>

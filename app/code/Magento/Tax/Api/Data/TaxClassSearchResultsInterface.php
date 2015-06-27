@@ -6,6 +6,10 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Interface for tax class search results.
+ * @api
+ */
 interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**

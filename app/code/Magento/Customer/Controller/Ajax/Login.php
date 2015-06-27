@@ -80,7 +80,6 @@ class Login extends \Magento\Framework\App\Action\Action
     {
         $credentials = null;
         $httpBadRequestCode = 400;
-        $httpUnauthorizedCode = 401;
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
@@ -92,7 +91,11 @@ class Login extends \Magento\Framework\App\Action\Action
         if (!$credentials || $this->getRequest()->getMethod() !== 'POST' || !$this->getRequest()->isXmlHttpRequest()) {
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
-        $responseText = null;
+
+        $response = [
+            'errors' => false,
+            'message' => __('Login successful.')
+        ];
         try {
             $customer = $this->customerAccountManagement->authenticate(
                 $credentials['username'],
@@ -101,19 +104,23 @@ class Login extends \Magento\Framework\App\Action\Action
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
             $this->customerSession->regenerateId();
         } catch (EmailNotConfirmedException $e) {
-            $responseText = $e->getMessage();
+            $response = [
+                'errors' => true,
+                'message' => $e->getMessage()
+            ];
         } catch (InvalidEmailOrPasswordException $e) {
-            $responseText = $e->getMessage();
+            $response = [
+                'errors' => true,
+                'message' => $e->getMessage()
+            ];
         } catch (\Exception $e) {
-            $responseText = __('There was an error validating the username and password.');
-        }
-        if ($responseText) {
-            return $resultRaw->setHttpResponseCode($httpUnauthorizedCode);
-        } else {
-            $responseText = __('Login successful.');
+            $response = [
+                'errors' => true,
+                'message' => __('Something went wrong while validating the login and password.')
+            ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData(['message' => $responseText]);
+        return $resultJson->setData($response);
     }
 }

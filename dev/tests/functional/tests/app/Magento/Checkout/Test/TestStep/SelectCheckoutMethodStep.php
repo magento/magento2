@@ -6,52 +6,65 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 
 /**
- * Class SelectCheckoutMethodStep
- * Selecting checkout method
+ * Selecting checkout method.
  */
 class SelectCheckoutMethodStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Checkout method
+     * Checkout method.
      *
      * @var string
      */
     protected $checkoutMethod;
 
     /**
-     * Customer fixture
+     * Customer fixture.
      *
      * @var Customer
      */
     protected $customer;
 
     /**
+     * Logout customer on frontend step.
+     *
+     * @var LogoutCustomerOnFrontendStep
+     */
+    protected $logoutCustomerOnFrontend;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param Customer $customer
+     * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param string $checkoutMethod
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, Customer $customer, $checkoutMethod)
-    {
+    public function __construct(
+        CheckoutOnepage $checkoutOnepage,
+        Customer $customer,
+        LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
+        $checkoutMethod
+    ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->checkoutMethod = $checkoutMethod;
         $this->customer = $customer;
+        $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
+        $this->checkoutMethod = $checkoutMethod;
     }
 
     /**
-     * Run step that selecting checkout method
+     * Run step that selecting checkout method.
      *
      * @return void
      * @throws \Exception
@@ -61,11 +74,6 @@ class SelectCheckoutMethodStep implements TestStepInterface
         $checkoutMethodBlock = $this->checkoutOnepage->getLoginBlock();
         switch ($this->checkoutMethod) {
             case 'guest':
-                $checkoutMethodBlock->guestCheckout();
-                $checkoutMethodBlock->clickContinue();
-                break;
-            case 'register':
-                $checkoutMethodBlock->registerCustomer();
                 $checkoutMethodBlock->clickContinue();
                 break;
             case 'login':
@@ -74,6 +82,18 @@ class SelectCheckoutMethodStep implements TestStepInterface
             default:
                 throw new \Exception("Undefined checkout method.");
                 break;
+        }
+    }
+
+    /**
+     * Logout customer on fronted.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        if ($this->checkoutMethod === 'login') {
+            $this->logoutCustomerOnFrontend->run();
         }
     }
 }

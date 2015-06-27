@@ -1,0 +1,62 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li id="opc-shipping" data-bind="fadeVisible: isActive(), attr: {'class': stepClassAttributes() }">
+    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
+        <span class="number" data-bind="text: stepNumber()"></span>
+        <h2 data-bind="text: $t('Shipping Information')"></h2>
+    </div>
+    <div id="checkout-step-shipping"
+         class="step-content"
+         data-role="content"
+         data-bind="fadeVisible: isVisible() && quoteHasBillingAddress()">
+        <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+            <!-- ko foreach: getRegion('before-fields') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+            <!-- ko if: (customerAddressCount)-->
+            <div class="field addresses" data-bind="visible: visible">
+                <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
+                <div class="control">
+                    <select name="shipping_address_id" id="shipping:address-select" data-bind="
+                    options: addresses(),
+                    optionsText: function(item) { return item.getAddressInline(); },
+                    optionsValue: 'customerAddressId',
+                    value: selectedAddressId,
+                    event: {change: onAddressChange}
+                    ">
+                    </select>
+                </div>
+            </div>
+            <!-- /ko -->
+            <fieldset id="shipping-new-address-form" class="fieldset address"
+                      data-bind="fadeVisible: isNewAddressSelected(), visible: formVisible">
+            <!-- ko foreach: getRegion('additional-fieldsets') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+            </fieldset>
+
+            <div class="choice field" data-bind="visible: visible">
+                <input type="checkbox"
+                       name="shipping[same_as_billing]"
+                       id="shipping:same_as_billing"
+                       value="1"
+                       checked="checked"
+                       class="checkbox"
+                       data-bind="checked: sameAsBilling, click: sameAsBillingClick"/>
+                <label class="label" for="shipping:same_as_billing">
+                    <span data-bind="text: $t('Use Billing Address')"></span>
+                </label>
+            </div>
+            <div class="actions-toolbar" id="shipping-buttons-container">
+                <div class="primary">
+                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: selectShippingAddress"><span data-bind="text: $t('Continue')"></span></button>
+                </div>
+                <div class="secondary"><a href="#" class="action back" data-bind="click: backToBilling"><span data-bind="text: $t('Back')"></span></a></div>
+            </div>
+        </form>
+    </div>
+</li>

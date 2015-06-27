@@ -82,7 +82,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new ValidatorException(__('Customer email is required'));
+            throw new ValidatorException(__('Please enter a customer email.'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -106,7 +106,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
-                __('Customer with the same email already exists in associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         }
 
@@ -202,8 +202,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
-        $this->saveAttribute($customer, 'default_billing');
-        $this->saveAttribute($customer, 'default_shipping');
+        $changedAddresses = [];
+
+        $changedAddresses['default_billing'] = $customer->getData('default_billing');
+        $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
+        $this->_getWriteAdapter()->update(
+            $this->getTable('customer_entity'),
+            $changedAddresses,
+            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
+        );
 
         return $this;
     }
@@ -247,7 +254,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Customer website ID must be specified when using the website scope')
+                    __('A customer website ID must be specified when using the website scope.')
                 );
             }
             $bind['website_id'] = (int)$customer->getWebsiteId();
@@ -274,7 +281,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     public function changePassword(\Magento\Customer\Model\Customer $customer, $newPassword)
     {
         $customer->setPassword($newPassword);
-        $this->saveAttribute($customer, 'password_hash');
         return $this;
     }
 
@@ -383,8 +389,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             $customer->setRpTokenCreatedAt(
                 (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             );
-            $this->saveAttribute($customer, 'rp_token');
-            $this->saveAttribute($customer, 'rp_token_created_at');
         }
         return $this;
     }

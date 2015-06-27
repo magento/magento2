@@ -18,6 +18,11 @@ use Magento\Framework\Shell\ComplexParameter;
 class Cli extends SymfonyApplication
 {
     /**
+     * Name of input option
+     */
+    const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+
+    /**
      * {@inheritdoc}
      */
     protected function getDefaultCommands()
@@ -41,7 +46,7 @@ class Cli extends SymfonyApplication
         $toolsCommands   = [];
         $modulesCommands = [];
 
-        $bootstrapParam = new ComplexParameter('bootstrap');
+        $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
         $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $bootstrap = Bootstrap::create(BP, $params);

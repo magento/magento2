@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  *
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
  * document lists the products and their quantities in the delivery package.
+ * @api
  */
 interface ShipmentSearchResultInterface extends SearchResultsInterface
 {

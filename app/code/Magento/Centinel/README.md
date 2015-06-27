@@ -1,1 +1,0 @@
-The Magento_Centinel module implements the integration with Centinel (Cardinal Centinel Thin Client), a payment gateway from Cardinal Commerce, and enables 3-D Secure credit card validation (that is, Verified by Visa, MasterCard SecureCode and JCB J/Secure Payer Authentication programs).

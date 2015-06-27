@@ -6,7 +6,7 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * A list of modules in the Magento application
@@ -140,7 +140,7 @@ class ModuleList implements ModuleListInterface
     private function loadConfigData()
     {
         if (null === $this->configData && ($this->config->isAvailable())) {
-            $this->configData = $this->config->getConfigData(ConfigOptionsList::KEY_MODULES);
+            $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
         }
     }
 }

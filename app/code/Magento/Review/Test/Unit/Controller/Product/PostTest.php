@@ -3,11 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Review\Test\Unit\Controller\Product;
 
 use Magento\Review\Model\Review;
+use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -80,6 +83,24 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \Magento\Framework\App\Action\Context
+     */
+    protected $context;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $this->redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface');
@@ -104,8 +125,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->coreRegistry = $this->getMock('\Magento\Framework\Registry');
         $this->review = $this->getMock(
             '\Magento\Review\Model\Review',
-            ['setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'setEntityPkValue', 'setStatusId',
-                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate'],
+            [
+                'setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'setEntityPkValue', 'setStatusId',
+                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate'
+            ],
             [],
             '',
             false,
@@ -119,7 +142,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $reviewFactory->expects($this->once())->method('create')->will($this->returnValue($this->review));
+        $reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
         $this->customerSession = $this->getMock(
             '\Magento\Customer\Model\Session',
             ['getCustomerId'],
@@ -144,31 +167,51 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $ratingFactory->expects($this->once())->method('create')->will($this->returnValue($this->rating));
+        $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
         $this->messageManager = $this->getMock('\Magento\Framework\Message\ManagerInterface');
 
         $this->store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
         $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(
-                '\Magento\Review\Controller\Product\Post',
-                [
-                    'request' => $this->request,
-                    'response' => $this->response,
-                    'redirect' => $this->redirect,
-                    'formKeyValidator' => $this->formKeyValidator,
-                    'reviewSession' => $this->reviewSession,
-                    'eventManager' => $this->eventManager,
-                    'productRepository' => $this->productRepository,
-                    'coreRegistry' => $this->coreRegistry,
-                    'reviewFactory' => $reviewFactory,
-                    'customerSession' => $this->customerSession,
-                    'ratingFactory' => $ratingFactory,
-                    'storeManager' => $storeManager,
-                    'messageManager' => $this->messageManager,
-                ]
-            );
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
+
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
+
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->context = $objectManagerHelper->getObject(
+            'Magento\Framework\App\Action\Context',
+            [
+                'request' => $this->request,
+                'resultFactory' => $this->resultFactoryMock,
+                'messageManager' => $this->messageManager
+            ]
+        );
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Review\Controller\Product\Post',
+            [
+                'response' => $this->response,
+                'redirect' => $this->redirect,
+                'formKeyValidator' => $this->formKeyValidator,
+                'reviewSession' => $this->reviewSession,
+                'eventManager' => $this->eventManager,
+                'productRepository' => $this->productRepository,
+                'coreRegistry' => $this->coreRegistry,
+                'reviewFactory' => $reviewFactory,
+                'customerSession' => $this->customerSession,
+                'ratingFactory' => $ratingFactory,
+                'storeManager' => $storeManager,
+                'context' => $this->context
+            ]
+        );
     }
 
     /**
@@ -184,19 +227,16 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $redirectUrl = 'url';
         $this->formKeyValidator->expects($this->any())->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
-            ->will($this->returnValue($ratingsData));
-        $this->eventManager->expects($this->at(0))->method('dispatch')
-            ->with('review_controller_product_init_before', ['controller_action' => $this->model])
-            ->will($this->returnSelf());
+            ->willReturn($ratingsData);
         $this->request->expects($this->at(0))->method('getParam')
             ->with('category', false)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->request->expects($this->at(1))->method('getParam')
             ->with('id')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId'],
@@ -206,83 +246,75 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $product->expects($this->once())
             ->method('isVisibleInCatalog')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->productRepository->expects($this->any())->method('getById')
             ->with(1)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $this->coreRegistry->expects($this->at(0))->method('register')
             ->with('current_product', $product)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->coreRegistry->expects($this->at(1))->method('register')
             ->with('product', $product)
-            ->will($this->returnSelf());
-        $this->eventManager->expects($this->at(1))->method('dispatch')
-            ->with('review_controller_product_init', ['product' => $product])
-            ->will($this->returnSelf());
-        $this->eventManager->expects($this->at(2))->method('dispatch')
-            ->with('review_controller_product_init_after', ['product' => $product, 'controller_action' => $this->model])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('setData')
             ->with($ratingsData)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->review->expects($this->once())->method('getEntityIdByCode')
             ->with(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->review->expects($this->once())->method('setEntityId')
             ->with(1)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
         $this->review->expects($this->once())->method('setEntityPkValue')
             ->with($productId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('setStatusId')
             ->with(\Magento\Review\Model\Review::STATUS_PENDING)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->customerSession->expects($this->exactly(2))->method('getCustomerId')
-            ->will($this->returnValue($customerId));
-        $this->review->expects($this->once())->method('setCustomerId')->with($customerId)->will($this->returnSelf());
+            ->willReturn($customerId);
+        $this->review->expects($this->once())->method('setCustomerId')->with($customerId)->willReturnSelf();
         $this->store->expects($this->exactly(2))->method('getId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $this->review->expects($this->once())->method('setStoreId')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('setStores')
             ->with([$storeId])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('save')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->rating->expects($this->once())->method('setRatingId')
             ->with(1)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('getId')
-            ->will($this->returnValue($reviewId));
+            ->willReturn($reviewId);
         $this->rating->expects($this->once())->method('setReviewId')
             ->with($reviewId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->rating->expects($this->once())->method('setCustomerId')
             ->with($customerId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->rating->expects($this->once())->method('addOptionVote')
             ->with(1, $productId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->review->expects($this->once())->method('aggregate')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->messageManager->expects($this->once())->method('addSuccess')
-            ->with('Your review has been accepted for moderation.')
-            ->will($this->returnSelf());
+            ->with(__('You submitted your review for moderation.'))
+            ->willReturnSelf();
         $this->reviewSession->expects($this->once())->method('getRedirectUrl')
             ->with(true)
-            ->will($this->returnValue($redirectUrl));
-        $this->response->expects($this->once())->method('setRedirect')
-            ->with($redirectUrl)
-            ->will($this->returnSelf());
-        $this->model->execute();
+            ->willReturn($redirectUrl);
+
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 }

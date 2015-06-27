@@ -54,7 +54,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         $objectManager->configure($this->_primaryConfigData);
         $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
         $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\Filesystem\DirectoryList');
-        $deploymentConfig = $this->createDeploymentConfig($directoryList, $arguments);
+        $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);
         $objectManager->addSharedInstance($deploymentConfig, 'Magento\Framework\App\DeploymentConfig');
         $objectManager->addSharedInstance(

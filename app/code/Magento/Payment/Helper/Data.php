@@ -115,9 +115,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get and sort available payment methods for specified or current store
      *
-     * @param null|string|bool|int|Store $store
+     * @param null|string|bool|int $store
      * @param Quote|null $quote
-     * @return array
+     * @return AbstractMethod[]
      */
     public function getStoreMethods($store = null, $quote = null)
     {
@@ -141,28 +141,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 /* if the payment method cannot be used at this time */
                 continue;
             }
-            $sortOrder = (int)$methodInstance->getConfigData('sort_order', $store);
-            $methodInstance->setSortOrder($sortOrder);
             $res[] = $methodInstance;
         }
 
-        uasort($res, [$this, '_sortMethods']);
+        @uasort(
+            $res,
+            function (MethodInterface $a, MethodInterface $b) {
+                if ((int)$a->getConfigData('sort_order') < (int)$b->getConfigData('sort_order')) {
+                    return -1;
+                }
+
+                if ((int)$a->getConfigData('sort_order') > (int)$b->getConfigData('sort_order')) {
+                    return 1;
+                }
+
+                return 0;
+            }
+        );
 
         return $res;
-    }
-
-    /**
-     * Sort payments methods
-     *
-     * @param MethodInterface $a
-     * @param MethodInterface $b
-     * @return int
-     */
-    protected function _sortMethods($a, $b)
-    {
-        return (int)$a->getSortOrder() <
-            (int)$b->getSortOrder() ? -1 : ((int)$a->getSortOrder() >
-            (int)$b->getSortOrder() ? 1 : 0);
     }
 
     /**

@@ -53,9 +53,9 @@ define([
          * @param [...] Any number of arguments that should be to the events' handler.
          * @returns {Boolean} False if event bubbling was canceled.
          */
-        trigger: function () {
+        bubble: function () {
             var args = _.toArray(arguments),
-                bubble = EventsBus.trigger.apply(this, args),
+                bubble = this.trigger.apply(this, args),
                 result;
 
             if (!bubble) {
@@ -63,7 +63,7 @@ define([
             }
 
             this.containers.forEach(function (parent) {
-                result = parent.trigger.apply(parent, args);
+                result = parent.bubble.apply(parent, args);
 
                 if (result === false) {
                     bubble = false;

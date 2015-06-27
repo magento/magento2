@@ -60,15 +60,7 @@ class Sidebar
         if (empty($error)) {
             $response = [
                 'success' => true,
-                'data' => [
-                    'summary_qty' => $this->getSummaryQty(),
-                    'summary_text' => $this->getSummaryText(),
-                    'subtotal' => $this->getSubtotalHtml(),
-                ],
             ];
-            if (!$this->getSummaryQty()) {
-                $response['cleanup'] = true;
-            }
         } else {
             $response = [
                 'success' => false,

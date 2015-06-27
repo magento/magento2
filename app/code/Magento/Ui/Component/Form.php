@@ -25,55 +25,25 @@ class Form extends AbstractComponent
     }
 
     /**
-     * Register component
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this);
-        unset($jsConfig['extends']);
-        $this->getContext()->addComponentDefinition($this->getContext()->getNamespace(), $jsConfig);
-
-        $this->getContext()->addButtons($this->getData('buttons'), $this);
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDataSourceData()
     {
-        $dataSources = [];
-        foreach ($this->getChildComponents() as $component) {
-            if ($component instanceof DataSourceInterface) {
-                $dataProvider = $component->getDataProvider();
-                $id = $this->getContext()->getRequestParam($dataProvider->getRequestFieldName());
-                $preparedData = [];
-                if ($id) {
-                    $dataProvider->addFilter($dataProvider->getPrimaryFieldName(), $id);
-                    $preparedData = $dataProvider->getData();
-                    if (isset($preparedData[$id])) {
-                        $preparedData = ['data' => $preparedData[$id]];
-                    }
-                }
+        $dataSource = [];
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
 
-                $config = $dataProvider->getConfigData();
-                if (isset($config['submit_url'])) {
-                    $config['submit_url'] = $this->getContext()->getUrl($config['submit_url']);
-                }
-                if (isset($config['validate_url'])) {
-                    $config['validate_url'] = $this->getContext()->getUrl($config['validate_url']);
-                }
-                $dataSources[$component->getName()] = [
-                    'type' => $component->getComponentName(),
-                    'name' => $component->getName(),
-                    'dataScope' => $component->getContext()->getNamespace(),
-                    'config' => array_merge($preparedData, $config)
-                ];
-            }
+        if ($id) {
+            $this->getContext()->getDataProvider()
+                ->addFilter($this->getContext()->getDataProvider()->getPrimaryFieldName(), $id);
         }
-        return $dataSources;
+        $data = $this->getContext()->getDataProvider()->getData();
+
+        if (isset($data[$id])) {
+            $dataSource = [
+                'data' => $data[$id]
+            ];
+        }
+
+        return $dataSource;
     }
 }

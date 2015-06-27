@@ -79,7 +79,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
 
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
-        $this->currencyIndex->getGridPageActions()->clickImportButton();
+        $this->currencyIndex->getCurrencyRateForm()->clickImportButton();
         if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
             throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
         }

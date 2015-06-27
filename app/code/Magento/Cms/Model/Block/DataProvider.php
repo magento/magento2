@@ -15,6 +15,13 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 class DataProvider implements DataProviderInterface
 {
     /**
+     * Data Provider name
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var string
      */
     protected $primaryFieldName;
@@ -42,6 +49,7 @@ class DataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
+     * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
@@ -49,12 +57,14 @@ class DataProvider implements DataProviderInterface
      * @param array $data
      */
     public function __construct(
+        $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
+        $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->collection = $collectionFactory->create();
@@ -63,33 +73,23 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @return array
-     */
-    public function getMeta()
-    {
-        return $this->meta;
-    }
-
-    /**
-     * @param string $fieldSetName
-     * @param string $fieldName
-     * @return array
-     */
-    public function getFieldMetaInfo($fieldSetName, $fieldName)
-    {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
-            : [];
-    }
-
-    /**
-     * Get data
+     * Get Data Provider name
      *
-     * @return array
+     * @return string
      */
-    public function getData()
+    public function getName()
     {
-        return $this->collection->toArray();
+        return $this->name;
+    }
+
+    /**
+     * Get primary field name
+     *
+     * @return string
+     */
+    public function getPrimaryFieldName()
+    {
+        return $this->primaryFieldName;
     }
 
     /**
@@ -103,13 +103,43 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Get primary field name
-     *
-     * @return string
+     * @return array
      */
-    public function getPrimaryFieldName()
+    public function getMeta()
     {
-        return $this->primaryFieldName;
+        return $this->meta;
+    }
+
+    /**
+     * Get field Set meta info
+     *
+     * @param string $fieldSetName
+     * @return array
+     */
+    public function getFieldSetMetaInfo($fieldSetName)
+    {
+        return isset($this->meta[$fieldSetName]) ? $this->meta[$fieldSetName] : [];
+    }
+
+    /**
+     * @param string $fieldSetName
+     * @return array
+     */
+    public function getFieldsMetaInfo($fieldSetName)
+    {
+        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+    }
+
+    /**
+     * @param string $fieldSetName
+     * @param string $fieldName
+     * @return array
+     */
+    public function getFieldMetaInfo($fieldSetName, $fieldName)
+    {
+        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
+            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+            : [];
     }
 
     /**
@@ -180,6 +210,16 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->collection->toArray();
+    }
+
+    /**
      * Retrieve count of loaded items
      *
      * @return int
@@ -208,14 +248,5 @@ class DataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
-    }
-
-    /**
-     * @param string $fieldSetName
-     * @return array
-     */
-    public function getFieldsMetaInfo($fieldSetName)
-    {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
     }
 }

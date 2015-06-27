@@ -10,7 +10,7 @@
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class Database implements \Magento\Framework\Option\ArrayInterface
 {
@@ -35,7 +35,7 @@ class Database implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         $resourceOptions = [];
-        $resourceConfig = $this->deploymentConfig->get(ConfigOptionsList::KEY_RESOURCE);
+        $resourceConfig = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_RESOURCE);
         if (null !== $resourceConfig) {
             foreach (array_keys($resourceConfig) as $resourceName) {
                 $resourceOptions[] = ['value' => $resourceName, 'label' => $resourceName];
