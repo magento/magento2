@@ -25,9 +25,9 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
     private $backupRollback;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
      */
-    private $dirList;
+    private $status;
 
     public function setup()
     {
@@ -39,15 +39,14 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->backupRollback = $this->getMock('\Magento\Framework\Setup\BackupRollback', [], [], '', false);
-        $this->dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
+        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
+        $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '',
+            false);
 
         $this->jobDbRollback = new JobDbRollback(
-            $this->dirList,
             $this->backupRollbackFactory,
             $output,
-            $status,
+            $this->status,
             'setup:rollback',
             []
         );
@@ -56,8 +55,8 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->backupRollbackFactory->expects($this->once())->method('create')->willReturn($this->backupRollback);
+        $this->backupRollback->expects($this->once())->method('getLastBackupFilePath')->willReturn('filename_db.gz');
         $this->backupRollback->expects($this->once())->method('dbRollback');
-        $this->dirList->expects($this->once())->method('getPath')->willReturn('some/path');
         $this->jobDbRollback->execute();
     }
 
@@ -71,26 +70,10 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
         $this->jobDbRollback->execute();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No available backup file found.
-     */
     public function testExceptionOnFindFile()
     {
         $this->backupRollbackFactory->expects($this->once())->method('create')->willReturn($this->backupRollback);
-        $this->dirList->expects($this->once())->method('getPath')->willReturn('');
+        $this->status->expects($this->once())->method('add');
         $this->jobDbRollback->execute();
-    }
-}
-
-// functions to override native php functions
-namespace Magento\Setup\Model\Cron;
-
-function scandir($inputDir)
-{
-    if ($inputDir == 'some/path/backups') {
-        return ['file1_code', 'file2_db'];
-    } else {
-        return [];
     }
 }

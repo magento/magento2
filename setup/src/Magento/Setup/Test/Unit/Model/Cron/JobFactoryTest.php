@@ -17,13 +17,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $serviceManager = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', [], '', false);
-        $backupRollbackFactory = $this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false);
-        $dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $valueMap = [
-            ['Magento\Framework\App\Filesystem\DirectoryList', $dirList],
-            ['Magento\Framework\Setup\BackupRollbackFactory', $backupRollbackFactory],
-        ];
-
+        $jobDbRollback = $this->getMock('Magento\Setup\Model\Cron\JobDbRollback', [], [], '', false);
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
         $status->expects($this->once())->method('getLogFilePath')->willReturn('path_b');
@@ -31,7 +25,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
         $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($objectManager);
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->any())->method('create')->willReturn($jobDbRollback);
 
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
         $rollbackCommand = $this->getMock('Magento\Setup\Console\Command\RollbackCommand', [], [], '', false);
