@@ -56,7 +56,7 @@ namespace Magento\Setup\Model\Cron;
 
 function scandir($inputDir)
 {
-    if ($inputDir == 'some/path/backups' ) {
+    if ($inputDir == 'some/path/backups') {
         return ['file1_code', 'file2_db'];
     } else {
         return [];
