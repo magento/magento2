@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -18,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobDbRollback extends AbstractJob
 {
     /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
      * @var BackupRollbackFactory
      */
     private $backupRollbackFactory;
@@ -30,7 +24,6 @@ class JobDbRollback extends AbstractJob
     /**
      * Constructor
      *
-     * @param DirectoryList $directoryList
      * @param BackupRollbackFactory $backupRollbackFactory
      * @param OutputInterface $output
      * @param Status $status
@@ -38,14 +31,12 @@ class JobDbRollback extends AbstractJob
      * @param array $params
      */
     public function __construct(
-        DirectoryList $directoryList,
         BackupRollbackFactory $backupRollbackFactory,
         OutputInterface $output,
         Status $status,
         $name,
         $params = []
     ) {
-        $this->directoryList  = $directoryList;
         $this->backupRollbackFactory = $backupRollbackFactory;
         parent::__construct($output, $status, $name, $params);
     }
