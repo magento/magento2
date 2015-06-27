@@ -41,10 +41,14 @@ define(
                 var observableFields = shippingRatesValidationRules.getObservableFields();
                 $.each(elements, function(index, elem) {
                     if (elem && observableFields.indexOf(elem.index) != -1) {
-                        self.bindHandler(elem);
-                        if (elem.index == 'postcode') {
-                            postcodeElement = elem;
+                        if (elem.index !== 'postcode') {
+                            self.bindHandler(elem);
                         }
+                    }
+
+                    if (elem.index === 'postcode') {
+                        self.bindHandler(elem);
+                        postcodeElement = elem;
                     }
                 });
             },
