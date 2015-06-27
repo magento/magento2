@@ -17,6 +17,12 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $serviceManager = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', [], '', false);
+        $backupRollbackFactory = $this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false);
+        $dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $valueMap = [
+            ['Magento\Framework\App\Filesystem\DirectoryList', $dirList],
+ 	 	 	['Magento\Framework\Setup\BackupRollbackFactory', $backupRollbackFactory],
+ 	 	];
 
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');
@@ -24,7 +30,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
+        $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($objectManager);
+        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
         $rollbackCommand = $this->getMock('Magento\Setup\Console\Command\RollbackCommand', [], [], '', false);
@@ -37,7 +44,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider]
         ];
 
-        $serviceManager->expects($this->any())
+        $serviceManager->expects($this->atLeastOnce())
             ->method('get')
             ->will($this->returnValueMap($returnValueMap));
 
