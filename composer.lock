@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.corp.ebay.com:magento-ogre/composer-lib.git",
-                "reference": "827ba1e36a07b10fd604ddf2078fd2818691f11b"
+                "reference": "a7a68c368a593ddb81f05124f0e99def5736f253"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -159,15 +159,15 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Magento\\": "app/code/Magento/"
+                    "Magento\\Composer\\": "src"
                 }
             },
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run Symfony commands.",
-            "time": "2015-06-26 14:13:26"
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "time": "2015-06-27 06:13:51"
         },
         {
             "name": "magento/magento-composer-installer",
