@@ -89,7 +89,7 @@ define(
             },
             getData: function() {
                 return {
-                    'method': this.item.code,
+                    'method': this.item.method,
                     'cc_type': this.creditCardType(),
                     'cc_exp_year': this.creditCardExpYear(),
                     'cc_exp_month': this.creditCardExpMonth(),

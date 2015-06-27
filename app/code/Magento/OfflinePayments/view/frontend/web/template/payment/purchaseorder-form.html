@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method" data-bind="css: {'_active': (item.code == isEnabled())}">
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <form id="purchaseorder-form" class="form form-purchase-order">
 
         <div class="payment-method-title field choice">
             <input type="radio"
                    name="payment[method]"
                    class="radio"
-                   data-bind="attr: {'id': item.code}, value: item.code, checked: isChecked, click: selectPaymentMethod"/>
-            <label data-bind="attr: {'for': item.code}" class="label">
+                   data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod"/>
+            <label data-bind="attr: {'for': getCode()}" class="label">
                 <span data-bind="text: getTitle()"></span>
             </label>
         </div>
@@ -49,7 +49,7 @@
                     <div class="primary">
                         <button class="action primary checkout"
                                 type="submit"
-                                data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: (item.code == isEnabled())"
+                                data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: (getCode() == isChecked())"
                                 data-role="review-save">
                             <span data-bind="text: $t('Place Order')"></span>
                         </button>

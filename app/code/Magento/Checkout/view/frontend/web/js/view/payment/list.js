@@ -32,7 +32,7 @@ define([
                         if (change.status === 'added') {
                             this.createRenderer(change.value);
                         } else if (change.status === 'deleted') {
-                            this.removeRenderer(change.value.code);
+                            this.removeRenderer(change.value.method);
                         }
                     }, this);
                 }, this, 'arrayChange');
@@ -60,7 +60,7 @@ define([
          * @param {Object} paymentMethodData
          */
         createRenderer: function (paymentMethodData) {
-            var renderer = this.getRendererByType(paymentMethodData.code),
+            var renderer = this.getRendererByType(paymentMethodData.method),
                 rendererTemplate,
                 rendererComponent,
                 templateData;
@@ -68,7 +68,7 @@ define([
             if (renderer) {
                 templateData = {
                     parentName: this.name,
-                    name: paymentMethodData.code
+                    name: paymentMethodData.method
                 };
                 rendererTemplate = {
                     parent: '${ $.$data.parentName }',
@@ -109,7 +109,7 @@ define([
         removeRenderer: function (paymentMethodCode) {
             var items = this.getRegion('payment-method-items');
             _.find(items(), function (value) {
-                if (value.item.code === paymentMethodCode) {
+                if (value.item.method === paymentMethodCode) {
                     value.disposeSubscriptions();
                     this.removeChild(value);
                 }
