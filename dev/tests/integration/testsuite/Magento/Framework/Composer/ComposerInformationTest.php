@@ -34,7 +34,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [DirectoryList::CONFIG, __DIR__ . '/_files/'],
             [DirectoryList::ROOT, __DIR__ . '/_files/' . $composerDir],
-            [DirectoryList::CONFIG, __DIR__ . '/_files/' . $composerDir],
+            [DirectoryList::COMPOSER_HOME, __DIR__ . '/_files/' . $composerDir],
         ];
 
         $this->directoryList->expects($this->any())
