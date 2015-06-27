@@ -67,7 +67,8 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                 ['main' => ''],
                 ['main' => false],
             ],
-            $this->navigation->getData());
+            $this->navigation->getData()
+        );
     }
 
     public function testGetMenuItems()
