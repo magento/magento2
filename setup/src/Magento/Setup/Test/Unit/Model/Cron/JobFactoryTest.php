@@ -21,8 +21,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $valueMap = [
             ['Magento\Framework\App\Filesystem\DirectoryList', $dirList],
- 	 	 	['Magento\Framework\Setup\BackupRollbackFactory', $backupRollbackFactory],
- 	 	];
+            ['Magento\Framework\Setup\BackupRollbackFactory', $backupRollbackFactory],
+        ];
 
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->once())->method('getStatusFilePath')->willReturn('path_a');

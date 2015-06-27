@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobDbRollback;
 
-class JobDBRollbackTest extends \PHPUnit_Framework_TestCase
+class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var JobDbRollback
