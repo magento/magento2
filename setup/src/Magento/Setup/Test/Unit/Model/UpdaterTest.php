@@ -13,44 +13,18 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUpdaterTask()
     {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
-        $filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
-        $write->expects($this->once())->method('readFile')->willReturn('{"jobs":[{"name": "job A", "params": {}}]}');
-        $rawData = [
-            'jobs' => [
-                ['name' => 'job A', 'params' => []],
+        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+        $queue->expects($this->once())
+            ->method('addJobs')
+            ->with(
                 [
-                    'name' => 'update',
-                    'params' => ['require' => [['name' => 'vendor/package', 'version' => 'dev-master']]]
+                    [
+                        'name' => 'update',
+                        'params' => ['require' => [['name' => 'vendor/package', 'version' => 'dev-master']]]
+                    ]
                 ]
-            ]
-        ];
-        $write->expects($this->once())
-            ->method('writeFile')
-            ->with('.update_queue.json', json_encode($rawData, JSON_PRETTY_PRINT));
-        $updater = new Updater($filesystem);
-        $updater->createUpdaterTask([['name' => 'vendor/package', 'version' => 'dev-master']]);
-    }
-
-    public function testCreateUpdaterTaskEmptyTask()
-    {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
-        $filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
-        $write->expects($this->once())->method('readFile')->willThrowException(new FileSystemException(new Phrase('')));
-        $rawData = [
-            'jobs' => [
-                [
-                    'name' => 'update',
-                    'params' => ['require' => [['name' => 'vendor/package', 'version' => 'dev-master']]]
-                ]
-            ]
-        ];
-        $write->expects($this->once())
-            ->method('writeFile')
-            ->with('.update_queue.json', json_encode($rawData, JSON_PRETTY_PRINT));
-        $updater = new Updater($filesystem);
+            );
+        $updater = new Updater($queue);
         $updater->createUpdaterTask([['name' => 'vendor/package', 'version' => 'dev-master']]);
     }
 }
