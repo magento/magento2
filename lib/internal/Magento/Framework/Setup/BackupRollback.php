@@ -29,6 +29,13 @@ class BackupRollback
     const DEFAULT_BACKUP_DIRECTORY = 'backups';
 
     /**
+     * Path to backup folder
+     *
+     * @var string
+     */
+    private $backupsDir;
+
+    /**
      * Object Manager
      *
      * @var ObjectManagerInterface
@@ -74,6 +81,8 @@ class BackupRollback
         $this->log = $log;
         $this->directoryList = $directoryList;
         $this->file = $file;
+        $this->backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
+            . '/' . self::DEFAULT_BACKUP_DIRECTORY;
     }
 
     /**
@@ -100,11 +109,10 @@ class BackupRollback
         } else {
             throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir)) {
-            $this->file->createDirectory($backupsDir, 0777);
+        if (!$this->file->isExists($this->backupsDir)) {
+            $this->file->createDirectory($this->backupsDir, 0777);
         }
-        $fsBackup->setBackupsDir($backupsDir);
+        $fsBackup->setBackupsDir($this->backupsDir);
         $fsBackup->setBackupExtension('tgz');
         $fsBackup->setTime($time);
         $this->log->log($granularType . ' backup is starting...');
@@ -131,8 +139,7 @@ class BackupRollback
         if (preg_match('/[0-9]_(filesystem)_(code|media)\.(tgz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
+        if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
@@ -162,7 +169,7 @@ class BackupRollback
         }
         $fsRollback->setRootDir($this->directoryList->getRoot());
         $fsRollback->addIgnorePaths($ignorePaths);
-        $fsRollback->setBackupsDir($backupsDir);
+        $fsRollback->setBackupsDir($this->backupsDir);
         $fsRollback->setBackupExtension('tgz');
         $time = explode('_', $rollbackFile);
         $fsRollback->setTime($time[0]);
@@ -185,11 +192,10 @@ class BackupRollback
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir)) {
-            $this->file->createDirectory($backupsDir, 0777);
+        if (!$this->file->isExists($this->backupsDir)) {
+            $this->file->createDirectory($this->backupsDir, 0777);
         }
-        $dbBackup->setBackupsDir($backupsDir);
+        $dbBackup->setBackupsDir($this->backupsDir);
         $dbBackup->setBackupExtension('gz');
         $dbBackup->setTime($time);
         $this->log->log('DB backup is starting...');
@@ -215,15 +221,14 @@ class BackupRollback
         if (preg_match('/[0-9]_(db).(gz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
+        if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbRollback */
         $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbRollback->setRootDir($this->directoryList->getRoot());
-        $dbRollback->setBackupsDir($backupsDir);
+        $dbRollback->setBackupsDir($this->backupsDir);
         $dbRollback->setBackupExtension('gz');
         $time = explode('_', $rollbackFile);
         if (count($time) === 3) {
@@ -294,5 +299,30 @@ class BackupRollback
             }
         }
         return $ignorePaths;
+    }
+
+    /**
+     * Find the last backup file from backup directory.
+     *
+     * @param string $type
+     * @throws \RuntimeException
+     * @return string
+     */
+    public function getLastBackupFilePath($type)
+    {
+        $allFileList = scandir($this->backupsDir, SCANDIR_SORT_DESCENDING);
+        $backupFileName = '';
+
+        foreach ($allFileList as $fileName) {
+            if (strpos($fileName, $type) !== false) {
+                $backupFileName = $fileName;
+                break;
+            }
+        }
+
+        if (empty($backupFileName)) {
+            return '';
+        }
+        return $backupFileName;
     }
 }
