@@ -42,6 +42,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
         $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation/menu.phtml', $viewModel->getTemplate());
+        $this->assertSame('/magento/setup/navigation-updater/menu.phtml', $viewModel->getTemplate());
     }
 }
