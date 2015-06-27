@@ -40,8 +40,7 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
         );
         $this->backupRollback = $this->getMock('\Magento\Framework\Setup\BackupRollback', [], [], '', false);
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '',
-            false);
+        $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
 
         $this->jobDbRollback = new JobDbRollback(
             $this->backupRollbackFactory,

@@ -66,13 +66,13 @@ class JobFactory
             case self::DB_ROLLBACK:
                 return $objectManager->create(
                     '\Magento\Setup\Model\Cron\JobDbRollback',
-                        [
-                            'output' => $multipleStreamOutput,
-                            'cronStatus' => $cronStatus,
-                            'name' => $name,
-                            'params' => $params
-                        ]
-                    );
+                    [
+                        'output' => $multipleStreamOutput,
+                        'cronStatus' => $cronStatus,
+                        'name' => $name,
+                        'params' => $params
+                    ]
+                );
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
