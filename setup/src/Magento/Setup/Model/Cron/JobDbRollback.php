@@ -60,7 +60,13 @@ class JobDbRollback extends AbstractJob
     {
         try {
             $rollbackHandler = $this->backupRollbackFactory->create($this->output);
-            $rollbackHandler->dbRollback($this->getLastBackupFilePath("db"));
+            $dbBackupFile = $rollbackHandler->getLastBackupFilePath("db");
+            if (!empty($dbBackupFile)) {
+                $rollbackHandler->dbRollback($dbBackupFile);
+            } else {
+                $this->status->add('No available DB backup file found. Please refer to documentation specified '
+                    . 'in <a href=""> doc link </a> to rollback database to a previous version to ');
+            }
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(
@@ -69,33 +75,5 @@ class JobDbRollback extends AbstractJob
                 $e
             );
         }
-    }
-
-    /**
-     * Find the last backup file from backup directory.
-     *
-     * @param string $type
-     * @throws \RuntimeException
-     * @return string
-     */
-    protected function getLastBackupFilePath($type)
-    {
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
-            . '/' . BackupRollback::DEFAULT_BACKUP_DIRECTORY;
-
-        $allFileList = scandir($backupsDir, SCANDIR_SORT_DESCENDING);
-        $backupFileName = '';
-
-        foreach ($allFileList as $fileName) {
-            if (strpos($fileName, $type) !== false) {
-                $backupFileName = $fileName;
-                break;
-            }
-        }
-
-        if (empty($backupFileName)) {
-            throw new \RuntimeException("No available backup file found.");
-        }
-        return $backupFileName;
     }
 }

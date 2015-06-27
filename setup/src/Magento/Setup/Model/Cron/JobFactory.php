@@ -64,14 +64,20 @@ class JobFactory
                 );
                 break;
             case self::DB_ROLLBACK:
-                return new JobDbRollback(
-                    $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList'),
-                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
-                    $multipleStreamOutput,
-                    $cronStatus,
-                    $name,
-                    $params
-                );
+                return $objectManager->create(
+                    '\Magento\Setup\Model\Cron\JobDbRollback',
+                        [
+                            'output' => $multipleStreamOutput,
+                            'cronStatus' => $cronStatus,
+                            'name' => $name,
+                            'params' => $params
+                        ]
+                    );
+//                return new JobDbRollback(
+//                    $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList'),
+//                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
+//
+//                );
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
