@@ -10,10 +10,22 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Navigation
 {
+    /**#@+
+     * Types of wizards
+     */
+    const NAV_INSTALLER = 'navInstaller';
+    const NAV_UPDATER = 'navUpdater';
+    /**#@- */
+
     /**
      * @var array
      */
     private $navStates;
+
+    /**
+     * @var string
+     */
+    private $navType;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
@@ -23,10 +35,20 @@ class Navigation
     {
         $objectManager = $objectManagerProvider->get();
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-            $this->navStates = $serviceLocator->get('config')['navUpdater'];
+            $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
+            $this->navType = self::NAV_UPDATER;
         } else {
-            $this->navStates = $serviceLocator->get('config')['navInstaller'];
+            $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
+            $this->navType = self::NAV_INSTALLER;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->navType;
     }
 
     /**
