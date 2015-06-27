@@ -24,7 +24,7 @@ define(
             },
             getData: function () {
                 return {
-                    "method": this.item.code,
+                    "method": this.item.method,
                     'po_number': this.purchaseOrderNumber(),
                     "cc_owner": null,
                     "cc_number": null,

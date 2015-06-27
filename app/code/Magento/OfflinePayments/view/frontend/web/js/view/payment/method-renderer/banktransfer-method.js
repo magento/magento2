@@ -19,7 +19,7 @@ define(
              * @returns {String}
              */
             getInstructions: function () {
-                return window.checkoutConfig.payment.instructions[this.item.code];
+                return window.checkoutConfig.payment.instructions[this.item.method];
             }
         });
     }

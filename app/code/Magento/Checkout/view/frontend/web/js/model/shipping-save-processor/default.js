@@ -10,10 +10,12 @@ define(
         'Magento_Checkout/js/model/resource-url-manager',
         'mage/storage',
         'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/model/payment/method-converter',
         'Magento_Ui/js/model/messageList'
     ],
-    function (ko, quote, resourceUrlManager, storage, paymentService, messageList) {
+    function (ko, quote, resourceUrlManager, storage, paymentService, methodConverter, messageList) {
         'use strict';
+
         return {
             saveShippingInformation: function() {
                 var payload = {
@@ -30,7 +32,7 @@ define(
                 ).done(
                     function (response) {
                         quote.setTotals(response.totals);
-                        paymentService.setPaymentMethods(response.payment_methods);
+                        paymentService.setPaymentMethods(methodConverter(response.payment_methods));
                     }
                 ).fail(
                     function (response) {
@@ -39,6 +41,6 @@ define(
                     }
                 );
             }
-        }
+        };
     }
 );

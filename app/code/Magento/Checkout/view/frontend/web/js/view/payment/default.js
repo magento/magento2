@@ -10,9 +10,10 @@ define(
         'Magento_Checkout/js/action/place-order',
         'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/quote',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/payment-service'
     ],
-    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer) {
+    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer, paymentService) {
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
@@ -55,26 +56,20 @@ define(
                 return true;
             },
 
-            isEnabled: ko.computed(function () {
-                return quote.paymentMethod()
-                        ? quote.paymentMethod().method
-                        : null;
-                }
-            ),
-
             isChecked: ko.computed(function () {
-                    return quote.paymentMethod()
-                        ? quote.paymentMethod().method
-                        : null;
-                }
-            ),
+                return quote.paymentMethod() ? quote.paymentMethod().method : null;
+            }),
+
+            isRadioButtonVisible: ko.computed(function () {
+                return paymentService.getAvailablePaymentMethods().length !== 1;
+            }),
 
             /**
              * Get payment method data
              */
             getData: function() {
                 return {
-                    "method": this.item.code,
+                    "method": this.item.method,
                     "po_number": null,
                     "cc_owner": null,
                     "cc_number": null,
@@ -96,7 +91,7 @@ define(
              * Get payment method code.
              */
             getCode: function () {
-                return this.item.code;
+                return this.item.method;
             },
 
             validate: function () {
@@ -104,7 +99,7 @@ define(
             },
 
             getBillingAddressFormName: function() {
-                return 'billing-address-form-' + this.item.code;
+                return 'billing-address-form-' + this.item.method;
             },
 
             disposeSubscriptions: function () {

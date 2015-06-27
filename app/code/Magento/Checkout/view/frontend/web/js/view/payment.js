@@ -10,12 +10,14 @@ define(
         'ko',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/model/payment/method-converter'
     ],
-    function (Component, ko, quote, stepNavigator, paymentService) {
+    function (Component, ko, quote, stepNavigator, paymentService, methodConverter) {
+        'use strict';
 
         /** Set payment methods to collection */
-        paymentService.setPaymentMethods(window.checkoutConfig.paymentMethods);
+        paymentService.setPaymentMethods(methodConverter(window.checkoutConfig.paymentMethods));
 
         return Component.extend({
             defaults: {
@@ -34,6 +36,6 @@ define(
             getFormKey: function() {
                 return window.checkoutConfig.formKey;
             }
-        })
+        });
     }
 );

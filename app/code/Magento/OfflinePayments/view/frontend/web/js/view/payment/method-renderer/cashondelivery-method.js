@@ -17,7 +17,7 @@ define(
 
             /** Returns payment method instructions */
             getInstructions: function() {
-                return window.checkoutConfig.payment.instructions[this.item.code];
+                return window.checkoutConfig.payment.instructions[this.item.method];
             }
         });
     }
