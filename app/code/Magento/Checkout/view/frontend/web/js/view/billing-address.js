@@ -43,7 +43,7 @@ define(
                         isAddressSameAsShipping: false
                     });
                 quote.billingAddress.subscribe(function(newAddress) {
-                    this.isAddressSameAsShipping(newAddress == quote.shippingAddress());
+                    this.isAddressSameAsShipping(newAddress == quote.shippingAddress() && !quote.isVirtual());
                     this.isAddressDetailsVisible(true);
                 }, this);
                 return this;
