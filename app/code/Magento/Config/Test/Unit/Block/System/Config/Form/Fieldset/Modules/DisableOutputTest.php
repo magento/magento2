@@ -200,7 +200,7 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
      * @param $expanded
      * @param $nested
      * @param $extra
-     * @dataProvider testRenderDataProvider
+     * @dataProvider renderDataProvider
      */
     public function testRender($expanded, $nested, $extra)
     {
@@ -219,7 +219,7 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testRenderDataProvider()
+    public function renderDataProvider()
     {
         return [
             'expandedNestedExtra' => [

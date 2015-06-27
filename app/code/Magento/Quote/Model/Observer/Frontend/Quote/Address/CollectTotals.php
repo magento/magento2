@@ -73,13 +73,11 @@ class CollectTotals
         $customer = $quote->getCustomer();
         $storeId = $customer->getStoreId();
 
-        if (($customer->getCustomAttribute('disable_auto_group_change')
-                && $customer->getCustomAttribute('disable_auto_group_change')->getValue())
+        if ($customer->getDisableAutoGroupChange()
             || false == $this->vatValidator->isEnabled($quoteAddress, $storeId)
         ) {
             return;
         }
-
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
         $groupId = null;

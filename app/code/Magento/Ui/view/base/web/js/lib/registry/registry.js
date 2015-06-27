@@ -4,10 +4,25 @@
  */
 define([
     'mageUtils',
+    'underscore',
     './storage',
     './events'
-], function(utils, Storage, Events) {
+], function (utils, _, Storage, Events) {
     'use strict';
+
+    function async(name, registry, method) {
+        var args = _.toArray(arguments).slice(3);
+
+        if (_.isString(method)) {
+            registry.get(name, function (component) {
+                component[method].apply(component, args);
+            });
+        } else if (_.isFunction(method)) {
+            registry.get(name, method);
+        } else if (!args.length) {
+            return registry.get(name);
+        }
+    }
 
     function Registry() {
         this.storage = new Storage();
@@ -20,9 +35,9 @@ define([
         /**
          * Retrieves data from registry.
          *
-         * @params {(String|Array)} elems -
+         * @param {(String|Array)} elems -
          *      An array of elements' names or a string of names divided by spaces.
-         * @params {Function} [callback] -
+         * @param {Function} [callback] -
          *      Callback function that will be triggered
          *      when all of the elements are registered.
          * @returns {Array|*|Undefined}
@@ -30,7 +45,7 @@ define([
          *      or an element itself if only is requested.
          *      If callback function is specified then returns 'undefined'.
          */
-        get: function(elems, callback) {
+        get: function (elems, callback) {
             var records;
 
             elems = utils.stringToArray(elems) || [];
@@ -46,12 +61,11 @@ define([
             }
         },
 
-
        /**
          * Sets data to registry.
          *
-         * @params {String} elems - Elements' name.
-         * @params {*} value - Value that will be assigned to the element.
+         * @param {String} elem - Elements' name.
+         * @param {*} value - Value that will be assigned to the element.
          * @returns {registry} Chainable.
          */
         set: function (elem, value) {
@@ -63,7 +77,7 @@ define([
 
         /**
          * Removes specified elements from a storage.
-         * @params {(String|Array)} elems -
+         * @param {(String|Array)} elems -
          *      An array of elements' names or a string of names divided by spaces.
          * @returns {registry} Chainable.
          */
@@ -78,7 +92,7 @@ define([
        /**
          * Checks whether specified elements has been registered.
          *
-         * @params {(String|Array)} elems -
+         * @param {(String|Array)} elems -
          *      An array of elements' names or a string of names divided by spaces.
          * @returns {Boolean}
          */
@@ -86,6 +100,10 @@ define([
             elems = utils.stringToArray(elems);
 
             return this.storage.has(elems);
+        },
+
+        async: function (name) {
+            return async.bind(null, name, this);
         },
 
         create: function () {

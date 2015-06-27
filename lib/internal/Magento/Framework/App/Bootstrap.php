@@ -12,6 +12,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Profiler;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * A bootstrap of Magento application
@@ -147,7 +148,8 @@ class Bootstrap
     {
         $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
         $driverPool = self::createFilesystemDriverPool($initParams);
-        return new ObjectManagerFactory($dirList, $driverPool);
+        $configFilePool = self::createConfigFilePool();
+        return new ObjectManagerFactory($dirList, $driverPool, $configFilePool);
     }
 
     /**
@@ -179,6 +181,16 @@ class Bootstrap
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
         };
         return new DriverPool($extraDrivers);
+    }
+
+    /**
+     * Creates instance of configuration files pool
+     *
+     * @return DriverPool
+     */
+    public static function createConfigFilePool()
+    {
+        return new ConfigFilePool();
     }
 
     /**

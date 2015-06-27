@@ -19,6 +19,8 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
 
@@ -395,12 +397,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected function _checkDdlTransaction($sql)
     {
         if (is_string($sql) && $this->getTransactionLevel() > 0) {
-            $startSql = strtolower(substr(ltrim($sql), 0, 3));
-            if (in_array($startSql, $this->_ddlRoutines)) {
+            $sqlMessage = explode(' ', $sql, 3);
+            $startSql = strtolower(substr(ltrim($sqlMessage[0]), 0, 3));
+            if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
                 trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
+
 
     /**
      * Special handling for PDO query().
@@ -410,9 +414,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function query($sql, $bind = [])
+    protected function _query($sql, $bind = [])
     {
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -461,6 +466,45 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 }
             }
         } while ($retry);
+    }
+
+
+    /**
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function query($sql, $bind = [])
+    {
+        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') !== false && count($this->_splitMultiQuery($sql)) > 1) {
+            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+        }
+        return $this->_query($sql, $bind);
+    }
+
+    /**
+     * Allows multiple queries -- to safeguard against SQL injection, USE CAUTION and verify that input
+     * cannot be tampered with.
+     *
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function multiQuery($sql, $bind = [])
+    {
+        return $this->_query($sql, $bind);
     }
 
     /**
@@ -614,47 +658,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $prev = $this->_queryHook;
         $this->_queryHook = $hook;
         return $prev;
-    }
-
-    /**
-     * Executes a SQL statement(s)
-     *
-     * @param string $sql
-     * @throws \Zend_Db_Exception
-     * @return array
-     */
-    public function multiQuery($sql)
-    {
-        return $this->multiMagentoQuery($sql);
-    }
-
-    /**
-     * Run Multi Query
-     *
-     * @param string $sql
-     * @return array
-     * @throws \Exception
-     */
-    public function multiMagentoQuery($sql)
-    {
-        ##$result = $this->rawQuery($sql);
-
-        #$this->beginTransaction();
-        try {
-            $stmts = $this->_splitMultiQuery($sql);
-            $result = [];
-            foreach ($stmts as $stmt) {
-                $result[] = $this->rawQuery($stmt);
-            }
-            #$this->commit();
-        } catch (\Exception $e) {
-            #$this->rollback();
-            throw $e;
-        }
-
-        $this->resetDdlCache();
-
-        return $result;
     }
 
     /**
@@ -1086,7 +1089,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $createSql = $this->getCreateTable($tableName, $schemaName);
 
             // collect CONSTRAINT
-            $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) '
+            $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY ?\(`([^`]*)`\) '
                 . 'REFERENCES (`([^`]*)`\.)?`([^`]*)` \(`([^`]*)`\)'
                 . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
                 . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
@@ -1935,6 +1938,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($schemaName !== null) {
             $table->setSchema($schemaName);
         }
+        if (isset($this->_config['engine'])) {
+            $table->setOption('type', $this->_config['engine']);
+        }
 
         return $table;
     }
@@ -1962,7 +1968,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         );
         $tableOptions   = $this->_getOptionsDefinition($table);
         $sql = sprintf(
-            "CREATE TABLE %s (\n%s\n) %s",
+            "CREATE TABLE IF NOT EXISTS %s (\n%s\n) %s",
             $this->quoteIdentifier($table->getName()),
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
@@ -1994,6 +2000,24 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
         );
+
+        return $this->query($sql);
+    }
+
+    /**
+     * Create temporary table like
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Statement_Pdo
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
+    {
+        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
+        $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
+        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
 
         return $this->query($sql);
     }
@@ -2709,14 +2733,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             'to'            => "{{fieldName}} <= ?",
             'seq'           => null,
             'sneq'          => null,
+            'ntoa'          => "INET_NTOA({{fieldName}}) LIKE ?",
         ];
 
         $query = '';
         if (is_array($condition)) {
-            if (isset($condition['field_expr'])) {
-                $fieldName = str_replace('#?', $this->quoteIdentifier($fieldName), $condition['field_expr']);
-                unset($condition['field_expr']);
-            }
             $key = key(array_intersect_key($condition, $conditionKeyMap));
 
             if (isset($condition['from']) || isset($condition['to'])) {
@@ -3114,47 +3135,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Minus superfluous characters from hash.
-     *
-     * @param  string $hash
-     * @param  string $prefix
-     * @param  int $maxCharacters
-     * @return string
-     */
-    protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
-    {
-        $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
-        $superfluous = $diff / 2;
-        $odd         = $diff % 2;
-        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
-        return $hash;
-    }
-
-    /**
-     * Retrieve valid table name
-     * Check table name length and allowed symbols
+     * Returns a compressed version of the table name if it is too long
      *
      * @param string $tableName
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTableName($tableName)
     {
-        $prefix = 't_';
-        if (strlen($tableName) > self::LENGTH_TABLE_NAME) {
-            $shortName = ExpressionConverter::shortName($tableName);
-            if (strlen($shortName) > self::LENGTH_TABLE_NAME) {
-                $hash = md5($tableName);
-                if (strlen($prefix . $hash) > self::LENGTH_TABLE_NAME) {
-                    $tableName = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_TABLE_NAME);
-                } else {
-                    $tableName = $prefix . $hash;
-                }
-            } else {
-                $tableName = $shortName;
-            }
-        }
+        return ExpressionConverter::shortenEntityName($tableName, 't_');
+    }
 
-        return $tableName;
+    /**
+     * Build a trigger name based on table name and trigger details
+     *
+     * @param string $tableName  The table which is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     * @codeCoverageIgnore
+     */
+
+    public function getTriggerName($tableName, $time, $event)
+    {
+        $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;
+        return ExpressionConverter::shortenEntityName($triggerName, 'trg_');
     }
 
     /**
@@ -3175,35 +3180,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         switch (strtolower($indexType)) {
             case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $prefix = 'unq_';
-                $shortPrefix = 'u_';
                 break;
             case AdapterInterface::INDEX_TYPE_FULLTEXT:
                 $prefix = 'fti_';
-                $shortPrefix = 'f_';
                 break;
             case AdapterInterface::INDEX_TYPE_INDEX:
             default:
                 $prefix = 'idx_';
-                $shortPrefix = 'i_';
         }
-
-        $hash = $tableName . '_' . $fields;
-
-        if (strlen($hash) + strlen($prefix) > self::LENGTH_INDEX_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_INDEX_NAME) {
-                $hash = md5($hash);
-                if (strlen($hash) + strlen($shortPrefix) > self::LENGTH_INDEX_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $shortPrefix, self::LENGTH_INDEX_NAME);
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        return strtoupper(ExpressionConverter::shortenEntityName($tableName . '_' . $fields, $prefix));
     }
 
     /**
@@ -3215,28 +3200,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @return string
+     * @codeCoverageIgnore
      */
     public function getForeignKeyName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        $prefix = 'fk_';
-        $hash = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
-        if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-            $short = ExpressionConverter::shortName($prefix . $hash);
-            if (strlen($short) > self::LENGTH_FOREIGN_NAME) {
-                $hash = md5($hash);
-                if (strlen($prefix . $hash) > self::LENGTH_FOREIGN_NAME) {
-                    $hash = $this->_minusSuperfluous($hash, $prefix, self::LENGTH_FOREIGN_NAME);
-                } else {
-                    $hash = $prefix . $hash;
-                }
-            } else {
-                $hash = $short;
-            }
-        } else {
-            $hash = $prefix . $hash;
-        }
-
-        return strtoupper($hash);
+        $fkName = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
+        return strtoupper(ExpressionConverter::shortenEntityName($fkName, 'fk_'));
     }
 
     /**
@@ -3733,7 +3702,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $statements
         );
 
-        return $this->query($sql);
+        return $this->multiQuery($sql);
     }
 
     /**

@@ -22,33 +22,6 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
-    /**
-     * Covers onepage payment.phtml templates
-     */
-    public function testIndexAction()
-    {
-        $this->dispatch('checkout/onepage/index');
-        $html = $this->getResponse()->getBody();
-        $this->assertContains('<li id="opc-payment"', $html);
-        $this->assertSelectEquals('[id="checkout-shipping-method-load"]', '', 1, $html);
-        $this->assertSelectEquals('[id="checkout-payment-method-load"]', '', 1, $html);
-        $this->assertSelectCount('form[id="co-billing-form"][action=""]', 1, $html);
-        $this->assertSelectCount('form[id="co-payment-form"] input[name="form_key"]', 1, $html);
-    }
-
-    public function testShippingMethodAction()
-    {
-        $this->dispatch('checkout/onepage/shippingMethod');
-        $this->assertContains('no quotes are available', $this->getResponse()->getBody());
-    }
-
-    public function testReviewAction()
-    {
-        $this->dispatch('checkout/onepage/review');
-        $this->assertContains('Place Order', $this->getResponse()->getBody());
-        $this->assertContains('checkout-review', $this->getResponse()->getBody());
-    }
-
     public function testSaveOrderActionWithoutFormKey()
     {
         $this->dispatch('checkout/onepage/saveOrder');

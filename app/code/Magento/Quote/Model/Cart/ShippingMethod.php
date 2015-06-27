@@ -164,6 +164,27 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     }
 
     /**
+     * Returns the error message.
+     *
+     * @return string|null Shipping Error message.
+     */
+    public function getErrorMessage()
+    {
+        return $this->_get(self::KEY_ERROR_MESSAGE);
+    }
+
+    /**
+     * Set an error message.
+     *
+     * @param string|null $errorMessage
+     * @return $this
+     */
+    public function setErrorMessage($errorMessage)
+    {
+        return $this->setData(self::KEY_ERROR_MESSAGE, $errorMessage);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null
@@ -183,5 +204,48 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
         \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return float
+     */
+    public function getPriceExclTax()
+    {
+        return $this->_get(self::KEY_PRICE_EXCL_TAX);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param float $priceExclTax
+     * @return $this
+     */
+    public function setPriceExclTax($priceExclTax)
+    {
+        return $this->setData(self::KEY_PRICE_EXCL_TAX, $priceExclTax);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return float
+     */
+    public function getPriceInclTax()
+    {
+        return $this->_get(self::KEY_PRICE_INCL_TAX);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param float $priceInclTax
+     * @return $this
+     */
+    public function setPriceInclTax($priceInclTax)
+    {
+        return $this->setData(self::KEY_PRICE_INCL_TAX, $priceInclTax);
     }
 }

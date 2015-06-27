@@ -288,12 +288,12 @@ class Address extends AbstractCustomer
         $this->addMessageTemplate(self::ERROR_ADDRESS_ID_IS_EMPTY, __('Customer address id column is not specified'));
         $this->addMessageTemplate(
             self::ERROR_ADDRESS_NOT_FOUND,
-            __("Customer address for such customer doesn't exist")
+            __('We can\'t find that customer address.')
         );
-        $this->addMessageTemplate(self::ERROR_INVALID_REGION, __('Region is invalid'));
+        $this->addMessageTemplate(self::ERROR_INVALID_REGION, __('Please enter a valid region.'));
         $this->addMessageTemplate(
             self::ERROR_DUPLICATE_PK,
-            __('Row with such email, website and address id combination was already found.')
+            __('We found another row with this email, website and address ID combination.')
         );
 
         $this->_initAttributes();
@@ -311,23 +311,6 @@ class Address extends AbstractCustomer
             $this->_customerEntity = $this->_customerFactory->create();
         }
         return $this->_customerEntity;
-    }
-
-    /**
-     * Get region parameters
-     *
-     * @return array
-     */
-    protected function _getRegionParameters()
-    {
-        if (!$this->_regionParameters) {
-            $this->_regionParameters = [];
-            /** @var $regionIdAttribute \Magento\Customer\Model\Attribute */
-            $regionIdAttribute = $this->_eavConfig->getAttribute($this->getEntityTypeCode(), 'region_id');
-            $this->_regionParameters['table'] = $regionIdAttribute->getBackend()->getTable();
-            $this->_regionParameters['attribute_id'] = $regionIdAttribute->getId();
-        }
-        return $this->_regionParameters;
     }
 
     /**
@@ -395,7 +378,8 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $addUpdateRows = [];
+            $newRows = [];
+            $updateRows = [];
             $attributes = [];
             $defaults = [];
             // customer default addresses (billing/shipping) data
@@ -409,7 +393,12 @@ class Address extends AbstractCustomer
 
                 if ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
                     $addUpdateResult = $this->_prepareDataForUpdate($rowData);
-                    $addUpdateRows[] = $addUpdateResult['entity_row'];
+                    if ($addUpdateResult['entity_row_new']) {
+                        $newRows[] = $addUpdateResult['entity_row_new'];
+                    }
+                    if ($addUpdateResult['entity_row_update']) {
+                        $updateRows[] = $addUpdateResult['entity_row_update'];
+                    }
                     $attributes = $this->_mergeEntityAttributes($addUpdateResult['attributes'], $attributes);
                     $defaults = $this->_mergeEntityAttributes($addUpdateResult['defaults'], $defaults);
                 } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
@@ -418,7 +407,8 @@ class Address extends AbstractCustomer
             }
 
             $this->_saveAddressEntities(
-                $addUpdateRows
+                $newRows,
+                $updateRows
             )->_saveAddressAttributes(
                 $attributes
             )->_saveCustomerDefaults(
@@ -462,26 +452,15 @@ class Address extends AbstractCustomer
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
 
-        $regionParameters = $this->_getRegionParameters();
-        $regionIdTable = $regionParameters['table'];
-        $regionIdAttributeId = $regionParameters['attribute_id'];
+        // entity table data
+        $entityRowNew = [];
+        $entityRowUpdate = [];
+        // attribute values
+        $attributes = [];
+        // customer default addresses
+        $defaults = [];
 
-        // get address attributes
-        $addressAttributes = [];
-        foreach ($this->_attributes as $attributeAlias => $attributeParams) {
-            if (isset($rowData[$attributeAlias]) && strlen($rowData[$attributeAlias])) {
-                if ('select' == $attributeParams['type']) {
-                    $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
-                } elseif ('datetime' == $attributeParams['type']) {
-                    $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
-                    $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-                } else {
-                    $value = $rowData[$attributeAlias];
-                }
-                $addressAttributes[$attributeParams['id']] = $value;
-            }
-        }
-
+        $newAddress = true;
         // get address id
         if (isset(
             $this->_addresses[$customerId]
@@ -490,35 +469,49 @@ class Address extends AbstractCustomer
             $this->_addresses[$customerId]
         )
         ) {
+            $newAddress = false;
             $addressId = $rowData[self::COLUMN_ADDRESS_ID];
         } else {
             $addressId = $this->_getNextEntityId();
         }
-
-        // entity table data
         $entityRow = [
             'entity_id' => $addressId,
             'parent_id' => $customerId,
-            'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
-        // attribute values
-        $attributes = [];
-        foreach ($this->_attributes as $attributeParams) {
-            if (isset($addressAttributes[$attributeParams['id']])) {
-                $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]
-                    = $addressAttributes[$attributeParams['id']];
+        foreach ($this->_attributes as $attributeAlias => $attributeParams) {
+            if (array_key_exists($attributeAlias, $rowData)) {
+                if (!strlen($rowData[$attributeAlias])) {
+                    if ($newAddress) {
+                        $value = null;
+                    } else {
+                        continue;
+                    }
+                } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
+
+                } elseif ('select' == $attributeParams['type']) {
+                    $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
+                } elseif ('datetime' == $attributeParams['type']) {
+                    $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
+                    $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                } else {
+                    $value = $rowData[$attributeAlias];
+                }
+                if ($attributeParams['is_static']) {
+                    $entityRow[$attributeAlias] = $value;
+                } else {
+                    $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]= $value;
+                }
             }
         }
 
-        // customer default addresses
-        $defaults = [];
+
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
-                $attribute = $this->_getCustomerEntity()->getAttribute($attributeCode);
-                $defaults[$attribute->getBackend()->getTable()][$customerId][$attribute->getId()] = $addressId;
+                $table = $this->_getCustomerEntity()->getResource()->getTable('customer_entity');
+                $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
 
@@ -529,32 +522,52 @@ class Address extends AbstractCustomer
 
             if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
                 $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
-                $attributes[$regionIdTable][$addressId][$regionIdAttributeId] = $regionId;
-                $tableName = $this->_attributes[self::COLUMN_REGION]['table'];
-                $regionColumnNameId = $this->_attributes[self::COLUMN_REGION]['id'];
-                $attributes[$tableName][$addressId][$regionColumnNameId] = $this->_regions[$regionId];
+                $entityRow[self::COLUMN_REGION] = $this->_regions[$regionId];
+                $entityRow['region_id'] = $regionId;
             }
         }
 
-        return ['entity_row' => $entityRow, 'attributes' => $attributes, 'defaults' => $defaults];
+        if ($newAddress) {
+            $entityRowNew = $entityRow;
+            $entityRowNew['created_at'] =
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+        } else {
+            $entityRowUpdate = $entityRow;
+        }
+
+        return [
+            'entity_row_new' => $entityRowNew,
+            'entity_row_update' => $entityRowUpdate,
+            'attributes' => $attributes,
+            'defaults' => $defaults
+        ];
     }
 
     /**
      * Update and insert data in entity table
      *
-     * @param array $entityRows Rows for insert
+     * @param array $addRows Rows for insert
+     * @param array $updateRows Rows for update
      * @return $this
      */
-    protected function _saveAddressEntities(array $entityRows)
+    protected function _saveAddressEntities(array $addRows, array $updateRows)
     {
-        if ($entityRows) {
-            $this->_connection->insertOnDuplicate($this->_entityTable, $entityRows, ['updated_at']);
+        if ($addRows) {
+            $this->_connection->insertMultiple($this->_entityTable, $addRows);
+        }
+        if ($updateRows) {
+            //list of updated fields can be different for addresses. We can not use insertOnDuplicate for whole rows.
+            foreach ($updateRows as $row) {
+                $fields = array_diff(array_keys($row), ['entity_id', 'parent_id', 'created_at']);
+                $this->_connection->insertOnDuplicate($this->_entityTable, $row, $fields);
+            }
+
         }
         return $this;
     }
 
     /**
-     * Save customer address attributes
+     * Save custom customer address attributes
      *
      * @param array $attributesData
      * @return $this
@@ -586,21 +599,15 @@ class Address extends AbstractCustomer
      */
     protected function _saveCustomerDefaults(array $defaults)
     {
-        /** @var $entity \Magento\Customer\Model\Customer */
-        $entity = $this->_customerFactory->create();
-
         foreach ($defaults as $tableName => $data) {
-            $tableData = [];
-            foreach ($data as $customerId => $attributeData) {
-                foreach ($attributeData as $attributeId => $value) {
-                    $tableData[] = [
-                        'entity_id' => $customerId,
-                        'attribute_id' => $attributeId,
-                        'value' => $value,
-                    ];
-                }
+            foreach ($data as $customerId => $defaultsData) {
+                $data = array_merge(
+                    ['entity_id' => $customerId],
+                    $defaultsData
+                );
+                $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-            $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
+
         }
         return $this;
     }

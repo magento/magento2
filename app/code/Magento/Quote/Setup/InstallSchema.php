@@ -147,13 +147,13 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true],
             'Customer Id'
         )->addColumn(
             'customer_tax_class_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true],
             'Customer Tax Class Id'
         )->addColumn(
             'customer_group_id',
@@ -390,7 +390,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'address_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            10,
             [],
             'Address Type'
         )->addColumn(
@@ -408,19 +408,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'firstname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Firstname'
         )->addColumn(
             'middlename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            40,
+            20,
             [],
             'Middlename'
         )->addColumn(
             'lastname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Lastname'
         )->addColumn(
@@ -438,19 +438,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'street',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Street'
         )->addColumn(
             'city',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'City'
         )->addColumn(
             'region',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Region'
         )->addColumn(
@@ -462,25 +462,25 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'postcode',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Postcode'
         )->addColumn(
             'country_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            30,
             [],
             'Country Id'
         )->addColumn(
             'telephone',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Phone Number'
         )->addColumn(
             'fax',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Fax'
         )->addColumn(
@@ -498,7 +498,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'shipping_method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Shipping Method'
         )->addColumn(
@@ -640,29 +640,29 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Subtotal Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
-            'shipping_hidden_tax_amount',
+            'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
-            'base_shipping_hidden_tax_amnt',
+            'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -710,7 +710,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
@@ -935,17 +935,17 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Row Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addIndex(
             $installer->getIdxName('quote_item', ['parent_item_id']),
             ['parent_item_id']
@@ -1209,17 +1209,17 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Row Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addIndex(
             $installer->getIdxName('quote_address_item', ['quote_address_id']),
             ['quote_address_id']
@@ -1541,13 +1541,22 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()->newTable(
             $installer->getTable('quote_id_mask')
         )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Entity Id'
+        )->addColumn(
             'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false],
+            ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Quote ID'
+        )->addIndex(
+            $installer->getIdxName('quote_id_mask', ['quote_id']),
+            ['quote_id']
         )->addForeignKey(
-            'quote_id',
+            $installer->getFkName('quote_id_mask', 'quote_id', 'quote', 'entity_id'),
             'quote_id',
             $installer->getTable('quote'),
             'entity_id',

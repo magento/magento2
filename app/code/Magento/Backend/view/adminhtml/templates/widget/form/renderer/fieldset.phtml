@@ -38,11 +38,13 @@ if ($isField) {
 */ ?>
 
 <?php if ($isWrapped): ?>
-    <div class="fieldset-wrapper <?php echo($isCollapsable) ? 'collapsable-wrapper ' : ''; ?>"
+    <div class="fieldset-wrapper <?php echo($isCollapsable) ? 'admin__collapsible-block-wrapper ' : ''; ?>"
         id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>"
         data-role="<?php echo $id ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
-            <strong class="title"<?php echo($isCollapsable) ? ' data-toggle="collapse" data-target="#' . $id . '-content"' : ''; ?>>
+            <strong <?php echo($isCollapsable) ?
+                'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
+                'class="title"'; ?>>
                 <span><?php echo $element->getLegend() ?></span>
             </strong>
             <?php echo $titleActions; ?>

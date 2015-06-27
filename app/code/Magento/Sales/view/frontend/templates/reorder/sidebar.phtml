@@ -6,53 +6,52 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
 /**
- * Last order sidebar
+ * Last ordered items sidebar
  *
- * @see \Magento\Sale\Block\Reorder\Sidebar
+ * @var $block \Magento\Sales\Block\Reorder\Sidebar
  */
 ?>
-<?php $_items = $block->getItems()?>
-<?php if ($_items): ?>
-<div class="block block-reorder">
-    <div class="block-title">
+<div class="block block-reorder" data-bind="scope: 'lastOrderedItems'">
+    <div class="block-title no-display"
+         data-bind="css: {'no-display': !lastOrderedItems().items || lastOrderedItems().items.length === 0}">
         <strong id="block-reorder-heading" role="heading" aria-level="2"><?php echo __('My Orders') ?></strong>
     </div>
-    <div class="block-content" aria-labelledby="block-reorder-heading">
-        <form method="post" class="form reorder" action="<?php echo $block->getFormActionUrl() ?>" id="reorder-validate-detail">
+    <div class="block-content no-display"
+         data-bind="css: {'no-display': !lastOrderedItems().items || lastOrderedItems().items.length === 0}"
+         aria-labelledby="block-reorder-heading">
+        <form method="post" class="form reorder"
+              action="<?php echo $block->getFormActionUrl() ?>" id="reorder-validate-detail">
             <strong class="subtitle"><?php echo __('Last Ordered Items') ?></strong>
-            <ol id="cart-sidebar-reorder" class="product-items product-items-names">
-            <?php $_showAddButtonFlag = false ?>
-            <?php foreach ($_items as $_item): ?>
+            <ol id="cart-sidebar-reorder" class="product-items product-items-names"
+                data-bind="foreach: lastOrderedItems().items">
                 <li class="product-item">
-                    <?php if ($block->isItemAvailableForReorder($_item)): ?>
-                        <?php $_showAddButtonFlag = true ?>
-                        <div class="field item choice">
-                            <label class="label" for="reorder-item-<?php echo $_item->getId() ?>"><span><?php echo __('Add to Cart') ?></span></label>
-                            <div class="control">
-                                <input type="checkbox" name="order_items[]" id="reorder-item-<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" title="<?php echo __('Add to Cart') ?>"
-                                       class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
-                            </div>
+                    <div class="field item choice no-display" data-bind="css: {'no-display': !is_saleable}">
+                        <label class="label" data-bind="attr: {'for': 'reorder-item-' + id}">
+                            <span><?php echo __('Add to Cart') ?></span>
+                        </label>
+                        <div class="control">
+                            <input type="checkbox" name="order_items[]"
+                                   data-bind="attr: {id: 'reorder-item-' + id, value: id}"
+                                   title="<?php echo __('Add to Cart') ?>"
+                                   class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
                         </div>
-                    <?php endif; ?>
+                    </div>
                     <strong class="product-item-name">
-                        <a href="<?php echo $_item->getProduct()->getProductUrl() ?>"
-                           class="product-item-link"><?php echo $block->escapeHtml($_item->getName()) ?></a>
+                        <a data-bind="attr: {href: url}" class="product-item-link">
+                            <span data-bind="text: name"></span>
+                        </a>
                     </strong>
                 </li>
-            <?php endforeach; ?>
             </ol>
             <div id="cart-sidebar-reorder-advice-container"></div>
             <div class="actions-toolbar">
-                <?php if ($_showAddButtonFlag): ?>
-                    <div class="primary">
+                    <div class="primary no-display"
+                         data-bind="css: {'no-display': !lastOrderedItems().isShowAddToCart}">
                         <button type="submit" title="<?php echo __('Add to Cart') ?>" class="action tocart primary">
                             <span><?php echo __('Add to Cart') ?></span>
                         </button>
                     </div>
-                <?php endif; ?>
                 <div class="secondary">
                     <a class="action view" href="<?php echo $block->getUrl('customer/account') ?>">
                         <span><?php echo __('View All'); ?></span>
@@ -61,17 +60,26 @@
             </div>
         </form>
     </div>
-    <?php echo $block->getPagerHtml(); ?>
     <script>
-require(["jquery", "mage/mage"], function(jQuery){
-
-jQuery('#reorder-validate-detail').mage('validation', {
-    errorPlacement: function(error, element) {
-        error.appendTo('#cart-sidebar-reorder-advice-container');
-    }
-});
-
-});
-</script>
+    require(["jquery", "mage/mage"], function(jQuery){
+        jQuery('#reorder-validate-detail').mage('validation', {
+            errorPlacement: function(error, element) {
+                error.appendTo('#cart-sidebar-reorder-advice-container');
+            }
+        });
+    });
+    </script>
 </div>
-<?php endif ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "lastOrderedItems": {
+                    "component": "Magento_Sales/js/view/last-ordered-items"
+                }
+            }
+        }
+    }
+}
+</script>

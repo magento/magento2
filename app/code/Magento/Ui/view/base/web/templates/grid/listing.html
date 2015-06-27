@@ -4,35 +4,43 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<table class="data-grid">
-    <thead data-part="head">
-        <tr data-part="head.row">
-            <!-- ko foreach: elems -->
-                <!-- ko if: visible -->
+<div class="admin__data-grid-wrap">
+    <table
+        class="data-grid"
+        data-bind="
+            afterRender: dndConfig.enabled ?
+                function (elem) { dnd('setTable', elem); } :
+                false,
+            css: {
+                'data-grid-draggable': dndConfig.enabled
+            }">
+        <thead data-part="head">
+            <tr data-part="head.row">
+                <!-- ko foreach: elems -->
                     <!-- ko template: getHeader() --><!-- /ko -->
                 <!-- /ko -->
-            <!-- /ko -->
-        </tr>
-    </thead>
-    <tbody data-part="body">
-        <!-- ko if: hasData() -->
-            <!-- ko foreach: { data: rows, as: 'row' } -->
-                <tr data-part="body.row">
-                    <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-                        <!-- ko if: visible -->
+            </tr>
+        </thead>
+        <tbody data-part="body">
+            <!-- ko if: hasData() -->
+                <!-- ko foreach: { data: rows, as: 'row' } -->
+                    <tr data-part="body.row">
+                        <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
                             <!-- ko template: getBody() --><!-- /ko -->
                         <!-- /ko -->
-                    <!-- /ko -->
+                    </tr>
+                <!-- /ko -->
+            <!-- /ko -->
+
+            <!-- ko ifnot: hasData() -->
+                <tr class="data-grid-tr-no-data">
+                    <td data-bind="attr: { colspan: getColspan() },
+                                   text: $t('We couldn\'t find any records.')"></td>
                 </tr>
             <!-- /ko -->
-        <!-- /ko -->
-
-        <!-- ko ifnot: hasData() -->
-            <tr class="data-grid-tr-no-data">
-                <td data-bind="attr: { colspan: getColspan() },
-                               text: $t('We couldn\'t find any records.')"></td>
-            </tr>
-        <!-- /ko -->
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <!-- ko if: dndConfig.enabled -->
+        <!-- ko template: dndConfig.containerTmpl --><!-- /ko -->
+    <!-- /ko -->
+</div>

@@ -40,7 +40,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'credit_cards' => ['SO' => 'Solo', 'SM' => 'Switch/Maestro'],
             'groups' => ['any_payment' => 'Any Payment'],
-            'methods' => ['checkmo' => ['allow_multiple_address' => 1, 'allow_multiple_with_3dsecure' => 1]],
+            'methods' => ['checkmo' => ['allow_multiple_address' => 1]],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -58,7 +58,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'credit_cards' => ['AE' => 'American Express', 'SM' => 'Switch/Maestro', 'SO' => 'Solo'],
             'groups' => ['any_payment' => 'Any Payment Methods', 'offline' => 'Offline Payment Methods'],
             'methods' => [
-                'checkmo' => ['allow_multiple_address' => 1, 'allow_multiple_with_3dsecure' => 1],
+                'checkmo' => ['allow_multiple_address' => 1],
                 'deny-method' => ['allow_multiple_address' => 0],
             ],
         ];

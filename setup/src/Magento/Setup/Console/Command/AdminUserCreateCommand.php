@@ -7,8 +7,9 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,11 +22,18 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
-     * @param InstallerFactory $installerFactory
+     * @var UserValidationRules
      */
-    public function __construct(InstallerFactory $installerFactory)
+    private $validationRules;
+    
+    /**
+     * @param InstallerFactory $installerFactory
+     * @param UserValidationRules $validationRules
+     */
+    public function __construct(InstallerFactory $installerFactory, UserValidationRules $validationRules)
     {
         $this->installerFactory = $installerFactory;
+        $this->validationRules = $validationRules;
         parent::__construct();
     }
 
@@ -37,7 +45,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('admin:user:create')
-            ->setDescription('Creates admin user')
+            ->setDescription('Creates an administrator')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
@@ -49,11 +57,14 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     {
         $errors = $this->validate($input);
         if ($errors) {
-            throw new \InvalidArgumentException(implode("\n", $errors));
+            $output->writeln('<error>' . implode('</error>' . PHP_EOL .  '<error>', $errors) . '</error>');
+            return;
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());
-        $output->writeln('<info>Created admin user ' . $input->getOption(AdminAccount::KEY_USER) . '</info>');
+        $output->writeln(
+            '<info>Created Magento administrator user named ' . $input->getOption(AdminAccount::KEY_USER) . '</info>'
+        );
     }
 
     /**
@@ -64,11 +75,21 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     public function getOptionsList()
     {
         return [
-            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, 'Admin user'),
-            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, 'Admin password'),
-            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, 'Admin email'),
-            new InputOption(AdminAccount::KEY_FIRST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin first name'),
-            new InputOption(AdminAccount::KEY_LAST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin last name'),
+            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, '(Required) Admin user'),
+            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, '(Required) Admin password'),
+            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, '(Required) Admin email'),
+            new InputOption(
+                AdminAccount::KEY_FIRST_NAME,
+                null,
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin first name'
+            ),
+            new InputOption(
+                AdminAccount::KEY_LAST_NAME,
+                null,
+                InputOption::VALUE_REQUIRED,
+                '(Required) Admin last name'
+            ),
         ];
     }
 
@@ -81,18 +102,24 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     public function validate(InputInterface $input)
     {
         $errors = [];
-        $required = [
-            AdminAccount::KEY_USER,
-            AdminAccount::KEY_PASSWORD,
-            AdminAccount::KEY_EMAIL,
-            AdminAccount::KEY_FIRST_NAME,
-            AdminAccount::KEY_LAST_NAME,
-        ];
-        foreach ($required as $key) {
-            if (!$input->getOption($key)) {
-                $errors[] = 'Missing option ' . $key;
-            }
+        $user = new \Magento\Framework\Object();
+        $user->setFirstname($input->getOption(AdminAccount::KEY_FIRST_NAME))
+            ->setLastname($input->getOption(AdminAccount::KEY_LAST_NAME))
+            ->setUsername($input->getOption(AdminAccount::KEY_USER))
+            ->setEmail($input->getOption(AdminAccount::KEY_EMAIL))
+            ->setPassword(
+                $input->getOption(AdminAccount::KEY_PASSWORD) === null
+                ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
+            );
+
+        $validator = new \Magento\Framework\Validator\Object;
+        $this->validationRules->addUserInfoRules($validator);
+        $this->validationRules->addPasswordRules($validator);
+
+        if (!$validator->isValid($user)) {
+            $errors = array_merge($errors, $validator->getMessages());
         }
+
         return $errors;
     }
 }

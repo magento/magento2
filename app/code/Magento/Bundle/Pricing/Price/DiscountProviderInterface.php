@@ -8,6 +8,7 @@ namespace Magento\Bundle\Pricing\Price;
 
 /**
  * Interface DiscountProviderInterface
+ * @api
  */
 interface DiscountProviderInterface
 {

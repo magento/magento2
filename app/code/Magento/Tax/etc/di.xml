@@ -42,7 +42,7 @@
     <preference for="Magento\Tax\Api\OrderTaxManagementInterface" type="Magento\Tax\Model\Sales\Order\TaxManagement" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
-    <preference for="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface" type="Magento\Tax\Model\Sales\Order\Tax\Item" />
+    <preference for="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface" type="Magento\Sales\Model\Order\Tax\Item" />
     <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="\Magento\Tax\Model\TaxClass\Management" />
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
@@ -59,7 +59,22 @@
     <preference for="Magento\Tax\Api\Data\AppliedTaxRateInterface" type="Magento\Tax\Model\TaxDetails\AppliedTaxRate" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsInterface" type="Magento\Tax\Model\TaxDetails\TaxDetails" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsItemInterface" type="Magento\Tax\Model\TaxDetails\ItemDetails" />
+    <preference for="Magento\Tax\Api\Data\GrandTotalDetailsInterface" type="Magento\Tax\Model\Calculation\GrandTotalDetails" />
+    <preference for="Magento\Tax\Api\Data\GrandTotalRatesInterface" type="Magento\Tax\Model\Calculation\GrandTotalRates" />
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
+    </type>
+    <type name="Magento\Quote\Model\Cart\CartTotalRepository">
+        <plugin name="add_tax_details" type="Magento\Tax\Model\Quote\GrandTotalDetails"/>
+    </type>
+    <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\Resource\Report\Tax\Updatedat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
     </type>
 </config>

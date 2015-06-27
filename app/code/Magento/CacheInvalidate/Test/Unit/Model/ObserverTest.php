@@ -22,6 +22,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Helper\Data */
     protected $_helperMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $logger;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object\ */
     protected $_observerObject;
 
@@ -45,10 +48,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->logger = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
         $this->_model = new \Magento\CacheInvalidate\Model\Observer(
             $this->_configMock,
             $this->_helperMock,
-            $this->_curlMock
+            $this->_curlMock,
+            $this->logger
         );
         $this->_observerMock = $this->getMock(
             'Magento\Framework\Event\Observer',

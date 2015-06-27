@@ -3,8 +3,11 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@import (reference) '_extends.less';
-@import '_control-table.less';
+//
+//  Components
+//  _____________________________________________
+
+@import 'controls/_checkbox-radio.less';
 
 //
 //  Variables
@@ -13,7 +16,7 @@
 @field-control__background-color: @color-white;
 @field-control__border-color: @action__border-color;
 @field-control__border-radius: 1px;
-@field-control__border-width: .1rem;
+@field-control__border-width: 1px;
 @field-control__color: @color-very-dark-gray-black;
 @field-control__font-size: @action__font-size;
 @field-control__line-height: @action__line-height;
@@ -99,7 +102,6 @@
     background-position+: ~'calc(100% - 33px)' 0;
     background-size+: 1px 100%;
 
-    height: @field-control__height;
     padding-right: 4.4rem; // Distance between select switch and inner text
     transition: @smooth__border-color;
 
@@ -190,11 +192,14 @@ option:empty {
     line-height: @field-control__line-height;
     padding-top: @field-control__padding-top;
     padding-bottom: @field-control__padding-bottom;
+    + [class*='admin__control-'] {
+        margin-left: @action__outer-indent;
+    }
 }
 
 [class*='admin__control-'] {
     + .admin__control-support-text {
-        margin-left: .7rem;
+        margin-left: @action__outer-indent;
     }
 }
 
@@ -304,7 +309,7 @@ option:empty {
         }
     }
     .admin__addon {
-        min-width: auto;
+        min-width: 0;
         overflow: hidden;
         text-align: right;
         white-space: nowrap;

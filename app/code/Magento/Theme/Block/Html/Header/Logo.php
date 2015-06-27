@@ -79,6 +79,38 @@ class Logo extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve logo width
+     *
+     * @return int
+     */
+    public function getLogoWidth()
+    {
+        if (empty($this->_data['logo_width'])) {
+            $this->_data['logo_width'] = $this->_scopeConfig->getValue(
+                'design/header/logo_width',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+        return (int)$this->_data['logo_width'] ? : (int)$this->getLogoImgWidth();
+    }
+
+    /**
+     * Retrieve logo height
+     *
+     * @return int
+     */
+    public function getLogoHeight()
+    {
+        if (empty($this->_data['logo_height'])) {
+            $this->_data['logo_height'] = $this->_scopeConfig->getValue(
+                'design/header/logo_height',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+        return (int)$this->_data['logo_height'] ? : (int)$this->getLogoImgHeight();
+    }
+
+    /**
      * Retrieve logo image URL
      *
      * @return string

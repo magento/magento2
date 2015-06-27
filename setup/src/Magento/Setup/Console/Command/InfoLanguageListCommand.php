@@ -9,7 +9,7 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Setup\Model\Lists;
+use Magento\Framework\Setup\Lists;
 
 /**
  * Command prints list of available language locales
@@ -38,7 +38,7 @@ class InfoLanguageListCommand extends Command
     protected function configure()
     {
         $this->setName('info:language:list')
-            ->setDescription('Prints list of available language locales');
+            ->setDescription('Displays the list of available language locales');
 
         parent::configure();
     }
@@ -48,8 +48,14 @@ class InfoLanguageListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Language', 'Code']);
+
         foreach ($this->lists->getLocaleList() as $key => $locale) {
-            $output->writeln($key . ' => ' . $locale);
+            $table->addRow([$locale, $key]);
         }
+
+        $table->render($output);
+
     }
 }

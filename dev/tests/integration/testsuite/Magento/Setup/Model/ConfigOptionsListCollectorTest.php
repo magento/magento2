@@ -27,18 +27,36 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $fullModuleListMock->expects($this->once())->method('getNames')->willReturn(['Magento_Backend']);
 
+        $dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
+        $configGenerator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
+
+        $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(
+                'Magento\Setup\Model\ConfigOptionsList',
+                [
+                    'configGenerator' => $configGenerator,
+                    'dbValidator' => $dbValidator
+                ]
+            );
+
+        $serviceLocator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
+
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('Magento\Setup\Model\ConfigOptionsList')
+            ->willReturn($setupOptions);
+
         /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsListCollector',
             [
                 'objectManagerProvider' => $this->objectManagerProvider,
                 'fullModuleList' => $fullModuleListMock,
+                'serviceLocator' => $serviceLocator
             ]
         );
         $result = $object->collectOptionsLists();
-
-        $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Config\ConfigOptionsList');
+        
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,

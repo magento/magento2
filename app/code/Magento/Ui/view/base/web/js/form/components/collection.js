@@ -12,10 +12,10 @@ define([
     'use strict';
 
     var childTemplate = {
-        template: '<%= $data.name %>.<%= $data.itemTemplate %>',
-        parent: '<%= $data.name %>',
-        name: '<%= $data.childIndex %>',
-        dataScope: '<%= name %>'
+        template: '${ $.$data.name }.${ $.$data.itemTemplate }',
+        parent: '${ $.$data.name }',
+        name: '${ $.$data.childIndex }',
+        dataScope: '${ $.name }'
     };
 
     return Component.extend({
@@ -45,7 +45,7 @@ define([
 
             elem.activate();
 
-            this.trigger('update');
+            this.bubble('update');
 
             return this;
         },
@@ -151,11 +151,11 @@ define([
          *      Since this method is used by 'click' binding,
          *      it requires function to invoke.
          */
-        removeChild: function (elem) {
+        removeAddress: function (elem) {
             var confirmed = confirm(this.removeMessage);
 
             if (confirmed) {
-                this._removeChild(elem);
+                this._removeAddress(elem);
             }
         },
 
@@ -166,7 +166,7 @@ define([
          *
          * @param {Object} elem - Element to remove.
          */
-        _removeChild: function (elem) {
+        _removeAddress: function (elem) {
             var isActive = elem.active(),
                 first;
 
@@ -178,7 +178,7 @@ define([
                 first.activate();
             }
 
-            this.trigger('update');
+            this.bubble('update');
         }
     });
 });

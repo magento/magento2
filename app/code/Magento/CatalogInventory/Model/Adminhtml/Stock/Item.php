@@ -11,13 +11,15 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Object\IdentityInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog Inventory Stock Model for adminhtml area
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Item extends \Magento\CatalogInventory\Model\Stock\Item
+class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {
     /**
      * @var GroupManagementInterface
@@ -36,7 +38,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -52,7 +54,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
         StockItemRepositoryInterface $stockItemRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -121,5 +123,18 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
     public function getShowDefaultNotificationMessage()
     {
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        $tags = [];
+        if ($this->getProductId()) {
+            $tags[] = Product::CACHE_TAG . '_' . $this->getProductId();
+        }
+
+        return $tags;
     }
 }

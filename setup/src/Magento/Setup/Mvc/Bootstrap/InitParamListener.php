@@ -30,7 +30,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * A CLI parameter for injecting bootstrap variables
      */
-    const BOOTSTRAP_PARAM = 'magento_init_params';
+    const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
      * List of ZF event listeners

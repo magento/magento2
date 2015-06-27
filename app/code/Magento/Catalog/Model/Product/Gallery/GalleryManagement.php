@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -28,21 +29,21 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\ContentValidator
+     * @var ImageContentValidatorInterface
      */
     protected $contentValidator;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param ContentValidator $contentValidator
+     * @param ImageContentValidatorInterface $contentValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\Gallery\ContentValidator $contentValidator
+        ImageContentValidatorInterface $contentValidator
     ) {
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;

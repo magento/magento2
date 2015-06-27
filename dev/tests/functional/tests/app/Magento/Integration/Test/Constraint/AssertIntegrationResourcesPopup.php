@@ -11,26 +11,26 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertIntegrationResourcesPopup
- * Assert that pop-up with resources are shown after starting activation
+ * Assert that pop-up with resources are shown after starting activation.
  */
 class AssertIntegrationResourcesPopup extends AbstractConstraint
 {
     /**
      * Assert that pop-up with resources, that were specified for integration are shown
-     * after starting activation of integration
+     * after starting activation of integration.
      *
      * @param IntegrationIndex $integrationIndex
      * @param Integration $integration
+     * @param int|null $resourceDepth
      * @return void
      */
-    public function processAssert(IntegrationIndex $integrationIndex, Integration $integration)
+    public function processAssert(IntegrationIndex $integrationIndex, Integration $integration, $resourceDepth = null)
     {
         $fixtureResources = is_array($integration->getResources())
             ? $integration->getResources()
             : [$integration->getResources()];
-        $formResources = $integrationIndex->getIntegrationGrid()->getResourcesPopup()->getData();
-        $result = $this->verifyResources($formResources['resources'], $fixtureResources);
+        $formResources = $integrationIndex->getIntegrationGrid()->getResourcesPopup()->getStructure($resourceDepth);
+        $result = $this->verifyResources($formResources, $fixtureResources);
         \PHPUnit_Framework_Assert::assertEmpty(
             $result,
             "Integration resources is not correct.\nLog:\n" . $result
@@ -39,7 +39,7 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
     }
 
     /**
-     * Verify that resources are correct
+     * Verify that resources are correct.
      *
      * @param array $formResources
      * @param array $fixtureResources
@@ -61,8 +61,8 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
         if (!empty($diff)) {
             $errorMessage = sprintf(
                 "Resources are not equal.\nExpected: %s\nActual: %s",
-                implode(",\n", $fixtureResources),
-                implode(",\n", $formResources)
+                implode(",\n", $formResources),
+                implode(",\n", $topFormResources)
             );
         }
 
@@ -70,7 +70,7 @@ class AssertIntegrationResourcesPopup extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of successful assertion
+     * Returns a string representation of successful assertion.
      *
      * @return string
      */

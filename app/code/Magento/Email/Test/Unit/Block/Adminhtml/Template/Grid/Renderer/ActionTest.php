@@ -58,6 +58,6 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->action->setColumn($this->columnMock);
         $row = new \Magento\Framework\Object();
         $row->setId(1);
-        $this->assertContains('action-select', $this->action->render($row));
+        $this->assertContains('admin__control-select', $this->action->render($row));
     }
 }

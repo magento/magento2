@@ -91,7 +91,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -111,7 +111,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_config = $config;
@@ -165,15 +165,15 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 $ratesTotal += count($regions);
                 if ($ratesTotal > self::RATES_MAX) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Google shopping only supports %1 tax rates per product', self::RATES_MAX)
+                        __('Google shopping only supports %1 tax rates per product.', self::RATES_MAX)
                     );
                 }
                 foreach ($regions as $region) {
                     $adjustments = $product->getPriceInfo()->getAdjustments();
                     if (array_key_exists('tax', $adjustments)) {
-                        $taxIncluded = true;
+                        $isTaxIncluded = true;
                     } else {
-                        $taxIncluded = false;
+                        $isTaxIncluded = false;
                     }
 
                     $quoteDetailsItemDataArray = [
@@ -185,7 +185,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         ],
                         'unit_price' => $product->getPrice(),
                         'quantity' => 1,
-                        'tax_included' => $taxIncluded,
+                        'is_tax_included' => $isTaxIncluded,
                         'short_description' => $product->getName(),
                     ];
 

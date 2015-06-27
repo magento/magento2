@@ -9,60 +9,45 @@
 /* @var $block \Magento\Wishlist\Block\Customer\Sidebar */
 ?>
 <?php
-$count = $block->getItemCount();
 $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
 ?>
 <?php if ($wishlistHelper->isAllow()) : ?>
-    <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
-    <div class="block block-wishlist">
+    <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
             <strong><?php echo $block->getTitle(); ?></strong>
-            <?php if ($count > 0): ?>
-                <span class="counter"><?php echo($count == 1) ? __('1 item') : __('%1 items', $count) ?></span>
-            <?php endif; ?>
+            <!-- ko if: wishlist().counter -->
+            <span data-bind="text: wishlist().counter" class="counter"></span>
+            <!-- /ko -->
         </div>
         <div class="block-content">
             <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>
-            <?php if ($block->hasWishlistItems()): ?>
-                <ol class="product-items" id="wishlist-sidebar">
-                    <?php $iterator = 1; ?>
-                    <?php foreach ($block->getWishlistItems() as $item): ?>
-                        <?php $product = $item->getProduct(); ?>
-                        <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+            <!-- ko if: wishlist().counter -->
+                <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
+                    <li class="product-item">
                         <div class="product-item-info">
-                            <a class="product-item-photo" href="<?php echo $block->getProductUrl($item) ?>"
-                               title="<?php echo $block->escapeHtml($product->getName()) ?>">
-                                <?php echo $imageBlock->init($product, 'wishlist_sidebar_block')->toHtml() ?>
+                            <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
+                                <!-- ko template: {name: 'Magento_Wishlist/product_image', data: $data.image} --><!-- /ko -->
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
-                                    <a href="<?php echo $block->getProductUrl($item) ?>"
-                                       class="product-item-link"><?php echo $block->escapeHtml($product->getName()) ?></a>
+                                    <a data-bind="attr: { href: product_url }" class="product-item-link">
+                                        <span data-bind="text: product_name"></span>
+                                    </a>
                                 </strong>
-                                <?php
-                                    echo $block->getItemPriceHtml(
-                                        $item,
-                                        \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
-                                        \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
-                                    );
-                                ?>
+                                <div data-bind="html: product_price"></div>
                                 <div class="product-item-actions">
-                                    <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
+                                    <!-- ko if: product_is_saleable_and_visible -->
                                     <div class="actions-primary">
-                                    <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
-                                        <a href="<?php echo $block->getItemAddToCartUrl($item) ?>"
-                                           class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a>
-                                    <?php else: ?>
-                                        <?php
-                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-                                            $postData = $postDataHelper->getPostData($block->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
-                                        ?>
-                                            <button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button>
-                                        <?php endif; ?>
+                                        <!-- ko if: product_has_required_options -->
+                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a>
+                                        <!-- /ko -->
+                                        <!-- ko ifnot: product_has_required_options -->
+                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?php echo __('Add to Cart') ?></span></button>
+                                        <!-- /ko -->
                                     </div>
-                                    <?php endif; ?>
+                                    <!-- /ko -->
                                     <div class="actions-secondary">
-                                        <a href="#" data-post='<?php echo $block->getItemRemoveParams($item) ?>'
+                                        <a href="#"  data-bind="attr: {'data-post': delete_item_params}"
                                            title="<?php echo __('Remove This Item') ?>"
                                            class="btn-remove action delete">
                                             <span><?php echo __('Remove This Item') ?></span>
@@ -71,19 +56,32 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                 </div>
                             </div>
                         </div>
-                        <?php echo($iterator == count($block->getWishlistItems()) + 1) ? '</li>' : '' ?>
-                    <?php endforeach; ?>
+                    </li>
                 </ol>
-                <div class="actions-toolbar">
+                <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
                            href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"
                            title="<?php echo __('Go to Wish List') ?>"><span><?php echo __('Go to Wish List') ?></span></a>
                     </div>
                 </div>
-            <?php else: ?>
+            <!-- /ko -->
+            <!-- ko ifnot: wishlist().counter -->
                 <div class="empty"><?php echo __('You have no items in your wish list.') ?></div>
-            <?php endif ?>
+            <!-- /ko -->
         </div>
     </div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "wishlist": {
+                        "component": "Magento_Wishlist/js/view/wishlist"
+                    }
+                }
+            }
+        }
+    }
+</script>
 <?php endif ?>

@@ -9,10 +9,10 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\History" name="sales.order.history">
+            <block class="Magento\Sales\Block\Order\History" name="sales.order.history" cacheable="false">
                 <container name="sales.order.history.info" as="info" label="Order History Info"/>
             </block>
-            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml"/>
+            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

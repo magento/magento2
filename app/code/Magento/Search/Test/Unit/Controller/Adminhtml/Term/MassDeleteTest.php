@@ -7,6 +7,7 @@
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Controller\ResultFactory;
 
 class MassDeleteTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,24 +29,22 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $pageFactory;
 
-    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
-    private $redirectFactory;
-
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $response;
-
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
-    private $redirect;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resultFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resultRedirectMock;
 
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->response = $this->getMockBuilder('\Magento\Framework\App\ResponseInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
@@ -61,26 +60,22 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
-            ->setMethods(['setPath'])
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
-            ->setMethods(['create'])
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectFactory->expects($this->any())
+        $this->resultFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->redirect));
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
         $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
             ->willReturn($this->request);
-        $this->context->expects($this->atLeastOnce())
-            ->method('getResponse')
-            ->willReturn($this->response);
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManager);
@@ -88,8 +83,8 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
         $this->context->expects($this->any())
-            ->method('getResultRedirectFactory')
-            ->willReturn($this->redirectFactory);
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
@@ -114,13 +109,12 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->will($this->returnSelf());
-        $this->redirect->expects($this->once())
+        $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('search/*/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
-        $result = $this->controller->execute();
-        $this->assertSame($this->redirect, $result);
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
     /**

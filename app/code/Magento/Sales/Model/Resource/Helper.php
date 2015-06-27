@@ -44,17 +44,31 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
         $mainTable,
         $aggregationTable
     ) {
+        $adapter = $this->_resource->getConnection('sales_write');
         if ($aggregation == $aggregationAliases['monthly']) {
             $this->_reportsResourceHelper->updateReportRatingPos(
+                $adapter,
                 'month',
                 'qty_ordered',
                 $mainTable,
                 $aggregationTable
             );
         } elseif ($aggregation == $aggregationAliases['yearly']) {
-            $this->_reportsResourceHelper->updateReportRatingPos('year', 'qty_ordered', $mainTable, $aggregationTable);
+            $this->_reportsResourceHelper->updateReportRatingPos(
+                $adapter,
+                'year',
+                'qty_ordered',
+                $mainTable,
+                $aggregationTable
+            );
         } else {
-            $this->_reportsResourceHelper->updateReportRatingPos('day', 'qty_ordered', $mainTable, $aggregationTable);
+            $this->_reportsResourceHelper->updateReportRatingPos(
+                $adapter,
+                'day',
+                'qty_ordered',
+                $mainTable,
+                $aggregationTable
+            );
         }
 
         return $this;

@@ -10,30 +10,30 @@ require([
     window.Product = {};
 
     function byId(id) {
-        return document.getElementById(id);
+        return $('#' + id);
     }
 
-    function toogleFieldEditMode(toogleIdentifier, fieldContainer) {
-        if (byId(toogleIdentifier).checked) {
-            enableFieldEditMode(fieldContainer);
+    function toogleFieldEditMode(toogleIdentifier, fieldId) {
+        if ($(toogleIdentifier).is(':checked')) {
+            enableFieldEditMode(fieldId);
         } else {
-            disableFieldEditMode(fieldContainer);
+            disableFieldEditMode(fieldId);
         }
     }
 
-    function disableFieldEditMode(fieldContainer) {
-        byId(fieldContainer).disabled = true;
+    function disableFieldEditMode(fieldId) {
+        byId(fieldId).prop('disabled', true);
 
-        if (byId(fieldContainer + '_hidden')) {
-            byId(fieldContainer + '_hidden').disabled = true;
+        if (byId(fieldId + '_hidden').length) {
+            byId(fieldId + '_hidden').prop('disabled', true);
         }
     }
 
-    function enableFieldEditMode(fieldContainer) {
-        byId(fieldContainer).disabled = false;
+    function enableFieldEditMode(fieldId) {
+        byId(fieldId).prop('disabled', false);
 
-        if (byId(fieldContainer + '_hidden')) {
-            byId(fieldContainer + '_hidden').disabled = false;
+        if (byId(fieldId + '_hidden').length) {
+            byId(fieldId + '_hidden').prop('disabled', false);
         }
     }
 
@@ -46,21 +46,23 @@ require([
 
     function onUrlkeyChanged(urlKey) {
         urlKey = byId(urlKey);
-        var hidden = $(urlKey).next('input[type=hidden]')[0];
-        var chbx = $(urlKey).next('input[type=checkbox]')[0];
-        var oldValue = chbx.value;
+        var hidden = urlKey.siblings('input[type=hidden]');
+        var chbx = urlKey.siblings('input[type=checkbox]');
+        var oldValue = chbx.val();
 
-        chbx.disabled = (oldValue === urlKey.value);
-        hidden.disabled = chbx.disabled;
+        chbx.prop('disabled', oldValue === urlKey.val());
+        hidden.prop('disabled', chbx.prop('disabled'));
     }
 
     function onCustomUseParentChanged(element) {
-        var useParent = (element.value === 1) ? true : false,
-            parent = $(element).parent().parent();
+        element = $(element);
+        var useParent = element.val() == 1,
+            parent = element.offsetParent().parent();
 
         parent.find('input, select, textarea').each(function (i, el) {
-            if (element.id !== el.id) {
-                el.disabled = useParent;
+            el = $(el);
+            if (element.prop('id') != el.prop('id')) {
+                el.prop('disabled', useParent);
             }
         });
 

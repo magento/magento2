@@ -8,7 +8,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Tools\Dependency\Circular;
+use Magento\Setup\Module\Dependency\Circular;
 
 class CircularDependencyTest extends \PHPUnit_Framework_TestCase
 {

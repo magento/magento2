@@ -15,13 +15,13 @@
                 <varnish4>
                     <path>Magento/PageCache/etc/varnish4.vcl</path>
                 </varnish4>
-                <ttl>120</ttl>
+                <ttl>86400</ttl>
                 <caching_application>1</caching_application>
                 <default>
                     <access_list>localhost</access_list>
                     <backend_host>localhost</backend_host>
                     <backend_port>8080</backend_port>
-                    <ttl>120</ttl>
+                    <ttl>86400</ttl>
                 </default>
             </full_page_cache>
         </system>

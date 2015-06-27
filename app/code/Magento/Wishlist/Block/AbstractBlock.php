@@ -31,29 +31,20 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         $this->httpContext = $httpContext;
-        $this->productRepository = $productRepository;
         parent::__construct(
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -136,14 +127,14 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
-     * Retrieve Add Item to shopping cart URL
+     * Retrieve Add Item to shopping cart params for POST request
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
      */
-    public function getItemAddToCartUrl($item)
+    public function getItemAddToCartParams($item)
     {
-        return $this->_getHelper()->getAddToCartUrl($item);
+        return $this->_getHelper()->getAddToCartParams($item);
     }
 
     /**
@@ -155,6 +146,16 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function getSharedItemAddToCartUrl($item)
     {
         return $this->_getHelper()->getSharedAddToCartUrl($item);
+    }
+
+    /**
+     * Retrieve URL for adding All items to shopping cart from shared wishlist
+     *
+     * @return string
+     */
+    public function getSharedAddAllToCartUrl()
+    {
+        return $this->_getHelper()->getSharedAddAllToCartUrl();
     }
 
     /**
@@ -276,23 +277,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getProductUrl($item, $additional = [])
     {
-        if ($item instanceof \Magento\Catalog\Model\Product) {
-            $product = $item;
-        } else {
-            $product = $item->getProduct();
-        }
-        $buyRequest = $item->getBuyRequest();
-        if (is_object($buyRequest)) {
-            $config = $buyRequest->getSuperProductConfig();
-            if ($config && !empty($config['product_id'])) {
-                $product = $this->productRepository->getById(
-                    $config['product_id'],
-                    false,
-                    $this->_storeManager->getStore()->getStoreId()
-                );
-            }
-        }
-        return parent::getProductUrl($product, $additional);
+        return $this->_getHelper()->getProductUrl($item, $additional);
     }
 
     /**

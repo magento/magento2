@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
     <body>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml"/>
+            <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

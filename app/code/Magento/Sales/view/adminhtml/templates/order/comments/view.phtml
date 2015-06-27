@@ -13,11 +13,13 @@
         <div class="admin__field field-row">
             <label class="admin__field-label"
                    for="history_comment"><?php echo __('Comment Text') ?></label>
-            <textarea name="comment[comment]"
-                      class="admin__control-textarea"
-                      rows="3"
-                      cols="5"
-                      id="history_comment"></textarea>
+            <div class="admin__field-control">
+                <textarea name="comment[comment]"
+                          class="admin__control-textarea"
+                          rows="3"
+                          cols="5"
+                          id="history_comment"></textarea>
+            </div>
         </div>
         <div class="admin__field">
             <div class="order-history-comments-options">
@@ -39,7 +41,7 @@
                            class="admin__control-checkbox"
                            value="1" />
                     <label class="admin__field-label"
-                           for="history_visible"> <?php echo __('Visible on Frontend') ?></label>
+                           for="history_visible"> <?php echo __('Visible on Storefront') ?></label>
                 </div>
             </div>
             <div class="order-history-comments-actions">
@@ -61,7 +63,7 @@
                         <span class="note-list-customer-not-notified"><?php echo __('Not Notified') ?></span>
                     <?php endif; ?>
                 </span>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u']) ?></div>
+                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>

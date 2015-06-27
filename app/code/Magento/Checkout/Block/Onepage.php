@@ -5,14 +5,41 @@
  */
 namespace Magento\Checkout\Block;
 
+use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * Onepage checkout block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey
+     */
+    protected $formKey;
+
+    /**
+     * @var bool
+     */
+    protected $_isScopePrivate = false;
+
+    /**
+     * @var array
+     */
+    protected $jsLayout;
+
+    /**
+     * @var \Magento\Checkout\Model\CompositeConfigProvider
+     */
+    protected $configProvider;
+
+    /**
+     * @var array|Checkout\LayoutProcessorInterface[]
+     */
+    protected $layoutProcessors;
+
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
@@ -25,6 +52,9 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
+     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+     * @param LayoutProcessorInterface[] $layoutProcessors
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -40,6 +70,9 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
+        \Magento\Framework\Data\Form\FormKey $formKey,
+        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        array $layoutProcessors = [],
         array $data = []
     ) {
         parent::__construct(
@@ -56,37 +89,51 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $addressMapper,
             $data
         );
+        $this->formKey = $formKey;
         $this->_isScopePrivate = true;
+        $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->configProvider = $configProvider;
+        $this->layoutProcessors = $layoutProcessors;
     }
 
     /**
-     * Get 'one step checkout' step data
-     *
-     * @return array
+     * @return string
      */
-    public function getSteps()
+    public function getJsLayout()
     {
-        $steps = [];
-        $stepCodes = $this->_getStepCodes();
-
-        if ($this->isCustomerLoggedIn()) {
-            $stepCodes = array_diff($stepCodes, ['login']);
+        foreach ($this->layoutProcessors as $processor) {
+            $this->jsLayout = $processor->process($this->jsLayout);
         }
-
-        foreach ($stepCodes as $step) {
-            $steps[$step] = $this->getCheckout()->getStepData($step);
-        }
-
-        return $steps;
+        return \Zend_Json::encode($this->jsLayout);
     }
 
     /**
-     * Get active step
+     * Retrieve form key
      *
      * @return string
      */
-    public function getActiveStep()
+    public function getFormKey()
     {
-        return $this->isCustomerLoggedIn() ? 'billing' : 'login';
+        return $this->formKey->getFormKey();
+    }
+
+    /**
+     * Retrieve checkout configuration
+     *
+     * @return array
+     */
+    public function getCheckoutConfig()
+    {
+        return $this->configProvider->getConfig();
+    }
+
+    /**
+     * Get base url for block.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }

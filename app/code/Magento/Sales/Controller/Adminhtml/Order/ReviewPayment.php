@@ -33,10 +33,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         $message = __('The payment has been denied.');
                         break;
                     case 'update':
-                        $order->getPayment()->registerPaymentReviewAction(
-                            \Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE,
-                            true
-                        );
+                        $order->getPayment()->update();
                         $message = __('The payment update has been made.');
                         break;
                     default:
@@ -50,10 +47,18 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We couldn\'t update the payment.'));
+            $this->messageManager->addError(__('We can\'t update the payment right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
         return $resultRedirect;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::review_payment');
     }
 }

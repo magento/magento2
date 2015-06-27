@@ -24,7 +24,7 @@ class Esi extends \Magento\PageCache\Controller\Block
             $blockInstance = array_shift($blocks);
             $html = $blockInstance->toHtml();
             $ttl = $blockInstance->getTtl();
-            if ($blockInstance instanceof \Magento\Framework\View\Block\IdentityInterface) {
+            if ($blockInstance instanceof \Magento\Framework\Object\IdentityInterface) {
                 $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
             }
         }

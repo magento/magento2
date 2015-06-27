@@ -27,6 +27,13 @@ interface UiComponentInterface extends BlockInterface
     public function getComponentName();
 
     /**
+     * Get component configuration
+     *
+     * @return array
+     */
+    public function getConfiguration();
+
+    /**
      * Render component
      *
      * @return string
@@ -96,14 +103,24 @@ interface UiComponentInterface extends BlockInterface
     public function getData($key = '', $index = null);
 
     /**
-     * @return array
-     */
-    public function getDataSourceData();
-
-    /**
      * Prepare component configuration
      *
      * @return void
      */
     public function prepare();
+
+    /**
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
+     */
+    public function prepareDataSource(array & $dataSource);
+
+    /**
+     * Get Data Source data
+     *
+     * @return array
+     */
+    public function getDataSourceData();
 }

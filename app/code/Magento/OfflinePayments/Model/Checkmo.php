@@ -12,10 +12,14 @@ namespace Magento\OfflinePayments\Model;
  */
 class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    const PAYMENT_METHOD_CHECKMO_CODE = 'checkmo';
+
     /**
+     * Payment method code
+     *
      * @var string
      */
-    protected $_code = 'checkmo';
+    protected $_code = self::PAYMENT_METHOD_CHECKMO_CODE;
 
     /**
      * @var string
@@ -33,27 +37,6 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
      * @var bool
      */
     protected $_isOffline = true;
-
-    /**
-     * Assign data to info model instance
-     *
-     * @param mixed $data
-     * @return $this
-     */
-    public function assignData($data)
-    {
-        $details = [];
-        if ($this->getPayableTo()) {
-            $details['payable_to'] = $this->getPayableTo();
-        }
-        if ($this->getMailingAddress()) {
-            $details['mailing_address'] = $this->getMailingAddress();
-        }
-        if (!empty($details)) {
-            $this->getInfoInstance()->setAdditionalData(serialize($details));
-        }
-        return $this;
-    }
 
     /**
      * @return string

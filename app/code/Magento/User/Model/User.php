@@ -8,39 +8,25 @@ namespace Magento\User\Model;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Api\Data\UserInterface;
 
 /**
  * Admin user model
  *
  * @method \Magento\User\Model\Resource\User _getResource()
  * @method \Magento\User\Model\Resource\User getResource()
- * @method string getFirstname()
- * @method \Magento\User\Model\User setFirstname(string $value)
- * @method string getLastname()
- * @method \Magento\User\Model\User setLastname(string $value)
- * @method string getEmail()
- * @method string getUsername()
- * @method \Magento\User\Model\User setUsername(string $value)
- * @method string getPassword()
- * @method \Magento\User\Model\User setPassword(string $value)
- * @method string getCreated()
- * @method \Magento\User\Model\User setCreated(string $value)
- * @method string getModified()
- * @method \Magento\User\Model\User setModified(string $value)
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
  * @method \Magento\User\Model\User setLognum(int $value)
  * @method int getReloadAclFlag()
  * @method \Magento\User\Model\User setReloadAclFlag(int $value)
- * @method int getIsActive()
- * @method \Magento\User\Model\User setIsActive(int $value)
  * @method string getExtra()
  * @method \Magento\User\Model\User setExtra(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class User extends AbstractModel implements StorageInterface
+class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -50,11 +36,6 @@ class User extends AbstractModel implements StorageInterface
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
-
-    /**
-     * Minimum length of admin password
-     */
-    const MIN_PASSWORD_LENGTH = 7;
 
     /**
      * Model event prefix
@@ -126,6 +107,11 @@ class User extends AbstractModel implements StorageInterface
     protected $_storeManager;
 
     /**
+     * @var UserValidationRules
+     */
+    protected $validationRules;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
@@ -135,11 +121,11 @@ class User extends AbstractModel implements StorageInterface
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param UserValidationRules $validationRules
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -153,8 +139,9 @@ class User extends AbstractModel implements StorageInterface
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        UserValidationRules $validationRules,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
@@ -166,6 +153,7 @@ class User extends AbstractModel implements StorageInterface
         $this->_roleFactory = $roleFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
+        $this->validationRules = $validationRules;
     }
 
     /**
@@ -226,20 +214,9 @@ class User extends AbstractModel implements StorageInterface
     public function beforeSave()
     {
         $data = [
-            'firstname' => $this->getFirstname(),
-            'lastname' => $this->getLastname(),
-            'email' => $this->getEmail(),
             'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
-
-        if ($this->getId() > 0) {
-            $data['user_id'] = $this->getId();
-        }
-
-        if ($this->getUsername()) {
-            $data['username'] = $this->getUsername();
-        }
 
         if ($this->_willSavePassword()) {
             $data['password'] = $this->_getEncodedPassword($this->getPassword());
@@ -271,33 +248,16 @@ class User extends AbstractModel implements StorageInterface
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $userNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $firstNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $lastNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $emailValidity = new \Zend_Validate_EmailAddress();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
-
         /** @var $validator \Magento\Framework\Validator\Object */
         $validator = $this->_validatorObject->create();
-        $validator->addRule(
-            $userNameNotEmpty,
-            'username'
-        )->addRule(
-            $firstNameNotEmpty,
-            'firstname'
-        )->addRule(
-            $lastNameNotEmpty,
-            'lastname'
-        )->addRule(
-            $emailValidity,
-            'email'
-        );
+        $this->validationRules->addUserInfoRules($validator);
 
+        // Add validation rules for the password management fields
         if ($this->_willSavePassword()) {
-            $this->_addPasswordValidation($validator);
+            $this->validationRules->addPasswordRules($validator);
+            if ($this->hasPasswordConfirmation()) {
+                $this->validationRules->addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
+            }
         }
         return $validator;
     }
@@ -311,68 +271,16 @@ class User extends AbstractModel implements StorageInterface
      */
     public function validate()
     {
-        $errors = [];
-        if (!\Zend_Validate::is(trim($this->getUsername()), 'NotEmpty')) {
-            $errors[] = __('The user name cannot be empty.');
+        /** @var $validator \Magento\Framework\Validator\Object */
+        $validator = $this->_validatorObject->create();
+        $this->validationRules->addUserInfoRules($validator);
+
+        if (!$validator->isValid($this)) {
+            return $validator->getMessages();
         }
 
-        if (!\Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
-            $errors[] = __('The first name cannot be empty.');
-        }
+        return true;
 
-        if (!\Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
-            $errors[] = __('The last name cannot be empty.');
-        }
-
-        if (!\Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
-            $errors[] = __('Please correct this email address: "%1".', $this->getEmail());
-        }
-
-        if (empty($errors)) {
-            return true;
-        }
-        return $errors;
-    }
-
-    /**
-     * Add validation rules for the password management fields
-     *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return void
-     */
-    protected function _addPasswordValidation(\Magento\Framework\Validator\Object $validator)
-    {
-        $passwordNotEmpty = new \Zend_Validate_NotEmpty();
-        $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $minPassLength = self::MIN_PASSWORD_LENGTH;
-        $passwordLength = new \Zend_Validate_StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
-        $passwordLength->setMessage(
-            __('Your password must be at least %1 characters.', $minPassLength),
-            \Zend_Validate_StringLength::TOO_SHORT
-        );
-        $passwordChars = new \Zend_Validate_Regex('/[a-z].*\d|\d.*[a-z]/iu');
-        $passwordChars->setMessage(
-            __('Your password must include both numeric and alphabetic characters.'),
-            \Zend_Validate_Regex::NOT_MATCH
-        );
-        $validator->addRule(
-            $passwordNotEmpty,
-            'password'
-        )->addRule(
-            $passwordLength,
-            'password'
-        )->addRule(
-            $passwordChars,
-            'password'
-        );
-        if ($this->hasPasswordConfirmation()) {
-            $passwordConfirmation = new \Zend_Validate_Identical($this->getPasswordConfirmation());
-            $passwordConfirmation->setMessage(
-                __('Your password confirmation must match your password.'),
-                \Zend_Validate_Identical::NOT_SAME
-            );
-            $validator->addRule($passwordConfirmation, 'password');
-        }
     }
 
     /**
@@ -514,16 +422,6 @@ class User extends AbstractModel implements StorageInterface
     }
 
     /**
-     * Retrieve user identifier
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->getUserId();
-    }
-
-    /**
      * Get user ACL role
      *
      * @return string
@@ -587,7 +485,7 @@ class User extends AbstractModel implements StorageInterface
                 throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('Access denied.'));
+                throw new AuthenticationException(__('You need more permissions to access this.'));
             }
             $result = true;
         }
@@ -729,5 +627,149 @@ class User extends AbstractModel implements StorageInterface
     {
         $this->_hasResources = $hasResources;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstName()
+    {
+        return $this->_getData('firstname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFirstName($firstName)
+    {
+        return $this->setData('firstname', $firstName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastName()
+    {
+        return $this->_getData('lastname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLastName($lastName)
+    {
+        return $this->setData('lastname', $lastName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->_getData('email');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmail($email)
+    {
+        return $this->setData('email', $email);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserName()
+    {
+        return $this->_getData('username');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUserName($userName)
+    {
+        return $this->setData('username', $userName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword()
+    {
+        return $this->_getData('password');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPassword($password)
+    {
+        return $this->setData('password', $password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreated()
+    {
+        return $this->_getData('created');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreated($created)
+    {
+        return $this->setData('created', $created);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModified()
+    {
+        return $this->_getData('modified');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setModified($modified)
+    {
+        return $this->setData('modified', $modified);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsActive()
+    {
+        return $this->_getData('is_active');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData('is_active', $isActive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInterfaceLocale()
+    {
+        return $this->_getData('interface_locale');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInterfaceLocale($interfaceLocale)
+    {
+        return $this->setData('interface_locale', $interfaceLocale);
     }
 }

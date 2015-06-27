@@ -249,15 +249,9 @@
             margin-top: @form-field__vertical-indent;
         }
     }
-    .product-options-wrapper {
-        .field {
-            .note {
-                display: block;
-                .css(margin-top, @indent__xs);
-            }
-        }
+}
 
-    }
+.product-options-wrapper {
     .fieldset-product-options-inner {
         .legend {
             border: none;
@@ -284,10 +278,11 @@
                 }
             }
         }
-        .datetime-picker {
-            + .time-picker {
-                .css(margin-left, @indent__xs);
-            }
+    }
+    .field {
+        .note {
+            display: block;
+            .css(margin-top, @indent__xs);
         }
     }
 }
@@ -528,13 +523,6 @@
     .product.info.detailed {
         .additional-attributes-wrapper {
             &:extend(.abs-no-border-top all);
-        }
-        .additional-attributes {
-            tbody {
-                th {
-                    &:extend(.abs-no-display-s all);
-                }
-            }
         }
     }
 }

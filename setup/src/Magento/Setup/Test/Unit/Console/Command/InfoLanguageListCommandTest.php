@@ -16,14 +16,21 @@ class InfoLanguageListCommandTest extends \PHPUnit_Framework_TestCase
         $languages = [
             'LNG' => 'Language description'
         ];
-        /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
-        $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
+
+        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table->expects($this->once())->method('setHeaders')->with(['Language', 'Code']);
+        $table->expects($this->once())->method('addRow')->with(['Language description', 'LNG']);
+
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
+
+        /** @var \Magento\Framework\Setup\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
+        $list = $this->getMock('Magento\Framework\Setup\Lists', [], [], '', false);
         $list->expects($this->once())->method('getLocaleList')->will($this->returnValue($languages));
-        $commandTester = new CommandTester(new InfoLanguageListCommand($list));
+        $command = new InfoLanguageListCommand($list);
+        $command->setHelperSet($helperSet);
+        $commandTester = new CommandTester($command);
         $commandTester->execute([]);
-        $this->assertStringMatchesFormat(
-            'LNG => Language description',
-            $commandTester->getDisplay()
-        );
     }
 }

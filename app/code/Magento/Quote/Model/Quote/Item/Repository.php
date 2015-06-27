@@ -59,7 +59,9 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {
-            $output[] = $item;
+            if (!$item->isDeleted() && !$item->getParentItemId()) {
+                $output[] = $item;
+            }
         }
         return $output;
     }

@@ -7,9 +7,12 @@
 
 <?php /* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts  */ ?>
 <div class="entry-edit" id="<?php echo $block->getId() ?>">
-    <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $block->getId() ?>-wrapper">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
+            <strong
+                class="admin__collapsible-title"
+                data-toggle="collapse"
+                data-target="#<?php echo $block->getId() ?>-content">
                 <span><?php echo $block->getTabLabel() ?></span>
             </strong>
         </div>

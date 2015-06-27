@@ -21,7 +21,7 @@ $productByUsedAttributes = $block->getAssociatedProducts();
 
 <div class="field">
     <div class="control">
-        <table class="data-table">
+        <table class="admin__table-secondary">
             <thead>
                 <tr>
                     <th class="col-display" data-column="display">
@@ -296,7 +296,7 @@ jQuery(function ($) {
                     parentElement.find('[name$="[image]"]').val(data.result.file);
                     parentElement.find('[data-toggle=dropdown]').show();
                 } else {
-                    alert($.mage.__('File extension not known or unsupported type.'));
+                    alert($.mage.__('We don\'t recognize or support this file extension type.'));
                 }
             },
             start: function(event) {

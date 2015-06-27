@@ -86,6 +86,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $generatorContextFactoryMock;
 
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appStateMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
@@ -136,8 +146,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->generatorContextFactoryMock = $this->getMockBuilder(
             'Magento\Framework\View\Layout\Generator\ContextFactory'
-        )->disableOriginalConstructor()
-        ->getMock();
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMock();
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,
@@ -150,6 +166,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             $this->cacheMock,
             $this->readerContextFactoryMock,
             $this->generatorContextFactoryMock,
+            $this->appStateMock,
+            $this->loggerMock,
             true
         );
     }

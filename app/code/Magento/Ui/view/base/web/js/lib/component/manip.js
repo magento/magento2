@@ -10,47 +10,19 @@ define([
 ], function (ko, _, utils, registry) {
     'use strict';
 
-    function getIndex(container, target) {
-        var result;
-
-        container.some(function (item, index) {
-            result = index;
-
-            return item && (item.name === target || item === target);
-        });
-
-        return result;
-    }
-
     function compact(container) {
         return container.filter(utils.isObject);
     }
 
-    function reserve(container, elem, position) {
-        var offset = position,
-            target;
-
-        if (_.isObject(position)) {
-            target = position.after || position.before;
-            offset = getIndex(container, target);
-
-            if (position.after) {
-                ++offset;
-            }
-        }
-
-        offset = utils.formatOffset(container, offset);
-
-        container[offset] ?
-            container.splice(offset, 0, elem) :
-            container[offset] = elem;
-
-        return offset;
-    }
-
     return {
+        /**
+         * Retrieves requested region.
+         * Creates region if it was not created yet
+         *
+         * @returns {ObservableArray}.
+         */
         getRegion: function (name) {
-            var regions = this.regions;
+            var regions = this.regions = this.regions || {};
 
             if (!regions[name]) {
                 regions[name] = ko.observable([]);
@@ -59,23 +31,65 @@ define([
             return regions[name];
         },
 
+        /**
+         * Replaces specified regions' data with a provided one.
+         * Creates region if it was not created yet.
+         *
+         * @param {Array} items - New regions' data.
+         * @param {String} name - Name of the region.
+         * @returns {Component} Chainable.
+         */
         updateRegion: function (items, name) {
             var region = this.getRegion(name);
 
             region(items);
+
+            return this;
         },
 
         /**
          * Requests specified components to insert
          * them into 'elems' array starting from provided position.
          *
-         * @param {String} elem - Name of the component to insert.
+         * @param {String} elems - Name of the component to insert.
          * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Component} Chainable.
          */
-        insert: function (elem, position) {
-            reserve(this._elems, elem, position);
-            registry.get(elem, this._insert);
+        insertChild: function (elems, position) {
+            var container = this._elems,
+                update = false,
+                newItems = [],
+                newItem;
+
+            if (Array.isArray(elems)) {
+                newItems = elems.map(function (item) {
+                    newItem = item.elem ?
+                        utils.insert(item.elem, container, item.position) :
+                        utils.insert(item, container, position);
+
+                    return newItem;
+                });
+            } else {
+                newItems.push(utils.insert(elems, container, position));
+            }
+
+            newItems.forEach(function (item) {
+                if (!item) {
+                    return;
+                }
+
+                if (item === true) {
+                    update = true;
+                } else {
+                    _.isString(item) ?
+                        registry.get(item, this._insert) :
+                        this._insert(item);
+                }
+            }, this);
+
+            if (update) {
+                this._update();
+            }
 
             return this;
         },
@@ -86,7 +100,7 @@ define([
          * @param {Object} elem - Element to be removed.
          * @returns {Component} Chainable.
          */
-        remove: function (elem) {
+        removeChild: function (elem) {
             utils.remove(this._elems, elem);
             this._update();
 
@@ -140,12 +154,10 @@ define([
             registry.remove(this.name);
 
             this.containers.forEach(function (parent) {
-                parent.remove(this);
+                parent.removeChild(this);
             }, this);
 
-            this.elems().forEach(function (child) {
-                child.destroy();
-            });
+            this.elems.each('destroy');
 
             return this;
         },

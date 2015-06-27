@@ -110,7 +110,8 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $paymentId = 200;
-        $methodData = ['method' => 'data'];
+        $methodDataWithAdditionalData = ['method' => 'data', 'additional_data' => ['additional' => 'value']];
+        $methodData = ['method' => 'data', 'additional' => 'value'];
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
@@ -132,7 +133,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
                 \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
             ])
             ->willReturnSelf();
-        $methodMock->expects($this->once())->method('getData')->willReturn($methodData);
+        $methodMock->expects($this->once())->method('getData')->willReturn($methodDataWithAdditionalData);
 
         $paymentMock = $this->getMock(
             'Magento\Quote\Model\Quote\Payment',
@@ -161,7 +162,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -278,7 +279,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->exactly(2))->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -343,7 +344,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(false);
         $quoteMock->expects($this->exactly(4))->method('getShippingAddress')->willReturn($shippingAddressMock);
 
-        $methodInstance = $this->getMock('Magento\Payment\Model\Checks\PaymentMethodChecksInterface');
+        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())

@@ -1,0 +1,107 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Integration\Model;
+
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Integration\Model\CredentialsValidator;
+use Magento\Integration\Model\Oauth\Token as Token;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
+use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory as TokenCollectionFactory;
+use Magento\User\Model\User as UserModel;
+
+/**
+ * Class to handle token generation for Admins
+ *
+ */
+class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInterface
+{
+    /**
+     * Token Model
+     *a
+     * @var TokenModelFactory
+     */
+    private $tokenModelFactory;
+
+    /**
+     * User Model
+     *
+     * @var UserModel
+     */
+    private $userModel;
+
+    /**
+     * @var \Magento\Integration\Model\CredentialsValidator
+     */
+    private $validatorHelper;
+
+    /**
+     * Token Collection Factory
+     *
+     * @var TokenCollectionFactory
+     */
+    private $tokenModelCollectionFactory;
+
+    /**
+     * Initialize service
+     *
+     * @param TokenModelFactory $tokenModelFactory
+     * @param UserModel $userModel
+     * @param TokenCollectionFactory $tokenModelCollectionFactory
+     * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
+     */
+    public function __construct(
+        TokenModelFactory $tokenModelFactory,
+        UserModel $userModel,
+        TokenCollectionFactory $tokenModelCollectionFactory,
+        CredentialsValidator $validatorHelper
+    ) {
+        $this->tokenModelFactory = $tokenModelFactory;
+        $this->userModel = $userModel;
+        $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
+        $this->validatorHelper = $validatorHelper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createAdminAccessToken($username, $password)
+    {
+        $this->validatorHelper->validate($username, $password);
+        $this->userModel->login($username, $password);
+        if (!$this->userModel->getId()) {
+            /*
+             * This message is same as one thrown in \Magento\Backend\Model\Auth to keep the behavior consistent.
+             * Constant cannot be created in Auth Model since it uses legacy translation that doesn't support it.
+             * Need to make sure that this is refactored once exception handling is updated in Auth Model.
+             */
+            throw new AuthenticationException(
+                __('You did not sign in correctly or your account is temporarily disabled.')
+            );
+        }
+        return $this->tokenModelFactory->create()->createAdminToken($this->userModel->getId())->getToken();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function revokeAdminAccessToken($adminId)
+    {
+        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
+        if ($tokenCollection->getSize() == 0) {
+            throw new LocalizedException(__('This user has no tokens.'));
+        }
+        try {
+            foreach ($tokenCollection as $token) {
+                $token->setRevoked(1)->save();
+            }
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The tokens could not be revoked.'));
+        }
+        return true;
+    }
+}

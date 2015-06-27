@@ -5,23 +5,40 @@
 define([
     'mageUtils',
     'moment',
-    './sortable'
-], function (utils, moment, Sortable) {
+    './column'
+], function (utils, moment, Column) {
     'use strict';
 
-    return Sortable.extend({
+    return Column.extend({
         defaults: {
             dateFormat: 'MMM D, YYYY h:mm:ss A'
         },
 
+        /**
+         * Initializes components' static properties.
+         *
+         * @returns {DateColumn} Chainable.
+         */
         initProperties: function () {
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
             return this._super();
         },
 
-        getLabel: function (data) {
-            return moment(data).format(this.dateFormat);
+        /**
+         * Formats incoming date based on the 'dateFormat' property.
+         *
+         * @param {String} date - Date to be formatted.
+         * @returns {String} Formatted date.
+         */
+        getLabel: function (date) {
+            date = moment(date);
+
+            date = date.isValid() ?
+                date.format(this.dateFormat) :
+                '';
+
+            return date;
         }
     });
 });

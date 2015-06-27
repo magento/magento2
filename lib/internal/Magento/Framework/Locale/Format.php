@@ -20,15 +20,23 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Directory\Model\CurrencyFactory
+     */
+    protected $currencyFactory;
+
+    /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param ResolverInterface $localeResolver
+     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      */
     public function __construct(
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory
     ) {
         $this->_scopeResolver = $scopeResolver;
         $this->_localeResolver = $localeResolver;
+        $this->currencyFactory = $currencyFactory;
     }
 
     /**
@@ -81,12 +89,21 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     /**
      * Functions returns array with price formatting info
      *
+     * @param string $localeCode Locale code.
+     * @param string $currencyCode Currency code.
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getPriceFormat()
+    public function getPriceFormat($localeCode = null, $currencyCode = null)
     {
-        $localeData = (new DataBundle())->get($this->_localeResolver->getLocale());
+        $localeCode = $localeCode ?: $this->_localeResolver->getLocale();
+        if ($currencyCode) {
+            $currency = $this->currencyFactory->create()->load($currencyCode);
+        } else {
+            $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();
+        }
+        $localeData = (new DataBundle())->get($localeCode);
         $format = $localeData['NumberElements']['latn']['patterns']['currencyFormat']
             ?: explode(';', $localeData['NumberPatterns'][1])[0];
         $decimalSymbol = $localeData['NumberElements']['latn']['symbols']['decimal']
@@ -122,7 +139,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
 
         $result = [
             //TODO: change interface
-            'pattern' => $this->_scopeResolver->getScope()->getCurrentCurrency()->getOutputFormat(),
+            'pattern' => $currency->getOutputFormat(),
             'precision' => $totalPrecision,
             'requiredPrecision' => $requiredPrecision,
             'decimalSymbol' => $decimalSymbol,

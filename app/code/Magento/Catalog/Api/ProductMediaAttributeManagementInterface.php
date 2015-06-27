@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Api;
 
+/**
+ * @api
+ */
 interface ProductMediaAttributeManagementInterface
 {
     /**

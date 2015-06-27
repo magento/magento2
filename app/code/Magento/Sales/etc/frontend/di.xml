@@ -15,4 +15,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="last-ordered-items" xsi:type="string">Magento\Sales\CustomerData\LastOrderedItems</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

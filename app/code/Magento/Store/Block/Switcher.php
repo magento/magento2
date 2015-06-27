@@ -219,7 +219,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     public function getTargetStorePostData(\Magento\Store\Model\Store $store)
     {
         return $this->_postDataHelper->getPostData(
-            $this->getHomeUrl(),
+            $this->getUrl('stores/store/switch'),
             ['___store' => $store->getCode(), '___from_store' => $this->getStoreCode()]
         );
     }

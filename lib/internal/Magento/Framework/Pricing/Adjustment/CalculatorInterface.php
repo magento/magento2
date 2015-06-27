@@ -10,6 +10,8 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**
  * Calculator interface
+ *
+ * @api
  */
 interface CalculatorInterface
 {

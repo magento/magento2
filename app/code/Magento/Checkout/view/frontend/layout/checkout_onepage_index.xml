@@ -6,33 +6,320 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="checkout_shipping_price_renderer"/>
-    <update handle="customer_form_template_handle"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Onepage" name="checkout.onepage" template="onepage.phtml">
-                <block class="Magento\Checkout\Block\Onepage\Login" name="checkout.onepage.login" as="login" template="onepage/login.phtml" cacheable="false">
-                    <container name="checkout.onepage.login.before" as="login_before" label="Login/Registration Before" htmlTag="div"/>
-                    <container name="form.login.additional.info" as="form_additional_info"/>
-                </block>
-                <block class="Magento\Checkout\Block\Onepage\Billing" name="checkout.onepage.billing" as="billing" template="onepage/billing.phtml" cacheable="false">
-                    <container name="form.billing.additional.info" as="form_additional_info"/>
-                </block>
-                <block class="Magento\Checkout\Block\Onepage\Shipping" name="checkout.onepage.shipping" as="shipping" template="onepage/shipping.phtml" cacheable="false"/>
-                <block class="Magento\Checkout\Block\Onepage\Shipping\Method" name="checkout.onepage.shipping_method" as="shipping_method" template="onepage/shipping_method.phtml" cacheable="false">
-                    <container name="shipping_method.available" label="invisible" as="available"/>
-                    <container name="shipping_method.additional" label="invisible" as="additional"/>
-                </block>
-                <block class="Magento\Checkout\Block\Onepage\Payment" name="checkout.onepage.payment" as="payment" template="onepage/payment.phtml" cacheable="false">
-                    <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="checkout.payment.methods" as="methods" template="onepage/payment/methods.phtml" cacheable="false"/>
-                    <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.additional" as="additional"/>
-                    <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
-                </block>
-                <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Onepage" name="checkout.root" template="onepage.phtml" cacheable="false">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="types" xsi:type="array">
+                            <item name="form.input" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                </item>
+                            </item>
+                        </item>
+                        <item name="components" xsi:type="array">
+                            <item name="checkout" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Checkout/js/view/onepage</item>
+                                <item name="children" xsi:type="array">
+                                    <item name="progress" xsi:type="array">
+                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item>
+                                        <item name="displayArea" xsi:type="string">progress</item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="shipping" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/shipping_method/price</item>
+                                                <item name="displayArea" xsi:type="string">shipping</item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                    <item name="errors" xsi:type="array">
+                                        <item name="sortOrder" xsi:type="string">0</item>
+                                        <item name="component" xsi:type="string">Magento_Ui/js/view/errors</item>
+                                        <item name="displayArea" xsi:type="string">errors</item>
+                                    </item>
+                                    <item name="steps" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="displayArea" xsi:type="string">steps</item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="authentication" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
+                                                <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="before" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data before authentication here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="billingAddress" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
+                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                <item name="sortOrder" xsi:type="string">2</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="billing-address-fieldset" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">additional-fieldsets</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- The following items override configuration of corresponding address attributes -->
+                                                            <item name="region" xsi:type="array">
+                                                                <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
+                                                                <item name="visible" xsi:type="boolean">false</item>
+                                                            </item>
+                                                            <item name="region_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                    <item name="customEntry" xsi:type="string">billingAddress.region</item>
+                                                                </item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="validate-select" xsi:type="string">true</item>
+                                                                </item>
+                                                                <!-- Value of region_id field is filtered by the value of county_id attribute -->
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="postcode" xsi:type="array">
+                                                                <!-- post-code field has custom UI component -->
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="company" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="fax" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="country_id" xsi:type="array">
+                                                                <item name="sortOrder" xsi:type="string">115</item>
+                                                            </item>
+                                                            <!-- The following items describe fields that are not directly related to address but must be shown in address form -->
+                                                            <item name="email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
+                                                                    <item name="customScope" xsi:type="string">customerDetails</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string">Email</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.email</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="sortOrder" xsi:type="string">45</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="boolean">true</item>
+                                                                    <item name="validate-email" xsi:type="boolean">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="dataScope" xsi:type="string">billingAddress.save_in_address_book</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                    <item name="billing-address-choice" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">additional-field-choice</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- this region for different choice -->
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="shippingAddress" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                <item name="sortOrder" xsi:type="string">3</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="before-fields" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before-fields</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- before fields -->
+                                                        </item>
+                                                    </item>
+                                                    <item name="shipping-address-fieldset" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">additional-fieldsets</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- The following items override configuration of corresponding address attributes -->
+                                                            <item name="region" xsi:type="array">
+                                                                <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
+                                                                <item name="visible" xsi:type="boolean">false</item>
+                                                            </item>
+                                                            <item name="region_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                    <item name="customEntry" xsi:type="string">shippingAddress.region</item>
+                                                                </item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="validate-select" xsi:type="string">true</item>
+                                                                </item>
+                                                                <!-- Value of region_id field is filtered by the value of county_id attribute -->
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="postcode" xsi:type="array">
+                                                                <!-- post-code field has custom UI component -->
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="company" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="fax" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="country_id" xsi:type="array">
+                                                                <item name="sortOrder" xsi:type="string">115</item>
+                                                            </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.save_in_address_book</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="shipping" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
+                                                <item name="sortOrder" xsi:type="string">4</item>
+                                                <item name="additional" xsi:type="array">
+                                                    <!-- merge your shipping methods here -->
+                                                </item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="afterSelect" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">afterSelect</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data after shipping methods here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="payment" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
+                                                <item name="sortOrder" xsi:type="string">5</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="beforeMethods" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">beforeMethods</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data before payment methods here -->
+                                                        </item>
+                                                    </item>
+                                                    <!-- merge your payment methods here -->
+                                                    <item name="afterMethods" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">afterMethods</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data after payment methods here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                            <item name="review" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
+                                                <item name="sortOrder" xsi:type="string">6</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="columns" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/columns</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="name" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/name</item></item>
+                                                            <item name="price" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/price</item></item>
+                                                            <item name="qty" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/qty</item></item>
+                                                            <item name="subtotal" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/subtotal</item></item>
+                                                        </item>
+                                                    </item>
+                                                    <item name="itemsBefore" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/itemsBefore</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
+                                                    </item>
+                                                    <item name="itemsAfter" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/itemsAfter</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
+                                                    </item>
+                                                    <item name="beforePlaceOrder" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/beforePlaceOrder</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
+                                                    </item>
+                                                    <item name="totals" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="subtotal" xsi:type="array">
+                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/subtotal</item>
+                                                            </item>
+                                                            <item name="discount" xsi:type="array">
+                                                                <item name="component"  xsi:type="string">Magento_Checkout/js/view/discount</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                    <item name="actions" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/review/actions</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="@default" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/actions/default</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="isDefault" xsi:type="boolean">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <!-- merge your components here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="checkoutProvider" xsi:type="array">
+                                <item name="component" xsi:type="string">uiComponent</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
             </block>
-            <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlClass="opc-block-progress-wrapper" htmlId="checkout-progress-wrapper" after="-">
-                <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
-            </container>
         </referenceContainer>
     </body>
 </page>

@@ -47,7 +47,7 @@ class GuestShippingMethodManagement implements GuestShippingMethodManagementInte
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->shippingMethodManagement->get($quoteIdMask->getId());
+        return $this->shippingMethodManagement->get($quoteIdMask->getQuoteId());
     }
 
     /**
@@ -57,7 +57,7 @@ class GuestShippingMethodManagement implements GuestShippingMethodManagementInte
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->shippingMethodManagement->getList($quoteIdMask->getId());
+        return $this->shippingMethodManagement->getList($quoteIdMask->getQuoteId());
     }
 
     /**
@@ -67,6 +67,6 @@ class GuestShippingMethodManagement implements GuestShippingMethodManagementInte
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->shippingMethodManagement->set($quoteIdMask->getId(), $carrierCode, $methodCode);
+        return $this->shippingMethodManagement->set($quoteIdMask->getQuoteId(), $carrierCode, $methodCode);
     }
 }

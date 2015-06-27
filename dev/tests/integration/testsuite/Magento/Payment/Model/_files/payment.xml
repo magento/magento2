@@ -23,7 +23,6 @@
     <methods>
         <method name="checkmo">
             <allow_multiple_address>1</allow_multiple_address>
-            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
         </method>
     </methods>
 </payment>

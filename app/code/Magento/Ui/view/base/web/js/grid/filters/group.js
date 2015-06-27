@@ -10,23 +10,28 @@ define([
 
     return Group.extend({
         defaults: {
-            template: 'ui/grid/filters/elements/group'
+            template: 'ui/grid/filters/elements/group',
+            isGroup: true
+        },
+
+        reset: function () {
+            this.elems.each('reset');
+
+            return this;
+        },
+
+        clear: function () {
+            this.elems.each('clear');
+
+            return this;
         },
 
         hasData: function () {
-            return this.elems.some(function (elem) {
-                return elem.delegate('hasData');
-            });
+            return this.elems.some('hasData');
         },
 
         getPreview: function () {
-            var previews = this.elems.map(function (elem) {
-                if (elem.hasData()) {
-                    return elem.label + ': ' + elem.getPreview();
-                }
-            });
-
-            return _.compact(previews).join(' ');
+            return this.elems.map('getPreview');
         }
     });
 });

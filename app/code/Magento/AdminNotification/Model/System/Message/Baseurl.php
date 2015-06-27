@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Store\Model\Store;
@@ -121,7 +119,9 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     public function getText()
     {
         return __(
-            '{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. It is highly recommended to change this value in your Magento <a href="%1">configuration</a>.',
+            '{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure '
+            . 'URL / Base Secure URL. We highly recommend changing this value in your Magento '
+            . '<a href="%1">configuration</a>.',
             $this->_getConfigUrl()
         );
     }

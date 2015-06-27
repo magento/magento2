@@ -73,9 +73,29 @@ require(['prototype'], function(){
                 <?php endforeach; ?>
             </select>
         </td>
-        <td class="col-title"><input class="input-text admin__control-text number-title" type="text" name="tracking[<%- data.index %>][title]" id="trackingT<%- data.index %>" value="" disabled="disabled" /></td>
-        <td class="col-number"><input class="input-text admin__control-text required-entry" type="text" name="tracking[<%- data.index %>][number]" id="trackingN<%- data.index %>" value="" disabled="disabled" /></td>
-        <td class="col-delete"><a href="#" class="action-delete" onclick="trackingControl.deleteRow(event);return false"><span><?php echo __('Delete') ?></span></a></td>
+        <td class="col-title">
+            <input class="input-text admin__control-text number-title"
+                   type="text"
+                   name="tracking[<%- data.index %>][title]"
+                   id="trackingT<%- data.index %>"
+                   value=""
+                   disabled="disabled" />
+        </td>
+        <td class="col-number">
+            <input class="input-text admin__control-text required-entry"
+                   type="text"
+                   name="tracking[<%- data.index %>][number]"
+                   id="trackingN<%- data.index %>"
+                   value=""
+                   disabled="disabled" />
+        </td>
+        <td class="col-delete">
+            <a href="#"
+               class="action-default action-delete"
+               onclick="trackingControl.deleteRow(event);return false">
+                <span><?php echo __('Delete') ?></span>
+            </a>
+        </td>
     </tr>
 </script>
 

@@ -55,7 +55,6 @@ class Select extends AbstractElement
      */
     public function prepare()
     {
-        parent::prepare();
         $config = $this->getData('config');
         if (isset($this->options)) {
             if (!isset($config['options'])) {
@@ -69,9 +68,7 @@ class Select extends AbstractElement
             $config['options'] = array_values(array_merge_recursive($options, $config['options']));
         }
         $this->setData('config', (array)$config);
-
-        $jsConfig = $this->getConfiguration($this, Input::NAME);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+        parent::prepare();
     }
 
     /**

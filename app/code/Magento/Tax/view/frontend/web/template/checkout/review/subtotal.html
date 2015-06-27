@@ -1,0 +1,31 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: isBothPricesDisplayed() -->
+<tr class="totals sub excl">
+    <th data-bind="text: excludingTaxMessage, attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
+    </th>
+    <td data-bind="text: getValue(), attr: {'style': style, 'data-th': $t(excludingTaxMessage) }" class="amount"></td>
+</tr>
+<tr class="totals sub incl">
+    <th data-bind="text: includingTaxMessage, attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
+    </th>
+    <td data-bind="text: getValueInclTax(), attr: {'style': style, 'data-th': $t(includingTaxMessage) }" class="amount">
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: !isBothPricesDisplayed() && isIncludingTaxDisplayed() -->
+<tr class="totals sub">
+    <th data-bind="text: $t(getTitle()), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+    <td data-bind="text: getValueInclTax(), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
+</tr>
+<!-- /ko -->
+<!-- ko if: !isBothPricesDisplayed() && !isIncludingTaxDisplayed() -->
+<tr class="totals sub">
+    <th data-bind="text: $t(getTitle()), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+    <td data-bind="text: getValue(), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
+</tr>
+<!-- /ko -->

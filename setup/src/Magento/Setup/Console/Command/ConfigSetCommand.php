@@ -7,6 +7,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +60,7 @@ class ConfigSetCommand extends AbstractSetupCommand
         $options = $this->configModel->getAvailableOptions();
 
         $this->setName('setup:config:set')
-            ->setDescription('Sets deployment configuration')
+            ->setDescription('Creates or modifies the deployment configuration')
             ->setDefinition($options);
 
         parent::configure();
@@ -104,8 +105,14 @@ class ConfigSetCommand extends AbstractSetupCommand
         );
 
         $optionsToChange = array_intersect(array_keys($inputOptions), array_keys($commandOptions));
+        $optionsToChange = array_diff($optionsToChange, [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]);
 
         $this->configModel->process($inputOptions);
+
+        $optionsWithDefaultValues = array_diff(
+            $optionsWithDefaultValues,
+            [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]
+        );
 
         if (count($optionsWithDefaultValues) > 0) {
             $defaultValuesMessage = implode(', ', $optionsWithDefaultValues);
@@ -134,7 +141,7 @@ class ConfigSetCommand extends AbstractSetupCommand
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
             }
-            throw new \InvalidArgumentException('Parameters validation is failed');
+            throw new \InvalidArgumentException('Parameter validation failed');
         }
     }
 }

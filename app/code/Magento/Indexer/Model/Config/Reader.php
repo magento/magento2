@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model\Config;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

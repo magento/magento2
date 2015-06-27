@@ -72,7 +72,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setSortable(false);
         $this->setPagerVisibility(false);
         $this->setFilterVisibility(false);
-        $this->setEmptyText(__('There are no items in customer\'s shopping cart at the moment'));
+        $this->setEmptyText(__('There are no items in customer\'s shopping cart.'));
     }
 
     /**

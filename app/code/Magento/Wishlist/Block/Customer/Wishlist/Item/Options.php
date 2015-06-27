@@ -33,14 +33,12 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
         array $data = []
     ) {
@@ -48,7 +46,6 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         parent::__construct(
             $context,
             $httpContext,
-            $productRepository,
             $data
         );
     }

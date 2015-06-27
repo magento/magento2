@@ -206,7 +206,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                 [
                     'label' => __('Reset Filter'),
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
-                    'class' => 'action-reset'
+                    'class' => 'action-reset action-tertiary'
                 ]
             )->setDataAttribute(
                 [
@@ -220,7 +220,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                 [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
-                    'class' => 'task',
+                    'class' => 'task action-secondary',
                 ]
             )->setDataAttribute(
                 [
@@ -1302,8 +1302,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     {
         $html = '';
         if ($this->getFilterVisibility()) {
-            $html .= $this->getResetFilterButtonHtml();
             $html .= $this->getSearchButtonHtml();
+            $html .= $this->getResetFilterButtonHtml();
         }
         return $html;
     }

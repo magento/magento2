@@ -12,7 +12,7 @@ define([
     return Abstract.extend({
         defaults: {
             imports: {
-                update: '<%= parentName %>.country_id:value'
+                update: '${ $.parentName }.country_id:value'
             }
         },
 
@@ -27,14 +27,14 @@ define([
 
             option = options[value];
 
-            if (!option.is_region_required) {
+            if (option.is_zipcode_optional) {
                 this.error(false);
                 this.validation = _.omit(this.validation, 'required-entry');
             } else {
                 this.validation['required-entry'] = true;
             }
 
-            this.required(!!option.is_region_required);
+            this.required(!option.is_zipcode_optional);
         }
     });
 });

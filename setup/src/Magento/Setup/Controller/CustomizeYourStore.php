@@ -5,10 +5,11 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Lists;
+use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\SampleData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class CustomizeYourStore extends AbstractActionController
 {
@@ -42,8 +43,25 @@ class CustomizeYourStore extends AbstractActionController
             'currency' => $this->list->getCurrencyList(),
             'language' => $this->list->getLocaleList(),
             'isSampledataEnabled' => $this->sampleData->isDeployed(),
+            'isSampleDataInstalled' => $this->sampleData->isInstalledSuccessfully(),
+            'isSampleDataErrorInstallation' => $this->sampleData->isInstallationError()
         ]);
         $view->setTerminal(true);
         return $view;
+    }
+
+    /**
+     * Getting default time zone from server settings
+     *
+     * @return JsonModel
+     */
+    public function defaultTimeZoneAction()
+    {
+        $defaultTimeZone = trim(@date_default_timezone_get());
+        if (empty($defaultTimeZone)) {
+            return new JsonModel(['defaultTimeZone' => 'UTC']);
+        } else {
+            return new JsonModel(['defaultTimeZone' => $defaultTimeZone]);
+        }
     }
 }

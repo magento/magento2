@@ -6,17 +6,16 @@
 namespace Magento\Framework\Oauth;
 
 /**
- * Interface ConsumerInterface
+ * Oauth consumer interface.
  *
- * This interface exposes minimal consumer functionality needed by the Oauth library.
- *
+ * @api
  */
 interface ConsumerInterface
 {
     /**
      * Validate consumer data (e.g. Key and Secret length).
      *
-     * @return bool - True if the consumer data is valid.
+     * @return bool True if the consumer data is valid.
      * @throws \Exception
      */
     public function validate();

@@ -40,20 +40,30 @@ class Input extends AbstractFilter
      */
     public function prepare()
     {
-        parent::prepare();
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             static::COMPONENT,
             ['context' => $this->getContext()]
         );
         $this->wrappedComponent->prepare();
+        // Merge JS configuration with wrapped component configuration
+        $jsConfig = array_replace_recursive(
+            $this->getJsConfig($this->wrappedComponent),
+            $this->getJsConfig($this)
+        );
+        $this->setData('js_config', $jsConfig);
+
+        $this->setData(
+            'config',
+            array_replace_recursive(
+                (array)$this->wrappedComponent->getData('config'),
+                (array)$this->getData('config')
+            )
+        );
 
         $this->applyFilter();
-        $jsConfig = array_replace_recursive(
-            $this->getConfiguration($this->wrappedComponent),
-            $this->getConfiguration($this)
-        );
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+
+        parent::prepare();
     }
 
     /**

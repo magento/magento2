@@ -10,7 +10,7 @@ namespace Magento\Captcha\Model;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model\ModelInterface
+class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model\CaptchaInterface
 {
     /**
      * Key in session for captcha code

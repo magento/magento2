@@ -20,7 +20,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
             [
                 $objectManager->get('Magento\Catalog\Block\Product\Context'),
                 $objectManager->get('Magento\Framework\App\Http\Context'),
-                $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface'),
             ]
         );
     }

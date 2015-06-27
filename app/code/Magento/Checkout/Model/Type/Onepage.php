@@ -449,7 +449,7 @@ class Onepage
                     'error' => 1,
                     // @codingStandardsIgnoreStart
                     'message' => __(
-                        'There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.'
+                        'This email address already belongs to a registered customer. You can sign in or create an account with a different email address.'
                     )
                     // @codingStandardsIgnoreEnd
                 ];
@@ -460,7 +460,7 @@ class Onepage
             /**
              * Billing address using options
              */
-            $usingCase = isset($data['use_for_shipping']) ? (int)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
+            $usingCase = isset($data['use_for_shipping']) ? (bool)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
 
             switch ($usingCase) {
                 case self::NOT_USE_FOR_SHIPPING:
@@ -783,11 +783,13 @@ class Onepage
         $quote = $this->getQuote();
 
         if ($quote->isMultipleShippingAddresses()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('There are more than one shipping address.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('There are more than one shipping addresses.')
+            );
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not enabled.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not available.'));
         }
     }
 
@@ -907,7 +909,7 @@ class Onepage
             $this->messageManager->addSuccess(
                 // @codingStandardsIgnoreStart
                 __(
-                    'Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.',
+                    'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
                 // @codingStandardsIgnoreEnd
@@ -951,8 +953,6 @@ class Onepage
             $this->getQuote()->getId()
         )->setLastSuccessQuoteId(
             $this->getQuote()->getId()
-        )->setLastOrderId(
-            $order->getIncrementId()
         )->clearHelperData();
 
         if ($order) {

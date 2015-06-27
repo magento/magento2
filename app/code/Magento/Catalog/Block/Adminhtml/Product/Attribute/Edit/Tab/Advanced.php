@@ -85,7 +85,7 @@ class Advanced extends Generic
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass
@@ -194,6 +194,9 @@ class Advanced extends Generic
         );
 
         $this->_eventManager->dispatch('product_attribute_form_build', ['form' => $form]);
+        if ($attributeObject->getId() && !$attributeObject->getIsUserDefined()) {
+            $form->getElement('is_global')->setDisabled(1);
+        }
         $this->setForm($form);
         return $this;
     }

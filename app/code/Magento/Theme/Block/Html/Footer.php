@@ -10,7 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Html page footer block
  */
-class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * Copyright information

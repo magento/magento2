@@ -36,6 +36,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return array
+     * @api
      */
     public function getMetadata()
     {

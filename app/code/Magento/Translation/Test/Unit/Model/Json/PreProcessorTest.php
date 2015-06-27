@@ -26,11 +26,28 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataProviderMock;
 
+    /**
+     * @var \Magento\Framework\App\AreaList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $areaListMock;
+
+    /**
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translateMock;
+
     protected function setUp()
     {
         $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
         $this->dataProviderMock = $this->getMock('Magento\Translation\Model\Js\DataProvider', [], [], '', false);
-        $this->model = new PreProcessor($this->configMock, $this->dataProviderMock);
+        $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
+        $this->translateMock = $this->getMockForAbstractClass('Magento\Framework\TranslateInterface');
+        $this->model = new PreProcessor(
+            $this->configMock,
+            $this->dataProviderMock,
+            $this->areaListMock,
+            $this->translateMock
+        );
     }
 
     public function testGetData()
@@ -42,6 +59,8 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $targetPath = 'path/js-translation.json';
         $themePath = '*/*';
         $dictionary = ['hello' => 'bonjour'];
+        $areaCode = 'adminhtml';
+        $area = $this->getMock('Magento\Framework\App\Area', [], [], '', false);
 
         $chain->expects($this->once())
             ->method('getTargetAssetPath')
@@ -58,6 +77,15 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getThemePath')
             ->willReturn($themePath);
+        $context->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+
+        $this->areaListMock->expects($this->once())
+            ->method('getArea')
+            ->with($areaCode)
+            ->willReturn($area);
+
         $this->dataProviderMock->expects($this->once())
             ->method('getData')
             ->with($themePath)

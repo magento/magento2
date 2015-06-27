@@ -13,6 +13,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    const PAYMENT_METHOD_FREE_CODE = 'free';
+
     /**
      * XML Paths for configuration constants
      */
@@ -34,7 +36,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var string
      */
-    protected $_code = 'free';
+    protected $_code = self::PAYMENT_METHOD_FREE_CODE;
 
     /**
      * @var PriceCurrencyInterface
@@ -48,9 +50,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Logger $logger
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -61,9 +64,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -73,6 +77,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
             $customAttributeFactory,
             $paymentData,
             $scopeConfig,
+            $logger,
             $resource,
             $resourceCollection,
             $data
@@ -93,6 +98,17 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         ) && !empty($quote) && $this->priceCurrency->round(
             $quote->getGrandTotal()
         ) == 0;
+    }
+
+    /**
+     * Check whether method is enabled in config
+     *
+     * @param \Magento\Quote\Model\Quote|null $quote
+     * @return bool
+     */
+    public function isAvailableInConfig($quote = null)
+    {
+        return parent::isAvailable($quote);
     }
 
     /**

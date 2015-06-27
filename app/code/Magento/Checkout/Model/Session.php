@@ -7,6 +7,7 @@ namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -82,6 +83,16 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $customerRepository;
 
     /**
+     * @param QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
+     * @param bool
+     */
+    protected $isQuoteMasked;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -98,6 +109,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,7 +129,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -126,6 +139,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
         $this->customerRepository = $customerRepository;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         parent::__construct(
             $request,
             $sidResolver,
@@ -229,16 +243,24 @@ class Session extends \Magento\Framework\Session\SessionManager
                 }
             }
 
-            if ($this->getQuoteId()) {
-                if ($this->_customer) {
-                    $quote->setCustomer($this->_customer);
-                } elseif ($this->_customerSession->isLoggedIn()) {
-                    $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
-                }
+            if ($this->_customer) {
+                $quote->setCustomer($this->_customer);
+            } elseif ($this->_customerSession->isLoggedIn()) {
+                $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
             }
 
             $quote->setStore($this->_storeManager->getStore());
             $this->_quote = $quote;
+        }
+
+        if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
+            $quoteId = $this->getQuoteId();
+            /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'quote_id');
+            if ($quoteIdMask->getMaskedId() === null) {
+                $quoteIdMask->setQuoteId($quoteId)->save();
+            }
+            $this->setIsQuoteMasked(true);
         }
 
         $remoteAddress = $this->_remoteAddress->getRemoteAddress();
@@ -465,5 +487,22 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
         }
         return false;
+    }
+
+    /**
+     * @param $isQuoteMasked bool
+     * @return void
+     */
+    protected function setIsQuoteMasked($isQuoteMasked)
+    {
+        $this->isQuoteMasked = $isQuoteMasked;
+    }
+
+    /**
+     * @return bool|null
+     */
+    protected function isQuoteMasked()
+    {
+        return $this->isQuoteMasked;
     }
 }

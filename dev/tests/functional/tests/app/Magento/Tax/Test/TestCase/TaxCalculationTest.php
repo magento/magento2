@@ -7,7 +7,6 @@
 namespace Magento\Tax\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
-use Magento\Mtf\ObjectManager;
 
 /**
  * Steps:
@@ -53,23 +52,5 @@ class TaxCalculationTest extends Scenario
     public function test()
     {
         $this->executeScenario();
-    }
-
-    /**
-     * Tear down after each test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->objectManager->create('\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
-        $this->objectManager->create('\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
-        $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
-
-        // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
-        $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'default_tax_configuration']
-        )->run();
     }
 }

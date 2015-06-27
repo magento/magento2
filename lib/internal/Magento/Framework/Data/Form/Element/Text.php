@@ -63,7 +63,9 @@ class Text extends AbstractElement
             'maxlength',
             'tabindex',
             'placeholder',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 }

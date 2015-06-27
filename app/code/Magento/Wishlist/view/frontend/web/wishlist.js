@@ -30,14 +30,16 @@ define([
          */
         _create: function () {
             var _this = this;
-
             if (!this.options.infoList) {
                 this.element
-                    .on('click', this.options.addToCartSelector, function () {
-                        $.proxy(_this._addItemsToCart($(this)), _this);
-                    })
                     .on('addToCart', function (event, context) {
-                        $.proxy(_this._addItemsToCart($(context).parents('.cart-cell').find(_this.options.addToCartSelector)), _this);
+                        event.stopPropagation(event);
+                        $(context).data('stop-processing', true);
+                        var urlParams = _this._getItemsToCartParams(
+                            $(context).parents('[data-row=product-item]').find(_this.options.addToCartSelector)
+                        );
+                        $.mage.dataPost().postData(urlParams);
+                        return false;
                     })
                     .on('click', this.options.btnRemoveSelector, $.proxy(function (event) {
                         event.preventDefault();
@@ -56,35 +58,19 @@ define([
         },
 
         /**
-         * Validate and Redirect.
-         * @private
-         * @param {String} url
-         */
-        _validateAndRedirect: function (url) {
-            if (this.element.validation({
-                errorPlacement: function (error, element) {
-                    error.insertAfter(element.next());
-                }
-            }).valid()) {
-                this.element.prop('action', url);
-                window.location.href = url;
-            }
-        },
-
-        /**
          * Add wish list items to cart.
          * @private
          * @param {jQuery object} elem - clicked 'add to cart' button
          */
-        _addItemsToCart: function (elem) {
+        _getItemsToCartParams: function (elem) {
             if (elem.data(this.options.dataAttribute)) {
                 var itemId = elem.data(this.options.dataAttribute),
-                    url = this.options.addToCartUrl.replace('%item%', itemId),
-                    inputName = $.validator.format(this.options.nameFormat, itemId),
-                    inputValue = $('[name="' + inputName + '"]').val(),
-                    separator = (url.indexOf('?') >= 0) ? '&' : '?';
-                url += separator + inputName + '=' + encodeURIComponent(inputValue);
-                this._validateAndRedirect(url);
+                    url = this.options.addToCartUrl,
+                    qtyName = $.validator.format(this.options.nameFormat, itemId),
+                    qtyValue = elem.parents().find('[name="' + qtyName + '"]').val();
+                url.data.item = itemId;
+                url.data.qty = qtyValue;
+                return url;
             }
         },
 
@@ -93,15 +79,14 @@ define([
          * @private
          */
         _addAllWItemsToCart: function () {
-            var url = this.options.addAllToCartUrl,
-                separator = (url.indexOf('?') >= 0) ? '&' : '?';
+            var urlParams = this.options.addAllToCartUrl,
+                separator = (urlParams.action.indexOf('?') >= 0) ? '&' : '?';
 
             this.element.find(this.options.qtySelector).each(function (index, element) {
-                url += separator + $(element).prop('name') + '=' + encodeURIComponent($(element).val());
+                urlParams.action += separator + $(element).prop('name') + '=' + encodeURIComponent($(element).val());
                 separator = '&';
             });
-
-            this._validateAndRedirect(url);
+            $.mage.dataPost().postData(urlParams);
         },
 
         /**

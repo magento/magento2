@@ -1,0 +1,42 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko ifnot: isFullTaxSummaryDisplayed -->
+<tr class="totals-tax">
+    <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+    </th>
+    <td data-bind="attr: {'style': style, 'data-th': $t(getTitle()) }" class="amount">
+        <span class="price" data-bind="text: getValue()"></span>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: isFullTaxSummaryDisplayed -->
+    <tr class="totals-tax-summary" data-bind="click: toggleDetails()">
+        <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+        </th>
+        <td data-bind="attr: {'style': style, 'data-th': $t(getTitle()) }" class="amount">
+            <span class="price" data-bind="text: getValue()"></span>
+        </td>
+    </tr>
+    <!-- ko foreach: getDetails() -->
+        <!-- ko foreach: rates -->
+        <tr class="totals-tax-details" data-bind="visible: $parents[1].isDetailsVisible">
+            <!-- ko if: percent -->
+                <th class="mark" scope="row" data-bind="text: title + ' (' + percent + '%)', attr: {'style': $parents[1].style, 'colspan': $parents[1].colspan}">
+                </th>
+            <!-- /ko -->
+            <!-- ko if: !percent -->
+                <th class="mark" scope="row" data-bind="text: title, attr: {'style': $parents[1].style, 'colspan': $parents[1].colspan}">
+                </th>
+            <!-- /ko -->
+            <!-- ko if: $index() == 0 -->
+                <td class="amount" data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'style': $parents[1].style, 'rowspan': $parents[0].rates.length }">
+                </td>
+            <!-- /ko -->
+        </tr>
+        <!-- /ko -->
+    <!-- /ko -->
+<!-- /ko -->

@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\CheckoutAgreements\Test\TestCase\UpdateTermEntityTest">
-    <variation name="UpdateTermEntityTestVariation1" firstConstraint="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" method="test">
+    <variation name="UpdateTermEntityTestVariation1">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="agreementOrigin/dataSet" xsi:type="string">term_disabled_text</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
@@ -19,11 +19,11 @@
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
     </variation>
-    <variation name="UpdateTermEntityTestVariation2" firstConstraint="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" method="test">
+    <variation name="UpdateTermEntityTestVariation2">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="agreementOrigin/dataSet" xsi:type="string">term_disabled_html</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
@@ -35,11 +35,11 @@
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
     </variation>
-    <variation name="UpdateTermEntityTestVariation3" firstConstraint="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" method="test">
+    <variation name="UpdateTermEntityTestVariation3">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="agreementOrigin/dataSet" xsi:type="string">term_enabled_text</data>
       <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
@@ -51,9 +51,9 @@
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage"/>
-      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
     </variation>
   </testCase>
 </config>

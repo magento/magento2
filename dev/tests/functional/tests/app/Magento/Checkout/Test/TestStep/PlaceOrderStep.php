@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Checkout\Test\Constraint\AssertOrderTotalOnReviewPage;
+use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
@@ -26,9 +26,9 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * Assert that Order Grand Total is correct on checkout page review block.
      *
-     * @var AssertOrderTotalOnReviewPage
+     * @var AssertGrandTotalOrderReview
      */
-    protected $assertOrderTotalOnReviewPage;
+    protected $assertGrandTotalOrderReview;
 
     /**
      * One page checkout success page.
@@ -40,7 +40,7 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * Price array.
      *
-     * @var string
+     * @var array
      */
     protected $prices;
 
@@ -54,20 +54,20 @@ class PlaceOrderStep implements TestStepInterface
     /**
      * @construct
      * @param CheckoutOnepage $checkoutOnepage
-     * @param AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage
+     * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param string $checkoutMethod
      * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage,
+        AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
         array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->assertOrderTotalOnReviewPage = $assertOrderTotalOnReviewPage;
+        $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
         $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
@@ -80,8 +80,8 @@ class PlaceOrderStep implements TestStepInterface
      */
     public function run()
     {
-        if (!empty($this->prices)) {
-            $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->prices);
+        if (isset($this->prices['grandTotal'])) {
+            $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getReviewBlock()->placeOrder();
 

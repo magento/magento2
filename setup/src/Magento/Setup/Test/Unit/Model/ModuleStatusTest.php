@@ -57,7 +57,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetAllModules($expectedAllModules, $expectedConfig, $expectedResult)
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
-        $this->deploymentConfig->expects($this->once())->method('getConfigData')
+        $this->deploymentConfig->expects($this->once())->method('get')
             ->will($this->returnValue($expectedConfig));
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
@@ -82,7 +82,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetAllModulesWithInputs($expectedAllModules, $expectedConfig, $expectedResult)
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
-        $this->deploymentConfig->expects($this->never())->method('getConfigData')
+        $this->deploymentConfig->expects($this->never())->method('get')
             ->will($this->returnValue($expectedConfig));
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
@@ -106,7 +106,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
-        $this->deploymentConfig->expects($this->once())->method('getConfigData')
+        $this->deploymentConfig->expects($this->once())->method('get')
             ->will($this->returnValue($expectedConfig));
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]

@@ -6,35 +6,39 @@
 namespace Magento\Review\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 
 /**
  * Admin ratings controller
  */
-class Rating extends \Magento\Backend\App\Action
+class Rating extends Action
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
-        $this->_coreRegistry = $coreRegistry;
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry
+    ) {
+        $this->coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
     /**
      * @return void
      */
-    protected function _initEnityId()
+    protected function initEnityId()
     {
-        $this->_coreRegistry->register(
+        $this->coreRegistry->register(
             'entityId',
             $this->_objectManager->create('Magento\Review\Model\Rating\Entity')->getIdByCode('product')
         );

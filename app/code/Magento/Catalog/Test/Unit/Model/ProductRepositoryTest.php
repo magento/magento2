@@ -9,6 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -107,7 +108,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $contentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Gallery\ContentValidator
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageContentValidator
      */
     protected $contentValidatorMock;
 
@@ -115,6 +116,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkTypeProviderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageProcessorInterface
+     */
+    protected $imageProcessorMock;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -195,15 +201,15 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
-        $this->contentFactoryMock = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory'
-        )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
-        $this->contentValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ContentValidator')
+        $this->contentFactoryMock = $this->getMock('Magento\Framework\Api\Data\ImageContentInterfaceFactory', ['create'], [], '', false);
+        $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
         $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
             ['getLinkTypes'], [], '', false);
+        $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
+
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -222,7 +228,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
-                'linkTypeProvider' => $this->linkTypeProviderMock
+                'linkTypeProvider' => $this->linkTypeProviderMock,
+                'imageProcessor' => $this->imageProcessorMock,
             ]
         );
     }
@@ -260,6 +267,19 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->productMock->expects($this->once())->method('load')->with('test_id');
         $this->assertEquals($this->productMock, $this->model->get('test_sku', true));
+    }
+
+    public function testGetWithSetStoreId()
+    {
+        $productId = 123;
+        $sku = 'test-sku';
+        $storeId = 7;
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($this->productMock);
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)->willReturn($productId);
+        $this->productMock->expects($this->once())->method('setData')->with('store_id', $storeId);
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->assertSame($this->productMock, $this->model->get($sku, false, $storeId));
     }
 
     /**
@@ -720,8 +740,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     [ //new option value
                         "title" => "DropdownOptions_3",
                         "price" => 4,
-                    ]
-                ]
+                    ],
+                ],
             ],
             [//new option
                 "type" => "checkbox",
@@ -730,7 +750,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                         "title" => "CheckBoxValue2",
                         "price" => 5,
                     ],
-                ]
+                ],
             ],
         ];
 
@@ -810,7 +830,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                             "price" => 6,
                             "is_delete" => 1,
                         ],
-                    ]
+                    ],
                 ],
                 [
                     "type" => "checkbox",
@@ -818,8 +838,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                         [
                             "title" => "CheckBoxValue2",
                             "price" => 5,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     "option_id" => 11,
@@ -936,32 +956,65 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         // Scenario 1
         // No existing, new links
         $data['scenario_1'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1],
+            'newLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "associated",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+                "qty" => 1,
+            ],
             'existingLinks' => [],
-            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1]]
-            ];
+            'expectedData' => [[
+                "product_sku" => "Simple Product 1",
+                "link_type" => "associated",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+                "qty" => 1,
+            ]],
+        ];
 
         // Scenario 2
         // Existing, no new links
         $data['scenario_2'] = [
             'newLinks' => [],
-            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
-            'expectedData' => []
+            'existingLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
+            'expectedData' => [],
         ];
 
         // Scenario 3
         // Existing and new links
         $data['scenario_3'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
-            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 3", "linked_product_type" => "simple", "position" => 0],
+            'newLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 2",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
+            'existingLinks' => [
+                "product_sku" => "Simple Product 1",
+                "link_type" => "related",
+                "linked_product_sku" => "Simple Product 3",
+                "linked_product_type" => "simple",
+                "position" => 0,
+            ],
             'expectedData' => [
-                ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
+                [
+                    "product_sku" => "Simple Product 1",
+                    "link_type" => "related",
+                    "linked_product_sku" => "Simple Product 2",
+                    "linked_product_type" => "simple",
+                    "position" => 0,
+                ],
+            ],
         ];
 
         return $data;
@@ -990,9 +1043,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'name' => 'filename',
-                    'mime_type' => 'image/jpeg',
-                    'entry_data' => 'encoded_content',
+                    ImageContentInterface::NAME => 'filename',
+                    ImageContentInterface::TYPE => 'image/jpeg',
+                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
             ],
         ];
@@ -1012,7 +1065,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         //setup media attribute backend
         $mediaTmpPath = '/tmp';
-        $relativePath = $mediaTmpPath . DIRECTORY_SEPARATOR . 'filename.jpg';
         $absolutePath = '/a/b/filename.jpg';
         $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
             ->disableOriginalConstructor()->getMock();
@@ -1022,20 +1074,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $mediaConfigMock->expects($this->once())
-            ->method('getBaseTmpMediaPath')
-            ->willReturn($mediaTmpPath);
-        $directoryWriteMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
-            ->getMockForAbstractClass();
-        $this->fileSystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryWriteMock);
-        $directoryWriteMock->expects($this->once())->method('create')->with($mediaTmpPath);
-        $this->mimeTypeExtensionMapMock->expects($this->once())->method('getMimeTypeExtension')
-            ->with('image/jpeg')
-            ->willReturn("jpg");
-        $directoryWriteMock->expects($this->once())->method('writeFile')
-            ->with($relativePath, false); //decoded value is false as it contains '_'
-        $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($absolutePath);
+            ->method('getTmpMediaShortUrl')
+            ->with($absolutePath)
+            ->willReturn($mediaTmpPath . $absolutePath);
         $this->initializedProductMock->expects($this->any())
             ->method('getGalleryAttributeBackend')
             ->willReturn($galleryAttributeBackendMock);
@@ -1044,7 +1085,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mediaConfigMock);
 
         //verify new entries
-        $contentDataObject = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\GalleryEntryContent')
+        $contentDataObject = $this->getMockBuilder('Magento\Framework\Api\ImageContent')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
@@ -1052,13 +1093,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($contentDataObject);
 
-        $this->contentValidatorMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
+        $this->imageProcessorMock->expects($this->once())
+            ->method('processImageContent')
+            ->willReturn($absolutePath);
 
         $imageFileUri = "imageFileUri";
         $galleryAttributeBackendMock->expects($this->once())->method('addImage')
-            ->with($this->initializedProductMock, $absolutePath, ['image', 'small_image'], true, false)
+            ->with($this->initializedProductMock, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
             ->willReturn($imageFileUri);
         $galleryAttributeBackendMock->expects($this->once())->method('updateImage')
             ->with(
@@ -1145,7 +1186,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $galleryAttributeBackendMock->expects($this->once())
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
-
 
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));

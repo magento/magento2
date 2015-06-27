@@ -16,10 +16,12 @@ if(typeof Bundle=='undefined') {
 
 </script>
 
-<div class="entry-edit form-inline" id="bundle_product_container">
-    <div class="fieldset-wrapper collapsable-wrapper" id="bundle_product-wrapper">
+<div
+    id="bundle_product_container"
+    class="entry-edit form-inline">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper collapsible-block-wrapper-last" id="bundle_product-wrapper">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#bundle_product-content">
+            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#bundle_product-content">
                 <span><?php echo $block->getTabLabel() ?></span>
             </strong>
         </div>
@@ -38,7 +40,9 @@ if(typeof Bundle=='undefined') {
                     </div>
                 </div>
 
-                <div class="entry-edit custom-options bundle" id="product_bundle_container">
+                <div
+                    id="product_bundle_container"
+                    class="entry-edit custom-options bundle sortable-wrapper">
                     <?php echo $block->getOptionsBoxHtml() ?>
                 </div>
 

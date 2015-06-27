@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<!-- ko if: isClickable(row) -->
 <td 
-    data-bind="click: redirect.bind($data, getClickUrl(row)),
-               html: getLabel(row[field.index])"
+    data-bind="
+        visible: visible,
+        css: { _dragging: dragging },
+        click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
+        text: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>
-<!-- /ko -->
-<!-- ko ifnot: isClickable(row) -->
-<td data-bind="html: getLabel(row[field.index])"></td>
-<!-- /ko -->

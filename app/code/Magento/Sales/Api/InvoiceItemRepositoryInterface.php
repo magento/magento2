@@ -9,6 +9,7 @@ namespace Magento\Sales\Api;
  * Invoice item repository interface.
  *
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
+ * @api
  */
 interface InvoiceItemRepositoryInterface
 {

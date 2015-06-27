@@ -9,6 +9,9 @@ namespace Magento\Catalog\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * @api
+ */
 interface ProductTierPriceInterface extends ExtensibleDataInterface
 {
     const QTY = 'qty';

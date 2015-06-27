@@ -176,7 +176,10 @@ class Customer extends AbstractCustomer
         $this->_permanentAttributes[] = self::COLUMN_WEBSITE;
         $this->_indexValueAttributes[] = 'group_id';
 
-        $this->addMessageTemplate(self::ERROR_DUPLICATE_EMAIL_SITE, __('E-mail is duplicated in import file'));
+        $this->addMessageTemplate(
+            self::ERROR_DUPLICATE_EMAIL_SITE,
+            __('This email is found more than once in the import file.')
+        );
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
             __('Orphan rows that will be skipped due default row errors')
@@ -185,8 +188,11 @@ class Customer extends AbstractCustomer
             self::ERROR_INVALID_STORE,
             __('Invalid value in Store column (store does not exists?)')
         );
-        $this->addMessageTemplate(self::ERROR_EMAIL_SITE_NOT_FOUND, __('E-mail and website combination is not found'));
-        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Invalid password length'));
+        $this->addMessageTemplate(
+            self::ERROR_EMAIL_SITE_NOT_FOUND,
+            __('We can\'t find that email and website combination.')
+        );
+        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Please enter a password with a valid length.'));
 
         $this->_initStores(true)->_initAttributes();
 
@@ -209,11 +215,30 @@ class Customer extends AbstractCustomer
             $this->_connection->insertMultiple($this->_entityTable, $entitiesToCreate);
         }
 
+        $customerFields = [
+            'group_id',
+            'store_id',
+            'updated_at',
+            'created_at',
+            'created_in',
+            'prefix',
+            'firstname',
+            'middlename',
+            'lastname',
+            'suffix',
+            'dob',
+            'password_hash',
+            'taxvat',
+            'confirmation',
+            'gender',
+            'rp_token',
+            'rp_token_created_at',
+        ];
         if ($entitiesToUpdate) {
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                ['group_id', 'store_id', 'updated_at', 'created_at']
+                $customerFields
             );
         }
 
@@ -282,11 +307,6 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        /** @var $passwordAttribute \Magento\Customer\Model\Attribute */
-        $passwordAttribute = $this->_customerModel->getAttribute('password_hash');
-        $passwordAttributeId = $passwordAttribute->getId();
-        $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
-
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
@@ -298,33 +318,36 @@ class Customer extends AbstractCustomer
         } else {
             $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
+
+        $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
+        $newCustomer = false;
+        $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
+        if (!$entityId) {
+            // create
+            $newCustomer = true;
+            $entityId = $this->_getNextEntityId();
+            $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
+        }
+
         $entityRow = [
             'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
             'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
             'created_at' => $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'entity_id' => $entityId,
         ];
 
-        $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
-        if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) {
-            // edit
-            $entityRow['entity_id'] = $entityId;
-            $entitiesToUpdate[] = $entityRow;
-        } else {
-            // create
-            $entityId = $this->_getNextEntityId();
-            $entityRow['entity_id'] = $entityId;
-            $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
-            $entityRow['email'] = $emailInLowercase;
-            $entityRow['is_active'] = 1;
-            $entitiesToCreate[] = $entityRow;
-
-            $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
+        // password change/set
+        if (isset($rowData['password']) && strlen($rowData['password'])) {
+            $entityRow['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
 
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
-            if (!$this->_attributes[$attributeCode]['is_static'] && strlen($value)) {
+            if ($newCustomer && !strlen($value)) {
+                continue;
+            }
+            if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
                 $backendModel = $attribute->getBackendModel();
@@ -344,15 +367,20 @@ class Customer extends AbstractCustomer
 
                 // restore 'backend_model' to avoid default setting
                 $attribute->setBackendModel($backendModel);
+            } else {
+                $entityRow[$attributeCode] = $value;
             }
         }
 
-        // password change/set
-        if (isset($rowData['password']) && strlen($rowData['password'])) {
-            $attributesToSave[$passwordStorageTable][$entityId][$passwordAttributeId] = $this->_customerModel
-                ->hashPassword(
-                    $rowData['password']
-                );
+        if ($newCustomer) {
+            // create
+            $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+            $entityRow['email'] = $emailInLowercase;
+            $entityRow['is_active'] = 1;
+            $entitiesToCreate[] = $entityRow;
+        } else {
+            // edit
+            $entitiesToUpdate[] = $entityRow;
         }
 
         return [

@@ -15,7 +15,7 @@
     </button>
     <div data-bind="css: {_overflow: hasOverflow()}" class="admin__action-dropdown-menu admin__data-grid-action-columns-menu">
         <div class="admin__action-dropdown-menu-header">
-            <span data-bind="text: getHeaderMessage($t('<%- visible %> out of <%- total %> visible'))"></span>
+            <span data-bind="text: getHeaderMessage()"></span>
         </div>
         <div class="admin__action-dropdown-menu-content">
             <!-- ko foreach: elems -->
@@ -33,11 +33,8 @@
                 </button>
             </div>
             <div class="admin__action-dropdown-footer-main-actions">
-                <button data-bind="click: cancel" class="action-tertiary" type="button">
+                <button data-bind="click: function () { $data.close().cancel(); }" class="action-tertiary" type="button">
                     <span data-bind="text: $t('Cancel')"></span>
-                </button>
-                <button data-bind="click: apply" class="action-secondary" type="button">
-                    <span data-bind="text: $t('Apply')"></span>
                 </button>
             </div>
         </div>

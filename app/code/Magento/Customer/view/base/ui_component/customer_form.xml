@@ -8,9 +8,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="provider" xsi:type="string">customer_form.customer_form_data_source</item>
-            </item>
+            <item name="provider" xsi:type="string">customer_form.customer_form_data_source</item>
             <item name="deps" xsi:type="string">customer_form.customer_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Customer Information</item>
@@ -32,28 +30,13 @@
     <dataSource name="customer_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Customer\Model\Customer\DataProvider</argument>
+            <argument name="name" xsi:type="string">customer_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="meta" xsi:type="array">
-                <item name="customer" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Account Information</item>
-                    </item>
-                </item>
-                <item name="address" xsi:type="array">
-                    <item name="is_collection" xsi:type="boolean">true</item>
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Addresses</item>
-                    </item>
-                </item>
-            </argument>
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="string">customer/index/save</item>
-                    <item name="validate_url" xsi:type="string">customer/index/validate</item>
+                    <item name="submit_url" xsi:type="url" path="customer/index/save"/>
+                    <item name="validate_url" xsi:type="url" path="customer/index/validate"/>
                 </item>
             </argument>
         </argument>
@@ -145,6 +128,7 @@
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="validateWholeGroup" xsi:type="boolean">true</item>
                 </item>
             </argument>
             <field name="group_id">
@@ -429,18 +413,6 @@
                 </item>
             </argument>
         </field>
-        <field name="country_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">address</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
         <field name="region">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -453,7 +425,6 @@
         </field>
         <field name="region_id">
             <argument name="data" xsi:type="array">
-                <item name="customEntry" xsi:type="string">region</item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">select</item>
@@ -463,7 +434,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="filterBy" xsi:type="array">
-                        <item name="target" xsi:type="string"><![CDATA[<%= provider %>:<%= parentScope %>.country_id]]></item>
+                        <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
                         <item name="field" xsi:type="string">country_id</item>
                     </item>
                 </item>

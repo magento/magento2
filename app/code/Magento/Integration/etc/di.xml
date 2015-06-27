@@ -6,14 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Integration\Service\V1\IntegrationInterface" type="Magento\Integration\Service\V1\Integration" />
-    <preference for="Magento\Integration\Service\V1\AuthorizationServiceInterface" type="Magento\Integration\Service\V1\AuthorizationService" />
-    <preference for="Magento\Integration\Service\V1\OauthInterface" type="Magento\Integration\Service\V1\Oauth" />
+    <preference for="Magento\Integration\Api\IntegrationServiceInterface" type="Magento\Integration\Model\IntegrationService" />
+    <preference for="Magento\Integration\Api\AuthorizationServiceInterface" type="Magento\Integration\Model\AuthorizationService" />
+    <preference for="Magento\Integration\Api\OauthServiceInterface" type="Magento\Integration\Model\OauthService" />
     <preference for="Magento\Framework\Oauth\ConsumerInterface" type="Magento\Integration\Model\Oauth\Consumer"/>
     <preference for="Magento\Framework\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
-    <preference for="Magento\Integration\Service\V1\CustomerTokenServiceInterface" type="Magento\Integration\Service\V1\CustomerTokenService" />
-    <preference for="Magento\Integration\Service\V1\AdminTokenServiceInterface" type="Magento\Integration\Service\V1\AdminTokenService" />
+    <preference for="Magento\Integration\Api\CustomerTokenServiceInterface" type="Magento\Integration\Model\CustomerTokenService" />
+    <preference for="Magento\Integration\Api\AdminTokenServiceInterface" type="Magento\Integration\Model\AdminTokenService" />
     <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
         <arguments>
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>
@@ -24,7 +24,7 @@
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Integration\Service\V1\Integration">
-        <plugin name="webapiIntegrationServiceV1" type="Magento\Integration\Model\Plugin\Service\V1\Integration"/>
+    <type name="Magento\Integration\Api\IntegrationServiceInterface">
+        <plugin name="webapiIntegrationService" type="Magento\Integration\Model\Plugin\Integration"/>
     </type>
 </config>

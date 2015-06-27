@@ -35,6 +35,11 @@ class AdminConfig extends Config
     protected $_storeManager;
 
     /**
+     * @var \Magento\Backend\App\BackendAppList
+     */
+    private $backendAppList;
+
+    /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\String $stringHelper
@@ -42,6 +47,7 @@ class AdminConfig extends Config
      * @param Filesystem $filesystem
      * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $lifetimePath
@@ -56,6 +62,7 @@ class AdminConfig extends Config
         Filesystem $filesystem,
         DeploymentConfig $deploymentConfig,
         $scopeType,
+        \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
@@ -71,9 +78,9 @@ class AdminConfig extends Config
             $scopeType,
             $lifetimePath
         );
-
         $this->_frontNameResolver = $frontNameResolver;
         $this->_storeManager = $storeManager;
+        $this->backendAppList = $backendAppList;
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
@@ -86,10 +93,17 @@ class AdminConfig extends Config
      */
     private function extractAdminPath()
     {
-        $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl());
-        $baseUrl = $parsedUrl['path'];
-        $adminPath = $this->_frontNameResolver->getFrontName();
-
-        return $baseUrl . $adminPath;
+        $backendApp = $this->backendAppList->getCurrentApp();
+        $cookiePath = null;
+        $baseUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        if (!$backendApp) {
+            $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
+            return $cookiePath;
+        }
+        //In case of application authenticating through the admin login, the script name should be removed
+        //from the path, because application has own script.
+        $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
+        $cookiePath = $baseUrl . $backendApp->getCookiePath();
+        return $cookiePath;
     }
 }

@@ -18,27 +18,27 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Catalog\Helper\Category
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Category
      */
     protected $_catalogCategory;
 
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
      */
     protected $_category;
 
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
      */
     protected $_childrenCategory;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $_categoryFlatState;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -64,17 +64,28 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_observer = (new ObjectManager($this))->getObject('Magento\Catalog\Model\Observer', [
-            'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
-            'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
-            'storeManager' => $this->_storeManager,
-            'catalogLayer' => $this->_getCleanMock('\Magento\Catalog\Model\Layer\Category'),
-            'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
-            'catalogCategory' => $this->_catalogCategory,
-            'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
-            'categoryFlatState' => $this->_categoryFlatState,
-            'productResourceFactory' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\ProductFactory'),
-        ]);
+        $layerResolver = $this->_getCleanMock('Magento\Catalog\Model\Layer\Resolver');
+        $layerResolver->expects($this->once())->method('get')->willReturn(null);
+        $this->_observer = (new ObjectManager($this))->getObject(
+            'Magento\Catalog\Model\Observer',
+            [
+                'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
+                'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
+                'storeManager' => $this->_storeManager,
+                'layerResolver' => $layerResolver,
+                'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
+                'catalogCategory' => $this->_catalogCategory,
+                'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
+                'categoryFlatState' => $this->_categoryFlatState,
+                'productResourceFactory' => $this->getMock(
+                    'Magento\Catalog\Model\Resource\ProductFactory',
+                    ['create'],
+                    [],
+                    '',
+                    false
+                )
+            ]
+        );
     }
 
     /**
@@ -175,5 +186,24 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->_observer->addCatalogToTopmenuItems($observer);
+    }
+
+    public function testGetMenuCategoryData()
+    {
+        $category = $this->getMock('Magento\Catalog\Model\Category', ['getId', 'getName'], [], '', false);
+        $category->expects($this->once())->method('getId')->willReturn('id');
+        $category->expects($this->once())->method('getName')->willReturn('name');
+        $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');
+
+        $this->assertEquals(
+            [
+                'name' => 'name',
+                'id' => 'category-node-id',
+                'url' => 'url',
+                'is_active' => false,
+                'has_active' => false,
+            ],
+            $this->_observer->getMenuCategoryData($category)
+        );
     }
 }

@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Config cache interface.
+ *
+ * @api
+ */
 interface CacheInterface extends \Magento\Framework\Cache\FrontendInterface
 {
 }

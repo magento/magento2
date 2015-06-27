@@ -77,6 +77,10 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\App\State\CleanupFiles',
                 $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false),
             ],
+            [
+                'Magento\Setup\Validator\DbValidator',
+                $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false),
+            ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
         $serviceLocatorMock
@@ -84,7 +88,7 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($returnValueMap));
 
-        $log = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
+        $log = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $resourceFactoryMock = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);
         $resourceFactoryMock
             ->expects($this->any())

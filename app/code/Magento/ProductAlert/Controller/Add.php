@@ -5,40 +5,42 @@
  */
 namespace Magento\ProductAlert\Controller;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
-class Add extends \Magento\Framework\App\Action\Action
+class Add extends Action
 {
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $customerSession;
 
     /**
-     * @param Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         Context $context,
-        \Magento\Customer\Model\Session $customerSession
+        CustomerSession $customerSession
     ) {
-        $this->_customerSession = $customerSession;
+        $this->customerSession = $customerSession;
         parent::__construct($context);
     }
 
     /**
      * Check customer authentication for some actions
      *
-     * @param RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_customerSession->authenticate($this)) {
+        if (!$this->customerSession->authenticate($this)) {
             $this->_actionFlag->set('', 'no-dispatch', true);
-            if (!$this->_customerSession->getBeforeUrl()) {
-                $this->_customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
+            if (!$this->customerSession->getBeforeUrl()) {
+                $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
             }
         }
         return parent::dispatch($request);

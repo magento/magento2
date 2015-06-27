@@ -9,7 +9,17 @@
     <body>
         <referenceContainer name="header-wrapper">
             <container name="compare-link-wrapper" label="Compare Link Wrapper" as="compare-link-wrapper" after="top.search" htmlTag="ul" htmlClass="compare wrapper">
-                <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml">
+                    <arguments>
+                        <argument name="jsLayout" xsi:type="array">
+                            <item name="components" xsi:type="array">
+                                <item name="compareProducts" xsi:type="array">
+                                    <item name="component" xsi:type="string">Magento_Catalog/js/view/compare-products</item>
+                                </item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
             </container>
         </referenceContainer>
     </body>

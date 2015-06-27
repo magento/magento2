@@ -13,8 +13,8 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 
@@ -1152,11 +1152,11 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param   \Magento\Framework\Object $object
+     * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function save(\Magento\Framework\Object $object)
+    public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         /**
          * Direct deleted items to delete method
@@ -1245,7 +1245,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *  'newObject', 'entityRow', 'insert', 'update', 'delete'
      * )
      *
-     * @param   \Magento\Framework\Object $newObject
+     * @param   \Magento\Framework\Model\AbstractModel $newObject
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1723,7 +1723,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             $connection = $this->transactionManager->start($this->_getWriteAdapter());
             if (is_numeric($object)) {
                 $id = (int) $object;
-            } elseif ($object instanceof \Magento\Framework\Object) {
+            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->beforeDelete();
                 $id = (int) $object->getId();
             }
@@ -1748,12 +1748,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
 
             $this->_afterDelete($object);
 
-            if ($object instanceof \Magento\Framework\Object) {
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->isDeleted(true);
                 $object->afterDelete();
             }
             $this->transactionManager->commit();
-            if ($object instanceof \Magento\Framework\Object) {
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->afterDeleteCommit();
             }
         } catch (\Exception $e) {

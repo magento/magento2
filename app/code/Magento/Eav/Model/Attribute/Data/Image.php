@@ -28,10 +28,6 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
 
         $imageProp = @getimagesize($value['tmp_name']);
 
-        if (!is_uploaded_file($value['tmp_name']) || !$imageProp) {
-            return [__('"%1" is not a valid file', $label)];
-        }
-
         $allowImageTypes = [1 => 'gif', 2 => 'jpg', 3 => 'png'];
 
         if (!isset($allowImageTypes[$imageProp[2]])) {

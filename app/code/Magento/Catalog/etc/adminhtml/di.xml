@@ -66,18 +66,4 @@
     <type name="Magento\Catalog\Model\Resource\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\Resource\Attribute\Save" />
     </type>
-    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
-        <arguments>
-            <argument name="disableSearchable" xsi:type="array">
-                <item name="visibility" xsi:type="boolean">true</item>
-                <item name="url_key" xsi:type="boolean">true</item>
-                <item name="status" xsi:type="boolean">true</item>
-                <item name="group_price" xsi:type="boolean">true</item>
-                <item name="price_type" xsi:type="boolean">true</item>
-                <item name="category_ids" xsi:type="boolean">true</item>
-                <item name="media_gallery" xsi:type="boolean">true</item>
-                <item name="country_of_manufacture" xsi:type="boolean">true</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

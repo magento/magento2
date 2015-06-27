@@ -72,14 +72,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->attrCollectionFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
         );
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getNewSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope'],
+            ['getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope'],
             [],
             '',
             false
@@ -108,32 +108,121 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSaveData()
+    /**
+     * Test for method saveData()
+     *
+     * @param array $skus
+     * @param array $bunch
+     *
+     * @dataProvider testSaveDataProvider
+     */
+    public function testSaveData($skus, $bunch)
     {
-        $associatedSku = 'sku_assoc';
-        $productSku = 'productSku';
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
-            $associatedSku => ['entity_id' => 1],
-            $productSku => ['entity_id' => 2]
-        ]));
+        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue($skus['newSku']));
+        $this->entityModel->expects($this->once())->method('getOldSku')->will($this->returnValue($skus['oldSku']));
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
-        $bunch = [[
-            '_associated_sku' => $associatedSku,
-            'sku' => $productSku,
-            '_type' => 'grouped',
-            '_associated_default_qty' => 4,
-            '_associated_position' => 6
-        ]];
-        $this->entityModel->expects($this->at(0))->method('getNextBunch')->will($this->returnValue($bunch));
-        $this->entityModel->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([$bunch]));
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
         $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(
             \Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT
         ));
 
-        $this->links->expects($this->once())->method("saveLinksData");
+        $this->links->expects($this->once())->method('saveLinksData');
+        $this->grouped->saveData();
+    }
+
+    /**
+     * Data provider for saveData()
+     *
+     * @return array
+     */
+    public function testSaveDataProvider()
+    {
+        return [
+            [
+                'skus' => [
+                    'newSku' => [
+                        'sku_assoc1' => ['entity_id' => 1],
+                        'productSku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+                    ],
+                    'oldSku' => ['sku_assoc2' => ['entity_id' => 2]]
+                ],
+                'bunch' => [
+                    'associated_skus' => 'sku_assoc1=1, sku_assoc2=2',
+                    'sku' => 'productSku',
+                    'product_type' => 'grouped'
+                ]
+            ],
+            [
+                'skus' => [
+                    'newSku' => [
+                        'productSku' => ['entity_id' => 1, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+                    ],
+                    'oldSku' => []
+                ],
+                'bunch' => [
+                    'associated_skus' => '',
+                    'sku' => 'productSku',
+                    'product_type' => 'grouped'
+                ]
+            ],
+            [
+                'skus' => ['newSku' => [],'oldSku' => []],
+                'bunch' => [
+                    'associated_skus' => 'sku_assoc1=1, sku_assoc2=2',
+                    'sku' => 'productSku',
+                    'product_type' => 'grouped'
+                ]
+            ],
+            [
+                'skus' => [
+                    'newSku' => [
+                        'sku_assoc1' => ['entity_id' => 1],
+                        'productSku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+                    ],
+                    'oldSku' => []
+                ],
+                'bunch' => [
+                    'associated_skus' => 'sku_assoc1=1',
+                    'sku' => 'productSku',
+                    'product_type' => 'simple'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test saveData() with store row scope
+     */
+    public function testSaveDataScopeStore()
+    {
+        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
+            'sku_assoc1' => ['entity_id' => 1],
+            'productSku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+        ]));
+        $this->entityModel->expects($this->once())->method('getOldSku')->will($this->returnValue([
+            'sku_assoc2' => ['entity_id' => 3]
+        ]));
+        $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
+        $this->links->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
+
+        $bunch = [[
+            'associated_skus' => 'sku_assoc1=1, sku_assoc2=2',
+            'sku' => 'productSku',
+            'product_type' => 'grouped'
+        ]];
+        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue($bunch));
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
+        $this->entityModel->expects($this->at(4))->method('getRowScope')->will($this->returnValue(
+            \Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT
+        ));
+        $this->entityModel->expects($this->at(5))->method('getRowScope')->will($this->returnValue(
+            \Magento\CatalogImportExport\Model\Import\Product::SCOPE_STORE
+        ));
+
+        $this->links->expects($this->once())->method('saveLinksData');
         $this->grouped->saveData();
     }
 }

@@ -125,8 +125,10 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     foreach ($appFiles as $info) {
-                        list(, , , $module, $filePath) = $info;
-                        $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                        list($fileArea, , , $module, $filePath) = $info;
+                        if ($fileArea == $area || $fileArea == 'base') {
+                            $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                        }
                     }
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);

@@ -7,11 +7,12 @@ namespace Magento\Quote\Api;
 
 /**
  * Cart Item repository interface for guest carts.
+ * @api
  */
 interface GuestCartItemRepositoryInterface
 {
     /**
-     * Lists items that are assigned to a specified cart.
+     * List items that are assigned to a specified cart.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\CartItemInterface[] Array of items.
@@ -20,7 +21,7 @@ interface GuestCartItemRepositoryInterface
     public function getList($cartId);
 
     /**
-     * Adds the specified item to the specified cart.
+     * Add the specified item to the specified cart.
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem The item.
      * @return \Magento\Quote\Api\Data\CartItemInterface Item.
@@ -31,7 +32,7 @@ interface GuestCartItemRepositoryInterface
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem);
 
     /**
-     * Removes the specified item from the specified cart.
+     * Remove the specified item from the specified cart.
      *
      * @param string $cartId The cart ID.
      * @param int $itemId The item ID of the item to be removed.

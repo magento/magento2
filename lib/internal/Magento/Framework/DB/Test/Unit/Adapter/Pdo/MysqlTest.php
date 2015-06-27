@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -149,7 +151,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertNotContains(
                 $e->getMessage(),
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_DDL_MESSAGE
+                AdapterInterface::ERROR_DDL_MESSAGE
             );
         }
 
@@ -160,7 +162,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertNotContains(
                 $e->getMessage(),
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_DDL_MESSAGE
+                AdapterInterface::ERROR_DDL_MESSAGE
             );
         }
     }
@@ -175,6 +177,18 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testCheckDdlTransaction($ddlQuery)
     {
         $this->_mockAdapter->query($ddlQuery);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Cannot execute multiple queries
+     */
+    public function testMultipleQueryException()
+    {
+        $sql = "SELECT COUNT(*) AS _num FROM test; ";
+        $sql.= "INSERT INTO test(id) VALUES (1); ";
+        $sql.= "SELECT COUNT(*) AS _num FROM test; ";
+        $this->_mockAdapter->query($sql);
     }
 
     /**
@@ -214,7 +228,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
+                AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
                 $e->getMessage()
             );
         }
@@ -230,7 +244,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
+                AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
                 $e->getMessage()
             );
         }
@@ -342,7 +356,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
             $this->_adapter->rollBack();
@@ -365,7 +379,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
             $this->_adapter->rollBack();
@@ -535,6 +549,30 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                 'expectedQuery' => 'ALTER TABLE `tableName` ADD COLUMN `columnName` int UNSIGNED '
                     . 'NOT NULL default  auto_increment COMMENT Some field AFTER `Previous field` ',
             ]
+        ];
+    }
+
+    /**
+     * @dataProvider getIndexNameDataProvider
+     */
+    public function testGetIndexName($name, $fields, $indexType, $expectedName)
+    {
+        $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
+        $this->assertTrue(
+            strpos($resultIndexName, $expectedName) === 0,
+            "Index name '$resultIndexName' did not begin with expected value '$expectedName'"
+        );
+    }
+
+    public function getIndexNameDataProvider()
+    {
+        // 65 characters long - will be compressed
+        $longTableName = '__________________________________________________long_table_name';
+        return [
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_UNIQUE, 'UNQ_'],
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_FULLTEXT, 'FTI_'],
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_INDEX, 'IDX_'],
+            ['short_table_name', ['field1', 'field2'], '', 'SHORT_TABLE_NAME_FIELD1_FIELD2'],
         ];
     }
 }

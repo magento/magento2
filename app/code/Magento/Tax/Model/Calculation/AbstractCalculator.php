@@ -217,7 +217,7 @@ abstract class AbstractCalculator
      */
     public function calculate(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
-        if ($item->getTaxIncluded()) {
+        if ($item->getIsTaxIncluded()) {
             return $this->calculateWithTaxInPrice($item, $quantity, $round);
         } else {
             return $this->calculateWithTaxNotInPrice($item, $quantity, $round);

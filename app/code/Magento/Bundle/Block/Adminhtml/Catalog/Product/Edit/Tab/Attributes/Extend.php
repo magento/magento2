@@ -110,9 +110,12 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      */
     public function isDisabledField()
     {
-        return $this->getProduct()->getId() &&
-            $this->getAttribute()->getAttributeCode() === 'price' ||
-            $this->getElement()->getReadonly();
+        return $this->_getData('is_disabled_field')
+            || ($this->getProduct()->getId()
+                && $this->getAttribute()->getAttributeCode() === 'price'
+            )
+            || $this->getElement()->getReadonly();
+
     }
 
     /**
@@ -142,7 +145,9 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 'values' => $this->getOptions(),
                 'value' => $switchAttributeCode,
                 'class' => 'required-entry next-toinput',
-                'disabled' => $this->isDisabledField()
+                'no_span' => true,
+                'disabled' => $this->isDisabledField(),
+                'value' => $this->getProduct()->getData($switchAttributeCode),
             ]
         );
     }

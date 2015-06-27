@@ -15,33 +15,33 @@
 
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
-    <div class="grid" id="order-items_grid">
-        <table class="data-table admin__table-primary order-tables">
-            <thead>
-                <tr class="headings">
-                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                    <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
-                    <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
-                    <th class="col-action"><span><?php echo __('Action') ?></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="even">
-                    <td class="empty-text" colspan="100"><?php echo __('No ordered items') ?></td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="order-items_grid">
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary order-tables">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?php echo __('Product') ?></span></th>
+                        <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                        <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                        <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
+                        <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
+                        <th class="col-action"><span><?php echo __('Action') ?></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="even">
+                        <td class="empty-text" colspan="100"><?php echo __('No ordered items') ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php else: ?>
-
-<div class="grid" id="order-items_grid">
-    <div class="hor-scroll">
+    <div class="admin__table-wrapper" id="order-items_grid">
     <?php if (count($_items)>10): ?>
         <div class="actions update actions-update">
-            <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+            <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
         </div>
     <?php endif; ?>
         <table class="data-table admin__table-primary order-tables">
@@ -101,7 +101,10 @@
                                            id="item_use_custom_price_<?php echo $_item->getId() ?>"
                                            <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?>
                                            onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php echo $_item->getId() ?>', 'item_tier_block_<?php echo $_item->getId() ?>');"/>
-                                    <label class="normal" for="item_use_custom_price_<?php echo $_item->getId() ?>"><?php echo __('Custom Price') ?>*</label>
+                                    <label
+                                        class="normal admin__field-label"
+                                        for="item_use_custom_price_<?php echo $_item->getId() ?>">
+                                        <span><?php echo __('Custom Price') ?>*</span></label>
                                 </div>
                             <?php endif; ?>
                             <input id="item_custom_price_<?php echo $_item->getId() ?>"
@@ -131,7 +134,10 @@
                                        <?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?>
                                        value="1"
                                        type="checkbox" />
-                                <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
+                                <label
+                                    for="item_use_discount_<?php echo $_item->getId() ?>"
+                                    class="normal admin__field-label">
+                                    <span><?php echo __('Apply') ?></span></label>
                             </div>
 
                         </td>
@@ -147,9 +153,9 @@
                                     <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
                                         <?php $wishlists = $block->getCustomerWishlists();?>
                                         <?php if (count($wishlists) <= 1):?>
-                                            <option value="wishlist"><?php echo __('Move to Wishlist') ?></option>
+                                            <option value="wishlist"><?php echo __('Move to Wish List') ?></option>
                                         <?php else: ?>
-                                            <optgroup label="<?php echo __('Move to Wishlist') ?>">
+                                            <optgroup label="<?php echo __('Move to Wish List') ?>">
                                                 <?php foreach ($wishlists as $wishlist):?>
                                                     <option value="wishlist_<?php echo $wishlist->getId();?>"><?php echo $block->escapeHtml($wishlist->getName());?></option>
                                                 <?php endforeach;?>
@@ -193,7 +199,7 @@
     </div>
 
     <div class="order-discounts">
-        <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+        <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
         <div id="order-coupons" class="order-coupons"><?php echo $block->getChildHtml();?></div>
     </div>
 
@@ -204,7 +210,6 @@
             order.itemsOnchangeBind()
         });
     </script>
-</div>
 
 <?php if ($block->isGiftMessagesAvailable()) : ?>
 <script>

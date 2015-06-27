@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Report extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Report extends \Magento\Sales\Model\Resource\EntityAbstract
 {
     /**
      * Resource initialization

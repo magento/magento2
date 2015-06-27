@@ -920,25 +920,11 @@ class LinkRepositoryTest extends WebapiAbstract
             ]
         ];
 
-        $sampleExpectation = [
-            'fields' => [
-                'title' => 'Downloadable Product Sample Title',
-                'sort_order' => 0,
-                'sample_file' => '/f/u/jellyfish_1_4.jpg',
-                'sample_type' => 'file'
-            ]
-        ];
-
         return [
             'links' => [
                 '/downloadable-links',
-                'GetLinks',
+                'GetList',
                 $linkExpectation,
-            ],
-            'samples' => [
-                '/downloadable-links/samples',
-                'GetSamples',
-                $sampleExpectation,
             ],
         ];
     }

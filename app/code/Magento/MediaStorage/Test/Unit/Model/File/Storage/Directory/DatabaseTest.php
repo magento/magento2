@@ -192,4 +192,13 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
         $this->directoryDatabase->importDirectories('not an array');
     }
+
+    public function testSetGetConnectionName()
+    {
+        $this->assertSame($this->customConnectionName, $this->directoryDatabase->getConnectionName());
+        $this->directoryDatabase->setConnectionName('test');
+        $this->assertSame('test', $this->directoryDatabase->getConnectionName());
+        $this->directoryDatabase->unsetData();
+        $this->assertSame('test', $this->directoryDatabase->getConnectionName());
+    }
 }

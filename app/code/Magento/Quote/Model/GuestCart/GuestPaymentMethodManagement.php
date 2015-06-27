@@ -46,7 +46,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->paymentMethodManagement->set($quoteIdMask->getId(), $method);
+        return $this->paymentMethodManagement->set($quoteIdMask->getQuoteId(), $method);
     }
 
     /**
@@ -56,7 +56,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->paymentMethodManagement->get($quoteIdMask->getId());
+        return $this->paymentMethodManagement->get($quoteIdMask->getQuoteId());
     }
 
     /**
@@ -66,6 +66,6 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->paymentMethodManagement->getList($quoteIdMask->getId());
+        return $this->paymentMethodManagement->getList($quoteIdMask->getQuoteId());
     }
 }

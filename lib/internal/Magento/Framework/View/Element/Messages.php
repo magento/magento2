@@ -99,21 +99,7 @@ class Messages extends Template
         $this->messageFactory = $messageFactory;
         $this->collectionFactory = $collectionFactory;
         $this->messageManager = $messageManager;
-        $this->_isScopePrivate = true;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Preparing global layout
-     *
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        $this->addStorageType($this->messageManager->getDefaultGroup());
-        $this->addMessages($this->messageManager->getMessages(true));
-        parent::_prepareLayout();
-        return $this;
     }
 
     /**

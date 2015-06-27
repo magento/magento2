@@ -38,7 +38,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         /** @var $currentUser \Magento\User\Model\User */
         $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         if ($userId == $currentUser->getId() && $this->_objectManager->get(
-            'Magento\Framework\Locale\Validator'
+            'Magento\Framework\Validator\Locale'
         )->isValid(
             $data['interface_locale']
         )

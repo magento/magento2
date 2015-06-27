@@ -17,7 +17,7 @@ use Magento\Customer\Model\Context;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * @var Category
@@ -145,7 +145,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
             $this->httpContext->getValue(Context::CONTEXT_GROUP),
             'template' => $this->getTemplate(),
             'name' => $this->getNameInLayout(),
-            $this->getCurrenCategoryKey(),
+            $this->getCurrentCategoryKey(),
         ];
         $cacheId = $shortCacheId;
 
@@ -153,7 +153,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
         $shortCacheId = implode('|', $shortCacheId);
         $shortCacheId = md5($shortCacheId);
 
-        $cacheId['category_path'] = $this->getCurrenCategoryKey();
+        $cacheId['category_path'] = $this->getCurrentCategoryKey();
         $cacheId['short_cache_id'] = $shortCacheId;
 
         return $cacheId;
@@ -164,7 +164,7 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      *
      * @return string
      */
-    public function getCurrenCategoryKey()
+    public function getCurrentCategoryKey()
     {
         if (!$this->_currentCategoryKey) {
             $category = $this->_registry->registry('current_category');

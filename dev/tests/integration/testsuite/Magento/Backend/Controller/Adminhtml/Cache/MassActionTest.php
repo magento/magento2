@@ -8,8 +8,10 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\App\Cache\State;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
-class MassActionTest extends \Magento\Backend\Utility\Controller
+class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Configuration of cache types
@@ -22,7 +24,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     {
         /** @var \Magento\Framework\App\DeploymentConfig $config */
         $config = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
-        self::$typesConfig = $config->getConfigData(State::CACHE_KEY);
+        self::$typesConfig = $config->get(State::CACHE_KEY);
     }
 
     protected function tearDown()
@@ -87,9 +89,11 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
      */
     protected function getCacheStates()
     {
-        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/etc/config.php';
+        $configFilePool = new ConfigFilePool();
+        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/'. DirectoryList::CONFIG .'/'
+            . $configFilePool->getPath($configFilePool::APP_ENV);
         $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
-        return $configData['cache_types'];
+        return $configData[State::CACHE_KEY];
     }
 
     /**

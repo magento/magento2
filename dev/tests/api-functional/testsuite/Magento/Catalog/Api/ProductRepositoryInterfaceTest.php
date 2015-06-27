@@ -140,7 +140,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->saveProduct($productData);
 
-        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "related",
+        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "related",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => []];
         $productWithRelatedData =  [
@@ -164,7 +164,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
-        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "upsell",
+        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "upsell",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => []];
         $productWithUpsellData =  [
@@ -314,8 +314,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
-        $filename1 = 'tiny1' . time();
-        $filename2 = 'tiny2' . time();
+        $filename1 = 'tiny1' . time() . '.jpg';
+        $filename2 = 'tiny2' . time() . '.jpeg';
         $productData = $this->getSimpleProductData();
         $productData['media_gallery_entries'] = [
             [
@@ -324,9 +324,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny1',
                 'types' => [],
                 'content' => [
-                    'mime_type' => 'image/jpeg',
+                    'type' => 'image/jpeg',
                     'name' => $filename1,
-                    'entry_data' => $encodedImage,
+                    'base64_encoded_data' => $encodedImage,
                 ]
             ],
             [
@@ -335,9 +335,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny2',
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'mime_type' => 'image/jpeg',
+                    'type' => 'image/jpeg',
                     'name' => $filename2,
-                    'entry_data' => $encodedImage,
+                    'base64_encoded_data' => $encodedImage,
                 ]
             ],
         ];
@@ -355,14 +355,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => true,
                 'types' => [],
-                'file' => '/t/i/' . $filename1 . '.jpg',
+                'file' => '/t/i/' . $filename1,
             ],
             [
                 'label' => 'tiny2',
                 'position' => 2,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename2 . '.jpg',
+                'file' => '/t/i/' . $filename2,
             ],
         ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
@@ -374,7 +374,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1 . '.jpg',
+                'file' => '/t/i/' . $filename1,
             ],
         ];
         $response = $this->updateProduct($response);
@@ -387,7 +387,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1 . '.jpg',
+                'file' => '/t/i/' . $filename1,
             ]
         ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);

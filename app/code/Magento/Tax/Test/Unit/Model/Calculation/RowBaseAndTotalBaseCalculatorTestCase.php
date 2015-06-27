@@ -65,11 +65,11 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
     /**
      * initialize all mocks
      *
-     * @param bool $taxIncluded
+     * @param bool $isTaxIncluded
      */
-    public function initMocks($taxIncluded)
+    public function initMocks($isTaxIncluded)
     {
-        $this->initMockItem($taxIncluded);
+        $this->initMockItem($isTaxIncluded);
         $this->initMockConfig();
         $this->initMockCalculationTool();
         $this->initMockAppliedTaxDataObjectFactory();
@@ -139,9 +139,9 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
     /**
      * init mock Items
      *
-     * @param bool $taxIncluded
+     * @param bool $isTaxIncluded
      */
-    protected function initMockItem($taxIncluded)
+    protected function initMockItem($isTaxIncluded)
     {
         $this->mockReturnValues(
             $this->mockItem,
@@ -168,8 +168,8 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     self::ONCE => true,
-                    self::MOCK_METHOD_NAME => 'getTaxIncluded',
-                    self::MOCK_VALUE => $taxIncluded
+                    self::MOCK_METHOD_NAME => 'getIsTaxIncluded',
+                    self::MOCK_VALUE => $isTaxIncluded
                 ]
             ]
         );

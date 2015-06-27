@@ -20,6 +20,13 @@ use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollec
 class DataProvider implements DataProviderInterface
 {
     /**
+     * Data Provider name
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var string
      */
     protected $primaryFieldName;
@@ -90,6 +97,7 @@ class DataProvider implements DataProviderInterface
     /**
      * Constructor
      *
+     * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param EavValidationRul $eavValidationRul
@@ -99,6 +107,7 @@ class DataProvider implements DataProviderInterface
      * @param array $data
      */
     public function __construct(
+        $name,
         $primaryFieldName,
         $requestFieldName,
         EavValidationRul $eavValidationRul,
@@ -107,6 +116,7 @@ class DataProvider implements DataProviderInterface
         array $meta = [],
         array $data = []
     ) {
+        $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->eavValidationRul = $eavValidationRul;
@@ -121,6 +131,36 @@ class DataProvider implements DataProviderInterface
             $this->eavConfig->getEntityType('customer_address')
         );
         $this->data = $data;
+    }
+
+    /**
+     * Get Data Provider name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get primary field name
+     *
+     * @return string
+     */
+    public function getPrimaryFieldName()
+    {
+        return $this->primaryFieldName;
+    }
+
+    /**
+     * Get field name in request
+     *
+     * @return string
+     */
+    public function getRequestFieldName()
+    {
+        return $this->requestFieldName;
     }
 
     /**
@@ -148,78 +188,25 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Get config data
+     * Get fields meta info
      *
-     * @return mixed
-     */
-    public function getConfigData()
-    {
-        return isset($this->data['config']) ? $this->data['config'] : [];
-    }
-
-    /**
-     * Set data
-     *
-     * @param mixed $config
-     * @return void
-     */
-    public function setConfigData($config)
-    {
-        $this->data['config'] = $config;
-    }
-
-    /**
-     * Get data
-     *
+     * @param string $fieldSetName
      * @return array
      */
-    public function getData()
+    public function getFieldsMetaInfo($fieldSetName)
     {
-        if (isset($this->loadedData)) {
-            return $this->loadedData;
-        }
-
-        $items = $this->collection->getItems();
-        /** @var Customer $customer */
-        foreach ($items as $customer) {
-            $result['customer'] = $customer->getData();
-
-            $addresses = [];
-            /** @var Address $address */
-            foreach ($customer->getAddresses() as $address) {
-                $addressId = $address->getId();
-                $address->load($addressId);
-                $addresses[$addressId] = $address->getData();
-                $this->prepareAddressData($addressId, $addresses, $result['customer']);
-            }
-            if (!empty($addresses)) {
-                $result['address'] = $addresses;
-            }
-
-            $this->loadedData[$customer->getId()] = $result;
-        }
-
-        return $this->loadedData;
+        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
     }
 
     /**
-     * Get field name in request
+     * Get field Set meta info
      *
-     * @return string
+     * @param string $fieldSetName
+     * @return array
      */
-    public function getRequestFieldName()
+    public function getFieldSetMetaInfo($fieldSetName)
     {
-        return $this->requestFieldName;
-    }
-
-    /**
-     * Get primary field name
-     *
-     * @return string
-     */
-    public function getPrimaryFieldName()
-    {
-        return $this->primaryFieldName;
+        return isset($this->meta[$fieldSetName]) ? $this->meta[$fieldSetName] : [];
     }
 
     /**
@@ -290,6 +277,40 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+
+        $items = $this->collection->getItems();
+        /** @var Customer $customer */
+        foreach ($items as $customer) {
+            $result['customer'] = $customer->getData();
+
+            $addresses = [];
+            /** @var Address $address */
+            foreach ($customer->getAddresses() as $address) {
+                $addressId = $address->getId();
+                $address->load($addressId);
+                $addresses[$addressId] = $address->getData();
+                $this->prepareAddressData($addressId, $addresses, $result['customer']);
+            }
+            if (!empty($addresses)) {
+                $result['address'] = $addresses;
+            }
+
+            $this->loadedData[$customer->getId()] = $result;
+        }
+
+        return $this->loadedData;
+    }
+
+    /**
      * Retrieve count of loaded items
      *
      * @return int
@@ -300,14 +321,24 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * Get fields meta info
+     * Get config data
      *
-     * @param string $fieldSetName
-     * @return array
+     * @return mixed
      */
-    public function getFieldsMetaInfo($fieldSetName)
+    public function getConfigData()
     {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+        return isset($this->data['config']) ? $this->data['config'] : [];
+    }
+
+    /**
+     * Set data
+     *
+     * @param mixed $config
+     * @return void
+     */
+    public function setConfigData($config)
+    {
+        $this->data['config'] = $config;
     }
 
     /**

@@ -6,7 +6,7 @@
 
 namespace Magento\PageCache\Test\Unit\Block\Controller;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
 class StubBlock extends AbstractBlock implements IdentityInterface

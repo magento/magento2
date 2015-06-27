@@ -21,6 +21,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
     /**
      * @return array
+     * @api
      */
     public function getProductIds()
     {

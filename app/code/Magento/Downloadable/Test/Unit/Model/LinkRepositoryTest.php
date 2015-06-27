@@ -49,10 +49,6 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $linkDataObjectFactory;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $sampleDataObjectFactory;
 
     /**
      * @var LinkRepository
@@ -119,7 +115,6 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->repositoryMock,
             $this->productTypeMock,
             $this->linkDataObjectFactory,
-            $this->sampleDataObjectFactory,
             $this->linkFactoryMock,
             $this->contentValidatorMock,
             $this->jsonEncoderMock,
@@ -487,7 +482,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->service->delete($linkId);
     }
 
-    public function testGetLinks()
+    public function testGetList()
     {
         $productSku = 'downloadable_sku';
 
@@ -540,58 +535,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setLinkAssertions($linkMock, $linkData);
         $this->linkDataObjectFactory->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
 
-        $this->assertEquals([$linkInterfaceMock], $this->service->getLinks($productSku));
-    }
-
-    public function testGetSamples()
-    {
-        $productSku = 'downloadable_sku';
-
-        $sampleData = [
-            'id' => 324,
-            'store_title' => 'rock melody sample',
-            'title' => 'just melody sample',
-            'sort_order' => 21,
-            'sample_type' => 'file',
-            'sample_url' => null,
-            'sample_file' => '/r/o/rock.melody.ogg'
-        ];
-
-        $sampleMock = $this->getMock(
-            '\Magento\Downloadable\Model\Sample',
-            [
-                'getId',
-                'getStoreTitle',
-                'getTitle',
-                'getSampleType',
-                'getSampleFile',
-                'getSampleUrl',
-                'getSortOrder',
-                'getData',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-
-        $sampleInterfaceMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
-
-        $this->repositoryMock->expects($this->once())
-            ->method('get')
-            ->with($productSku)
-            ->will($this->returnValue($this->productMock));
-
-        $this->productTypeMock->expects($this->once())
-            ->method('getSamples')
-            ->with($this->productMock)
-            ->will($this->returnValue([$sampleMock]));
-
-        $this->setSampleAssertions($sampleMock, $sampleData);
-
-        $this->sampleDataObjectFactory->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
-
-        $this->assertEquals([$sampleInterfaceMock], $this->service->getSamples($productSku));
+        $this->assertEquals([$linkInterfaceMock], $this->service->getList($productSku));
     }
 
     protected function setLinkAssertions($resource, $inputData)
@@ -621,22 +565,5 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($inputData['link_file']));
         $resource->expects($this->any())->method('getLinkUrl')
             ->will($this->returnValue($inputData['link_url']));
-    }
-
-    protected function setSampleAssertions($resource, $inputData)
-    {
-        $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));
-        $resource->expects($this->any())->method('getStoreTitle')
-            ->will($this->returnValue($inputData['store_title']));
-        $resource->expects($this->any())->method('getTitle')
-            ->will($this->returnValue($inputData['title']));
-        $resource->expects($this->any())->method('getSortOrder')
-            ->will($this->returnValue($inputData['sort_order']));
-        $resource->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue($inputData['sample_type']));
-        $resource->expects($this->any())->method('getSampleFile')
-            ->will($this->returnValue($inputData['sample_file']));
-        $resource->expects($this->any())->method('getSampleUrl')
-            ->will($this->returnValue($inputData['sample_url']));
     }
 }

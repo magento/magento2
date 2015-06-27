@@ -37,12 +37,11 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
 
         $data = [
-            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_ID => (int)$address->getId(),
-            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
             AddressInterface::KEY_REGION => $address->getRegion(),
             AddressInterface::KEY_REGION_ID => $address->getRegionId(),
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
+            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_STREET => $address->getStreet(),
             AddressInterface::KEY_COMPANY => $address->getCompany(),
             AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
@@ -50,7 +49,12 @@ class BillingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_EMAIL => $address->getEmail()
+            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
+            AddressInterface::KEY_EMAIL => $address->getEmail(),
+            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
+            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook()
+
         ];
 
         $cartId = $quote->getId();
@@ -68,7 +72,11 @@ class BillingAddressManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        asort($data);
+        asort($response);
+        $this->assertEquals($data, $response);
     }
 
     /**
@@ -95,7 +103,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
+            'email' => '',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -126,6 +134,7 @@ class BillingAddressManagementTest extends WebapiAbstract
             $this->assertContains($streetLine, $quote->getBillingAddress()->getStreet());
         }
         unset($addressData['street']);
+        unset($addressData['email']);
         $this->assertEquals('billing', $savedData['address_type']);
         //check the rest of fields
         foreach ($addressData as $key => $value) {
@@ -141,9 +150,9 @@ class BillingAddressManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -154,12 +163,11 @@ class BillingAddressManagementTest extends WebapiAbstract
         $address = $quote->getBillingAddress();
 
         $data = [
-            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_ID => (int)$address->getId(),
-            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
             AddressInterface::KEY_REGION => $address->getRegion(),
             AddressInterface::KEY_REGION_ID => $address->getRegionId(),
             AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
+            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_STREET => $address->getStreet(),
             AddressInterface::KEY_COMPANY => $address->getCompany(),
             AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
@@ -167,7 +175,12 @@ class BillingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_EMAIL => $address->getEmail()
+            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
+            AddressInterface::KEY_EMAIL => $address->getEmail(),
+            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
+            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook()
+
         ];
 
         $serviceInfo = [
@@ -178,7 +191,11 @@ class BillingAddressManagementTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo));
+        $response = $this->_webApiCall($serviceInfo);
+
+        asort($data);
+        asort($response);
+        $this->assertEquals($data, $response);
     }
 
     /**
@@ -189,9 +206,9 @@ class BillingAddressManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -210,7 +227,6 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',

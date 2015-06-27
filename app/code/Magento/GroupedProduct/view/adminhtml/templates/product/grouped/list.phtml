@@ -32,17 +32,20 @@
     <td data-column="qty" class="editable col-qty col-number">
         <input
             type="text"
-            class="input-text "
+            class="admin__control-text"
             name="links[associated][<%- data.id %>][qty]"
             value="<%- data.qty %>">
     </td>
     <td data-column="actions" class="col-actions">
-        <button type="button" class="action- delete" data-role="delete"></button>
+        <button
+            type="button"
+            class="action-delete"
+            data-role="delete"></button>
     </td>
 </tr>
 </script>
-<div class="grid-container" class="no-display">
-    <table class="data-table" data-role="grouped-product-grid"
+<div class="grid-container no-display">
+    <table class="admin__control-table" data-role="grouped-product-grid"
         data-products="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
                 $block->getAssociatedProducts()
         )); ?>">

@@ -14,7 +14,7 @@ namespace Magento\CatalogSearch\Block\Advanced;
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\Data\Collection\Db;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
@@ -78,7 +78,7 @@ class Form extends Template
     /**
      * Retrieve collection of product searchable attributes
      *
-     * @return Db
+     * @return DbCollection
      */
     public function getSearchableAttributes()
     {

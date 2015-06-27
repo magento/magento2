@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -125,6 +125,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var array
      */
     protected $_options = [];
+
+    /**
+     * @var bool
+     */
+    protected $optionsInitialized = false;
 
     /**
      * @var array
@@ -240,6 +245,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * Instance of category collection.
+     *
+     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     */
+    protected $categoryCollection;
+
+    /**
      * @var Product\Image\CacheFactory
      */
     protected $imageCacheFactory;
@@ -280,6 +292,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $dataObjectHelper;
 
     /**
+     * @var int
+     */
+    protected $_productIdCached;
+
+    /**
      * List of attributes in ProductInterface
      * @var array
      */
@@ -299,6 +316,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         'tier_price',
         'group_price',
     ];
+
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -334,6 +356,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -372,6 +395,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -400,6 +424,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->joinProcessor = $joinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -581,10 +606,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getStatus()
     {
-        if ($this->_getData(self::STATUS) === null) {
-            $this->setData(self::STATUS, \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-        }
-        return $this->_getData(self::STATUS);
+        $status = $this->_getData(self::STATUS);
+        return $status !== null ? $status : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
     }
 
     /**
@@ -693,7 +716,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryCollection()
     {
-        return $this->_getResource()->getCategoryCollection($this);
+        if ($this->categoryCollection === null || $this->getId() != $this->_productIdCached) {
+            $categoryCollection = $this->_getResource()->getCategoryCollection($this);
+            $this->setCategoryCollection($categoryCollection);
+            $this->_productIdCached = $this->getId();
+        }
+        return $this->categoryCollection;
+    }
+
+    /**
+     * Set product categories.
+     *
+     * @param \Magento\Framework\Data\Collection $categoryCollection
+     * @return $this
+     */
+    protected function setCategoryCollection(\Magento\Framework\Data\Collection $categoryCollection)
+    {
+        $this->categoryCollection = $categoryCollection;
+        return $this;
     }
 
     /**
@@ -969,6 +1009,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function _afterLoad()
     {
+        if (!$this->hasData(self::STATUS)) {
+            $this->setData(self::STATUS, \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        }
         parent::_afterLoad();
         /**
          * Load product options
@@ -1375,7 +1418,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 foreach ($collection as $item) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
                     $productLink = $this->productLinkFactory->create();
-                    $productLink->setProductSku($this->getSku())
+                    $productLink->setSku($this->getSku())
                         ->setLinkType($linkTypeName)
                         ->setLinkedProductSku($item['sku'])
                         ->setLinkedProductType($item['type'])
@@ -1925,6 +1968,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptions()
     {
+        if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
+            $collection = $this->getProductOptionsCollection();
+            $this->joinProcessor->process($collection);
+            foreach ($collection as $option) {
+                $option->setProduct($this);
+                $this->addOption($option);
+            }
+            $this->optionsInitialized = true;
+        }
         return $this->_options;
     }
 
@@ -1938,6 +1990,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (is_array($options) && empty($options)) {
             $this->setData('is_delete_options', true);
         }
+        $this->optionsInitialized = true;
         return $this;
     }
 
@@ -2264,8 +2317,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getOrigData('status') > $this->getData('status')) {
-            foreach ($this->getData('category_ids') as $categoryId) {
+        if ($this->getOrigData('status') != $this->getData('status')) {
+            foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
@@ -2519,19 +2572,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @param ProductAttributeMediaGalleryEntryContentInterface $content
+     * @param ImageContentInterface $content
      * @return array
      */
     protected function convertFromMediaGalleryEntryContentInterface(
-        ProductAttributeMediaGalleryEntryContentInterface $content = null
+        ImageContentInterface $content = null
     ) {
         if ($content == null) {
             return null;
         } else {
             return [
-                "entry_data" => $content->getEntryData(),
-                "mime_type" => $content->getMimeType(),
-                "name" => $content->getName(),
+                'data' => [
+                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                    ImageContentInterface::TYPE => $content->getType(),
+                    ImageContentInterface::NAME => $content->getName(),
+                ],
             ];
         }
     }

@@ -62,7 +62,7 @@ class LayoutPlugin
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [];
             foreach ($subject->getAllBlocks() as $block) {
-                if ($block instanceof \Magento\Framework\View\Block\IdentityInterface) {
+                if ($block instanceof \Magento\Framework\Object\IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
                     $isVarnish = $this->config->getType() == \Magento\PageCache\Model\Config::VARNISH;
                     if ($isVarnish && $isEsiBlock) {

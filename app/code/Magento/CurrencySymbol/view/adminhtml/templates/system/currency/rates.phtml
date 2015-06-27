@@ -12,16 +12,14 @@
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency
  */
 ?>
-<div class="grid-actions">
-    <form action="<?php echo $block->getImportFormAction() ?>" method="post" class="import-service">
-        <?php echo $block->getBlockHtml('formkey')?>
-        <dix class="import">
-            <?php echo $block->getServicesHtml() ?>
-            <?php echo $block->getImportButtonHtml() ?>
-        </dix>
-    </form>
-    <?php echo $block->getResetButtonHtml() ?>
-    <?php echo $block->getSaveButtonHtml() ?>
-</div>
 
+<form action="<?php echo $block->getImportFormAction() ?>" method="post" class="import-service">
+    <?php echo $block->getBlockHtml('formkey')?>
+    <fieldset class="admin__fieldset admin__fieldset-import-service">
+        <?php echo $block->getServicesHtml() ?>
+        <?php echo $block->getImportButtonHtml() ?>
+    </fieldset>
+</form>
+<?php echo $block->getResetButtonHtml() ?>
+<?php echo $block->getSaveButtonHtml() ?>
 <?php echo $block->getRatesMatrixHtml() ?>

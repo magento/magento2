@@ -93,7 +93,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $model = new State($this->config, $this->writer);
         $this->config->expects($this->once())->method('getConfigData')->willReturn(['test_cache_type' => true]);
-        $configValue = [ConfigFilePool::APP_CONFIG => ['cache_types' => ['test_cache_type' => true]]];
+        $configValue = [ConfigFilePool::APP_ENV => ['cache_types' => ['test_cache_type' => true]]];
         $this->writer->expects($this->once())->method('saveConfig')->with($configValue);
         $model->persist();
     }

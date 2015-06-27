@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,18 +19,25 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     const INPUT_KEY_IP = 'ip';
 
     /**
-     * @var MaintenanceMode $maintenanceMode
+     * @var MaintenanceMode
      */
     protected $maintenanceMode;
+
+    /**
+     * @var IpValidator
+     */
+    protected $ipValidator;
 
     /**
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
+     * @param IpValidator $ipValidator
      */
-    public function __construct(MaintenanceMode $maintenanceMode)
+    public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
         $this->maintenanceMode = $maintenanceMode;
+        $this->ipValidator = $ipValidator;
         parent::__construct();
     }
 
@@ -45,7 +53,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
                 self::INPUT_KEY_IP,
                 null,
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Allowed IP addresses'
+                "Allowed IP addresses (use 'none' to clear allowed IP list)"
             ),
         ];
         $this->setDefinition($options);
@@ -72,6 +80,12 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
+        $messages = $this->validate($addresses);
+        if (!empty($messages)) {
+            $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
+            return;
+        }
+
         $this->maintenanceMode->set($this->isEnable());
         $output->writeln($this->getDisplayString());
 
@@ -84,5 +98,16 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
                 . '</info>'
             );
         }
+    }
+
+    /**
+     * Validates IP addresses and return error messages
+     *
+     * @param string[] $addresses
+     * @return string[]
+     */
+    protected function validate(array $addresses)
+    {
+        return $this->ipValidator->validateIps($addresses, true);
     }
 }

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @method string getStatus()
  * @method string getLabel()
  */
-class Status extends \Magento\Framework\Model\AbstractModel
+class Status extends \Magento\Sales\Model\AbstractModel
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -23,22 +23,35 @@ class Status extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_storeManager = $storeManager;
     }
+
 
     /**
      * @return void

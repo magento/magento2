@@ -9,6 +9,8 @@ namespace Magento\Checkout\Block\Onepage\Payment;
  * Checkout payment information data
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @removeCandidate
  */
 class Info extends \Magento\Payment\Block\Info\AbstractContainer
 {

@@ -12,7 +12,7 @@ namespace Magento\CatalogRule\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Algorithm for calculating price rule
+     * Algorithm for calculating price by rule
      *
      * @param  string $actionOperator
      * @param  int $ruleAmount

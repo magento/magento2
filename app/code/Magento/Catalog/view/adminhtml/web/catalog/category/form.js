@@ -57,7 +57,7 @@ define([
                 if (response.error) {
                     alert(response.message);
                 } else {
-                    if (this.element.find(this.options.categoryIdSelector).prop('value') === response.id) {
+                    if (this.element.find(this.options.categoryIdSelector).prop('value') == response.id) {
                         this.element.find(this.options.categoryPathSelector)
                             .prop('value', response.path);
                     }

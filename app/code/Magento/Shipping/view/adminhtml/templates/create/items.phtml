@@ -12,7 +12,7 @@
     <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items to Ship') ?></span>
     </div>
-    <div class="grid">
+    <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-shipment-table">
             <thead>
                 <tr class="headings">
@@ -51,56 +51,63 @@
                     <label class="admin__field-label"
                            for="shipment_comment_text">
                         <span><?php echo __('Comment Text') ?></span></label>
-                    <textarea id="shipment_comment_text"
-                              class="admin__control-textarea"
-                              name="shipment[comment_text]"
-                              rows="3"
-                              cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+                    <div class="admin__field-control">
+                        <textarea id="shipment_comment_text"
+                                  class="admin__control-textarea"
+                                  name="shipment[comment_text]"
+                                  rows="3"
+                                  cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="admin__page-section-item order-totals">
-        <?php if ($block->canCreateShippingLabel()): ?>
-            <div class="field choice admin__field admin__field-option field-create">
-                <input id="create_shipping_label"
-                       class="admin__control-checkbox"
-                       name="shipment[create_shipping_label]"
-                       value="1"
-                       type="checkbox"
-                       onclick="toggleCreateLabelCheckbox();"/>
-                <label class="admin__field-label"
-                       for="create_shipping_label">
-                    <span><?php echo __('Create Shipping Label') ?></span></label>
-            </div>
-        <?php endif ?>
-
-        <div class="field choice admin__field admin__field-option field-append">
-            <input id="notify_customer"
-                   class="admin__control-checkbox"
-                   name="shipment[comment_customer_notify]"
-                   value="1"
-                   type="checkbox"/>
-            <label class="admin__field-label"
-                   for="notify_customer">
-                <span><?php echo __('Append Comments') ?></span></label>
+    <div class="admin__page-section-item order-totals order-totals-actions">
+        <div class="admin__page-section-item-title">
+            <span class="title"><?php echo __('Shipment Options') ?></span>
         </div>
+        <div class="admin__page-section-item-content">
+            <?php if ($block->canCreateShippingLabel()): ?>
+                <div class="field choice admin__field admin__field-option field-create">
+                    <input id="create_shipping_label"
+                           class="admin__control-checkbox"
+                           name="shipment[create_shipping_label]"
+                           value="1"
+                           type="checkbox"
+                           onclick="toggleCreateLabelCheckbox();"/>
+                    <label class="admin__field-label"
+                           for="create_shipping_label">
+                        <span><?php echo __('Create Shipping Label') ?></span></label>
+                </div>
+            <?php endif ?>
 
-        <?php if ($block->canSendShipmentEmail()): ?>
-            <div class="field choice admin__field admin__field-option field-email">
-                <input id="send_email"
+            <div class="field choice admin__field admin__field-option field-append">
+                <input id="notify_customer"
                        class="admin__control-checkbox"
-                       name="shipment[send_email]"
+                       name="shipment[comment_customer_notify]"
                        value="1"
                        type="checkbox"/>
                 <label class="admin__field-label"
-                       for="send_email">
-                    <span><?php echo __('Email Copy of Shipment') ?></span></label>
+                       for="notify_customer">
+                    <span><?php echo __('Append Comments') ?></span></label>
             </div>
-        <?php endif; ?>
 
-        <div class="order-history-comments-actions actions">
-            <?php echo $block->getChildHtml('submit_button') ?>
+            <?php if ($block->canSendShipmentEmail()): ?>
+                <div class="field choice admin__field admin__field-option field-email">
+                    <input id="send_email"
+                           class="admin__control-checkbox"
+                           name="shipment[send_email]"
+                           value="1"
+                           type="checkbox"/>
+                    <label class="admin__field-label"
+                           for="send_email">
+                        <span><?php echo __('Email Copy of Shipment') ?></span></label>
+                </div>
+            <?php endif; ?>
+
+            <div class="order-history-comments-actions actions">
+                <?php echo $block->getChildHtml('submit_button') ?>
+            </div>
         </div>
     </div>
 </section>

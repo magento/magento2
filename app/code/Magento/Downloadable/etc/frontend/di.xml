@@ -14,4 +14,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="downloadable" xsi:type="object">Magento\Downloadable\Helper\Catalog\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

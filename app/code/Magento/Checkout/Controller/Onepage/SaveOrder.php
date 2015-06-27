@@ -8,6 +8,10 @@ namespace Magento\Checkout\Controller\Onepage;
 use Magento\Framework\Object;
 use Magento\Framework\Exception\PaymentException;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -109,7 +113,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $result->setData('error', true);
             $result->setData(
                 'error_messages',
-                __('Something went wrong processing your order. Please try again later.')
+                __('Something went wrong while processing your order. Please try again later.')
             );
         }
         /**

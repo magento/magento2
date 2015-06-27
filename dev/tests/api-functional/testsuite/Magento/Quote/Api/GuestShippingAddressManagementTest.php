@@ -35,7 +35,8 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
             $quote->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
             $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
-            $quoteIdMask->delete($quote->getId());
+            $quoteIdMask->load($quote->getId(), 'quote_id');
+            $quoteIdMask->delete();
         }
     }
 
@@ -43,7 +44,7 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
-        $quoteIdMask->load($quoteId);
+        $quoteIdMask->load($quoteId, 'quote_id');
         return $quoteIdMask->getMaskedId();
     }
 
@@ -72,7 +73,10 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_EMAIL => $address->getEmail()
+            AddressInterface::KEY_EMAIL => $address->getEmail(),
+            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
+            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook()
         ];
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
@@ -90,7 +94,11 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        asort($data);
+        asort($response);
+        $this->assertEquals($data, $response);
     }
 
     /**
@@ -145,7 +153,7 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
+            'email' => '',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -175,6 +183,7 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         //custom checks for street, region and address_type
         $this->assertEquals($addressData['street'], $quote->getShippingAddress()->getStreet());
         unset($addressData['street']);
+        unset($addressData['email']);
 
         $this->assertEquals('shipping', $savedData['address_type']);
         //check the rest of fields

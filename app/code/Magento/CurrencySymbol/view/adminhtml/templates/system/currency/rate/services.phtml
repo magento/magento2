@@ -12,5 +12,9 @@
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services
  */
 ?>
-<label class="label"><?php echo __('Import Service') ?></label>
-<?php echo $block->getChildHtml('import_services') ?>
+<div class="admin__field">
+    <label class="admin__field-label"><span><?php echo __('Import Service') ?></span></label>
+    <div class="admin__field-control">
+        <?php echo $block->getChildHtml('import_services') ?>
+    </div>
+</div>

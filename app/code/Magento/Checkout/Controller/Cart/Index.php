@@ -51,7 +51,6 @@ class Index extends \Magento\Checkout\Controller\Cart
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         $resultPage->getConfig()->getTitle()->set(__('Shopping Cart'));
         return $resultPage;
     }

@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class ExportTest extends \Magento\Backend\Utility\Controller
+class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Set value of $_SERVER['HTTP_X_REQUESTED_WITH'] parameter here

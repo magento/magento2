@@ -8,10 +8,15 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.item.renderers">
-            <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" as="downloadable" template="checkout/cart/item/default.phtml"/>
+            <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" as="downloadable" template="checkout/cart/item/default.phtml">
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.downloadable.actions" as="actions">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.downloadable.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml"/>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.downloadable.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>
+                </block>
+            </block>
         </referenceBlock>
         <referenceBlock name="additional.product.info">
-            <block class="Magento\Framework\View\Element\Template" name="downloadable.product.links" template="Magento_Downloadable::checkout/links.phtml"/>
+            <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" name="downloadable.product.links" template="Magento_Downloadable::checkout/links.phtml"/>
         </referenceBlock>
     </body>
 </page>

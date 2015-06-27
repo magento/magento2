@@ -76,6 +76,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -207,7 +208,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->addressDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($newAddressMock);
 
         $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
@@ -294,7 +294,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->addressDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($newAddressMock);
 
         $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
@@ -387,7 +386,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->addressDataFactoryMock->expects($this->once())
             ->method('create')
-            ->with([])
             ->willReturn($newAddressMock);
 
         $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')

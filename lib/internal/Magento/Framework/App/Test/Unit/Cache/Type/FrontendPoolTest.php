@@ -6,7 +6,6 @@
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
 use \Magento\Framework\App\Cache\Type\FrontendPool;
-use Magento\Framework\Config\ConfigOptionsList;
 
 class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 {
