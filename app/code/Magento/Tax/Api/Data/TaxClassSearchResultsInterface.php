@@ -25,5 +25,5 @@ interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * @param \Magento\Tax\Api\Data\TaxClassInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

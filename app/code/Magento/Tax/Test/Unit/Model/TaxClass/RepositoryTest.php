@@ -222,6 +222,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $collection->expects($this->any())->method('getSize')->willReturn(2);
         $collection->expects($this->any())->method('setItems')->with([$taxClassOne, $taxClassTwo]);
+        $collection->expects($this->any())->method('getItems')->willReturn([$taxClassOne, $taxClassTwo]);
         $collection->expects($this->once())->method('setCurPage')->with(0);
         $collection->expects($this->once())->method('setPageSize')->with(20);
 

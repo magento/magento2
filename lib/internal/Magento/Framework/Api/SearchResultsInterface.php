@@ -26,7 +26,7 @@ interface SearchResultsInterface
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 
     /**
      * Get search criteria.
@@ -41,7 +41,7 @@ interface SearchResultsInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Get total count.
