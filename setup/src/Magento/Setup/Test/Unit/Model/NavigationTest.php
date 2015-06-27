@@ -54,6 +54,11 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->objectManagerProvider);
     }
 
+    public function testGetType()
+    {
+        $this->assertEquals(Navigation::NAV_INSTALLER, $this->navigation->getType());
+    }
+
     public function testGetData()
     {
         $this->assertEquals(

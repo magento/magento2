@@ -40,7 +40,12 @@ class Navigation extends AbstractActionController
     public function menuAction()
     {
         $view = new ViewModel;
-        $view->setTemplate('/magento/setup/navigation/menu.phtml');
+        if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
+            $view->setTemplate('/magento/setup/navigation-installer/menu.phtml');
+        } else {
+            $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
+        }
+
         $view->setTerminal(true);
         $view->setVariable('menu', $this->navigation->getMenuItems());
         $view->setVariable('main', $this->navigation->getMainItems());
