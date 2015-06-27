@@ -49,6 +49,8 @@ class JobFactory
         $multipleStreamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
         $maintenanceMode = $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode');
         $objectManagerProvider = $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider');
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $objectManagerProvider->get();
         switch ($name) {
             case self::NAME_UPGRADE:
                 return new JobUpgrade(
@@ -62,9 +64,9 @@ class JobFactory
                 );
                 break;
             case self::DB_ROLLBACK:
-                return new JobRollback(
-                    $objectManagerProvider,
-                    $maintenanceMode,
+                return new JobDbRollback(
+                    $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList'),
+                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
                     $multipleStreamOutput,
                     $cronStatus,
                     $name,

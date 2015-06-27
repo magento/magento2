@@ -6,7 +6,6 @@
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -16,13 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Upgrade job
  */
-class JobRollback extends AbstractJob
+class JobDbRollback extends AbstractJob
 {
-    /**
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
-
     /**
      * @var DirectoryList
      */
@@ -36,25 +30,23 @@ class JobRollback extends AbstractJob
     /**
      * Constructor
      *
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param MaintenanceMode $maintenanceMode
+     * @param DirectoryList $directoryList
+     * @param BackupRollbackFactory $backupRollbackFactory
      * @param OutputInterface $output
      * @param Status $status
      * @param string $name
      * @param array $params
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        MaintenanceMode $maintenanceMode,
+        DirectoryList $directoryList,
+        BackupRollbackFactory $backupRollbackFactory,
         OutputInterface $output,
         Status $status,
         $name,
         $params = []
     ) {
-        $objectManager = $objectManagerProvider->get();
-        $this->directoryList  = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $this->backupRollbackFactory = $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
-        $this->maintenanceMode = $maintenanceMode;
+        $this->directoryList  = $directoryList;
+        $this->backupRollbackFactory = $backupRollbackFactory;
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -69,10 +61,13 @@ class JobRollback extends AbstractJob
         try {
             $rollbackHandler = $this->backupRollbackFactory->create($this->output);
             $rollbackHandler->dbRollback($this->getLastBackupFilePath("db"));
-            $this->maintenanceMode->set(false);
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
-            throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
+            throw new \RuntimeException(
+                sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()),
+                $e->getCode(),
+                $e
+            );
         }
     }
 
