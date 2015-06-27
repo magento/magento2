@@ -15,11 +15,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 class Remove
 {
     /**
-     * Composer application
+     * Composer application factory
      *
-     * @var Application
+     * @var MagentoComposerApplicationFactory
      */
-    private $composerApp;
+    private $composerApplicationFactory;
 
     /**
      * Directory List
@@ -31,14 +31,14 @@ class Remove
     /**
      * Constructor
      *
-     * @param MagentoComposerApplication $composerApp
+     * @param MagentoComposerApplicationFactory $composerApplicationFactory
      * @param DirectoryList $directoryList
      */
     public function __construct(
-        MagentoComposerApplication $composerApp,
+        MagentoComposerApplicationFactory $composerApplicationFactory,
         DirectoryList $directoryList
     ) {
-        $this->composerApp = $composerApp;
+        $this->composerApplicationFactory = $composerApplicationFactory;
         $this->directoryList = $directoryList;
     }
 
@@ -48,25 +48,23 @@ class Remove
      * @param array $packages
      * @throws \Exception
      *
-     * @return void
+     * @return string
      */
     public function remove(array $packages)
     {
         $vendorDir = include $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-
         $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . "/{$vendorDir}/../composer.json";
 
         $composerHomePath = $this->directoryList->getPath(DirectoryList::COMPOSER_HOME);
-
         $composerJsonRealPath = realpath($composerJson);
 
         if ($composerJsonRealPath === false) {
             throw new \Exception('Composer file not found: ' . $composerJson);
         }
 
-        $this->composerApp->setConfig($composerHomePath, $composerJson);
+        $composerApplication = $this->composerApplicationFactory->create($composerHomePath, $composerJson);
 
-        return $this->composerApp->runComposerCommand(
+        return $composerApplication->runComposerCommand(
             [
                 'command' => 'remove',
                 'packages' => $packages
