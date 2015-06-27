@@ -62,7 +62,8 @@ class Module implements
             include __DIR__ . '/../../../config/module.config.php',
             include __DIR__ . '/../../../config/router.config.php',
             include __DIR__ . '/../../../config/di.config.php',
-            include __DIR__ . '/../../../config/states.config.php',
+            include __DIR__ . '/../../../config/states.installer.config.php',
+            include __DIR__ . '/../../../config/states.updater.config.php',
             include __DIR__ . '/../../../config/languages.config.php'
         );
         return $result;

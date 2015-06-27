@@ -9,7 +9,11 @@ angular.module('complete-backup', ['ngStorage'])
         $scope.backupinfo = $localStorage.backupInfo;
         var files = '';
         for (var i = 0; i < $scope.backupinfo.backupFiles.length; i++) {
-            files = files + $scope.backupinfo.backupFiles[i] + '\n';
+            if (i == 0) {
+                files = files + $scope.backupinfo.backupFiles[i];
+            } else {
+                files = files + " and " + $scope.backupinfo.backupFiles[i];
+            }
         }
         $scope.files = files;
         // Listens on form validate event, dispatched by parent controller
@@ -25,7 +29,7 @@ angular.module('complete-backup', ['ngStorage'])
                 $scope.$emit('validation-response', false);
                 $scope.backupStatus.submitted = true;
             }
-        }
+        };
 
         // Update 'submitted' flag
         $scope.$watch(function() { return $scope.backupStatus.$valid }, function(valid) {

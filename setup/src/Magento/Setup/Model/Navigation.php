@@ -25,7 +25,7 @@ class Navigation
         if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $this->navStates = $serviceLocator->get('config')['navUpdater'];
         } else {
-            $this->navStates = $serviceLocator->get('config')['nav'];
+            $this->navStates = $serviceLocator->get('config')['navInstaller'];
         }
     }
 

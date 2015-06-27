@@ -28,16 +28,12 @@ class BackupRollbackFactory
     /**
      * Create and return BackupRollback
      *
-     * @param OutputInterface|LoggerInterface $outputLogger
+     * @param OutputInterface $output
      * @return BackupRollback
      */
-    public function create($outputLogger)
+    public function create($output)
     {
-        if ($outputLogger instanceof OutputInterface) {
-            $log = $this->_objectManager->create('Magento\Framework\Setup\ConsoleLogger', ['output' => $outputLogger]);
-        } else {
-            $log = $outputLogger;
-        }
+        $log = $this->_objectManager->create('Magento\Framework\Setup\ConsoleLogger', ['output' => $output]);
         return $this->_objectManager->create('Magento\Framework\Setup\BackupRollback', ['log' => $log]);
     }
 }
