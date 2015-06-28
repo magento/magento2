@@ -6,7 +6,6 @@
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Framework\App\Cache;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,11 +22,6 @@ class JobUpgrade extends AbstractJob
     private $cache;
 
     /**
-     * @var MaintenanceMode
-     */
-    private $maintenanceMode;
-
-    /**
      * @var \Magento\Framework\App\State\CleanupFiles
      */
     private $cleanupFiles;
@@ -42,7 +36,6 @@ class JobUpgrade extends AbstractJob
      *
      * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param MaintenanceMode $maintenanceMode
      * @param OutputInterface $output
      * @param Status $status
      * @param string $name
@@ -51,7 +44,6 @@ class JobUpgrade extends AbstractJob
     public function __construct(
         AbstractSetupCommand $command,
         ObjectManagerProvider $objectManagerProvider,
-        MaintenanceMode $maintenanceMode,
         OutputInterface $output,
         Status $status,
         $name,
@@ -60,7 +52,6 @@ class JobUpgrade extends AbstractJob
         $objectManager = $objectManagerProvider->get();
         $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $this->cache = $objectManager->get('Magento\Framework\App\Cache');
-        $this->maintenanceMode = $maintenanceMode;
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
@@ -82,8 +73,6 @@ class JobUpgrade extends AbstractJob
             $this->cleanupFiles->clearCodeGeneratedFiles();
             $this->status->add('Clearing cache...');
             $this->cache->clean();
-            $this->status->add('Disabling maintenance mode...');
-            $this->maintenanceMode->set(false);
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));

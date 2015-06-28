@@ -47,7 +47,6 @@ class JobFactory
         $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
         $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
         $multipleStreamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
-        $maintenanceMode = $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode');
         $objectManagerProvider = $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider');
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $objectManagerProvider->get();
@@ -56,7 +55,6 @@ class JobFactory
                 return new JobUpgrade(
                     $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
                     $objectManagerProvider,
-                    $maintenanceMode,
                     $multipleStreamOutput,
                     $cronStatus,
                     $name,
