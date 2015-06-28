@@ -12,7 +12,7 @@ angular.module('complete-backup', ['ngStorage'])
             if (i == 0) {
                 files = files + $scope.backupinfo.backupFiles[i];
             } else {
-                files = files + " and " + $scope.backupinfo.backupFiles[i];
+                files = files + ", " + $scope.backupinfo.backupFiles[i];
             }
         }
         $scope.files = files;
