@@ -12,16 +12,7 @@ use Psr\Log\LoggerInterface as Logger;
 use \Magento\Quote\Model\QuoteAddressValidator;
 
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
-{/**
- * @var \Magento\Quote\Api\GuestShippingAddressManagementInterface
- */
-    protected $shippingAddressManagement;
-
-    /**
-     * @var \Magento\Quote\Api\GuestShippingMethodManagementInterface
-     */
-    protected $shippingMethodManagement;
-
+{
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
      */
@@ -69,15 +60,16 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Quote\Api\ShippingAddressManagementInterface $shippingAddressManagement
-     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
-     * @param PaymentDetailsFactory $paymentDetailsFactory
+     * @param \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteAddressValidator $addressValidator
+     * @param Logger $logger
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Quote\Api\ShippingAddressManagementInterface $shippingAddressManagement,
-        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
@@ -87,8 +79,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->shippingAddressManagement = $shippingAddressManagement;
-        $this->shippingMethodManagement = $shippingMethodManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;

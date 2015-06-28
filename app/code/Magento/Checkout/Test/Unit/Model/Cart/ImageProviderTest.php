@@ -27,7 +27,7 @@ class ImageProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->itemRepositoryMock = $this->getMock('Magento\Quote\Api\CartItemRepositoryInterface', [], [], '', false);
         $this->itemPoolMock = $this->getMock('Magento\Checkout\CustomerData\ItemPoolInterface', [], [], '', false);
-        $this->model = new \Magento\Checkout\Model\Cart\ImageProvider (
+        $this->model = new \Magento\Checkout\Model\Cart\ImageProvider(
             $this->itemRepositoryMock,
             $this->itemPoolMock
         );
