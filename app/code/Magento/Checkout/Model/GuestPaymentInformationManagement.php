@@ -33,7 +33,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
-
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -63,7 +62,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     ) {
         $billingAddress->setEmail($email);
-        $this->billingAddressManagement->assign($cartId,  $billingAddress);
+        $this->billingAddressManagement->assign($cartId, $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return true;
     }

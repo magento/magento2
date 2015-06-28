@@ -8,7 +8,6 @@ namespace Magento\Tax\Model\Quote;
 use Magento\Quote\Model\Cart\CartTotalRepository;
 use Magento\Quote\Api\Data\TotalsExtensionFactory;
 
-
 class GrandTotalDetailsPlugin
 {
     /**
