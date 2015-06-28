@@ -295,9 +295,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     'shipping/shipping_policy/enable_shipping_policy',
                     ScopeInterface::SCOPE_STORE
                 ),
-                'shippingPolicyContent' => $this->scopeConfig->getValue(
-                    'shipping/shipping_policy/shipping_policy_content',
-                    ScopeInterface::SCOPE_STORE
+                'shippingPolicyContent' => nl2br(
+                    $this->scopeConfig->getValue(
+                        'shipping/shipping_policy/shipping_policy_content',
+                        ScopeInterface::SCOPE_STORE
+                    )
                 )
             ],
             'activeCarriers' => $this->getActiveCarriers(),
