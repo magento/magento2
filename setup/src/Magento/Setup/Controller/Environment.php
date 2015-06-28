@@ -232,7 +232,7 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * Verifies php version
+     * Verifies updater application exists
      *
      * @return JsonModel
      */
