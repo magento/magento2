@@ -40,7 +40,7 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->totalsFactoryMock = $this->getMock(
             'Magento\Quote\Api\Data\TotalsItemInterfaceFactory',
-            [],
+            ['create'],
             [],
             '',
             false
