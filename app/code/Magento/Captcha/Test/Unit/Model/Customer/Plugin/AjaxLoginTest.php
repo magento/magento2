@@ -43,6 +43,11 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
     protected $loginControllerMock;
 
     /**
+     * @var array
+     */
+    protected $formIds;
+
+    /**
      * @var \Magento\Captcha\Model\Customer\Plugin\AjaxLogin
      */
     protected $model;
@@ -67,11 +72,13 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->requestMock));
         $this->captchaHelperMock->expects($this->once())->method('getCaptcha')
             ->with('user_login')->will($this->returnValue($this->captchaMock));
+        $this->formIds = ['user_login'];
 
         $this->model = new \Magento\Captcha\Model\Customer\Plugin\AjaxLogin(
             $this->captchaHelperMock,
             $this->sessionManagerMock,
-            $this->jsonFactoryMock
+            $this->jsonFactoryMock,
+            $this->formIds
         );
     }
 
@@ -79,7 +86,11 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
     {
         $username = 'name';
         $captchaString = 'string';
-        $requestContent = json_encode(['username' => $username, 'captcha_string' => $captchaString]);
+        $requestContent = json_encode([
+            'username' => $username,
+            'captcha_string' => $captchaString,
+            'captcha_form_id' => $this->formIds[0]
+        ]);
 
         $this->requestMock->expects($this->once())->method('getContent')->will($this->returnValue($requestContent));
         $this->captchaMock->expects($this->once())->method('isRequired')->with($username)
@@ -98,7 +109,11 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
     {
         $username = 'name';
         $captchaString = 'string';
-        $requestContent = json_encode(['username' => $username, 'captcha_string' => $captchaString]);
+        $requestContent = json_encode([
+            'username' => $username,
+            'captcha_string' => $captchaString,
+            'captcha_form_id' => $this->formIds[0]
+        ]);
 
         $this->requestMock->expects($this->once())->method('getContent')->will($this->returnValue($requestContent));
         $this->captchaMock->expects($this->once())->method('isRequired')->with($username)
