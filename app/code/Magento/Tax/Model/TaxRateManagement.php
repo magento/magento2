@@ -57,7 +57,7 @@ class TaxRateManagement implements TaxRateManagementInterface
      */
     public function getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId)
     {
-        $this->searchCriteriaBuilder->addFilter(
+        $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
                     ->setField('customer_tax_class_ids')
@@ -66,7 +66,7 @@ class TaxRateManagement implements TaxRateManagementInterface
             ]
         );
 
-        $this->searchCriteriaBuilder->addFilter(
+        $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
                     ->setField('product_tax_class_ids')

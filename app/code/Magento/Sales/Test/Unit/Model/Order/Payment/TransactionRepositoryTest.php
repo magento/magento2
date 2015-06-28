@@ -112,7 +112,7 @@ class TransactionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroup]);
         $this->searchCriteriaBuilder->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$filter]);
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')

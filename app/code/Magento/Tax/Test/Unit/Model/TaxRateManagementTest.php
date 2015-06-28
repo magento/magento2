@@ -76,7 +76,7 @@ class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
             $customerFilterMock,
             $productFilterMock
         );
-        $this->searchCriteriaBuilderMock->expects($this->exactly(2))->method('addFilter')->withConsecutive(
+        $this->searchCriteriaBuilderMock->expects($this->exactly(2))->method('addFilters')->withConsecutive(
             [[$customerFilterMock]],
             [[$productFilterMock]]
         );

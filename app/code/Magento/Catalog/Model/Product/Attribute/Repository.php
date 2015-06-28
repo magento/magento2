@@ -212,7 +212,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $defaultAttributeSetId = $this->eavConfig
             ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
             ->getDefaultAttributeSetId();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
