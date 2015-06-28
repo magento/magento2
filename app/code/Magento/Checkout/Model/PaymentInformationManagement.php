@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: ilagno
- * Date: 12.06.2015
- * Time: 11:44
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Model;
