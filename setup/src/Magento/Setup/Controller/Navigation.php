@@ -9,6 +9,7 @@ use Magento\Setup\Model\Navigation as NavModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\Cron\Status;
 
 class Navigation extends AbstractActionController
 {
@@ -18,11 +19,18 @@ class Navigation extends AbstractActionController
     protected $navigation;
 
     /**
-     * @param NavModel $navigation
+     * @var Status
      */
-    public function __construct(NavModel $navigation)
+    protected $status;
+
+    /**
+     * @param NavModel $navigation
+     * @param Status $status
+     */
+    public function __construct(NavModel $navigation, Status $status)
     {
         $this->navigation = $navigation;
+        $this->status = $status;
     }
 
     /**
@@ -43,6 +51,9 @@ class Navigation extends AbstractActionController
         if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
             $view->setTemplate('/magento/setup/navigation-installer/menu.phtml');
         } else {
+            if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
+
+            }
             $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
         }
 
