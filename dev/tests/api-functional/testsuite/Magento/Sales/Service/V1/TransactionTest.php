@@ -105,7 +105,7 @@ class TransactionTest extends WebapiAbstract
             'Magento\Framework\Api\SearchCriteriaBuilder'
         );
 
-        $searchCriteriaBuilder->addFilter($filters);
+        $searchCriteriaBuilder->addFilters($filters);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['criteria' => $searchData];

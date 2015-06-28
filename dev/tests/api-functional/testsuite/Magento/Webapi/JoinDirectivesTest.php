@@ -89,7 +89,7 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         /** @var SortOrder $sortOrder */
         $sortOrder = $this->sortOrderBuilder->setField('store_id')->setDirection(SearchCriteria::SORT_ASC)->create();
         $this->searchBuilder->setSortOrders([$sortOrder]);
-        $this->searchBuilder->addFilter([$this->filterBuilder->setField('state')->setValue(2)->create()]);
+        $this->searchBuilder->addFilters([$this->filterBuilder->setField('state')->setValue(2)->create()]);
         $searchCriteria = $this->searchBuilder->create()->__toArray();
         $requestData = ['criteria' => $searchCriteria];
 

@@ -698,7 +698,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         }
         $rateRequest = $this->getRateRequest($shippingAddressObj, $billingAddressObj, $customerTaxClassId);
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters(
             [$this->filterBuilder->setField(ClassModel::KEY_TYPE)
                  ->setValue(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_PRODUCT)
                  ->create()]

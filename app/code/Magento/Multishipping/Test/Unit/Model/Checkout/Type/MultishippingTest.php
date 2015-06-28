@@ -149,7 +149,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->atLeastOnce())->method('create')->willReturnSelf();
 
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())->method('addFilters')->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())->method('create')
             ->willReturn($searchCriteriaMock);
 

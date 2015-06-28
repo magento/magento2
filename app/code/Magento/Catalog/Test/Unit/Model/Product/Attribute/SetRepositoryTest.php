@@ -181,7 +181,7 @@ class SetRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
+            ->method('addFilters')
             ->with([$filterMock])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->once())

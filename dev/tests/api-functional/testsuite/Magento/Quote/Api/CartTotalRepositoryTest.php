@@ -23,7 +23,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
@@ -33,7 +33,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->searchBuilder = $this->objectManager->create(
+        $this->searchCriteriaBuilder = $this->objectManager->create(
             'Magento\Framework\Api\SearchCriteriaBuilder'
         );
         $this->filterBuilder = $this->objectManager->create(

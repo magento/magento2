@@ -437,7 +437,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             ->setValue('codeUs12')
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
 
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -488,7 +488,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             ->setDirection(SearchCriteria::SORT_DESC)
             ->create();
         // Order them by descending postcode (not the default order)
-        $this->searchCriteriaBuilder->addFilter([$filter])
+        $this->searchCriteriaBuilder->addFilters([$filter])
             ->addSortOrder($sortOrder);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];

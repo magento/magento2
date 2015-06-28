@@ -652,7 +652,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $defaultAttributeSetId = $this->eavConfig
             ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
             ->getDefaultAttributeSetId();
-        $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilter(
+        $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')

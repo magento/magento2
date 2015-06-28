@@ -19,10 +19,13 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->will($this->returnValue(['randomValue']));
 
+        /** @var \Magento\Framework\Api\FilterBuilder $filterBuilder */
         $filterBuilder = $objectManagerHelper
             ->getObject('Magento\Framework\Api\FilterBuilder');
+        /** @var \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder */
         $filterGroupBuilder = $objectManagerHelper
             ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $objectManagerHelper->getObject(
             'Magento\Framework\Api\SearchCriteriaBuilder',
             [
@@ -30,7 +33,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $expectedSearchCriteria = $searchCriteriaBuilder
-            ->addFilter([$filterBuilder->setField('tax_class_id')->setValue(5)->create()])
+            ->addFilters([$filterBuilder->setField('tax_class_id')->setValue(5)->create()])
             ->create();
 
         $customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Api\GroupRepositoryInterface')

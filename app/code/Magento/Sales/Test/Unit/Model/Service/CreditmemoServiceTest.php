@@ -63,14 +63,14 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
             'Magento\Framework\Api\SearchCriteriaBuilder',
-            ['create', 'addFilter'],
+            ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
             'Magento\Framework\Api\FilterBuilder',
-            ['setField', 'setValue', 'create'],
+            ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
@@ -151,11 +151,15 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->with($id)
             ->will($this->returnSelf());
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->will($this->returnSelf());
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($filterMock));
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $filterMock]);
+            ->method('addFilters')
+            ->with([$filterMock]);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($searchCriteriaMock));

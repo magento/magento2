@@ -573,7 +573,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects($this->once())->method('setValue')
             ->with(4)
             ->willReturn($this->filterBuilderMock);
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])
             ->willReturn($searchCriteriaBuilderMock);
         $searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($extendedSearchCriteriaMock);
         $this->metadataServiceMock->expects($this->once())->method('getList')->with($extendedSearchCriteriaMock)

@@ -154,8 +154,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
             ->setValue(self::CUST_GROUP_ALL)
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($notLoggedInFilter)
-            ->addFilter($groupAll)
+            ->addFilters($notLoggedInFilter)
+            ->addFilters($groupAll)
             ->create();
         return $this->groupRepository->getList($searchCriteria)->getItems();
     }
