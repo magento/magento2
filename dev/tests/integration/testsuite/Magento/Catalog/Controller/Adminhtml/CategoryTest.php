@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class CategoryTest extends \Magento\Backend\Utility\Controller
+class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
@@ -333,7 +333,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(['Unable to save the category']),
+            $this->equalTo(['Something went wrong while saving the category.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

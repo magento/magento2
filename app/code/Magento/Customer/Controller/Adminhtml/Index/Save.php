@@ -269,7 +269,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('An error occurred while saving the customer.'));
+                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             }

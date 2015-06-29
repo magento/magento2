@@ -8,6 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
     <menu>
         <add id="Magento_CatalogRule::promo" title="Promotions" module="Magento_CatalogRule" parent="Magento_Backend::marketing" sortOrder="10" resource="Magento_CatalogRule::promo"/>
-        <add id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rules" sortOrder="10" module="Magento_CatalogRule" parent="Magento_CatalogRule::promo" action="catalog_rule/promo_catalog/" dependsOnModule="Magento_Catalog" resource="Magento_CatalogRule::promo_catalog"/>
+        <add id="Magento_CatalogRule::promo_catalog" title="Catalog Price Rule" sortOrder="10" module="Magento_CatalogRule" parent="Magento_CatalogRule::promo" action="catalog_rule/promo_catalog/" dependsOnModule="Magento_Catalog" resource="Magento_CatalogRule::promo_catalog"/>
     </menu>
 </config>

@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class GroupTest extends \Magento\Backend\Utility\Controller
+class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     const TAX_CLASS_ID = 3;
     const TAX_CLASS_NAME = 'Retail Customer';
@@ -97,7 +97,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['The customer group has been deleted.']),
+            $this->equalTo(['You deleted the customer group.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'index'));
@@ -137,7 +137,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         $this->assertSessionMessages($this->logicalNot($this->isEmpty()), MessageInterface::TYPE_SUCCESS);
 
         $this->assertSessionMessages(
-            $this->equalTo(['The customer group has been saved.']),
+            $this->equalTo(['You saved the customer group.']),
             MessageInterface::TYPE_SUCCESS
         );
 

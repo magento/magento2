@@ -75,7 +75,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $session->setPageData($model->getData());
 
                 $model->save();
-                $this->messageManager->addSuccess(__('The rule has been saved.'));
+                $this->messageManager->addSuccess(__('You saved the rule.'));
                 $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('sales_rule/*/edit', ['id' => $model->getId()]);
@@ -94,7 +94,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 return;
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('An error occurred while saving the rule data. Please review the log and try again.')
+                    __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);

@@ -6,7 +6,7 @@
 
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-class IndexTest extends \Magento\Backend\Utility\Controller
+class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testViewAction()
     {
