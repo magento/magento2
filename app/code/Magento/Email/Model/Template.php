@@ -335,7 +335,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     {
         $code = $this->getTemplateCode();
         if (empty($code)) {
-            throw new \Magento\Framework\Exception\MailException(__('The template Name must not be empty.'));
+            throw new \Magento\Framework\Exception\MailException(__('Please enter a template name.'));
         }
         if ($this->_getResource()->checkCodeUsage($this)) {
             throw new \Magento\Framework\Exception\MailException(__('Duplicate Of Template Name'));
