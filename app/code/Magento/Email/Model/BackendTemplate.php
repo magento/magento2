@@ -54,8 +54,8 @@ class BackendTemplate extends Template
         $this->_structure = $structure;
         parent::__construct(
             $context,
-            $registry,
             $design,
+            $registry,
             $appEmulation,
             $storeManager,
             $assetRepo,
