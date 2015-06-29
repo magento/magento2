@@ -24,6 +24,11 @@ use Magento\Framework\Filesystem;
 class Environment extends AbstractActionController
 {
     /**
+     * Path to updater application
+     */
+    const UPDATER_DIR = 'update';
+
+    /**
      * Model to determine PHP version, currently installed and required PHP extensions.
      *
      * @var \Magento\Setup\Model\PhpInformation
@@ -240,7 +245,7 @@ class Environment extends AbstractActionController
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
 
-        if (!$this->filesystem->getDirectoryRead(DirectoryList::UPDATER_DIR)->isExist()) {
+        if (!$this->filesystem->getDirectoryRead(DirectoryList::ROOT)->isExist(self::UPDATER_DIR)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
         $data = [
