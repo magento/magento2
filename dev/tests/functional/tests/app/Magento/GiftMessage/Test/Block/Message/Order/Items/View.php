@@ -100,7 +100,7 @@ class View extends Block
      */
     protected function giftMessageButtonIsVisible($itemName)
     {
-        return $isVisible = $this->_rootElement->find(
+        return $this->_rootElement->find(
             sprintf($this->giftMessageButtonSelector, $itemName),
             Locator::SELECTOR_XPATH
         )->isVisible();
