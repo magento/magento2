@@ -16,6 +16,11 @@ use Magento\Framework\View\Layout\Generator\Structure;
  */
 class Json extends AbstractContentType
 {
+    /**
+     * Generator structure instance
+     *
+     * @var Structure
+     */
     private $structure;
 
     /**
