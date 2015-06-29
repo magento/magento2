@@ -67,7 +67,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareFormWithTemplateId()
     {
-        $this->expectedFields[] = 'used_currently_for';
+        $this->expectedFields[] = 'currently_used_for';
         $this->runTest();
     }
 

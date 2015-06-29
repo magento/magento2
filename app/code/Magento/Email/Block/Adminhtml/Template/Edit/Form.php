@@ -73,14 +73,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $templateId = $this->getEmailTemplate()->getId();
         $fieldset->addField(
-            'used_currently_for',
+            'currently_used_for',
             'label',
             [
-                'label' => __('Used Currently For'),
-                'container_id' => 'used_currently_for',
+                'label' => __('Currenlty Used For'),
+                'container_id' => 'currently_used_for',
                 'after_element_html' => '<script>require(["prototype"], function () {' .
-                (!$this->getEmailTemplate()->getSystemConfigPathsWhereUsedCurrently() ? '$(\'' .
-                'used_currently_for' .
+                (!$this->getEmailTemplate()->getSystemConfigPathsWhereCurrentlyUsed() ? '$(\'' .
+                'currently_used_for' .
                 '\').hide(); ' : '') .
                 '});</script>'
             ]
