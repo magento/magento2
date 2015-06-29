@@ -232,8 +232,18 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             if ($customerId = $this->_customerSession->getCustomerId()) {
                 $shipping = $this->accountManagement->getDefaultShippingAddress($customerId);
                 $billing = $this->accountManagement->getDefaultBillingAddress($customerId);
+                $customerTaxClass = null;
+            } else {
+                $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
+                $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
+                if (!empty($billingAddressArray)) {
+                    $billing = new \Magento\Framework\Object($billingAddressArray);
+                }
+                if (!empty($shippingAddressArray)) {
+                    $shipping = new \Magento\Framework\Object($shippingAddressArray);
+                }
+                $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
-            $customerTaxClass = null;
         }
 
         $rateRequest = $calculator->getRateRequest(
@@ -321,5 +331,16 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             }
         }
         return $result;
+    }
+
+    /**
+     * @param int $countryId
+     * @param int $regionId
+     * @param int $websiteId
+     * @return boolean
+     */
+    public function isWeeeInLocation($countryId, $regionId, $websiteId)
+    {
+        return $this->getResource()->isWeeeInLocation($countryId, $regionId, $websiteId);
     }
 }
