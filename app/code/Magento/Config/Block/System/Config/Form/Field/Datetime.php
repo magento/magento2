@@ -9,6 +9,8 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Backend system config datetime field renderer
+ *
+ * @codeCoverageIgnore
  */
 class Datetime extends \Magento\Config\Block\System\Config\Form\Field
 {
