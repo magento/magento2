@@ -60,7 +60,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         // Check requires option to have some value
         if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         }
 
         // Check maximal length limit

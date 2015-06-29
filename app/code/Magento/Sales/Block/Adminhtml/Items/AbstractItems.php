@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Abstract items renderer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractItems extends \Magento\Backend\Block\Template
 {
@@ -227,7 +228,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
             return $this->getItem()->getOrder();
         }
 
-        throw new \Magento\Framework\Exception\LocalizedException(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t get the order instance right now.'));
     }
 
     /**

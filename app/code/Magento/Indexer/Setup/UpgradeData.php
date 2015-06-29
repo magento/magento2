@@ -49,6 +49,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
+     * @internal param StateFactory $stateFactory
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -71,17 +72,18 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
+            $stateIndexers = [];
             $states = $this->statesFactory->create();
-            foreach (array_keys($this->config->getIndexers()) as $indexerId) {
-                $indexerConfig = $this->config->getIndexer($indexerId);
-                foreach ($states->getItems() as $state) {
-                    /** @var \Magento\Indexer\Model\Indexer\State $state */
-                    if ($state->getIndexerId() == $indexerId) {
-                        $state->setHashConfig(
-                            $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5)
-                        );
-                        $state->save();
-                    }
+            foreach ($states->getItems() as $state) {
+                /** @var \Magento\Indexer\Model\Indexer\State $state */
+                $stateIndexers[$state->getIndexerId()] = $state;
+            }
+
+            foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+                $hash = $this->encryptor->hash($this->encoder->encode($indexerConfig), Encryptor::HASH_VERSION_MD5);
+                if (isset($stateIndexers[$indexerId])) {
+                    $stateIndexers[$indexerId]->setHashConfig($hash);
+                    $stateIndexers[$indexerId]->save();
                 }
             }
         }

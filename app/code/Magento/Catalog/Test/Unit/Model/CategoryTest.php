@@ -180,7 +180,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Sorry, but we can't move the category because we can't find the new parent category you selected.
+     * @expectedExceptionMessage Sorry, but we can't find the new parent category you selected.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenCannotFindParentCategory()
@@ -206,7 +206,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Sorry, but we can't move the category because we can't find the new category you selected.
+     * @expectedExceptionMessage Sorry, but we can't find the new category you selected.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenCannotFindNewCategory()
@@ -232,7 +232,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage We can't perform this category move operation because the parent category matches the child category.
+     * @expectedExceptionMessage We can't move the category because the parent category name matches the child category name.
      * @codingStandardsIgnoreEnd
      */
     public function testMoveWhenParentCategoryIsSameAsChildCategory()
