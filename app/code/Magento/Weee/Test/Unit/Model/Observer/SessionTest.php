@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tax\Test\Unit\Model\Observer;
+namespace Magento\Weee\Test\Unit\Model\Observer;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,11 +16,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
-
-    /**
-     * @var \Magento\Customer\Model\Resource\GroupRepository
-     */
-    protected $groupRepositoryMock;
 
     /**
      * Module manager
@@ -37,9 +32,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     private $cacheConfigMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var \Magento\Weee\Helper\Data
      */
-    protected $taxHelperMock;
+    protected $weeeHelperMock;
 
     /**
      * @var \Magento\Tax\Model\Observer\Session
@@ -57,14 +52,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->groupRepositoryMock = $this->getMockBuilder('Magento\Customer\Model\Resource\GroupRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'setCustomerTaxClassId', 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
+                'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
             ])
             ->getMock();
 
@@ -76,16 +67,15 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
+        $this->weeeHelperMock = $this->getMockBuilder('Magento\Weee\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->session = $this->objectManager->getObject(
-            'Magento\Tax\Model\Observer\Session',
+            'Magento\Weee\Model\Observer\Session',
             [
-                'groupRepository' => $this->groupRepositoryMock,
                 'customerSession' => $this->customerSessionMock,
-                'taxHelper' => $this->taxHelperMock,
+                'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock
             ]
@@ -103,8 +93,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $this->taxHelperMock->expects($this->any())
-            ->method('isCatalogPriceDisplayAffectedByTax')
+        $this->weeeHelperMock->expects($this->any())
+            ->method('isEnabled')
             ->willReturn(true);
 
         $customerMock = $this->getMockBuilder('Magento\Customer\Model\Data\Customer')
@@ -115,27 +105,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('customer')
             ->willReturn($customerMock);
-
-        $customerMock->expects($this->once())
-            ->method('getGroupId')
-            ->willReturn(1);
-
-        $customerGroupMock = $this->getMockBuilder('Magento\Customer\Model\Data\Group')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->groupRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with(1)
-            ->willReturn($customerGroupMock);
-
-        $customerGroupMock->expects($this->once())
-            ->method('getTaxClassId')
-            ->willReturn(1);
-
-        $this->customerSessionMock->expects($this->once())
-            ->method('setCustomerTaxClassId')
-            ->with(1);
 
         $address = $this->objectManager->getObject('Magento\Customer\Model\Data\Address');
         $address->setIsDefaultShipping(true);
@@ -169,8 +138,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $this->taxHelperMock->expects($this->any())
-            ->method('isCatalogPriceDisplayAffectedByTax')
+        $this->weeeHelperMock->expects($this->any())
+            ->method('isEnabled')
             ->willReturn(true);
 
         $address = $this->objectManager->getObject('Magento\Customer\Model\Address');
