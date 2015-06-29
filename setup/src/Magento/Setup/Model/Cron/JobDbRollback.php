@@ -51,9 +51,9 @@ class JobDbRollback extends AbstractJob
     {
         try {
             $rollbackHandler = $this->backupRollbackFactory->create($this->output);
-            $dbBackupFile = $rollbackHandler->getLastBackupFilePath("db");
+            $dbBackupFile = $this->params['backup_file_name'];
             if (!empty($dbBackupFile)) {
-                $rollbackHandler->dbRollback($dbBackupFile);
+                $rollbackHandler->dbRollback(basename($dbBackupFile));
             } else {
                 $this->status->add(
                     'No available DB backup file found. Please refer to documentation specified '

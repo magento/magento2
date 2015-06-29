@@ -300,29 +300,4 @@ class BackupRollback
         }
         return $ignorePaths;
     }
-
-    /**
-     * Find the last backup file from backup directory.
-     *
-     * @param string $type
-     * @throws \RuntimeException
-     * @return string
-     */
-    public function getLastBackupFilePath($type)
-    {
-        $allFileList = scandir($this->backupsDir, SCANDIR_SORT_DESCENDING);
-        $backupFileName = '';
-
-        foreach ($allFileList as $fileName) {
-            if (strpos($fileName, $type) !== false) {
-                $backupFileName = $fileName;
-                break;
-            }
-        }
-
-        if (empty($backupFileName)) {
-            return '';
-        }
-        return $backupFileName;
-    }
 }

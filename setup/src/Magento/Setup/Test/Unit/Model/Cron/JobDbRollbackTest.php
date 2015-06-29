@@ -47,14 +47,13 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
             $output,
             $this->status,
             'setup:rollback',
-            []
+            ['backup_file_name' => 'someFileName']
         );
     }
 
     public function testExecute()
     {
         $this->backupRollbackFactory->expects($this->once())->method('create')->willReturn($this->backupRollback);
-        $this->backupRollback->expects($this->once())->method('getLastBackupFilePath')->willReturn('filename_db.gz');
         $this->backupRollback->expects($this->once())->method('dbRollback');
         $this->jobDbRollback->execute();
     }
@@ -66,13 +65,6 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
     public function testExceptionOnExecute()
     {
         $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception);
-        $this->jobDbRollback->execute();
-    }
-
-    public function testExceptionOnFindFile()
-    {
-        $this->backupRollbackFactory->expects($this->once())->method('create')->willReturn($this->backupRollback);
-        $this->status->expects($this->once())->method('add');
         $this->jobDbRollback->execute();
     }
 }
