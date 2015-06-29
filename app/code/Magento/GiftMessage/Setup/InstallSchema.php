@@ -51,7 +51,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
             [],
-            'Recipient'
+            'Registrant'
         )->addColumn(
             'message',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
