@@ -301,7 +301,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateProvider()
+    public function getProcessedTemplateDataProvider()
     {
         return [
             'default' => [
