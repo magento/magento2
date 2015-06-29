@@ -51,8 +51,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->setConstructorArgs(
             [
                 $objectManager->get('Magento\Framework\Model\Context'),
-                $objectManager->get('Magento\Framework\View\DesignInterface'),
                 $objectManager->get('Magento\Framework\Registry'),
+                $objectManager->get('Magento\Framework\View\DesignInterface'),
                 $objectManager->get('Magento\Store\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
@@ -539,7 +539,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage The template Name must not be empty.
+     * @expectedExceptionMessage Please enter a template name.
      */
     public function testBeforeSaveEmptyTemplateCode()
     {

@@ -38,8 +38,8 @@ class BackendTemplate extends Template
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
-        \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -54,8 +54,8 @@ class BackendTemplate extends Template
         $this->_structure = $structure;
         parent::__construct(
             $context,
-            $design,
             $registry,
+            $design,
             $appEmulation,
             $storeManager,
             $assetRepo,
