@@ -2256,4 +2256,10 @@ return [
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
+    ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
+    ['loadByCode', 'Magento\Newsletter\Model\Resource'],
+    ['_getIncludeParameters', 'Magento\Framework\Filter\Template', '_getParameters'],
+    ['setIncludeProcessor', 'Magento\Framework\Filter\Template'],
+    ['includeDirective', 'Magento\Framework\Filter\Template'],
 ];
