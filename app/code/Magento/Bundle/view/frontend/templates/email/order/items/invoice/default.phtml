@@ -18,6 +18,13 @@
 
 <?php foreach ($items as $_item): ?>
 
+<?php
+    // As part of invoice item renderer logic, the order is set on each invoice item.
+    // In the case of a bundle product, this template takes over rendering its children,
+    // so it is necessary to pass the order along to each child.
+    $_item->setOrder($_order);
+?>
+
 <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
