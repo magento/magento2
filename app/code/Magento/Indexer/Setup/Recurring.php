@@ -78,10 +78,11 @@ class Recurring implements InstallSchemaInterface
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1') >= 0) {
+            /** @var State[] $stateIndexers */
             $stateIndexers = [];
             $states = $this->statesFactory->create();
             foreach ($states->getItems() as $state) {
-                /** @var \Magento\Indexer\Model\Indexer\State $state */
+                /** @var State $state */
                 $stateIndexers[$state->getIndexerId()] = $state;
             }
 
@@ -98,9 +99,9 @@ class Recurring implements InstallSchemaInterface
                         $stateIndexers[$indexerId]->save();
                     }
                 } else {
-                    /** @var \Magento\Indexer\Model\Indexer\State $state */
+                    /** @var State $state */
                     $state = $this->stateFactory->create();
-                    $state->setIndexerId($indexerId);
+                    $state->loadByIndexer($indexerId);
                     $state->setHashConfig($expectedHashConfig);
                     $state->setStatus(State::STATUS_INVALID);
                     $state->save();
