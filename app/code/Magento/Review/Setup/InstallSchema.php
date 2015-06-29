@@ -390,7 +390,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0],
-                'Rating Position On Frontend'
+                'Rating Position On Storefront'
             )
             ->addColumn(
                 'is_active',
@@ -460,7 +460,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0],
-                'Ration option position on frontend'
+                'Ration option position on Storefront'
             )
             ->addIndex(
                 $installer->getIdxName('rating_option', ['rating_id']),

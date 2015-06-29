@@ -396,7 +396,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'addException'
         )->with(
             $this->equalTo($exception),
-            $this->equalTo('An error occurred while resetting customer password.')
+            $this->equalTo('Something went wrong while resetting customer password.')
         );
 
         $this->_testedObject->execute();
@@ -455,7 +455,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addSuccess'
         )->with(
-            $this->equalTo('Customer will receive an email with a link to reset password.')
+            $this->equalTo('The customer will receive an email with a link to reset password.')
         );
 
         // verify redirect

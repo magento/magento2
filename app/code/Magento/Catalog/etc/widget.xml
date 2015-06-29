@@ -103,7 +103,7 @@
             </parameter>
             <parameter name="anchor_text" xsi:type="text" visible="true">
                 <label translate="true">Anchor Custom Text</label>
-                <description translate="true">If empty, the Product Name will be used</description>
+                <description translate="true">If empty, we'll use the product name here.</description>
             </parameter>
             <parameter name="title" xsi:type="text" visible="true">
                 <label translate="true">Anchor Custom Title</label>
@@ -142,7 +142,7 @@
             </parameter>
             <parameter name="anchor_text" xsi:type="text" visible="true">
                 <label translate="true">Anchor Custom Text</label>
-                <description translate="true">If empty, the Category Name will be used</description>
+                <description translate="true">If empty, we'll use the category name here.</description>
             </parameter>
             <parameter name="title" xsi:type="text" visible="true">
                 <label translate="true">Anchor Custom Title</label>

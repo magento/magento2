@@ -135,7 +135,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogin()
     {
-        // Customer e-mail and password are pulled from the fixture customer.php
+        // Customer email and password are pulled from the fixture customer.php
         $customer = $this->accountManagement->authenticate('customer@example.com', 'password', true);
 
         $this->assertSame('customer@example.com', $customer->getEmail());
@@ -149,7 +149,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoginWrongPassword()
     {
-        // Customer e-mail and password are pulled from the fixture customer.php
+        // Customer email and password are pulled from the fixture customer.php
         $this->accountManagement->authenticate('customer@example.com', 'wrongPassword', true);
     }
 
@@ -159,7 +159,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoginWrongUsername()
     {
-        // Customer e-mail and password are pulled from the fixture customer.php
+        // Customer email and password are pulled from the fixture customer.php
         $this->accountManagement->authenticate('non_existing_user', 'password', true);
     }
 
@@ -178,7 +178,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Password doesn't match for this account
+     * @expectedExceptionMessage The password doesn't match this account.
      */
     public function testChangePasswordWrongPassword()
     {
