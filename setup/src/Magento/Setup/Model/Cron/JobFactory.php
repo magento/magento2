@@ -62,6 +62,7 @@ class JobFactory
                 );
                 break;
             case self::DB_ROLLBACK:
+
                 return $objectManager->create(
                     '\Magento\Setup\Model\Cron\JobDbRollback',
                     [

@@ -72,7 +72,7 @@ class CronRunCommand extends AbstractSetupCommand
             while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
                 $job = $this->queue->popQueuedJob();
                 $this->status->add(
-                    sprintf('Job "%s" has been started', $job)
+                    sprintf('Job "%s" has started' . PHP_EOL, $job)
                 );
                 try {
                     $job->execute();

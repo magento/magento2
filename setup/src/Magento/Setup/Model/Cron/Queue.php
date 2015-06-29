@@ -89,7 +89,7 @@ class Queue
             if (empty($queue[self::KEY_JOBS])) {
                 $this->writer->write('');
             } else {
-                $this->writer->write(json_encode($queue, JSON_PRETTY_PRINT));
+                $this->writer->write(json_encode($queue, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             }
         } else {
             throw new \RuntimeException(sprintf('"%s" field is missing or is not an array.', self::KEY_JOBS));
