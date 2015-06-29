@@ -20,7 +20,7 @@ use Magento\SalesRule\Model\RuleFactory;
 use Magento\Store\Model\System\Store;
 
 /**
- * Shopping Cart Price Rule General Information Tab
+ * Cart Price Rule General Information Tab
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
