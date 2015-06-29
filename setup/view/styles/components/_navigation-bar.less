@@ -13,6 +13,8 @@
 
 @nav-bar__color: @color-brownie;
 @nav-bar__font-size: 1.2rem;
+@nav-bar__height__base: @btn__base__font-size * @base__line-height + @btn__base__font-size * @btn__base__padding-top + @btn__base__font-size * @btn__base__padding-bottom;;
+@nav-bar__indent-top: 3rem;
 @nav-bar__min-height: 5.8rem;
 
 @nav-bar-bullet-wrap__background-color: @color-gray84;
@@ -62,7 +64,7 @@
 }
 
 .nav-bar-outer-actions {
-    margin-top: -(@main__indent-top + @nav-bar__min-height + @nav-bar-items__indent-bottom + .1rem);
+    margin-top: -(@nav-bar__indent-top + @nav-bar__min-height + @nav-bar-items__indent-bottom + .1rem);
     padding-right: @nav__indent-right;
 }
 
@@ -127,7 +129,8 @@
         }
 
         //  Disabled state
-        &.disabled {
+        &.disabled,
+        &.ui-state-disabled {
             &:before {
                 bottom: 0;
                 content: '';
@@ -140,7 +143,8 @@
         }
 
         //  Active step link wrap
-        &.active {
+        &.active,
+        &.ui-state-active {
             //  Not visited
             ~ li {
                 //  Not visited progress line (discard)
@@ -234,7 +238,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
     .nav {
-        padding-bottom: @btn__height__base + @nav-bar-items__indent-bottom;
+        padding-bottom: @nav-bar__height__base + @nav-bar-items__indent-bottom;
         padding-left: 1.5rem;
         text-align: center;
     }
@@ -248,7 +252,7 @@
     .nav-bar-outer-actions {
         display: inline-block;
         float: none;
-        margin-top: -(@main__indent-top + @btn__height__base + @nav-bar-items__indent-bottom + .1rem);
+        margin-top: -(@nav-bar__indent-top + @nav-bar__height__base + @nav-bar-items__indent-bottom + .1rem);
         text-align: center;
         vertical-align: top;
         width: 100%;
