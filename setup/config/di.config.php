@@ -25,6 +25,7 @@ return [
             'Magento\Setup\Controller\Install',
             'Magento\Setup\Controller\Success',
             'Magento\Setup\Controller\Modules',
+            'Magento\Setup\Controller\ComponentGrid',
             'Magento\Setup\Controller\ComponentUpgrade',
             'Magento\Setup\Controller\ComponentUpgradeSuccess',
         ],

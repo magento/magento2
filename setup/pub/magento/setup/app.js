@@ -19,6 +19,7 @@ var app = angular.module(
         'install',
         'success',
         'landing-updater',
+        'component-grid',
         'readiness-check-updater',
         'create-backup',
         'complete-backup',
