@@ -1,0 +1,49 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@steps-wizard-section-title__font-size: 1.8rem;
+
+@steps-wizard-gallery-image__background-color: @color-white-fog;
+@steps-wizard-gallery-image__padding: 14px @indent__base;
+
+//
+//  Common
+//  ---------------------------------------------
+
+.steps-wizard {
+
+    .steps-wizard-section {
+        margin: 0 0 @indent__l;
+    }
+
+    .steps-wizard-section-title {
+        border-bottom: 1px solid @steps-wizard-section-title__border-color;
+        font-size: @steps-wizard-section-title__font-size;
+        margin: 0 0 @indent__s;
+        padding: 0 0 @indent__s;
+    }
+
+    .steps-wizard-section-list {
+        &:extend(.abs-list-reset-styles all);
+        margin: 0 0 @indent__s;
+        > li {
+            margin: 0 0 @indent__s;
+        }
+    }
+
+    .gallery-image-wrapper {
+        background: @steps-wizard-gallery-image__background-color;
+        padding: @steps-wizard-gallery-image__padding;
+        position: relative;
+
+        .multiselect-alt {
+            &:extend(.abs-list-reset-styles all);
+        }
+    }
+}

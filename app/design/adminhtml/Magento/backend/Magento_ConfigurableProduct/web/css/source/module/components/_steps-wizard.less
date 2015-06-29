@@ -3,10 +3,28 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@steps-wizard-section-title__border-color: @color-gray89;
+
+//
+//  Common
+//  ---------------------------------------------
+
 .steps-wizard {
     position: relative;
 
-    .content {
-        clear: both;
+    .steps-wizard-navigation {
+        &:extend(.abs-clearfix all);
+    }
+
+    .steps-wizard-title {
+        margin: 0 0 @indent__s;
+    }
+
+    .steps-wizard-inner {
+        margin: 0 0 @indent__base;
     }
 }
