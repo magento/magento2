@@ -115,7 +115,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
@@ -132,7 +131,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
@@ -148,7 +146,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $assetRepo,
             $filesystem,
             $scopeConfig,
-            $objectManager,
             $emailConfig,
             $templateFactory,
             $data
@@ -193,7 +190,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function isValidForSend()
     {
-        return !$this->_scopeConfig->isSetFlag(
+        return !$this->scopeConfig->isSetFlag(
             \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
             ScopeInterface::SCOPE_STORE
         ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
