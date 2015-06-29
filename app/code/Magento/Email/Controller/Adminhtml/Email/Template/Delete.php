@@ -19,7 +19,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
         if ($template->getId()) {
             try {
                 // check if the template is currently used
-                if (count($template->getSystemConfigPathsWhereUsedCurrently()) == 0) {
+                if (count($template->getSystemConfigPathsWhereCurrentlyUsed()) == 0) {
                     $template->delete();
                     // display success message
                     $this->messageManager->addSuccess(__('The email template has been deleted.'));

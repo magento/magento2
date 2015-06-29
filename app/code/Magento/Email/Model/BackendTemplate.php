@@ -76,7 +76,7 @@ class BackendTemplate extends Template
      *
      * @return array
      */
-    public function getSystemConfigPathsWhereUsedCurrently()
+    public function getSystemConfigPathsWhereCurrentlyUsed()
     {
         $templateId = $this->getId();
         if (!$templateId) {

@@ -372,11 +372,11 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      * @param bool $asJSON
      * @return string
      */
-    public function getUsedCurrentlyForPaths($asJSON = true)
+    public function getCurrentlyUsedForPaths($asJSON = true)
     {
         /** @var $template \Magento\Email\Model\BackendTemplate */
         $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedCurrently();
+        $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
         if ($asJSON) {
             return $this->_jsonEncoder->encode($pathsParts);

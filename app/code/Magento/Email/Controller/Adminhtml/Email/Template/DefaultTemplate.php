@@ -53,7 +53,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             $template->setData('template_variables', \Zend_Json::encode($template->getVariablesOptionArray(true)));
 
             $templateBlock = $this->_view->getLayout()->createBlock('Magento\Email\Block\Adminhtml\Template\Edit');
-            $template->setData('orig_template_used_currently_for', $templateBlock->getUsedCurrentlyForPaths(false));
+            $template->setData('orig_template_currently_used_for', $templateBlock->getCurrentlyUsedForPaths(false));
 
             $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($template->getData())

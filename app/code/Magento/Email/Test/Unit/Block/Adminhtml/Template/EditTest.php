@@ -116,7 +116,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetUsedCurrentlyForPaths()
+    public function testGetCurrentlyUsedForPaths()
     {
         $sectionMock = $this->getMock(
             'Magento\Config\Model\Config\Structure\Element\Section',
@@ -183,7 +183,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', [], [], '', false, false);
         $templateMock->expects($this->once())
-            ->method('getSystemConfigPathsWhereUsedCurrently')
+            ->method('getSystemConfigPathsWhereCurrentlyUsed')
             ->will($this->returnValue($this->_fixtureConfigPath));
 
         $this->_registryMock->expects($this->once())
@@ -191,7 +191,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with('current_email_template')
             ->will($this->returnValue($templateMock));
 
-        $actual = $this->_block->getUsedCurrentlyForPaths(false);
+        $actual = $this->_block->getCurrentlyUsedForPaths(false);
         $expected = [
             [
                 ['title' => __('Title')],

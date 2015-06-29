@@ -86,7 +86,7 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php echo $block->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
+            this.renderPaths(<?php echo $block->getCurrentlyUsedForPaths(); ?>, 'currently_used_for');
         },
 
         bindEvents: function(){
@@ -193,13 +193,13 @@ require([
                                   $('convert_button').show();
                               }
                           }
-                          if (pair.key == 'orig_template_used_currently_for') {
+                          if (pair.key == 'orig_template_currently_used_for') {
                                if(pair.value.length){
-                                   $('used_currently_for').show();
-                                   this.renderPaths(pair.value, 'used_currently_for');
+                                   $('currently_used_for').show();
+                                   this.renderPaths(pair.value, 'currently_used_for');
                                }
                                else{
-                                   $('used_currently_for').hide();
+                                   $('currently_used_for').hide();
                                }
                           }
                        }.bind(this));

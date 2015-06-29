@@ -2258,4 +2258,17 @@ return [
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['getUsedDefaultForPaths', 'Magento\Email\Block\Adminhtml\Template\Edit'],
+    ['getSystemConfigPathsWhereUsedAsDefault', 'Magento\Email\Model\BackendTemplate'],
+    ['_findEmailTemplateUsages', 'Magento\Email\Model\BackendTemplate'],
+    [
+        'getSystemConfigPathsWhereUsedCurrently',
+        'Magento\Email\Model\BackendTemplate',
+        'Magento\Email\Model\BackendTemplate::getSystemConfigPathsWhereCurrentlyUsed',
+    ],
+    [
+        'getUsedCurrentlyForPaths',
+        'Magento\Email\Block\Adminhtml\Template\Edit',
+        'Magento\Email\Block\Adminhtml\Template\Edit::getCurrentlyUsedForPaths',
+    ],
 ];
