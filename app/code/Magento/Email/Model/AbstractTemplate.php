@@ -25,6 +25,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const DEFAULT_DESIGN_AREA = 'frontend';
 
     /**
+     * Default path to email logo
+     */
+    const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
+
+    /**
      * Email logo url
      *
      * @var string
@@ -368,7 +373,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         $designParams = $this->getDesignParams();
         return $this->assetRepo->getUrlWithParams(
-            'Magento_Email::logo_email.png',
+            self::DEFAULT_LOGO_FILE_ID,
             $designParams
         );
     }

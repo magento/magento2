@@ -232,7 +232,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function isValidForSend()
     {
-        return !$this->_scopeConfig->isSetFlag(
+        return !$this->scopeConfig->isSetFlag(
             \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
