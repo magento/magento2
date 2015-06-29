@@ -12,6 +12,22 @@ define([
 ], function (_, utils, registry, Storage, Collapsible, layout) {
     'use strict';
 
+    /**
+     * Removes 'current' namespace from a 'path' string.
+     *
+     * @param {String} path
+     * @returns {String} Path without namespace.
+     */
+    function removeStateNs(path) {
+        path = typeof path == 'string' ? path.split('.') : '';
+
+        if (path[0] === 'current') {
+            path.shift();
+        }
+
+        return path.join('.');
+    }
+
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/controls/bookmarks/bookmarks',
@@ -29,7 +45,7 @@ define([
                 },
                 newView: {
                     label: 'New View',
-                    index: '${ Date.now() }',
+                    index: '_${ Date.now() }',
                     editing: true,
                     isNew: true
                 }
@@ -59,8 +75,8 @@ define([
          */
         initialize: function () {
             utils.limit(this, 'saveSate', 2000);
-            utils.limit(this, 'checkChanges', 200);
             utils.limit(this, '_defaultPolyfill', 1000);
+            utils.limit(this, 'checkChanges', 50);
 
             this._super()
                 .initViews();
@@ -223,13 +239,43 @@ define([
          */
         applyView: function (view) {
             if (typeof view === 'string') {
-                view = this.elems.findWhere({index: view});
+                view = this.elems.findWhere({
+                    index: view
+                });
             }
 
             view.active(true);
 
             this.activeView(view);
             this.set('current', view.getData());
+
+            return this;
+        },
+
+        /**
+         * Applies specified views' data on a current data object.
+         *
+         * @param {String} state - Defines what state shultd be used: default or saved.
+         * @param {String} [path] - Path to the property whose value
+         *      will be inserted to a current data object.
+         * @returns {Bookmarks} Chainable.
+         */
+        applyState: function (state, path) {
+            var view,
+                value;
+
+            view = state === 'default' ?
+                this.defaultView :
+                this.activeView();
+
+            path  = removeStateNs(path);
+            value = view.getData(path);
+
+            if (!_.isUndefined(value)) {
+                path = path ? 'current.' + path : 'current';
+
+                this.set(path, value);
+            }
 
             return this;
         },
@@ -258,24 +304,6 @@ define([
             this.hasChanges(!diff.equal);
 
             return this;
-        },
-
-        /**
-         * Retrieves last saved data of a current view.
-         *
-         * @returns {Object}
-         */
-        getSaved: function () {
-            return this.activeView().getData();
-        },
-
-        /**
-         * Retrieves default data.
-         *
-         * @returns {Object}
-         */
-        getDefault: function () {
-            return this.defaultView.getData();
         },
 
         /**

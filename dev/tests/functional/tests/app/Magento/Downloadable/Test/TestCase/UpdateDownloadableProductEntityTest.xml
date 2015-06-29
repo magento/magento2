@@ -114,7 +114,6 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">10</data>
             <data name="product/data/special_price" xsi:type="string">40</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>

@@ -144,7 +144,7 @@ class CreditmemoLoader extends Object
          * Check creditmemo create availability
          */
         if (!$order->canCreditmemo()) {
-            $this->messageManager->addError(__('Cannot create credit memo for the order.'));
+            $this->messageManager->addError(__('We can\'t create credit memo for the order.'));
             return false;
         }
         return true;

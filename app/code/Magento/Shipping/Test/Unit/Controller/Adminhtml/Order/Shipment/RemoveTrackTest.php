@@ -264,7 +264,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     public function testExecuteTrackIdFail()
     {
         $trackId = null;
-        $errors = ['error' => true, 'message' => 'Cannot load track with retrieving identifier.'];
+        $errors = ['error' => true, 'message' => 'We can\'t load track with retrieving identifier right now.'];
 
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')
@@ -285,7 +285,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     {
         $errors = [
             'error' => true,
-            'message' => 'Cannot initialize shipment for delete tracking number.',
+            'message' => 'We can\'t initialize shipment for delete tracking number.',
         ];
         $this->shipmentLoad();
 
@@ -302,7 +302,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteDeleteFail()
     {
-        $errors = ['error' => true, 'message' => 'Cannot delete tracking number.'];
+        $errors = ['error' => true, 'message' => 'We can\'t delete tracking number.'];
         $this->shipmentLoad();
 
         $this->shipmentLoaderMock->expects($this->once())
