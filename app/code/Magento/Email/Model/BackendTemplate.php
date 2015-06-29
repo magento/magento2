@@ -93,8 +93,19 @@ class BackendTemplate extends Template
         }
 
         $configData = $this->_getResource()->getSystemConfigByPathsAndTemplateId($templatePaths, $templateId);
-        if (!$configData) {
-            return [];
+        foreach ($templatePaths as $path) {
+            if ($this->_scopeConfig->getValue($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT) == $templateId) {
+                foreach ($configData as $data) {
+                    if ($data['path'] == $path) {
+                        continue 2;   // don't add final fallback value if it was found in stored config
+                    }
+                }
+
+                $configData[] = [
+                    'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    'path' => $path
+                ];
+            }
         }
 
         return $configData;
