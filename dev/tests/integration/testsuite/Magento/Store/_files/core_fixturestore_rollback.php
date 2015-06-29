@@ -14,7 +14,7 @@ $registry->register('isSecureArea', true);
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
 $storeCode = 'fixturestore';
 $store->load($storeCode);
-if (!$store->getId()) {
+if ($store->getId()) {
     $store->delete();
 }
 
