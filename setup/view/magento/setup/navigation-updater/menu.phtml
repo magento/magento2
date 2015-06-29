@@ -21,7 +21,8 @@
 
 <nav
     ng-controller="navigationController"
-    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>, redirect : redirectTo('<?php echo $this->redirect?>')}"
+    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
+    data-ng-init="redirectTo('<?php echo $this->redirect?>')"
     id="menu"
     class="nav ng-cloak"
     >
