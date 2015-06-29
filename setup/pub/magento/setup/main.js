@@ -5,11 +5,16 @@
 
 'use strict';
 var main = angular.module('main', ['ngStorage']);
-main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navigationService', function ($scope, $state, $rootScope, navigationService) {
+main.controller('navigationController', ['$scope', '$state', '$rootScope', '$window', 'navigationService', function ($scope, $state, $rootScope, $window, navigationService) {
     navigationService.load();
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {
         return $state.$current.order <= order || !$rootScope.isMenuEnabled;
+    };
+    $scope.redirectTo = function (url) {
+        if (url) {
+            $window.location.href = url;
+        }
     };
 }])
 .controller('mainController', [
