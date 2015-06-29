@@ -52,10 +52,10 @@ class Navigation extends AbstractActionController
             $view->setTemplate('/magento/setup/navigation-installer/menu.phtml');
         } else {
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
-                $view->setTemplate('/magento/setup/navigation-updater/redirect.phtml');
-            } else {
-                $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
+                $view->setVariable('redirect', '../update/index.php');
             }
+
+            $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
 
         }
 
