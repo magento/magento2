@@ -172,7 +172,7 @@ class StockRegistry implements StockRegistryInterface
         $criteria = $this->criteriaFactory->create();
         $criteria->setLimit($currentPage, $pageSize);
         $criteria->setWebsiteFilter($websiteId);
-        $criteria->setQtyFilter('>=', $qty);
+        $criteria->setQtyFilter('<=', $qty);
         $criteria->addField('qty');
         return $this->stockItemRepository->getList($criteria);
     }

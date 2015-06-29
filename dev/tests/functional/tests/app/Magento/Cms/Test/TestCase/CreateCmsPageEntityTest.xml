@@ -9,10 +9,11 @@
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest">
         <variation name="CreateCmsPageEntityTestVariation1">
             <data name="description" xsi:type="string">MAGETWO-12399: Create CMS Content Page</data>
-            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
-            <data name="cms/data/identifier" xsi:type="string">identifier-%isolation%</data>
-            <data name="cms/data/store_id" xsi:type="string">All Store Views</data>
-            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="data/store_id" xsi:type="string">All Store Views</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
@@ -20,20 +21,21 @@
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2">
             <data name="description" xsi:type="string">Create page for default store view</data>
-            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
-            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation3">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34858</data>
             <data name="description" xsi:type="string">Create page with widget and system variable</data>
-            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
-            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
-            <data name="cms/data/content/widget/preset" xsi:type="string">default</data>
-            <data name="cms/data/content/variable" xsi:type="string">General Contact Name</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="data/content/widget/preset" xsi:type="string">default</data>
+            <data name="data/content/variable" xsi:type="string">General Contact Name</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
@@ -41,10 +43,11 @@
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4">
             <data name="description" xsi:type="string">Create disabled page</data>
-            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
-            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-            <data name="cms/data/is_active" xsi:type="string">Disabled</data>
-            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="data/is_active" xsi:type="string">Disabled</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />

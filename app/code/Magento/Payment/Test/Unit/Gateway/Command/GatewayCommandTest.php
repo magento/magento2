@@ -16,36 +16,44 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
     protected $requestBuilderMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Http\TransferBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Http\TransferFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $transferBuilderMock;
+    protected $transferFactoryMock;
 
     /**
      * @var \Magento\Payment\Gateway\Http\ClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $gatewayMock;
+    protected $clientMock;
 
     /**
      * @var \Magento\Payment\Gateway\Response\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseHandlerMock;
 
+    /**
+     * @var \Magento\Payment\Gateway\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $validatorMock;
+
     protected function setUp()
     {
         $this->requestBuilderMock = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
             ->getMockForAbstractClass();
-        $this->transferBuilderMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferBuilderInterface')
+        $this->transferFactoryMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferFactoryInterface')
             ->getMockForAbstractClass();
-        $this->gatewayMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\ClientInterface')
+        $this->clientMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\ClientInterface')
             ->getMockForAbstractClass();
         $this->responseHandlerMock = $this->getMockBuilder('Magento\Payment\Gateway\Response\HandlerInterface')
+            ->getMockForAbstractClass();
+        $this->validatorMock = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ValidatorInterface')
             ->getMockForAbstractClass();
 
         $this->model = new \Magento\Payment\Gateway\Command\GatewayCommand(
             $this->requestBuilderMock,
-            $this->transferBuilderMock,
-            $this->gatewayMock,
-            $this->responseHandlerMock
+            $this->transferFactoryMock,
+            $this->clientMock,
+            $this->responseHandlerMock,
+            $this->validatorMock
         );
     }
 
@@ -54,26 +62,35 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
         $commandSubject = ['authorize'];
         $request = ['request_field1' => 'request_value1', 'request_field2' => 'request_value2'];
         $response = ['response_field1' => 'response_value1'];
+        $validationResult = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ResultInterface')
+            ->getMockForAbstractClass();
 
         $transferO = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferInterface')
             ->getMockForAbstractClass();
 
-        $this->requestBuilderMock->expects($this->once())
+        $this->requestBuilderMock->expects(static::once())
             ->method('build')
             ->with($commandSubject)
             ->willReturn($request);
 
-        $this->transferBuilderMock->expects($this->once())
-            ->method('build')
+        $this->transferFactoryMock->expects(static::once())
+            ->method('create')
             ->with($request)
             ->willReturn($transferO);
 
-        $this->gatewayMock->expects($this->once())
+        $this->clientMock->expects(static::once())
             ->method('placeRequest')
             ->with($transferO)
             ->willReturn($response);
+        $this->validatorMock->expects(static::once())
+            ->method('validate')
+            ->with(array_merge($commandSubject, ['response' =>$response]))
+            ->willReturn($validationResult);
+        $validationResult->expects(static::once())
+            ->method('isValid')
+            ->willReturn(true);
 
-        $this->responseHandlerMock->expects($this->once())
+        $this->responseHandlerMock->expects(static::once())
             ->method('handle')
             ->with($commandSubject, $response);
 
