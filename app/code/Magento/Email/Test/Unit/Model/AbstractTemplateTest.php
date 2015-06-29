@@ -17,11 +17,6 @@ namespace Magento\Email\Test\Unit\Model;
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $context;
-
-    /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $design;
@@ -78,9 +73,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,7 +135,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
             $helper->getConstructArguments(
                 'Magento\Email\Model\AbstractTemplate',
                 [
-                    'context' => $this->context,
                     'design' => $this->design,
                     'registry' => $this->registry,
                     'appEmulation' => $this->appEmulation,
