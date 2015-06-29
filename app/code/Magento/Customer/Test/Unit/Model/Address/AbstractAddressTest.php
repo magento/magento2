@@ -274,6 +274,25 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for setData method with "value" argument
+     *
+     * @return void
+     */
+    public function testSetDataWithObject()
+    {
+        $value = [
+            'key' => new \Magento\Framework\Object(),
+        ];
+        $expected = [
+            'key' => [
+                'key' => new \Magento\Framework\Object()
+            ]
+        ];
+        $this->model->setData('key', $value);
+        $this->assertEquals($expected, $this->model->getData());
+    }
+
+    /**
      * @param $data
      * @param $expected
      *

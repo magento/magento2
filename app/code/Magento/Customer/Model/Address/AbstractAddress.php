@@ -295,7 +295,15 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _implodeArrayValues($value)
     {
         if (is_array($value) && count($value)) {
-            $value = trim(implode("\n", $value));
+            $isScalar = false;
+            foreach ($value as $val) {
+                if (is_scalar ($val)) {
+                    $isScalar = true;
+                }
+            }
+            if ($isScalar) {
+                $value = trim(implode("\n", $value));
+            }
         }
         return $value;
     }
