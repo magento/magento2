@@ -19,7 +19,7 @@ use Magento\Framework\Filesystem;
  *
  * Provides information and checks about the environment.
  *
- * * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Environment extends AbstractActionController
 {
@@ -43,6 +43,8 @@ class Environment extends AbstractActionController
     protected $versionParser;
 
     /**
+     * File system
+     *
      * @var Filesystem
      */
     protected $filesystem;
