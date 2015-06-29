@@ -20,16 +20,23 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
      */
     private $controller;
 
+    /**
+     * @var \Magento\Setup\Model\Cron\Status|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $status;
+
     public function setUp()
     {
         $this->navigationModel = $this->getMock('\Magento\Setup\Model\Navigation', [], [], '', false);
-        $this->controller = new Navigation($this->navigationModel);
+        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
+        $this->controller = new Navigation($this->navigationModel, $this->status);
     }
 
     public function testIndexAction()
     {
         $this->navigationModel->expects($this->once())->method('getData')->willReturn('some data');
         $viewModel = $this->controller->indexAction();
+
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $viewModel);
         $this->assertArrayHasKey('nav', $viewModel->getVariables());
     }
