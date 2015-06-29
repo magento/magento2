@@ -204,7 +204,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @param $storeId int
      * @param $expectedVariables array
      * @param $expectedResult string
-     * @dataProvider getProcessedTemplateProvider
+     * @dataProvider getProcessedTemplateDataProvider
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
