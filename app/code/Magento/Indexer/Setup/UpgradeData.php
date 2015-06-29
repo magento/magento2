@@ -14,6 +14,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Indexer\Model\ConfigInterface;
 use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
+use Magento\Indexer\Model\Indexer\State;
+use Magento\Indexer\Model\Indexer\StateFactory;
 
 /**
  * @codeCoverageIgnore
@@ -43,9 +45,15 @@ class UpgradeData implements UpgradeDataInterface
     private $encoder;
 
     /**
+     * @var StateFactory
+     */
+    private $stateFactory;
+
+    /**
      * Init
      *
      * @param CollectionFactory $statesFactory
+     * @param StateFactory $stateFactory
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
@@ -53,6 +61,7 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function __construct(
         CollectionFactory $statesFactory,
+        StateFactory $stateFactory,
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder
@@ -61,6 +70,7 @@ class UpgradeData implements UpgradeDataInterface
         $this->config = $config;
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
+        $this->stateFactory = $stateFactory;
     }
 
     /**
@@ -72,10 +82,11 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
+            /** @var State[] $stateIndexers */
             $stateIndexers = [];
             $states = $this->statesFactory->create();
             foreach ($states->getItems() as $state) {
-                /** @var \Magento\Indexer\Model\Indexer\State $state */
+                /** @var State $state */
                 $stateIndexers[$state->getIndexerId()] = $state;
             }
 
@@ -84,6 +95,13 @@ class UpgradeData implements UpgradeDataInterface
                 if (isset($stateIndexers[$indexerId])) {
                     $stateIndexers[$indexerId]->setHashConfig($hash);
                     $stateIndexers[$indexerId]->save();
+                } else {
+                    /** @var State $state */
+                    $state = $this->stateFactory->create();
+                    $state->loadByIndexer($indexerId);
+                    $state->setHashConfig($hash);
+                    $state->setStatus(State::STATUS_INVALID);
+                    $state->save();
                 }
             }
         }
