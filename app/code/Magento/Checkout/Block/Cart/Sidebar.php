@@ -53,6 +53,25 @@ class Sidebar extends AbstractCart
     }
 
     /**
+     * Returns minicart config
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
+            'shoppingCartUrl' => $this->getShoppingCartUrl(),
+            'checkoutUrl' => $this->getCheckoutUrl(),
+            'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
+            'removeItemUrl' => $this->getRemoveItemUrl(),
+            'imageTemplate' => $this->getImageHtmlTemplate(),
+            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
+            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
+            'baseUrl' => $this->getBaseUrl()
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getImageHtmlTemplate()
