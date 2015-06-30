@@ -31,13 +31,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     protected $collection = 'Magento\Sales\Model\Resource\Order\Collection';
 
     /**
-     * Model
-     *
-     * @var string
-     */
-    protected $model = 'Magento\Sales\Model\Order';
-
-    /**
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -48,7 +41,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
         $selected = $this->getRequest()->getParam('selected');
         $excluded = $this->getRequest()->getParam('excluded');
 
-        $collection = $this->_objectManager->get($this->collection);
+        $collection = $this->_objectManager->create($this->collection);
         try {
             if (isset($excluded)) {
                 if (!empty($excluded)) {
