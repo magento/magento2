@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\GroupedProduct\Test\Repository\Associated">
+    <repository class="Magento\GroupedProduct\Test\Repository\GroupedProduct\Associated">
         <dataset name="defaultSimpleProduct">
             <field name="assigned_products" xsi:type="array">
                 <item name="0" xsi:type="array">

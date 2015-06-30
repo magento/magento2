@@ -64,7 +64,7 @@
         <field name="samples_title" is_required="1" />
         <field name="short_description" is_required="0" group="autosettings" />
         <field name="downloadable" is_required="0" group="downloadable_information" />
-        <field name="downloadable_links" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProduct\Links" />
+        <field name="downloadable_links" is_required="0" group="downloadable_information" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\Links" />
         <field name="downloadable_sample" is_required="0" group="downloadable_information" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\Samples" />
         <field name="sku" is_required="1" group="product-details" />
         <field name="small_image" is_required="0" />
