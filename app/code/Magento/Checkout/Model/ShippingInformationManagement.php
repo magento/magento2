@@ -161,7 +161,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         }
 
         try {
-            $address->collectTotals()->save();
+            $address->save();
             $quote->collectTotals();
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
