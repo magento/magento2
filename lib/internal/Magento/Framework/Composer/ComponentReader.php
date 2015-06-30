@@ -36,7 +36,7 @@ class ComponentReader
     {
         $this->rootDir = str_replace('\\', '/', $rootDir);
         $this->patterns = file(
-            __DIR__ . '/etc/magento_components_list.txt',
+            __DIR__ . '/etc/composer_file_lookup_patterns.txt',
             FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
         );
     }
