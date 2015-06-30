@@ -47,36 +47,6 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Load an object by template code
-     *
-     * @param \Magento\Newsletter\Model\Template $object
-     * @param string $templateCode
-     * @return $this
-     */
-    public function loadByCode(\Magento\Newsletter\Model\Template $object, $templateCode)
-    {
-        $read = $this->_getReadAdapter();
-        if ($read && !is_null($templateCode)) {
-            $select = $this->_getLoadSelect(
-                'template_code',
-                $templateCode,
-                $object
-            )->where(
-                'template_actual = :template_actual'
-            );
-            $data = $read->fetchRow($select, ['template_actual' => 1]);
-
-            if ($data) {
-                $object->setData($data);
-            }
-        }
-
-        $this->_afterLoad($object);
-
-        return $this;
-    }
-
-    /**
      * Check usage of template in queue
      *
      * @param \Magento\Newsletter\Model\Template $template

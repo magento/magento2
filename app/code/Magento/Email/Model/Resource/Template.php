@@ -44,27 +44,6 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Load by template code from DB.
-     *
-     * @param string $templateCode
-     * @return array
-     */
-    public function loadByCode($templateCode)
-    {
-        $select = $this->_getReadAdapter()->select()->from(
-            $this->getMainTable()
-        )->where(
-            'template_code = :template_code'
-        );
-        $result = $this->_getReadAdapter()->fetchRow($select, ['template_code' => $templateCode]);
-
-        if (!$result) {
-            return [];
-        }
-        return $result;
-    }
-
-    /**
      * Check usage of template code in other templates
      *
      * @param \Magento\Email\Model\Template $template

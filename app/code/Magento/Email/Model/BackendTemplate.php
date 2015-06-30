@@ -25,12 +25,12 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
      *
@@ -42,30 +42,30 @@ class BackendTemplate extends Template
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
+        $this->_structure = $structure;
         parent::__construct(
             $context,
-            $registry,
             $design,
+            $registry,
             $appEmulation,
             $storeManager,
-            $filesystem,
             $assetRepo,
-            $viewFileSystem,
+            $filesystem,
             $scopeConfig,
-            $emailFilterFactory,
             $emailConfig,
+            $templateFactory,
+            $filterFactory,
             $data
         );
-        $this->_structure = $structure;
     }
 
     /**
@@ -80,7 +80,7 @@ class BackendTemplate extends Template
             return [];
         }
 
-        $configData = $this->_scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $configData = $this->scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
         return $paths;
     }
