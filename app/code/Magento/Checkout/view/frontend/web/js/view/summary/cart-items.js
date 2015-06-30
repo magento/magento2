@@ -6,11 +6,14 @@
 /*global define*/
 define(
     [
+        'ko',
         'Magento_Checkout/js/model/totals',
-        'uiComponent'
+        'uiComponent',
+        'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/model/quote'
     ],
-    function (totals, Component) {
-        "use strict";
+    function (ko, totals, Component, stepNavigator, quote) {
+        'use strict';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/cart-items'
@@ -19,6 +22,9 @@ define(
             getItems: totals.getItems(),
             getItemsQty: function() {
                 return parseInt(this.totals.items_qty) || 0;
+            },
+            isItemsBlockExpanded: function () {
+                return quote.isVirtual() || stepNavigator.isProcessed('shipping');
             }
         });
     }
