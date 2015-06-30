@@ -55,6 +55,7 @@ class AjaxLogin
      * @return $this
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Zend_Json_Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,
