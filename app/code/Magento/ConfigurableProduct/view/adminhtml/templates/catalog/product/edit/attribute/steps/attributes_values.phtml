@@ -16,10 +16,15 @@
         <div class="attribute-entity">
             <div class="attribute-entity-top">
                 <div class="attribute-entity-title-block">
+                    <span class="attribute-draggable"
+                          data-role="draggable"
+                          title="<?= __('Sort Variations') ?>">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </span>
                     <div class="attribute-entity-title" data-bind="text: label"></div>
                     <div class="attribute-options-block">
-                        <span class="attribute-length" data-bind="text: $data.options().length"></span>
-                        <?= __('Options') ?>
+                        (<span class="attribute-length" data-bind="text: $data.options().length"></span>
+                        <?= __('Options') ?>)
                     </div>
                 </div>
 
@@ -27,31 +32,17 @@
                     <button type="button" class="action-select-all action-tertiary" data-bind="click: $parent.selectAllAttributes">
                         <span><?= __('Select All') ?></span>
                     </button>
-                    <button class="action-remove"
-                            type="button"
-                            data-bind="click: $parent.removeAttribute.bind($parent)">
-                        <span><?= __('Remove Attribute') ?></span>
-
-                    </button>
-                    <button type="button"
-                            class="action-toggle"
-                            data-bind="click: $parent.toggleOpened, css: {'_expanded': opened}">
-                        <span></span>
-                    </button>
                 </div>
             </div>
 
-            <fieldset class="admin__fieldset admin__fieldset-options" data-bind="css: {'_visible': opened}">
-                <span class="attribute-draggable" data-role="draggable" title="<?= __('Sort Variations') ?>">
-                    <span></span><span></span><span></span><span></span><span></span>
-                </span>
+            <fieldset class="admin__fieldset admin__fieldset-options">
                 <ul class="attribute-options" data-bind="foreach: options">
-                    <li class="attribute-option" data-bind="css: {'_new-label': !label}">
+                    <li class="attribute-option">
                         <div class="admin__field admin__field-option">
                             <input
                                 type="checkbox"
                                 class="admin__control-checkbox"
-                                data-bind="checkedValue: value, checked: !value || $parent.chosenOptions" />
+                                data-bind="checkedValue: value, checked: !value || $parent.chosenOptions, attr: {id: 'some-checkbox'+value}" />
                             <label data-bind="text: label, visible: label" class="admin__field-label"></label>
                         </div>
                         <div class="admin__field admin__field-create-new" data-bind="visible: !label">

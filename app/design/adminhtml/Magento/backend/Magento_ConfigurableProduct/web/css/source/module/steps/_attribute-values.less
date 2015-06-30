@@ -14,17 +14,14 @@
 
 @steps-wizard-attribute-entity-title__font-size: 1.8rem;
 
-@steps-wizard-attribute-entity-action-toggle__open__content: @icon-expand-open__content;
-@steps-wizard-attribute-entity-action-toggle__close__content: @icon-expand-close__content;
-
 @steps-wizard-attribute-entity-action-remove__content: @icon-delete__content;
 @steps-wizard-attribute-entity-action-save__content: @icon-arrow-right__content;
 @steps-wizard-attribute-entity-action-save__hover__content: @color-very-dark-gray-black2;
 
 @steps-wizard-attribute-option-width: 100%/3;
 
-@steps-wizard-attibute-draggable__color: @color-dark-gray;
-@steps-wizard-attibute-draggable__hover__color: darken(@color-dark-gray, 10%);
+@steps-wizard-attribute-draggable__color: @color-dark-gray;
+@steps-wizard-attribute-draggable__hover__color: darken(@color-dark-gray, 10%);
 
 //
 //  Common
@@ -33,7 +30,11 @@
 .steps-wizard {
     .attribute-entity {
         background: @steps-wizard-attribute-entity__background;
+        border: 1px solid @steps-wizard-attribute-entity__border-color;
+        margin: 0 0 @indent__l;
         max-width: 70rem;
+        padding: @indent__s;
+        transition: @steps-wizard-attribute-entity__transition;
 
         &.ui-sortable-helper {
             border-color: @steps-wizard-attribute-entity__active__border-color;
@@ -41,63 +42,17 @@
 
         .action-select-all {
             font-weight: @font-weight__regular;
-            padding: 0;
-        }
-
-        .action-toggle {
-            padding: 0;
-            .action-icon();
-            &:before {
-                &:extend(.abs-icon all);
-                content: @steps-wizard-attribute-entity-action-toggle__open__content;
-            }
-            > span {
-                display: none;
-            }
-            &._expanded {
-                &:before {
-                    content: @steps-wizard-attribute-entity-action-toggle__close__content;
-                }
-            }
-        }
-
-        .action-remove {
-            .action-icon();
-            &:before {
-                &:extend(.abs-icon all);
-                content: @steps-wizard-attribute-entity-action-remove__content;
-            }
-            &:hover {
-                color: @steps-wizard-attribute-entity-action-save__hover__content;
-            }
-            > span {
-                display: none;
-            }
+            padding: @indent__xs;
         }
     }
 
     .attribute-entity-top {
+        margin: 0 0 @indent__s;
         &:extend(.abs-clearfix all);
-    }
-
-    .admin__fieldset-options {
-        border: 1px solid @steps-wizard-attribute-entity__border-color;
-        display: none;
-        padding: @indent__s;
-        transition: @steps-wizard-attribute-entity__transition;
-
-        &._visible {
-            display: block;
-            + .action-create-new {
-                display: block;
-                margin: 0 0 @indent__l;
-            }
-        }
     }
 
     .attribute-entity-title-block {
         float: left;
-        margin-top: .3rem;
     }
 
     .attribute-entity-title {
@@ -120,15 +75,14 @@
         cursor: -webkit-grabbing;
         display: inline-block;
         font-size: 0;
-        margin: 0 0 @indent__s;
+        padding: 0 @indent__s 0 0;
         vertical-align: middle;
-        width: 100%;
 
         &:hover {
             > span {
                 &:after,
                 &:before {
-                    background: @steps-wizard-attibute-draggable__hover__color;
+                    background: @steps-wizard-attribute-draggable__hover__color;
                 }
             }
         }
@@ -141,7 +95,7 @@
             }
             &:after,
             &:before {
-                background: @steps-wizard-attibute-draggable__color;
+                background: @steps-wizard-attribute-draggable__color;
                 content: '';
                 display: inline-block;
                 height: .3rem;
@@ -213,7 +167,6 @@
     }
 
     .action-create-new {
-        display: none;
         font-weight: @font-weight__regular;
         padding-left: 0;
     }
