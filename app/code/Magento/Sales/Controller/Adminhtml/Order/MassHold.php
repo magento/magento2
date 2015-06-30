@@ -14,7 +14,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $orderIds = $this->getRequest()->getPost('order_ids', []);
+        $orderIds = $this->getRequest()->getPost('selected', []);
         $countHoldOrder = 0;
 
         foreach ($orderIds as $orderId) {
