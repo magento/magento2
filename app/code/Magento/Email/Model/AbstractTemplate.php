@@ -25,6 +25,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const DEFAULT_DESIGN_AREA = 'frontend';
 
     /**
+     * Default path to email logo
+     */
+    const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
+
+    /**
      * Email logo url
      *
      * @var string
@@ -57,7 +62,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @var \Magento\Framework\Object
      */
-    protected $_designConfig;
+    private $designConfig;
 
     /**
      * Whether template is child of another template
@@ -78,21 +83,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @var \Magento\Framework\Object|boolean
      */
-    protected $_emulatedDesignConfig = false;
+    private $emulatedDesignConfig = false;
 
     /**
      * Package area
      *
      * @var string
      */
-    protected $_area;
+    private $area;
 
     /**
      * Store id
      *
      * @var int
      */
-    protected $_store;
+    private $store;
 
     /**
      * Tracks whether design has been applied within the context of this template model. Important as there are multiple
@@ -105,50 +110,43 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * @var \Magento\Email\Model\TemplateFactory
      */
-    private $templateFactory = null;
+    protected $templateFactory = null;
 
     /**
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
      */
-    protected $_design = null;
+    protected $design = null;
 
     /**
      * @var \Magento\Store\Model\App\Emulation
      */
-    protected $_appEmulation;
+    protected $appEmulation;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     /**
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
      */
-    private $assetRepo;
+    protected $assetRepo;
 
     /**
      * @var \Magento\Framework\Filesystem
      */
-    private $filesystem;
+    protected $filesystem;
 
     /**
      * Scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
-
-    /**
-     * Object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
+    protected $scopeConfig;
 
     /**
      * @var \Magento\Email\Model\Template\Config
@@ -164,8 +162,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param array $data
@@ -181,20 +177,18 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         Template\Config $emailConfig,
         TemplateFactory $templateFactory,
         array $data = []
     ) {
-        $this->_design = $design;
-        $this->_area = isset($data['area']) ? $data['area'] : null;
-        $this->_store = isset($data['store']) ? $data['store'] : null;
-        $this->_appEmulation = $appEmulation;
+        $this->design = $design;
+        $this->area = isset($data['area']) ? $data['area'] : null;
+        $this->store = isset($data['store']) ? $data['store'] : null;
+        $this->appEmulation = $appEmulation;
         $this->storeManager = $storeManager;
         $this->assetRepo = $assetRepo;
         $this->filesystem = $filesystem;
-        $this->_scopeConfig = $scopeConfig;
-        $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
         $this->emailConfig = $emailConfig;
         $this->templateFactory = $templateFactory;
         parent::__construct($context, $registry, null, null, $data);
@@ -244,7 +238,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function loadByConfigPath($configPath)
     {
-        $templateId = $this->_scopeConfig->getValue(
+        $templateId = $this->scopeConfig->getValue(
             $configPath,
             ScopeInterface::SCOPE_STORE,
             $this->getDesignConfig()->getStore()
@@ -379,7 +373,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         $designParams = $this->getDesignParams();
         return $this->assetRepo->getUrlWithParams(
-            'Magento_Email::logo_email.png',
+            self::DEFAULT_LOGO_FILE_ID,
             $designParams
         );
     }
@@ -393,7 +387,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function getLogoUrl($store)
     {
         $store = $this->storeManager->getStore($store);
-        $fileName = $this->_scopeConfig->getValue(
+        $fileName = $this->scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -419,7 +413,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function getLogoAlt($store)
     {
         $store = $this->storeManager->getStore($store);
-        $alt = $this->_scopeConfig->getValue(
+        $alt = $this->scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -453,35 +447,35 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $variables['logo_alt'] = $this->getLogoAlt($storeId);
         }
         if (!isset($variables['logo_width'])) {
-            $variables['logo_width'] = $this->_scopeConfig->getValue(
+            $variables['logo_width'] = $this->scopeConfig->getValue(
                 self::XML_PATH_DESIGN_EMAIL_LOGO_WIDTH,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['logo_height'])) {
-            $variables['logo_height'] = $this->_scopeConfig->getValue(
+            $variables['logo_height'] = $this->scopeConfig->getValue(
                 self::XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_phone'])) {
-            $variables['store_phone'] = $this->_scopeConfig->getValue(
+            $variables['store_phone'] = $this->scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_STORE_PHONE,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_hours'])) {
-            $variables['store_hours'] = $this->_scopeConfig->getValue(
+            $variables['store_hours'] = $this->scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_STORE_HOURS,
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
         if (!isset($variables['store_email'])) {
-            $variables['store_email'] = $this->_scopeConfig->getValue(
+            $variables['store_email'] = $this->scopeConfig->getValue(
                 'trans_email/ident_support/email',
                 ScopeInterface::SCOPE_STORE,
                 $store
@@ -514,7 +508,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($storeId !== null) {
             // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
             // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
-            $this->_appEmulation->startEnvironmentEmulation($storeId, $area, true);
+            $this->appEmulation->startEnvironmentEmulation($storeId, $area, true);
         }
         return true;
     }
@@ -526,7 +520,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function cancelDesignConfig()
     {
-        $this->_appEmulation->stopEnvironmentEmulation();
+        $this->appEmulation->stopEnvironmentEmulation();
         $this->hasDesignBeenApplied = false;
         return $this;
     }
@@ -542,9 +536,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
-            'theme' => $this->_design->getDesignTheme()->getCode(),
-            'themeModel' => $this->_design->getDesignTheme(),
-            'locale' => $this->_design->getLocale(),
+            'theme' => $this->design->getDesignTheme()->getCode(),
+            'themeModel' => $this->design->getDesignTheme(),
+            'locale' => $this->design->getLocale(),
         ];
     }
 
@@ -555,18 +549,18 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getDesignConfig()
     {
-        if ($this->_designConfig === null) {
-            if ($this->_area === null) {
-                $this->_area = $this->_design->getArea();
+        if ($this->designConfig === null) {
+            if ($this->area === null) {
+                $this->area = $this->design->getArea();
             }
-            if ($this->_store === null) {
-                $this->_store = $this->storeManager->getStore()->getId();
+            if ($this->store === null) {
+                $this->store = $this->storeManager->getStore()->getId();
             }
-            $this->_designConfig = new \Magento\Framework\Object(
-                ['area' => $this->_area, 'store' => $this->_store]
+            $this->designConfig = new \Magento\Framework\Object(
+                ['area' => $this->area, 'store' => $this->store]
             );
         }
-        return $this->_designConfig;
+        return $this->designConfig;
     }
 
     /**
@@ -649,7 +643,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         if ($storeId) {
             // save current design settings
-            $this->_emulatedDesignConfig = clone $this->getDesignConfig();
+            $this->emulatedDesignConfig = clone $this->getDesignConfig();
             if (
                 $this->getDesignConfig()->getStore() != $storeId
                 || $this->getDesignConfig()->getArea() != $area
@@ -658,7 +652,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 $this->applyDesignConfig();
             }
         } else {
-            $this->_emulatedDesignConfig = false;
+            $this->emulatedDesignConfig = false;
         }
     }
 
@@ -669,10 +663,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function revertDesign()
     {
-        if ($this->_emulatedDesignConfig) {
-            $this->setDesignConfig($this->_emulatedDesignConfig->getData());
+        if ($this->emulatedDesignConfig) {
+            $this->setDesignConfig($this->emulatedDesignConfig->getData());
             $this->cancelDesignConfig();
-            $this->_emulatedDesignConfig = false;
+            $this->emulatedDesignConfig = false;
         }
     }
 

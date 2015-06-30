@@ -15,7 +15,6 @@
         "magento/module-directory": "0.74.0-beta14",
         "magento/module-eav": "0.74.0-beta14",
         "magento/module-gift-message": "0.74.0-beta14",
-        "magento/module-wishlist": "0.74.0-beta14",
         "magento/module-page-cache": "0.74.0-beta14",
         "magento/module-theme": "0.74.0-beta14",
         "magento/module-msrp": "0.74.0-beta14",

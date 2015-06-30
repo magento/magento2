@@ -76,7 +76,7 @@ class UpdateQty extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
-            $response = ['error' => true, 'message' => __('Cannot update the item\'s quantity.')];
+            $response = ['error' => true, 'message' => __('We can\'t update the item\'s quantity right now.')];
         }
         if (is_array($response)) {
             $resultJson = $this->resultJsonFactory->create();

@@ -21,7 +21,6 @@
         "magento/module-reports": "0.74.0-beta14",
         "magento/module-catalog-inventory": "0.74.0-beta14",
         "magento/module-wishlist": "0.74.0-beta14",
-        "magento/module-email": "0.74.0-beta14",
         "magento/module-shipping": "0.74.0-beta14",
         "magento/module-config": "0.74.0-beta14",
         "magento/module-media-storage": "0.74.0-beta14",

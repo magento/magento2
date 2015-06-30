@@ -65,7 +65,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
                     $email,
                     $this->storeManager->getStore()->getWebsiteId()
                 );
-                $this->messageManager->addSuccess(__('Please, check your email for confirmation key.'));
+                $this->messageManager->addSuccess(__('Please check your email for confirmation key.'));
             } catch (InvalidTransitionException $e) {
                 $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {

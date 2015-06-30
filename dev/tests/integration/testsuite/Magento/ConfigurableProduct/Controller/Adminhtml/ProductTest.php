@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class ProductTest extends \Magento\Backend\Utility\Controller
+class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php

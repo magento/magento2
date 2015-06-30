@@ -2245,7 +2245,7 @@ return [
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
-    ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['getFilePath', 'Magento\MediaStorage\Model\File\Storage\Request'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['getDataSetDefault', 'Magento\Framework\Object'],
@@ -2257,5 +2257,16 @@ return [
     ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    [
+        'getConfigureUrl',
+        'Magento\Checkout\Block\Cart\Item\Renderer',
+        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+    ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
+    ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
+    ['loadByCode', 'Magento\Newsletter\Model\Resource'],
+    ['_getIncludeParameters', 'Magento\Framework\Filter\Template', '_getParameters'],
+    ['setIncludeProcessor', 'Magento\Framework\Filter\Template'],
+    ['includeDirective', 'Magento\Framework\Filter\Template'],
 ];
