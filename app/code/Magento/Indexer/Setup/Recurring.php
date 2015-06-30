@@ -19,6 +19,7 @@ use Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Recurring implements InstallSchemaInterface
 {
