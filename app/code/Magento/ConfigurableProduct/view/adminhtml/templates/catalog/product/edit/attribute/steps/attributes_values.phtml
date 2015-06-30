@@ -7,18 +7,16 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: '<?= $block->getComponentName()?>'">
-    <h2 class="steps-wizard-title"><?= __('Attribute Values') ?></h2>
+    <h2 class="steps-wizard-title"><?= __('Step 2: Attribute Values') ?></h2>
     <div class="steps-wizard-info">
         <span><?= __('Choose options from each attribute to create unique products.') ?></span>
     </div>
-    <div data-bind="foreach: attributes, sortableList: attributes" class="steps-wizard-section">
+    <div data-bind="foreach: attributes, sortableList: attributes">
 
         <div class="attribute-entity">
             <div class="attribute-entity-top">
                 <div class="attribute-entity-title-block">
-                    <span class="attribute-draggable" data-role="draggable" title="<?= __('Sort Variations') ?>"></span>
                     <div class="attribute-entity-title" data-bind="text: label"></div>
-
                     <div class="attribute-options-block">
                         <span class="attribute-length" data-bind="text: $data.options().length"></span>
                         <?= __('Options') ?>
@@ -43,9 +41,12 @@
                 </div>
             </div>
 
-            <fieldset class="admin__fieldset admin__fieldset-options" data-bind="visible: opened">
+            <fieldset class="admin__fieldset admin__fieldset-options" data-bind="css: {'_visible': opened}">
+                <span class="attribute-draggable" data-role="draggable" title="<?= __('Sort Variations') ?>">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </span>
                 <ul class="attribute-options" data-bind="foreach: options">
-                    <li class="attribute-option">
+                    <li class="attribute-option" data-bind="css: {'_new-label': !label}">
                         <div class="admin__field admin__field-option">
                             <input
                                 type="checkbox"
@@ -53,23 +54,32 @@
                                 data-bind="checkedValue: value, checked: !value || $parent.chosenOptions" />
                             <label data-bind="text: label, visible: label" class="admin__field-label"></label>
                         </div>
-
-                        <div class="admin__field">
+                        <div class="admin__field admin__field-create-new" data-bind="visible: !label">
                             <div class="admin__field-control">
                                 <input class="admin__control-text"
-                                       data-bind="value: label, visible: !label"
+                                       data-bind="value: label"
                                        type="text" />
                             </div>
+                            <button type="button"
+                                    class="action-save"
+                                    data-bind="click: $parents[1].saveOption.bind($parent)">
+                                <span><?= __('Save Option') ?></span>
+                            </button>
+                            <button type="button"
+                                    class="action-remove"
+                                    data-bind="click: $parents[1].removeOption.bind($parent)">
+                                <span><?= __('Remove Option') ?></span>
+                            </button>
                         </div>
-
-                        <a href="#" data-bind="visible: !label, click: $parents[1].saveOption.bind($parent)">-></a>
-                        <a href="#" data-bind="visible: !label, click: $parents[1].removeOption.bind($parent)">X</a>
                     </li>
                 </ul>
-                <a data-action="addOption" href="#" data-bind="click: $parent.createOption">
-                    <?= __('Create New Value') ?>
-                </a>
             </fieldset>
+            <button class="action-create-new action-tertiary"
+                    type="button"
+                    data-action="addOption"
+                    data-bind="click: $parent.createOption">
+                <span><?= __('Create New Value') ?></span>
+            </button>
         </div>
     </div>
 </div>

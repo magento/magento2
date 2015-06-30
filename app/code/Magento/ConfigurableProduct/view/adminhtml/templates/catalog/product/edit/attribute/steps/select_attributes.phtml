@@ -10,6 +10,7 @@
     <div class="select-attributes-button-block">
         <?= $block->getAddNewAttributeButton(); ?>
     </div>
+    <h2 class="steps-wizard-title"><?= __('Step 1: Select Attributes') ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= $block->getComponentName()?>'">
         <?= __('Selected Attributes:') ?>
         <div data-bind="text: selectedAttributes() || '--'"></div>
