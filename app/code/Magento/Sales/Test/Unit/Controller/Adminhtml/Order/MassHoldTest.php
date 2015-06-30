@@ -155,7 +155,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
-            ->with('order_ids', [])
+            ->with('selected', [])
             ->willReturn([1, 2]);
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
@@ -192,7 +192,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
-            ->with('order_ids', [])
+            ->with('selected', [])
             ->willReturn([1, 2]);
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
@@ -232,7 +232,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
-            ->with('order_ids', [])
+            ->with('selected', [])
             ->willReturn([1, 2]);
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
