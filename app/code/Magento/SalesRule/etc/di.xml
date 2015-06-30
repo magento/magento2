@@ -6,6 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\SalesRule\Api\RuleRepositoryInterface"
+                type="Magento\SalesRule\Model\Resource\RuleRepository" />
+    <preference for="Magento\SalesRule\Api\Data\RuleInterface"
+                type="Magento\SalesRule\Model\Data\Rule" />
+    <preference for="Magento\SalesRule\Api\Data\ConditionInterface"
+                type="Magento\SalesRule\Model\Data\Condition" />
+    <preference for="Magento\SalesRule\Api\Data\RuleSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\SalesRule\Api\Data\RuleLabelInterface"
+                type="Magento\SalesRule\Model\Data\RuleLabel" />
     <type name="Magento\SalesRule\Model\Resource\Rule\Collection" shared="false" />
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
