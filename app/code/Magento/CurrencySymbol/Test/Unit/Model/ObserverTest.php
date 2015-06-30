@@ -96,7 +96,7 @@ class ObserverTest extends PHPUnit_Framework_TestCase
 
         $expectedCurrencyOptions = [
             \Magento\Framework\Locale\Currency::CURRENCY_OPTION_SYMBOL => $sampleCurrencySymbol,
-            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => \Magento\Framework\Currency::USE_SYMBOL
+            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_DISPLAY => \Magento\Framework\Currency::USE_SYMBOL
         ];
 
         //Return invalid value
