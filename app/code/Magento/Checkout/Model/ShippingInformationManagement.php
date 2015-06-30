@@ -11,6 +11,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface as Logger;
 use \Magento\Quote\Model\QuoteAddressValidator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInformationManagementInterface
 {
     /**
@@ -91,6 +94,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveAddressInformation(
         $cartId,
