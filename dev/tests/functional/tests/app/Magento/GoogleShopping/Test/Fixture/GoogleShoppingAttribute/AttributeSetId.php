@@ -6,34 +6,19 @@
 
 namespace Magento\GoogleShopping\Test\Fixture\GoogleShoppingAttribute;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
 /**
- * Class AttributeSetId
  * Prepare Attribute Set
  *
  *  Data keys:
- *  - dataSet
+ *  - dataset
  *  - attribute_set
  */
-class AttributeSetId implements FixtureInterface
+class AttributeSetId extends DataSource
 {
-    /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params = [];
-
-    /**
-     * Attribute Set name
-     *
-     * @var string
-     */
-    protected $data;
-
     /**
      * Attribute Set fixture
      *
@@ -42,6 +27,7 @@ class AttributeSetId implements FixtureInterface
     protected $attributeSet;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -49,9 +35,9 @@ class AttributeSetId implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
+        if (isset($data['dataset'])) {
             /** @var CatalogAttributeSet $attributeSet */
-            $attributeSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataSet' => $data['dataSet']]);
+            $attributeSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataset' => $data['dataset']]);
             $this->prepareData($attributeSet);
         }
 
@@ -61,7 +47,7 @@ class AttributeSetId implements FixtureInterface
     }
 
     /**
-     * Prepare Catalog Attribute Set data
+     * Prepare Catalog Attribute Set data.
      *
      * @param CatalogAttributeSet $attributeSet
      * @return void
@@ -77,45 +63,12 @@ class AttributeSetId implements FixtureInterface
     }
 
     /**
-     * Persist attribute options
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return Attribute Set fixture
+     * Return Attribute Set fixture.
      *
      * @return CatalogAttributeSet
      */
     public function getAttributeSet()
     {
         return $this->attributeSet;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 }

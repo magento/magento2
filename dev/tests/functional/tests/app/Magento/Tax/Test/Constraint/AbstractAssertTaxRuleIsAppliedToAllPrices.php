@@ -109,7 +109,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->catalogProductView = $catalogProductView;
         $this->checkoutCart = $checkoutCart;
         //Preconditions
-        $address = $fixtureFactory->createByCode('address', ['dataSet' => 'US_address_NY']);
+        $address = $fixtureFactory->createByCode('address', ['dataset' => 'US_address_NY']);
         $shipping = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $actualPrices = [];
         //Assertion steps

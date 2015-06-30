@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateInvoiceEntityTest">
         <variation name="CreateInvoiceEntityTestVariation1">
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">full_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
@@ -25,8 +25,8 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
         </variation>
         <variation name="CreateInvoiceEntityTestVariation2">
-            <data name="order/dataSet" xsi:type="string">default</data>
-            <data name="order/data/price/preset" xsi:type="string">partial_invoice</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">partial_invoice</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
             <data name="data/items_data/0/qty" xsi:type="string">1</data>

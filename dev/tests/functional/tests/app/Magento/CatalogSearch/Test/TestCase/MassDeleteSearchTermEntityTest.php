@@ -69,8 +69,8 @@ class MassDeleteSearchTermEntityTest extends Injectable
         $deleteSearchTerms = [];
         $searchTerms = array_map('trim', explode(',', $searchTerms));
         foreach ($searchTerms as $term) {
-            list($fixture, $dataSet) = explode('::', $term);
-            $term = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+            list($fixture, $dataset) = explode('::', $term);
+            $term = $fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
             /** @var CatalogSearchQuery $term */
             $term->persist();
             $deleteSearchTerms[] = ['search_query' => $term->getQueryText()];

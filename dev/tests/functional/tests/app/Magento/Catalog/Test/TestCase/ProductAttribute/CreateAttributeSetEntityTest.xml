@@ -9,7 +9,7 @@
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateAttributeSetEntityTest">
         <variation name="CreateAttributeSetEntityTestVariation1">
             <data name="attributeSet/data/attribute_set_name" xsi:type="string">ProductTemplate%isolation%</data>
-            <data name="attributeSet/data/skeleton_set/dataSet" xsi:type="string">default</data>
+            <data name="attributeSet/data/skeleton_set/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid" />

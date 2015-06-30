@@ -67,7 +67,7 @@ class DeleteAdminUserEntityTest extends Injectable
     {
         $user = $fixtureFactory->createByCode(
             'user',
-            ['dataSet' => 'custom_admin_with_default_role']
+            ['dataset' => 'custom_admin_with_default_role']
         );
         $user->persist();
 

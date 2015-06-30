@@ -122,7 +122,7 @@ class ViewedProductsReportEntityTest extends Injectable
         $products = [];
         foreach ($productsData as $productConfig) {
             $product = explode('::', $productConfig);
-            $productFixture = $this->fixtureFactory->createByCode($product[0], ['dataSet' => $product[1]]);
+            $productFixture = $this->fixtureFactory->createByCode($product[0], ['dataset' => $product[1]]);
             $productFixture->persist();
             $products[] = $productFixture;
         }

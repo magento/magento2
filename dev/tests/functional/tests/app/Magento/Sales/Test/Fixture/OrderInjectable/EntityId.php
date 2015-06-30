@@ -15,13 +15,6 @@ use Magento\Mtf\Fixture\DataSource;
 class EntityId extends DataSource
 {
     /**
-     * Current preset.
-     *
-     * @var string
-     */
-    protected $currentPreset;
-
-    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $data
@@ -42,8 +35,8 @@ class EntityId extends DataSource
         if (is_string($data['products'])) {
             $products = explode(',', $data['products']);
             foreach ($products as $product) {
-                list($fixture, $dataSet) = explode('::', trim($product));
-                $product = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+                list($fixture, $dataset) = explode('::', trim($product));
+                $product = $fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
                 $product->persist();
                 $this->data['products'][] = $product;
             }

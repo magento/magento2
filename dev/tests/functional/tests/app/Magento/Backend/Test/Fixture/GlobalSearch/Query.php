@@ -6,40 +6,23 @@
 
 namespace Magento\Backend\Test\Fixture\GlobalSearch;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class Query
- * Global Search query data provider
+ * Global Search query data provider.
  */
-class Query implements FixtureInterface
+class Query extends DataSource
 {
     /**
-     * Prepared dataSet data
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Data source entity
+     * Data source entity.
      *
      * @var InjectableFixture
      */
     protected $entity = null;
 
     /**
-     * Constructor
-     *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param string $data
@@ -54,8 +37,8 @@ class Query implements FixtureInterface
                 $this->data = $explodedData[0];
                 break;
             case 3:
-                list($fixture, $dataSet, $field) = $explodedData;
-                $entity = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+                list($fixture, $dataset, $field) = $explodedData;
+                $entity = $fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
                 if (!$entity->hasData('id')) {
                     $entity->persist();
                 }
@@ -63,8 +46,8 @@ class Query implements FixtureInterface
                 $this->entity = $entity;
                 break;
             case 4:
-                list($fixture, $dataSet, $source, $field) = $explodedData;
-                $entity = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+                list($fixture, $dataset, $source, $field) = $explodedData;
+                $entity = $fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
                 if (!$entity->hasData('id')) {
                     $entity->persist();
                 }
@@ -76,45 +59,12 @@ class Query implements FixtureInterface
     }
 
     /**
-     * Persist order products
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Get entity for global search
+     * Get entity for global search.
      *
      * @return InjectableFixture
      */
     public function getEntity()
     {
         return $this->entity;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return string
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 }

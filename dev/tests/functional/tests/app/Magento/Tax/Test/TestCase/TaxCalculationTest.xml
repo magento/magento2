@@ -14,7 +14,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">277.14</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">300.00</data>
@@ -43,7 +43,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.61</data>
@@ -72,7 +72,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.50</data>
@@ -101,7 +101,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">83.05</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">89.90</data>
@@ -130,7 +130,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">276.81</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">299.65</data>
@@ -159,7 +159,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">97.43</data>
@@ -188,7 +188,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.50</data>
@@ -217,7 +217,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">84.06</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">91.10</data>
@@ -246,7 +246,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">300.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">325.13</data>
@@ -275,7 +275,7 @@
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">97.54</data>

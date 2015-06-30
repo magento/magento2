@@ -46,7 +46,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $product,
         Customer $customer = null
     ) {
-        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => $product]);
+        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
         $catalogPriceRule = $this->applyCustomerGroup($catalogPriceRule, $customer);
         $replace = [

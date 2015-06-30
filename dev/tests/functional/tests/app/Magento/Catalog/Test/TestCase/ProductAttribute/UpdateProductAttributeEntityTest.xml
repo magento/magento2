@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest">
         <variation name="UpdateProductAttributeEntityTestVariation1">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
-            <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_text_field</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_text_field</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_%isolation%</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
@@ -28,10 +28,10 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation2">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
-            <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_dropdown</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
-            <data name="attribute/data/options/preset" xsi:type="string">default</data>
+            <data name="attribute/data/options/dataset" xsi:type="string">default</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
             <data name="attribute/data/is_unique" xsi:type="string">Yes</data>

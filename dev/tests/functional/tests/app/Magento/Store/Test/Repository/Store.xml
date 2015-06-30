@@ -9,7 +9,7 @@
     <repository class="Magento\Store\Test\Repository\Store">
         <dataset name="default">
             <field name="group_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Default Store View</field>
             <field name="code" xsi:type="string">base</field>
@@ -19,7 +19,7 @@
 
         <dataset name="custom">
             <field name="group_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Custom_Store_%isolation%</field>
             <field name="code" xsi:type="string">code_%isolation%</field>
@@ -31,14 +31,14 @@
             <field name="store_id" xsi:type="string">1</field>
         </dataset>
 
-        <dataset name="All Store Views">
+        <dataset name="all_store_views">
             <field name="name" xsi:type="string">All Store Views</field>
             <field name="store_id" xsi:type="string">0</field>
         </dataset>
 
         <dataset name="german">
             <field name="group_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">DE%isolation%</field>
             <field name="code" xsi:type="string">de%isolation%</field>

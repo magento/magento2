@@ -16,7 +16,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Log in as default admin user.
  * 2. Go to Stores > Tax Rules.
  * 3. Click 'Add New Tax Rule' button.
- * 4. Fill in data according to dataSet
+ * 4. Fill in data according to dataset
  * 5. Save Tax Rule.
  * 6. Perform all assertions.
  *

@@ -18,7 +18,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Test delete products from shopping cart
  *
  * Preconditions
- * 1. Create product according to dataSet
+ * 1. Create product according to dataset
  * 2. Add products to cart
  *
  * Steps:

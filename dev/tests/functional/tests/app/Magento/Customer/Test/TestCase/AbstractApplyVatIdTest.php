@@ -67,9 +67,9 @@ abstract class AbstractApplyVatIdTest extends Injectable
     {
         $this->fixtureFactory = $fixtureFactory;
 
-        foreach ($this->vatGroupDataSets as $group => $dataSet) {
+        foreach ($this->vatGroupDataSets as $group => $dataset) {
             /** @var CustomerGroup $groupFixture */
-            $groupFixture = $this->fixtureFactory->createByCode('customerGroup', ['dataSet' => $dataSet]);
+            $groupFixture = $this->fixtureFactory->createByCode('customerGroup', ['dataset' => $dataset]);
             $groupFixture->persist();
             $this->vatGroups[$group] = $groupFixture;
         }

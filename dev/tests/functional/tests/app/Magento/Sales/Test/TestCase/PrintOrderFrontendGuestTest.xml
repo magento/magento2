@@ -9,10 +9,10 @@
     <testCase name="Magento\Sales\Test\TestCase\PrintOrderFrontendGuestTest">
         <variation name="PrintOrderFrontendGuestTestVariation1">
             <data name="customer" xsi:type="array">
-                <item name="dataSet" xsi:type="string">johndoe_with_addresses"</item>
+                <item name="dataset" xsi:type="string">johndoe_with_addresses"</item>
             </data>
             <data name="billingAddress" xsi:type="array">
-                <item name="dataSet" xsi:type="string">customer_US"</item>
+                <item name="dataset" xsi:type="string">customer_US"</item>
             </data>
             <data name="payment" xsi:type="array">
                 <item name="method" xsi:type="string">checkmo"</item>
