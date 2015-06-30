@@ -105,20 +105,21 @@ define([
             var defaults    = parent && parent.childDefaults || {},
                 children    = node.children,
                 type        = getNodeType(parent, node),
-                dataScope   = getDataScope(parent, node);
-
-            name = getNodeName(parent, node, name);
+                dataScope   = getDataScope(parent, node),
+                nodeName;
 
             node.children = false;
 
             node = utils.extend({
             }, types.get(type), defaults, node);
 
+            nodeName = getNodeName(parent, node, name);
+
             _.extend(node, node.config || {}, {
                 index: node.name || name,
-                name: name,
+                name: nodeName,
                 dataScope: dataScope,
-                parentName: utils.getPart(name, -2),
+                parentName: utils.getPart(nodeName, -2),
                 parentScope: utils.getPart(dataScope, -2)
             });
 
