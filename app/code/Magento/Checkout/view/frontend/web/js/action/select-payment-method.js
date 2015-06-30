@@ -80,9 +80,10 @@ define(
                         });
                         if (proceed) {
                             quote.setPaymentMethod(methodData.method);
+                            //set the totals before setting PaymentData
+                            quote.setTotals(response);
                             service.setSelectedPaymentData(methodData);
                             service.setSelectedPaymentInfo(methodInfo);
-                            quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
                     }
