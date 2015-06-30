@@ -106,8 +106,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
-        \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
@@ -117,7 +117,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Filter\FilterManager $filterManager,
         array $data = []
     ) {
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $registry, $design, $appEmulation, $storeManager, $data);
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->_filter = $filter;

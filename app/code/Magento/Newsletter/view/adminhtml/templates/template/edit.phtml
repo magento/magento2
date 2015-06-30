@@ -126,7 +126,7 @@ require([
             }
 
             if($F('code').blank() || $F('code')==templateControl.templateName) {
-               value = prompt('<?php echo __('Please enter new template name.') ?>', templateControl.templateName + '<?php echo __(' Copy') ?>');
+               value = prompt('<?php echo __('Please enter a new template name.') ?>', templateControl.templateName + '<?php echo __(' Copy') ?>');
                if(!value) {
                    if(value !== null) {
                        $('code').value = '';
@@ -174,7 +174,7 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php echo __('Are you sure that you want to delete this template?') ?>")) {
+            if(window.confirm("<?php echo __('Are you sure you want to delete this template?') ?>")) {
                    window.location.href = '<?php echo $block->getDeleteUrl() ?>';
             }
         },

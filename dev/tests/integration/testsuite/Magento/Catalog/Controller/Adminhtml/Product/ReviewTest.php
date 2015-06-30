@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * @magentoAppArea adminhtml
  */
-class ReviewTest extends \Magento\Backend\Utility\Controller
+class ReviewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Review/_files/review_xss.php

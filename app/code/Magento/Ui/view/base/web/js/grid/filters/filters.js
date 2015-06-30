@@ -5,8 +5,9 @@
 define([
     'underscore',
     'mageUtils',
+    'Magento_Ui/js/core/renderer/layout',
     'Magento_Ui/js/lib/collapsible'
-], function (_, utils, Collapsible) {
+], function (_, utils, layout, Collapsible) {
     'use strict';
 
     function extractPreview(elem) {
@@ -39,15 +40,15 @@ define([
             filters: {
                 placeholder: true
             },
-            listens: {
-                active: 'extractPreviews',
-                applied: 'cancel extractActive'
-            },
             links: {
                 applied: '${ $.storageConfig.path }'
             },
             exports: {
                 applied: '${ $.provider }:params.filters'
+            },
+            listens: {
+                active: 'updatePreviews',
+                applied: 'cancel extractActive'
             }
         },
 
@@ -57,6 +58,8 @@ define([
          * @returns {Filters} Chainable.
          */
         initialize: function () {
+            this._processedColumns = {};
+
             this._super()
                 .cancel()
                 .extractActive();
@@ -182,12 +185,12 @@ define([
         },
 
         /**
-         * Extract previews of a specified filters.
+         * Updates previews of a specified filters.
          *
          * @param {Array} filters - Filters to be processed.
          * @returns {Filters} Chainable.
          */
-        extractPreviews: function (filters) {
+        updatePreviews: function (filters) {
             var previews = filters.map(extractPreview);
 
             this.previews(_.compact(previews));
