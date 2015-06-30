@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta13",
+    "version": "0.74.0-beta14",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -56,12 +56,14 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-xsl": "*",
+        "ext-mbstring": "*",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",
+        "magento/module-advanced-pricing-import-export": "self.version",
         "magento/module-authorization": "self.version",
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",

@@ -58,7 +58,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
                 $filesystem,
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
                 $objectManager->get('Magento\Email\Model\TemplateFactory'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
@@ -540,7 +539,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage The template Name must not be empty.
+     * @expectedExceptionMessage Please enter a template name.
      */
     public function testBeforeSaveEmptyTemplateCode()
     {

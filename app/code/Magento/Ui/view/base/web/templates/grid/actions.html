@@ -18,8 +18,8 @@
         <ul
             class="action-menu"
             data-bind="css: {'_active': opened},
-                       foreach: {data: actions, as: 'action'}">
-            <li data-bind="click: $parent.applyAction.bind($parent, action)">
+                       foreach: actions">
+            <li data-bind="click: $parent.applyAction.bind($parent, type)">
             <span
                 class="action-menu-item"
                 data-bind="text: label"></span>

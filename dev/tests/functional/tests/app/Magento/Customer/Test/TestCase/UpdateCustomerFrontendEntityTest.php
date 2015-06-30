@@ -135,14 +135,4 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
     }
-
-    /**
-     * Customer logout from account
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
-    }
 }

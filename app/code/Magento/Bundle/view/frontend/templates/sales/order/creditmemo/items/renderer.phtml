@@ -50,7 +50,7 @@
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
         <?php if ($block->canShowPriceInfo($_item)): ?>
             <?php echo $_item->getQty()*1 ?>
         <?php else: ?>

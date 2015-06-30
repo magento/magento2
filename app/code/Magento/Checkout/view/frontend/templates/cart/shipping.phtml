@@ -30,7 +30,7 @@
                 <label for="region_id" class="label"><span><?php echo __('State/Province') ?></span></label>
                 <div class="control">
                     <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" <?php if ($block->isStateProvinceRequired()):?> data-validate="{'validate-select':true}" <?php endif;?> >
-                        <option value=""><?php echo __('Please select region, state or province') ?></option>
+                        <option value=""><?php echo __('Please select a region, state or province.') ?></option>
                     </select>
                    <input type="text" id="region" name="region" value="<?php echo $block->escapeHtml($block->getEstimateRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text" />
                 </div>
@@ -71,7 +71,8 @@
                     "form": "#shipping-zip-form",
                     "regionJson": <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
                     "defaultRegion": "<?php echo $block->getEstimateRegionId() ?>",
-                    "countriesWithOptionalZip": <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+                    "countriesWithOptionalZip": <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>,
+                    "isMultipleCountriesAllowed": <?php echo $block->isMultipleCountriesAllowed() ? 'true' : 'false'; ?>
                 }
             }
         }

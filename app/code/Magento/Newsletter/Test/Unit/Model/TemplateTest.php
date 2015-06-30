@@ -56,11 +56,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManager;
-
-    /**
      * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $emailConfig;
@@ -121,9 +116,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,7 +150,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->assetRepo,
                     $this->filesystem,
                     $this->scopeConfig,
-                    $this->objectManager,
                     $this->emailConfig,
                     $this->templateFactory,
                     $this->request,
@@ -213,7 +204,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @param $storeId int
      * @param $expectedVariables array
      * @param $expectedResult string
-     * @dataProvider getProcessedTemplateProvider
+     * @dataProvider getProcessedTemplateDataProvider
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
@@ -310,7 +301,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateProvider()
+    public function getProcessedTemplateDataProvider()
     {
         return [
             'default' => [

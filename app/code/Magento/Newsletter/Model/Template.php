@@ -73,7 +73,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
      *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
@@ -91,7 +90,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\App\RequestInterface $request,
@@ -107,7 +105,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $assetRepo,
             $filesystem,
             $scopeConfig,
-            $objectManager,
             $emailConfig,
             $templateFactory,
             $data
@@ -235,7 +232,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function isValidForSend()
     {
-        return !$this->_scopeConfig->isSetFlag(
+        return !$this->scopeConfig->isSetFlag(
             \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
