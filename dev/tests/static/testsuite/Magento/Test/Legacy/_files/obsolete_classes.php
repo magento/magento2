@@ -1420,6 +1420,10 @@ return [
     ['Magento\Core\Model\Design\Fallback\Rule\Simple', 'Magento\Framework\View\Design\Fallback\Rule\Simple'],
     ['Magento\Core\Model\Design\Fallback\Factory', 'Magento\Framework\View\Design\Fallback\RulePool'],
     ['Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy'],
+    ['Magento\Framework\View\Design\FileResolution\Fallback\Cache'],
+    ['Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface'],
+    ['Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat'],
+    ['Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped'],
     ['Magento\Framework\View\Design\FileResolution\Strategy\View\NotifiableInterface'],
     ['Magento\Framework\View\Design\FileResolution\Strategy\View\FileInterface'],
     ['Magento\Framework\View\Design\FileResolution\Strategy\View\LocaleInterface'],
@@ -2613,6 +2617,7 @@ return [
     ['Magento\Less\PreProcessorInterface', 'Magento\Framework\View\Asset\PreProcessorInterface'],
     ['Magento\Framework\View\Asset\PreProcessorFactory'],
     ['Magento\Framework\View\Asset\PreProcessor\Composite'],
+    ['Magento\Framework\View\Asset\PreProcessor\Cache'],
     [
         'Magento\Framework\View\Asset\PreProcessor\PreProcessorInterface',
         'Magento\Framework\View\Asset\PreProcessorInterface',
