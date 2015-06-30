@@ -27,7 +27,15 @@
 <h2 class="page-title">{{$state.current.header}}</h2>
 
 <div ng-show="$state.is('root.component-grid')" class="accent-box">
-    <p>Component Picker information here.</p>
+<table width="100%">
+  <tbody>
+  <tr ng-repeat="component in components">
+    <td width="33%">{{component.name}}</td>
+    <td width="33%">{{component.type}}</td>
+    <td width="33%">{{component.version}}</td>
+  </tr>
+  </tbody>
+</table>
 </div>
 
 <div ui-view></div>

@@ -5,5 +5,8 @@
 
 'use strict';
 angular.module('component-grid', ['ngStorage'])
-    .controller('componentGridController', ['$scope', '$state', '$localStorage', '$http', '$window', function ($scope, $state, $localStorage, $http, $window) {
+    .controller('componentGridController', ['$scope', '$http', function ($scope, $http) {
+      $http.get('index.php/componentGrid/components').success(function(data) {
+        $scope.components = data.components;
+      });
     }]);
