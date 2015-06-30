@@ -144,6 +144,10 @@ class Full
      * @var \Magento\Framework\Search\Request\DimensionFactory
      */
     private $dimensionFactory;
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -162,6 +166,7 @@ class Full
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
+     * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -180,7 +185,8 @@ class Full
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
+        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
+        array $data
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -198,6 +204,7 @@ class Full
         $this->fulltextResource = $fulltextResource;
         $this->priceCurrency = $priceCurrency;
         $this->dimensionFactory = $dimensionFactory;
+        $this->data = $data;
     }
 
     /**
@@ -255,7 +262,7 @@ class Full
     protected function rebuildIndex($productIds = null)
     {
         $storeIds = array_keys($this->storeManager->getStores());
-        $engine = $this->engineProvider->get();
+        $engine = $this->getEngineProvider();
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
             $engine->deleteIndex([$dimension], $this->getIterator($productIds));
@@ -318,7 +325,7 @@ class Full
         $visibility = $this->getSearchableAttribute('visibility');
         $status = $this->getSearchableAttribute('status');
         $statusIds = $this->catalogProductStatus->getVisibleStatusIds();
-        $allowedVisibility = $this->engineProvider->get()->getAllowedVisibility();
+        $allowedVisibility = $this->getEngineProvider()->getAllowedVisibility();
 
         $lastProductId = 0;
         while (true) {
@@ -441,7 +448,7 @@ class Full
     protected function cleanIndex($storeId)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->engineProvider->get()->cleanIndex([$dimension]);
+        $this->getEngineProvider()->cleanIndex([$dimension]);
     }
 
     /**
@@ -454,7 +461,7 @@ class Full
     protected function deleteIndex($storeId = null, $productIds = null)
     {
         $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
-        $this->engineProvider->get()->deleteIndex([$dimension], $this->getIterator($productIds));
+        $this->getEngineProvider()->deleteIndex([$dimension], $this->getIterator($productIds));
     }
 
     /**
@@ -486,7 +493,7 @@ class Full
 
             $this->eventManager->dispatch(
                 'catelogsearch_searchable_attributes_load_after',
-                ['engine' => $this->engineProvider->get(), 'attributes' => $attributes]
+                ['engine' => $this->getEngineProvider(), 'attributes' => $attributes]
             );
 
             $entity = $this->getEavConfig()->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
@@ -732,7 +739,7 @@ class Full
             $index['options'] = $data;
         }
 
-        return $this->engineProvider->get()->prepareEntityIndex($index, $this->separator);
+        return $this->getEngineProvider()->prepareEntityIndex($index, $this->separator);
     }
 
     /**
@@ -746,11 +753,11 @@ class Full
     protected function getAttributeValue($attributeId, $valueId, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
-        $value = $this->engineProvider->get()->processAttributeValue($attribute, $valueId);
+        $value = $this->getEngineProvider()->processAttributeValue($attribute, $valueId);
 
         if ($attribute->getIsSearchable()
             && $attribute->usesSource()
-            && $this->engineProvider->get()->allowAdvancedIndex()
+            && $this->getEngineProvider()->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
             $valueText = $attribute->getSource()->getIndexOptionText($valueId);
@@ -812,5 +819,13 @@ class Full
         foreach ($data as $key => $value) {
             yield $key => $value;
         }
+    }
+
+    /**
+     * @return \Magento\CatalogSearch\Model\Resource\EngineInterface
+     */
+    private function getEngineProvider()
+    {
+        return $this->engineProvider->get($this->data);
     }
 }

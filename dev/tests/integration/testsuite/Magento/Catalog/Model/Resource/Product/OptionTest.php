@@ -3,11 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Model\Resource\Product;
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Catalog\Model\Resource\Product;
-
+/**
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ */
 class OptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
