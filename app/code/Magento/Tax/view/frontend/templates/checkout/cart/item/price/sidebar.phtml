@@ -9,10 +9,9 @@
 /** @var $block \Magento\Tax\Block\Item\Price\Renderer */
 ?>
 <?php $_item = $block->getItem() ?>
-<div class="price-container">
-    <span class="price-label"><?php echo __('Price')?></span>
     <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
         <span class="price-wrapper price-including-tax" data-label="<?php echo __('Incl. Tax')?>">
+            <?php $_incl = $_item->getPriceInclTax(); ?>
             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
         </span>
     <?php endif; ?>
@@ -21,4 +20,3 @@
             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
         </span>
     <?php endif; ?>
-</div>
