@@ -87,4 +87,12 @@ interface OrderAdapterInterface
      * @return string
      */
     public function getBaseCurrencyCode();
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return float
+     */
+    public function getGrandTotalAmount();
+
 }

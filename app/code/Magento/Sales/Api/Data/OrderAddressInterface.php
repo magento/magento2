@@ -35,6 +35,10 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Region ID.
      */
     const REGION_ID = 'region_id';
+    /**
+     * Region code.
+     */
+    const KEY_REGION_CODE = 'region_code';
     /*
      * Customer ID.
      */
@@ -248,9 +252,9 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getRegion();
 
     /**
-     * Return 2 letter state code if available, otherwise full region name
+     * Gets the region code for the order address
      *
-     * @return null|string
+     * @return string|null Region code.
      */
     public function getRegionCode();
 
@@ -500,6 +504,14 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return $this
      */
     public function setVatRequestId($id);
+
+    /**
+     * Set region code
+     *
+     * @param string $regionCode
+     * @return $this
+     */
+    public function setRegionCode($regionCode);
 
     /**
      * Sets the VAT request date for the order address.

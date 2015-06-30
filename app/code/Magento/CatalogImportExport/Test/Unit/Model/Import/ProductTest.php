@@ -89,8 +89,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     // @codingStandardsIgnoreStart
     /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    // @codingStandardsIgnoreEnd
     protected $_resourceFactory;
 
+    // @codingStandardsIgnoreStart
     /** @var  \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_setColFactory;
 
