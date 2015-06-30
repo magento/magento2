@@ -54,12 +54,14 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
                 'getControllerName',
                 'getModuleName',
                 'getActionName',
+                'getRequestUri',
                 'getParam',
                 'setParams',
                 'getParams',
                 'setModuleName',
                 'isSecure',
                 'setActionName',
+                'setRequestUri',
                 'getCookie'
             ],
             [],
@@ -122,6 +124,9 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getActionName')
             ->will($this->returnValue('action'));
+        $this->requestMock->expects($this->once())
+            ->method('getRequestUri')
+            ->will($this->returnValue('uri'));
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
@@ -153,10 +158,11 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
      * @param string $route
      * @param string $controller
      * @param string $action
+     * @param string $uri
      * @param string $expectedResult
      * @dataProvider getScriptOptionsPrivateContentDataProvider
      */
-    public function testGetScriptOptionsPrivateContent($url, $route, $controller, $action, $expectedResult)
+    public function testGetScriptOptionsPrivateContent($url, $route, $controller, $action, $uri, $expectedResult)
     {
         $handles = [
             'some',
@@ -179,6 +185,10 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
             ->method('getActionName')
             ->will($this->returnValue($action));
 
+        $this->requestMock->expects($this->once())
+            ->method('getRequestUri')
+            ->will($this->returnValue($uri));
+
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
@@ -191,14 +201,17 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
 
     public function getScriptOptionsPrivateContentDataProvider()
     {
+        // @codingStandardsIgnoreStart
         return [
             'http' => [
-                'url' => 'http://some-name.com/page_cache/block/render',
-                'route' => 'route',
-                'controller' => 'controller',
-                'action' => 'action',
-                'expectedResult' => '~"originalRequest":{"route":"route","controller":"controller","action":"action"}~'
+                'url'            => 'http://some-name.com/page_cache/block/render',
+                'route'          => 'route',
+                'controller'     => 'controller',
+                'action'         => 'action',
+                'uri'            => 'uri',
+                'expectedResult' => '~"originalRequest":{"route":"route","controller":"controller","action":"action","uri":"uri"}~'
             ],
         ];
+        //@codingStandardsIgnoreEnd
     }
 }
