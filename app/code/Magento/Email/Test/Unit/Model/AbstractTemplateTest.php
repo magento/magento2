@@ -17,11 +17,6 @@ namespace Magento\Email\Test\Unit\Model;
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $context;
-
-    /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $design;
@@ -62,11 +57,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManager;
-
-    /**
      * @var \Magento\Email\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterFactory;
@@ -83,9 +73,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -122,9 +109,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -151,7 +135,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
             $helper->getConstructArguments(
                 'Magento\Email\Model\AbstractTemplate',
                 [
-                    'context' => $this->context,
                     'design' => $this->design,
                     'registry' => $this->registry,
                     'appEmulation' => $this->appEmulation,
@@ -159,7 +142,6 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'filesystem' => $this->filesystem,
                     'assetRepo' => $this->assetRepo,
                     'scopeConfig' => $this->scopeConfig,
-                    'objectManager' => $this->objectManager,
                     'emailConfig' => $this->emailConfig,
                     'filterFactory' => $this->filterFactory,
                     'templateFactory' => $this->templateFactory
