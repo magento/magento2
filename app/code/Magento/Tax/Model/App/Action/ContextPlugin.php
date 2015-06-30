@@ -84,7 +84,8 @@ class ContextPlugin
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$this->moduleManager->isEnabled('Magento_PageCache') ||
+        if (!$this->customerSession->isLoggedIn() ||
+            !$this->moduleManager->isEnabled('Magento_PageCache') ||
             !$this->cacheConfig->isEnabled() ||
             !$this->taxHelper->isCatalogPriceDisplayAffectedByTax()) {
             return $proceed($request);
