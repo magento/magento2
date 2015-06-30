@@ -23,8 +23,16 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
-  - sh -c "if [ -x $HOME/.cache/bin/composer ]; then $HOME/.cache/bin/composer self-update; echo ''; else  mkdir -p $HOME/.cache/bin; curl --connect-timeout 30 -sS 'https://getcomposer.org/installer' | php -- --install-dir $HOME/.cache/bin/ --filename composer; fi"
-  - $HOME/.cache/bin/composer --version
+  - sh -c 'if [ "$CASHER_DIR" ]; then
+         if [ -x $HOME/.cache/bin/composer ]; then
+           $HOME/.cache/bin/composer self-update; echo '';
+         else
+           mkdir -p $HOME/.cache/bin;
+           curl --connect-timeout 30 -sS https://getcomposer.org/installer \
+           | php -- --install-dir $HOME/.cache/bin/ --filename composer;
+         fi
+       fi'
+  - export PATH="$HOME/.cache/bin:$PATH"
 before_script:
   # Mock mail
   - sudo service postfix stop
@@ -53,7 +61,7 @@ before_script:
   # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
-  - $HOME/.cache/bin/composer install --no-interaction --prefer-dist
+  - composer install --no-interaction --prefer-dist
 script:
   # Unit tests
   - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
