@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
-    <group id="index">
+    <group id="default">
         <job name="indexer_reindex_all_invalid" instance="Magento\Indexer\Model\Processor" method="reindexAllInvalid">
             <schedule>* * * * *</schedule>
         </job>

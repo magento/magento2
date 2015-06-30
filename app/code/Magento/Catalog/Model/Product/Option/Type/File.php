@@ -226,7 +226,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
-                    throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+                    throw new LocalizedException(__('Please specify product\'s required option(s).'));
                     break;
                 default:
                     $this->setUserValue(null);
