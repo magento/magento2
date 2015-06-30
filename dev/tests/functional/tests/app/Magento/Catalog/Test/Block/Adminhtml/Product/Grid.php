@@ -26,7 +26,7 @@ class Grid extends DataGrid
         'sku' => [
             'selector' => '[name="filters[sku]"]',
         ],
-        'type_id' => [
+        'type' => [
             'selector' => '[name="filters[type_id]"]',
             'input' => 'select',
         ],
@@ -50,7 +50,7 @@ class Grid extends DataGrid
             'selector' => '[name="filters[status]"]',
             'input' => 'select',
         ],
-        'attribute_set_id' => [
+        'set_name' => [
             'selector' => '[name="filters[attribute_set_id]"]',
             'input' => 'select',
         ],
