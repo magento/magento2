@@ -32,7 +32,8 @@ define([
             this._on(events);
         },
         _updateWishlistData: function(event) {
-            var dataToAdd = {};
+            var dataToAdd = {},
+                isFileUploaded = false;
             if (event.handleObj.selector == this.options.qtyInfo) {
                 this._updateAddToWishlistButton({});
                 event.stopPropagation();
@@ -40,15 +41,22 @@ define([
             }
             var self = this;
             $(event.handleObj.selector).each(function(index, element){
-                if ($(element).attr('type') == 'text') {
+                if ($(element).is('input[type=text]')
+                    || $(element).is('input[type=checkbox]:checked')
+                    || $(element).is('input[type=radio]:checked')
+                    || $('#' + element.id + ' option:selected').length
+                    || $(element).is('textarea')
+                ) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                     return;
                 }
-                if ($(element).is(':checked') || $(element).find(':checked').length) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                if ($(element).is('input[type=file]') && $(element).val()) {
+                    isFileUploaded = true;
                 }
             });
-
+            if (isFileUploaded) {
+                this.bindFormSubmit();
+            }
             this._updateAddToWishlistButton(dataToAdd);
             event.stopPropagation();
         },
@@ -90,7 +98,9 @@ define([
                     data[elementName + '[' + option + ']'] = option;
                 });
             } else {
-                data[elementName] = elementValue;
+                if (elementValue) {
+                    data[elementName] = elementValue;
+                }
             }
             return data;
         },
@@ -98,6 +108,23 @@ define([
             var dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
             $.each(dataToRemove, function(key, value) {
                 delete params.data[key];
+            });
+        },
+        bindFormSubmit: function() {
+            var self = this;
+            $('[data-action="add-to-wishlist"]').on('click', function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                var element = $('input[type=file]' + self.options.customOptionsInfo),
+                    params = $(event.currentTarget).data('post'),
+                    form = $(element).closest('form'),
+                    action = params.action;
+                if (params.data.uenc) {
+                    action += 'uenc/' + params.data.uenc;
+                }
+
+                $(form).attr('action', action).submit();
             });
         }
     });
