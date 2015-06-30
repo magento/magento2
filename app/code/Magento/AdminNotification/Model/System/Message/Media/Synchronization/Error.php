@@ -34,8 +34,7 @@ class Error extends \Magento\AdminNotification\Model\System\Message\Media\Abstra
     public function getText()
     {
         return __(
-            'One or more media files failed to be synchronized during the media storages synchronization process. '
-            . 'Refer to the log file for details.'
+            'We were unable to synchronize one or more media files. Please refer to the log file for details.'
         );
     }
 }

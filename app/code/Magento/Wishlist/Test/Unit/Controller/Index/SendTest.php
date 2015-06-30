@@ -374,13 +374,21 @@ class SendTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['test text', 1, 'user1@example.com', 1, 0, '', 'Message length must not exceed 1 symbols'],
-            ['test text', 100, null, 1, 0, '', 'Email address can\'t be empty.'],
-            ['test text', 100, '', 1, 0, '', 'Email address can\'t be empty.'],
-            ['test text', 100, 'user1@example.com', 1, 1, '', 'This wishlist can be shared 0 more times.'],
-            ['test text', 100, 'u1@example.com, u2@example.com', 3, 2, '', 'This wishlist can be shared 1 more times.'],
-            ['test text', 100, 'wrongEmailAddress', 1, 0, '', 'Please input a valid email address.'],
-            ['test text', 100, 'user1@example.com, wrongEmailAddress', 2, 0, '', 'Please input a valid email address.'],
-            ['test text', 100, 'wrongEmailAddress, user2@example.com', 2, 0, '', 'Please input a valid email address.'],
+            ['test text', 100, null, 1, 0, '', 'Please enter an email address.'],
+            ['test text', 100, '', 1, 0, '', 'Please enter an email address.'],
+            ['test text', 100, 'user1@example.com', 1, 1, '', 'This wish list can be shared 0 more times.'],
+            [
+                'test text',
+                100,
+                'u1@example.com, u2@example.com',
+                3,
+                2,
+                '',
+                'This wish list can be shared 1 more times.'
+            ],
+            ['test text', 100, 'wrongEmailAddress', 1, 0, '', 'Please enter a valid email address.'],
+            ['test text', 100, 'user1@example.com, wrongEmailAddress', 2, 0, '', 'Please enter a valid email address.'],
+            ['test text', 100, 'wrongEmailAddress, user2@example.com', 2, 0, '', 'Please enter a valid email address.'],
         ];
     }
 

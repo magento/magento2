@@ -344,7 +344,7 @@ class Storage extends \Magento\Framework\Object
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the folder name. Use only letters, numbers, underscores and dashes.')
+                __('Please rename the folder using only letters, numbers, underscores and dashes.')
             );
         }
 
@@ -462,7 +462,7 @@ class Storage extends \Magento\Framework\Object
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot upload the file.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
         }
 
         // create thumbnail
@@ -690,7 +690,9 @@ class Storage extends \Magento\Framework\Object
     {
         $root = $this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot());
         if ($root == $path) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete root directory %1.', $path));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t delete root directory %1 right now.', $path)
+            );
         }
         if (strpos($path, $root) !== 0) {
             throw new \Magento\Framework\Exception\LocalizedException(

@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div id="gift-options-cart" data-bind="scope:'giftOptionsCart'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#gift-options-cart": {
+                "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+            }
+        }
+    </script>
+    <script>
+        window.giftOptionsConfig = <?php echo $block->getGiftOptionsConfigJson(); ?>;
+    </script>
+</div>

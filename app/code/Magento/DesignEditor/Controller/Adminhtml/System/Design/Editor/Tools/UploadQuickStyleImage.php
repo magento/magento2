@@ -43,7 +43,7 @@ class UploadQuickStyleImage extends \Magento\DesignEditor\Controller\Adminhtml\S
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         } catch (\Exception $e) {
             $errorMessage = __(
-                'Something went wrong uploading the image.' .
+                'Something went wrong while uploading the image.' .
                 ' Please check the file format and try again (JPEG, GIF, or PNG).'
             );
             $response = ['error' => true, 'message' => $errorMessage];

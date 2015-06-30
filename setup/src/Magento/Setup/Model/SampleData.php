@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\LoggerInterface;
 
 /**
  * Sample data installer
@@ -45,6 +46,47 @@ class SampleData
     public function isDeployed()
     {
         return file_exists($this->directoryList->getPath(DirectoryList::MODULES) . self::PATH);
+    }
+
+    /**
+     * Get state object or null if state object cannot be initialized
+     *
+     * @return null|\Magento\SampleData\Helper\State
+     */
+    protected function getState()
+    {
+        if ($this->isDeployed() && class_exists('Magento\SampleData\Helper\State')) {
+            return new \Magento\SampleData\Helper\State();
+        }
+        return null;
+    }
+
+    /**
+     * Check whether installation of sample data was successful
+     *
+     * @return bool
+     */
+    public function isInstalledSuccessfully()
+    {
+        $state = $this->getState();
+        if (!$state) {
+            return false;
+        }
+        return \Magento\SampleData\Helper\State::STATE_FINISHED == $state->getState();
+    }
+
+    /**
+     * Check whether there was unsuccessful attempt to install Sample data
+     *
+     * @return bool
+     */
+    public function isInstallationError()
+    {
+        $state = $this->getState();
+        if (!$state) {
+            return false;
+        }
+        return \Magento\SampleData\Helper\State::STATE_STARTED == $state->getState();
     }
 
     /**

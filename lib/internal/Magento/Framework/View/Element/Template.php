@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Template\Html\Minifier;
 
 /**
  * Base html block

@@ -26,21 +26,27 @@ class Validate extends ImportController
         ImportResultBlock $resultBlock
     ) {
         if ($import->getProcessedRowsCount() == $import->getInvalidRowsCount()) {
-            $resultBlock->addNotice(__('File is totally invalid. Please fix errors and re-upload file.'));
+            $resultBlock->addNotice(__('This file is invalid. Please fix errors and re-upload the file.'));
         } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
             $resultBlock->addNotice(
-                __('Errors limit (%1) reached. Please fix errors and re-upload file.', $import->getErrorsLimit())
+                __(
+                    'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
+                    $import->getErrorsLimit()
+                )
             );
         } else {
             if ($import->isImportAllowed()) {
                 $resultBlock->addNotice(
                     __(
-                        'Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'
+                        'Please fix errors and re-upload the file. Or press "Import" to skip rows with errors.'
                     ),
                     true
                 );
             } else {
-                $resultBlock->addNotice(__('File is partially valid, but import is not possible'), false);
+                $resultBlock->addNotice(
+                    __('The file is partially valid, but we can\'t import it for some reason.'),
+                    false
+                );
             }
         }
         // errors info
@@ -75,12 +81,13 @@ class Validate extends ImportController
                 $source = ImportAdapter::findAdapterFor(
                     $import->uploadSource(),
                     $this->_objectManager->create('Magento\Framework\Filesystem')
-                        ->getDirectoryWrite(DirectoryList::ROOT)
+                        ->getDirectoryWrite(DirectoryList::ROOT),
+                    $data[$import::FIELD_FIELD_SEPARATOR]
                 );
                 $validationResult = $import->validateSource($source);
 
                 if (!$import->getProcessedRowsCount()) {
-                    $resultBlock->addError(__('File does not contain data. Please upload another one'));
+                    $resultBlock->addError(__('This file is empty. Please try another one.'));
                 } else {
                     if (!$validationResult) {
                         $this->processValidationError($import, $resultBlock);
@@ -91,7 +98,10 @@ class Validate extends ImportController
                                 true
                             );
                         } else {
-                            $resultBlock->addError(__('File is valid, but import is not possible'), false);
+                            $resultBlock->addError(
+                                __('The file is valid, but we can\'t import it for some reason.'),
+                                false
+                            );
                         }
                     }
                     $resultBlock->addNotice($import->getNotices());
@@ -106,14 +116,15 @@ class Validate extends ImportController
                     );
                 }
             } catch (\Exception $e) {
-                $resultBlock->addNotice(__('Please fix errors and re-upload file.'))->addError($e->getMessage());
+                $resultBlock->addNotice(__('Please fix errors and re-upload the file.'))
+                    ->addError($e->getMessage());
             }
             return $resultLayout;
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
-            $resultBlock->addError(__('File was not uploaded'));
+            $resultBlock->addError(__('The file was not uploaded.'));
             return $resultLayout;
         }
-        $this->messageManager->addError(__('Data is invalid or file is not uploaded'));
+        $this->messageManager->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');

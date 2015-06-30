@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Create new category.
@@ -40,7 +40,7 @@ class NewCategoryIds extends Form
      *
      * @var string
      */
-    protected $createCategoryButton = '[data-action="save"]';
+    protected $createCategoryButton = '[data-role="action"][type="button"]';
 
     /**
      * Add new category to product.
