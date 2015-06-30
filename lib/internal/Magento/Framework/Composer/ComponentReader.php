@@ -8,6 +8,9 @@ namespace Magento\Framework\Composer;
 
 use Magento\Framework\Config\Composer\Package;
 
+/**
+ * Class ComponentReader reads composer.json files from specified directory paths to compile a list of components.
+ */
 class ComponentReader
 {
     /**
@@ -41,6 +44,7 @@ class ComponentReader
     public function getComponents()
     {
         $packages = $this->readMagentoPackages();
+        $components = [];
         foreach ($packages as $package) {
             $components[] = [
                 'name' => $package->get('name'),

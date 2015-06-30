@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Composer\Test\Unit;
 
-use Magento\Setup\Model\ComponentManager;
 use Magento\Framework\Composer\ComponentReader;
 
 class ComponentReaderTest extends \PHPUnit_Framework_TestCase
@@ -18,11 +17,16 @@ class ComponentReaderTest extends \PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->reader = $objectManager->getObject(
-            'Magento\Framework\Composer\ComponentReader',
-            ['rootDir' => BP]
-        );
+        $this->reader = $this->getMock('Magento\Framework\Composer\ComponentReader', [], [], '', false);
+        $this->reader->expects($this->once())
+            ->method('getComponents')
+            ->willReturn(
+                [
+                    'type' => 'module',
+                    'version' => '1.0',
+                    'name' => 'module name'
+                ]
+            );
     }
 
     public function testGetComponents()

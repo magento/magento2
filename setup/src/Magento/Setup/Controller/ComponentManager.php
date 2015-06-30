@@ -7,7 +7,6 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComponentReader;
-use Magento\Setup\Model\ComponentManager as ComponentManagerModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
@@ -27,7 +26,7 @@ class ComponentManager extends AbstractActionController
     }
 
     /**
-     * @return ViewModel|\Zend\Http\Response
+     * @inheritdoc
      */
     public function indexAction()
     {
