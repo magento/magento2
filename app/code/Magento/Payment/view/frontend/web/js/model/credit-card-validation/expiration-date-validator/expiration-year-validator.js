@@ -9,7 +9,7 @@ define(
     function() {
         'use strict';
 
-        function result(isValid, isPotentiallyValid) {
+        function resultWrapper(isValid, isPotentiallyValid) {
             return {
                 isValid: isValid,
                 isPotentiallyValid: isPotentiallyValid
@@ -17,47 +17,26 @@ define(
         }
 
         return function(value) {
-            var currentFirstTwo,
-                currentYear = new Date().getFullYear(),
-                firstTwo,
+            var currentYear = new Date().getFullYear(),
                 len = value.length,
-                twoDigitYear,
                 valid,
-                maxYear = 19;
+                expMaxLifetime = 19;
 
             if (value.replace(/\s/g, '') === '') {
-                return result(false, true);
+                return resultWrapper(false, true);
             }
 
             if (!/^\d*$/.test(value)) {
-                return result(false, false);
+                return resultWrapper(false, false);
             }
 
-            if (len < 2) {
-                return result(false, true);
-            }
-
-            if (len === 3) {
-                // 20x === 20x
-                firstTwo = value.slice(0, 2);
-                currentFirstTwo = String(currentYear).slice(0, 2);
-                return result(false, firstTwo === currentFirstTwo);
-            }
-
-            if (len > 4) {
-                return result(false, false);
+            if (len !== 4) {
+                return resultWrapper(false, true);
             }
 
             value = parseInt(value, 10);
-            twoDigitYear = Number(String(currentYear).substr(2, 2));
-
-            if (len === 2) {
-                valid = value >= twoDigitYear && value <= twoDigitYear + maxYear;
-            } else if (len === 4) {
-                valid = value >= currentYear && value <= currentYear + maxYear;
-            }
-
-            return result(valid, valid);
+            valid = value >= currentYear && value <= currentYear + expMaxLifetime;
+            return resultWrapper(valid, valid);
         };
     }
 );

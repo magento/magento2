@@ -9,7 +9,7 @@ define(
     function () {
         'use strict';
 
-        function result(isValid, isPotentiallyValid) {
+        function resultWrapper(isValid, isPotentiallyValid) {
             return {
                 isValid: isValid,
                 isPotentiallyValid: isPotentiallyValid
@@ -21,21 +21,21 @@ define(
                 monthValid;
 
             if ((value.replace(/\s/g, '') === '') || (value === '0')) {
-                return result(false, true);
+                return resultWrapper(false, true);
             }
 
             if (!/^\d*$/.test(value)) {
-                return result(false, false);
+                return resultWrapper(false, false);
             }
 
             if (isNaN(value)) {
-                return result(false, false);
+                return resultWrapper(false, false);
             }
 
             month = parseInt(value, 10);
             monthValid = month > 0 && month < 13;
 
-            return result(monthValid, monthValid);
+            return resultWrapper(monthValid, monthValid);
         };
     }
 );

@@ -13,7 +13,7 @@ define(
     function (utils, luhn10, creditCardTypes) {
         'use strict';
 
-        function result(card, isPotentiallyValid, isValid) {
+        function resultWrapper(card, isPotentiallyValid, isValid) {
             return {
                 card: card,
                 isValid: isValid,
@@ -29,21 +29,21 @@ define(
                 maxLength;
 
             if (utils.isEmpty(value)) {
-                return result(null, false, false);
+                return resultWrapper(null, false, false);
             }
 
             value = value.replace(/\-|\s/g, '');
 
             if (!/^\d*$/.test(value)) {
-                return result(null, false, false);
+                return resultWrapper(null, false, false);
             }
 
             potentialTypes = creditCardTypes.getCardTypes(value);
 
             if (potentialTypes.length === 0) {
-                return result(null, false, false);
+                return resultWrapper(null, false, false);
             } else if (potentialTypes.length !== 1) {
-                return result(null, true, false);
+                return resultWrapper(null, true, false);
             }
 
             cardType = potentialTypes[0];
@@ -56,17 +56,17 @@ define(
 
             for (i = 0; i < cardType.lengths.length; i++) {
                 if (cardType.lengths[i] === value.length) {
-                    return result(cardType, valid, valid);
+                    return resultWrapper(cardType, valid, valid);
                 }
             }
 
             maxLength = Math.max.apply(null, cardType.lengths);
 
             if (value.length < maxLength) {
-                return result(cardType, true, false);
+                return resultWrapper(cardType, true, false);
             }
 
-            return result(cardType, false, false);
+            return resultWrapper(cardType, false, false);
         };
     }
 );
