@@ -133,6 +133,25 @@ class ComposerInformation
     }
 
     /**
+     * Collect required packages and types from root composer.lock file
+     *
+     * @return array
+     */
+    public function getRootRequiredPackageTypesByNameVersion()
+    {
+        $packages = [];
+        /** @var PackageInterface $package */
+        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            $packages[] = [
+                'name' => $package->getName(),
+                'type' => $package->getType(),
+                'version' => $package->getVersion()
+                ];
+        }
+        return $packages;
+    }
+
+    /**
      * Determines if Magento is the root package or it is included as a requirement.
      *
      * @return bool
