@@ -88,7 +88,7 @@
 
     <fieldset class="fieldset recipients">
         <?php echo $block->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo __('Recipient') ?></span></legend>
+        <legend class="legend"><span><?php echo __('Invitee') ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($block->getMaxRecipients()): ?>
@@ -100,7 +100,7 @@
             <div class="secondary">
             <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
-                    <span><?php echo __('Add Recipient') ?></span></button>
+                    <span><?php echo __('Add Invitee') ?></span></button>
             <?php endif; ?>
             </div>
         </div>

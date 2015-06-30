@@ -159,7 +159,7 @@ class Uploader
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
-            throw new \Exception('File was not uploaded.', $code);
+            throw new \Exception('The file was not uploaded.', $code);
         } else {
             $this->_fileExists = true;
         }

@@ -108,7 +108,7 @@ require([
         },
 
         stripTags: function () {
-            if(!window.confirm("<?php echo __('Are you sure that you want to strip tags?') ?>")) {
+            if(!window.confirm("<?php echo __('Are you sure you want to strip tags?') ?>")) {
                 return false;
             }
             this.unconvertedText = $('template_text').value;
@@ -159,7 +159,7 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php echo __('Are you sure that you want to delete this template?') ?>")) {
+            if(window.confirm("<?php echo __('Are you sure you want to delete this template?') ?>")) {
                    window.location.href = '<?php echo $block->getDeleteUrl() ?>';
             }
         },
@@ -204,7 +204,7 @@ require([
                           }
                        }.bind(this));
                    } else {
-                       alert('<?php echo __('Failed to load template. See error log for details.') ?>');
+                       alert('<?php echo __('The template did not load. Please review the log for details.') ?>');
                    }
                }.bind(this)
             });

@@ -15,10 +15,10 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The product attribute has been deleted.';
+    const SUCCESS_MESSAGE = 'You deleted the product attribute.';
 
     /**
-     * Assert that message "The product attribute has been deleted." is present on Attribute page
+     * Assert that message "You deleted the product attribute." is present on Attribute page
      *
      * @param CatalogProductAttributeIndex $attributeIndex
      * @return void

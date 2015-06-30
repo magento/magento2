@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 /**
  * @magentoAppArea adminhtml
  */
-class ThemeControllerTest extends \Magento\Backend\Utility\Controller
+class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testUploadJsAction()
     {
