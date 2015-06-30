@@ -64,6 +64,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testIndexerInvalidation()
     {
