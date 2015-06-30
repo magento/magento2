@@ -19,6 +19,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class ProductTest
  *
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
