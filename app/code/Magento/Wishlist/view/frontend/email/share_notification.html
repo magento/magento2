@@ -15,13 +15,22 @@
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Hey,"}}</h1>
-<p>{{trans "Take a look at my Wish List from %store_name." store_name=$store.getFrontendName()}}</p>
-<p>{{var message}}</p>
+<p>{{trans "%customer_name wants to share this Wish List from %store_name with you:" customer_name=$customerName store_name=$store.getFrontendName()}}</p>
+
+{{depend message}}
+<table class="message-info" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td>
+            <h3>{{trans "Message from %customer_name:" customer_name=$customerName}}</h3>
+            {{var message|raw}}
+        </td>
+    </tr>
+</table>
+{{/depend}}
+
 {{var items|raw}}
 <br/>
-<p><a href="{{var viewOnSiteLink}}">{{trans "View all Wish List items"}}</a></p>
 
-<p>{{trans "Thank you, <strong>%customer_name</strong>" customer_name=$customerName}}</p>
+<p><a href="{{var viewOnSiteLink}}">{{trans "View all Wish List items"}}</a></p>
 
 {{template config_path="design/email/footer_template"}}

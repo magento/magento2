@@ -30,8 +30,10 @@
                     </a>
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
-                    <p><?= __('Comment') ?>:
-                    <br/><?= $block->getEscapedDescription($item) ?></p>
+                    <p>
+                        <strong><?= __('Comment') ?>:</strong>
+                        <br/><?= $block->getEscapedDescription($item) ?>
+                    </p>
                 <?php endif; ?>
                 <p>
                     <a href="<?= $block->getProductUrl($_product) ?>">

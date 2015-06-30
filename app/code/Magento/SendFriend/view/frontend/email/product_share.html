@@ -28,9 +28,18 @@ Use vars: {{var var_name}}
 
 {{template config_path="design/email/header_template"}}
 
-<h1>{{trans "Welcome, %name" name=$name}}</h1>
-<p>{{trans "Please look at"}} <a href="{{var product_url}}">{{var product_name}}</a></p>
-<h2>{{trans "Here is message:"}}</h2>
-<p>{{var message}}</p>
+<p class="greeting">{{trans "%name," name=$name}}</p>
+<p>{{trans "%sender_name wants to share this product with you:" sender_name=$sender_name}} <a href="{{var product_url}}">{{var product_name}}</a></p>
+
+{{depend message}}
+<table class="message-info" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td>
+            <h3>{{trans "Message from %sender_name:" sender_name=$sender_name}}</h3>
+            {{var message|raw}}
+        </td>
+    </tr>
+</table>
+{{/depend}}
 
 {{template config_path="design/email/footer_template"}}
