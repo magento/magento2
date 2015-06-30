@@ -69,15 +69,15 @@
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId()); ?>
-        <?php if ($_giftMessage): ?>
+        <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
             <table class="message-gift">
                 <tr>
                     <td>
-                        <strong><?= __('Gift Message') ?></strong>
-                        <br /><?= __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><?= __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><?= __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+                        <h3><?= __('Gift Message') ?></h3>
+                        <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= __('Message:'); ?></strong>
+                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                     </td>
                 </tr>
             </table>
