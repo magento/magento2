@@ -19,6 +19,11 @@ class Cart
     protected $checkoutHelper;
 
     /**
+     * @var \Magento\Tax\Block\Item\Price\Renderer
+     */
+    protected $itemPriceRenderer;
+
+    /**
      * @var \Magento\Quote\Model\Quote|null
      */
     protected $quote = null;
@@ -31,13 +36,16 @@ class Cart
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Helper\Data $checkoutHelper
+        \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
+        $this->itemPriceRenderer = $itemPriceRenderer;
     }
 
     /**
@@ -50,8 +58,21 @@ class Cart
      */
     public function afterGetSectionData(\Magento\Checkout\CustomerData\Cart $subject, $result)
     {
+
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
+
+        /**
+         * @var \Magento\Quote\Model\Quote $quote
+         */
+        $items =$this->getQuote()->getAllVisibleItems();
+        if (is_array($items)) {
+            foreach ($items as $key => $item) {
+                $this->itemPriceRenderer->setItem($item);
+                $this->itemPriceRenderer->setTemplate('item/price/unit.phtml');
+                $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+            }
+        }
         return $result;
     }
 
