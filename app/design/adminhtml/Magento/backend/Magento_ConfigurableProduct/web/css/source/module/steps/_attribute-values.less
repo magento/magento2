@@ -1,0 +1,112 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@steps-wizard-attribute-entity__background: @color-white;
+@steps-wizard-attribute-entity__border-color: @color-gray82;
+@steps-wizard-attribute-entity__active__border-color: @color-blue1;
+
+@steps-wizard-attribute-entity-title__font-size: 1.7rem;
+@steps-wizard-attribute-entity-top__border-color: @steps-wizard-section-title__border-color;
+
+@steps-wizard-attribute-entity-action-toggle__open__content: @icon-expand-open__content;
+@steps-wizard-attribute-entity-action-toggle__close__content: @icon-expand-close__content;
+
+//
+//  Common
+//  ---------------------------------------------
+
+.steps-wizard {
+
+    .attribute-entity {
+        background: @steps-wizard-attribute-entity__background;
+        border-radius: 2px;
+        border: 2px solid @steps-wizard-attribute-entity__border-color;
+        margin: 0 0 @indent__s;
+        padding: .6rem 1.2rem;
+
+        &.ui-sortable-helper {
+            border-color: @steps-wizard-attribute-entity__active__border-color;
+        }
+
+        .action-toggle {
+            .action-icon();
+            font-size: 1.6rem;
+            &:before {
+                &:extend(.abs-icon all);
+                content: @steps-wizard-attribute-entity-action-toggle__open__content;
+            }
+            > span {
+                display: none;
+            }
+            &._expanded {
+                &:before {
+                    content: @steps-wizard-attribute-entity-action-toggle__close__content;
+                }
+            }
+        }
+
+        .action-remove {
+            .action-icon();
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-delete__content;
+            }
+            > span {
+                display: none;
+            }
+        }
+    }
+
+    .attribute-entity-top {
+        &:extend(.abs-clearfix all);
+        margin: 0 0 @indent__xs;
+    }
+
+    .admin__fieldset-options {
+        border-top: 1px solid @steps-wizard-attribute-entity-top__border-color;
+        margin: 0 0 @indent__s;
+        padding-top: @indent__s;
+    }
+
+    .attribute-entity-title-block {
+        float: left;
+        margin-top: .3rem;
+    }
+
+    .attribute-entity-title {
+        display: inline-block;
+        font-size: @steps-wizard-attribute-entity-title__font-size;
+        font-weight: @font-weight__semibold;
+        vertical-align: middle;
+    }
+
+    .attribute-options-block {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: @indent__l;
+    }
+
+    .attribute-entity-actions {
+        float: right;
+    }
+
+    .attribute-draggable {
+        background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
+        cursor: move;
+        display: inline-block;
+        height: 1.4rem;
+        vertical-align: middle;
+        margin-top: .3rem;
+        width: 1.5rem;
+    }
+
+    .attribute-options {
+        &:extend(.abs-list-reset-styles all);
+    }
+}

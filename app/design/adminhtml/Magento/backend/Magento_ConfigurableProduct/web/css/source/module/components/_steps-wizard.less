@@ -8,6 +8,7 @@
 //  ---------------------------------------------
 
 @steps-wizard-section-title__border-color: @color-gray89;
+@steps-wizard-section-title__font-size: 1.8rem;
 
 //
 //  Common
@@ -24,7 +25,33 @@
         margin: 0 0 @indent__s;
     }
 
-    .steps-wizard-inner {
+    .steps-wizard-info {
         margin: 0 0 @indent__base;
+    }
+
+    .steps-wizard-section {
+        margin: 0 0 @indent__l;
+
+        .admin__field-control {
+            .admin__control-text,
+            .admin__control-textarea {
+                width: auto;
+            }
+        }
+    }
+
+    .steps-wizard-section-title {
+        border-bottom: 1px solid @steps-wizard-section-title__border-color;
+        font-size: @steps-wizard-section-title__font-size;
+        margin: 0 0 @indent__s;
+        padding: 0 0 @indent__s;
+    }
+
+    .admin__data-grid-wrap {
+        overflow: visible;
+    }
+
+    .admin__data-grid-pager-wrap {
+        float: right;
     }
 }

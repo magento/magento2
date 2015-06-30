@@ -6,12 +6,18 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
-<?= $block->getAddNewAttributeButton(); ?>
-<div data-bind="scope: '<?= $block->getComponentName()?>'">
-    <?= __('Selected Attributes:') ?>
-    <div data-bind="text: selectedAttributes() || '--'"></div>
+<div class="select-attributes-block">
+    <div class="select-attributes-button-block">
+        <?= $block->getAddNewAttributeButton(); ?>
+    </div>
+    <div class="selected-attributes" data-bind="scope: '<?= $block->getComponentName()?>'">
+        <?= __('Selected Attributes:') ?>
+        <div data-bind="text: selectedAttributes() || '--'"></div>
+    </div>
+    <?= $block->getChildHtml(); ?>
 </div>
-<?= $block->getChildHtml(); ?>
+
+
 
 <script type="text/x-magento-init">
     {

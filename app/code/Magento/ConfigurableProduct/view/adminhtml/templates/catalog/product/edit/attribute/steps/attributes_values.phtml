@@ -7,51 +7,63 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: '<?= $block->getComponentName()?>'">
-    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Attribute Values') ?></h1>
-    <div style="padding-bottom: 10px">
+    <h2 class="steps-wizard-title"><?= __('Attribute Values') ?></h2>
+    <div class="steps-wizard-info">
         <span><?= __('Choose options from each attribute to create unique products.') ?></span>
     </div>
-    <div data-bind="foreach: attributes, sortableList: attributes">
-        <div style="padding-bottom: 30px;">
-            <input style="float: left; border: 0px" data-bind="value: label"/>
-            <div style="float: right; font-size: smaller;">
-                <a style="text-decoration: underline;" href="#"
-                   data-bind="click: $parent.removeAttribute.bind($parent)">
-                    <?= __('Remove Attribute') ?>
-                </a>
-                <span style="cursor: pointer; padding: 10px;" data-bind="click: $parent.toggleOpened">
-                    <span data-bind="if: opened">&mdash;</span>
-                    <span data-bind="ifnot: opened">&#10010;</span>
-                </span>
+    <div data-bind="foreach: attributes, sortableList: attributes" class="steps-wizard-section">
+
+        <div class="attribute-entity">
+            <div class="attribute-entity-top">
+                <div class="attribute-entity-title-block">
+                    <span class="attribute-draggable" data-role="draggable" title="<?= __('Sort Variations') ?>"></span>
+                    <div class="attribute-entity-title" data-bind="text: label"></div>
+
+                    <div class="attribute-options-block">
+                        <span class="attribute-length" data-bind="text: $data.options().length"></span>
+                        <?= __('Options') ?>
+                    </div>
+                </div>
+
+                <div class="attribute-entity-actions">
+                    <button type="button" class="action-select-all action-tertiary" data-bind="click: $parent.selectAllAttributes">
+                        <span><?= __('Select All') ?></span>
+                    </button>
+                    <button class="action-remove"
+                            type="button"
+                            data-bind="click: $parent.removeAttribute.bind($parent)">
+                        <span><?= __('Remove Attribute') ?></span>
+
+                    </button>
+                    <button type="button"
+                            class="action-toggle"
+                            data-bind="click: $parent.toggleOpened, css: {'_expanded': opened}">
+                        <span></span>
+                    </button>
+                </div>
             </div>
-            <div data-bind="style: {'border-bottom': !opened() && '1px solid gray'}" style="clear: both;"></div>
-            <fieldset style="background-color: white;" data-bind="visible: opened">
-                <div style="
-                    float: left;
-                    background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
-                    width: 8px;
-                    height: 14px;
-                    cursor: ns-resize;" data-role="draggable" title="<?= __('Sort Variations') ?>">#</div>
-                <span style="clear: both;" data-bind="text: $data.options().length"></span>
-                <span><?= __('Options') ?></span>
-                <a href="#" data-bind="click: $parent.selectAllAttributes" style="
-                    float: right;
-                    font-size: smaller;
-                "><?= __('Select All') ?></a>
-                <ul data-bind="foreach: options" style="
-                    list-style-type: none;
-                    text-transform: capitalize;
-                ">
-                    <li>
-                        <input
-                            type="checkbox"
-                            data-bind="checkedValue: value, checked: !value || $parent.chosenOptions"
-                        />
-                        <span data-bind="text: label, visible: label"></span>
-                        <input data-bind="value: label, visible: !label" type="text">
+
+            <fieldset class="admin__fieldset admin__fieldset-options" data-bind="visible: opened">
+                <ul class="attribute-options" data-bind="foreach: options">
+                    <li class="attribute-option">
+                        <div class="admin__field admin__field-option">
+                            <input
+                                type="checkbox"
+                                class="admin__control-checkbox"
+                                data-bind="checkedValue: value, checked: !value || $parent.chosenOptions" />
+                            <label data-bind="text: label, visible: label" class="admin__field-label"></label>
+                        </div>
+
+                        <div class="admin__field">
+                            <div class="admin__field-control">
+                                <input class="admin__control-text"
+                                       data-bind="value: label, visible: !label"
+                                       type="text" />
+                            </div>
+                        </div>
+
                         <a href="#" data-bind="visible: !label, click: $parents[1].saveOption.bind($parent)">-></a>
-                        <a href="#" data-bind="visible: !label, click: $parents[1].removeOption.bind($parent)
-                        ">X</a>
+                        <a href="#" data-bind="visible: !label, click: $parents[1].removeOption.bind($parent)">X</a>
                     </li>
                 </ul>
                 <a data-action="addOption" href="#" data-bind="click: $parent.createOption">
