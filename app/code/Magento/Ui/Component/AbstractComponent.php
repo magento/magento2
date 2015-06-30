@@ -226,6 +226,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
      *
      * @param array $dataSource
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareDataSource(array & $dataSource)
     {
