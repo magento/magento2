@@ -111,48 +111,6 @@ class OrderAdapter implements OrderAdapterInterface
     }
 
     /**
-     * Returns order increment id
-     *
-     * @return string
-     *
-     */
-    public function getIncrementId()
-    {
-        return $this->order->getIncrementId();
-    }
-
-    /**
-     * Returns quote id
-     *
-     * @return int
-     */
-    public function getQuoteId()
-    {
-        return $this->order->getQuoteId();
-    }
-
-    /**
-     * Returns order grand total
-     *
-     * @return float
-     */
-    public function getGrandTotal()
-    {
-        return $this->order->getGrandTotal();
-    }
-
-    /**
-     * Returns base currency code
-     *
-     * @return string
-     */
-    public function getBaseCurrencyCode()
-    {
-        return $this->order->getBaseCurrencyCode();
-
-    }
-
-    /**
      * Returns order grand total amount
      *
      * @return float|null

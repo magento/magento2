@@ -112,49 +112,6 @@ class QuoteAdapter implements OrderAdapterInterface
     }
 
     /**
-     * Returns order increment id
-     *
-     * @return string
-     *
-     */
-    public function getIncrementId()
-    {
-        return $this->quote->getReservedOrderId();
-    }
-
-    /**
-     * Returns quote id
-     *
-     * @return int
-     */
-    public function getQuoteId()
-    {
-        return $this->quote->getId();
-    }
-
-    /**
-     * Returns order grand total
-     *
-     * @return float
-     * @throws LocalizedException
-     */
-    public function getGrandTotal()
-    {
-        throw new LocalizedException(__('This method cannot be implemented in this class "' . __CLASS__ . '"'));
-    }
-
-    /**
-     * Returns base currency code
-     *
-     * @return string
-     */
-    public function getBaseCurrencyCode()
-    {
-        return $this->quote->getCurrency()->getBaseCurrencyCode();
-
-    }
-
-    /**
      * Returns order grand total amount
      *
      * @return null

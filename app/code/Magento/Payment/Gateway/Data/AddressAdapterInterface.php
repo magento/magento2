@@ -95,20 +95,6 @@ interface AddressAdapterInterface
     public function getEmail();
 
     /**
-     * Returns street
-     *
-     * @return string
-     */
-    public function getStreet();
-
-    /**
-     * Returns region
-     *
-     * @return string
-     */
-    public function getRegion();
-
-    /**
      * Returns name prefix
      *
      * @return string
