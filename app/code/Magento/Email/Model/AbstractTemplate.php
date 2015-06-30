@@ -348,8 +348,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
         $processor->setStoreId($storeId);
 
-        // Populate the variables array with store, store info, logo, etc.
-        $variables += $this->getEmailVariables($storeId);
+        // Populate the variables array with store, store info, logo, etc. variables
+        $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
         try {
@@ -425,45 +425,62 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Returns variables that are used by transactional and newsletter emails
+     * Add variables that are used by transactional and newsletter emails
      *
+     * @param array $variables
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function getEmailVariables($storeId)
+    protected function addEmailVariables($variables, $storeId)
     {
         $store = $this->storeManager->getStore($storeId);
-
-        $variables = [
-            'store' => $store,
-            'logo_url' => $this->getLogoUrl($storeId),
-            'logo_alt' => $this->getLogoAlt($storeId),
-            'logo_width' => $this->scopeConfig->getValue(
+        if (!isset($variables['store'])) {
+            $variables['store'] = $store;
+        }
+        if (!isset($variables['logo_url'])) {
+            $variables['logo_url'] = $this->getLogoUrl($storeId);
+        }
+        if (!isset($variables['logo_alt'])) {
+            $variables['logo_alt'] = $this->getLogoAlt($storeId);
+        }
+        if (!isset($variables['logo_width'])) {
+            $variables['logo_width'] = $this->scopeConfig->getValue(
                 self::XML_PATH_DESIGN_EMAIL_LOGO_WIDTH,
                 ScopeInterface::SCOPE_STORE,
                 $store
-            ),
-            'logo_height' => $this->scopeConfig->getValue(
+            );
+        }
+        if (!isset($variables['logo_height'])) {
+            $variables['logo_height'] = $this->scopeConfig->getValue(
                 self::XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT,
                 ScopeInterface::SCOPE_STORE,
                 $store
-            ),
-            'store_phone' => $this->scopeConfig->getValue(
+            );
+        }
+        if (!isset($variables['store_phone'])) {
+            $variables['store_phone'] = $this->scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_STORE_PHONE,
                 ScopeInterface::SCOPE_STORE,
                 $store
-            ),
-            'store_hours' => $this->scopeConfig->getValue(
+            );
+        }
+        if (!isset($variables['store_hours'])) {
+            $variables['store_hours'] = $this->scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_STORE_HOURS,
                 ScopeInterface::SCOPE_STORE,
                 $store
-            ),
-            'store_email' => $this->scopeConfig->getValue(
+            );
+        }
+        if (!isset($variables['store_email'])) {
+            $variables['store_email'] = $this->scopeConfig->getValue(
                 'trans_email/ident_support/email',
                 ScopeInterface::SCOPE_STORE,
                 $store
-            ),
-        ];
+            );
+        }
         // If template is text mode, don't include styles
         if (!$this->isPlain() && !isset($variables['template_styles'])) {
             $variables['template_styles'] = $this->getTemplateStyles();
