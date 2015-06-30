@@ -107,7 +107,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Template Id'
+                'Template ID'
             )
             ->addColumn(
                 'template_code',
@@ -211,7 +211,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Template Id'
+                'Template ID'
             )
             ->addColumn(
                 'newsletter_type',

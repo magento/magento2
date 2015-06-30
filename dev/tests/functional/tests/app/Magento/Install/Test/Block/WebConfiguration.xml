@@ -7,7 +7,9 @@
 -->
 <mapping strict="0">
     <fields>
-        <web />
+        <baseUrl>
+            <selector>[name="base_url"]</selector>
+        </baseUrl>
         <admin />
         <keyOwn>
             <selector>[value="user"]</selector>

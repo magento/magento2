@@ -18,4 +18,12 @@ class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
         $resultLayout = $this->resultLayoutFactory->create();
         return $resultLayout;
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::creditmemo');
+    }
 }
