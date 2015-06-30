@@ -8,9 +8,11 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Indexer\Model\ConfigInterface;
 use Magento\Indexer\Model\IndexerRegistry;
+use Magento\Store\Model\Resource\Store;
 
 class View extends AbstractPlugin
 {
@@ -48,28 +50,26 @@ class View extends AbstractPlugin
     /**
      * Invalidate indexer on store view save
      *
-     * @param \Magento\Store\Model\Resource\Store $subject
+     * @param Store $subject
      * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $store
+     * @param AbstractModel $store
      *
-     * @return \Magento\Store\Model\Resource\Store
+     * @return Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Store\Model\Resource\Store $subject,
+        Store $subject,
         \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $store
+        AbstractModel $store
     ) {
         $needInvalidation = $store->isObjectNew();
         $result = $proceed($store);
         if ($needInvalidation) {
-            $dimensions = [
-                $this->dimensionFactory->create(['name' => 'scope', 'value' => $store->getId()])
-            ];
-            $configData = $this->indexerConfig->getIndexer(Fulltext::INDEXER_ID);
-            /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
-            $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
-            $indexHandler->cleanIndex($dimensions);
+            $subject->addCommitCallback(
+                function () use ($store) {
+                    $this->clearIndex($store);
+                }
+            );
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
         return $result;
@@ -78,17 +78,32 @@ class View extends AbstractPlugin
     /**
      * Invalidate indexer on store view delete
      *
-     * @param \Magento\Store\Model\Resource\Store $subject
-     * @param \Magento\Store\Model\Resource\Store $result
+     * @param Store $subject
+     * @param Store $result
      *
-     * @return \Magento\Store\Model\Resource\Store
+     * @return Store
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
-        \Magento\Store\Model\Resource\Store $subject,
-        \Magento\Store\Model\Resource\Store $result
+        Store $subject,
+        Store $result
     ) {
         $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         return $result;
+    }
+
+    /**
+     * @param AbstractModel $store
+     * @return void
+     */
+    public function clearIndex(AbstractModel $store)
+    {
+        $dimensions = [
+            $this->dimensionFactory->create(['name' => 'scope', 'value' => $store->getId()])
+        ];
+        $configData = $this->indexerConfig->getIndexer(Fulltext::INDEXER_ID);
+        /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
+        $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
+        $indexHandler->cleanIndex($dimensions);
     }
 }
