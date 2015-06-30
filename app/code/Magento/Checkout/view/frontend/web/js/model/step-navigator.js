@@ -39,20 +39,10 @@ define(
                 return activeIndex;
             },
 
-            isAvailable: function(code) {
-                var flag = false;
-                this.stepCodes.forEach(function(element){
-                    if (element == code) {
-                        flag = true;
-                    }
-                });
-                return flag;
-            },
-
             isProcessed: function(code) {
                 var activeItemIndex = this.getActiveItemIndex();
                 var sortedItems = steps.sort(this.sortItems);
-                var requestedItemIndex = 0;
+                var requestedItemIndex = -1;
                 sortedItems.forEach(function(element, index) {
                     if (element.code == code) {
                         requestedItemIndex = index;
@@ -62,9 +52,7 @@ define(
             },
 
             navigateTo: function(step) {
-                var activeItemIndex = this.getActiveItemIndex();
                 var sortedItems = steps.sort(this.sortItems);
-                var stepIndex = sortedItems.indexOf(step);
                 if (!this.isProcessed(step.code)) {
                     return;
                 }
