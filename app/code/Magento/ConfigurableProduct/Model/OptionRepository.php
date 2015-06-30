@@ -228,14 +228,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
                 $product->save();
             } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('An error occurred while saving option'));
+                throw new CouldNotSaveException(__('Something went wrong while saving option.'));
             }
 
             $configurableAttribute = $this->configurableAttributeFactory->create();
             $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
         }
         if (!$configurableAttribute->getId()) {
-            throw new CouldNotSaveException(__('An error occurred while saving option'));
+            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
         }
         return $configurableAttribute->getId();
     }
