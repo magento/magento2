@@ -24,19 +24,19 @@ define([
             images: {
                 label: 'images',
                 type: ko.observable('none'),
-                value: ko.observable(),
+                value: ko.observableArray([]),
                 attribute: ko.observable()
             },
             pricing: {
                 label: 'pricing',
                 type: ko.observable('none'),
-                value: ko.observable(),
+                value: ko.observable(0),
                 attribute: ko.observable()
             },
             inventory: {
                 label: 'inventory',
                 type: ko.observable('none'),
-                value: ko.observable(),
+                value: ko.observable(0),
                 attribute: ko.observable()
             }
         }),
@@ -52,8 +52,23 @@ define([
             this.newProductsCount(count);
             this.bindGalleries();
         },
+        getSectionValue: function (section, options) {
+            switch (this.sections()[section].type()) {
+                case 'each':
+                    return _.find(this.sections()[section].attribute().chosen, function (chosen) {
+                        return _.find(options, function (option) {
+                            return chosen.label == option.label;
+                        });
+                    }).sections()[section];
+                case 'single':
+                    return this.sections()[section].value();
+                case 'none':
+                    return null;
+            }
+        },
         force: function (wizard) {
             wizard.data.sections = this.sections;
+            wizard.data.sectionHelper = this.getSectionValue.bind(this);
         },
         back: function (wizard) {
         },
