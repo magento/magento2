@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Composer\ComposerInformation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -16,10 +17,16 @@ use Zend\View\Model\ViewModel;
 class ComponentGrid extends AbstractActionController
 {
     /**
-     *
+     * @var ComposerInformation
      */
-    public function __construct()
+    private $composerInformation;
+
+    /**
+     * @param ComposerInformation $reader
+     */
+    public function __construct(ComposerInformation $composerInformation)
     {
+        $this->composerInformation = $composerInformation;
     }
 
     /**
@@ -39,23 +46,7 @@ class ComponentGrid extends AbstractActionController
      */
     public function componentsAction()
     {
-        $components = [
-          [
-            'name' => 'bluesky-theme',
-            'type' => 'magento/theme',
-            'version' => '1.0.0',
-          ],
-          [
-            'name' => 'greenfield-theme',
-            'type' => 'magento/theme',
-            'version' => '0.9.0',
-          ],
-          [
-            'name' => 'redlava-module',
-            'type' => 'magento/module',
-            'version' => '2.0.1',
-          ],
-        ];
+        $components = $this->composerInformation->getRootRequiredPackageTypesByNameVersion();
         return new JsonModel(['success' => true, 'components' => $components]);
     }
 }

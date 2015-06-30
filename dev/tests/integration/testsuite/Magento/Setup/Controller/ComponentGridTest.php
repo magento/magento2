@@ -6,14 +6,12 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Controller\ComponentManager;
-
-class ComponentManagerTest extends \PHPUnit_Framework_TestCase
+class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ComponentReader
+     * @var Magento\Framework\Composer\ComposerInformation
      */
-    private $reader;
+    private $composerInformationMock;
 
     /**
      * @var array
@@ -24,21 +22,27 @@ class ComponentManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentData = [
             [
+                'name' => 'module name',
                 'type' => 'module',
                 'version' => '1.0',
-                'name' => 'module name',
             ],
         ];
-        $this->reader = $this->getMock('Magento\Framework\Composer\ComponentReader', [], [], '', false);
-        $this->reader->expects($this->once())
-            ->method('getComponents')
+        $this->composerInformationMock = $this->getMock(
+            'Magento\Framework\Composer\ComposerInformation',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->composerInformationMock->expects($this->once())
+            ->method('getRootRequiredPackageTypesByNameVersion')
             ->willReturn($this->componentData);
     }
 
     public function testIndexAction()
     {
-        $controller = new \Magento\Setup\Controller\ComponentManager($this->reader);
-        $viewModel = $controller->indexAction();
+        $controller = new \Magento\Setup\Controller\ComponentGrid($this->composerInformationMock);
+        $viewModel = $controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $viewModel);
         $this->assertTrue($viewModel->getVariable('success'));
         $this->assertEquals($this->componentData, $viewModel->getVariable('components'));
