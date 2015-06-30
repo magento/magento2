@@ -35,7 +35,7 @@ class MassVisibleIn extends ProductController
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,
-                    __('An error occurred while updating the selected review(s).')
+                    __('Something went wrong while updating these review(s).')
                 );
             }
         }

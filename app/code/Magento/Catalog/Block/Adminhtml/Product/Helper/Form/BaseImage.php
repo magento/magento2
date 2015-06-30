@@ -84,7 +84,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         $htmlId = $this->_escaper->escapeHtml($this->getHtmlId());
         $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
         $spacerImage = $this->_assetRepo->getUrl('images/spacer.gif');
-        $imagePlaceholderText = __('Click here or drag and drop to add images');
+        $imagePlaceholderText = __('Click here or drag and drop to add images.');
         $deleteImageText = __('Delete image');
         $makeBaseText = __('Make Base');
         $hiddenText = __('Hidden');

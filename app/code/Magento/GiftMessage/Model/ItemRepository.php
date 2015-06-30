@@ -13,7 +13,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Shopping cart gift message item repository object.
+ * Shopping cart gift message item repository object for registered customer
  */
 class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
 {

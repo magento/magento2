@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Rule\Test\Unit\Model\Condition\Product;
 
 use ReflectionMethod;
@@ -14,24 +12,30 @@ use ReflectionProperty;
 class AbstractProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractProduct|\PHPUnit_Framework_MockObject_MockObject
+     * Tested condition
+     *
+     * @var \Magento\Rule\Model\Condition\Product\AbstractProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_condition;
 
     /**
+     * Framework object
+     *
      * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_object;
 
     /**
+     * Reflection for Magento\Rule\Model\Condition\Product\AbstractProduct::$_entityAttributeValues
+     *
      * @var \ReflectionProperty
-     * 'Magento\Rule\Model\Condition\Product\AbstractProduct::_entityAttributeValues'
      */
     protected $_entityAttributeValuesProperty;
 
     /**
+     * Reflection for Magento\Rule\Model\Condition\Product\AbstractProduct::$_config
+     *
      * @var \ReflectionProperty
-     * 'Magento\Rule\Model\Condition\Product\AbstractProduct::_config'
      */
     protected $_configProperty;
 
@@ -159,8 +163,10 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             $this->_condition,
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false)
         );
-        $this->_entityAttributeValuesProperty->setValue($this->_condition,
-            $this->getMock('Magento\Eav\Model\Config', [], [], '', false));
+        $this->_entityAttributeValuesProperty->setValue(
+            $this->_condition,
+            $this->getMock('Magento\Eav\Model\Config', [], [], '', false)
+        );
 
         $attribute = new \Magento\Framework\Object();
         $attribute->setBackendType('datetime');
@@ -306,7 +312,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $attrObjectSourceMock
-            ->expects(is_null($expectedAttrObjSourceAllOptionsParam) ? $this->never() : $this->once())
+            ->expects((null === $expectedAttrObjSourceAllOptionsParam) ? $this->never() : $this->once())
             ->method('getAllOptions')
             ->with($expectedAttrObjSourceAllOptionsParam)
             ->willReturn($attrObjectSourceAllOptionsValue);
@@ -317,7 +323,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $attributeObjectMock->method('usesSource')->willReturn(true);
         $attributeObjectMock
-            ->expects(is_null($attributeObjectFrontendInput) ? $this->never() : $this->once())
+            ->expects((null === $attributeObjectFrontendInput) ? $this->never() : $this->once())
             ->method('getFrontendInput')
             ->willReturn($attributeObjectFrontendInput);
         $attributeObjectMock->method('getSource')->willReturn($attrObjectSourceMock);
@@ -345,12 +351,14 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $attrSetCollectionValueMock->method('setEntityTypeFilter')->will($this->returnSelf());
         $attrSetCollectionValueMock->method('load')->will($this->returnSelf());
         $attrSetCollectionValueMock
-            ->expects(is_null($attrSetCollectionOptionsArray) ? $this->never() : $this->once())
+            ->expects((null === $attrSetCollectionOptionsArray) ? $this->never() : $this->once())
             ->method('toOptionArray')
             ->willReturn($attrSetCollectionOptionsArray);
 
-        $attrSetCollectionProperty =
-            new ReflectionProperty('Magento\Rule\Model\Condition\Product\AbstractProduct', '_attrSetCollection');
+        $attrSetCollectionProperty = new ReflectionProperty(
+            'Magento\Rule\Model\Condition\Product\AbstractProduct',
+            '_attrSetCollection'
+        );
         $attrSetCollectionProperty->setAccessible(true);
         $attrSetCollectionProperty->setValue($this->_condition, $attrSetCollectionValueMock);
 
@@ -366,6 +374,8 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider for prepare value options
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
