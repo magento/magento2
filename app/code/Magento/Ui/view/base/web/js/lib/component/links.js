@@ -126,7 +126,7 @@ define([
             if (type === 'link' || type === 'both') {
                 callback = update.bind(null, data, target);
 
-                owner.component.on(owner.property, callback);
+                owner.component.on(owner.property, callback, target.component.name);
             }
 
             if (type === 'transfer' || type === 'both') {
