@@ -151,5 +151,16 @@ class QuoteAdapter implements OrderAdapterInterface
     public function getBaseCurrencyCode()
     {
         return $this->quote->getCurrency()->getBaseCurrencyCode();
+
+    }
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return null
+     */
+    public function getGrandTotalAmount()
+    {
+        return null;
     }
 }

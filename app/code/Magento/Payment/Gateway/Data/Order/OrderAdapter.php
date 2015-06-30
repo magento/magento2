@@ -149,5 +149,16 @@ class OrderAdapter implements OrderAdapterInterface
     public function getBaseCurrencyCode()
     {
         return $this->order->getBaseCurrencyCode();
+
+    }
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return float|null
+     */
+    public function getGrandTotalAmount()
+    {
+        return $this->order->getBaseGrandTotal();
     }
 }

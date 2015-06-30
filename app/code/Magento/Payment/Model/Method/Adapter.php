@@ -7,6 +7,9 @@ namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Payment\Gateway\Command\CommandPoolInterface;
+use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
+use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 
@@ -18,17 +21,17 @@ use Magento\Payment\Model\MethodInterface;
 class Adapter implements MethodInterface
 {
     /**
-     * @var \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface
+     * @var ValueHandlerPoolInterface
      */
     private $valueHandlerPool;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\ValidatorPoolInterface
+     * @var ValidatorPoolInterface
      */
     private $validatorPool;
 
     /**
-     * @var \Magento\Payment\Gateway\Command\CommandPoolInterface
+     * @var CommandPoolInterface
      */
     private $commandPool;
 
@@ -69,9 +72,9 @@ class Adapter implements MethodInterface
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface $valueHandlerPool
-     * @param \Magento\Payment\Gateway\Validator\ValidatorPoolInterface $validatorPool
-     * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
+     * @param ValueHandlerPoolInterface $valueHandlerPool
+     * @param ValidatorPoolInterface $validatorPool
+     * @param CommandPoolInterface $commandPool
      * @param \Magento\Payment\Gateway\Data\PaymentDataObjectFactory $paymentDataObjectFactory
      * @param string $code
      * @param string $formBlockType
@@ -79,9 +82,9 @@ class Adapter implements MethodInterface
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface $valueHandlerPool,
-        \Magento\Payment\Gateway\Validator\ValidatorPoolInterface $validatorPool,
-        \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
+        ValueHandlerPoolInterface $valueHandlerPool,
+        ValidatorPoolInterface $validatorPool,
+        CommandPoolInterface $commandPool,
         \Magento\Payment\Gateway\Data\PaymentDataObjectFactory $paymentDataObjectFactory,
         $code,
         $formBlockType,
@@ -306,7 +309,15 @@ class Adapter implements MethodInterface
     private function getConfiguredValue($field)
     {
         $handler = $this->valueHandlerPool->get($field);
-        return $handler->handle($field, $this->getStore());
+        $subject = [
+            'field' => $field
+        ];
+
+        if ($this->getInfoInstance()) {
+            $subject['payment'] = $this->paymentDataObjectFactory->create($this->getInfoInstance());
+        }
+
+        return $handler->handle($subject, $this->getStore());
     }
 
     /**
@@ -522,12 +533,6 @@ class Adapter implements MethodInterface
      */
     public function getInfoInstance()
     {
-        if (!$this->infoInstance instanceof InfoInterface) {
-            throw new LocalizedException(
-                __('We cannot retrieve the payment information object instance.')
-            );
-        }
-
         return $this->infoInstance;
     }
 
@@ -548,8 +553,16 @@ class Adapter implements MethodInterface
             return $this->getConfiguredValue($field);
         }
 
+        $subject = [
+            'field' => $field
+        ];
+
+        if ($this->getInfoInstance()) {
+            $subject['payment'] = $this->paymentDataObjectFactory->create($this->getInfoInstance());
+        }
+
         $handler = $this->valueHandlerPool->get($field);
-        return $handler->handle($field, (int)$storeId);
+        return $handler->handle($subject, (int)$storeId);
     }
 
     /**
@@ -567,6 +580,7 @@ class Adapter implements MethodInterface
 
     /**
      * {inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
