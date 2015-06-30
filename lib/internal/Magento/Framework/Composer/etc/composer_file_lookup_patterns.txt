@@ -1,5 +1,0 @@
-app/code/Magento
-app/design/adminhtml/Magento
-app/design/frontend/Magento
-app/i18n/magento
-lib/internal/Magento
