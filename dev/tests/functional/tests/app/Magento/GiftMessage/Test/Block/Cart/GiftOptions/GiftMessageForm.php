@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GiftMessage\Test\Block\Message\Inline;
+namespace Magento\GiftMessage\Test\Block\Cart\GiftOptions;
 
 use Magento\Mtf\Block\Form;
 
