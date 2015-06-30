@@ -6,18 +6,21 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php $_item = $block->getItem() ?>
+/** @var $_item \Magento\Sales\Model\Order\Item */
+$_item = $block->getItem() ?>
 <tr>
-    <td>
-        <strong><?= $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
-        <dl>
-            <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-            <dd><?= nl2br($option['value']) ?></dd>
-            <?php endforeach; ?>
-        </dl>
+            <dl class="item-options">
+                <?php foreach ($block->getItemOptions() as $option): ?>
+                    <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                    <dd>
+                        <?= nl2br($option['value']) ?>
+                    </dd>
+                <?php endforeach; ?>
+            </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
@@ -25,6 +28,5 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td><?= $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td><?= $_item->getQty() * 1 ?></td>
+    <td class="item-qty"><?= $_item->getQty() * 1 ?></td>
 </tr>

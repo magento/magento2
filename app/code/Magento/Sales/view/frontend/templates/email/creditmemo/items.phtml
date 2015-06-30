@@ -10,29 +10,32 @@
 <?php $_creditmemo = $block->getCreditmemo() ?>
 <?php $_order      = $block->getOrder() ?>
 <?php if ($_creditmemo && $_order): ?>
-<table>
-    <thead>
-        <tr>
-            <th><?= __('Item') ?></th>
-            <th><?= __('Sku') ?></th>
-            <th><?= __('Qty') ?></th>
-            <th><?= __('Subtotal') ?></th>
-        </tr>
-    </thead>
-
-    <?php $i = 0; foreach ($_creditmemo->getAllItems() as $_item): ?>
-    <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} else {
-    $i++;
-} ?>
-    <tbody<?= $i % 2 ? ' ' : '' ?>>
-        <?= $block->getItemHtml($_item) ?>
-    </tbody>
-    <?php endforeach; ?>
-
-    <tfoot>
-        <?= $block->getChildHtml('creditmemo_totals') ?>
-    </tfoot>
-</table>
+    <table class="email-items">
+        <thead>
+            <tr>
+                <th class="item-info">
+                    <?= __('Items'); ?>
+                </th>
+                <th class="item-qty">
+                    <?= __('Qty'); ?>
+                </th>
+                <th class="item-subtotal">
+                    <?= __('Subtotal'); ?>
+                </th>
+            </tr>
+        </thead>
+        <?php foreach ($_creditmemo->getAllItems() as $_item): ?>
+            <?php
+                if ($_item->getOrderItem()->getParentItem()) {
+                    continue;
+                }
+            ?>
+            <tbody>
+                <?= $block->getItemHtml($_item) ?>
+            </tbody>
+        <?php endforeach; ?>
+        <tfoot class="order-totals">
+            <?= $block->getChildHtml('creditmemo_totals') ?>
+        </tfoot>
+    </table>
 <?php endif; ?>
