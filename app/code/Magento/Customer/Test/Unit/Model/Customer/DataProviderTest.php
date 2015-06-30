@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -47,12 +48,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerCollectionFactoryMock = $this->getMockBuilder(
-            'Magento\Customer\Model\Resource\Customer\CollectionFactory'
-        )->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->eavValidationRulesMock = $this->getMockBuilder('Magento\Ui\DataProvider\EavValidationRules')
+        $this->customerCollectionFactoryMock = $this->getMock(
+            'Magento\Customer\Model\Resource\Customer\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->eavValidationRulesMock = $this
+            ->getMockBuilder('Magento\Ui\DataProvider\EavValidationRules')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -67,13 +71,17 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributesMetaWithOptions(array $expected)
     {
-        $dataProvider = new DataProvider(
-            'test-name',
-            'primary-field-name',
-            'request-field-name',
-            $this->eavValidationRulesMock,
-            $this->getCustomerCollectionFactoryMock(),
-            $this->getEavConfigMock()
+        $helper = new ObjectManager($this);
+        $dataProvider = $helper->getObject(
+            '\Magento\Customer\Model\Customer\DataProvider',
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
+                'eavConfig' => $this->getEavConfigMock()
+            ]
         );
 
         $meta = $dataProvider->getMeta();
