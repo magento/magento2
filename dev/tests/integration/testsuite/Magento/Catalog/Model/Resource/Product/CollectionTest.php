@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Customer\Api\GroupManagementInterface;
 
+/**
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
