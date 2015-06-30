@@ -109,7 +109,7 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        // "depend", "if", and "include" directives should be first
+        // "depend", "if", and "template" directives should be first
         foreach ([
                      self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
                      self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
