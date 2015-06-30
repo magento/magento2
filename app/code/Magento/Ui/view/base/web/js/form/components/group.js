@@ -50,6 +50,18 @@ define([
          * @returns {Group} Chainable.
          */
         _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
             _.extend(this.additionalClasses, {
                 required:   this.required,
                 _error:     this.error,

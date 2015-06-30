@@ -208,9 +208,7 @@ class AttributeMerger
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
                 'validation' => $isFirstLine ? ['required-entry' => true] : [],
-                'additionalClasses' => [
-                    'additional' => $isFirstLine
-                ]
+                'additionalClasses' => $isFirstLine ? : 'additional'
             ];
         }
         return [
@@ -223,9 +221,7 @@ class AttributeMerger
             'type' => 'group',
             'config' => [
                 'template' => 'ui/group/group',
-                'additionalClasses' => [
-                    'street' => true
-                ]
+                'additionalClasses' => 'street'
             ],
             'children' => $streetLines,
         ];
