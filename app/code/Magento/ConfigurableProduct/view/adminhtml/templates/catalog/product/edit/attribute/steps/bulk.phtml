@@ -21,20 +21,20 @@
                 <li>
                     <label>
                         <input type="radio" value="single"
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Apply single set of images to all SKUs') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" value="each" data-bind="attr:{name:label}, checked:type">
+                        <input type="radio" value="each" data-bind="checked:type">
                         <span><?= __('Apply unique images by attribute to each SKU') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" value="none" checked
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Skip image uploading at this time') ?></span>
                     </label>
                 </li>
@@ -43,7 +43,7 @@
                  style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
             >
                 <label>
-                    <span data-bind="text:label"></span>
+                    <span><?= __('Images') ?></span>
                 </label>
 
                 <div data-role="gallery" class="gallery" data-images="[]">
@@ -409,20 +409,20 @@
                 <li>
                     <label>
                         <input type="radio" value="single"
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Apply single price to all SKUs') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" value="each" data-bind="attr:{name:label}, checked:type">
+                        <input type="radio" value="each" data-bind="checked:type">
                         <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" value="none" checked
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Skip pricing at this time') ?></span>
                     </label>
                 </li>
@@ -431,7 +431,7 @@
                  style="list-style-type: none;margin-top: 10px;"
             >
                 <label>
-                    <span data-bind="text:label"></span>
+                    <span><?= __('Pricing') ?></span>
                     <input type="text" data-bind="value:value">
                 </label>
             </div>
@@ -466,20 +466,20 @@
                 <li>
                     <label>
                         <input type="radio" value="single"
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Apply single inventory to each SKUs') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
-                        <input type="radio" value="each" data-bind="attr:{name:label}, checked:type">
+                        <input type="radio" value="each" data-bind="checked:type">
                         <span><?= __('Apply unique inventory by attribute to each SKU') ?></span>
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" value="none" checked
-                               data-bind="attr:{name:label}, checked:type">
+                               data-bind="checked:type">
                         <span><?= __('Skip inventory at this time') ?></span>
                     </label>
                 </li>
@@ -488,7 +488,7 @@
                  style="list-style-type: none;margin-top: 10px;"
                 >
                 <label>
-                    <span data-bind="text:label"></span>
+                    <span><?= __('Inventory') ?></span>
                     <input type="text" data-bind="value:value">
                 </label>
             </div>
