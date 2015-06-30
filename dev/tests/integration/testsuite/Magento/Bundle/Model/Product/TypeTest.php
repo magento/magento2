@@ -8,6 +8,8 @@ namespace Magento\Bundle\Model\Product;
 
 /**
  * Test class for \Magento\Bundle\Model\Product\Type (bundle product type)
+ *
+ * @magentoDbIsolation disabled
  */
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
