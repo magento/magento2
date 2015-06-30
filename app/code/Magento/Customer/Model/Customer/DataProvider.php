@@ -223,6 +223,7 @@ class DataProvider implements DataProviderInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addField($field, $alias = null)
     {
@@ -260,6 +261,7 @@ class DataProvider implements DataProviderInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function removeField($field, $isAlias = false)
     {

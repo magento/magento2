@@ -76,7 +76,7 @@ class Definition
             throw new LocalizedException(
                 new Phrase(
                     'The requested component ("' . $name . '") is not found. '
-                     . 'Before using, you must add the implementation.'
+                    . 'Before using, you must add the implementation.'
                 )
             );
         }
