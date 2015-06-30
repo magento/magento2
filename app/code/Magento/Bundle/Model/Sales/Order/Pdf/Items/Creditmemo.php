@@ -67,7 +67,7 @@ class Creditmemo extends AbstractItems
         $pdf = $this->getPdf();
         $page = $this->getPage();
 
-        $items = $this->getChilds($item);
+        $items = $this->getChildren($item);
         $prevOptionId = '';
         $drawItems = [];
         $leftBound = 35;
