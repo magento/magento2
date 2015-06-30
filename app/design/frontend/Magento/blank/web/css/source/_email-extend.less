@@ -16,32 +16,34 @@
 //  These declarations are also wrapped in an otherwise useless media query in order to prevent them from causing
 //  problems in Microsoft Outlook email clients.
 
-@media screen {
-    .font-face(
-        @family-name: @font-family-name__base,
-        @font-path: '@{baseUrl}fonts/opensans/light/opensans-300',
-        @font-weight: 300,
-        @font-style: normal
-    );
+.email-non-inline() {
+    @media screen {
+        .font-face(
+            @family-name: @font-family-name__base,
+            @font-path: '@{baseUrl}fonts/opensans/light/opensans-300',
+            @font-weight: 300,
+            @font-style: normal
+        );
 
-    .font-face(
-        @family-name: @font-family-name__base,
-        @font-path: '@{baseUrl}fonts/opensans/regular/opensans-400',
-        @font-weight: 400,
-        @font-style: normal
-    );
+        .font-face(
+            @family-name: @font-family-name__base,
+            @font-path: '@{baseUrl}fonts/opensans/regular/opensans-400',
+            @font-weight: 400,
+            @font-style: normal
+        );
 
-    .font-face(
-        @family-name: @font-family-name__base,
-        @font-path: '@{baseUrl}fonts/opensans/semibold/opensans-600',
-        @font-weight: 600,
-        @font-style: normal
-    );
+        .font-face(
+            @family-name: @font-family-name__base,
+            @font-path: '@{baseUrl}fonts/opensans/semibold/opensans-600',
+            @font-weight: 600,
+            @font-style: normal
+        );
 
-    .font-face(
-        @family-name: @font-family-name__base,
-        @font-path: '@{baseUrl}fonts/opensans/bold/opensans-700',
-        @font-weight: 700,
-        @font-style: normal
-    );
+        .font-face(
+            @family-name: @font-family-name__base,
+            @font-path: '@{baseUrl}fonts/opensans/bold/opensans-700',
+            @font-weight: 700,
+            @font-style: normal
+        );
+    }
 }
