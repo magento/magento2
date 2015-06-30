@@ -22,7 +22,7 @@
 {{template config_path="design/email/header_template"}}
 
 <table cellpadding="0" cellspacing="0" border="0">
-    <tr class="intro">
+    <tr class="email-intro">
         <td>
             <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
             <p>
@@ -45,13 +45,13 @@
             </p>
         </td>
     </tr>
-    <tr class="order-summary">
+    <tr class="email-summary">
         <td>
             <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
             <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
         </td>
     </tr>
-    <tr class="order-information">
+    <tr class="email-information">
         <td>
             {{depend order.getEmailCustomerNote()}}
             <table class="message-info" cellspacing="0" cellpadding="0" border="0">

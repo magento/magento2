@@ -26,7 +26,7 @@
 {{template config_path="design/email/header_template"}}
 
 <table cellpadding="0" cellspacing="0" border="0">
-    <tr class="intro">
+    <tr class="email-intro">
         <td>
             <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
             <p>
@@ -41,14 +41,14 @@
             </p>
         </td>
     </tr>
-    <tr class="order-summary">
+    <tr class="email-summary">
         <td>
             <p>{{trans "Your shipping confirmation is below. Thank you again for your business."}}</p>
 
             <h2>{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h2>
         </td>
     </tr>
-    <tr class="order-information">
+    <tr class="email-information">
         <td>
             <table class="order-details" cellspacing="0" cellpadding="0" border="0">
                 <tr>
