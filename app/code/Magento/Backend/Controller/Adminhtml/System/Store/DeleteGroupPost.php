@@ -6,21 +6,22 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
         $itemId = $this->getRequest()->getParam('item_id');
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Group')->load($itemId))) {
-            $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
@@ -32,8 +33,15 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
             return $redirectResult->setPath('*/*/editGroup', ['group_id' => $itemId]);
         }
 
-        $model->delete();
-        $this->messageManager->addSuccess(__('The store has been deleted.'));
-        return $redirectResult->setPath('adminhtml/*/');
+        try {
+            $model->delete();
+            $this->messageManager->addSuccess(__('You deleted the store.'));
+            return $redirectResult->setPath('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Unable to delete store. Please, try again later.'));
+        }
+        return $redirectResult->setPath('adminhtml/*/editGroup', ['group_id' => $itemId]);
     }
 }

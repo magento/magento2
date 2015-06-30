@@ -397,7 +397,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')
-            ->with('The account information has been saved.');
+            ->with('You saved the account information.');
 
         $this->redirectResultMock
             ->expects($this->once())

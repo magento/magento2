@@ -12,12 +12,12 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Assert that the correct option details are displayed on the "View Details" tool tip.
+ * Assert that the correct option details are displayed on the "See Details" tooltip.
  */
 class AssertProductDetailsInWishlist extends AbstractAssertWishlistProductDetails
 {
     /**
-     * Assert that the correct option details are displayed on the "View Details" tool tip.
+     * Assert that the correct option details are displayed on the "See Details" tooltip.
      *
      * @param CmsIndex $cmsIndex
      * @param WishlistIndex $wishlistIndex

@@ -30,7 +30,7 @@ class Login extends Form
     protected $continue = '#onepage-guest-register-button';
 
     /**
-     * 'Checkout as Guest' radio button
+     * Locator value for "Check Out as Guest" radio button.
      *
      * @var string
      */

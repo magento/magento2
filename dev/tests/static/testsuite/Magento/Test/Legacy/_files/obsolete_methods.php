@@ -771,6 +771,8 @@ return [
     ['getAffectedEntityIds', 'Magento\CatalogImportExport\Model\Import\Product'],
     ['getCategoryWithRoot', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
     ['getCategory', 'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'],
+    ['prepareGroupPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
+    ['prepareTierPrices', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['prepareGoogleOptimizerScripts'],
     ['prepareRedirect', 'Magento\Core\Controller\Varien\Exception'],
     ['preparePriceAlertData', 'Magento\ProductAlert\Block\Product\View'],
@@ -2123,6 +2125,16 @@ return [
         'Magento\Customer\Controller\Account\LoginPost',
         'Magento\Customer\Model\Account\Redirect::getRedirect',
     ],
+    [
+        'process',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::process'
+    ],
+    [
+        'extractExtensionAttributes',
+        'Magento\Framework\Api\ExtensionAttributesFactory',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::extractExtensionAttributes'
+    ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],
     ['getCreateAccountUrl', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getCreateAccountUrl'],
@@ -2233,7 +2245,7 @@ return [
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
-    ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['getFilePath', 'Magento\MediaStorage\Model\File\Storage\Request'],
     ['_getStoreTimezoneUtcOffset', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['_dateToUtc', 'Magento\Reports\Model\Resource\Report\AbstractReport'],
     ['getDataSetDefault', 'Magento\Framework\Object'],
@@ -2245,4 +2257,16 @@ return [
     ['getOrigData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['dataHasChangedFor', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['setDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    [
+        'getConfigureUrl',
+        'Magento\Checkout\Block\Cart\Item\Renderer',
+        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+    ],
+    ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
+    ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
+    ['loadByCode', 'Magento\Newsletter\Model\Resource'],
+    ['_getIncludeParameters', 'Magento\Framework\Filter\Template', '_getParameters'],
+    ['setIncludeProcessor', 'Magento\Framework\Filter\Template'],
+    ['includeDirective', 'Magento\Framework\Filter\Template'],
 ];
