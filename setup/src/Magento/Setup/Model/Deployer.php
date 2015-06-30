@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
@@ -21,6 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Deployer
 {
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
     /** @var Files */
     private $filesUtil;
 
@@ -71,6 +77,11 @@ class Deployer
     protected $jsTranslationConfig;
 
     /**
+     * @var array
+     */
+    private $parentTheme;
+
+    /**
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
@@ -80,6 +91,7 @@ class Deployer
      * @param bool $isDryRun
      */
     public function __construct(
+        DirectoryList $directoryList,
         Files $filesUtil,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
@@ -88,6 +100,7 @@ class Deployer
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
+        $this->directoryList = $directoryList;
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
@@ -95,6 +108,7 @@ class Deployer
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
+        $this->parentTheme = [];
     }
 
     /**
@@ -125,8 +139,11 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     foreach ($appFiles as $info) {
-                        list($fileArea, , , $module, $filePath) = $info;
-                        if ($fileArea == $area || $fileArea == 'base') {
+                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        if (($fileArea == $area || $fileArea == 'base') &&
+                            ($fileTheme == '' || $fileTheme == $themePath ||
+                                $fileTheme == $this->findParent($area . '/' . $themePath))
+                        ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
                         }
                     }
@@ -300,6 +317,16 @@ class Deployer
             $this->verboseLog((string)$e);
             $this->errorCount++;
         }
+    }
+
+    private function findParent($fullThemePath)
+    {
+        if (!isset($this->parentTheme[$fullThemePath])) {
+            $themeXmlFile = $this->directoryList->getPath(DirectoryList::THEMES) . '/' . $fullThemePath . '/theme.xml';
+            $xmlData = new \SimpleXMLElement(file_get_contents($themeXmlFile));
+            $this->parentTheme[$fullThemePath] = $xmlData->parent ?: '';
+        }
+        return $this->parentTheme[$fullThemePath];
     }
 
     /**
