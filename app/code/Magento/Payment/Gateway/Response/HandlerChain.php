@@ -6,21 +6,29 @@
 namespace Magento\Payment\Gateway\Response;
 
 use Magento\Framework\ObjectManager\TMap;
+use Magento\Framework\ObjectManager\TMapFactory;
 
 class HandlerChain implements HandlerInterface
 {
     /**
-     * @var HandlerInterface[]
+     * @var HandlerInterface[] | TMap
      */
     private $handlers;
 
     /**
-     * @param TMap $handlers
+     * @param array $handlers
+     * @param TMapFactory $tmapFactory
      */
     public function __construct(
-        TMap $handlers
+        array $handlers,
+        TMapFactory $tmapFactory
     ) {
-        $this->handlers = $handlers;
+        $this->handlers = $tmapFactory->create(
+            [
+                'array' => $handlers,
+                'type' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+            ]
+        );
     }
 
     /**

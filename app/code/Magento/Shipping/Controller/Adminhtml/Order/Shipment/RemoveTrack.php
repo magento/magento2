@@ -61,14 +61,17 @@ class RemoveTrack extends \Magento\Backend\App\Action
                 } else {
                     $response = [
                         'error' => true,
-                        'message' => __('Cannot initialize shipment for delete tracking number.'),
+                        'message' => __('We can\'t initialize shipment for delete tracking number.'),
                     ];
                 }
             } catch (\Exception $e) {
-                $response = ['error' => true, 'message' => __('Cannot delete tracking number.')];
+                $response = ['error' => true, 'message' => __('We can\'t delete tracking number.')];
             }
         } else {
-            $response = ['error' => true, 'message' => __('Cannot load track with retrieving identifier.')];
+            $response = [
+                'error' => true,
+                'message' => __('We can\'t load track with retrieving identifier right now.')
+            ];
         }
         if (is_array($response)) {
             $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);

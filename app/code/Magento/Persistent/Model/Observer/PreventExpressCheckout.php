@@ -79,7 +79,7 @@ class PreventExpressCheckout
             return;
         }
 
-        $this->messageManager->addNotice(__('To check out, please log in using your email address.'));
+        $this->messageManager->addNotice(__('To check out, please sign in using your email address.'));
         $customerBeforeAuthUrl = $this->_url->getUrl('persistent/index/expressCheckout');
 
         $this->_expressRedirectHelper->redirectLogin($controllerAction, $customerBeforeAuthUrl);

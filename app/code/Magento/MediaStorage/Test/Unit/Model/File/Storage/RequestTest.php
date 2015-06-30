@@ -20,11 +20,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $_workingDir = '..var';
-
-    /**
-     * @var string
-     */
     protected $_pathInfo = 'PathInfo';
 
     protected function setUp()
@@ -32,7 +27,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $path = '..PathInfo';
         $this->_requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
-        $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_workingDir, $this->_requestMock);
+        $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_requestMock);
     }
 
     protected function tearDown()
@@ -44,10 +39,5 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetPathInfo()
     {
         $this->assertEquals($this->_pathInfo, $this->_model->getPathInfo());
-    }
-
-    public function testGetFilePath()
-    {
-        $this->assertEquals($this->_workingDir . '/' . $this->_pathInfo, $this->_model->getFilePath());
     }
 }

@@ -16,10 +16,26 @@ class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $validator2 = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ValidatorInterface')
             ->getMockForAbstractClass();
-
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [
+                        'validator1' => 'Magento\Payment\Gateway\Validator\ValidatorInterface',
+                        'validator2' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    ],
+                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$validator1, $validator2]));
@@ -64,7 +80,14 @@ class ValidatorCompositeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($compositeResult);
 
 
-        $validatorComposite = new ValidatorComposite($resultFactory, $tMap);
+        $validatorComposite = new ValidatorComposite(
+            $resultFactory,
+            [
+                'validator1' => 'Magento\Payment\Gateway\Validator\ValidatorInterface',
+                'validator2' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+            ],
+            $tMapFactory
+        );
         static::assertSame($compositeResult, $validatorComposite->validate($validationSubject));
     }
 }
