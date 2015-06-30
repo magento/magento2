@@ -85,7 +85,6 @@
     <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection" />
     <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
-    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat"/>
     <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\DefaultMetadataService"/>
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
@@ -597,29 +596,23 @@
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </virtualType>
-    <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\File">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile">
         <arguments>
-            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+            <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
     <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat</argument>
             <argument name="alternativeExtensions" xsi:type="array">
                 <item name="css" xsi:type="array">
                     <item name="less" xsi:type="string">less</item>
