@@ -71,7 +71,7 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetFields()
     {
         $mainTable = 'main_table';
-        $expectedDescribedTable = 'described_table';
+        $expectedDescribedTable = ['described_table' => null];
         $this->resource->expects($this->any())->method('getMainTable')->willReturn($mainTable);
         $this->connection->expects($this->once())->method('describeTable')->with($mainTable)->willReturn(
             $expectedDescribedTable
