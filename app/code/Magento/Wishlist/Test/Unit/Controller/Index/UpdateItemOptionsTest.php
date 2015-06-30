@@ -395,7 +395,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')
-            ->with('Test name has been updated in your wish list.', null)
+            ->with('Test name has been updated in your Wish List.', null)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('error-message')));
         $this->messageManager
             ->expects($this->once())
@@ -533,12 +533,12 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')
-            ->with('Test name has been updated in your wish list.', null)
+            ->with('Test name has been updated in your Wish List.', null)
             ->willThrowException($exception);
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('An error occurred while updating wish list.', null)
+            ->with('We can\'t update your Wish List right now.', null)
             ->willReturn(true);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

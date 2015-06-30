@@ -38,7 +38,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         $category = $this->categoryRepository->get($categoryId);
         $productsPosition = $category->getProductsPosition();
 
-        /** @var \Magento\Framework\Data\Collection\Db $products */
+        /** @var \Magento\Framework\Data\Collection\AbstractDb $products */
         $products = $category->getProductCollection();
 
         /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface[] $links */

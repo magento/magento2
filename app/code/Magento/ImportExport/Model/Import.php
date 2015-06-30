@@ -40,9 +40,31 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**#@+
      * Form field names (and IDs)
      */
+
+    /**
+     * Import source file.
+     */
     const FIELD_NAME_SOURCE_FILE = 'import_file';
 
+    /**
+     * Import image archive.
+     */
     const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
+
+    /**
+     * Import images file directory.
+     */
+    const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
+
+    /**
+     * Import field separator.
+     */
+    const FIELD_FIELD_SEPARATOR = '_import_field_separator';
+
+    /**
+     * Import multiple value separator.
+     */
+    const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**#@-*/
 
@@ -175,14 +197,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please enter a correct entity model.')
+                    );
                 }
                 if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\Entity\AbstractEntity &&
                     !$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\AbstractEntity
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'Entity adapter object must be an instance of %1 or %2',
+                            'The entity adapter object must be an instance of %1 or %2.',
                             'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
                             'Magento\ImportExport\Model\Import\AbstractEntity'
                         )
@@ -213,7 +237,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
             $sourceFile,
-            $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT)
+            $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT),
+            $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
     }
 
@@ -229,17 +254,17 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         if ($this->getProcessedRowsCount()) {
             if (!$validationResult) {
                 if ($this->getProcessedRowsCount() == $this->getInvalidRowsCount()) {
-                    $messages[] = __('File is totally invalid. Please fix errors and re-upload file.');
+                    $messages[] = __('This file is invalid. Please fix errors and re-upload the file.');
                 } elseif ($this->getErrorsCount() >= $this->getErrorsLimit()) {
                     $messages[] = __(
-                        'Errors limit (%1) reached. Please fix errors and re-upload file.',
+                        'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
                         $this->getErrorsLimit()
                     );
                 } else {
                     if ($this->isImportAllowed()) {
-                        $messages[] = __('Please fix errors and re-upload file.');
+                        $messages[] = __('Please fix errors and re-upload the file.');
                     } else {
-                        $messages[] = __('File is partially valid, but import is not possible');
+                        $messages[] = __('The file is partially valid, but we can\'t import it for some reason.');
                     }
                 }
                 // errors info
@@ -249,9 +274,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 }
             } else {
                 if ($this->isImportAllowed()) {
-                    $messages[] = __('Validation finished successfully');
+                    $messages[] = __('The validation is complete.');
                 } else {
-                    $messages[] = __('File is valid, but import is not possible');
+                    $messages[] = __('The file is valid, but we can\'t import it for some reason.');
                 }
             }
             $notices = $this->getNotices();
@@ -266,7 +291,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $this->getErrorsCount()
             );
         } else {
-            $messages[] = __('File does not contain data.');
+            $messages[] = __('This file does not contain any data.');
         }
         return $messages;
     }
@@ -410,12 +435,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public function importSource()
     {
-        $this->setData(
-            [
-                'entity' => $this->getDataSourceModel()->getEntityTypeCode(),
-                'behavior' => $this->getDataSourceModel()->getBehavior(),
-            ]
-        );
+        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
+        $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
 
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
@@ -430,7 +451,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $this->getInvalidRowsCount(),
                     $this->getErrorsCount()
                 ),
-                __('Import has been done successfuly.'),
+                __('The import was successful.'),
             ]
         );
 
@@ -462,7 +483,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
                 $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
             } else {
-                $errorMessage = __('File was not uploaded.');
+                $errorMessage = __('The file was not uploaded.');
             }
             throw new \Magento\Framework\Exception\LocalizedException($errorMessage);
         }
@@ -477,7 +498,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $uploadedFile = $result['path'] . $result['file'];
         if (!$extension) {
             $this->_varDirectory->delete($uploadedFile);
-            throw new \Magento\Framework\Exception\LocalizedException(__('Uploaded file has no extension'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The file you uploaded has no extension.'));
         }
         $sourceFile = $this->getWorkingDir() . $entity;
 
@@ -495,7 +516,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $sourceFileRelative
                 );
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Source file moving failed'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The source file moving process failed.'));
             }
         }
         $this->_removeBom($sourceFile);
@@ -540,7 +561,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = $this->getOperationResultMessages($result);
         $this->addLogComment($messages);
         if ($result) {
-            $this->addLogComment(__('Done import data validation'));
+            $this->addLogComment(__('Import data validation is complete.'));
         }
         return $result;
     }
@@ -595,7 +616,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     'code' => $behavior->getCode() . '_behavior',
                 ];
             } else {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid behavior token for %1', $entityCode));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The behavior token for %1 is invalid.', $entityCode)
+                );
             }
         }
         return $behaviourData;

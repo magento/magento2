@@ -8,6 +8,7 @@ namespace Magento\User\Model;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Api\Data\UserInterface;
 
 /**
  * Admin user model
@@ -123,7 +124,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param UserValidationRules $validationRules
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,7 +141,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
@@ -484,7 +485,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new AuthenticationException(__('Access denied.'));
+                throw new AuthenticationException(__('You need more permissions to access this.'));
             }
             $result = true;
         }

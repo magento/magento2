@@ -49,20 +49,11 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
                 throw new LocalizedException(
-                    __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                    __('Please enter a password with at least %1 characters.', self::MIN_PASSWORD_LENGTH)
                 );
             }
 
-            if ($this->string->substr(
-                $password,
-                0,
-                1
-            ) == ' ' || $this->string->substr(
-                $password,
-                $length - 1,
-                1
-            ) == ' '
-            ) {
+            if (trim($password) != $password) {
                 throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 

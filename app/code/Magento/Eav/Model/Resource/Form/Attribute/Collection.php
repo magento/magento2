@@ -84,10 +84,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         if (empty($this->_moduleName)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Current module pathname is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The current module pathname is undefined.'));
         }
         if (empty($this->_entityTypeCode)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Current module EAV entity is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The current module EAV entity is undefined.')
+            );
         }
     }
 

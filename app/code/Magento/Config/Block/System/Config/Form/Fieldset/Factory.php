@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * \Magento\Config\Block\System\Config\Form\Fieldset object factory
- */
 namespace Magento\Config\Block\System\Config\Form\Fieldset;
 
+/**
+ * Magento\Config\Block\System\Config\Form\Fieldset Class Factory
+ *
+ * @codeCoverageIgnore
+ */
 class Factory
 {
     /**

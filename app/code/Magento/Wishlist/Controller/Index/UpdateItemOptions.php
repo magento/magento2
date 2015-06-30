@@ -96,12 +96,12 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
 
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
 
-            $message = __('%1 has been updated in your wish list.', $product->getName());
+            $message = __('%1 has been updated in your Wish List.', $product->getName());
             $this->messageManager->addSuccess($message);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while updating wish list.'));
+            $this->messageManager->addError(__('We can\'t update your Wish List right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);

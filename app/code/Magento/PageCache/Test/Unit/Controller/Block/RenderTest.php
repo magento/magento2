@@ -88,11 +88,11 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     public function testExecuteNoParams()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock->expects($this->at(10))
             ->method('getParam')
             ->with($this->equalTo('blocks'), $this->equalTo(''))
             ->will($this->returnValue(''));
-        $this->requestMock->expects($this->at(2))
+        $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->will($this->returnValue(''));
@@ -103,6 +103,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     {
         $blocks = ['block1', 'block2'];
         $handles = ['handle1', 'handle2'];
+        $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
         $blockInstance1 = $this->getMock(
@@ -124,11 +125,29 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
+
         $this->requestMock->expects($this->at(1))
+            ->method('getRouteName')
+            ->will($this->returnValue('magento_pagecache'));
+        $this->requestMock->expects($this->at(2))
+            ->method('getControllerName')
+            ->will($this->returnValue('block'));
+        $this->requestMock->expects($this->at(3))
+            ->method('getActionName')
+            ->will($this->returnValue('render'));
+        $this->requestMock->expects($this->at(4))
+            ->method('getRequestUri')
+            ->will($this->returnValue('uri'));
+        $this->requestMock->expects($this->at(5))
+            ->method('getParam')
+            ->with($this->equalTo('originalRequest'))
+            ->will($this->returnValue($originalRequest));
+
+        $this->requestMock->expects($this->at(10))
             ->method('getParam')
             ->with($this->equalTo('blocks'), $this->equalTo(''))
             ->will($this->returnValue(json_encode($blocks)));
-        $this->requestMock->expects($this->at(2))
+        $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->will($this->returnValue(json_encode($handles)));

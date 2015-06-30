@@ -166,6 +166,7 @@ return [
     ['_filesystem', 'Magento\Core\Model\Resource\Setup\Migration', '_directory'],
     ['_filesystem', 'Magento\Core\Model\Theme\Collection', '_directory'],
     ['_mediaBaseDirectory', 'Magento\MediaStorage\Model\Resource\File\Storage\File'],
+    ['_mediaBaseDirectory', 'Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase'],
     ['_dbHelper', 'Magento\MediaStorage\Model\Resource\File\Storage\File'],
     ['_filesystem', 'Magento\Core\Model\Theme\CopyService', '_directory'],
     ['_baseDir', 'Magento\Core\Model\Theme\Collection'],
@@ -411,4 +412,8 @@ return [
     ['_emulatedLocales', 'Magento\Framework\Locale\Resolver', 'emulatedLocales'],
     ['_collectionAttributes', 'Magento\Eav\Model\Config'],
     ['_attributeFactory', '\Magento\Customer\Model\Customer'],
+    ['_hasDataChanges', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_origData', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_idFieldName', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['_isDeleted', 'Magento\Framework\Object', 'Moved to Magento\Framework\Model\AbstractModel'],
 ];
