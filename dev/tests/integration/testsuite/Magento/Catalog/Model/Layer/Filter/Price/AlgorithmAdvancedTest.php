@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
