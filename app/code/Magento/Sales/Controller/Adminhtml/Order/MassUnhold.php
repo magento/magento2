@@ -14,7 +14,7 @@ class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $orderIds = $this->getRequest()->getPost('order_ids', []);
+        $orderIds = $this->getRequest()->getPost('selected', []);
         $countUnHoldOrder = 0;
         $countNonUnHoldOrder = 0;
 

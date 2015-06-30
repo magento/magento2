@@ -141,10 +141,10 @@ define([
          * Default action callback. Sends selections data
          * via POST request.
          *
-         * @param {Object} data - Selections data.
          * @param {Object} action - Action data.
+         * @param {Object} data - Selections data.
          */
-        defaultCallback: function (data, action) {
+        defaultCallback: function (action, data) {
             var selections = {};
 
             if (data.excludeMode) {
