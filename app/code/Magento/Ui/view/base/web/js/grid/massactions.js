@@ -145,12 +145,13 @@ define([
          * @param {Object} data - Selections data.
          */
         defaultCallback: function (action, data) {
-            var selections = {};
+            var itemsType = data.excludeMode ? 'excluded' : 'selected',
+                selections = {};
 
-            if (data.excludeMode) {
-                selections.excluded = data.excluded;
-            } else {
-                selections.selected = data.selected;
+            selections[itemsType] = data[itemsType];
+
+            if (!selections[itemsType].length) {
+                selections[itemsType] = false;
             }
 
             utils.submit({
