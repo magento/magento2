@@ -48,7 +48,7 @@
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Quantity')); ?>">
         <?php if (
         ($_item->getParentItem() && $block->isChildCalculated()) ||
         (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>

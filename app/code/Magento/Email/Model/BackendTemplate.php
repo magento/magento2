@@ -28,7 +28,6 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
@@ -39,14 +38,13 @@ class BackendTemplate extends Template
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
-        \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\DesignInterface $design,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
@@ -63,7 +61,6 @@ class BackendTemplate extends Template
             $assetRepo,
             $filesystem,
             $scopeConfig,
-            $objectManager,
             $emailConfig,
             $templateFactory,
             $filterFactory,
@@ -83,7 +80,7 @@ class BackendTemplate extends Template
             return [];
         }
 
-        $configData = $this->_scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $configData = $this->scopeConfig->getValue(null, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
         return $paths;
     }

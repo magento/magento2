@@ -113,7 +113,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
 
             if (!$entityStores) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Chosen cms page does not associated with any website.')
+                    __('Please assign a website to the selected CMS page.')
                 );
             }
         }

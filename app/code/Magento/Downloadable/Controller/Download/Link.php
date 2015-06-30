@@ -58,12 +58,12 @@ class Link extends \Magento\Downloadable\Controller\Download
                 );
                 if ($product->getId()) {
                     $notice = __(
-                        'Please log in to download your product or purchase <a href="%1">%2</a>.',
+                        'Please sign in to download your product or purchase <a href="%1">%2</a>.',
                         $product->getProductUrl(),
                         $product->getName()
                     );
                 } else {
-                    $notice = __('Please log in to download your product.');
+                    $notice = __('Please sign in to download your product.');
                 }
                 $this->messageManager->addNotice($notice);
                 $session->authenticate($this);

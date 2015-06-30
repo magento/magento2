@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest">
         <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -28,17 +27,15 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation3">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
-            <data name="product" xsi:type="string">catalogProductSimple::default</data>
+            <data name="product" xsi:type="string">catalogProductSimple::product_without_category</data>
             <data name="actionName" xsi:type="string">deleteAttributes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation4">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
-            <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+            <data name="product" xsi:type="string">catalogProductVirtual::required_fields</data>
             <data name="actionName" xsi:type="string">deleteAttributes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
@@ -51,7 +48,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation6">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -82,7 +78,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation9">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
             <data name="actionName" xsi:type="string">-</data>
