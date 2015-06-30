@@ -102,7 +102,7 @@ define([
 
     _.extend(Class, {
         defaults: {
-            tmplsIgnore: {
+            ignoreTmpls: {
                 templates: true
             }
         },
@@ -133,7 +133,7 @@ define([
         initConfig: function (options) {
             var defaults    = this.constructor.defaults,
                 config      = utils.extend({}, defaults, options || {}),
-                ignored     = config.tmplsIgnore || {},
+                ignored     = config.ignoreTmpls || {},
                 cached      = utils.omit(config, ignored);
 
             config = utils.template(config, this);
