@@ -17,7 +17,7 @@ class BackendTemplate extends Template
     /**
      * @var \Magento\Config\Model\Config\Structure
      */
-    private $_structure;
+    private $structure;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -51,7 +51,7 @@ class BackendTemplate extends Template
         \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
-        $this->_structure = $structure;
+        $this->structure = $structure;
         parent::__construct(
             $context,
             $design,
@@ -121,7 +121,7 @@ class BackendTemplate extends Template
             return [];
         }
 
-        $templatePaths = $this->_structure->getFieldPathsByAttribute(
+        $templatePaths = $this->structure->getFieldPathsByAttribute(
             'source_model',
             'Magento\Config\Model\Config\Source\Email\Template'
         );
