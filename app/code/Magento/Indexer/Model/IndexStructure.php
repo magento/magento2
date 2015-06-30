@@ -139,6 +139,13 @@ class IndexStructure
     {
         $adapter = $this->getAdapter();
         $table = $adapter->newTable($tableName);
+        $table->addColumn(
+            'entity_id',
+            Table::TYPE_INTEGER,
+            10,
+            ['unsigned' => true, 'nullable' => false],
+            'Entity ID'
+        );
         foreach ($fields as $field) {
             $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
