@@ -39,7 +39,7 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
         $resultPage->getConfig()->getTitle()->prepend(__('Product Templates'));
         $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'));
-        $resultPage->addBreadcrumb(__('Manage Attribute Sets'), __('Manage Attribute Sets'));
+        $resultPage->addBreadcrumb(__('Manage Product Templates'), __('Product Templates'));
         return $resultPage;
     }
 }

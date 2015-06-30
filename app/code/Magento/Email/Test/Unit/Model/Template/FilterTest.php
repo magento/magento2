@@ -76,7 +76,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $backendUrlBuilder;
 
     /**
-     * @var \Pelago\Emogrifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Pelago\Emogrifier
      */
     private $emogrifier;
 
