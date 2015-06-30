@@ -36,7 +36,6 @@
     <preference for="Magento\Quote\Api\GuestShippingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
-    <preference for="Magento\Quote\Api\GuestAddressDetailsManagementInterface" type="Magento\Quote\Model\GuestCart\GuestAddressDetailsManagement" />
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
@@ -56,8 +55,6 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Quote\Api\AddressDetailsManagementInterface" type="Magento\Quote\Model\AddressDetailsManagement" />
-    <preference for="Magento\Quote\Api\Data\AddressDetailsInterface" type="Magento\Quote\Model\AddressDetails" />
     <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
     <preference for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface" type="Magento\Quote\Model\Cart\TotalsAdditionalData" />
     <preference for="\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="\Magento\Quote\Model\Quote\Address\CustomAttributeList" />
