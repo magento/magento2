@@ -1575,7 +1575,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getEmail()
     {
-        return $this->getData(self::KEY_EMAIL);
+        $email = $this->getData(self::KEY_EMAIL);
+        if (!$email) {
+            $email = $this->getQuote()->getCustomerEmail();
+            $this->setEmail($email);
+        }
+        return $email;
     }
 
     /**
