@@ -481,7 +481,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
         $this->assertArrayHasKey('message', $result, 'Error message was expected to be set');
         $this->assertStringStartsWith(
-            'There is already a registered customer using this email address',
+            'This email address already belongs to a registered customer.',
             (string)$result['message'],
             'Validation error is invalid.'
         );

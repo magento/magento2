@@ -35,7 +35,7 @@ class Form extends \Magento\Framework\App\Helper\AbstractHelper
                 'value' => $experimentCodeModel ? $experimentCodeModel->getExperimentScript() : '',
                 'class' => 'textarea googleoptimizer',
                 'required' => false,
-                'note' => __('Note: Experiment code should be added to the original page only.')
+                'note' => __('Experiment code should be added to the original page only.')
             ]
         );
 
