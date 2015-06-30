@@ -6,14 +6,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
+
+use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Catalog\Model\Indexer\Product\Category;
+use Magento\Indexer\Model\Indexer\State;
 
 class IndexerState
 {
     /**
-     * @var \Magento\Indexer\Model\Indexer\State
+     * @var State
      */
     protected $state;
 
@@ -23,14 +25,14 @@ class IndexerState
      * @var int[]
      */
     protected $indexerIds = [
-        \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID,
-        \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID,
+        Category::INDEXER_ID,
+        Product::INDEXER_ID,
     ];
 
     /**
-     * @param \Magento\Indexer\Model\Indexer\State $state
+     * @param State $state
      */
-    public function __construct(\Magento\Indexer\Model\Indexer\State $state)
+    public function __construct(State $state)
     {
         $this->state = $state;
     }
@@ -38,19 +40,22 @@ class IndexerState
     /**
      * Synchronize status for indexers
      *
-     * @param \Magento\Indexer\Model\Indexer\State $state
-     * @return \Magento\Indexer\Model\Indexer\State
+     * @param State $state
+     * @return State
      */
-    public function afterSetStatus(\Magento\Indexer\Model\Indexer\State $state)
+    public function afterSave(State $state)
     {
         if (in_array($state->getIndexerId(), $this->indexerIds)) {
-            $indexerId = $state->getIndexerId() ==
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+            $indexerId = $state->getIndexerId() === Product::INDEXER_ID
+                ? Category::INDEXER_ID
+                : Product::INDEXER_ID;
 
             $relatedIndexerState = $this->state->loadByIndexer($indexerId);
 
-            $relatedIndexerState->setData('status', $state->getStatus());
-            $relatedIndexerState->save();
+            if ($relatedIndexerState->getStatus() !== $state->getStatus()) {
+                $relatedIndexerState->setData('status', $state->getStatus());
+                $relatedIndexerState->save();
+            }
         }
 
         return $state;
