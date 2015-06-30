@@ -35,10 +35,17 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
         <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
-        <br /><strong><?= __('Gift Message') ?></strong>
-        <br /><?= __('From:') ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-        <br /><?= __('To:') ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-        <br /><?= __('Message:') ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+            <table class="message-gift">
+                <tr>
+                    <td>
+                        <h3><?= __('Gift Message') ?></h3>
+                        <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= __('Message:'); ?></strong>
+                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                    </td>
+                </tr>
+            </table>
         <?php endif; ?>
     </td>
     <td class="item-qty"><?= $_item->getQtyOrdered() * 1 ?></td>

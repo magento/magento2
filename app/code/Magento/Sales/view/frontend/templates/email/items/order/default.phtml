@@ -43,10 +43,11 @@ $_order = $_item->getOrder();
         <table class="message-gift">
             <tr>
                 <td>
-                    <strong><?= __('Gift Message') ?></strong>
-                    <?= __('From:'); ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?><br />
-                    <?= __('To:'); ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?><br />
-                    <strong><?= __('Message:'); ?></strong><br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                    <h3><?= __('Gift Message') ?></h3>
+                    <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                    <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                    <br /><strong><?= __('Message:'); ?></strong>
+                    <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                 </td>
             </tr>
         </table>
