@@ -8,6 +8,8 @@ namespace Magento\Mtf\Util\Generate\Fixture;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Provider of fields from database.
@@ -15,25 +17,29 @@ use Magento\Framework\ObjectManagerInterface;
 class FieldsProvider
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * EAV configuration.
+     *
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * Resources and connections registry and factory.
+     *
+     * @var Resource
      */
     protected $resource;
 
     /**
      * Magento connection.
      *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
     /**
      * @constructor
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
@@ -58,7 +64,7 @@ class FieldsProvider
     }
 
     /**
-     * Collect fields for the entity based on its type
+     * Collect fields for the entity based on its type.
      *
      * @param array $fixture
      * @return array
@@ -74,7 +80,7 @@ class FieldsProvider
     }
 
     /**
-     * Collect fields for the entity with eav type
+     * Collect fields for the entity with eav type.
      *
      * @param array $fixture
      * @return array
@@ -106,7 +112,7 @@ class FieldsProvider
     }
 
     /**
-     * Collect fields for the entity with table type
+     * Collect fields for the entity with table type.
      *
      * @param array $fixture
      * @return array
@@ -117,7 +123,7 @@ class FieldsProvider
     }
 
     /**
-     * Collect fields for the entity with flat type
+     * Collect fields for the entity with flat type.
      *
      * @param array $fixture
      * @return array
@@ -144,7 +150,7 @@ class FieldsProvider
     }
 
     /**
-     * Collect fields for the entity with composite type
+     * Collect fields for the entity with composite type.
      *
      * @param array $fixture
      * @return array
