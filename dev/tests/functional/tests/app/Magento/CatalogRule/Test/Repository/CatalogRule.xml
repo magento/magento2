@@ -37,7 +37,7 @@
             <field name="from_date" xsi:type="string">3/25/14</field>
             <field name="to_date" xsi:type="string">3/29/14</field>
             <field name="sort_order" xsi:type="string">1</field>
-            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
         </dataset>
 
@@ -50,7 +50,7 @@
             <field name="customer_group_ids" xsi:type="array">
                 <item name="0" xsi:type="string">NOT LOGGED IN</item>
             </field>
-            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
         </dataset>
 
@@ -68,7 +68,7 @@
                 <item name="3" xsi:type="string">Retailer</item>
             </field>
             <field name="rule" xsi:type="string">[Category|is|2]</field>
-            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">10</field>
         </dataset>
 
@@ -83,13 +83,13 @@
                 <item name="0" xsi:type="string">NOT LOGGED IN</item>
             </field>
             <field name="sort_order" xsi:type="string">0</field>
-            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
         </dataset>
 
         <dataset name="catalog_price_rule_priority_1_stop_further_rules">
             <field name="name" xsi:type="string">catalog_price_rule_priority_1_stop_further_rules</field>
-            <field name="description" xsi:type="string">Priority 1, -5 By fixed amount</field>
+            <field name="description" xsi:type="string">Priority 1, -5 Apply as fixed amount</field>
             <field name="is_active" xsi:type="string">Active</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -98,14 +98,14 @@
                 <item name="0" xsi:type="string">NOT LOGGED IN</item>
             </field>
             <field name="sort_order" xsi:type="string">1</field>
-            <field name="simple_action" xsi:type="string">By Fixed Amount</field>
+            <field name="simple_action" xsi:type="string">Apply as fixed amount</field>
             <field name="discount_amount" xsi:type="string">5</field>
             <field name="stop_rules_processing" xsi:type="string">Yes</field>
         </dataset>
 
         <dataset name="catalog_price_rule_priority_2">
             <field name="name" xsi:type="string">catalog_price_rule_priority_2</field>
-            <field name="description" xsi:type="string">Priority 2, -10 By fixed amount</field>
+            <field name="description" xsi:type="string">Priority 2, -10 Apply as fixed amount</field>
             <field name="is_active" xsi:type="string">Active</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -114,7 +114,7 @@
                 <item name="0" xsi:type="string">NOT LOGGED IN</item>
             </field>
             <field name="sort_order" xsi:type="string">2</field>
-            <field name="simple_action" xsi:type="string">By Fixed Amount</field>
+            <field name="simple_action" xsi:type="string">Apply as fixed amount</field>
             <field name="discount_amount" xsi:type="string">10</field>
         </dataset>
 
@@ -132,7 +132,7 @@
                 <item name="3" xsi:type="string">Retailer</item>
             </field>
             <field name="sort_order" xsi:type="string">0</field>
-            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="simple_action" xsi:type="string">Apply as percentage of original</field>
             <field name="discount_amount" xsi:type="string">50</field>
         </dataset>
     </repository>

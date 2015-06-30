@@ -79,7 +79,7 @@ class AddComment extends \Magento\Backend\App\Action
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The Comment Text field cannot be empty.')
+                    __('Please enter a comment.')
                 );
             }
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));

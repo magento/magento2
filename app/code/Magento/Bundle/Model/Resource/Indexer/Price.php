@@ -20,7 +20,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
 
         $this->beginTransaction();
         try {
@@ -54,10 +54,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundlePriceTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_bundle_idx');
-        }
-        return $this->getTable('catalog_product_index_price_bundle_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle');
     }
 
     /**
@@ -67,10 +64,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundleSelectionTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_bundle_sel_idx');
-        }
-        return $this->getTable('catalog_product_index_price_bundle_sel_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle_sel');
     }
 
     /**
@@ -80,10 +74,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      */
     protected function _getBundleOptionTable()
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('catalog_product_index_price_bundle_opt_idx');
-        }
-        return $this->getTable('catalog_product_index_price_bundle_opt_tmp');
+        return $this->tableStrategy->getTableName('catalog_product_index_price_bundle_opt');
     }
 
     /**

@@ -43,7 +43,7 @@ class AssertOrderInOrdersGrid extends AbstractConstraint
     {
         $filter = [
             'id' => $order->hasData('id') ? $order->getId() : $orderId,
-            'status' => $status,
+            'status' => $status
         ];
         $errorMessage = implode(', ', $filter);
         \PHPUnit_Framework_Assert::assertTrue(

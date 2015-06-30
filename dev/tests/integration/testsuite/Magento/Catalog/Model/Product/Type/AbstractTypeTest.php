@@ -209,7 +209,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         // fixture
         $this->assertEquals(
-            'Please specify the product\'s required option(s).',
+            'Please specify product\'s required option(s).',
             $this->_model->prepareForCart(new \Magento\Framework\Object(), $product)
         );
     }
@@ -217,7 +217,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetSpecifyOptionMessage()
     {
         $this->assertEquals(
-            'Please specify the product\'s required option(s).',
+            'Please specify product\'s required option(s).',
             $this->_model->getSpecifyOptionMessage()
         );
     }

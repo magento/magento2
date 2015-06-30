@@ -9,138 +9,139 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
+    const MEDIA_DIRECTORY = 'mediaDirectory';
+    const RELATIVE_FILE_PATH = 'test/file.png';
+    const CACHE_FILE_PATH = 'var';
+
     /**
      * @var \Magento\MediaStorage\App\Media
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
+    private $configFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    private $syncFactoryMock;
 
     /**
      * @var callable
      */
-    protected $_closure;
+    private $closure;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
+    private $configMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_sync;
+    private $sync;
 
     /**
-     * @var string
+     * @var \Magento\MediaStorage\Model\File\Storage\Response|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_mediaDirectory = 'mediaDirectory';
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_responseMock;
+    private $responseMock;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystemMock;
+    private $filesystemMock;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryReadMock;
+    private $directoryMock;
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Request', [], [], '', false);
-        $this->_closure = function () {
+        $this->closure = function () {
             return true;
         };
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_configMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Config', [], [], '', false);
-        $this->_sync = $this->getMock('Magento\MediaStorage\Model\File\Storage\Synchronization', [], [], '', false);
-
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->directoryReadMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Read',
-            [],
+        $this->configMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Config', [], [], '', false);
+        $this->sync = $this->getMock('Magento\MediaStorage\Model\File\Storage\Synchronization', [], [], '', false);
+        $this->configFactoryMock = $this->getMock(
+            'Magento\MediaStorage\Model\File\Storage\ConfigFactory',
+            ['create'],
             [],
             '',
             false
         );
-
-        $this->filesystemMock->expects(
-            $this->any()
-        )->method(
-            'getDirectoryRead'
-        )->with(
-            DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->directoryReadMock)
+        $this->configFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->configMock));
+        $this->syncFactoryMock = $this->getMock(
+            'Magento\MediaStorage\Model\File\Storage\SynchronizationFactory',
+            ['create'],
+            [],
+            '',
+            false
         );
+        $this->syncFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->sync));
 
-        $this->_responseMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Response', [], [], '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->directoryMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
 
-        $map = [
-            ['Magento\MediaStorage\Model\File\Storage\Request', $this->_requestMock],
-            ['Magento\MediaStorage\Model\File\Storage\Synchronization', $this->_sync],
-        ];
-        $this->_model = new \Magento\MediaStorage\App\Media(
-            $this->_objectManagerMock,
-            $this->_requestMock,
-            $this->_responseMock,
-            $this->_closure,
-            'baseDir',
-            'mediaDirectory',
-            'var',
-            'params',
+        $this->filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->will($this->returnValue($this->directoryMock));
+
+        $this->responseMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Response', [], [], '', false);
+
+        $this->model = new \Magento\MediaStorage\App\Media(
+            $this->configFactoryMock,
+            $this->syncFactoryMock,
+            $this->responseMock,
+            $this->closure,
+            self::MEDIA_DIRECTORY,
+            self::CACHE_FILE_PATH,
+            self::RELATIVE_FILE_PATH,
             $this->filesystemMock
         );
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
     }
 
     protected function tearDown()
     {
-        unset($this->_model);
+        unset($this->model);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The specified path is not within media directory.
-     */
     public function testProcessRequestCreatesConfigFileMediaDirectoryIsNotProvided()
     {
-        $this->_model = new \Magento\MediaStorage\App\Media(
-            $this->_objectManagerMock,
-            $this->_requestMock,
-            $this->_responseMock,
-            $this->_closure,
-            'baseDir',
+        $this->model = new \Magento\MediaStorage\App\Media(
+            $this->configFactoryMock,
+            $this->syncFactoryMock,
+            $this->responseMock,
+            $this->closure,
             false,
-            'var',
-            'params',
+            self::CACHE_FILE_PATH,
+            self::RELATIVE_FILE_PATH,
             $this->filesystemMock
         );
-        $this->_objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            'Magento\MediaStorage\Model\File\Storage\Config'
-        )->will(
-            $this->returnValue($this->_configMock)
-        );
-        $this->_configMock->expects($this->once())->method('save');
-        $this->_model->launch();
+        $filePath = '/absolute/path/to/test/file.png';
+        $this->directoryMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValueMap(
+                [
+                    [null, self::MEDIA_DIRECTORY],
+                    [self::RELATIVE_FILE_PATH, $filePath],
+                ]
+            ));
+        $this->configMock->expects($this->once())->method('save');
+        $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
+        $this->directoryMock->expects($this->once())
+            ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->will($this->returnValue(true));
+        $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
+        $this->model->launch();
     }
 
     /**
@@ -149,101 +150,90 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRequestReturnsNotFoundResponseIfResourceIsNotAllowed()
     {
-        $this->_closure = function () {
+        $this->closure = function () {
             return false;
         };
-        $this->_model = new \Magento\MediaStorage\App\Media(
-            $this->_objectManagerMock,
-            $this->_requestMock,
-            $this->_responseMock,
-            $this->_closure,
-            'baseDir',
+        $this->model = new \Magento\MediaStorage\App\Media(
+            $this->configFactoryMock,
+            $this->syncFactoryMock,
+            $this->responseMock,
+            $this->closure,
             false,
-            'var',
-            'params',
+            self::CACHE_FILE_PATH,
+            self::RELATIVE_FILE_PATH,
             $this->filesystemMock
         );
-        $this->_requestMock->expects($this->once())->method('getPathInfo');
-        $this->_objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            'Magento\MediaStorage\Model\File\Storage\Config'
-        )->will(
-            $this->returnValue($this->_configMock)
-        );
-        $this->_configMock->expects($this->once())->method('getAllowedResources')->will($this->returnValue(false));
-        $this->_model->launch();
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The specified path is not within media directory.
-     */
-    public function testProcessRequestReturnsNotFoundIfFileIsNotAllowed()
-    {
-        $this->_configMock->expects($this->never())->method('save');
-        $this->_requestMock->expects($this->once())->method('getPathInfo');
-        $this->_requestMock->expects($this->never())->method('getFilePath');
-        $this->_model->launch();
+        $this->directoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with()
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+        $this->configMock->expects($this->once())->method('getAllowedResources')->will($this->returnValue(false));
+        $this->model->launch();
     }
 
     public function testProcessRequestReturnsFileIfItsProperlySynchronized()
     {
-        $relativeFilePath = '_files';
-        $filePath = str_replace('\\', '/', __DIR__ . '/' . $relativeFilePath);
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getPathInfo'
-        )->will(
-            $this->returnValue($this->_mediaDirectory . '/')
-        );
-        $this->_sync->expects($this->once())->method('synchronize');
-        $this->_requestMock->expects($this->any())->method('getFilePath')->will($this->returnValue($filePath));
-
-        $this->directoryReadMock->expects(
-            $this->once()
-        )->method(
-            'getRelativePath'
-        )->with(
-            $filePath
-        )->will(
-            $this->returnValue($relativeFilePath)
-        );
-
-        $this->directoryReadMock->expects(
-            $this->once()
-        )->method(
-            'isReadable'
-        )->with(
-            $relativeFilePath
-        )->will(
-            $this->returnValue(true)
-        );
-        $this->_responseMock->expects($this->once())->method('setFilePath')->with($filePath);
-        $this->assertSame($this->_responseMock, $this->_model->launch());
+        $filePath = '/absolute/path/to/test/file.png';
+        $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
+        $this->directoryMock->expects($this->once())
+            ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->will($this->returnValue(true));
+        $this->directoryMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValueMap(
+                [
+                    [null, self::MEDIA_DIRECTORY],
+                    [self::RELATIVE_FILE_PATH, $filePath],
+                ]
+            ));
+        $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
+        $this->assertSame($this->responseMock, $this->model->launch());
     }
 
     public function testProcessRequestReturnsNotFoundIfFileIsNotSynchronized()
     {
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getPathInfo'
-        )->will(
-            $this->returnValue($this->_mediaDirectory . '/')
-        );
-        $this->_sync->expects($this->once())->method('synchronize');
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getFilePath'
-        )->will(
-            $this->returnValue('non_existing_file_name')
-        );
-        $this->_responseMock->expects($this->once())->method('setHttpResponseCode')->with(404);
-        $this->assertSame($this->_responseMock, $this->_model->launch());
+        $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
+        $this->directoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with()
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+        $this->directoryMock->expects($this->once())
+            ->method('isReadable')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->will($this->returnValue(false));
+        $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(404);
+        $this->assertSame($this->responseMock, $this->model->launch());
+    }
+
+    /**
+     * @param bool $isDeveloper
+     * @param int $setBodyCalls
+     *
+     * @dataProvider catchExceptionDataProvider
+     */
+    public function testCatchException($isDeveloper, $setBodyCalls)
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $exception = $this->getMock('Exception', [], [], '', false);
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(404);
+        $bootstrap->expects($this->once())
+            ->method('isDeveloperMode')
+            ->will($this->returnValue($isDeveloper));
+        $this->responseMock->expects($this->exactly($setBodyCalls))
+            ->method('setBody');
+        $this->responseMock->expects($this->once())
+            ->method('sendResponse');
+        $this->model->catchException($bootstrap, $exception);
+    }
+
+    public function catchExceptionDataProvider()
+    {
+        return [
+            'default mode' => [false, 0],
+            'developer mode' => [true, 1],
+        ];
     }
 }
