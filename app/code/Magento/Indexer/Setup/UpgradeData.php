@@ -19,6 +19,7 @@ use Magento\Indexer\Model\Indexer\StateFactory;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
