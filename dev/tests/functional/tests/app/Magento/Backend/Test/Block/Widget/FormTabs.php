@@ -7,6 +7,7 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
@@ -87,8 +88,7 @@ class FormTabs extends Form
         foreach ($tabs as $tabName => $tabFields) {
             $tab = $this->getTab($tabName);
             $this->openTab($tabName);
-            $tab->fillFormTab(array_merge($tabFields, $this->unassignedFields), $context);
-            $this->updateUnassignedFields($tab);
+            $tab->fillFormTab($tabFields, $context);
         }
         if (!empty($this->unassignedFields)) {
             $this->fillMissedFields($tabs);
@@ -98,33 +98,24 @@ class FormTabs extends Form
     }
 
     /**
-     * Update array with fields which aren't assigned to any tab
-     *
-     * @param Tab $tab
-     */
-    protected function updateUnassignedFields(Tab $tab)
-    {
-        $this->unassignedFields = array_diff_key(
-            $this->unassignedFields,
-            array_intersect_key($this->unassignedFields, $tab->setFields)
-        );
-    }
-
-    /**
      * Fill fields which weren't found on filled tabs
      *
-     * @param array $tabs
      * @throws \Exception
-     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function fillMissedFields(array $tabs)
+    protected function fillMissedFields()
     {
-        foreach (array_diff_key($this->tabs, $tabs) as $tabName => $tabData) {
+        foreach ($this->tabs as $tabName => $tabData) {
             $tab = $this->getTab($tabName);
-            if ($this->openTab($tabName)) {
-                $tab->fillFormTab($this->unassignedFields, $this->_rootElement);
-                $this->updateUnassignedFields($tab);
+            if ($this->openTab($tabName) && $this->isTabVisible($tabName)) {
+                $mapping = $tab->dataMapping($this->unassignedFields);
+                foreach ($mapping as $fieldName => $data) {
+                    $element = $tab->_rootElement->find($data['selector'], $data['strategy'], $data['input']);
+                    if ($element->isVisible()) {
+                        $element->setValue($data['value']);
+                        unset($this->unassignedFields[$fieldName]);
+                    }
+                }
                 if (empty($this->unassignedFields)) {
                     break;
                 }

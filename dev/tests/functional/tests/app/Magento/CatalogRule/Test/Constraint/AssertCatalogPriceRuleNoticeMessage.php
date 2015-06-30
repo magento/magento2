@@ -14,11 +14,11 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCatalogPriceRuleNoticeMessage extends AbstractConstraint
 {
-    const NOTICE_MESSAGE_RULES = 'There are rules that have been changed but were not applied.';
+    const NOTICE_MESSAGE_RULES = 'We found updated rules that are not applied.';
     const NOTICE_MESSAGE_APPLY = ' Please, click Apply Rules in order to see immediate effect in the catalog.';
 
     /**
-     * Assert that message "There are rules that have been changed but were not applied..."
+     * Assert that message "We found updated rules that are not applied..."
      * is present on page after Save (without applying Rule)
      * or after Edit (without applying Rule) action on the Catalog Price Rules page.
      *
