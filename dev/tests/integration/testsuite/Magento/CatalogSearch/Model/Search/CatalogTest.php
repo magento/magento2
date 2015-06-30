@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Search;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  */
 class CatalogTest extends \PHPUnit_Framework_TestCase
 {
