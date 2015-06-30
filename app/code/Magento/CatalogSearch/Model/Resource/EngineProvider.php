@@ -58,7 +58,7 @@ class EngineProvider
      * @param array $data
      * @return EngineInterface
      */
-    public function get(array $data)
+    public function get(array $data = [])
     {
         if (!$this->engine) {
             $currentEngine = $this->scopeConfig->getValue(self::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
