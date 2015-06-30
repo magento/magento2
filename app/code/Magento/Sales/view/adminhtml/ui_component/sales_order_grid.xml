@@ -369,7 +369,7 @@
                 </item>
             </item>
         </argument>
-        <column name="massaction" class="Magento\Ui\Component\MassAction\Columns\Column">
+        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
