@@ -25,6 +25,11 @@ class Metadata extends \Magento\Framework\Model\Resource\Db\VersionControl\Metad
 
             $fields = array_merge($fields, $entity->getAttributes());
 
+            $fields = array_fill_keys(
+                array_keys($fields),
+                null
+            );
+
             $this->metadataInfo[get_class($entity)] = $fields;
         }
 

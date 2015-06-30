@@ -42,16 +42,9 @@ class Snapshot
      */
     public function registerSnapshot(\Magento\Framework\Object $entity)
     {
-        $data = [];
-
-        foreach ($this->metadata->getFields($entity) as $field => $value) {
-            if ($entity->hasData($field)) {
-                $data[$field] = $entity->getData($field);
-            } else {
-                $data[$field] = null;
-            }
-        }
-
+        $metaData = $this->metadata->getFields($entity);
+        $filteredData = array_intersect_key($entity->getData(), $metaData);
+        $data = array_merge($metaData, $filteredData);
         $this->snapshotData[get_class($entity)][$entity->getId()] = $data;
     }
 
