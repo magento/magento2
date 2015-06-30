@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Controller;
 
-use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -15,6 +15,13 @@ use Zend\View\Model\ViewModel;
  */
 class ComponentGrid extends AbstractActionController
 {
+    /**
+     *
+     */
+    public function __construct()
+    {
+    }
+
     /**
      * Index page action
      *
@@ -25,5 +32,30 @@ class ComponentGrid extends AbstractActionController
         $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function componentsAction()
+    {
+        $components = [
+          [
+            'name' => 'bluesky-theme',
+            'type' => 'magento/theme',
+            'version' => '1.0.0',
+          ],
+          [
+            'name' => 'greenfield-theme',
+            'type' => 'magento/theme',
+            'version' => '0.9.0',
+          ],
+          [
+            'name' => 'redlava-module',
+            'type' => 'magento/module',
+            'version' => '2.0.1',
+          ],
+        ];
+        return new JsonModel(['success' => true, 'components' => $components]);
     }
 }
