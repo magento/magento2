@@ -24,7 +24,7 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,
-                    __('Something went wrong while we were unassigning the order.')
+                    __('Something went wrong while unassigning the order.')
                 );
             }
         } else {

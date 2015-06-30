@@ -16,16 +16,28 @@ use Magento\Framework\DB\Select;
 
 abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
-    const IDX_SUFFIX = '_idx';
-
-    const TMP_SUFFIX = '_tmp';
+    /**
+     * Constructor
+     *
+     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface
+     */
+    protected $tableStrategy;
 
     /**
-     * Flag that defines if need to use "_idx" index table suffix instead of "_tmp"
+     * Class constructor
      *
-     * @var bool
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
+     * @param null $resourcePrefix
      */
-    protected $_isNeedUseIdxTable = false;
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
+        $resourcePrefix = null
+    ) {
+        $this->tableStrategy = $tableStrategy;
+        parent::__construct($context, $resourcePrefix);
+    }
 
     /**
      * Reindex all
@@ -34,7 +46,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         return $this;
     }
 
@@ -56,14 +68,10 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function getIdxTable($table = null)
     {
-        $suffix = self::TMP_SUFFIX;
-        if ($this->_isNeedUseIdxTable) {
-            $suffix = self::IDX_SUFFIX;
-        }
         if ($table) {
-            return $table . $suffix;
+            return $this->tableStrategy->prepareTableName($table);
         }
-        return $this->getMainTable() . $suffix;
+        return $this->tableStrategy->prepareTableName($this->getMainTable());
     }
 
     /**
@@ -153,20 +161,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
         }
 
         return $this;
-    }
-
-    /**
-     * Set or get what either "_idx" or "_tmp" suffixed temporary index table need to use
-     *
-     * @param bool $value
-     * @return bool
-     */
-    public function useIdxTable($value = null)
-    {
-        if ($value !== null) {
-            $this->_isNeedUseIdxTable = (bool)$value;
-        }
-        return $this->_isNeedUseIdxTable;
     }
 
     /**

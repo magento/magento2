@@ -86,11 +86,9 @@ class Page extends Block
     public function waitUntilTextIsVisible($text)
     {
         $text = sprintf($this->textSelector, $text);
-        $browser = $this->browser;
         $this->_rootElement->waitUntil(
-            function () use ($browser, $text) {
-                $blockText = $browser->find($text, Locator::SELECTOR_XPATH);
-                return $blockText->isVisible() == true ? false : null;
+            function () use ($text) {
+                return $this->browser->find($text, Locator::SELECTOR_XPATH)->isVisible() == true ? false : null;
             }
         );
     }
@@ -106,10 +104,9 @@ class Page extends Block
     public function isWidgetVisible($widgetType, $widgetText)
     {
         if (isset($this->widgetSelectors[$widgetType])) {
-            return $this->_rootElement->find(
-                sprintf($this->widgetSelectors[$widgetType], $widgetText),
-                Locator::SELECTOR_XPATH
-            )->isVisible();
+            return $this->_rootElement
+                ->find(sprintf($this->widgetSelectors[$widgetType], $widgetText), Locator::SELECTOR_XPATH)
+                ->isVisible();
         } else {
             throw new \Exception('Determine how to find the widget on the page.');
         }

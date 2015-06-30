@@ -9,18 +9,16 @@
     <testCase name="Magento\Sales\Test\TestCase\PrintOrderFrontendGuestTest">
         <variation name="PrintOrderFrontendGuestTestVariation1">
             <data name="customer" xsi:type="array">
-                <item name="dataset" xsi:type="string">johndoe_with_addresses"</item>
+                <item name="dataset" xsi:type="string">johndoe_with_addresses</item>
             </data>
             <data name="billingAddress" xsi:type="array">
-                <item name="dataset" xsi:type="string">customer_US"</item>
+                <item name="dataset" xsi:type="string">US_address_1_without_email</item>
             </data>
             <data name="payment" xsi:type="array">
-                <item name="method" xsi:type="string">checkmo"</item>
+                <item name="method" xsi:type="string">checkmo</item>
             </data>
             <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product, configurableProduct::default, downloadableProduct::default</data>
-            <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">723.00</item>
-            </data>
+            <data name="prices/grandTotal" xsi:type="string">723.43</data>
             <data name="paymentMethod" xsi:type="string">Check / Money order</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="salesRuleDiscount" xsi:type="string">300.00</data>
