@@ -7,7 +7,6 @@ namespace Magento\Email\Model;
 
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filter\Template as FilterTemplate;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -76,7 +75,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * Email template filter
      *
-     * @var FilterTemplate
+     * @var Filter
      */
     protected $_templateFilter;
 
@@ -278,10 +277,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * Declare template processing filter
      *
-     * @param FilterTemplate $filter
+     * @param Filter $filter
      * @return $this
      */
-    public function setTemplateFilter(FilterTemplate $filter)
+    public function setTemplateFilter(Filter $filter)
     {
         $this->_templateFilter = $filter;
         return $this;
