@@ -9,31 +9,33 @@ define(
     function() {
         'use strict';
 
-        function result(isValid, isPotentiallyValid) {
+        function resultWrapper(isValid, isPotentiallyValid) {
             return {
                 isValid: isValid,
                 isPotentiallyValid: isPotentiallyValid
             };
         }
 
+        /**
+         * CVV number validation
+         * validate digit count fot CVV code
+         */
         return function(value, maxLength) {
             var DEFAULT_LENGTH = 3;
             maxLength = maxLength || DEFAULT_LENGTH;
 
             if (!/^\d*$/.test(value)) {
-                return result(false, false);
+                return resultWrapper(false, false);
             }
             if (value.length === maxLength) {
-                return result(true, true);
+                return resultWrapper(true, true);
             }
             if (value.length < maxLength) {
-                return result(false, true);
+                return resultWrapper(false, true);
             }
             if (value.length > maxLength) {
-                return result(false, false);
+                return resultWrapper(false, false);
             }
-
-            return result(true, true);
         };
     }
 );

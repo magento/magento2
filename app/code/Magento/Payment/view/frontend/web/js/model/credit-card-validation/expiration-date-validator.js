@@ -14,7 +14,7 @@ define(
     function(utils, parseDate, expirationMonth, expirationYear) {
         'use strict';
 
-        function result(isValid, isPotentiallyValid, month, year) {
+        function resultWrapper(isValid, isPotentiallyValid, month, year) {
             return {
                 isValid: isValid,
                 isPotentiallyValid: isPotentiallyValid,
@@ -29,7 +29,7 @@ define(
                 yearValid;
 
             if (utils.isEmpty(value)) {
-                return result(false, false, null, null);
+                return resultWrapper(false, false, null, null);
             }
 
             value = value.replace(/^(\d\d) (\d\d(\d\d)?)$/, '$1/$2');
@@ -38,14 +38,14 @@ define(
             yearValid = expirationYear(date.year);
 
             if (monthValid.isValid && yearValid.isValid) {
-                return result(true, true, date.month, date.year);
+                return resultWrapper(true, true, date.month, date.year);
             }
 
             if (monthValid.isPotentiallyValid && yearValid.isPotentiallyValid) {
-                return result(false, true, null, null);
+                return resultWrapper(false, true, null, null);
             }
 
-            return result(false, false, null, null);
+            return resultWrapper(false, false, null, null);
         }
     }
 );

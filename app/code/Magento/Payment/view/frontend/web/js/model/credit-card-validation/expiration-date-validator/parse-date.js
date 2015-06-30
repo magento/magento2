@@ -20,7 +20,7 @@ define(
                 };
             }
 
-            len = value[0] === '0' || value.length > 5 || value.length === 4 || value.length === 3 ? 2 : 1;
+            len = (value[0] === '0' || value.length > 5 || value.length === 4 || value.length === 3) ? 2 : 1;
             month = value.substr(0, len);
 
             return {
