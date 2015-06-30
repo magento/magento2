@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Model\Cart;
 
-class ConfigPlugin 
+class ConfigPlugin
 {
     /**
      * @var \Magento\Captcha\Model\Checkout\ConfigProvider
