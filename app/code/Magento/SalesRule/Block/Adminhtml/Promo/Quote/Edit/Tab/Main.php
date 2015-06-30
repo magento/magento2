@@ -21,6 +21,7 @@ use Magento\Store\Model\System\Store;
 
 /**
  * Cart Price Rule General Information Tab
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
