@@ -188,8 +188,8 @@ class IndexerHandler implements IndexerInterface
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {
             $documentFlat = ['entity_id' => $entityId];
-            foreach ($this->fields as $fieldName => $fieldValue) {
-                $documentFlat[$fieldName] = $document[$fieldName];
+            foreach ($this->fields as $field) {
+                $documentFlat[$field['name']] = $document[$field['name']];
             }
             $insertDocuments[] = $documentFlat;
         }
@@ -204,11 +204,11 @@ class IndexerHandler implements IndexerInterface
     {
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {
-            foreach ($this->fields as $fieldName => $fieldValue) {
+            foreach ($this->fields as $field) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
-                    'attribute_id' => $fieldName,
-                    'data_index' => $document[$fieldName],
+                    'attribute_id' => $field['name'],
+                    'data_index' => $document[$field['name']],
                 ];
             }
         }
