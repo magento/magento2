@@ -13,7 +13,7 @@ namespace Magento\Integration\Controller\Adminhtml;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class IntegrationTest extends \Magento\Backend\Utility\Controller
+class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /** @var \Magento\Integration\Model\Integration  */
     private $_integration;

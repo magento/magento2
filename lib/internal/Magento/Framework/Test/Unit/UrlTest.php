@@ -121,7 +121,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentUrl($httpHost, $url)
     {
         $requestMock = $this->getRequestMock();
-        $requestMock->expects($this->once())->method('getServer')->with('REQUEST_URI')->willReturn('/fancy_uri');
+        $requestMock->expects($this->once())->method('getRequestUri')->willReturn('/fancy_uri');
         $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
         $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue($httpHost));
         $model = $this->getUrlModel(['request' => $requestMock]);

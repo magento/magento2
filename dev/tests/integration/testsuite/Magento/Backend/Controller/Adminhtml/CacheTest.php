@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class CacheTest extends \Magento\Backend\Utility\Controller
+class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Backend/controllers/_files/cache/application_cache.php
