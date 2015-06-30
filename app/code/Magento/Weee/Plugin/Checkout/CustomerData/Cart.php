@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tax\Plugin\Checkout\CustomerData;
+namespace Magento\Weee\Plugin\Checkout\CustomerData;
 
 class Cart
 {
@@ -19,7 +19,7 @@ class Cart
     protected $checkoutHelper;
 
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer
+     * @var \Magento\Weee\Block\Item\Price\Renderer
      */
     protected $itemPriceRenderer;
 
@@ -36,12 +36,12 @@ class Cart
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+     * @param \Magento\Weee\Block\Item\Price\Renderer $itemPriceRenderer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+        \Magento\Weee\Block\Item\Price\Renderer $itemPriceRenderer
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
@@ -61,15 +61,14 @@ class Cart
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
 
-        /**
-         * @var \Magento\Quote\Model\Quote $quote
-         */
         $items =$this->getQuote()->getAllVisibleItems();
         if (is_array($items)) {
             foreach ($items as $key => $item) {
                 /** @var $item \Magento\Quote\Model\Quote\Item */
                 $this->itemPriceRenderer->setItem($item);
                 $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
+               // $this->itemPriceRenderer->setTemplate('item/price/unit.phtml');
+                $x=$this->itemPriceRenderer->toHtml();
                 $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
             }
         }
