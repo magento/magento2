@@ -311,7 +311,7 @@
                             <item name="url" xsi:type="string">adminhtml/order_shipment/massPrintShippingLabel</item>
                         </item>
                     </item>
-                    <item name="indexField" xsi:type="string">increment_id</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
         </massaction>
@@ -375,7 +375,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">increment_id</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="controlVisibility" xsi:type="boolean">false</item>
                 </item>
             </argument>
