@@ -99,6 +99,7 @@ $hints = [
                         name="admin"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
+                        ng-init="config.address.admin = '<?php echo $this->autoAdminPath ?>';"
                         required
                         >
                     <div class="error-container">

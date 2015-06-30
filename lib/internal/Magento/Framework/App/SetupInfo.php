@@ -24,6 +24,11 @@ class SetupInfo
     const DEFAULT_PATH = 'setup';
 
     /**
+     * Prefix for admin area path
+     */
+    const ADMIN_AREA_PATH_PREFIX = 'admin-';
+
+    /**
      * Environment variables
      *
      * @var array
@@ -111,6 +116,16 @@ class SetupInfo
             return '';
         }
         return 'http://' . $this->server['HTTP_HOST'] . substr($this->projectRoot . '/', strlen($this->docRoot));
+    }
+
+    /**
+     * Get the admin area path
+     *
+     * @return string
+     */
+    public function getProjectAdminPath()
+    {
+        return self::ADMIN_AREA_PATH_PREFIX . substr(dechex(rand(0, PHP_INT_MAX)), 0, 8);
     }
 
     /**
