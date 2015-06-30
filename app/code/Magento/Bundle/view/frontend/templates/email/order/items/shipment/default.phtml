@@ -7,6 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
+<?php /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */ ?>
+
 <?php $parentItem = $block->getItem() ?>
 
 <?php $items = array_merge([$parentItem->getOrderItem()], $parentItem->getOrderItem()->getChildrenItems()) ?>
