@@ -113,7 +113,7 @@ class Store extends Action
         } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
-                __('We couldn\'t create a backup right now. Please try again later.')
+                __('We can\'t create a backup right now. Please try again later.')
             );
             return false;
         }

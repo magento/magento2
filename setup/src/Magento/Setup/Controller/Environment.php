@@ -6,11 +6,11 @@
 namespace Magento\Setup\Controller;
 
 use Composer\Package\Version\VersionParser;
-use Magento\Setup\Model\ComposerInformation;
-use Magento\Setup\Model\FilePermissions;
-use Magento\Setup\Model\PhpInformation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Magento\Framework\Composer\ComposerInformation;
+use Magento\Setup\Model\PhpInformation;
+use Magento\Setup\Model\FilePermissions;
 
 /**
  * Class Environment
@@ -68,7 +68,7 @@ class Environment extends AbstractActionController
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                     'data' => [
                         'error' => 'phpVersionError',
-                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage(),
+                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage()
                     ],
                 ]
             );
@@ -116,7 +116,7 @@ class Environment extends AbstractActionController
 
         $data = [
             'responseType' => $responseType,
-            'data' => $settings,
+            'data' => $settings
         ];
 
         return new JsonModel($data);
@@ -132,13 +132,14 @@ class Environment extends AbstractActionController
         try {
             $required = $this->composerInformation->getRequiredExtensions();
             $current = $this->phpInformation->getCurrent();
+
         } catch (\Exception $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                     'data' => [
                         'error' => 'phpExtensionError',
-                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage(),
+                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage()
                     ],
                 ]
             );
@@ -190,9 +191,10 @@ class Environment extends AbstractActionController
     {
         $data = [];
         $error = false;
-
+    
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
+
             $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
@@ -210,7 +212,7 @@ class Environment extends AbstractActionController
 
             $data['xdebug_max_nesting_level'] = [
                 'message' => $message,
-                'error' => $error,
+                'error' => $error
             ];
         }
 

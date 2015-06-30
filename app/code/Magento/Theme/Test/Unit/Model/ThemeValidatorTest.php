@@ -81,9 +81,9 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->themeValidator->validateIsThemeInUse(['frontend/Magento/a']);
         $this->assertEquals(
             [
-                'frontend/Magento/a is in use in default config',
-                'frontend/Magento/a is in use in website websiteA',
-                'frontend/Magento/a is in use in store storeA',
+                '<error>frontend/Magento/a is in use in default config</error>',
+                '<error>frontend/Magento/a is in use in website websiteA</error>',
+                '<error>frontend/Magento/a is in use in store storeA</error>'
             ],
             $result
         );

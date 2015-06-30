@@ -7,9 +7,9 @@
 namespace Magento\Theme\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -131,7 +131,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap(
                 [
                     ['test1/composer.json', null, null, '{"name": "dummy"}'],
-                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}'],
+                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}']
                 ]
             ));
         $dirRead->expects($this->any())->method('isExist')->willReturn(true);
@@ -183,7 +183,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 [
                     ['test1/composer.json', null, null, '{"name": "dummy1"}'],
                     ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
-                    ['test4/composer.json', null, null, '{"name": "dummy2"}'],
+                    ['test4/composer.json', null, null, '{"name": "dummy2"}']
                 ]
             ));
         $dirRead->expects($this->any())
@@ -193,7 +193,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test1/composer.json', true],
                     ['test2/composer.json', true],
                     ['test3/composer.json', false],
-                    ['test4/composer.json', true],
+                    ['test4/composer.json', true]
                 ]
             ));
         $this->collection->expects($this->any())
@@ -250,6 +250,33 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([]));
     }
 
+    public function setupPassThemeInUseCheck()
+    {
+        $this->themeValidator->expects($this->once())->method('validateIsThemeInUse')->willReturn([]);
+    }
+
+    public function setupPassDependencyCheck()
+    {
+        $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
+    }
+
+    public function testExecuteFailedThemeInUseCheck()
+    {
+        $this->setUpPassValidation();
+        $this->setupPassChildThemeCheck();
+        $this->setupPassDependencyCheck();
+        $this->themeValidator
+            ->expects($this->once())
+            ->method('validateIsThemeInUse')
+            ->willReturn(['frontend/Magento/a is in use in default config']);
+        $this->tester->execute(['theme' => ['frontend/Magento/a']]);
+        $this->assertEquals(
+            'Unable to uninstall. Please resolve the following issues:' . PHP_EOL
+            . 'frontend/Magento/a is in use in default config' . PHP_EOL,
+            $this->tester->getDisplay()
+        );
+    }
+
     /**
      * @dataProvider executeFailedChildThemeCheckDataProvider
      * @param bool $hasVirtual
@@ -261,6 +288,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFailedChildThemeCheck($hasVirtual, $hasPhysical, array $input, $expected)
     {
         $this->setUpPassValidation();
+        $this->setupPassThemeInUseCheck();
+        $this->setupPassDependencyCheck();
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->any())->method('hasChildThemes')->willReturn($hasVirtual);
         $parentThemeA = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
@@ -282,10 +311,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$childThemeC, $childThemeD]));
         $this->tester->execute($input);
-        $this->assertContains(
-            $expected,
-            $this->tester->getDisplay()
-        );
+        $this->assertContains($expected, $this->tester->getDisplay());
     }
 
     /**
@@ -298,65 +324,65 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. frontend/Magento/a is a parent of virtual theme',
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL
+                . 'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 false,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme',
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
             [
                 false,
                 true,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. frontend/Magento/a is a parent of physical theme',
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
             ],
             [
                 false,
                 true,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of physical theme',
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 true,
                 ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. frontend/Magento/a is a parent of virtual theme' . PHP_EOL .
-                'Unable to uninstall. frontend/Magento/a is a parent of physical theme',
+                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+                'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.' . PHP_EOL .
+                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
             ],
             [
                 true,
                 true,
                 ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of virtual theme' . PHP_EOL .
-                'Unable to uninstall. frontend/Magento/a, frontend/Magento/b are parents of physical theme',
+                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
+                . ' Parent themes cannot be uninstalled.' . PHP_EOL .
+                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
+                . ' Parent themes cannot be uninstalled.'
             ],
         ];
-    }
-
-    public function testExecuteFailedThemeInUseCheck()
-    {
-        $this->setUpPassValidation();
-        $this->themeValidator
-            ->expects($this->once())
-            ->method('validateIsThemeInUse')
-            ->willReturn(['frontend/Magento/a is in use in default config']);
-        $this->tester->execute(['theme' => ['frontend/Magento/a']]);
-        $this->assertEquals('frontend/Magento/a is in use in default config' . PHP_EOL, $this->tester->getDisplay());
     }
 
     public function testExecuteFailedDependencyCheck()
     {
         $this->setUpPassValidation();
+        $this->setupPassThemeInUseCheck();
         $this->setupPassChildThemeCheck();
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependencies')
             ->willReturn(['magento/theme-a' => ['magento/theme-b', 'magento/theme-c']]);
         $this->tester->execute(['theme' => ['frontend/Magento/a']]);
         $this->assertContains(
-            'Cannot uninstall frontend/Magento/a because the following package(s) ' .
-            'depend on it:' . PHP_EOL . "\tmagento/theme-b" . PHP_EOL . "\tmagento/theme-c",
+            'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
+            'frontend/Magento/a has the following dependent package(s):'
+            . PHP_EOL . "\tmagento/theme-b" . PHP_EOL . "\tmagento/theme-c",
             $this->tester->getDisplay()
         );
     }
@@ -364,8 +390,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function setUpExecute()
     {
         $this->setUpPassValidation();
+        $this->setupPassThemeInUseCheck();
         $this->setupPassChildThemeCheck();
-        $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
+        $this->setupPassDependencyCheck();
         $this->remove->expects($this->once())->method('remove');
         $this->cache->expects($this->once())->method('clean');
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
