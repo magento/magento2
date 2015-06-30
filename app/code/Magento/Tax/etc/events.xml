@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_order_save_after">
-        <observer name="tax" instance="Magento\Tax\Model\Observer" method="salesEventOrderAfterSave" />
-    </event>
     <event name="sales_quote_collect_totals_before">
         <observer name="tax" instance="Magento\Tax\Model\Observer" method="quoteCollectTotalsBefore" />
     </event>
