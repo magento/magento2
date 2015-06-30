@@ -37,7 +37,7 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
-        $resultPage->getConfig()->getTitle()->set((__('Products')));
+        $resultPage->getConfig()->getTitle()->prepend(__('Catalog'));
         return $resultPage;
     }
 }
