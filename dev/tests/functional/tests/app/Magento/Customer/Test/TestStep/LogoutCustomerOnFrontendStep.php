@@ -18,7 +18,7 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
     /**
      * Logout page title.
      */
-    const LOGOUT_PAGE_TITLE = 'You are now logged out';
+    const LOGOUT_PAGE_TITLE = 'You are signed out.';
 
     /**
      * Cms index page.
@@ -55,8 +55,8 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
         $this->cmsIndex->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
-        if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
-            $this->cmsIndex->getLinksBlock()->openLink("Log Out");
+        if ($this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
+            $this->cmsIndex->getLinksBlock()->openLink('Sign Out');
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         }

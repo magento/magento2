@@ -1045,7 +1045,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
                 $port = ':' . $httpHostWithPort[1];
             }
         }
-        return $this->_request->getScheme() . '://' . $httpHost . $port . $this->_request->getServer('REQUEST_URI');
+        return $this->_request->getScheme() . '://' . $httpHost . $port . $this->_request->getRequestUri();
     }
 
     /**

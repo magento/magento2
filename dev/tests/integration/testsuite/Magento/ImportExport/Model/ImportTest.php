@@ -155,7 +155,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      * Test getEntityBehaviors with not existing behavior class
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid behavior token for customer
+     * @expectedExceptionMessage The behavior token for customer is invalid.
      */
     public function testGetEntityBehaviorsWithUnknownBehavior()
     {

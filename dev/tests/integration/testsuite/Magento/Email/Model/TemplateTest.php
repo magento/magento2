@@ -270,7 +270,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage The template Name must not be empty.
+     * @expectedExceptionMessage Please enter a template name.
      */
     public function testBeforeSaveEmptyTemplateCode()
     {

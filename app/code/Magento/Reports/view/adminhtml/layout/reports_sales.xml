@@ -9,7 +9,7 @@
     <body>
         <referenceBlock name="messages">
             <action method="addNotice">
-                <argument translate="true" name="message" xsi:type="string">This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.</argument>
+                <argument translate="true" name="message" xsi:type="string">For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.</argument>
             </action>
         </referenceBlock>
     </body>
