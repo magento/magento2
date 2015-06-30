@@ -360,7 +360,7 @@
                 <item name="childDefaults" xsi:type="array">
                     <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="actionField" xsi:type="string">actions</item>
-                    <item name="clickAction" xsi:type="string">edit</item>
+                    <item name="clickAction" xsi:type="string">view</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
@@ -375,6 +375,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="draggable" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="controlVisibility" xsi:type="boolean">false</item>
                 </item>

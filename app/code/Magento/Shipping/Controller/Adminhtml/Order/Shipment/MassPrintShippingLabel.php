@@ -9,8 +9,9 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
-class MassPrintShippingLabel extends \Magento\Backend\App\Action
+class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var \Magento\Shipping\Model\Shipping\LabelGenerator
@@ -49,13 +50,14 @@ class MassPrintShippingLabel extends \Magento\Backend\App\Action
      * Batch print shipping labels for whole shipments.
      * Push pdf document with shipping labels to user browser
      *
+     * @param AbstractCollection $collection
      * @return ResponseInterface|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
         $request = $this->getRequest();
-        $ids = $request->getParam('order_ids');
+        $ids = $collection->getAllIds();
         $createdFromOrders = !empty($ids);
         $shipments = null;
         $labelsContent = [];
