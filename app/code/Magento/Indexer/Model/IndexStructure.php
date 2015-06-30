@@ -147,15 +147,20 @@ class IndexStructure
             'Entity ID'
         );
         foreach ($fields as $field) {
+            if ($field['type'] !== 'filterable') {
+                continue;
+            }
             $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => $field['type'], 'size' => $field['size']];
+                : ['type' => $field['type'], 'size' => isset($field['size']) ? $field['size'] : null];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
-        $adapter->createTable($table);
+        if (count($table->getColumns()) > 1) {
+            $adapter->createTable($table);
+        }
     }
 
     /**
