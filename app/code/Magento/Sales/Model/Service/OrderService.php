@@ -78,7 +78,13 @@ class OrderService implements OrderManagementInterface
      */
     public function cancel($id)
     {
-        return (bool)$this->orderRepository->get($id)->cancel();
+        $order = $this->orderRepository->get($id);
+        if ((bool)$order->cancel()) {
+            $this->orderRepository->save($order);
+            return true;
+        }
+
+        return false;
     }
 
     /**

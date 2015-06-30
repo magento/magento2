@@ -60,39 +60,9 @@ interface OrderAdapterInterface
     public function getId();
 
     /**
-     * Returns order increment id
-     *
-     * @return string
-     *
-     */
-    public function getIncrementId();
-
-    /**
-     * Returns quote id
-     *
-     * @return int
-     */
-    public function getQuoteId();
-
-    /**
-     * Returns order grand total
-     *
-     * @return float
-     */
-    public function getGrandTotal();
-
-    /**
-     * Returns base currency code
-     *
-     * @return string
-     */
-    public function getBaseCurrencyCode();
-
-    /**
      * Returns order grand total amount
      *
      * @return float
      */
     public function getGrandTotalAmount();
-
 }

@@ -149,26 +149,6 @@ class AddressAdapter implements AddressAdapterInterface
     }
 
     /**
-     * Returns street
-     *
-     * @return string[]
-     */
-    public function getStreet()
-    {
-        return $this->address->getStreet();
-    }
-
-    /**
-     * Returns region
-     *
-     * @return string
-     */
-    public function getRegion()
-    {
-        return $this->address->getRegion();
-    }
-
-    /**
      * Returns name prefix
      *
      * @return string

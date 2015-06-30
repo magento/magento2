@@ -402,7 +402,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
-    public function capture($invoice)
+    public function capture($invoice = null)
     {
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
@@ -2720,5 +2720,52 @@ class Payment extends Info implements OrderPaymentInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * Sets whether transaction is pending
+     *
+     * @param bool|int $flag
+     * @return $this
+     */
+    public function setIsTransactionPending($flag)
+    {
+        $this->setData('is_transaction_pending', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether transaction is pending
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsTransactionPending()
+    {
+        return (bool)$this->getData('is_transaction_pending');
+    }
+
+    /**
+     * Sets whether fraud was detected
+     *
+     * @param bool|int $flag
+     * @return $this
+     */
+    public function setIsFraudDetected($flag)
+    {
+        $this->setData('is_fraud_detected', (bool)$flag);
+        return $this;
+    }
+
+    /**
+     * Whether fraud was detected
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsFraudDetected()
+    {
+        return (bool)$this->getData('is_fraud_detected');
+    }
+
     //@codeCoverageIgnoreEnd
 }
