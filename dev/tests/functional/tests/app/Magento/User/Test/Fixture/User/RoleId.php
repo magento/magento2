@@ -6,18 +6,18 @@
 
 namespace Magento\User\Test\Fixture\User;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\User\Test\Fixture\Role;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Source for Role of User.
  *
  * Data keys:
- *  - dataSet
+ *  - dataset
  *  - role
  */
-class RoleId implements FixtureInterface
+class RoleId extends DataSource
 {
     /**
      * Admin User Role.
@@ -25,13 +25,6 @@ class RoleId implements FixtureInterface
      * @var Role
      */
     protected $role;
-
-    /**
-     * User role name.
-     *
-     * @var string
-     */
-    protected $data;
 
     /**
      * @construct
@@ -42,9 +35,9 @@ class RoleId implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
-            list($fixtureCode, $dataSet) = explode('::', $data['dataSet']);
-            $this->role = $fixtureFactory->createByCode($fixtureCode, ['dataSet' => $dataSet]);
+        if (isset($data['dataset']) && $data['dataset'] !== '-') {
+            list($fixtureCode, $dataset) = explode('::', $data['dataset']);
+            $this->role = $fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
             if (!$this->role->hasData('role_id')) {
                 $this->role->persist();
             }
@@ -56,39 +49,6 @@ class RoleId implements FixtureInterface
         } elseif (isset($data['value'])) {
             $this->data = $data['value'];
         }
-    }
-
-    /**
-     * Persist user role.
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set.
-     *
-     * @param string $key [optional]
-     * @return string|null
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings.
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 
     /**

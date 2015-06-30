@@ -6,36 +6,22 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="giftMessage" module="Magento_GiftMessage" type="flat" entity_type="gift_message" collection="Magento\GiftMessage\Model\Resource\Message\Collection" identifier="gift_message_id" repository_class="Magento\GiftMessage\Test\Repository\GiftMessage" class="Magento\GiftMessage\Test\Fixture\GiftMessage">
-    <dataset name="default">
-        <field name="allow_gift_options" xsi:type="string">Yes</field>
-        <field name="allow_gift_messages_for_order" xsi:type="string">Yes</field>
-        <field name="sender" xsi:type="string">John Doe</field>
-        <field name="recipient" xsi:type="string">Jane Doe</field>
-        <field name="message" xsi:type="string">text_%isolation%</field>
-    </dataset>
-    <field name="gift_message_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="customer_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="sender" is_required="">
-      <default_value xsi:type="string">John Doe</default_value>
-    </field>
-    <field name="recipient" is_required="">
-      <default_value xsi:type="string">Jane Doe</default_value>
-    </field>
-    <field name="message" is_required="">
-      <default_value xsi:type="string">text_%isolation%</default_value>
-    </field>
-    <field name="allow_gift_options">
-      <default_value xsi:type="string">Yes</default_value>
-    </field>
-    <field name="allow_gift_messages_for_order">
-      <default_value xsi:type="string">Yes</default_value>
-    </field>
-    <field name="allow_gift_options_for_items"/>
-    <field name="items" source="Magento\GiftMessage\Test\Fixture\GiftMessage\Items"/>
-  </fixture>
+    <fixture name="giftMessage"
+             module="Magento_GiftMessage"
+             type="flat"
+             entity_type="gift_message"
+             collection="Magento\GiftMessage\Model\Resource\Message\Collection"
+             identifier="gift_message_id"
+             repository_class="Magento\GiftMessage\Test\Repository\GiftMessage"
+             class="Magento\GiftMessage\Test\Fixture\GiftMessage">
+        <field name="gift_message_id" is_required="1" />
+        <field name="customer_id" is_required="" />
+        <field name="sender" is_required="" />
+        <field name="recipient" is_required="" />
+        <field name="message" is_required="" />
+        <field name="allow_gift_options" />
+        <field name="allow_gift_messages_for_order" />
+        <field name="allow_gift_options_for_items" />
+        <field name="items" source="Magento\GiftMessage\Test\Fixture\GiftMessage\Items" />
+    </fixture>
 </config>

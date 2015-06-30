@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Steps:
  * 1. Open Backend Stores > Terms and Conditions
  * 2. Create new "Terms and Conditions"
- * 3. Fill data from dataSet
+ * 3. Fill data from dataset
  * 4. Save
  * 5. Perform all assertions
  *

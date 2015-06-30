@@ -13,7 +13,7 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertGiftMessageInBackendOrder
- * Assert that message from dataSet is displayed on order(s) view page on backend.
+ * Assert that message from dataset is displayed on order(s) view page on backend.
  */
 class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 {
@@ -30,7 +30,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
     ];
 
     /**
-     * Assert that message from dataSet is displayed on order(s) view page on backend.
+     * Assert that message from dataset is displayed on order(s) view page on backend.
      *
      * @param GiftMessage $giftMessage
      * @param SalesOrderView $salesOrderView
@@ -72,6 +72,6 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Backend gift message form data is equal to data passed from dataSet.';
+        return 'Backend gift message form data is equal to data passed from dataset.';
     }
 }

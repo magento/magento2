@@ -15,12 +15,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertGiftMessageInFrontendOrderItems
- * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
+ * Assert that message from dataset is displayed for each items on order(s) view page on frontend
  */
 class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
 {
     /**
-     * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
+     * Assert that message from dataset is displayed for each items on order(s) view page on frontend
      *
      * @param GiftMessage $giftMessage
      * @param Customer $customer

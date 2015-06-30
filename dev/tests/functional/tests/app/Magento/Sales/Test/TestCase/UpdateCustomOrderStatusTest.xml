@@ -9,7 +9,7 @@
     <testCase name="Magento\Sales\Test\TestCase\UpdateCustomOrderStatusTest">
         <variation name="UpdateCustomOrderStatusTestVariation1">
             <data name="description" xsi:type="string">change status label to existed</data>
-            <data name="orderStatusInitial/dataSet" xsi:type="string">default</data>
+            <data name="orderStatusInitial/dataset" xsi:type="string">default</data>
             <data name="orderExist" xsi:type="string">No</data>
             <data name="orderStatus/data/label" xsi:type="string">Processing</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage" />
@@ -17,7 +17,7 @@
         </variation>
         <variation name="UpdateCustomOrderStatusTestVariation2">
             <data name="description" xsi:type="string">change status label to new and check orderStatus for order with changed orderStatus</data>
-            <data name="orderStatusInitial/dataSet" xsi:type="string">assign_to_pending</data>
+            <data name="orderStatusInitial/dataset" xsi:type="string">assign_to_pending</data>
             <data name="orderExist" xsi:type="string">Yes</data>
             <data name="orderStatus/data/label" xsi:type="string">orderLabel%isolation%</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage" />

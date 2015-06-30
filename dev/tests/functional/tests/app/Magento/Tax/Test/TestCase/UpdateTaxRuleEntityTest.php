@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Login to backend
  * 2. Navigate to Stores > Tax Rules
  * 3. Click Tax Rule from grid
- * 4. Edit test value(s) according to dataSet.
+ * 4. Edit test value(s) according to dataset.
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
@@ -58,7 +58,7 @@ class UpdateTaxRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_retailer']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_retailer']);
         $customer->persist();
 
         return ['customer' => $customer];

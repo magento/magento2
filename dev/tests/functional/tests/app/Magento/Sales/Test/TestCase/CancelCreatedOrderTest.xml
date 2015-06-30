@@ -9,7 +9,7 @@
     <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest">
         <variation name="CancelCreatedOrderTestVariation1">
             <data name="description" xsi:type="string">cancel order and check status on the frontend</data>
-            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <data name="status" xsi:type="string">Canceled</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />

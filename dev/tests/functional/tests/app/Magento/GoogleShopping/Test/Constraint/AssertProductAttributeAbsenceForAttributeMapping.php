@@ -40,7 +40,7 @@ class AssertProductAttributeAbsenceForAttributeMapping extends AbstractConstrain
         $shoppingAttributes = $fixtureFactory->createByCode(
             'googleShoppingAttribute',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $productTemplate],
                 ],

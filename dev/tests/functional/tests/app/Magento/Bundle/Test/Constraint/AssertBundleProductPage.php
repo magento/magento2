@@ -22,7 +22,7 @@ class AssertBundleProductPage extends AssertProductPage
      */
     protected function verifyPrice()
     {
-        $priceData = $this->product->getDataFieldConfig('price')['source']->getPreset();
+        $priceData = $this->product->getDataFieldConfig('price')['source']->getPriceData();
         $priceView = $this->product->getPriceView();
         $priceBlock = $this->productView->getPriceBlock();
 

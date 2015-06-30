@@ -13,7 +13,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * Class TaxClass
  *
  * Data keys:
- *  - dataSet
+ *  - dataset
  */
 class TaxClass extends DataSource
 {
@@ -33,11 +33,11 @@ class TaxClass extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
-            $dataSets = $data['dataSet'];
-            foreach ($dataSets as $dataSet) {
+        if (isset($data['dataset'])) {
+            $datasets = $data['dataset'];
+            foreach ($datasets as $dataset) {
                 /** @var \Magento\Tax\Test\Fixture\TaxClass $taxClass */
-                $taxClass = $fixtureFactory->createByCode('taxClass', ['dataSet' => $dataSet]);
+                $taxClass = $fixtureFactory->createByCode('taxClass', ['dataset' => $dataset]);
                 $this->fixture[] = $taxClass;
                 $this->data[] = $taxClass->getClassName();
             }

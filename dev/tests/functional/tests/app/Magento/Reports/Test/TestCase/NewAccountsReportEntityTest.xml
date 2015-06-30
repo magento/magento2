@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Reports\Test\TestCase\NewAccountsReportEntityTest">
     <variation name="NewAccountsReportEntityTestVariation1">
-      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customer/dataset" xsi:type="string">default</data>
       <data name="total" xsi:type="string">1</data>
       <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
       <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
@@ -16,7 +16,7 @@
       <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult"/>
     </variation>
     <variation name="NewAccountsReportEntityTestVariation2">
-      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customer/dataset" xsi:type="string">default</data>
       <data name="total" xsi:type="string">1</data>
       <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
       <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
@@ -24,7 +24,7 @@
       <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult"/>
     </variation>
     <variation name="NewAccountsReportEntityTestVariation3">
-      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customer/dataset" xsi:type="string">default</data>
       <data name="total" xsi:type="string">1</data>
       <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
       <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
@@ -32,7 +32,7 @@
       <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult"/>
     </variation>
     <variation name="NewAccountsReportEntityTestVariation4">
-      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customer/dataset" xsi:type="string">default</data>
       <data name="total" xsi:type="string">0</data>
       <data name="customersReport/report_from" xsi:type="string">m/d/Y 12:00 a+1 day</data>
       <data name="customersReport/report_to" xsi:type="string">m/d/Y 12:00 a+1 day</data>

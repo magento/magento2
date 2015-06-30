@@ -11,7 +11,7 @@
       <data name="description" xsi:type="string">General customer without address</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>
@@ -37,7 +37,7 @@
       <data name="description" xsi:type="string">Customer with prefix</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Admin</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">Wholesale</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
       <data name="customer/data/prefix" xsi:type="string">M</data>
       <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">Jack</data>
@@ -63,7 +63,7 @@
       <data name="description" xsi:type="string">General customer from USA</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>
@@ -89,7 +89,7 @@
       <data name="description" xsi:type="string">Retailer customer without address</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">Retailer</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>
@@ -113,7 +113,7 @@
       <data name="description" xsi:type="string">General customer from Poland</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">Thomas%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>
@@ -139,7 +139,7 @@
       <data name="description" xsi:type="string">MAGETWO-12516: Create New Customer on Backend</data>
       <data name="customerAction" xsi:type="string">saveAndContinue</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
-      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
       <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
       <data name="customer/data/middlename" xsi:type="string">-</data>

@@ -32,11 +32,11 @@ class Review extends AbstractRepository
             'detail' => 'review_detail_%isolation%',
             'ratings' => [
                 [
-                    'dataSet' => 'visibleOnDefaultWebsite',
+                    'dataset' => 'visibleOnDefaultWebsite',
                     'rating' => mt_rand(1, 5)
                 ]
             ],
-            'entity_id' => ['dataSet' => 'catalogProductSimple::default']
+            'entity_id' => ['dataset' => 'catalogProductSimple::default']
         ];
 
         $this->_data['frontend_review'] = [
@@ -45,7 +45,7 @@ class Review extends AbstractRepository
             'nickname' => 'nickname_%isolation%',
             'title' => 'title_%isolation%',
             'detail' => 'review_detail_%isolation%',
-            'entity_id' => ['dataSet' => 'catalogProductSimple::default']
+            'entity_id' => ['dataset' => 'catalogProductSimple::default']
         ];
     }
 }

@@ -6,61 +6,29 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="catalogRule" module="Magento_CatalogRule" type="eav" entity_type="catalog_rule" collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection" repository_class="Magento\CatalogRule\Test\Repository\CatalogRule" handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface" class="Magento\CatalogRule\Test\Fixture\CatalogRule">
-    <dataset name="default">
-        <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
-        <field name="description" xsi:type="string">Catalog Price Rule Description</field>
-        <field name="is_active" xsi:type="string">Active</field>
-        <field name="website_ids" xsi:type="array">
-            <item name="0" xsi:type="string">Main Website</item>
-        </field>
-        <field name="customer_group_ids" xsi:type="array">
-            <item name="0" xsi:type="string">NOT LOGGED IN</item>
-        </field>
-        <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
-        <field name="discount_amount" xsi:type="string">50</field>
-    </dataset>
-    <field name="name" is_required="1" group="rule_information">
-      <default_value xsi:type="string">CatalogPriceRule %isolation%</default_value>
-    </field>
-    <field name="description" group="rule_information">
-      <default_value xsi:type="string">Catalog Price Rule Description</default_value>
-    </field>
-    <field name="is_active" is_required="1" group="rule_information">
-      <default_value xsi:type="string">Active</default_value>
-    </field>
-    <field name="website_ids" is_required="1" group="rule_information">
-      <default_value xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </default_value>
-    </field>
-    <field name="customer_group_ids" is_required="1" group="rule_information">
-      <default_value xsi:type="array">
-                <item name="0" xsi:type="string">NOT LOGGED IN</item>
-            </default_value>
-    </field>
-    <field name="from_date" is_required="0" group="rule_information">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="to_date" is_required="0" group="rule_information">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="simple_action" is_required="0" group="actions">
-      <default_value xsi:type="string">By Percentage of the Original Price</default_value>
-    </field>
-    <field name="discount_amount" is_required="1" group="actions">
-      <default_value xsi:type="number">50</default_value>
-    </field>
-    <field name="condition_type" is_required="0" group="conditions"/>
-    <field name="condition_value" is_required="0" group="conditions"/>
-    <field name="rule" is_required="0" group="conditions"/>
-    <field name="conditions" group="conditions"/>
-    <field name="id"/>
-    <field name="sort_order" group="rule_information">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="stop_rules_processing" group="rule_information">
-      <default_value xsi:type="null"/>
-    </field>
-  </fixture>
+    <fixture name="catalogRule"
+             module="Magento_CatalogRule"
+             type="eav"
+             entity_type="catalog_rule"
+             collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection"
+             repository_class="Magento\CatalogRule\Test\Repository\CatalogRule"
+             handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface"
+             class="Magento\CatalogRule\Test\Fixture\CatalogRule">
+        <field name="name" is_required="1" group="rule_information" />
+        <field name="description" group="rule_information" />
+        <field name="is_active" is_required="1" group="rule_information" />
+        <field name="website_ids" is_required="1" group="rule_information" />
+        <field name="customer_group_ids" is_required="1" group="rule_information" />
+        <field name="from_date" is_required="0" group="rule_information" />
+        <field name="to_date" is_required="0" group="rule_information" />
+        <field name="simple_action" is_required="0" group="actions" />
+        <field name="discount_amount" is_required="1" group="actions" />
+        <field name="condition_type" is_required="0" group="conditions" />
+        <field name="condition_value" is_required="0" group="conditions" />
+        <field name="rule" is_required="0" group="conditions" />
+        <field name="conditions" group="conditions" />
+        <field name="id" />
+        <field name="sort_order" group="rule_information" />
+        <field name="stop_rules_processing" group="rule_information" />
+    </fixture>
 </config>
