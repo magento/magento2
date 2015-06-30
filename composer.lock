@@ -395,6 +395,62 @@
             "time": "2015-03-10 18:12:59"
         },
         {
+            "name": "pelago/emogrifier",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jjriv/emogrifier.git",
+                "reference": "ed72bcd6a3c7014862ff86d026193667a172fedf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jjriv/emogrifier/zipball/ed72bcd6a3c7014862ff86d026193667a172fedf",
+                "reference": "ed72bcd6a3c7014862ff86d026193667a172fedf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6.0",
+                "squizlabs/php_codesniffer": "~2.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pelago\\": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Reeve",
+                    "email": "jreeve@pelagodesign.com"
+                },
+                {
+                    "name": "Cameron Brooks"
+                },
+                {
+                    "name": "Jaime Prado"
+                },
+                {
+                    "name": "Oliver Klee",
+                    "email": "typo3-coding@oliverklee.de"
+                },
+                {
+                    "name": "Roman Ožana",
+                    "email": "ozana@omdesign.cz"
+                }
+            ],
+            "description": "Converts CSS styles into inline style attributes in your HTML code",
+            "homepage": "http://www.pelagodesign.com/sidecar/emogrifier/",
+            "time": "2015-05-15 11:37:51"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {

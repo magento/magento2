@@ -23,7 +23,16 @@ class Template implements \Zend_Filter_Interface
 
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
+    const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
+
     /**#@-*/
+
+    /**
+     * Callbacks that will be applied after filtering
+     *
+     * @var array
+     */
+    private $afterFilterCallbacks = [];
 
     /**
      * Assigned template variables
@@ -31,6 +40,13 @@ class Template implements \Zend_Filter_Interface
      * @var array
      */
     protected $_templateVars = [];
+
+    /**
+     * Template processor
+     *
+     * @var callable|null
+     */
+    protected $_templateProcessor = null;
 
     /**
      * @var \Magento\Framework\Stdlib\String
@@ -62,6 +78,28 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * Sets the processor for template directive.
+     *
+     * @param callable $callback it must return string
+     * @return $this
+     */
+    public function setTemplateProcessor(callable $callback)
+    {
+        $this->_templateProcessor = $callback;
+        return $this;
+    }
+
+    /**
+     * Sets the processor for template directive.
+     *
+     * @return callable|null
+     */
+    public function getTemplateProcessor()
+    {
+        return is_callable($this->_templateProcessor) ? $this->_templateProcessor : null;
+    }
+
+    /**
      * Filter the string as template.
      *
      * @param string $value
@@ -71,10 +109,11 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        // "depend" and "if" operands should be first
+        // "depend", "if", and "template" directives should be first
         foreach ([
                      self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
                      self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
+                     self::CONSTRUCTION_TEMPLATE_PATTERN => 'templateDirective',
                  ] as $pattern => $directive) {
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
@@ -106,7 +145,55 @@ class Template implements \Zend_Filter_Interface
                 $value = str_replace($construction[0], $replacedValue, $value);
             }
         }
+
+        $value = $this->afterFilter($value);
         return $value;
+    }
+
+    /**
+     * Runs callbacks that have been added to filter content after directive processing is finished.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function afterFilter($value)
+    {
+        foreach ($this->afterFilterCallbacks as $callback) {
+            $value = call_user_func($callback, $value);
+        }
+        // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+        // prevent callbacks running for unrelated content (e.g., email subject and email body)
+        $this->resetAfterFilterCallbacks();
+        return $value;
+    }
+
+    /**
+     * Adds a callback to run after main filtering has happened. Callback must accept a single argument and return
+     * a string of the processed value.
+     *
+     * @param callable $afterFilterCallback
+     * @return $this
+     */
+    public function addAfterFilterCallback(callable $afterFilterCallback)
+    {
+        // Only add callback if it doesn't already exist
+        if (in_array($afterFilterCallback, $this->afterFilterCallbacks)) {
+            return $this;
+        }
+
+        $this->afterFilterCallbacks[] = $afterFilterCallback;
+        return $this;
+    }
+
+    /**
+     * Resets the after filter callbacks
+     *
+     * @return $this
+     */
+    protected function resetAfterFilterCallbacks()
+    {
+        $this->afterFilterCallbacks = [];
+        return $this;
     }
 
     /**
@@ -121,6 +208,36 @@ class Template implements \Zend_Filter_Interface
         }
 
         $replacedValue = $this->_getVariable($construction[2], '');
+        return $replacedValue;
+    }
+
+    /**
+     * Allows templates to be included inside other templates
+     *
+     * Usage:
+     *
+     *     {{template config_path="<PATH>"}}
+     *
+     * <PATH> equals the XPATH to the system configuration value that contains the value of the template.
+     * This directive is useful to include things like a global header/footer.
+     *
+     * @param string[] $construction
+     * @return mixed
+     */
+    public function templateDirective($construction)
+    {
+        // Processing of {template config_path=... [...]} statement
+        $templateParameters = $this->_getParameters($construction[2]);
+        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
+            // Not specified template or not set include processor
+            $replacedValue = '{Error in template processing}';
+        } else {
+            // Including of template
+            $configPath = $templateParameters['config_path'];
+            unset($templateParameters['config_path']);
+            $templateParameters = array_merge_recursive($templateParameters, $this->_templateVars);
+            $replacedValue = call_user_func($this->getTemplateProcessor(), $configPath, $templateParameters);
+        }
         return $replacedValue;
     }
 
@@ -163,14 +280,14 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Return associative array of include construction.
+     * Return associative array of parameters.
      *
      * @param string $value raw parameters
      * @return array
      */
-    protected function _getIncludeParameters($value)
+    protected function _getParameters($value)
     {
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Parameter();
+        $tokenizer = new Template\Tokenizer\Parameter();
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
@@ -192,7 +309,7 @@ class Template implements \Zend_Filter_Interface
     protected function _getVariable($value, $default = '{no_value_defined}')
     {
         \Magento\Framework\Profiler::start('email_template_processing_variables');
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Variable();
+        $tokenizer = new Template\Tokenizer\Variable();
         $tokenizer->setString($value);
         $stackVars = $tokenizer->tokenize();
         $result = $default;

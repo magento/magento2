@@ -49,6 +49,8 @@ class Store extends AbstractModel implements
 
     const XML_PATH_STORE_STORE_PHONE = 'general/store_information/phone';
 
+    const XML_PATH_STORE_STORE_HOURS = 'general/store_information/hours';
+
     const XML_PATH_STORE_IN_URL = 'web/url/use_store';
 
     const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';

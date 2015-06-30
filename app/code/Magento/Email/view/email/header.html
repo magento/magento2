@@ -1,0 +1,57 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject Header @-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <style type="text/css">
+        {{var template_styles}}
+
+        {{css file="css/email.css"}}
+    </style>
+</head>
+<body>
+{{inlinecss file="css/email-inline.css"}}
+<!-- Begin wrapper table -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" id="background-table">
+    <tr>
+        <td valign="top" class="container-td" align="center">
+            <table cellpadding="0" cellspacing="0" border="0" align="center" class="container-table">
+                <tr>
+                    <td>
+                        <table cellpadding="0" cellspacing="0" border="0" class="logo-container">
+                            <tr>
+                                <td class="logo">
+                                    <a href="{{store url=""}}">
+                                    <img
+                                        {{if logo_width}}
+                                        width="{{var logo_width}}"
+                                        {{else}}
+                                        width="167"
+                                        {{/if}}
+
+                                        {{if logo_height}}
+                                        height="{{var logo_height}}"
+                                        {{else}}
+                                        height="47"
+                                        {{/if}}
+
+                                        src="{{var logo_url}}"
+                                        alt="{{var logo_alt}}"
+                                        border="0"
+                                    />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" class="top-content">
+                        <!-- Begin Content -->

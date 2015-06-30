@@ -13,7 +13,7 @@
         <xs:attribute name="label" type="xs:string" use="required"/>
         <xs:attribute name="file" type="xs:string" use="required"/>
         <xs:attribute name="type" type="emailTemplateFormatType" use="required"/>
-        <xs:attribute name="module" type="xs:string" use="optional"/>
+        <xs:attribute name="module" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:simpleType name="emailTemplateFormatType">
