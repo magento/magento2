@@ -14,7 +14,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $orderIds = $this->getRequest()->getPost('order_ids', []);
+        $orderIds = $this->getRequest()->getPost('selected', []);
         $countCancelOrder = 0;
         $countNonCancelOrder = 0;
         foreach ($orderIds as $orderId) {
