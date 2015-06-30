@@ -16,7 +16,7 @@ class SchemaXml
     /**
      * Object manager instance.
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -28,16 +28,11 @@ class SchemaXml
     protected $fieldsProvider;
 
     /**
+     * The DOMDocument class represents an entire XML.
+     *
      * @var \DOMDocument
      */
     protected $dom;
-
-    /**
-     * Path to xsd schema.
-     *
-     * @var string
-     */
-    protected $pathToXsd = '../../../../../../vendor/magento/mtf/etc/fixture.xsd';
 
     /**
      * Required fields list.
@@ -132,9 +127,6 @@ class SchemaXml
 
         /** @var \DOMElement $root */
         $root = $this->dom->getElementsByTagName('config')->item(0);
-        $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $root->setAttribute('xsi:noNamespaceSchemaLocation', $this->pathToXsd);
-        $this->dom->appendChild($root);
 
         $fixture = $this->dom->createElement('fixture');
         $fixture->setAttribute('name', $config['name']);
@@ -165,7 +157,7 @@ class SchemaXml
      *
      * @SuppressWarnings(PHPMD)
      */
-    public function getHelp()
+    protected function getHelp()
     {
         echo <<<TAG
 Usage: Magento 2 fixture schema generator.
