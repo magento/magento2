@@ -158,9 +158,7 @@ class IndexStructure
             $size = $columnMap['size'];
             $table->addColumn($name, $type, $size);
         }
-        if (count($table->getColumns()) > 1) {
-            $adapter->createTable($table);
-        }
+        $adapter->createTable($table);
     }
 
     /**

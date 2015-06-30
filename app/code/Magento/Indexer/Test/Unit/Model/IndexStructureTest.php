@@ -200,19 +200,12 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     private function mockFlatTable($callNumber, $tableName, array $fields)
     {
         $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
-            ->setMethods(['addColumn'])
+            ->setMethods(['addColumn', 'getColumns'])
             ->disableOriginalConstructor()
             ->getMock();
-        $at = 0;
-        foreach ($fields as $field) {
-            $name = $field['name'];
-            $type = $field['type'];
-            $size = $field['size'];
-            $table->expects($this->at($at++))
-                ->method('addColumn')
-                ->with($name, $type, $size)
-                ->willReturnSelf();
-        }
+        $table->expects($this->any())
+            ->method('addColumn')
+            ->willReturnSelf();
 
         $this->adapter->expects($this->at($callNumber++))
             ->method('newTable')
