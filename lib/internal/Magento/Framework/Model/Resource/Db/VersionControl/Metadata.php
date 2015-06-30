@@ -26,8 +26,13 @@ class Metadata
     {
         if (!isset($this->metadataInfo[get_class($entity)])) {
             $this->metadataInfo[get_class($entity)] =
-                $entity->getResource()->getReadConnection()->describeTable(
-                    $entity->getResource()->getMainTable()
+                array_fill_keys(
+                    array_keys(
+                        $entity->getResource()->getReadConnection()->describeTable(
+                            $entity->getResource()->getMainTable()
+                        )
+                    ),
+                    null
                 );
         }
         return $this->metadataInfo[get_class($entity)];
