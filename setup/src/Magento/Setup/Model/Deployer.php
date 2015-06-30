@@ -319,6 +319,12 @@ class Deployer
         }
     }
 
+    /**
+     * Find parent theme by looking up the theme configuration file
+     *
+     * @param string $fullThemePath
+     * @return string
+     */
     private function findParent($fullThemePath)
     {
         if (!isset($this->parentTheme[$fullThemePath])) {
