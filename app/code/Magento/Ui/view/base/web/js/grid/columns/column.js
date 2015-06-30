@@ -18,7 +18,7 @@ define([
             sorting: false,
             visible: true,
             draggable: true,
-            tmplsIgnore: {
+            ignoreTmpls: {
                 fieldAction: true
             },
             links: {

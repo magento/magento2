@@ -47,7 +47,7 @@ define([
         initialize: function () {
             _.bindAll(this, 'reset');
 
-            this._super();
+            this._super()
                 ._setClasses();
 
             this.initialValue = this.getInitialValue();
