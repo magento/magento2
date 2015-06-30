@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+/**
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
