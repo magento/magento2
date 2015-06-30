@@ -90,7 +90,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * In form of:
      *
-     * [customer e-mail] => array(
+     * [customer email] => array(
      *    [website id 1] => customer_id 1,
      *    [website id 2] => customer_id 2,
      *           ...       =>     ...      ,

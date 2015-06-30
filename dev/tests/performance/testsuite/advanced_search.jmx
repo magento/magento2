@@ -158,7 +158,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assertion: Non-Empty Search Results" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="110843263">No items were found using the following search criteria</stringProp>
+              <stringProp name="110843263">We can\'t find any items matching these search criteria.</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

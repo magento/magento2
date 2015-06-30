@@ -180,13 +180,13 @@ class MassOperations
                     $errors[] = $message;
                 } catch (CoreException $e) {
                     $errors[] = __(
-                        'The product "%1" cannot be added to Google Content. %2',
+                        'We can\'t add product "%1" to Google Content right now. %2',
                         $product->getName(),
                         $e->getMessage()
                     );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
-                    $errors[] = __('The product "%1" hasn\'t been added to Google Content.', $product->getName());
+                    $errors[] = __('We can\'t add product "%1" to Google Content right now.', $product->getName());
                 }
             }
             if (empty($productIds)) {
@@ -196,19 +196,19 @@ class MassOperations
 
         if ($totalAdded > 0) {
             $this->_notifier->addNotice(
-                __('Products were added to Google Shopping account.'),
-                __('A total of %1 product(s) have been added to Google Content.', $totalAdded)
+                __('You added products to the Google Shopping account.'),
+                __('You added a total of %1 product(s) to the Google Content.', $totalAdded)
             );
         }
 
         if (count($errors)) {
-            $this->_notifier->addMajor(__('Errors happened while adding products to Google Shopping.'), $errors);
+            $this->_notifier->addMajor(__('Something went wrong while adding products to Google Shopping.'), $errors);
         }
 
         if ($this->_flag->isExpired()) {
             $this->_notifier->addMajor(
                 __('Operation of adding products to Google Shopping expired.'),
-                __('Some products may have not been added to Google Shopping bacause of expiration')
+                __('Some products may have not been added to Google Shopping because of expiration.')
             );
         }
 
@@ -275,7 +275,7 @@ class MassOperations
                     $totalFailed++;
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
-                    $errors[] = __('The item "%1" hasn\'t been updated.', $item->getProduct()->getName());
+                    $errors[] = __('We can\'t update item "%1" right now.', $item->getProduct()->getName());
                     $totalFailed++;
                 }
             }
@@ -284,7 +284,7 @@ class MassOperations
         }
 
         $this->_notifier->addNotice(
-            __('Product synchronization with Google Shopping completed'),
+            __('The product synchronization with Google Shopping is finished.'),
             __(
                 'A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.',
                 $totalDeleted,
@@ -292,9 +292,9 @@ class MassOperations
             )
         );
         if ($totalFailed > 0 || count($errors)) {
-            array_unshift($errors, __("We cannot update %1 items.", $totalFailed));
+            array_unshift($errors, __('We can\'t update %1 item(s).', $totalFailed));
             $this->_notifier->addMajor(
-                __('Errors happened during synchronization with Google Shopping'),
+                __('Something went wrong during synchronization with Google Shopping.'),
                 $errors
             );
         }
@@ -337,7 +337,7 @@ class MassOperations
                     );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
-                    $errors[] = __('The item "%1" hasn\'t been deleted.', $item->getProduct()->getName());
+                    $errors[] = __('We can\'t update item "%1" right now.', $item->getProduct()->getName());
                 }
             }
         } else {
@@ -346,12 +346,12 @@ class MassOperations
 
         if ($totalDeleted > 0) {
             $this->_notifier->addNotice(
-                __('Google Shopping item removal process succeded'),
-                __('Total of %1 items(s) have been removed from Google Shopping.', $totalDeleted)
+                __('The Google Shopping item removal process succeeded.'),
+                __('You removed %1 items(s) from Google Shopping.', $totalDeleted)
             );
         }
         if (count($errors)) {
-            $this->_notifier->addMajor(__('Errors happened while deleting items from Google Shopping'), $errors);
+            $this->_notifier->addMajor(__('Something went wrong while deleting items from Google Shopping.'), $errors);
         }
 
         return $this;

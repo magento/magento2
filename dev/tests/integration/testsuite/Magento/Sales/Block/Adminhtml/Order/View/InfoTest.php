@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\View\Info
  */
-class InfoTest extends \Magento\Backend\Utility\Controller
+class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Value for the user defined custom attribute, which is created by attribute_user_defined_customer.php fixture.

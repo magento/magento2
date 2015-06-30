@@ -125,7 +125,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ? __('Administrator') : __('Guest');
         }
 
-        $fieldset->addField('customer', 'note', ['label' => __('Posted By'), 'text' => $customerText]);
+        $fieldset->addField('customer', 'note', ['label' => __('Author'), 'text' => $customerText]);
 
         $fieldset->addField(
             'summary_rating',
@@ -167,7 +167,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'select_stores',
                 'multiselect',
                 [
-                    'label' => __('Visible In'),
+                    'label' => __('Visibility'),
                     'required' => true,
                     'name' => 'stores[]',
                     'values' => $this->_systemStore->getStoreValuesForForm()

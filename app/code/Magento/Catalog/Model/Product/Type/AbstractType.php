@@ -559,7 +559,7 @@ abstract class AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify the product\'s required option(s).');
+        return __('Please specify product\'s required option(s).');
     }
 
     /**
