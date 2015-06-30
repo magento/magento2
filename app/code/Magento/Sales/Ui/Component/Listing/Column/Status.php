@@ -16,9 +16,14 @@ use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
 class Status extends Column
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $statuses;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
 
     /**
      * Constructor
@@ -36,9 +41,7 @@ class Status extends Column
         array $components = [],
         array $data = []
     ) {
-        foreach ($collectionFactory->create()->getData() as $status) {
-            $this->statuses[$status['status']] = $status['label'];
-        }
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -50,6 +53,12 @@ class Status extends Column
      */
     public function prepareDataSource(array & $dataSource)
     {
+        if (null === $this->statuses) {
+            /** @var \Magento\Sales\Model\Order\Status $status */
+            foreach ($this->collectionFactory->create()->getItems() as $status) {
+                $this->statuses[$status->getStatus()] = $status->getLabel();
+            }
+        }
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $item[$this->getData('name')] = $this->statuses[$item[$this->getData('name')]];
