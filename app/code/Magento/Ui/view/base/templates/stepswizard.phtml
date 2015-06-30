@@ -13,7 +13,7 @@
     <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
         "steps": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getStepComponents()) ?>,
         "stepRegistryComponent": "<?= $block->getComponentName()?>"}}'>
-        <div data-role="messages"></div>
+        <div data-role="messages" class="messages"></div>
 
         <div class="steps-wizard-navigation">
             <ul class="nav-bar">
