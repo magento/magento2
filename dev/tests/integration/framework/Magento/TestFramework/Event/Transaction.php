@@ -90,7 +90,7 @@ class Transaction
     protected function _startTransaction(\PHPUnit_Framework_TestCase $test)
     {
         if (!$this->_isTransactionActive) {
-            $this->_getAdapter()->beginTransparentTransaction();
+            $this->_getAdapter()->beginTransaction();
             $this->_isTransactionActive = true;
             try {
                 $this->_eventManager->fireEvent('startTransaction', [$test]);
@@ -110,7 +110,7 @@ class Transaction
     protected function _rollbackTransaction()
     {
         if ($this->_isTransactionActive) {
-            $this->_getAdapter()->rollbackTransparentTransaction();
+            $this->_getAdapter()->rollBack();
             $this->_isTransactionActive = false;
             $this->_eventManager->fireEvent('rollbackTransaction');
         }
