@@ -19,6 +19,7 @@
                                             <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                             <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                             <item name="formId" xsi:type="string">user_login</item>
+                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
                                         </item>
                                     </item>
                                 </item>
@@ -36,6 +37,7 @@
                                                                             <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                                                             <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                                                             <item name="formId" xsi:type="string">guest_checkout</item>
+                                                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
                                                                         </item>
                                                                     </item>
                                                                 </item>
@@ -57,6 +59,7 @@
                                                                             <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                                                             <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                                                             <item name="formId" xsi:type="string">guest_checkout</item>
+                                                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
                                                                         </item>
                                                                     </item>
                                                                 </item>

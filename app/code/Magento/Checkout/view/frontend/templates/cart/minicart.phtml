@@ -42,16 +42,7 @@
         </div>
     <?php endif ?>
     <script>
-        window.checkout = {
-            shoppingCartUrl: '<?=$block->getShoppingCartUrl()?>',
-            checkoutUrl: '<?=$block->getCheckoutUrl()?>',
-            updateItemQtyUrl: '<?=$block->getUpdateItemQtyUrl()?>',
-            removeItemUrl: '<?=$block->getRemoveItemUrl()?>',
-            imageTemplate: '<?= $block->getImageHtmlTemplate()?>',
-            customerRegisterUrl: '<?= $block->getCustomerRegisterUrlUrl()?>',
-            customerForgotPasswordUrl: '<?= $block->getCustomerForgotPasswordUrl()?>',
-            baseUrl: '<?= $block->getBaseUrl()?>'
-        };
+        window.checkout = <?php echo \Zend_Json::encode($block->getConfig()); ?>;
     </script>
     <script type="text/x-magento-init">
     {
