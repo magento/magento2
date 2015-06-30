@@ -164,12 +164,36 @@ class IndexerHandler implements IndexerInterface
     {
         if ($dataType === $this->dataTypes[0]) {
             $documents = $this->prepareSearchableFields($documents);
+            $updater = ['data_index'];
+        } else {
+            $documents = $this->prepareFilterableFields($documents);
+            $updater = [];
+            foreach ($this->fields as $field) {
+                $updater[] = $field['name'];
+            }
         }
-        $this->_getWriteAdapter()->insertOnDuplicate(
+        $this->getAdapter()->insertOnDuplicate(
             $this->getTableName($dataType, $dimensions),
             $documents,
-            ['data_index']
+            $updater
         );
+    }
+
+    /**
+     * @param array $documents
+     * @return array
+     */
+    private function prepareFilterableFields(array $documents)
+    {
+        $insertDocuments = [];
+        foreach ($documents as $entityId => $document) {
+            $documentFlat = ['entity_id' => $entityId];
+            foreach ($this->fields as $fieldName => $fieldValue) {
+                $documentFlat[$fieldName] = $document[$fieldName];
+            }
+            $insertDocuments[] = $documentFlat;
+        }
+        return $insertDocuments;
     }
 
     /**
@@ -180,11 +204,11 @@ class IndexerHandler implements IndexerInterface
     {
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {
-            foreach ($document as $attributeId => $fieldValue) {
+            foreach ($this->fields as $fieldName => $fieldValue) {
                 $insertDocuments[] = [
                     'entity_id' => $entityId,
-                    'attribute_id' => $attributeId,
-                    'data_index' => $fieldValue,
+                    'attribute_id' => $fieldName,
+                    'data_index' => $document[$fieldName],
                 ];
             }
         }
