@@ -5,12 +5,6 @@
  */
 -->
 
-<style>
-    .credit-card-types div.active{
-        font-weight: bold;
-    }
-</style>
-
 <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
     <!-- ko if: (isShowLegend())-->
     <legend class="legend">
@@ -22,18 +16,24 @@
             <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
         </label>
         <div class="control">
-            <div class="credit-card-types">
+            <ul class="credit-card-types">
                 <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
-                <div data-bind="css: {active: $parent.selectedCardType() == item.value} ">
-                    <!-- ko text: item.type --><!-- /ko -->
-                </div>
+                <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
+                    <!-- if picture -->
+                    <img data-bind="attr: {
+                        'src': 'Magento_Payment::images/cc/'+ item.value + '.png',
+                        'alt': item.type
+                        }">
+                    <!-- if NOpicture -->
+                    <span><!-- ko text: item.type --><!-- /ko --></span>
+                </li>
                 <!--/ko-->
-                <input type="hidden"
-                       name="payment[cc_number]"
-                       class="input-text"
-                       value=""
-                       data-bind="attr: {id: getCode() + '_cc_type'}, value: creditCardType">
-            </div>
+            </ul>
+            <input type="hidden"
+                   name="payment[cc_number]"
+                   class="input-text"
+                   value=""
+                   data-bind="attr: {id: getCode() + '_cc_type'}, value: creditCardType">
         </div>
     </div>
     <div class="field number required">
