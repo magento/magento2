@@ -17,6 +17,20 @@ use Magento\Mtf\Repository\RepositoryFactory;
 class BundleSelections extends DataSource
 {
     /**
+     * Repository factory instance.
+     *
+     * @var RepositoryFactory
+     */
+    protected $repositoryFactory;
+
+    /**
+     * Fixture factory instance.
+     *
+     * @var RepositoryFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
@@ -29,11 +43,24 @@ class BundleSelections extends DataSource
         array $data,
         array $params = []
     ) {
+        $this->repositoryFactory = $repositoryFactory;
+        $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
         $this->data = !isset($data['dataset']) ? $data : [];
+        $this->getDataset($data);
+        $this->prepareProducts();
+    }
 
+    /**
+     * Get dataset for a field.
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function getDataset(array $data)
+    {
         if (isset($data['dataset']) && isset($this->params['repository'])) {
-            $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
+            $this->data = $this->repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             if (!empty($data['products'])) {
                 $this->data['products'] = [];
                 $this->data['products'] = explode('|', $data['products']);
@@ -42,7 +69,15 @@ class BundleSelections extends DataSource
                 }
             }
         }
+    }
 
+    /**
+     * Prepare products for bundle items.
+     *
+     * @return void
+     */
+    protected function prepareProducts()
+    {
         if (!empty($this->data['products'])) {
             $productsSelections = $this->data['products'];
             $this->data['products'] = [];
@@ -54,7 +89,7 @@ class BundleSelections extends DataSource
                         continue;
                     }
                     list($fixture, $dataset) = explode('::', $product);
-                    $productSelection[$key] = $fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
+                    $productSelection[$key] = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
                     $productSelection[$key]->persist();
                     $this->data['bundle_options'][$index]['assigned_products'][$key]['search_data']['name'] =
                         $productSelection[$key]->getName();

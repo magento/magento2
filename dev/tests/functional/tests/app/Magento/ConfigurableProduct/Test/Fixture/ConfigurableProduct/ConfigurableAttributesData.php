@@ -12,7 +12,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Repository\RepositoryFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * Source configurable attributes data of the configurable products.
@@ -94,7 +93,7 @@ class ConfigurableAttributesData extends DataSource
      */
     protected function prepareAttributes(array $data)
     {
-        if (isset($data['attributes'])) {
+        if (!isset($data['attributes'])) {
             return;
         }
 
@@ -145,7 +144,7 @@ class ConfigurableAttributesData extends DataSource
      */
     protected function prepareProducts(array $data)
     {
-        if (isset($data['products'])) {
+        if (!isset($data['products'])) {
             return;
         }
 

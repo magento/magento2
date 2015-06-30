@@ -31,6 +31,8 @@ class Content extends DataSource
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         RepositoryFactory $repositoryFactory,

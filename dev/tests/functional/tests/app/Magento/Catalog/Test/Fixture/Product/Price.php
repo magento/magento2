@@ -38,14 +38,6 @@ class Price extends DataSource
 
         if (isset($data['value'])) {
             $this->data = $data['value'];
-//            if (is_array($this->data)) {
-//                $this->data = array_filter(
-//                    $this->data,
-//                    function ($value) {
-//                        return $value !== '-';
-//                    }
-//                );
-//            }
         }
 
         if (isset($data['dataset']) && isset($this->params['repository'])) {
