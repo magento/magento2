@@ -10,6 +10,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
@@ -111,9 +112,9 @@ class Observer
      */
     protected function _isDefaultBilling($address)
     {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling() ||
-            $address->getIsPrimaryBilling() ||
-            $address->getIsDefaultBilling();
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling()
+            || $address->getIsPrimaryBilling()
+            || $address->getIsDefaultBilling();
     }
 
     /**
@@ -124,9 +125,9 @@ class Observer
      */
     protected function _isDefaultShipping($address)
     {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping() ||
-            $address->getIsPrimaryShipping() ||
-            $address->getIsDefaultShipping();
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping()
+            || $address->getIsPrimaryShipping()
+            || $address->getIsDefaultShipping();
     }
 
     /**
@@ -146,7 +147,7 @@ class Observer
         }
 
         $configAddressType = $this->_customerAddress->getTaxCalculationAddressType();
-        if ($configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING) {
+        if ($configAddressType == AbstractAddress::TYPE_SHIPPING) {
             return $this->_isDefaultShipping($address);
         }
         return $this->_isDefaultBilling($address);
@@ -170,11 +171,9 @@ class Observer
             $this->_coreRegistry->register(self::VIV_CURRENTLY_SAVED_ADDRESS, $customerAddress->getId());
         } else {
             $configAddressType = $this->_customerAddress->getTaxCalculationAddressType();
-
-            $forceProcess = $configAddressType ==
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING ? $customerAddress->getIsDefaultShipping() : $customerAddress
-                    ->getIsDefaultBilling();
-
+            $forceProcess = $configAddressType == AbstractAddress::TYPE_SHIPPING
+                ? $customerAddress->getIsDefaultShipping()
+                : $customerAddress->getIsDefaultBilling();
             if ($forceProcess) {
                 $customerAddress->setForceProcess(true);
             } else {
