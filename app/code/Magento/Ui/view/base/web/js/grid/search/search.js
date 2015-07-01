@@ -16,11 +16,6 @@ define([
             template: 'ui/grid/search/search',
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
-            optionsConfig: {
-                provider: '${ $.optionsConfig.name }',
-                name: '${ $.name }_options',
-                component: 'Magento_Ui/js/grid/search/options'
-            },
             imports: {
                 inputValue: 'value',
                 updatePreview: 'value'
@@ -29,10 +24,9 @@ define([
                 value: '${ $.provider }:params.search'
             },
             links: {
-                value: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+                value: '${ $.storageConfig.path }'
             },
             modules: {
-                options: '${ $.optionsConfig.provider }',
                 chips: '${ $.chipsProvider }'
             }
         },
@@ -44,7 +38,6 @@ define([
          */
         initialize: function () {
             this._super()
-                .initOptions()
                 .initChips();
 
             return this;
@@ -64,24 +57,6 @@ define([
                 .observe({
                     previews: []
                 });
-
-            return this;
-        },
-
-        /**
-         * Initializes options component.
-         *
-         * @returns {Search} Chainable.
-         */
-        initOptions: function () {
-            layout([this.optionsConfig]);
-
-            this.options('setTarget', {
-                model: this,
-                value: 'inputValue',
-                navigate: 'inputValue',
-                select: 'apply'
-            });
 
             return this;
         },
@@ -129,8 +104,6 @@ define([
         apply: function (value) {
             value = value || this.inputValue();
 
-            this.options('clear');
-
             this.value(value);
             this.inputValue(value);
 
@@ -156,29 +129,6 @@ define([
             this.previews(preview);
 
             return this;
-        },
-
-        /**
-         * Inputs' field 'keyup' event handler.
-         *
-         * @param {Oject} model - Model associated with an input field.
-         * @param {KeyboardEvent} e - Event object.
-         */
-        onKeyUp: function (model, e) {
-            var code = e.keyCode;
-
-            switch (code) {
-                case 13:
-                    this.apply();
-                    break;
-
-                case 27:
-                    this.cancel();
-                    break;
-
-                default:
-                    this.options('applyKey', code);
-            }
         }
     });
 });
