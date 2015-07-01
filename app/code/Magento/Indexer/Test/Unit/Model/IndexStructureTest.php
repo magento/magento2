@@ -98,7 +98,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($index . '_flat');
         $position = 0;
         $position = $this->mockDropTable($position, $expectedTable, true);
-        $position = $this->mockDropTable($position, $index . '_flat', true);
+        $this->mockDropTable($position, $index . '_flat', true);
 
         $this->target->delete($index, $dimensions);
     }
@@ -157,7 +157,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->with($index, $dimensions)
             ->willReturn($index . '_flat');
         $position = $this->mockFulltextTable($position, $expectedTable, true);
-        $position = $this->mockFlatTable($position, $index . '_flat', $fields);
+        $this->mockFlatTable($position, $index . '_flat');
 
         $this->target->create($index, $fields, $dimensions);
     }
@@ -197,7 +197,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         return $callNumber;
     }
 
-    private function mockFlatTable($callNumber, $tableName, array $fields)
+    private function mockFlatTable($callNumber, $tableName)
     {
         $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
             ->setMethods(['addColumn', 'getColumns'])
