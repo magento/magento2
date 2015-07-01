@@ -20,5 +20,11 @@
         </button>
         <label class="label"><?php echo __('Themes JavaScript and CSS files combined to one file.')?></label>
     </div>
+    <div class="field">
+        <button onclick="setLocation('<?php echo $block->getCleanStaticFilesUrl()?>')" type="button">
+            <?php echo __('Flush Static Files Cache') ?>
+        </button>
+        <label class="label"><?php echo __('Preprocessed view files and static files.')?></label>
+    </div>
     <?php echo $block->getChildHtml(); ?>
 </div>

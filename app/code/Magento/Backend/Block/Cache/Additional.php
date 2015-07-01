@@ -22,4 +22,13 @@ class Additional extends \Magento\Backend\Block\Template
     {
         return $this->getUrl('*/*/cleanMedia');
     }
+
+
+    /**
+     * @return string
+     */
+    public function getCleanStaticFilesUrl()
+    {
+        return $this->getUrl('*/*/cleanStaticFiles');
+    }
 }
