@@ -22,11 +22,6 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     protected $orderConfig;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderFactory;
-
-    /**
      * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSession;
@@ -36,14 +31,19 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
-        $this->orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', ['getLastOrderId'], [], '', false);
+
+        $this->checkoutSession = $this->getMock(
+            'Magento\Checkout\Model\Session',
+            ['getLastOrderId', 'getLastRealOrderId', 'getLastOrderStatus'],
+            [],
+            '',
+            false
+        );
 
         $this->block = $objectManager->getObject(
             'Magento\Checkout\Block\Onepage\Success',
             [
                 'orderConfig' => $this->orderConfig,
-                'orderFactory' => $this->orderFactory,
                 'checkoutSession' => $this->checkoutSession
             ]
         );
@@ -74,28 +74,21 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlOrderVisibleOnFront(array $invisibleStatuses, $orderStatus, $expectedResult)
     {
         $orderId = 5;
-        $order = $this->getMock('Magento\Sales\Model\Order', ['getId', '__wakeup', 'load', 'getStatus'], [], '', false);
-
-        $order->expects($this->any())
-            ->method('load')
-            ->with($orderId)
-            ->will($this->returnValue($order));
-        $order->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($orderId));
-        $order->expects($this->any())
-            ->method('getStatus')
-            ->will($this->returnValue($orderStatus));
+        $realOrderId = 100003332;
 
         $this->checkoutSession->expects($this->once())
             ->method('getLastOrderId')
             ->will($this->returnValue($orderId));
+        $this->checkoutSession->expects($this->once())
+            ->method('getLastRealOrderId')
+            ->will($this->returnValue($realOrderId));
+        $this->checkoutSession->expects($this->once())
+            ->method('getLastOrderStatus')
+            ->will($this->returnValue($orderStatus));
+
         $this->orderConfig->expects($this->any())
             ->method('getInvisibleOnFrontStatuses')
             ->will($this->returnValue($invisibleStatuses));
-        $this->orderFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($order));
 
         $this->block->toHtml();
 
