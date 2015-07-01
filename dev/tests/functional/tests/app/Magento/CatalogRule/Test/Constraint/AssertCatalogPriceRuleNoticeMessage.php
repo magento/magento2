@@ -10,12 +10,12 @@ use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCatalogPriceRuleNoticeMessage
+ * Assert notice message after saving catalog price rule.
  */
 class AssertCatalogPriceRuleNoticeMessage extends AbstractConstraint
 {
     const NOTICE_MESSAGE_RULES = 'We found updated rules that are not applied.';
-    const NOTICE_MESSAGE_APPLY = ' Please, click Apply Rules in order to see immediate effect in the catalog.';
+    const NOTICE_MESSAGE_APPLY = ' Please click "Apply Rules" to update your catalog.';
 
     /**
      * Assert that message "We found updated rules that are not applied..."
