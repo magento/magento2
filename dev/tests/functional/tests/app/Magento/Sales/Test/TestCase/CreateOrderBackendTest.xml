@@ -129,6 +129,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="CreateOrderBackendTestVariation7">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
             <data name="description" xsi:type="string">MAGETWO-12520 - Create Order for New Customer in Admin with Offline Payment Method</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
@@ -142,7 +143,6 @@
                 <item name="grandTotal" xsi:type="string">32.73</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />

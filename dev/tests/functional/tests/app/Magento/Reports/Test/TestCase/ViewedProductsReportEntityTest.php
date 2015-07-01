@@ -13,7 +13,6 @@ use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create products
  * 2. Open product page on frontend
@@ -34,7 +33,6 @@ class ViewedProductsReportEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
     /* end tags */
 
     /**

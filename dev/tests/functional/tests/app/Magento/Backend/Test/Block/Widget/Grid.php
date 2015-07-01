@@ -179,7 +179,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $noRecords = '[data-role="row"] .empty-text';
+    protected $noRecords = '.empty-text';
 
     /**
      * Base part of row locator template for getRow() method.
