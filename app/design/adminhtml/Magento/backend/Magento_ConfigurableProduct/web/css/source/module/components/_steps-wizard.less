@@ -36,7 +36,16 @@
     }
 
     .admin__data-grid-wrap {
-        overflow: visible;
+        .action-multiselect-wrap {
+            position: static;
+            .action-menu {
+                left: 0;
+                margin-top: 16px;
+                right: auto;
+                top: auto;
+                z-index: 2;
+            }
+        }
     }
 
     .admin__data-grid-pager-wrap {
