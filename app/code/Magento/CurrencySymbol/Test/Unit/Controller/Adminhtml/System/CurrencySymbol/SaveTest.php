@@ -141,7 +141,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('The custom currency symbols were applied.'));
+            ->with(__('You applied the custom currency symbols.'));
 
         $this->action->execute();
     }
