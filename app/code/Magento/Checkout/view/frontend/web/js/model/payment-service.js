@@ -2,67 +2,72 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
 define(
     [
-        'ko',
-        'jquery',
-        'Magento_Checkout/js/model/quote'
+        'underscore',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/payment/method-list',
+        'Magento_Checkout/js/action/select-payment-method'
     ],
-    function (ko, $, quote) {
+    function (_, quote, methodList, selectPaymentMethod) {
+        'use strict';
+        var freeMethodCode = 'free';
+
         return {
-            paymentMethods: ko.observableArray([]),
-            availablePaymentMethods: ko.observableArray([]),
-            selectedPaymentData: ko.observableArray(),
-            selectedPaymentInfo: ko.observableArray([]),
-            setPaymentMethods: function(methods) {
-                this.paymentMethods(methods);
+            isFreeAvailable: false,
+            /**
+             * Populate the list of payment methods
+             * @param {Array} methods
+             */
+            setPaymentMethods: function (methods) {
+                var self = this,
+                    freeMethod,
+                    filteredMethods,
+                    methodIsAvailable;
+
+                freeMethod = _.find(methods, function (method) {
+                    return method.method === freeMethodCode;
+                });
+                this.isFreeAvailable = freeMethod ? true : false;
+
+                if (self.isFreeAvailable && freeMethod && quote.totals().grand_total <= 0) {
+                    methods.splice(0, methods.length, freeMethod);
+                    selectPaymentMethod(freeMethod);
+                }
+                filteredMethods = _.without(methods, freeMethod);
+
+                if (filteredMethods.length === 1) {
+                    selectPaymentMethod(filteredMethods[0]);
+                } else if (quote.paymentMethod()) {
+                    methodIsAvailable = methods.some(function (item) {
+                        return item.method === quote.paymentMethod().method;
+                    });
+                    //Unset selected payment method if not available
+                    if (!methodIsAvailable) {
+                        selectPaymentMethod(null);
+                    }
+                }
+                methodList(methods);
             },
+            /**
+             * Get the list of available payment methods.
+             * @returns {Array}
+             */
             getAvailablePaymentMethods: function () {
                 var methods = [],
                     self = this;
-                $.each(this.paymentMethods(), function (key, method) {
-                    if (self.isFreeMethodActive() && (
-                        quote.getCalculatedTotal() <= 0 && method['code'] == 'free'
-                        || quote.getCalculatedTotal() > 0 && method['code'] != 'free'
-                        ) || !self.isFreeMethodActive()
+                _.each(methodList(), function (method) {
+                    if (self.isFreeAvailable && (
+                        quote.totals().grand_total <= 0 && method.method === freeMethodCode ||
+                        quote.totals().grand_total > 0 && method.method !== freeMethodCode
+                        ) || !self.isFreeAvailable
                     ) {
                         methods.push(method);
                     }
                 });
+
                 return methods;
-            },
-            isFreeMethodActive: function () {
-                var isAvailable = false;
-                $.each(this.paymentMethods(), function (key, method) {
-                    if (method['code'] == 'free') {
-                        isAvailable = true;
-                    }
-                });
-                return isAvailable;
-            },
-            setSelectedPaymentData: function(data) {
-                this.selectedPaymentData(data);
-            },
-            getSelectedPaymentData: function () {
-                return this.selectedPaymentData();
-            },
-            setSelectedPaymentInfo: function(data) {
-                this.selectedPaymentInfo(data);
-            },
-            getSelectedPaymentInfo: function () {
-                return this.selectedPaymentInfo();
-            },
-            getTitleByCode: function(code) {
-                var methodTitle = '';
-                $.each(this.getAvailablePaymentMethods(), function (key, entity) {
-                    if (entity['code'] == code) {
-                        methodTitle = entity['title'];
-                    }
-                });
-                return methodTitle;
             }
-        }
+        };
     }
 );
