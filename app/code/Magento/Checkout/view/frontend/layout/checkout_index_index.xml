@@ -46,6 +46,14 @@
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/progress-bar</item>
                                         <item name="displayArea" xsi:type="string">progressBar</item>
                                     </item>
+                                    <item name="estimation" xsi:type="array">
+                                        <item name="sortOrder" xsi:type="string">10</item>
+                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/estimation</item>
+                                        <item name="displayArea" xsi:type="string">estimation</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="template" xsi:type="string">Magento_Checkout/estimation</item>
+                                        </item>
+                                    </item>
                                     <item name="steps" xsi:type="array">
                                         <item name="component" xsi:type="string">uiComponent</item>
                                         <item name="displayArea" xsi:type="string">steps</item>

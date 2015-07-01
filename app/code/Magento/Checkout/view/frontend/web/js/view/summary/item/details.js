@@ -6,11 +6,9 @@
 /*global alert*/
 define(
     [
-        'uiComponent',
-        '../../../model/quote',
-        'Magento_Catalog/js/price-utils'
+        'uiComponent'
     ],
-    function (Component, quote, priceUtils) {
+    function (Component) {
         "use strict";
         return Component.extend({
             defaults: {
