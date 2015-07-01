@@ -19,23 +19,42 @@
 
 {{template config_path="design/email/header_template"}}
 
-<p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
-<p>
-    {{trans
-        "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
-        
-        increment_id=$order.increment_id
-        order_status=$order.getStatusLabel()
-    |raw}}
-</p>
-<p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}</p>
-<p>{{var comment}}</p>
-<p>
-    {{trans
-        'If you have any questions, please feel free to contact us at <a href="mailto:%support_email">%support_email</a> or by phone at %support_phone.'
-        
-        support_email=$store.getConfig('trans_email/ident_support/email')
-        support_phone=$store.getConfig('general/store_information/phone')
-    |raw}}
-</p>
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
+            <p>
+                {{trans
+                    "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+
+                    increment_id=$order.increment_id
+                    order_status=$order.getStatusLabel()
+                |raw}}
+            </p>
+            <p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}</p>
+            <p>
+                {{trans
+                    'If you have any questions, please feel free to contact us at <a href="mailto:%support_email">%support_email</a> or by phone at %support_phone.'
+                    
+                    support_email=$store.getConfig('trans_email/ident_support/email')
+                    support_phone=$store.getConfig('general/store_information/phone')
+                |raw}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+        </td>
+    </tr>
+</table>
+
 {{template config_path="design/email/footer_template"}}
