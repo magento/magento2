@@ -415,6 +415,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * General conditions for testGetDirsCollection tests
+     *
      * @param string $path
      * @param array $collectionArray
      * @param array $expectedRemoveKeys
