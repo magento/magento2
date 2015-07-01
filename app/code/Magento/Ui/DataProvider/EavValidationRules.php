@@ -8,9 +8,9 @@ namespace Magento\Ui\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
- * Class EavValidationRul
+ * Class EavValidationRules
  */
-class EavValidationRul
+class EavValidationRules
 {
     /**
      * @var array
