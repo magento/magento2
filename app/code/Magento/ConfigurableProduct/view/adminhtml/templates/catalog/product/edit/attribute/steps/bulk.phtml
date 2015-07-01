@@ -10,7 +10,8 @@
 <div data-bind="scope: '<?= $block->getComponentName()?>'" data-role="bulk-step">
 <h2 class="steps-wizard-title"><?= __('Step 3: Bulk Images, Pricing, and Inventory') ?></h2>
 <div class="steps-wizard-info">
-    <?= __('Based on your selections <span data-bind="text:newProductsCount"></span> new products will be created. Use this step to customize images and pricing for your new products.') ?>
+    <?= __('Based on your selections <span class="new-products-count" data-bind="text:newProductsCount"></span>
+    new products will be created. Use this step to customize images and pricing for your new products.') ?>
 </div>
 
 <div data-bind="with: sections().images" class="steps-wizard-section">
