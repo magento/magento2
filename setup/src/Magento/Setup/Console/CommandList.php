@@ -38,6 +38,7 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
+            'Magento\Setup\Console\Command\AdminGetUriCommand',
             'Magento\Setup\Console\Command\AdminUserCreateCommand',
             'Magento\Setup\Console\Command\BackupCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
