@@ -18,7 +18,7 @@ class AssertStoreSuccessSaveMessage extends AbstractConstraint
     /**
      * Success store view create message
      */
-    const SUCCESS_MESSAGE = 'The store view has been saved';
+    const SUCCESS_MESSAGE = 'You saved the store view.';
 
     /**
      * Assert that success message is displayed after Store View has been created

@@ -892,19 +892,16 @@
           <stringProp name="ConstantTimer.delay">${sleep_between_steps}</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout billing/shipping addresses" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout shipping information" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;shippingAddress&quot;:{&quot;company&quot;:&quot;&quot;,&quot;fax&quot;:&quot;&quot;,&quot;city&quot;:&quot;Culver City&quot;,&quot;firstname&quot;:&quot;Name&quot;,&quot;lastname&quot;:&quot;Lastname&quot;&#xd;
-,&quot;street&quot;:{&quot;0&quot;:&quot;10441 Jefferson Blvd, ste 200&quot;,&quot;1&quot;:&quot;&quot;},&quot;telephone&quot;:&quot;1-310-945-0345&quot;,&quot;postcode&quot;:&quot;90232&quot;&#xd;
-,&quot;region_id&quot;:&quot;12&quot;,&quot;country_id&quot;:&quot;US&quot;,&quot;region&quot;:&quot;&quot;,&quot;save_in_address_book&quot;:&quot;1&quot;,&quot;email&quot;:&quot;test@example.com&quot;&#xd;
-,&quot;same_as_billing&quot;:1},&quot;billingAddress&quot;:{&quot;company&quot;:&quot;&quot;,&quot;fax&quot;:&quot;&quot;,&quot;city&quot;:&quot;Culver City&quot;,&quot;firstname&quot;:&quot;Name&quot;&#xd;
-,&quot;lastname&quot;:&quot;Lastname&quot;,&quot;street&quot;:{&quot;0&quot;:&quot;10441 Jefferson Blvd, ste 200&quot;,&quot;1&quot;:&quot;&quot;},&quot;telephone&quot;:&quot;1-310-945-0345&quot;&#xd;
-,&quot;postcode&quot;:&quot;90232&quot;,&quot;region_id&quot;:&quot;12&quot;,&quot;country_id&quot;:&quot;US&quot;,&quot;region&quot;:&quot;&quot;,&quot;save_in_address_book&quot;:&quot;1&quot;,&quot;email&quot;&#xd;
-:&quot;test@example.com&quot;,&quot;same_as_billing&quot;:1},&quot;additionalData&quot;:{&quot;extensionAttributes&quot;:{}}}</stringProp>
+                <stringProp name="Argument.value">{&quot;addressInformation&quot;:{&quot;shipping_address&quot;:{&quot;countryId&quot;:&quot;US&quot;,&quot;regionId&quot;:&quot;12&quot;,&quot;regionCode&quot;:&quot;CA&quot;,&quot;region&quot;&#xd;
+:&quot;California&quot;,&quot;street&quot;:[&quot;10441 Jefferson Blvd&quot;,&quot;ste 200&quot;],&quot;company&quot;:&quot;&quot;,&quot;telephone&quot;:&quot;1-310-945-0345&quot;,&quot;fax&quot;&#xd;
+:&quot;&quot;,&quot;postcode&quot;:&quot;90232&quot;,&quot;city&quot;:&quot;Culver City&quot;,&quot;firstname&quot;:&quot;Firstname&quot;,&quot;lastname&quot;:&quot;Lastname&quot;,&quot;saveInAddressBook&quot;&#xd;
+:true},&quot;shipping_method_code&quot;:&quot;flatrate&quot;,&quot;shipping_carrier_code&quot;:&quot;flatrate&quot;}}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -915,7 +912,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/addresses</stringProp>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/shipping-information</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -948,7 +945,7 @@
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-768590464">{&quot;shipping_methods&quot;:</stringProp>
+              <stringProp name="-1494218646">{&quot;payment_methods&quot;:</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -960,15 +957,17 @@
           <stringProp name="ConstantTimer.delay">${sleep_between_steps}</stringProp>
         </ConstantTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout shipping/payment method" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout payment information" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;cartId&quot;:&quot;${cart_id}&quot;,&quot;paymentMethod&quot;:{&quot;method&quot;:&quot;checkmo&quot;,&quot;po_number&quot;:null,&quot;cc_owner&quot;&#xd;
-:null,&quot;cc_number&quot;:null,&quot;cc_type&quot;:null,&quot;cc_exp_year&quot;:null,&quot;cc_exp_month&quot;:null,&quot;additional_data&quot;:null}&#xd;
-,&quot;shippingCarrierCode&quot;:&quot;flatrate&quot;,&quot;shippingMethodCode&quot;:&quot;flatrate&quot;}</stringProp>
+                <stringProp name="Argument.value">{&quot;cartId&quot;:&quot;${cart_id}&quot;,&quot;paymentMethod&quot;:{&quot;method&quot;:&quot;checkmo&quot;,&quot;po_number&quot;:null,&quot;cc_owner&quot;:null,&quot;cc_number&quot;:null&#xd;
+,&quot;cc_type&quot;:null,&quot;cc_exp_year&quot;:null,&quot;cc_exp_month&quot;:null,&quot;additional_data&quot;:null},&quot;billingAddress&quot;:{&quot;countryId&quot;&#xd;
+:&quot;US&quot;,&quot;regionId&quot;:&quot;12&quot;,&quot;regionCode&quot;:&quot;CA&quot;,&quot;region&quot;:&quot;California&quot;,&quot;street&quot;:[&quot;10441 Jefferson Blvd&quot;,&quot;ste 200&quot;&#xd;
+],&quot;company&quot;:&quot;&quot;,&quot;telephone&quot;:&quot;1-310-945-0345&quot;,&quot;fax&quot;:&quot;&quot;,&quot;postcode&quot;:&quot;90232&quot;,&quot;city&quot;:&quot;Culver City&quot;,&quot;firstname&quot;&#xd;
+:&quot;Firstname&quot;,&quot;lastname&quot;:&quot;Lastname&quot;,&quot;saveInAddressBook&quot;:true}}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -979,70 +978,8 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/collect-totals</stringProp>
-          <stringProp name="HTTPSampler.method">PUT</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">Referer</stringProp>
-                <stringProp name="Header.value">http://mage2.com/checkout/onepage/</stringProp>
-              </elementProp>
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8 </stringProp>
-              </elementProp>
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">Accept</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">X-Requested-With</stringProp>
-                <stringProp name="Header.value">XMLHttpRequest</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="629313218">{&quot;grand_total&quot;:</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-          <stringProp name="ConstantTimer.delay">${sleep_between_steps}</stringProp>
-        </ConstantTimer>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout place order" enabled="true">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value"></stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/order</stringProp>
-          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/payment-information</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -1143,7 +1080,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="890055751">You are now logged out</stringProp>
+              <stringProp name="1723813687">You are signed out.</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

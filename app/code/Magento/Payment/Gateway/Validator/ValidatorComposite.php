@@ -6,30 +6,33 @@
 namespace Magento\Payment\Gateway\Validator;
 
 use Magento\Framework\ObjectManager\TMap;
+use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
-class ValidatorComposite implements ValidatorInterface
+class ValidatorComposite extends AbstractValidator
 {
     /**
-     * @var ValidatorInterface[]
+     * @var ValidatorInterface[] | TMap
      */
     private $validators;
 
     /**
-     * @var ResultInterfaceFactory
-     */
-    private $resultFactory;
-
-    /**
      * @param ResultInterfaceFactory $resultFactory
-     * @param TMap $validators
+     * @param array $validators
+     * @param TMapFactory $tmapFactory
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
-        TMap $validators
+        array $validators,
+        TMapFactory $tmapFactory
     ) {
-        $this->validators = $validators;
-        $this->resultFactory = $resultFactory;
+        $this->validators = $tmapFactory->create(
+            [
+                'array' => $validators,
+                'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+            ]
+        );
+        parent::__construct($resultFactory);
     }
 
     /**
@@ -53,11 +56,6 @@ class ValidatorComposite implements ValidatorInterface
             }
         }
 
-        return $this->resultFactory->create(
-            [
-                'isValid' => $isValid,
-                'failsDescription' => $failsDescriptionAggregate
-            ]
-        );
+        return $this->createResult($isValid, $failsDescriptionAggregate);
     }
 }

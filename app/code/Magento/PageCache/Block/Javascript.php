@@ -27,9 +27,10 @@ class Javascript extends \Magento\Framework\View\Element\Template
             ),
             'handles' => $this->_layout->getUpdate()->getHandles(),
             'originalRequest' => [
-                'route' => $this->getRequest()->getRouteName(),
+                'route'      => $this->getRequest()->getRouteName(),
                 'controller' => $this->getRequest()->getControllerName(),
-                'action' => $this->getRequest()->getActionName(),
+                'action'     => $this->getRequest()->getActionName(),
+                'uri'        => $this->getRequest()->getRequestUri(),
             ],
             'versionCookieName' => \Magento\Framework\App\PageCache\Version::COOKIE_NAME
         ];

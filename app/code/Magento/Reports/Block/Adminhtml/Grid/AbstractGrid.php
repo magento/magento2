@@ -71,6 +71,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Pseudo constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -82,10 +84,14 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         if (isset($this->_columnGroupBy)) {
             $this->isColumnGrouped($this->_columnGroupBy, true);
         }
-        $this->setEmptyCellLabel(__('We couldn\'t find records for this period.'));
+        $this->setEmptyCellLabel(__('We can\'t find records for this period.'));
     }
 
     /**
+     * Get resource collection name
+     *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getResourceCollectionName()
@@ -339,9 +345,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param array $storeIds
+     * StoreIds setter
      *
+     * @param array $storeIds
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreIds($storeIds)
     {
@@ -396,6 +404,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Object $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     protected function _addCustomFilter($collection, $filterData)
     {
