@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,11 +14,11 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     /**
      * Validate path to generate
      *
-     * @param $data
+     * @param array $data
      * @return bool
      * @throws \Exception
      */
-    protected function validatePathToGenerate($data)
+    protected function validatePathToGenerate(array $data)
     {
         if (!empty($data['sitemap_filename']) && !empty($data['sitemap_path'])) {
             $data['sitemap_path'] = '/' . ltrim($data['sitemap_path'], '/');
@@ -45,9 +44,10 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     /**
      * Clear sitemap
      *
-     * @param $model
+     * @param \Magento\Sitemap\Model\Sitemap $model
+     * @return void
      */
-    protected function clearSiteMap($model)
+    protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get('Magento\Framework\Filesystem')
@@ -105,7 +105,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
             // redirect to edit form
             return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)
-                ->setPath('adminhtml/*/edit',['sitemap_id' => $this->getRequest()->getParam('sitemap_id')]);
+                ->setPath('adminhtml/*/edit', ['sitemap_id' => $this->getRequest()->getParam('sitemap_id')]);
         }
     }
 
@@ -131,5 +131,4 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         }
         return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)->setPath('adminhtml/*/');
     }
-
 }
