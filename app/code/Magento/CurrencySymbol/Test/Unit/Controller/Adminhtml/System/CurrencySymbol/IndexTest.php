@@ -52,7 +52,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageConfigMock;
 
-    /** @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $titleMock;
 
     public function setUp()
