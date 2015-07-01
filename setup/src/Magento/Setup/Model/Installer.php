@@ -302,7 +302,7 @@ class Installer
 
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
-            'Admin Panel URI: /'
+            'Magento Admin URI: /'
             . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
         );
 
