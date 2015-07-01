@@ -7,9 +7,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Class to deal with backup and rollback functionality for database and Code base
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class to generate random backend URI
  */
 class BackendFrontnameGenerator
 {
