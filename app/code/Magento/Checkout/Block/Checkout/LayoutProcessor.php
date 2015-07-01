@@ -63,6 +63,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']
         )) {
+            if (!isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'])) {
+                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'] = [];
+            }
+
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']['payments-list']['children'] =
                 array_merge_recursive(
