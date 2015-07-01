@@ -17,6 +17,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Initialize connection and define main table
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

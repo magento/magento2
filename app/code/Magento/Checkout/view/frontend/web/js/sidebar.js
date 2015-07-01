@@ -6,9 +6,11 @@
 /*global confirm:true*/
 define([
     "jquery",
+    'Magento_Checkout/js/model/cart/authentication-popup',
+    'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
-], function($){
+], function($, authenticationPopup, customerData){
 
     $.widget('mage.sidebar', {
         options: {
@@ -32,6 +34,13 @@ define([
             });
 
             $(this.options.button.checkout).on('click', $.proxy(function() {
+                var cart = customerData.get('cart'),
+                    customer = customerData.get('customer');
+
+                if (customer() == false && !cart().isGuestCheckoutAllowed) {
+                    authenticationPopup.showModal();
+                    return false;
+                }
                 location.href = this.options.url.checkout;
             }, this));
 
