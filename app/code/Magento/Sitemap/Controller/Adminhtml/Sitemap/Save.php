@@ -68,7 +68,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Save model
      *
      * @param array $data
-     * @return Controller\Result\Redirect|Controller\Result\Forward
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
      */
     protected function saveModel($data)
     {
@@ -112,7 +112,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     /**
      * Save action
      *
-     * @return Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -120,7 +120,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             if (!$this->validatePathToGenerate($data)) {
-                /** @var Controller\Result\Redirect $resultRedirect */
+                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
                 return $resultRedirect->setPath(
                     'adminhtml/*/edit',
