@@ -12,7 +12,7 @@ use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Assert that the correct option details are displayed on the "View Details" tool tip.
+ * Assert that the correct option details are displayed on the "See Details" tooltip.
  */
 abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
 {

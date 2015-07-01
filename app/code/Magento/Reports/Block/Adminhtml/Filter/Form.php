@@ -136,7 +136,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'report_type',
                 'options' => $this->_reportTypeOptions,
-                'label' => __('Match Period To')
+                'label' => __('Date Used')
             ]
         );
 

@@ -67,7 +67,7 @@
             <label class="label" for="shipping:region"><span><?php echo __('State/Province') ?></span></label>
             <div class="control">
                 <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo __('State/Province') ?>" class="validate-select" style="display:none;">
-                    <option value=""><?php echo __('Please select region, state or province') ?></option>
+                    <option value=""><?php echo __('Please select a region, state or province.') ?></option>
                 </select>
                 <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $block->escapeHtml($block->getAddress()->getRegion()) ?>" title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
             </div>
