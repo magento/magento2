@@ -730,6 +730,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         if ($this->needToAddWebsiteNamesToResult) {
             $this->doAddWebsiteNamesToResult();
         }
+        return $this;
     }
 
     /**
