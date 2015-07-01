@@ -9,9 +9,10 @@ define(
     function(storage) {
         "use strict";
         return function(refreshUrl, formId, imageSource) {
-            storage.post(
+            return storage.post(
                 refreshUrl,
-                JSON.stringify({'formId': formId})
+                JSON.stringify({'formId': formId}),
+                false
             ).done(
                 function (response) {
                     if (response.imgSrc) {
