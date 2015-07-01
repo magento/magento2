@@ -47,21 +47,21 @@ class Billing extends Form
         Address $billingAddress = null,
         $isShippingAddress = false
     ) {
-        if ($billingAddress) {
-            $this->fill($billingAddress);
-        }
         if ($isShippingAddress) {
             $this->_rootElement->find($this->useForShipping)->click();
+        }
+        if ($billingAddress) {
+            $this->fill($billingAddress);
         }
         $this->waitForElementNotVisible($this->waitElement);
     }
 
     /**
-     * Click continue on billing information block.
+     * Click update on billing information block.
      *
      * @return void
      */
-    public function clickContinue()
+    public function clickUpdate()
     {
         $this->_rootElement->find($this->continue)->click();
         $browser = $this->browser;

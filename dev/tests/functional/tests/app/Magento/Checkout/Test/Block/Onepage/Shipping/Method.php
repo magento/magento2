@@ -21,7 +21,7 @@ class Method extends Block
      *
      * @var string
      */
-    protected $shippingMethod = '//dt[text()="%s"]/following-sibling::*//label/span[contains(text()[2], "%s")]';
+    protected $shippingMethod = './/tbody//tr[td[contains(., "%s")] and td[contains(., "%s")]]//input';
 
     /**
      * Continue checkout button
@@ -45,7 +45,8 @@ class Method extends Block
      */
     public function selectShippingMethod(array $method)
     {
-        $selector = sprintf($this->shippingMethod, $method['shipping_service'], $method['shipping_method']);
+        sleep(5);
+        $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
         $this->waitForElementVisible($selector, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }

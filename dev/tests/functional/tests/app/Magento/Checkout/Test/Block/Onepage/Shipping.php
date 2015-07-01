@@ -48,17 +48,19 @@ class Shipping extends Form
     /**
      * Fill shipping address
      *
-     * @param Checkout $fixture
+     * @param $fixture
      * @return void
      */
-    public function fillShipping(Checkout $fixture)
+    public function fillShipping($fixture)
     {
-        $shippingAddress = $fixture->getShippingAddress();
-        if (!$shippingAddress) {
+        if ($fixture instanceof Checkout) {
+            $fixture = $fixture->getShippingAddress();
+        }
+        if (!$fixture) {
             return;
         }
-        $this->fill($shippingAddress);
-        $this->_rootElement->find($this->continue, Locator::SELECTOR_CSS)->click();
-        $this->waitForElementNotVisible($this->waitElement);
+        $this->fill($fixture);
+//        $this->_rootElement->find($this->continue, Locator::SELECTOR_CSS)->click();
+//        $this->waitForElementNotVisible($this->waitElement);
     }
 }

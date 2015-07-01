@@ -86,7 +86,14 @@ class Login extends Form
      */
     public function loginCustomer(FixtureInterface $customer)
     {
-        $this->fill($customer);
+        $data = $customer->getData();
+        $mapping = $this->dataMapping($data);
+        $login['email'] = $mapping['email'];
+        $this->_fill($login);
+        $this->waitForElementVisible('._block-content-loading');
+        $this->waitForElementNotVisible('._block-content-loading');
+        $password['password'] = $mapping['password'];
+        $this->_fill($password);
         $this->_rootElement->find($this->login)->click();
         $this->waitForElementNotVisible($this->loadingMask);
     }
