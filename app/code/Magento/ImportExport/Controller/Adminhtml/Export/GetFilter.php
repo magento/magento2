@@ -36,7 +36,7 @@ class GetFilter extends ExportController
                 $this->messageManager->addError($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent.'));
+            $this->messageManager->addError(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

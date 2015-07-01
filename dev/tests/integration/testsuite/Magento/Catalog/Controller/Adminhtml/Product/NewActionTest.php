@@ -11,7 +11,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * @magentoAppArea adminhtml
  */
-class NewActionTest extends \Magento\Backend\Utility\Controller
+class NewActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @TODO: Remove this test when corresponding functional tests become mandatory:

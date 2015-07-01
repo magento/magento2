@@ -14,7 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
-    const CONNECTION_NAME = 'Connection Name';
+    const CONNECTION_NAME = 'connection-name';
     const TABLE_PREFIX = 'prefix_';
 
     /**
@@ -196,5 +196,22 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->connection));
 
         $this->assertEquals('fkName', $this->resource->getFkName($table, $columnName, $refTable, $refColumnName));
+    }
+
+    public function testGetTriggerName()
+    {
+        $tableName = 'subject_table';
+        $time = 'before';
+        $event = 'insert';
+        $triggerName = 'trg_subject_table_before_insert';
+
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
+        $this->connection->expects($this->once())
+            ->method('getTriggerName')
+            ->with($tableName, $time, $event)
+            ->willReturn($triggerName);
+        $this->assertSame($triggerName, $this->resource->getTriggerName($tableName, $time, $event));
     }
 }

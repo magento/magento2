@@ -9,17 +9,12 @@ use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
-class ValidatorComposite implements ValidatorInterface
+class ValidatorComposite extends AbstractValidator
 {
     /**
      * @var ValidatorInterface[] | TMap
      */
     private $validators;
-
-    /**
-     * @var ResultInterfaceFactory
-     */
-    private $resultFactory;
 
     /**
      * @param ResultInterfaceFactory $resultFactory
@@ -37,7 +32,7 @@ class ValidatorComposite implements ValidatorInterface
                 'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
             ]
         );
-        $this->resultFactory = $resultFactory;
+        parent::__construct($resultFactory);
     }
 
     /**
@@ -61,11 +56,6 @@ class ValidatorComposite implements ValidatorInterface
             }
         }
 
-        return $this->resultFactory->create(
-            [
-                'isValid' => $isValid,
-                'failsDescription' => $failsDescriptionAggregate
-            ]
-        );
+        return $this->createResult($isValid, $failsDescriptionAggregate);
     }
 }
