@@ -137,10 +137,6 @@ class Full
      * @var \Magento\Framework\Search\Request\DimensionFactory
      */
     private $dimensionFactory;
-    /**
-     * @var array
-     */
-    private $data;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
