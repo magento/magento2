@@ -211,7 +211,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->checkoutSessionMock = $this->getMock(
             'Magento\Checkout\Model\Session',
-            ['setLastQuoteId', 'setLastSuccessQuoteId', 'setLastOrderId', 'setLastRealOrderId'],
+            ['setLastQuoteId', 'setLastSuccessQuoteId', 'setLastOrderId', 'setLastRealOrderId', 'setLastOrderStatus'],
             [],
             '',
             false
@@ -652,6 +652,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 100;
         $orderId = 332;
         $orderIncrementId = 100003332;
+        $orderStatus = 'status1';
         $email = 'email@mail.com';
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -710,13 +711,17 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getId')->willReturn($cartId);
+
         $orderMock->expects($this->atLeastOnce())->method('getId')->willReturn($orderId);
         $orderMock->expects($this->atLeastOnce())->method('getIncrementId')->willReturn($orderIncrementId);
+        $orderMock->expects($this->atLeastOnce())->method('getStatus')->willReturn($orderStatus);
 
         $this->checkoutSessionMock->expects($this->once())->method('setLastQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
+        $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
+
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $this->assertEquals($orderId, $service->placeOrder($cartId));
@@ -763,6 +768,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 323;
         $orderId = 332;
         $orderIncrementId = 100003332;
+        $orderStatus = 'status1';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
         $service = $this->getMock(
@@ -822,13 +828,17 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getId')->willReturn($cartId);
+
         $orderMock->expects($this->atLeastOnce())->method('getId')->willReturn($orderId);
         $orderMock->expects($this->atLeastOnce())->method('getIncrementId')->willReturn($orderIncrementId);
+        $orderMock->expects($this->atLeastOnce())->method('getStatus')->willReturn($orderStatus);
 
         $this->checkoutSessionMock->expects($this->once())->method('setLastQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
+        $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
+
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $paymentMethod = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
