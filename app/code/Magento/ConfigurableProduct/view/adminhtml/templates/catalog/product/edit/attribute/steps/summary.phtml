@@ -12,7 +12,7 @@
         <span><?= __('Here are all the products you are going to create. ') ?></span>
     </div>
 
-    <table style="border: 3px solid white;">
+    <table class="data-grid-configurable">
         <thead>
             <tr>
                 <!-- ko foreach: attributesName -->
@@ -30,6 +30,15 @@
         </thead>
         <tbody data-bind="foreach: grid">
             <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
+                <!-- TEMP: START: MAGETWO-37241: Icon for the number of uploaded images markup -->
+                <td class="col-image">
+                    <div class="images-uploaded">
+                        <img src="image.jpg" alt="Product title" width="50" height="50">
+                        <span>555</span><!-- the number of uploaded images -->
+                    </div>
+                </td>
+                <!-- END: MAGETWO-37241: Icon for the number of uploaded images markup -->
+
                 <!-- ko foreach: $data -->
                 <td style="padding: 10px;text-align: center;border-left: 2px solid grey;"><span data-bind='text: $data'></span></td>
                 <!-- /ko -->
