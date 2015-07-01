@@ -101,7 +101,7 @@ class InstallData implements InstallDataInterface
             ],
             'processing' => [
                 'label' => __('Processing'),
-                'statuses' => ['processing' => ['default' => '1']],
+                'statuses' => ['processing' => ['default' => '1'], 'fraud' => []],
                 'visible_on_front' => true,
             ],
             'complete' => [
