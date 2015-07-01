@@ -76,6 +76,9 @@ define([
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'value'));
         },
+        deSelectAllAttributes: function (attribute) {
+            this.chosenOptions.removeAll();
+        },
         render: function(wizard) {
             this.wizard = wizard;
             $.ajax({
