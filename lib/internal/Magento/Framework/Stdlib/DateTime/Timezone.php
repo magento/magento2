@@ -251,7 +251,7 @@ class Timezone implements TimezoneInterface
             $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
-            $timezone ?: $date->getTimezone(),
+            $timezone ?: $date->getTimezone() ?: new \DateTimeZone(\DateTimeZone::UTC),
             null,
             $pattern
         );
