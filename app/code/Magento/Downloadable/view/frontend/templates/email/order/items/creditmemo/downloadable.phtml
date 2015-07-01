@@ -11,8 +11,9 @@
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
-    <td>
-        <strong><?= $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="item-info has-extra">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= __('SKU'); ?>: <?= $this->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
@@ -25,15 +26,16 @@
         <dl>
             <dt><strong><em><?= $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
-                <dd><?= $block->escapeHtml($link->getLinkTitle()) ?></dd>
+                <dd>
+                    <?= $block->escapeHtml($link->getLinkTitle()) ?>
+                </dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td><?= $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td><?= $_item->getQty() * 1 ?></td>
-    <td>
+    <td class="item-qty"><?= $_item->getQty() * 1 ?></td>
+    <td class="item-price">
         <?= $block->getItemPrice($_item) ?>
     </td>
 </tr>

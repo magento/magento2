@@ -59,29 +59,29 @@
 <?php endforeach; ?>
 
 <?php if ($_showlastRow): ?>
-<tr>
-    <td colspan="3" class="item-extra">
-        <?php if ($block->getItemOptions()): ?>
-        <dl>
-            <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-                        <dd><?= $option['value'] ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <?php endif; ?>
-        <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
-            <table class="message-gift">
-                <tr>
-                    <td>
-                        <h3><?= __('Gift Message') ?></h3>
-                        <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><strong><?= __('Message:'); ?></strong>
-                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
-                    </td>
-                </tr>
-            </table>
-        <?php endif; ?>
-    </td>
-</tr>
+    <tr>
+        <td colspan="3" class="item-extra">
+            <?php if ($block->getItemOptions()): ?>
+            <dl>
+                <?php foreach ($block->getItemOptions() as $option): ?>
+                <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                            <dd><?= $option['value'] ?></dd>
+                <?php endforeach; ?>
+            </dl>
+            <?php endif; ?>
+            <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
+                <table class="message-gift">
+                    <tr>
+                        <td>
+                            <h3><?= __('Gift Message') ?></h3>
+                            <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                            <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                            <br /><strong><?= __('Message:'); ?></strong>
+                            <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                        </td>
+                    </tr>
+                </table>
+            <?php endif; ?>
+        </td>
+    </tr>
 <?php endif; ?>

@@ -14,74 +14,76 @@
 <?php $_index = 0 ?>
 <?php $_order = $block->getItem()->getOrder(); ?>
 
-<?php $_prevOptionId = '' ?>
-
-<?php foreach ($items as $_item): ?>
-
-<?php
-    // As part of invoice item renderer logic, the order is set on each invoice item.
-    // In the case of a bundle product, this template takes over rendering its children,
-    // so it is necessary to pass the order along to each child.
-    $_item->setOrder($_order);
-?>
-
 <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
     <?php $_showlastRow = false ?>
 <?php endif; ?>
 
-<?php if ($_item->getOrderItem()->getParentItem()): ?>
-    <?php $attributes = $block->getSelectionAttributes($_item) ?>
-    <?php if ($_prevOptionId != $attributes['option_id']): ?>
-    <tr>
-        <td><strong><em><?= $attributes['option_label'] ?></em></strong></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-    </tr>
-    <?php $_prevOptionId = $attributes['option_id'] ?>
+<?php $_prevOptionId = '' ?>
+
+<?php foreach ($items as $_item): ?>
+
+    <?php
+        // As part of invoice item renderer logic, the order is set on each invoice item.
+        // In the case of a bundle product, this template takes over rendering its children,
+        // so it is necessary to pass the order along to each child.
+        $_item->setOrder($_order);
+    ?>
+
+    <?php if ($_item->getOrderItem()->getParentItem()): ?>
+        <?php $attributes = $block->getSelectionAttributes($_item) ?>
+        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+            <tr class="bundle-option-label">
+                <td colspan="3">
+                    <strong><em><?= $attributes['option_label'] ?></em></strong>
+                </td>
+            </tr>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
+        <?php endif; ?>
     <?php endif; ?>
-<?php endif; ?>
-<tr id="order-item-row-<?= $_item->getId() ?>">
     <?php if (!$_item->getOrderItem()->getParentItem()): ?>
-    <td><strong><?= $block->escapeHtml($_item->getName()) ?></strong></td>
+        <tr class="bundle-item bundle-parent">
+            <td class="item-info">
+                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+                <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+            </td>
     <?php else: ?>
-    <td><?= $block->getValueHtml($_item) ?></td>
+        <tr class="bundle-item bundle-option-value">
+            <td class="item-info">
+                <p><?= $block->getValueHtml($_item)?></p>
+            </td>
     <?php endif; ?>
-    <td><?= $block->escapeHtml($_item->getSku()) ?></td>
-    <td>
-        <?php if ($block->canShowPriceInfo($_item)): ?>
-            <?= $_item->getQty() * 1 ?>
-        <?php else: ?>
-            &nbsp;
-        <?php endif; ?>
-    </td>
-    <td>
-        <?php if ($block->canShowPriceInfo($_item)): ?>
-            <?= $block->getItemPrice($_item) ?>
-        <?php else: ?>
-            &nbsp;
-        <?php endif; ?>
-    </td>
-</tr>
+            <td class="item-qty">
+                <?php if ($block->canShowPriceInfo($_item)): ?>
+                    <?= $_item->getQty() * 1 ?>
+                <?php else: ?>
+                    &nbsp;
+                <?php endif; ?>
+            </td>
+            <td class="item-price">
+                <?php if ($block->canShowPriceInfo($_item)): ?>
+                    <?= $block->getItemPrice($_item) ?>
+                <?php else: ?>
+                    &nbsp;
+                <?php endif; ?>
+            </td>
+        </tr>
+
 <?php endforeach; ?>
 
 <?php if ($_showlastRow): ?>
-<tr>
-    <td>
-        <?php if ($block->getItemOptions()): ?>
-        <dl>
-            <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-            <dd><?= $option['value'] ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-</tr>
+    <tr>
+        <td colspan="3" class="item-extra">
+            <?php if ($block->getItemOptions()): ?>
+                <dl>
+                    <?php foreach ($block->getItemOptions() as $option): ?>
+                        <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                                    <dd><?= $option['value'] ?></dd>
+                    <?php endforeach; ?>
+                </dl>
+            <?php endif; ?>
+            <?= $block->escapeHtml($_item->getDescription()) ?>
+        </td>
+    </tr>
 <?php endif; ?>
