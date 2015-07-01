@@ -1,13 +1,14 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -24,7 +25,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Images\Storage
      */
-    protected $model = null;
+    protected $imagesStorage;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -228,7 +229,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->model = $this->objectManagerHelper->getObject(
+        $this->imagesStorage = $this->objectManagerHelper->getObject(
             'Magento\Cms\Model\Wysiwyg\Images\Storage',
             [
                 'session' => $this->sessionMock,
@@ -257,7 +258,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResizeWidth()
     {
-        $this->assertEquals(100, $this->model->getResizeWidth());
+        $this->assertEquals(100, $this->imagesStorage->getResizeWidth());
     }
 
     /**
@@ -265,7 +266,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResizeHeight()
     {
-        $this->assertEquals(50, $this->model->getResizeHeight());
+        $this->assertEquals(50, $this->imagesStorage->getResizeHeight());
     }
 
     /**
@@ -277,7 +278,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Exception\LocalizedException',
             sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
         );
-        $this->model->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
+        $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
     /**
@@ -289,7 +290,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Exception\LocalizedException',
             sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
         );
-        $this->model->deleteDirectory(self::STORAGE_ROOT_DIR);
+        $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 
     public function testGetDirsCollectionCreateSubDirectories()
@@ -325,7 +326,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirsCollection($exclude, $include, $fileNames, $expectedRemoveKeys)
     {
-        $this->model = $this->objectManagerHelper->getObject(
+        $this->imagesStorage = $this->objectManagerHelper->getObject(
             'Magento\Cms\Model\Wysiwyg\Images\Storage',
             [
                 'session' => $this->sessionMock,
@@ -450,6 +451,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($storageCollectionMock);
 
-        $this->model->getDirsCollection($path);
+        $this->imagesStorage->getDirsCollection($path);
     }
 }
