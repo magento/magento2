@@ -43,6 +43,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @covers \Magento\Catalog\Block\Product\ListProduct::getToolbarBlock
      * @covers \Magento\Catalog\Block\Product\ListProduct::getMode
      * @covers \Magento\Catalog\Block\Product\ListProduct::getToolbarHtml

@@ -52,6 +52,14 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock('Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full');
+        $fullActionFactory = $this->getMock(
+            'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
         $this->saveHandler = $this->getClassMock('\Magento\CatalogSearch\Model\Indexer\IndexerHandler');
         $indexerHandlerFactory = $this->getMock(
             '\Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory',
@@ -86,7 +94,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->searchRequestConfig = $this->getClassMock('Magento\Framework\Search\Request\Config');
 
         $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(
-            $this->fullAction,
+            $fullActionFactory,
             $indexerHandlerFactory,
             $this->storeManager,
             $dimensionFactory,

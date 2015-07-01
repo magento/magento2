@@ -95,6 +95,9 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(100, $this->_block->getProductsCount());
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testToHtml()
     {
         $this->assertEmpty($this->_block->getProductCollection());
