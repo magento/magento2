@@ -21,7 +21,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<table cellpadding="0" cellspacing="0" border="0">
+<table>
     <tr class="email-intro">
         <td>
             <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
@@ -54,7 +54,7 @@
     <tr class="email-information">
         <td>
             {{depend order.getEmailCustomerNote()}}
-            <table class="message-info" cellspacing="0" cellpadding="0" border="0">
+            <table class="message-info">
                 <tr>
                     <td>
                         {{var order.getEmailCustomerNote()}}
@@ -62,7 +62,7 @@
                 </tr>
             </table>
             {{/depend}}
-            <table class="order-details" cellspacing="0" cellpadding="0" border="0">
+            <table class="order-details">
                 <tr>
                     <td class="address-details">
                         <h3>{{trans "Billing Info"}}</h3>
