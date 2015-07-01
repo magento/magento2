@@ -165,7 +165,7 @@ Usage: Magento 2 fixture schema generator.
  --type\t\t<flat>|<eav>|<table>|<composite>\t\tTable type for the entity\tDefault: flat
  --name\t\t<className>\t\t\t\t\tName of generated class
  --entity_type\t<entity_type>|<entity_type1,entity_type2>\tDatabase table name where entity data is stored
- --collection\t<path\\\\to\\\\collection>\t\t\t\tCollection to generate data sets\tNOTE: All backslashes have to be escaped
+ --collection\t<path\\\\to\\\\collection>\t\t\t\tCollection to generate data sets\tNOTE: All backslashes must be escaped
  --help\t\tThis help
 
  name, entity_type, collection - required fields

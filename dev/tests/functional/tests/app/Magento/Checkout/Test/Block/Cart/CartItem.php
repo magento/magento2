@@ -26,7 +26,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $removeItem = '.action.delete';
+    protected $removeItem = '.action-delete';
 
     /**
      * Get bundle options
