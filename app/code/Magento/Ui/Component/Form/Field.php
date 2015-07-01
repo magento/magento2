@@ -80,23 +80,23 @@ class Field extends AbstractComponent
             $formElement,
             array_merge(['context' => $this->getContext()], (array)$this->getData())
         );
+        $this->wrappedComponent->setData(
+            'config',
+            array_replace_recursive(
+                (array) $this->wrappedComponent->getData('config'),
+                (array) $this->getData('config')
+            )
+        );
         $this->wrappedComponent->prepare();
+        $this->components = $this->wrappedComponent->getChildComponents();
         // Merge JS configuration with wrapped component configuration
         $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);
-        $jsConfig = array_replace_recursive(
-            $wrappedComponentConfig,
-            $this->getJsConfig($this)
-        );
+
+        $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getJsConfig($this));
         $jsConfig['extends'] = $this->wrappedComponent->getComponentName();
         $this->setData('js_config', $jsConfig);
 
-        $this->setData(
-            'config',
-            array_replace_recursive(
-                (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
-            )
-        );
+        $this->setData('config', $this->wrappedComponent->getData('config'));
 
         parent::prepare();
     }
