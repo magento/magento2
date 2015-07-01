@@ -104,9 +104,10 @@ class Success extends \Magento\Framework\View\Element\Template
     {
         $orderId = $this->_checkoutSession->getLastOrderId();
         if ($orderId) {
-            $order = $this->_orderFactory->create()->load($orderId);
-            if ($order->getId()) {
-                $isVisible = !in_array($order->getStatus(), $this->_orderConfig->getInvisibleOnFrontStatuses());
+            $incrementId = $this->_checkoutSession->getLastRealOrderId();
+            $status = $this->_checkoutSession->getLastOrderStatus();
+            if ($status && $incrementId) {
+                $isVisible = !in_array($status, $this->_orderConfig->getInvisibleOnFrontStatuses());
                 $canView = $this->httpContext->getValue(Context::CONTEXT_AUTH) && $isVisible;
                 $this->addData(
                     [
@@ -115,7 +116,7 @@ class Success extends \Magento\Framework\View\Element\Template
                         'print_url' => $this->getUrl('sales/order/print', ['order_id' => $orderId]),
                         'can_print_order' => $isVisible,
                         'can_view_order'  => $canView,
-                        'order_id'  => $order->getIncrementId(),
+                        'order_id'  => $incrementId,
                     ]
                 );
             }
