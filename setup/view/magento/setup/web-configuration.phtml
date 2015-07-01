@@ -18,6 +18,12 @@ $hints = [
         '<p>%s</p>',
         'Key to encrypt sensitive data such as passwords and personally identifiable customer information in the Magento database. The encryption key is stored in [your Magento install dir]/app/etc/env.php'
     ),
+    'admin' => sprintf(
+        '<div><p>%s</p><p>%s</p><p>%s</p></div>',
+        'For security purposes, we generated a random URL to access the Magento Admin.',
+        'This unique URL helps avoid automated attacks on the Admin.',
+        'You can choose your own value but we recommend you do not use common words, such as \'admin\', \'backend\', or \'control\'.'
+    )
 ];
 ?>
 
@@ -99,7 +105,12 @@ $hints = [
                         name="admin"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
+                        ng-init="config.address.admin = '<?php echo $this->autoAdminPath ?>';"
                         required
+                        tooltip-placement="right"
+                        tooltip-html-unsafe="<?php echo $hints['admin']; ?>"
+                        tooltip-trigger="focus"
+                        tooltip-append-to-body="true"
                         >
                     <div class="error-container">
                         <span ng-show="webconfig.admin.$error.required">
