@@ -42,11 +42,20 @@
     </tr>
     <tr class="email-summary">
         <td>
-            <h2>{{trans "Your Credit Memo #%creditmemo_id for Order #%order_id" creditmemo_id=$creditmemo.increment_id order_id=$order.increment_id}}</h2>
+            <h1>{{trans "Your Credit Memo #%creditmemo_id for Order #%order_id" creditmemo_id=$creditmemo.increment_id order_id=$order.increment_id}}</h1>
         </td>
     </tr>
     <tr class="email-information">
         <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
@@ -74,7 +83,6 @@
                 </tr>
             </table>
             {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
-            <p>{{var comment}}</p>
         </td>
     </tr>
 </table>

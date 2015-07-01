@@ -45,11 +45,20 @@
         <td>
             <p>{{trans "Your shipping confirmation is below. Thank you again for your business."}}</p>
 
-            <h2>{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h2>
+            <h1>{{trans "Your Shipment #%shipment_id for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h1>
         </td>
     </tr>
     <tr class="email-information">
         <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
@@ -78,7 +87,6 @@
             </table>
             {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
             {{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
-            <p>{{var comment}}</p>
         </td>
     </tr>
 </table>
