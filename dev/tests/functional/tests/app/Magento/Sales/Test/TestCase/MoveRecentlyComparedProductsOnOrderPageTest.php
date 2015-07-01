@@ -33,6 +33,8 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-28109
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
 {
