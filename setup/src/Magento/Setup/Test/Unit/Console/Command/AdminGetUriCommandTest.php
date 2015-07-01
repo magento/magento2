@@ -23,6 +23,8 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
+        $this->deploymentConfig->expects($this->once())->method('get')->willReturn('admin_qw12er');
+
         $commandTester = new CommandTester(new AdminGetUriCommand($this->deploymentConfig));
         $commandTester->execute([]);
 
