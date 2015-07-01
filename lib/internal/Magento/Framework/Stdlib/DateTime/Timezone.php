@@ -157,7 +157,7 @@ class Timezone implements TimezoneInterface
                 $locale,
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::SHORT,
-                $timezone
+                new \DateTimeZone($timezone)
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
