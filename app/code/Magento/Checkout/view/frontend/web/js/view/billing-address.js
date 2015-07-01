@@ -18,7 +18,8 @@ define(
     function (ko, Component, customer, addressList, quote, createBillingAddress, selectBillingAddress, $t) {
         "use strict";
 
-        var newAddressOption = {
+        var lastSelectedBillingAddress = null,
+            newAddressOption = {
             getAddressInline: function() {
                 return $t('New Address');
             },
@@ -71,6 +72,8 @@ define(
                     selectBillingAddress(quote.shippingAddress());
                     this.isAddressDetailsVisible(true);
                 } else {
+                    lastSelectedBillingAddress = quote.billingAddress();
+                    quote.billingAddress(null);
                     this.isAddressDetailsVisible(false);
                 }
                 return true;
@@ -97,16 +100,25 @@ define(
             },
 
             editAddress: function () {
+                lastSelectedBillingAddress = quote.billingAddress();
+                quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
             },
 
             cancelAddressEdit: function () {
+                this.restoreBillingAddress();
                 if (quote.billingAddress()) {
                     // restore 'Same As Shipping' checkbox state
                     this.isAddressSameAsShipping(
                         !quote.isVirtual() && (quote.shippingAddress() == quote.billingAddress())
                     );
                     this.isAddressDetailsVisible(true);
+                }
+            },
+
+            restoreBillingAddress: function() {
+                if (lastSelectedBillingAddress != null) {
+                    selectBillingAddress(lastSelectedBillingAddress);
                 }
             },
 
