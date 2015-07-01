@@ -3,11 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\CurrencySymbol\Test\Unit\Model;
+
+use \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
 
 /**
  * Test for \Magento\CurrencySymbol\Model\Observer
  */
-class ObserverTest extends PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CurrencySymbol\Model\Observer
@@ -15,7 +18,7 @@ class ObserverTest extends PHPUnit_Framework_TestCase
     private $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $mockSymbolFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|CurrencysymbolFactory $mockSymbolFactory
      */
     private $mockSymbolFactory;
 
@@ -71,7 +74,7 @@ class ObserverTest extends PHPUnit_Framework_TestCase
         $this->mockEventObserver->expects($this->any())->method('getEvent')->willReturn($this->mockEvent);
         $this->mockSymbolFactory->expects($this->any())->method('create')->willReturn($this->mockSymbol);
 
-        $this->observer = new Magento\CurrencySymbol\Model\Observer($this->mockSymbolFactory);
+        $this->observer = new \Magento\CurrencySymbol\Model\Observer($this->mockSymbolFactory);
     }
 
     public function testCurrencyDisplayOptionsEmpty()

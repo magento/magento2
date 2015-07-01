@@ -3,14 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Currency Symbol Observer
- */
 namespace Magento\CurrencySymbol\Model;
 
 use Magento\Framework\Locale\Currency;
 
+/**
+ * Currency Symbol Observer
+ */
 class Observer
 {
     /**
@@ -19,7 +18,7 @@ class Observer
     protected $symbolFactory;
 
     /**
-     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
+     * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
      */
     public function __construct(\Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory)
     {
