@@ -36,29 +36,9 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     protected $systemStoreMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $websiteMock;
-
-    /**
-     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $groupMock;
-
-    /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeMock;
-
-    /**
      * @var \Magento\Config\Model\Config\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configFactoryMock;
-
-    /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configMock;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -153,17 +133,6 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->configMock = $this->getMock(
-            'Magento\Config\Model\Config',
-            ['setSection', 'setWebsite', 'setStore', 'setGroups', 'save'],
-            [],
-            '',
-            false
-        );
-        $this->websiteMock = $this->getMock('Magento\Store\Model\Website', ['getId', 'getConfig'], [], '', false);
-        $this->groupMock = $this->getMock('Magento\Store\Model\Group', ['getId', 'getWebsiteId'], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', ['getGroupId'], [], '', false);
-
 
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\CurrencySymbol\Model\System\Currencysymbol',
@@ -219,14 +188,25 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareMocksForGetCurrencySymbolsData($websiteId, $groupId, $currencies);
 
-        $this->configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
-        $this->configMock->expects($this->any())
+        /**
+         * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+         */
+        $configMock = $this->getMock(
+            'Magento\Config\Model\Config',
+            ['setSection', 'setWebsite', 'setStore', 'setGroups', 'save'],
+            [],
+            '',
+            false
+        );
+
+        $this->configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
+        $configMock->expects($this->any())
             ->method('setSection')
             ->with(Currencysymbol::CONFIG_SECTION)
             ->willReturnSelf();
-        $this->configMock->expects($this->any())->method('setWebsite')->with(null)->willReturnSelf();
-        $this->configMock->expects($this->any())->method('setStore')->with(null)->willReturnSelf();
-        $this->configMock->expects($this->any())->method('setGroups')->with($value)->willReturnSelf();
+        $configMock->expects($this->any())->method('setWebsite')->with(null)->willReturnSelf();
+        $configMock->expects($this->any())->method('setStore')->with(null)->willReturnSelf();
+        $configMock->expects($this->any())->method('setGroups')->with($value)->willReturnSelf();
 
         $this->coreConfigMock->expects($this->once())->method('reinit');
         $this->storeManagerMock->expects($this->once())->method('reinitStores');
@@ -292,15 +272,30 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareMocksForGetCurrencySymbolsData($websiteId, $groupId, $currencies)
     {
+        /**
+         * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+         */
+        $websiteMock = $this->getMock('Magento\Store\Model\Website', ['getId', 'getConfig'], [], '', false);
+
+        /**
+         * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+         */
+        $groupMock = $this->getMock('Magento\Store\Model\Group', ['getId', 'getWebsiteId'], [], '', false);
+
+        /**
+         * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+         */
+        $storeMock = $this->getMock('Magento\Store\Model\Store', ['getGroupId'], [], '', false);
+
         $this->systemStoreMock->expects($this->once())
             ->method('getWebsiteCollection')
-            ->willReturn([$this->websiteMock]);
-        $this->systemStoreMock->expects($this->once())->method('getGroupCollection')->willReturn([$this->groupMock]);
-        $this->systemStoreMock->expects($this->once())->method('getStoreCollection')->willReturn([$this->storeMock]);
-        $this->websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
-        $this->groupMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
-        $this->groupMock->expects($this->any())->method('getId')->willReturn($groupId);
-        $this->storeMock->expects($this->any())->method('getGroupId')->willReturn($groupId);
+            ->willReturn([$websiteMock]);
+        $this->systemStoreMock->expects($this->once())->method('getGroupCollection')->willReturn([$groupMock]);
+        $this->systemStoreMock->expects($this->once())->method('getStoreCollection')->willReturn([$storeMock]);
+        $websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
+        $groupMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+        $groupMock->expects($this->any())->method('getId')->willReturn($groupId);
+        $storeMock->expects($this->any())->method('getGroupId')->willReturn($groupId);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -310,24 +305,23 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
                     [
                         CurrencySymbol::XML_PATH_ALLOWED_CURRENCIES,
                         ScopeInterface::SCOPE_STORE,
-                        $this->storeMock,
+                        $storeMock,
                         $currencies
                     ],
                     [CurrencySymbol::XML_PATH_ALLOWED_CURRENCIES, ScopeInterface::SCOPE_STORE, null, $currencies],
                     [
                         CurrencySymbol::XML_PATH_ALLOWED_CURRENCIES,
                         ScopeInterface::SCOPE_STORE,
-                        $this->storeMock,
+                        $storeMock,
                         $currencies
                     ]
                 ]
             );
 
-        $this->websiteMock->expects($this->any())
+        $websiteMock->expects($this->any())
             ->method('getConfig')
             ->with(CurrencySymbol::XML_PATH_ALLOWED_CURRENCIES)
             ->willReturn($currencies);
         $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
     }
-
 }
