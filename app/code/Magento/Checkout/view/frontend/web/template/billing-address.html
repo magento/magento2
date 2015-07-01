@@ -4,54 +4,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-billing" data-bind="attr: {'class': stepClassAttributes() }" role="presentation">
-    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
-        <span class="number" data-bind="text: stepNumber()"></span>
-        <h2 data-bind="text: $t('Billing Information')"></h2>
-    </div>
-    <div id="checkout-step-billing" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()">
-        <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields">
-            <!-- ko if: (customerAddressCount)-->
-            <div class="field addresses">
-                <label class="label" for="billing:address-select"><span data-bind="text: $t('Select a billing address from your address book or enter a new address.')"></span></label>
-                <div class="control">
-                    <select name="billing_address_id" id="billing:address-select" data-bind="
-                        options: billingAddresses(),
-                        optionsText: billingAddressesOptionsText,
-                        optionsValue: 'customerAddressId',
-                        value: selectedBillingAddressId,
-                        event: {change: onAddressChange(selectedBillingAddressId)};
-                    "></select>
-                </div>
-            </div>
-            <!--/ko-->
-            <fieldset id="billing-new-address-form" class="fieldset address"
-                      data-bind="fadeVisible: isNewAddressSelected(), event {change: hideExtraFields()}">
+<div class="billing-address-same-as-shipping-block field choice" data-bind="visible: canUseShippingAddress()">
+    <input type="checkbox" name="billing-address-same-as-shipping" data-bind="checked: isAddressSameAsShipping, click: useShippingAddress, attr: {id: 'billing-address-same-as-shipping-' + $parent.getCode()}"/>
+    <label data-bind="text: $t('My billing and shipping address are the same'), attr: {for: 'billing-address-same-as-shipping-' + $parent.getCode()}"></label>
+</div>
 
-            <!-- ko foreach: getRegion('additional-fieldsets') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-            </fieldset>
-            <!-- ko if: quoteIsVirtual == 0 -->
-            <div class="field choice">
-                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" data-bind="checked: useForShipping" />
-                <label class="label" for="billing:use_for_shipping_yes"><span><!-- ko text: $t('Ship to this address')--><!-- /ko --> </span></label>
-            </div>
-            <div class="field choice">
-                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" data-bind="checked: useForShipping" />
-                <label class="label" for="billing:use_for_shipping_no"><span><!-- ko text: $t('Ship to different address')--><!-- /ko --></span></label>
-            </div>
-                <!-- ko foreach: getRegion('additional-field-choice') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
-            <!-- /ko -->
-
-            <input type="hidden" name="billing[use_for_shipping]" value="1" />
-            <div class="actions" id="billing-buttons-container">
-                <div class="primary">
-                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: submitBillingAddress"><span><!-- ko text: $t('Continue')--><!-- /ko --></span></button>
-                </div>
-            </div>
-        </form>
+<!-- ko template: 'Magento_Checkout/billing-address/details' --><!-- /ko -->
+<fieldset class="fieldset" data-bind="visible: !isAddressDetailsVisible()">
+    <!-- ko template: 'Magento_Checkout/billing-address/list' --><!-- /ko -->
+    <!-- ko template: 'Magento_Checkout/billing-address/form' --><!-- /ko -->
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button class="action action-update" type="button" data-bind="click: updateAddress">
+                <span data-bind="text: $t('Update')"></span>
+            </button>
+            <button class="action action-cancel" type="button" data-bind="click: cancelAddressEdit">
+                <span data-bind="text: $t('Cancel')"></span>
+            </button>
+        </div>
     </div>
-</li>
+</fieldset>

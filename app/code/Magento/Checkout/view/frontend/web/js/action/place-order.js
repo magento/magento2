@@ -2,48 +2,56 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
 define(
     [
-        '../model/quote',
-        '../model/url-builder',
-        '../model/payment-service',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'mage/url',
-        'Magento_Ui/js/model/errorlist',
+        'Magento_Ui/js/model/messageList',
         'Magento_Customer/js/model/customer',
         'underscore'
     ],
-    function(quote, urlBuilder, paymentService, storage, url, errorList, customer, _) {
-        "use strict";
-        return function(customParams, callback) {
-            var payload;
-            customParams = customParams || {
-                cartId: quote.getQuoteId(),
-                paymentMethod: paymentService.getSelectedPaymentData()
-            };
+    function (quote, urlBuilder, storage, url, messageList, customer, _) {
+        'use strict';
+
+        return function (paymentData, redirectOnSuccess) {
+            var serviceUrl, payload;
+
+            redirectOnSuccess = redirectOnSuccess === false ? false : true;
             /**
              * Checkout for guest and registered customer.
              */
-            var serviceUrl;
-            if (quote.getCheckoutMethod()() === 'guest') {
-                serviceUrl =  urlBuilder.createUrl('/guest-carts/:quoteId/order', {quoteId: quote.getQuoteId()});
+            if (!customer.isLoggedIn()) {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
+                    quoteId: quote.getQuoteId()
+                });
+                payload = {
+                    cartId: quote.getQuoteId(),
+                    email: quote.guestEmail,
+                    paymentMethod: paymentData,
+                    billingAddress: quote.billingAddress()
+                };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+                payload = {
+                    cartId: quote.getQuoteId(),
+                    paymentMethod: paymentData,
+                    billingAddress: quote.billingAddress()
+                };
             }
-            payload = customParams;
-            storage.put(
+            storage.post(
                 serviceUrl, JSON.stringify(payload)
             ).done(
-                function() {
-                    if (!_.isFunction(callback) || callback()) {
+                function () {
+                    if (redirectOnSuccess) {
                         window.location.replace(url.build('checkout/onepage/success/'));
                     }
                 }
             ).fail(
-                function(response) {
+                function (response) {
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error);
+                    messageList.addErrorMessage(error);
                 }
             );
         };
