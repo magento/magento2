@@ -14,6 +14,10 @@ define(
         });
         return function(shippingAddress) {
             quote.shippingAddress(shippingAddress);
+            //set billing address same as shipping by default
+            if (shippingAddress.canUseForBilling()) {
+                quote.billingAddress(shippingAddress);
+            }
         };
     }
 );
