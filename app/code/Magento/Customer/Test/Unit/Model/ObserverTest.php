@@ -18,6 +18,9 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -509,6 +512,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      * @param string $resultInvalidMessage
      * @param string $resultErrorMessage
      * @dataProvider dataProviderAfterAddressSaveNewGroup
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testAfterAddressSaveNewGroup(
         $vatId,

@@ -20,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Message\ManagerInterface;
 
 /**
- * Customer module observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
