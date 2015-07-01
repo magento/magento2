@@ -38,11 +38,22 @@
 
         &.ui-sortable-helper {
             border-color: @steps-wizard-attribute-entity__active__border-color;
+            .attribute-draggable {
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;
+            }
         }
 
-        .action-select-all {
+        .action-select-all,
+        .action-deselect-all {
             font-weight: @font-weight__regular;
-            padding: @indent__xs;
+            line-height: 1;
+            margin: @indent__xs 0 0;
+            padding: 0 0 0 @indent__xs;
+        }
+
+        .action-deselect-all {
+            border-left: 1px solid @steps-wizard-attribute-entity__border-color;
         }
     }
 
@@ -70,9 +81,10 @@
     }
 
     .attribute-draggable {
+
         cursor: move;
-        cursor: -moz-grabbing;
-        cursor: -webkit-grabbing;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
         display: inline-block;
         font-size: 0;
         padding: 0 @indent__s 0 0;
