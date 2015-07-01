@@ -359,7 +359,7 @@ class Widget
     }
 
     /**
-     * Remove attributes from widget array so that emulates how \Magento\Framework\Simplexml\Element::asCanonicalArray works
+     * Remove attributes from widget array and emulates how \Magento\Framework\Simplexml\Element::asCanonicalArray works
      *
      * @param array $inputArray
      * @return array
