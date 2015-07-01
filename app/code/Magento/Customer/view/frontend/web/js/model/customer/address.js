@@ -5,6 +5,10 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define([], function() {
+    /**
+     * @param addressData
+     * Returns new address object
+     */
     return function (addressData) {
         return {
             customerAddressId: addressData.id,
@@ -26,9 +30,28 @@ define([], function() {
             prefix: addressData.prefix,
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
-            sameAsBilling: null,
+            sameAsBilling: addressData.same_as_billing,
+            saveInAddressBook: addressData.save_in_address_book,
+            isDefaultShipping: function() {
+                return addressData.default_shipping;
+            },
+            isDefaultBilling: function() {
+                return addressData.default_billing;
+            },
             getAddressInline: function() {
                 return addressData.inline;
+            },
+            getType: function() {
+                return 'customer-address'
+            },
+            getKey: function() {
+                return this.getType() + this.customerAddressId;
+            },
+            isEditable: function() {
+                return false;
+            },
+            canUseForBilling: function() {
+                return true;
             }
         }
     }
