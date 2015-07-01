@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml;
-
+namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
