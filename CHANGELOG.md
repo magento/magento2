@@ -1,3 +1,98 @@
+0.74.0-beta15
+=============
+* Framework Improvements:
+  * Introduced Drag&Drop Columns functionality in scope of Enhanced Data Grids on CMS 
+  * Improved Column Actions functionality in scope of Enhanced Data Grids on CMS
+  * Adapted Payment\Gateway framework to client requirements
+  * Removed 'field_expr' option from filters
+  * Added product details renderer list support on Catalog category page
+  * Security: Clickjacking solution - introduced X-Frame-Options
+  * Gift message was moved to shopping cart
+  * Improved simple products export
+  * Separated import of advanced prices
+  * Changed 'updated_at' filter for products export
+  * Added the link with sample product import file
+  * Cleared and improved the  messages and names in different modules
+  * Added mbstring extension as a requirement
+* Tests
+  * Increased test coverage for the CatalogInventory, Email and Newsletter modules
+  * Added wait to form element before filling a value in functional tests
+  * Increased test coverage of Reports module
+  * Functional tests were fixed and maintained
+* Fixed Bugs:
+  * Fixed loading of images from database media storage with separate connection
+  * Eliminated duplication of ComposerInformation class in Magento Framework and Setup Application
+  * Fixed an error message format inconsistency in theme uninstall command
+  * Fixed an issue where incorrect action name checks led to customer info leak
+  * Fixed an issue where /magento_version exposed too detailed version information
+  * Fixed an issue where generate data failed when table prefix exceeded length of 5
+  * Fixed an issue where product options were displayed not styled on "Edit Product from Wishlist" Frontend page
+  * Fixed an issue where payment information was displayed broken on "Order Management" Backend page forms
+  * Fixed an issue where admin panel pop-ups contained lots of empty space
+  * Fixed an issue where Customer account form was displayed broken
+  * Fixed an issue where all text fields were invisible in Backend "Add New Customer" page
+  * Fixed XSS issues in Magento - wishlist sending
+  * Fixed an issue where it was unable to specify all values of "Multiple Select" Product Custom Option to purchase
+  * Fixed an issue where setting a permission for 'ALL Groups' produced an error if other permissions existed
+  * Fixed an issue where stock was not updated when Stock indexer was in Update on Schedule mode
+  * Fixed an issue where it was not possible to update stock items of product using API service
+  * Fixed an issue where Customer review changes in backend were not reflected in frontend until cache was cleared
+  * Fixed an issue where cache was not updated when changing stock status using mass action
+  * Fixed an issue where Stock Items API service to return low stock information did not return correct results
+  * Fixed an issue where found records in global search in Backend could not be selected via keyboard
+  * Fixed an issue where Category menu items went out of screen when page side was reached
+  * Fixed an issue where subcategories in menu were shown instantly when user moved mouse quickly
+  * Fixed an issue where popup header was our of window range while creating group product
+  * Fixed an issue where region field was absent in customer address form on backend for "United Kingdom" country
+  * Fixed an ability to edit the Order from Admin panel
+  * Fixed an issue where email could not be retrieved from \Magento\Quote\Api\Data\AddressInterface after adding an address on OnePageCheckout
+  * Fixed an issue where Products were not displayed correctly across all storeviews of the catalog
+* Github Issues:
+  * [#1378](https://github.com/magento/magento2/issues/1319) -- jquery-cookie.js is not published by deploy tool in production mode
+  * [#1314](https://github.com/magento/magento2/pull/1314)-- Fixed a bug where type attribute for tag button was missing
+  * [#1354](https://github.com/magento/magento2/pull/1354) -- Add gitter.im badge to ReadMe.
+  * [#1378](https://github.com/magento/magento2/pull/1378) -- Fix incorrect js filename
+
+
+0.74.0-beta14
+=============
+* Framework improvements:
+    * Introduced an ability to uninstall modules which were installed via composer (bin/magento module:uninstall <moduleName>)
+    * Introduced an ability to uninstall themes (bin/magento theme:uninstall <themeName>)
+    * Introduced an ability to backup and rollback DB and Media via CLI (bin/magento setup:backup, options are --code, --db or --media)
+    * Introduced an ability to uninstall language packages (bin/magento i18n:uninstall <languagePack>)
+    * Introduced API notation for the following modules: Backend, Backup, Cron, Log, PageCache 
+    * Added join processors to search services, joined config for services with extension attributes
+    * Renamed hidden_tax to discount_tax_compensation 
+    * The customer address entity table was transformed from EAV into a flat model to minimize database operations
+* Fixed bugs:
+    * Fixed an issue where Setup Wizard failed on readiness check when Magento was deployed by composer create-project
+    * Fixed the local file path disclosure when trying to browse image cache directory  
+    * Fixed an issue where development errors resulted in too many redirects 
+    * Fixed an integration test failure in Reports ViewedTest 
+    * Fixed an issue where it was impossible to save existent Grouped Product with no child items 
+    * Fixed an issue where message "We don't have as many "conf1" as you requested" appeared 
+    * Fixed an issue where second product from bundle product was ordered as separate item after checkout 
+    * Fixed an issue where configs for payments and shippings were not encrypted 
+    * Fixed an issue where Table Rates shipping method did not work 
+    * Fixed an issue where admin could not set locale properly on Account page 
+    * Fixed incomplete generated results of single tenant compiler 
+    * Fixed an issue with full page caching where one set of prices was cached for all customers 
+    * Fixed incorrect urls for private content 
+    * Fixed an issue where it was not possible to assign a product link to another product using API 
+    * Fixed an issue where zipcode was not displayed as required field on Create New Order page 
+    * Fixed the Sample Data re-installation 
+    * Fixed random fails on inventory tab for test CreateSimpleProductEntityTest
+* Tests:
+    * Covered various modules with unit tests 
+    * Functional tests fixed and maintained
+* GitHub issues:
+    * [#1156](https://github.com/magento/magento2/pull/1156) -- Moves common code to all auto-generated Interceptor classes into a trait
+    * [#1206](https://github.com/magento/magento2/pull/1206) -- Allow modules to live outside of app/code directory
+    * [#1245](https://github.com/magento/magento2/pull/1245) -- Unable to save product per website wise
+    * [#1347](https://github.com/magento/magento2/pull/1347) -- Fixed failing Install during integration tests (MAGETWO-38482)
+    * [#1368](https://github.com/magento/magento2/pull/1368) -- Fix typo in getCurrentCategoryKey
+    
 0.74.0-beta13
 =============
 * Framework improvements:

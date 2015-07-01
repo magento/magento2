@@ -15,6 +15,7 @@ class Actions extends Generic implements TabInterface
      * Prepare content for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -25,6 +26,7 @@ class Actions extends Generic implements TabInterface
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -35,6 +37,7 @@ class Actions extends Generic implements TabInterface
      * Returns status flag about this tab can be showen or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -45,6 +48,7 @@ class Actions extends Generic implements TabInterface
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -65,7 +69,7 @@ class Actions extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset(
             'action_fieldset',
-            ['legend' => __('Update Prices Using the Following Information')]
+            ['legend' => __('Pricing Structure Rules')]
         );
 
         $fieldset->addField(
@@ -75,10 +79,10 @@ class Actions extends Generic implements TabInterface
                 'label' => __('Apply'),
                 'name' => 'simple_action',
                 'options' => [
-                    'by_percent' => __('By Percentage of the Original Price'),
-                    'by_fixed' => __('By Fixed Amount'),
-                    'to_percent' => __('To Percentage of the Original Price'),
-                    'to_fixed' => __('To Fixed Amount'),
+                    'by_percent' => __('Apply as percentage of original'),
+                    'by_fixed' => __('Apply as fixed amount'),
+                    'to_percent' => __('Adjust final price to this percentage'),
+                    'to_fixed' => __('Adjust final price to discount value'),
                 ]
             ]
         );
@@ -99,8 +103,8 @@ class Actions extends Generic implements TabInterface
             'select',
             [
                 'name' => 'sub_is_enable',
-                'label' => __('Enable Discount to Subproducts'),
-                'title' => __('Enable Discount to Subproducts'),
+                'label' => __('Subproduct discounts'),
+                'title' => __('Subproduct discounts'),
                 'onchange' => 'hideShowSubproductOptions(this);',
                 'values' => [0 => __('No'), 1 => __('Yes')]
             ]
@@ -113,10 +117,10 @@ class Actions extends Generic implements TabInterface
                 'label' => __('Apply'),
                 'name' => 'sub_simple_action',
                 'options' => [
-                    'by_percent' => __('By Percentage of the Original Price'),
-                    'by_fixed' => __('By Fixed Amount'),
-                    'to_percent' => __('To Percentage of the Original Price'),
-                    'to_fixed' => __('To Fixed Amount'),
+                    'by_percent' => __('Apply as percentage of original'),
+                    'by_fixed' => __('Apply as fixed amount'),
+                    'to_percent' => __('Adjust final price to this percentage'),
+                    'to_fixed' => __('Adjust final price to discount value'),
                 ]
             ]
         );
@@ -136,8 +140,8 @@ class Actions extends Generic implements TabInterface
             'stop_rules_processing',
             'select',
             [
-                'label' => __('Stop Further Rules Processing'),
-                'title' => __('Stop Further Rules Processing'),
+                'label' => __('Subsequent rules'),
+                'title' => __('Subsequent rules'),
                 'name' => 'stop_rules_processing',
                 'options' => ['1' => __('Yes'), '0' => __('No')]
             ]

@@ -3,11 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Api\Data;
 
-
-interface GrandTotalDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface GrandTotalDetailsInterface
 {
     /**
      * Get tax amount value
@@ -47,21 +45,4 @@ interface GrandTotalDetailsInterface extends \Magento\Framework\Api\ExtensibleDa
      * @return $this
      */
     public function setGroupId($id);
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
-    );
 }

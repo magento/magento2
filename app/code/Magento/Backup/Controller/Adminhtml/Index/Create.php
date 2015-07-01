@@ -60,12 +60,12 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
                         __(
                             'You need more permissions to activate maintenance mode right now.'
                         ) . ' ' . __(
-                            'To continue with the backup, you need to either deselect ' .
-                            '"Put store on the maintenance mode" or update your permissions.'
+                            'To create the backup, please deselect '
+                            . '"Put store into maintenance mode" or update your permissions.'
                         )
                     );
                     $backupManager->setErrorMessage(
-                        __("Something went wrong putting your store into maintenance mode.")
+                        __("Something went wrong while putting your store into maintenance mode.")
                     );
                     return $this->getResponse()->representJson($response->toJson());
                 }
@@ -92,7 +92,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
             $errorMessage = __('You need more permissions to create a backup.');
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
-            $errorMessage = __('Something went wrong creating the backup.');
+            $errorMessage = __('We can\'t create the backup right now.');
         }
 
         if (!empty($errorMessage)) {

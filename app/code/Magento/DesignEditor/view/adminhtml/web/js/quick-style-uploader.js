@@ -101,7 +101,7 @@ define([
                     }
                 }, this),
                 error: function() {
-                    alert($.mage.__('Sorry, something went wrong.'));
+                    alert($.mage.__('Sorry, something went wrong. That\'s all we know.'));
                 }
             });
         },

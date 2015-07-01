@@ -39,6 +39,11 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     protected $transferObjectMock;
 
+    /**
+     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->converterMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\ConverterInterface')
@@ -53,10 +58,18 @@ class ZendTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->loggerMock = $this->getMockBuilder('Magento\Payment\Model\Method\Logger')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->transferObjectMock = $this->getMockBuilder('Magento\Payment\Gateway\Http\TransferInterface')
             ->getMockForAbstractClass();
 
-        $this->model = new Zend($this->zendClientFactoryMock, $this->converterMock);
+        $this->model = new Zend(
+            $this->zendClientFactoryMock,
+            $this->loggerMock,
+            $this->converterMock
+        );
     }
 
     public function testPlaceRequest()
@@ -136,9 +149,9 @@ class ZendTest extends \PHPUnit_Framework_TestCase
         $this->transferObjectMock->expects($this->once())->method('getClientConfig')->willReturn($config);
         $this->transferObjectMock->expects($this->atLeastOnce())->method('getMethod')->willReturn($method);
         $this->transferObjectMock->expects($this->once())->method('getHeaders')->willReturn($headers);
-        $this->transferObjectMock->expects($this->once())->method('getBody')->willReturn($body);
+        $this->transferObjectMock->expects($this->atLeastOnce())->method('getBody')->willReturn($body);
         $this->transferObjectMock->expects($this->once())->method('shouldEncode')->willReturn($shouldEncode);
-        $this->transferObjectMock->expects($this->once())->method('getUri')->willReturn($uri);
+        $this->transferObjectMock->expects(static::atLeastOnce())->method('getUri')->willReturn($uri);
 
         $this->clientMock->expects($this->once())->method('setConfig')->with($config)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();

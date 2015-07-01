@@ -6,12 +6,14 @@
 define([
     "jquery",
     "mage/template",
-    "jquery/ui"
+    "jquery/ui",
+    "Magento_Payment/js/model/credit-card-validation/validator"
 ], function($, mageTemplate){
-    "use strict";
+    'use strict';
 
     $.widget('mage.transparent', {
         options: {
+            context: null,
             placeOrderSelector: '[data-role="review-save"]',
             paymentFormSelector: '#co-payment-form',
             updateSelectorPrefix: '#checkout-',
@@ -28,14 +30,30 @@ define([
             controller: null,
             gateway: null,
             dateDelim: null,
-            cardFieldsMap: null
+            cardFieldsMap: null,
+            expireYearLength: 2
         },
 
         _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            $(this.options.placeOrderSelector)
-                .off('click')
-                .on('click', $.proxy(this._placeOrderHandler, this));
+
+            if (this.options.context) {
+                this.options.context.setPlaceOrderHandler($.proxy(this._orderSave, this));
+                this.options.context.setValidateHandler($.proxy(this._validateHandler, this));
+            } else {
+                $(this.options.placeOrderSelector)
+                    .off('click')
+                    .on('click', $.proxy(this._placeOrderHandler, this));
+            }
+        },
+
+        /**
+         * handler for credit card validation
+         * @return {Boolean}
+         * @private
+         */
+        _validateHandler: function() {
+            return (this.element.validation && this.element.validation('isValid'));
         },
 
         /**
@@ -44,7 +62,7 @@ define([
          * @private
          */
         _placeOrderHandler: function() {
-            if (this.element.validation && this.element.validation('isValid')) {
+            if (this._validateHandler()) {
                 this._orderSave();
             }
             return false;
@@ -60,7 +78,11 @@ define([
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();
             }
             postData += '&controller=' + this.options.controller;
-            $.ajax({
+            postData += '&cc_type=' + this.element.find(
+                '[data-container="' + this.options.gateway + '-cc-type"]'
+            ).val();
+
+            return $.ajax({
                 url: this.options.orderSaveUrl,
                 type: 'post',
                 context: this,
@@ -105,7 +127,6 @@ define([
                     inputs: data
                 }
             });
-
             $(tmpl).appendTo($(iframeSelector)).submit();
         },
 
@@ -140,9 +161,10 @@ define([
                     this.element.find('[data-container="' + this.options.gateway + '-cc-month"]').val(),
                     10
                 );
-            if (year.length > 2) {
-                year = year.substring(2);
+            if (year.length > this.options.expireYearLength) {
+                year = year.substring(year.length - this.options.expireYearLength);
             }
+
             if (month < 10) {
                 month = '0' + month;
             }

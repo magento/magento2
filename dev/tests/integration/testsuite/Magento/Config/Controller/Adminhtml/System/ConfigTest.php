@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigTest extends \Magento\Backend\Utility\Controller
+class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testEditAction()
     {

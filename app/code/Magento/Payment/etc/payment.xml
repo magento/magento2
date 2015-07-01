@@ -32,5 +32,14 @@
         <type id="OT" order="1000">
             <label>Other</label>
         </type>
+        <type id="DN" order="60">
+            <label>Diners</label>
+        </type>
+        <type id="MI" order="80">
+            <label>Maestro International</label>
+        </type>
+        <type id="MD" order="100">
+            <label>Maestro Domestic</label>
+        </type>
     </credit_cards>
 </payment>
