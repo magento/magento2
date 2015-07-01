@@ -26,14 +26,10 @@ define([
                 var tmp = [];
                 _.each(matrix, function(variations){
                     _.each(attribute.chosen, function(option){
-                        if (_.isArray(variations)){
-                            tmp.push(_.union(variations, [option]));
-                        } else {
-                            tmp.push([variations, option]);
-                        }
+                        tmp.push(_.union(variations, [option]));
                     });
                 });
-                if (tmp.length < 1) {
+                if (!tmp.length) {
                     return _.map(attribute.chosen, function(option){
                         return [option];
                     });
@@ -41,45 +37,24 @@ define([
                 return tmp;
             }, []);
         },
-        generateGrid: function (variations) {
+        generateGrid: function (variations, getSectionValue) {
             //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
             return _.map(variations, function (options) {
-                var variation = [],
-                    pricing,
-                    inventory,
-                    images;
+                var variation = [];
                 //images
-                images = _.find(options, function (option) {
-                    return !_.isEmpty(option.sections().images);
-                });
-                variation.push(images
-                    ? images.sections().images
-                    : this.sections().images.value()
-                );
+                variation.push(getSectionValue('images', options));
                 //sku
                 variation.push(_.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '').substring(1));
                 //inventory
-                inventory = _.find(options, function (option) {
-                    return !_.isEmpty(option.sections().inventory);
-                });
-                variation.push(inventory
-                    ? inventory.sections().inventory
-                    : this.sections().inventory.value()
-                );
+                variation.push(getSectionValue('inventory', options));
                 //attributes
                 _.each(options, function (option) {
                     variation.push(option.label);
                 });
                 //pricing
-                pricing = _.find(options, function (option) {
-                    return !_.isEmpty(option.sections().pricing);
-                });
-                variation.push(pricing
-                    ? pricing.sections().pricing
-                    : this.sections().pricing.value()
-                );
+                variation.push(getSectionValue('pricing', options));
 
                 //result
                 return variation;
@@ -94,7 +69,7 @@ define([
                 this.attributesName.splice(3 + index, 0, attribute.label);
             }, this);
 
-            this.grid(this.generateGrid(this.generateVariation(this.attributes())));
+            this.grid(this.generateGrid(this.generateVariation(this.attributes()), wizard.data.sectionHelper));
         },
         force: function (wizard) {
         },
