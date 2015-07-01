@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Sales\Test\Repository\OrderInjectable">
+    <repository class="Magento\Sales\Test\Repository\OrderInjectable\Price">
         <dataset name="default_with_discount">
             <field name="subtotal" xsi:type="string">560</field>
             <field name="discount" xsi:type="string">280</field>

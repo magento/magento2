@@ -8,7 +8,6 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
@@ -78,15 +77,14 @@ class ItemProduct extends Form
     }
 
     /**
-     * Fill the root form.
+     * Fill the root form with checkout data.
      *
-     * @param FixtureInterface $fixture
+     * @param array $data
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
+    public function fillCheckoutData(array $data, SimpleElement $element = null)
     {
-        $data = $fixture->getData();
         if (isset($data['cartItem'])) {
             unset($data['cartItem']);
         }

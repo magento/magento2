@@ -9,7 +9,7 @@
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest">
         <variation name="UpdateSimpleProductEntityTestVariation1">
             <data name="description" xsi:type="string">Update visibility to Catalog, Search</data>
-            <data name="initialProduct/dataset" xsi:type="string">simple_with_tier_price</data>
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">245.00</data>
@@ -143,7 +143,6 @@
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
-            <data name="product/data/price/dataset" xsi:type="string">-</data>
             <data name="product/data/attribute_set_id/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
