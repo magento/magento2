@@ -54,10 +54,10 @@ $orderStoreDate = $block->formatDate(
                     <tr>
                         <th><?php echo __(
                                 'Order Date (%1)',
-                                $block->getCreatedAtStoreDate(
+                                $block->getTimezoneForStore(
                                     $_order->getStore(),
                                     $_order->getCreatedAt()
-                                )->getTimezone()->getName()
+                                )
                             ) ?></th>
                         <td><?php echo $orderStoreDate ?></td>
                     </tr>
