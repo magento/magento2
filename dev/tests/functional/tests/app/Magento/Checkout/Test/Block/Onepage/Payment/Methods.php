@@ -35,7 +35,7 @@ class Methods extends Form
      *
      * @var string
      */
-    protected $paymentMethodLabel = '[for=p_method_%s]';
+    protected $paymentMethodLabel = '[for=%s]';
 
     /**
      * Continue checkout button
@@ -72,9 +72,8 @@ class Methods extends Form
         if ($paymentSelector->isVisible()) {
             $paymentSelector->click();
         } else {
-            $paymentCount = count($this->_rootElement->getElements($this->paymentMethodLabels));
             $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
-            if ($paymentCount !== 1 && !$paymentSelector->isVisible()) {
+            if (!$paymentSelector->isVisible()) {
                 throw new \Exception('Such payment method is absent.');
             }
         }

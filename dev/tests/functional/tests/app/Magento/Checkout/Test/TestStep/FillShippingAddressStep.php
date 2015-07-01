@@ -11,27 +11,26 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class FillBillingInformationStep
- * Fill billing information
+ * Fill shipping address step.
  */
-class FillBillingInformationStep implements TestStepInterface
+class FillShippingAddressStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Address fixture
+     * Address fixture.
      *
      * @var Address
      */
-    protected $billingAddress;
+    protected $shippingAddress;
 
     /**
-     * Checkout method
+     * Checkout method.
      *
      * @var string
      */
@@ -40,26 +39,28 @@ class FillBillingInformationStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param Address $billingAddress
+     * @param Address $shippingAddress
      * @param string $checkoutMethod
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         $checkoutMethod,
-        Address $billingAddress = null
+        Address $shippingAddress = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->billingAddress = $billingAddress;
+        $this->shippingAddress = $shippingAddress;
         $this->checkoutMethod = $checkoutMethod;
     }
 
     /**
-     * Fill billing address
+     * Fill shipping address.
      *
      * @return void
      */
     public function run()
     {
-        $this->checkoutOnepage->getBillingBlock()->fillBilling($this->billingAddress);
+        if (!empty($this->shippingAddress)) {
+            $this->checkoutOnepage->getShippingBlock()->fillShipping($this->shippingAddress);
+        }
     }
 }

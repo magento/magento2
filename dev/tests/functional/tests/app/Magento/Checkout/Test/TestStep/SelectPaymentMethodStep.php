@@ -63,6 +63,5 @@ class SelectPaymentMethodStep implements TestStepInterface
         if ($this->payment['method'] !== 'free') {
             $this->checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod($this->payment, $this->creditCard);
         }
-        $this->checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
     }
 }

@@ -24,7 +24,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $continueCheckoutButton = '#review-buttons-container button';
+    protected $continueCheckoutButton = '.payment-method._active .actions-toolbar .checkout';
 
     /**
      * Grand total search mask.
