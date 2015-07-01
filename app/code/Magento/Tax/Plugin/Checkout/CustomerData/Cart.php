@@ -61,16 +61,14 @@ class Cart
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
 
-        /**
-         * @var \Magento\Quote\Model\Quote $quote
-         */
         $items =$this->getQuote()->getAllVisibleItems();
-        if (is_array($items)) {
-            foreach ($items as $key => $item) {
-                /** @var $item \Magento\Quote\Model\Quote\Item */
-                $this->itemPriceRenderer->setItem($item);
-                $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
-                $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+        if (is_array($result['items'])) {
+            foreach ($result['items'] as $key => $itemAsArray) {
+                if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
+                    $this->itemPriceRenderer->setItem($item);
+                    $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
+                    $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                }
             }
         }
         return $result;
@@ -131,5 +129,25 @@ class Cart
             $this->quote = $this->checkoutSession->getQuote();
         }
         return $this->quote;
+    }
+
+    /**
+     * Find item by id in items haystack
+     *
+     * @param int $id
+     * @param array $itemsHaystack
+     * @return \Magento\Quote\Model\Quote\Item | bool
+     */
+    protected function findItemById($id, $itemsHaystack)
+    {
+        if (is_array($itemsHaystack)) {
+            foreach ($itemsHaystack as $item) {
+                /** @var $item \Magento\Quote\Model\Quote\Item */
+                if ((int)$item->getItemId() == $id) {
+                    return $item;
+                }
+            }
+        }
+        return false;
     }
 }
