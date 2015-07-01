@@ -313,6 +313,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      */
     public function testSaveActionExistingCustomerUnsubscribeNewsletter()
