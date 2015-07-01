@@ -33,6 +33,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
+use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -300,6 +301,10 @@ class Installer
         }
 
         $this->log->logSuccess('Magento installation complete.');
+        $this->log->logSuccess(
+            'Admin Panel URI: /'
+            . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
+        );
 
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
             throw new \LogicException('Installation progress did not finish properly.');

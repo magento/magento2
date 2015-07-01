@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use \Magento\Framework\Setup\BackendFrontnameGenerator;
+
 /**
  * A model for determining information about setup application
  */
@@ -22,11 +24,6 @@ class SetupInfo
      * Default path relative to the project root
      */
     const DEFAULT_PATH = 'setup';
-
-    /**
-     * Prefix for admin area path
-     */
-    const ADMIN_AREA_PATH_PREFIX = 'admin-';
 
     /**
      * Environment variables
@@ -125,7 +122,7 @@ class SetupInfo
      */
     public function getProjectAdminPath()
     {
-        return self::ADMIN_AREA_PATH_PREFIX . substr(dechex(rand(0, PHP_INT_MAX)), 0, 8);
+        return BackendFrontnameGenerator::generate();
     }
 
     /**
