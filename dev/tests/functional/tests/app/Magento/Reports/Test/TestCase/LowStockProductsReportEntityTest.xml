@@ -6,10 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\Reports\Test\TestCase\LowStockProductsReportEntityTest">
-    <variation name="LowStockProductsReportEntityTestVariation1">
-      <data name="product/dataset" xsi:type="string">low_stock_product</data>
-      <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid"/>
-    </variation>
-  </testCase>
+    <testCase name="Magento\Reports\Test\TestCase\LowStockProductsReportEntityTest">
+        <variation name="LowStockProductsReportEntityTestVariation1">
+            <data name="product/dataset" xsi:type="string">low_stock_product</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid" />
+        </variation>
+    </testCase>
 </config>

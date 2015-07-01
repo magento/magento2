@@ -15,7 +15,7 @@
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_big_qty,downloadableProduct::one_dollar_product_with_no_separated_link,catalogProductVirtual::required_fields_with_category</data>
             <data name="product/data/associated/dataset" xsi:type="string">simple_downloadable_virtual</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" next="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />

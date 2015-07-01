@@ -12,7 +12,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Products is created.
  *

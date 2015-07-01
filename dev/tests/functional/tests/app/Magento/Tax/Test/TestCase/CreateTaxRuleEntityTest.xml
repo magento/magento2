@@ -68,7 +68,7 @@
             <data name="taxRule/data/tax_customer_class/dataset/class_1" xsi:type="string">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">taxable_goods</data>
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">product_tax_class</data>
-            <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test, stable:no</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
