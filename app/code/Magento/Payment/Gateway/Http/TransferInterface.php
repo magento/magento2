@@ -38,7 +38,7 @@ interface TransferInterface
     /**
      * Returns request body
      *
-     * @return string
+     * @return array
      */
     public function getBody();
 
