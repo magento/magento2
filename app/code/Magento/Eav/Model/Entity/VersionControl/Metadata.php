@@ -18,7 +18,8 @@ class Metadata extends \Magento\Framework\Model\Resource\Db\VersionControl\Metad
      */
     public function getFields(\Magento\Framework\Object $entity)
     {
-        if (!isset($this->metadataInfo[get_class($entity)])) {
+        $entityClass = get_class($entity);
+        if (!isset($this->metadataInfo[$entityClass])) {
             $fields = $entity->getResource()->getReadConnection()->describeTable(
                 $entity->getResource()->getEntityTable()
             );
@@ -30,9 +31,9 @@ class Metadata extends \Magento\Framework\Model\Resource\Db\VersionControl\Metad
                 null
             );
 
-            $this->metadataInfo[get_class($entity)] = $fields;
+            $this->metadataInfo[$entityClass] = $fields;
         }
 
-        return $this->metadataInfo[get_class($entity)];
+        return $this->metadataInfo[$entityClass];
     }
 }

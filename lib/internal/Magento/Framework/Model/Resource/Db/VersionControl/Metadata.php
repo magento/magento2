@@ -24,8 +24,9 @@ class Metadata
      */
     public function getFields(\Magento\Framework\Object $entity)
     {
-        if (!isset($this->metadataInfo[get_class($entity)])) {
-            $this->metadataInfo[get_class($entity)] =
+        $entityClass = get_class($entity);
+        if (!isset($this->metadataInfo[$entityClass])) {
+            $this->metadataInfo[$entityClass] =
                 array_fill_keys(
                     array_keys(
                         $entity->getResource()->getReadConnection()->describeTable(
@@ -35,6 +36,6 @@ class Metadata
                     null
                 );
         }
-        return $this->metadataInfo[get_class($entity)];
+        return $this->metadataInfo[$entityClass];
     }
 }

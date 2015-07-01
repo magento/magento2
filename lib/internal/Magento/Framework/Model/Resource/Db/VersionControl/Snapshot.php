@@ -60,10 +60,11 @@ class Snapshot
             return true;
         }
 
-        if (!isset($this->snapshotData[get_class($entity)][$entity->getId()])) {
+        $entityClass = get_class($entity);
+        if (!isset($this->snapshotData[$entityClass][$entity->getId()])) {
             return true;
         }
-        foreach ($this->snapshotData[get_class($entity)][$entity->getId()] as $field => $value) {
+        foreach ($this->snapshotData[$entityClass][$entity->getId()] as $field => $value) {
             if ($entity->getDataByKey($field) != $value) {
                 return true;
             }
