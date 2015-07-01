@@ -5,9 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
-/**
- * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
- */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     const DEFAULT_ROOT_CATEGORY = 2;
@@ -36,6 +33,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     */
     public function testReindexAll()
     {
         $categories = $this->getCategories(4);
@@ -68,7 +69,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      */
     public function testStatusChange()
     {
@@ -99,7 +101,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      */
     public function testVisibilityChange()
     {
