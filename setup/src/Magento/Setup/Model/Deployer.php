@@ -11,6 +11,8 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Theme;
+use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,9 +25,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Deployer
 {
     /**
-     * @var DirectoryList
+     * @var Filesystem
      */
-    private $directoryList;
+    private $filesystem;
 
     /** @var Files */
     private $filesUtil;
@@ -83,6 +85,7 @@ class Deployer
 
     /**
      * @param Files $filesUtil
+     * @param Filesystem $filesystem
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -91,8 +94,8 @@ class Deployer
      * @param bool $isDryRun
      */
     public function __construct(
-        DirectoryList $directoryList,
         Files $filesUtil,
+        Filesystem $filesystem,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -100,7 +103,7 @@ class Deployer
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
-        $this->directoryList = $directoryList;
+        $this->filesystem = $filesystem;
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
@@ -142,7 +145,7 @@ class Deployer
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
-                                $fileTheme == $this->findParent($area . '/' . $themePath))
+                                $fileTheme == $this->findParent($area . Theme::THEME_PATH_SEPARATOR . $themePath))
                         ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
                         }
@@ -328,9 +331,15 @@ class Deployer
     private function findParent($fullThemePath)
     {
         if (!isset($this->parentTheme[$fullThemePath])) {
-            $themeXmlFile = $this->directoryList->getPath(DirectoryList::THEMES) . '/' . $fullThemePath . '/theme.xml';
-            $xmlData = new \SimpleXMLElement(file_get_contents($themeXmlFile));
-            $this->parentTheme[$fullThemePath] = $xmlData->parent ?: '';
+            $themesRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
+            /** @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory */
+            $themeConfigFactory = $this->objectManager->get('Magento\Framework\Config\ThemeFactory');
+            $themeConfig = $themeConfigFactory->create(
+                ['configContent' => $themesRead->readFile($fullThemePath . '/theme.xml')]
+            );
+            $parentThemeParts = $themeConfig->getParentTheme();
+            $this->parentTheme[$fullThemePath] = $parentThemeParts != null ?
+                implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts) : '';
         }
         return $this->parentTheme[$fullThemePath];
     }
