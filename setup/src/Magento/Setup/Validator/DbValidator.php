@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Validator;
 
+use Magento\Framework\Math\Random;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Module\ConnectionFactory;
 
@@ -22,13 +23,19 @@ class DbValidator
     private $connectionFactory;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * Constructor
      * 
      * @param ConnectionFactory $connectionFactory
      */
-    public function __construct(ConnectionFactory $connectionFactory)
+    public function __construct(ConnectionFactory $connectionFactory, Random $random)
     {
         $this->connectionFactory = $connectionFactory;
+        $this->random = $random;
     }
 
     /**
@@ -86,5 +93,44 @@ class DbValidator
             }
         }
         return true;
+    }
+
+    /**
+     * Check database write permission
+     *
+     * @param string $dbName
+     * @param string $dbHost
+     * @param string $dbUser
+     * @param string string $dbPass
+     * @return bool
+     */
+    public function checkDatabaseWrite($dbName, $dbHost, $dbUser, $dbPass = '')
+    {
+        $connection = $this->connectionFactory->create([
+            'dbname' => $dbName,
+            'host' => $dbHost,
+            'username' => $dbUser,
+            'password' => $dbPass,
+            'active' => true,
+        ]);
+        $tableName = $this->random->getRandomString(10);
+        $newTable = $connection->newTable($tableName)->addColumn('testCol', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
+        try {
+            $connection->createTemporaryTable($newTable);
+            $connection->insert($tableName, ['testCol' => 'testing']);
+            $result = $connection->fetchAll(
+                'select * from ' . $tableName . ' where testCol = "testing"'
+            );
+            if (count($result) == 1) {
+                $connection->delete($tableName, ['testCol=?' => 'testing']);
+                $result = $connection->fetchAll('select * from ' . $tableName);
+                if (count($result) == 0) {
+                    return true;
+                }
+            }
+        } catch (\Zend_Db_Exception $e) {
+            return false;
+        }
+        return false;
     }
 }

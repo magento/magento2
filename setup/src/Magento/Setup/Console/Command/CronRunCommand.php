@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\Cron\Queue;
+use Magento\Setup\Model\Cron\ReadinessCheck;
 use Magento\Setup\Model\Cron\Status;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,16 +27,24 @@ class CronRunCommand extends AbstractSetupCommand
     protected $status;
 
     /**
+     * @var ReadinessCheck
+     */
+    protected $readinessCheck;
+
+    /**
      * Constructor
      *
      * @param Queue $queue
+     * @param ReadinessCheck $readinessCheck
      * @param Status $status
      */
     public function __construct(
         Queue $queue,
+        ReadinessCheck $readinessCheck,
         Status $status
     ) {
         $this->queue = $queue;
+        $this->readinessCheck = $readinessCheck;
         $this->status = $status;
         parent::__construct();
     }
@@ -58,7 +67,9 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->status->isUpdateInProgress() || $this->status->isUpdateError()) {
+        if (!$this->readinessCheck->runReadinessCheck() || $this->status->isUpdateInProgress() ||
+            $this->status->isUpdateError()
+        ) {
             return;
         }
         try {
