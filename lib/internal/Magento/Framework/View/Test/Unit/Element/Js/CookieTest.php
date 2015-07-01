@@ -38,6 +38,21 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->ipValidatorMock = $this->getMockBuilder('Magento\Framework\Validator\Ip')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $validtorMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\File\Validator')
+            ->setMethods(['isValid'])->disableOriginalConstructor()->getMock();
+
+        $scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
+            ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+
+        $this->contextMock->expects($this->any())
+            ->method('getScopeConfig')
+            ->will($this->returnValue($scopeConfigMock));
+
+        $this->contextMock->expects($this->any())
+            ->method('getValidator')
+            ->will($this->returnValue($validtorMock));
+
         $this->model = new \Magento\Framework\View\Element\Js\Cookie(
             $this->contextMock,
             $this->sessionConfigMock,
