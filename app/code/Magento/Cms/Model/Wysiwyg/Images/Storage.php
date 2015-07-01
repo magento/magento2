@@ -185,6 +185,8 @@ class Storage extends \Magento\Framework\Object
     }
 
     /**
+     * Create sub directories if DB storage is used
+     *
      * @param string $path
      * @return void
      */
@@ -202,6 +204,8 @@ class Storage extends \Magento\Framework\Object
     }
 
     /**
+     * Prepare and get conditions for exclude directories
+     *
      * @return array
      */
     protected function getConditionsForExcludeDirs()
@@ -225,6 +229,8 @@ class Storage extends \Magento\Framework\Object
     }
 
     /**
+     * Remove excluded directories from collection
+     *
      * @param \Magento\Framework\Data\Collection\Filesystem $collection
      * @param array $conditions
      * @return \Magento\Framework\Data\Collection\Filesystem
