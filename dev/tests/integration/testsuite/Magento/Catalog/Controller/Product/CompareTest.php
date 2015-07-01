@@ -93,6 +93,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_assertCompareListEquals([2]);
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testIndexActionDisplay()
     {
         $this->_requireVisitorWithTwoProducts();
