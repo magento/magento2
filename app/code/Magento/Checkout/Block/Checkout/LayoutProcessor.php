@@ -117,6 +117,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                     'component' => 'Magento_Checkout/js/view/billing-address',
                     'displayArea' => 'billing-address-form-' . $paymentCode,
                     'provider' => 'checkoutProvider',
+                    'deps' => 'checkoutProvider',
                     'dataScopePrefix' => 'billingAddress' . $paymentCode,
                     'sortOrder' => 1,
                     'children' => [
