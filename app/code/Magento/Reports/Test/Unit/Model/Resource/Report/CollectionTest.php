@@ -190,7 +190,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             "en_US",
             \IntlDateFormatter::SHORT,
             \IntlDateFormatter::SHORT,
-            'America/Los_Angeles'
+            new \DateTimeZone('America/Los_Angeles')
         );
 
         return $formatter->format($dateStart);
