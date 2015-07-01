@@ -42,18 +42,15 @@
         </div>
     <?php endif ?>
     <script>
-        window.checkout = {
-            shoppingCartUrl: '<?=$block->getShoppingCartUrl()?>',
-            checkoutUrl: '<?=$block->getCheckoutUrl()?>',
-            updateItemQtyUrl: '<?=$block->getUpdateItemQtyUrl()?>',
-            removeItemUrl: '<?=$block->getRemoveItemUrl()?>',
-            imageTemplate: '<?= $block->getImageHtmlTemplate()?>'
-        };
+        window.checkout = <?php echo \Zend_Json::encode($block->getConfig()); ?>;
     </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
             "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+        },
+        "*": {
+            "Magento_Ui/js/block-loader": "<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
         }
     }
     </script>
