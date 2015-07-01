@@ -195,7 +195,7 @@
                                                                     <item name="telephone" xsi:type="array">
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
-                                                                                <item name="description" xsi:type="string">For delivery Questions</item>
+                                                                                <item name="description" xsi:type="string">For delivery questions.</item>
                                                                             </item>
                                                                         </item>
                                                                     </item>
