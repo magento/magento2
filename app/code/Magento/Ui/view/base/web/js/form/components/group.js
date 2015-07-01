@@ -35,7 +35,10 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('visible required');
+                .observe('visible')
+                .observe({
+                    required: !!+this.required
+                });
 
             return this;
         },
