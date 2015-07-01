@@ -76,7 +76,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'currently_used_for',
             'label',
             [
-                'label' => __('Currenlty Used For'),
+                'label' => __('Currently Used For'),
                 'container_id' => 'currently_used_for',
                 'after_element_html' => '<script>require(["prototype"], function () {' .
                 (!$this->getEmailTemplate()->getSystemConfigPathsWhereCurrentlyUsed() ? '$(\'' .
