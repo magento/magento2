@@ -272,7 +272,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(31))->method('log')->with('Current status:');
         $this->logger->expects($this->at(34))->method('log')->with('Disabling Maintenance Mode:');
         $this->logger->expects($this->at(36))->method('log')->with('Post installation file permissions check...');
-        $this->logger->expects($this->once())->method('logSuccess')->with('Magento installation complete.');
+        $this->logger->expects($this->at(38))->method('logSuccess')->with('Magento installation complete.');
         $this->object->install($request);
     }
 
