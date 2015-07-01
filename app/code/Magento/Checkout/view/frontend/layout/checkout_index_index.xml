@@ -16,6 +16,9 @@
                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                                 <item name="config" xsi:type="array">
                                     <item name="provider" xsi:type="string">checkoutProvider</item>
+                                    <item name="deps" xsi:type="array">
+                                        <item name="0" xsi:type="string">checkoutProvider</item>
+                                    </item>
                                     <item name="template" xsi:type="string">ui/form/field</item>
                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                 </item>
@@ -74,7 +77,10 @@
                                                     </item>
                                                     <item name="shippingAddress" xsi:type="array">
                                                         <item name="config" xsi:type="array">
-                                                            <item name="deps" xsi:type="string">checkout.steps.shipping-step.step-config</item>
+                                                            <item name="deps" xsi:type="array">
+                                                                <item name="0" xsi:type="string">checkout.steps.shipping-step.step-config</item>
+                                                                <item name="1" xsi:type="string">checkoutProvider</item>
+                                                            </item>
                                                             <item name="popUpForm" xsi:type="array">
                                                                 <item name="element" xsi:type="string">#opc-new-shipping-address</item>
                                                                 <item name="options" xsi:type="array">
@@ -157,6 +163,11 @@
                                                             </item>
                                                             <item name="shipping-address-fieldset" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="deps" xsi:type="array">
+                                                                        <item name="0" xsi:type="string">checkoutProvider</item>
+                                                                    </item>
+                                                                </item>
                                                                 <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                                 <item name="children" xsi:type="array">
                                                                      <!-- The following items override configuration of corresponding address attributes -->
