@@ -123,8 +123,10 @@
                     <label class="admin__field-label" for="send_email"><?php echo __('Email Copy of Invoice') ?></label>
                 </div>
                 <?php endif; ?>
+                <?php echo $block->getChildHtml('submit_before') ?>
                 <div class="actions">
                     <?php echo $block->getChildHtml('submit_button') ?>
+                    <?php echo $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>
