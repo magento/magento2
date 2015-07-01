@@ -100,14 +100,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             false
         );
         $viewMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
+        $this->subjectMock->expects($this->exactly($invalidateCounter))->method('addCommitCallback');
 
         $closureMock = function (\Magento\Store\Model\Store $object) use ($viewMock) {
             $this->assertEquals($object, $viewMock);
             return $this->subjectMock;
         };
-
-        $this->config->expects($this->exactly($invalidateCounter))->method('getIndexer')->willReturn([]);
-        $this->indexerHandler->expects($this->exactly($invalidateCounter))->method('cleanIndex');
 
         $this->prepareIndexer($invalidateCounter);
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
