@@ -193,7 +193,59 @@ body {
 //  Buttons
 //  ---------------------------------------------
 
-// TODO: Add button styles
+.button {
+    .inner-wrapper {
+        td {
+            .css(border-radius, @button__border-radius, 1);
+            background-color: @button-primary__background;
+
+            a {
+                font-size: @button__font-size;
+                color: @button-primary__color;
+                .css(border-radius, @button__border-radius, 1);
+                border: 1px solid @button-primary__background;
+                text-decoration: none;
+                padding: @button__padding;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.email-non-inline() {
+    .button {
+        .inner-wrapper {
+            td:hover {
+                background-color: @button-primary__hover__background !important;
+            }
+
+            td:active {
+                background-color: @button-primary__active__background !important;
+            }
+        }
+
+        a:hover {
+            // Undo general link hover state
+            color: @button-primary__color !important;
+            text-decoration: none !important;
+            border: 1px solid @button-primary__hover__background;
+        }
+    }
+
+    .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+        .button {
+            .inner-wrapper {
+                width:100% !important;
+
+                td {
+                    a {
+                        font-size: @button__font-size + 2;
+                    }
+                }
+            }
+        }
+    }
+}
 
 //
 //  Messages
