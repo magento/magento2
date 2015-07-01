@@ -39,7 +39,7 @@ class AdminGetUriCommand extends Command
     protected function configure()
     {
         $this->setName('admin:geturi')
-            ->setDescription('Get Admin Backend URI');
+            ->setDescription('Displays the Magento Admin URI');
         parent::configure();
     }
 
