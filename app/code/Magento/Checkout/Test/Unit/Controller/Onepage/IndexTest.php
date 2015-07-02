@@ -188,6 +188,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->basicStub($this->quoteMock, 'hasItems')->willReturn(true);
         $this->basicStub($this->quoteMock, 'getHasError')->willReturn(false);
         $this->basicStub($this->quoteMock, 'validateMinimumAmount')->willReturn(true);
+        $this->basicStub($this->sessionMock, 'isLoggedIn')->willReturn(true);
 
         //Expected outcomes
         $this->sessionMock->expects($this->once())->method('regenerateId');

@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<ol class="checkout-agreements-items">
+    <!-- ko foreach: agreementConfiguration -->
+    <li class="checkout-agreements-item">
+        <div class="checkout-agreements-item-title" data-bind="html: checkboxText"></div>
+        <div class="checkout-agreements-item-content"
+             data-bind="style: { height: height || null }, html: content"></div>
+    </li>
+    <!-- /ko -->
+</ol>
