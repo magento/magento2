@@ -1,0 +1,14 @@
+<!--
+/**
+* Copyright © 2015 Magento. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<!-- ko if: isDisplayed() -->
+<tr class="totals">
+    <th data-bind="text: title" class="mark" scope="row"></th>
+    <td class="amount" data-bind="attr: {'data-th': $t(title) }">
+        <span data-bind="text: getValue()"></span>
+    </td>
+</tr>
+<!-- /ko -->
