@@ -42,6 +42,8 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_BASE_TAX_AMOUNT = 'base_tax_amount';
 
+    const KEY_WEEE_TAX_APPLIED_AMOUNT = 'weee_tax_applied_amount';
+
     const KEY_SHIPPING_TAX_AMOUNT = 'shipping_tax_amount';
 
     const KEY_BASE_SHIPPING_TAX_AMOUNT = 'base_shipping_tax_amount';
@@ -58,7 +60,13 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_QUOTE_CURRENCY_CODE = 'quote_currency_code';
 
+    const KEY_COUPON_CODE = 'coupon_code';
+
     const KEY_ITEMS = 'items';
+
+    const KEY_TOTAL_SEGMENTS = 'total_segments';
+
+    const KEY_ITEMS_QTY = 'items_qty';
 
     /**#@-*/
 
@@ -273,6 +281,21 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setBaseTaxAmount($baseTaxAmount);
 
     /**
+     * Returns the total weee tax applied amount in quote currency.
+     *
+     * @return float Item weee tax applied amount in quote currency.
+     */
+    public function getWeeeTaxAppliedAmount();
+
+    /**
+     * Sets the total weee tax applied amount in quote currency.
+     *
+     * @param float $weeeTaxAppliedAmount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
+
+    /**
      * Get shipping tax amount in quote currency
      *
      * @return float|null
@@ -393,6 +416,36 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setQuoteCurrencyCode($quoteCurrencyCode);
 
     /**
+     * Get applied coupon code
+     *
+     * @return string|null
+     */
+    public function getCouponCode();
+
+    /**
+     * Set applied coupon code
+     *
+     * @param string $couponCode
+     * @return $this
+     */
+    public function setCouponCode($couponCode);
+
+    /**
+     * Get items qty
+     *
+     * @return int||null
+     */
+    public function getItemsQty();
+
+    /**
+     * Set items qty
+     *
+     * @param int $itemsQty
+     * @return $this
+     */
+    public function setItemsQty($itemsQty = null);
+
+    /**
      * Get totals by items
      *
      * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
@@ -406,6 +459,21 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setItems(array $items = null);
+
+    /**
+     * Get dynamically calculated totals
+     *
+     * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
+     */
+    public function getTotalSegments();
+
+    /**
+     * Set dynamically calculated totals
+     *
+     * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totals
+     * @return $this
+     */
+    public function setTotalSegments($totals = []);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

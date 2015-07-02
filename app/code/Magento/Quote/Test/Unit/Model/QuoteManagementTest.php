@@ -717,45 +717,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $this->assertEquals($orderId, $service->placeOrder($cartId));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
-    public function testPlaceOrderIfAgreementsIsNotValid()
-    {
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(false);
-        
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
-        $service = $this->getMock(
-            '\Magento\Quote\Model\QuoteManagement',
-            ['submit'],
-            [
-                'eventManager' => $this->eventManager,
-                'quoteValidator' => $this->quoteValidator,
-                'orderFactory' => $this->orderFactory,
-                'orderManagement' => $this->orderManagement,
-                'customerManagement' => $this->customerManagement,
-                'quoteAddressToOrder' => $this->quoteAddressToOrder,
-                'quoteAddressToOrderAddress' => $this->quoteAddressToOrderAddress,
-                'quoteItemToOrderItem' => $this->quoteItemToOrderItem,
-                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment,
-                'userContext' => $this->userContextMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'customerRepository' => $this->customerRepositoryMock,
-                'customerModelFactory' => $this->customerFactoryMock,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
-                'storeManager' => $this->storeManagerMock,
-                'checkoutSession' => $this->checkoutSessionMock,
-                'customerSession' => $this->customerSessionMock,
-                'accountManagement' => $this->accountManagementMock,
-                'agreementsValidator' => $this->agreementsValidatorMock,
-            ]
-        );
-        $service->placeOrder(45);
     }
 
     public function testPlaceOrder()
@@ -829,7 +792,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $paymentMethod = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
         $paymentMethod->expects($this->once())->method('setChecks');

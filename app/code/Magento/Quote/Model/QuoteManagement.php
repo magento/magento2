@@ -297,11 +297,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
-        if (!$this->agreementsValidator->isValid($agreements)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Please agree to all the terms and conditions before placing the order.')
-            );
-        }
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
             $paymentMethod->setChecks([
