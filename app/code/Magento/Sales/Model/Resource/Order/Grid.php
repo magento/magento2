@@ -73,10 +73,16 @@ class Grid extends AbstractGrid
      */
     protected function getGridOriginSelect()
     {
-        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\n', ifnull(sba.city, ''), "
-            . "',', ifnull(sba.region, ''), ',', ifnull(sba.postcode, '')))";
-        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\n', ifnull(ssa.city, ''), "
-            . "',', ifnull(ssa.region, ''), ',', ifnull(ssa.postcode, '')))";
+        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\\n', ifnull(sba.city, ''), "
+            . "', ', ifnull(sba.region, ''), ', ', ifnull(sba.postcode, '')))";
+        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\\n', ifnull(ssa.city, ''), "
+            . "', ', ifnull(ssa.region, ''), ', ', ifnull(ssa.postcode, '')))";
+        $customerName = "trim(concat(ifnull(sfo.customer_firstname, ''), ' ', ifnull(sfo.customer_lastname, '')))";
+        $paymentMethodSelect = $this->getConnection()->select()->from(
+            'sales_order_payment', ['method']
+        )->where(
+            '`parent_id` = sfo.entity_id'
+        )->limit(1);
         return $this->getConnection()->select()
             ->from(['sfo' => $this->getTable($this->orderTableName)], [])
             ->joinLeft(
@@ -87,11 +93,6 @@ class Grid extends AbstractGrid
             ->joinLeft(
                 ['ssa' => $this->getTable($this->addressTableName)],
                 'sfo.shipping_address_id = ssa.entity_id',
-                []
-            )
-            ->joinLeft(
-                ['cg' => $this->getTable('customer_group')],
-                'sfo.customer_group_id = cg.customer_group_id',
                 []
             )
             ->columns(
@@ -116,9 +117,11 @@ class Grid extends AbstractGrid
                     'shipping_address' => $shippingAddress,
                     'shipping_information' => 'sfo.shipping_description',
                     'customer_email' => 'sfo.customer_email',
-                    'customer_group' => 'cg.customer_group_code',
+                    'customer_group' => 'sfo.customer_group_id',
                     'subtotal' => 'sfo.base_subtotal',
-                    'shipping_and_handling' => 'sfo.base_shipping_amount'
+                    'shipping_and_handling' => 'sfo.base_shipping_amount',
+                    'customer_name' => $customerName,
+                    'payment_method' => sprintf('(%s)', $paymentMethodSelect)
                 ]
             );
     }
