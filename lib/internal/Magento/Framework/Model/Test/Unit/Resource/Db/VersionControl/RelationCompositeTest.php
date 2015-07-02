@@ -4,25 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Test\Unit\Model\Resource;
+namespace Magento\Framework\Model\Test\Unit\Resource\Db\VersionControl;
 
 /**
- * Class EntityRelationCompositeTest
+ * Class RelationCompositeTest
  */
-class EntityRelationCompositeTest extends \PHPUnit_Framework_TestCase
+class RelationCompositeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\EntityRelationComposite
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite
      */
     protected $entityRelationComposite;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $salesModelMock;
+    protected $modelMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntityRelationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface
      */
     protected $relationProcessorMock;
 
@@ -33,7 +33,7 @@ class EntityRelationCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->salesModelMock = $this->getMockBuilder('Magento\Sales\Model\AbstractModel')
+        $this->modelMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -41,16 +41,17 @@ class EntityRelationCompositeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->relationProcessorMock = $this->getMockBuilder('Magento\Sales\Model\AbstractModel')
+        $this->relationProcessorMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->relationProcessorMock = $this->getMockBuilder('Magento\Sales\Model\Resource\EntityRelationInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->entityRelationComposite = new \Magento\Sales\Model\Resource\EntityRelationComposite(
+        $this->relationProcessorMock = $this->getMockBuilder(
+            'Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface'
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+
+        $this->entityRelationComposite = new \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite(
             $this->eventManagerMock,
             [
                 'default' => $this->relationProcessorMock
@@ -62,18 +63,18 @@ class EntityRelationCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->relationProcessorMock->expects($this->once())
             ->method('processRelation')
-            ->with($this->salesModelMock);
-        $this->salesModelMock->expects($this->once())
+            ->with($this->modelMock);
+        $this->modelMock->expects($this->once())
             ->method('getEventPrefix')
-            ->willReturn('sales_event_prefix');
+            ->willReturn('custom_event_prefix');
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
-                'sales_event_prefix_process_relation',
+                'custom_event_prefix_process_relation',
                 [
-                    'object' => $this->salesModelMock
+                    'object' => $this->modelMock
                 ]
             );
-        $this->entityRelationComposite->processRelations($this->salesModelMock);
+        $this->entityRelationComposite->processRelations($this->modelMock);
     }
 }
