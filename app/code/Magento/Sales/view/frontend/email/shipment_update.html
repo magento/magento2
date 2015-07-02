@@ -6,18 +6,18 @@
 -->
 <!--@subject {{var store.getFrontendName()}}: Shipment # {{var shipment.increment_id}} update @-->
 <!--@vars {
-"store url=\"\"":"Store Url",
 "store url=\"customer\/account\/\"":"Customer Account Url",
+"var order.getCustomerName()":"Customer Name",
 "template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
 "template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var comment":"Order Comment",
 "var logo_alt":"Email Logo Image Alt",
 "var logo_url":"Email Logo Image Url",
-"var order.getCustomerName()":"Customer Name",
-"var order.getStatusLabel()":"Order Status",
+"var comment":"Order Comment",
 "var order.increment_id":"Order Id",
+"var order.getStatusLabel()":"Order Status",
 "var shipment.increment_id":"Shipment Id",
-"var store.getFrontendName()":"Store Name"
+"var store.getFrontendName()":"Store Name",
+"store url=\"\"":"Store Url"
 } @-->
 
 {{template config_path="design/email/header_template"}}

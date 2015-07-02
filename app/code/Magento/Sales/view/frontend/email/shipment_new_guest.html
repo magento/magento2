@@ -6,23 +6,23 @@
 -->
 <!--@subject {{var store.getFrontendName()}}: Shipment # {{var shipment.increment_id}} for Order # {{var order.increment_id}} @-->
 <!--@vars {
-"block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
-"layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
-"store url=\"\"":"Store Url",
+"var formattedBillingAddress|raw":"Billing Address",
 "template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
 "template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var billing.getName()":"Guest Customer Name",
-"var comment":"Shipment Comment",
-"var formattedBillingAddress|raw":"Billing Address",
-"var formattedShippingAddress|raw":"Shipping Address",
 "var logo_alt":"Email Logo Image Alt",
 "var logo_url":"Email Logo Image Url",
-"var order.getShippingDescription()":"Shipping Description",
+"var billing.getName()":"Guest Customer Name",
 "var order.increment_id":"Order Id",
-"var order.shipping_description":"Shipping Description",
 "var payment_html|raw":"Payment Details",
+"var comment":"Shipment Comment",
 "var shipment.increment_id":"Shipment Id",
-"var store.getFrontendName()":"Store Name"
+"layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
+"block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
+"var formattedShippingAddress|raw":"Shipping Address",
+"var order.shipping_description":"Shipping Description",
+"var order.getShippingDescription()":"Shipping Description",
+"var store.getFrontendName()":"Store Name",
+"store url=\"\"":"Store Url"
 } @-->
 
 {{template config_path="design/email/header_template"}}

@@ -6,19 +6,19 @@
 -->
 <!--@subject {{var store.getFrontendName()}}: New Order # {{var order.increment_id}} @-->
 <!--@vars {
-"layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"":"Order Items Grid",
-"store url=''":"Store Url",
+"var formattedBillingAddress|raw":"Billing Address",
 "template config_path=\"design\/email\/footer_template\"":"Email Footer Template",
 "template config_path=\"design\/email\/header_template\"":"Email Header Template",
-"var formattedBillingAddress|raw":"Billing Address",
-"var formattedShippingAddress|raw":"Shipping Address",
 "var logo_alt":"Email Logo Image Alt",
 "var logo_url":"Email Logo Image Url",
 "var order.getEmailCustomerNote()":"Email Order Note",
-"var order.getShippingDescription()":"Shipping Description",
 "var order.increment_id":"Order Id",
+"layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"":"Order Items Grid",
 "var payment_html|raw":"Payment Details",
-"var store.getFrontendName()":"Store Name"
+"var formattedShippingAddress|raw":"Shipping Address",
+"var order.getShippingDescription()":"Shipping Description",
+"var store.getFrontendName()":"Store Name",
+"store url=''":"Store Url"
 } @-->
 
 {{template config_path="design/email/header_template"}}
