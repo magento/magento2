@@ -12,14 +12,17 @@
     data-type="<%= data.type %>">
     <div class="modal-inner-wrap">
         <header class="modal-header">
+            <% if(data.title){ %>
             <h1 class="modal-title"
                 data-role="title"><%= data.title %></h1>
+            <% } %>
             <button
                 class="action-close"
                 data-role="closeBtn"
                 type="button">
                 <span><%= data.closeText %></span>
             </button>
+            <% if(data.buttons.length > 0){ %>
             <div class="page-main-actions">
                 <div class="page-actions">
                     <div class="page-actions-buttons">
@@ -33,6 +36,7 @@
                     </div>
                 </div>
             </div>
+            <% } %>
         </header>
         <div class="modal-content" data-role="content"></div>
     </div>

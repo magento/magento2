@@ -65,7 +65,7 @@
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
     <type name="Magento\Quote\Model\Cart\CartTotalRepository">
-        <plugin name="add_tax_details" type="Magento\Tax\Model\Quote\GrandTotalDetails"/>
+        <plugin name="add_tax_details" type="Magento\Tax\Model\Quote\GrandTotalDetailsPlugin"/>
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
         <arguments>
@@ -76,5 +76,8 @@
         <arguments>
             <argument name="resourcePrefix" xsi:type="string">sales</argument>
         </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="save_order_tax" type="Magento\Tax\Model\Plugin\OrderSave"/>
     </type>
 </config>
