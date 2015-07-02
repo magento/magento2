@@ -5,23 +5,27 @@
  */
 -->
 <!--@subject {{var store.getFrontendName()}}: Shipment # {{var shipment.increment_id}} for Order # {{var order.increment_id}} @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
-"var logo_alt":"Email Logo Image Alt",
-"var order.getCustomerName()":"Customer Name",
-"var store.getFrontendName()":"Store Name",
-"store url=\"customer/account/\"":"Customer Account Url",
-"var shipment.increment_id":"Shipment Id",
-"var order.increment_id":"Order Id",
-"var formattedBillingAddress":"Billing Address",
-"var payment_html":"Payment Details",
-"var formattedShippingAddress":"Shipping Address",
-"var order.shipping_description":"Shipping Description",
+<!--@vars {
+"block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"n\/a",
+"block type='Magento\\Framework\\View\\Element\\Template' area='frontend' template='email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
 "layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
-"block type='Magento\\Framework\\View\\Element\\Template' area='frontend' template='email/shipment/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
-"var comment":"Shipment Comment"}
-@-->
+"store url=\"\"":"Store Url",
+"store url=\"customer\/account\/\"":"Customer Account Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
+"var comment":"Shipment Comment",
+"var formattedBillingAddress|raw":"Billing Address",
+"var formattedShippingAddress|raw":"Shipping Address",
+"var logo_alt":"Email Logo Image Alt",
+"var logo_url":"Email Logo Image Url",
+"var order.getCustomerName()":"Customer Name",
+"var order.getShippingDescription()":"Shipping Description",
+"var order.increment_id":"Order Id",
+"var order.shipping_description":"Shipping Description",
+"var payment_html|raw":"Payment Details",
+"var shipment.increment_id":"Shipment Id",
+"var store.getFrontendName()":"Store Name"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 

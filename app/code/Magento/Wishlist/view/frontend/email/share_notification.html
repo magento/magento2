@@ -5,13 +5,17 @@
  */
 -->
 <!--@subject Take a look at {{var customerName}}'s Wish List @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
+<!--@vars {
+"store url=\"\"":"Store Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
+"var customerName":"Customer Name",
+"var items|raw":"Wish List Items",
 "var logo_alt":"Email Logo Image Alt",
-"var message":"Wish List Message",
-"var items":"Wish List Items"}
-@-->
+"var logo_url":"Email Logo Image Url",
+"var message|raw":"Wish List Message",
+"var viewOnSiteLink":"n\/a"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 
