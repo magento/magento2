@@ -42,6 +42,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityFactoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot
+     */
+    protected $entitySnapshotMock;
+
     protected function setUp()
     {
         $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
@@ -81,6 +86,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->entitySnapshotMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\VersionControl\Snapshot')
+            ->disableOriginalConstructor()
+            ->setMethods(['registerSnapshot'])
+            ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
@@ -89,7 +98,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'customerResource' => $this->customerResourceMock,
                 'resource' => $this->resourceMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
-                'entityFactory' => $this->entityFactoryMock
+                'entityFactory' => $this->entityFactoryMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -154,7 +164,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturn($customerId);
 
-        $itemMock = $this->getMockBuilder('Magento\Framework\Object')
+        $itemMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->once())
