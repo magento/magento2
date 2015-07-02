@@ -306,7 +306,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsite')
             ->with($websiteId)
             ->willReturn($website);
-        $exception = new \Magento\Framework\Exception\AlreadyExistsException(new \Magento\Framework\Phrase('Exception message'));
+        $exception = new \Magento\Framework\Exception\AlreadyExistsException(
+            new \Magento\Framework\Phrase('Exception message')
+        );
         $this->customerRepository
             ->expects($this->once())
             ->method('save')
@@ -380,7 +382,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsite')
             ->with($websiteId)
             ->willReturn($website);
-        $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Exception message'));
+        $exception = new \Magento\Framework\Exception\LocalizedException(
+            new \Magento\Framework\Phrase('Exception message')
+        );
         $this->customerRepository
             ->expects($this->once())
             ->method('save')
@@ -462,8 +466,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($customer, $hash)
             ->willReturn($customer);
-
-        $exception = new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('Exception message'));
+        $exception = new \Magento\Framework\Exception\InputException(
+            new \Magento\Framework\Phrase('Exception message')
+        );
         $this->addressRepository
             ->expects($this->atLeastOnce())
             ->method('save')
@@ -478,7 +483,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreateAccountWithPasswordHashWithoutException()
     {
@@ -489,7 +494,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $customerEmail = 'email@email.com';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
         $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
-        $customerName = 'Customer Name';
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
