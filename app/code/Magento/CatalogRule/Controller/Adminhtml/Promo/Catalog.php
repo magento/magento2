@@ -86,6 +86,7 @@ class Catalog extends Action
      *
      * @param string $dirtyRulesNoticeMessage
      * @return void
+     * @codeCoverageIgnore
      */
     public function setDirtyRulesNoticeMessage($dirtyRulesNoticeMessage)
     {
