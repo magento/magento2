@@ -158,12 +158,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsCountryInEU()
-    {
-        $this->assertEquals(true, $this->_model->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->_model->isCountryInEU("US"));
-    }
-
     /**
      * Callback function, emulates getValue function
      * @param $path
@@ -181,7 +175,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'carriers/dhl/password' => 'some password',
             'carriers/dhl/content_type' => 'N',
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
-            'general/country/eu_countries' => 'DE,GB',
         ];
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
     }
