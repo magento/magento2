@@ -7,7 +7,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractEntityTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Entity model to be tested
@@ -115,7 +115,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    private function _getAdapterMock()
+    protected function _getAdapterMock()
     {
         $adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',

@@ -46,7 +46,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $gridPoolMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -95,7 +95,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',

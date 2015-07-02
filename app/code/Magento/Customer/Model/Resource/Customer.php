@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
  * Customer entity resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
+class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
@@ -33,6 +33,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -40,12 +42,14 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
@@ -149,70 +153,12 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Save customer addresses and set default addresses in attributes backend
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\Object $customer
      * @return $this
      */
     protected function _afterSave(\Magento\Framework\Object $customer)
     {
-        $this->_saveAddresses($customer);
         return parent::_afterSave($customer);
-    }
-
-    /**
-     * Save/delete customer address
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _saveAddresses(\Magento\Customer\Model\Customer $customer)
-    {
-        $defaultBillingId = $customer->getData('default_billing');
-        $defaultShippingId = $customer->getData('default_shipping');
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($customer->getAddresses() as $address) {
-            if ($address->getData('_deleted')) {
-                if ($address->getId() == $defaultBillingId) {
-                    $customer->setData('default_billing', null);
-                }
-                if ($address->getId() == $defaultShippingId) {
-                    $customer->setData('default_shipping', null);
-                }
-                $removedAddressId = $address->getId();
-                $address->delete();
-                // Remove deleted address from customer address collection
-                $customer->getAddressesCollection()->removeItemByKey($removedAddressId);
-            } else {
-                $address->setParentId(
-                    $customer->getId()
-                )->setStoreId(
-                    $customer->getStoreId()
-                )->setIsCustomerSaveTransaction(
-                    true
-                )->save();
-                if (($address->getIsPrimaryBilling() ||
-                    $address->getIsDefaultBilling()) && $address->getId() != $defaultBillingId
-                ) {
-                    $customer->setData('default_billing', $address->getId());
-                }
-                if (($address->getIsPrimaryShipping() ||
-                    $address->getIsDefaultShipping()) && $address->getId() != $defaultShippingId
-                ) {
-                    $customer->setData('default_shipping', $address->getId());
-                }
-            }
-        }
-        $changedAddresses = [];
-
-        $changedAddresses['default_billing'] = $customer->getData('default_billing');
-        $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
-        $this->_getWriteAdapter()->update(
-            $this->getTable('customer_entity'),
-            $changedAddresses,
-            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
-        );
-
-        return $this;
     }
 
     /**
