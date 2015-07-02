@@ -61,8 +61,9 @@
 @button-marker-triangle__width__xl: 1.2rem;
 
 //  Button Triangle
+@button-triangle__base__border-color: darken(@button__border-color, 10%);
+@button-triangle__base__disabled__background-color: lighten(@button__background-color, 10%);
 @button-triangle__base__size: 1.7rem;
-@button-triangle__border-color: darken(@button__border-color, 10%);
 
 //
 //  Utilities
@@ -235,6 +236,17 @@
             box-shadow: none;
         }
     }
+    .action-default {
+        &[disabled],
+        &.disabled {
+            .ie9 &,
+            .ie10 & {
+                background-color: @button-triangle__base__disabled__background-color;
+                opacity: 1;
+                text-shadow: none;
+            }
+        }
+    }
 }
 
 //  Right Triangle
@@ -252,7 +264,7 @@
             margin-left: -(@button-triangle__base__size);
         }
         &:before {
-            border-left-color: @button-triangle__border-color;
+            border-left-color: @button-triangle__base__border-color;
             right: -1px;
         }
         &:hover,
@@ -260,6 +272,16 @@
         &:focus {
             &:after {
                 border-left-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent transparent transparent @button-triangle__base__disabled__background-color;
+                }
             }
         }
     }
@@ -293,7 +315,7 @@
             right: 100%;
         }
         &:before {
-            border-right-color: @button-triangle__border-color;
+            border-right-color: @button-triangle__base__border-color;
             left: -1px;
         }
         &:hover,
@@ -301,6 +323,16 @@
         &:focus {
             &:after {
                 border-right-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent @button-triangle__base__disabled__background-color transparent transparent;
+                }
             }
         }
     }
