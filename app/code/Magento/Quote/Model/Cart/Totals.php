@@ -311,6 +311,27 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     }
 
     /**
+     * Returns the total weee tax applied amount in quote currency.
+     *
+     * @return float Item weee tax applied amount in quote currency.
+     */
+    public function getWeeeTaxAppliedAmount()
+    {
+        return $this->getData(self::KEY_WEEE_TAX_APPLIED_AMOUNT);
+    }
+
+    /**
+     * Sets the total weee tax applied amount in quote currency.
+     *
+     * @param float $weeeTaxAppliedAmount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount)
+    {
+        return $this->setData(self::KEY_WEEE_TAX_APPLIED_AMOUNT, $weeeTaxAppliedAmount);
+    }
+
+    /**
      * Get shipping tax amount in quote currency
      *
      * @return float|null
@@ -479,6 +500,43 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCouponCode()
+    {
+        return $this->getData(self::KEY_COUPON_CODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCouponCode($couponCode)
+    {
+        return $this->setData(self::KEY_COUPON_CODE, $couponCode);
+    }
+
+    /**
+     * Get items qty
+     *
+     * @return int||null
+     */
+    public function getItemsQty()
+    {
+        return $this->getData(self::KEY_ITEMS_QTY);
+    }
+
+    /**
+     * Set items qty
+     *
+     * @param int $itemsQty
+     * @return $this
+     */
+    public function setItemsQty($itemsQty = null)
+    {
+        return $this->setData(self::KEY_ITEMS_QTY, $itemsQty);
+    }
+
+    /**
      * Get totals by items
      *
      * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
@@ -497,6 +555,22 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     public function setItems(array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotalSegments()
+    {
+        return $this->getData(self::KEY_TOTAL_SEGMENTS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalSegments($totals = [])
+    {
+        return $this->setData(self::KEY_TOTAL_SEGMENTS, $totals);
     }
 
     /**

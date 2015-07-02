@@ -3,15 +3,15 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "0.74.0-beta14",
-        "magento/module-catalog": "0.74.0-beta14",
-        "magento/module-customer": "0.74.0-beta14",
-        "magento/module-theme": "0.74.0-beta14",
-        "magento/framework": "0.74.0-beta14",
+        "magento/module-store": "0.74.0-beta15",
+        "magento/module-catalog": "0.74.0-beta15",
+        "magento/module-customer": "0.74.0-beta15",
+        "magento/module-theme": "0.74.0-beta15",
+        "magento/framework": "0.74.0-beta15",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta14",
+    "version": "0.74.0-beta15",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
