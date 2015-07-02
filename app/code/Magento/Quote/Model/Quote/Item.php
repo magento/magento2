@@ -20,7 +20,6 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Item setUpdatedAt(string $value)
- * @method \Magento\Quote\Model\Quote\Item setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\Quote\Model\Quote\Item setStoreId(int $value)
  * @method int getParentItemId()

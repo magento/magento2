@@ -53,6 +53,25 @@ class Sidebar extends AbstractCart
     }
 
     /**
+     * Returns minicart config
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
+            'shoppingCartUrl' => $this->getShoppingCartUrl(),
+            'checkoutUrl' => $this->getCheckoutUrl(),
+            'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
+            'removeItemUrl' => $this->getRemoveItemUrl(),
+            'imageTemplate' => $this->getImageHtmlTemplate(),
+            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
+            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
+            'baseUrl' => $this->getBaseUrl()
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getImageHtmlTemplate()
@@ -138,5 +157,35 @@ class Sidebar extends AbstractCart
     public function getTotalsHtml()
     {
         return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
+    }
+
+    /**
+     * Get customer register url
+     *
+     * @return string
+     */
+    public function getCustomerRegisterUrlUrl()
+    {
+        return $this->getUrl('customer/account/create');
+    }
+
+    /**
+     * Get customer forgot password url
+     *
+     * @return string
+     */
+    public function getCustomerForgotPasswordUrl()
+    {
+        return $this->getUrl('customer/account/forgotpassword');
+    }
+
+    /**
+     * Return base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }
