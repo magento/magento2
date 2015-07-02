@@ -60,6 +60,9 @@
 @button-marker-triangle__height__xl: .9rem;
 @button-marker-triangle__width__xl: 1.2rem;
 
+//  Button Triangle
+@button-triangle__base__size: 1.7rem;
+
 //
 //  Utilities
 //  _____________________________________________
@@ -211,6 +214,111 @@
     .action-menu();
 }
 
+//  Triangle Wrap
+.abs-action-wrap-triangle {
+    position: relative;
+    .action-default {
+        width: 100%;
+        &:before,
+        &:after {
+            border-style: solid;
+            content: '';
+            height: 0;
+            position: absolute;
+            top: 0;
+            width: 0;
+        }
+        &:active,
+        &:focus,
+        &:hover {
+            box-shadow: none;
+        }
+    }
+}
+
+//  Right Triangle
+.abs-action-wrap-triangle-right {
+    display: inline-block;
+    padding-right: @button-triangle__base__size - .1;
+    position: relative;
+
+    .action-default {
+        &:before,
+        &:after {
+            border-color: transparent transparent transparent @button__background-color;
+            border-width: @button-triangle__base__size 0 (@button-triangle__base__size - .1) @button-triangle__base__size;
+            left: 100%;
+            margin-left: -(@button-triangle__base__size);
+        }
+        &:before {
+            border-left-color: @button__border-color;
+            right: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button__hover__background-color;
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent transparent transparent @button-primary__background-color;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+//  Left Triangle
+.abs-action-wrap-triangle-left {
+    display: inline-block;
+    padding-left: @button-triangle__base__size - .1;
+
+    .action-default {
+        text-indent: -(@button-triangle__base__size) / 2;
+        &:before,
+        &:after {
+            border-color: transparent @button__background-color transparent transparent;
+            border-width: @button-triangle__base__size @button-triangle__base__size (@button-triangle__base__size - .1) 0;
+            margin-right: -(@button-triangle__base__size);
+            right: 100%;
+        }
+        &:before {
+            border-right-color: @button__border-color;
+            left: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button__hover__background-color;
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent @button-primary__background-color transparent transparent;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+
 //
 //  Default action
 //  ---------------------------------------------
@@ -221,7 +329,9 @@ button {
     background: @button__background-color;
     border-color: @button__border-color;
     color: @button__color;
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
         background-color: @button__hover__background-color;
         color: @button__color;
         text-decoration: none;
