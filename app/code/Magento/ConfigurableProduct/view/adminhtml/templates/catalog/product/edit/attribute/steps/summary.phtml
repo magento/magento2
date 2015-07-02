@@ -31,7 +31,16 @@
         <tbody data-bind="foreach: grid">
             <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
                 <!-- ko foreach: $data -->
-                <td style="padding: 10px;text-align: center;border-left: 2px solid grey;"><span data-bind='text: $data'></span></td>
+                <!-- ko if: $data && $data.preview -->
+                <td style="padding: 10px;text-align: center;border-left: 2px solid grey;">
+                    <img data-bind='attr: {src: $data.preview}' />
+                </td>
+                <!-- /ko -->
+                <!-- ko ifnot: $data && $data.preview -->
+                <td style="padding: 10px;text-align: center;border-left: 2px solid grey;">
+                    <span data-bind='text: $data'></span>
+                </td>
+                <!-- /ko -->
                 <!-- /ko -->
             </tr>
         </tbody>
