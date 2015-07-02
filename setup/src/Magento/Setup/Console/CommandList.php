@@ -38,7 +38,6 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
-            'Magento\Setup\Console\Command\AdminGetUriCommand',
             'Magento\Setup\Console\Command\AdminUserCreateCommand',
             'Magento\Setup\Console\Command\BackupCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
@@ -54,6 +53,7 @@ class CommandList
             'Magento\Setup\Console\Command\GenerateFixturesCommand',
             'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
             'Magento\Setup\Console\Command\I18nPackCommand',
+            'Magento\Setup\Console\Command\InfoAdminCommand',
             'Magento\Setup\Console\Command\InfoBackupsListCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
