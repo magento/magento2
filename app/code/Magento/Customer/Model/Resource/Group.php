@@ -5,12 +5,15 @@
  */
 namespace Magento\Customer\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+
 /**
  * Customer group resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb
 {
     /**
      * Group Management
@@ -26,19 +29,23 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param Snapshot $entitySnapshot,
+     * @param RelationComposite $entityRelationComposite,
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
         $resourcePrefix = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
     }
 
     /**
