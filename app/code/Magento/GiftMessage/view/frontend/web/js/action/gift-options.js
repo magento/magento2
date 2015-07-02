@@ -7,10 +7,10 @@ define(
     [
         '../model/url-builder',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist',
+        'Magento_Ui/js/model/messageList',
         'mage/url'
     ],
-    function(urlBuilder, storage, errorList, url) {
+    function(urlBuilder, storage, messageList, url) {
         "use strict";
         return function(giftMessage, remove) {
             url.setBaseUrl(giftMessage.getConfigValue('baseUrl'));
@@ -30,7 +30,7 @@ define(
                     );
                 }
             }
-            errorList.clear();
+            messageList.clear();
 
             storage.post(
                 serviceUrl,
@@ -49,7 +49,7 @@ define(
             ).fail(
                 function(response) {
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error);
+                    messageList.addErrorMessage(error);
                 }
             );
         };
