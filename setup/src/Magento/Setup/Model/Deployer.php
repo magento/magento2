@@ -145,7 +145,10 @@ class Deployer
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
-                                $fileTheme == $this->findParent($area . Theme::THEME_PATH_SEPARATOR . $themePath))
+                                in_array(
+                                    $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
+                                    $this->findAncestors($area, $themePath)
+                                ))
                         ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
                         }
@@ -323,13 +326,16 @@ class Deployer
     }
 
     /**
-     * Find parent theme by looking up the theme configuration file
+     * Find ancestor themes by looking up the theme configuration file
      *
-     * @param string $fullThemePath
-     * @return string
+     * @param string $fileArea
+     * @param string $themePath
+     * @return string[]
      */
-    private function findParent($fullThemePath)
+    private function findAncestors($fileArea, $themePath)
     {
+        $ancestors = [];
+        $fullThemePath = $fileArea . Theme::THEME_PATH_SEPARATOR . $themePath;
         if (!isset($this->parentTheme[$fullThemePath])) {
             $themesRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
             /** @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory */
@@ -338,10 +344,24 @@ class Deployer
                 ['configContent' => $themesRead->readFile($fullThemePath . '/theme.xml')]
             );
             $parentThemeParts = $themeConfig->getParentTheme();
-            $this->parentTheme[$fullThemePath] = $parentThemeParts != null ?
-                implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts) : '';
+            if ($parentThemeParts) {
+                $this->parentTheme[$fullThemePath] = $fileArea . Theme::THEME_PATH_SEPARATOR .
+                    implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts);
+                $ancestors[] = $this->parentTheme[$fullThemePath];
+                $ancestors = array_merge(
+                    $ancestors,
+                    $this->findAncestors($fileArea, implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts))
+                );
+            }
+        } else {
+            $ancestors[] = $this->parentTheme[$fullThemePath];
+            $themePath = explode(Theme::THEME_PATH_SEPARATOR, $this->parentTheme[$fullThemePath], 2)[1];
+            $ancestors = array_merge(
+                $ancestors,
+                $this->findAncestors($fileArea, $themePath)
+            );
         }
-        return $this->parentTheme[$fullThemePath];
+        return $ancestors;
     }
 
     /**
