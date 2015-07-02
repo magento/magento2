@@ -96,11 +96,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $eavConfig;
-
-    /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
@@ -183,7 +178,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
-        \Magento\Eav\Model\Config $eavConfig,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
@@ -205,7 +199,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentValidator = $contentValidator;
         $this->contentFactory = $contentFactory;
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
-        $this->eavConfig = $eavConfig;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
@@ -649,19 +642,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-        $defaultAttributeSetId = $this->eavConfig
-            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
-            ->getDefaultAttributeSetId();
-        $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilter(
-            [
-                $this->filterBuilder
-                    ->setField('attribute_set_id')
-                    ->setValue($defaultAttributeSetId)
-                    ->create(),
-            ]
-        );
 
-        foreach ($this->metadataService->getList($extendedSearchCriteria->create())->getItems() as $metadata) {
+        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());
         }
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
