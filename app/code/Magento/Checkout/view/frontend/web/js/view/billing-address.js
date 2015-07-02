@@ -16,7 +16,7 @@ define(
         'mage/translate'
     ],
     function (ko, Component, customer, addressList, quote, createBillingAddress, selectBillingAddress, $t) {
-        "use strict";
+        'use strict';
 
         var lastSelectedBillingAddress = null,
             newAddressOption = {
@@ -116,7 +116,7 @@ define(
                 }
             },
 
-            restoreBillingAddress: function() {
+            restoreBillingAddress: function () {
                 if (lastSelectedBillingAddress != null) {
                     selectBillingAddress(lastSelectedBillingAddress);
                 }
