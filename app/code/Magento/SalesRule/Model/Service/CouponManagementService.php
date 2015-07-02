@@ -1,0 +1,164 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\SalesRule\Model\Service;
+
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use \Magento\SalesRule\Model\Resource\Rule\Collection;
+
+/**
+ * Coupon management service class
+ *
+ */
+class CouponManagementService implements \Magento\SalesRule\Api\CouponManagementInterface
+{
+    /**
+     * @var \Magento\SalesRule\Model\CouponFactory
+     */
+    protected $couponFactory;
+
+    /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    protected $ruleFactory;
+
+    /**
+     * @var \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var \Magento\SalesRule\Model\Coupon\Massgenerator
+     */
+    protected $couponGenerator;
+
+    /**
+     * @var \Magento\SalesRule\Model\Spi\CouponResourceInterface
+     */
+    protected $resourceModel;
+
+    public function __construct(
+        \Magento\SalesRule\Model\CouponFactory $couponFactory,
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory,
+        \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator,
+        \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
+    ) {
+        $this->couponFactory = $couponFactory;
+        $this->ruleFactory = $ruleFactory;
+        $this->collectionFactory = $collectionFactory;
+        $this->couponGenerator = $couponGenerator;
+        $this->resourceModel = $resourceModel;
+    }
+
+    /**
+     * Generate coupon for a rule
+     *
+     * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
+     * @return string[]
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function generate(\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec)
+    {
+        $data = $this->convertCouponSpec($couponSpec);
+        if (!$this->couponGenerator->validateData($data)) {
+            throw new \Magento\Framework\Exception\InputException();
+        }
+
+        try {
+            $this->couponGenerator->setData($data);
+            $this->couponGenerator->generatePool();
+            return $this->couponGenerator->getGeneratedCodes();
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error occured when generating coupons: %1', $e->getMessage())
+            );
+        }
+    }
+
+    /**
+     * Convert CouponGenerationSpecInterface to data array expected by Massgenerator
+     *
+     * @param \Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec
+     * @return array
+     */
+    protected function convertCouponSpec(\Magento\SalesRule\Api\Data\CouponGenerationSpecInterface $couponSpec)
+    {
+        $data = [];
+        $data['rule_id'] = $couponSpec->getRuleId();
+        $data['qty'] = $couponSpec->getQuantity();
+        $data['format'] = $couponSpec->getFormat();
+        $data['length'] = $couponSpec->getLength();
+        $data['to_date'] = $couponSpec->getExpirationDate();
+        $data['uses_per_coupon'] = $couponSpec->getUsagePerCoupon();
+        $data['uses_per_customer'] = $couponSpec->getUsagePerCustomer();
+        return $data;
+    }
+
+    /**
+     * Delete coupon by coupon ids.
+     *
+     * @param int[] $ids
+     * @param bool $ignoreInvalidIds
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteByIds(array $ids, $ignoreInvalidIds = true)
+    {
+        return $this->massDelete('coupon_id', $ids, $ignoreInvalidIds);
+    }
+
+    /**
+     * Delete coupon by coupon codes.
+     *
+     * @param string[] codes
+     * @param bool $ignoreInvalidCodes
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteByCodes(array $codes, $ignoreInvalidCodes = true)
+    {
+        return $this->massDelete('code', $codes, $ignoreInvalidCodes);
+    }
+
+    /**
+     * Delete coupons by filter
+     *
+     * @param string $fieldName
+     * @param string[] fieldValues
+     * @param bool $ignoreInvalid
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function massDelete($fieldName, array $fieldValues, $ignoreInvalid)
+    {
+        $couponsCollection = $this->collectionFactory->create()
+            ->addFieldToFilter(
+                $fieldName,
+                ['in' => $fieldValues]
+            );
+
+        if (!$ignoreInvalid) {
+            if ($couponsCollection->getSize() != count($fieldValues)) {
+                throw new \Magento\Framework\Exception\LocalizedException('Some inputs are invalid');
+            }
+        }
+        try {
+            /** @var \Magento\SalesRule\Model\Coupon $coupon */
+            foreach ($couponsCollection as $coupon) {
+                $coupon->delete();
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error occured when deleting coupons: %1.', $e->getMessage())
+            );
+        }
+    }
+}

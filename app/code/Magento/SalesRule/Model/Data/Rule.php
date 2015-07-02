@@ -13,6 +13,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 /**
  * Class Rule
  *
+ * @codeCoverageIgnore
  */
 class Rule extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\RuleInterface

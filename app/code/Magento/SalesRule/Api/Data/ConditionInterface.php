@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Api\Data;
 
+/**
+ * Interface ConditionInterface
+ *
+ * @api
+ */
 interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const AGGREGATOR_TYPE_ALL = 'all';

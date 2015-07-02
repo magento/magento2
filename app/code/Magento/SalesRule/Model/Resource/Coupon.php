@@ -12,7 +12,8 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb implements
+    \Magento\SalesRule\Model\Spi\CouponResourceInterface
 {
     /**
      * Constructor adds unique fields
