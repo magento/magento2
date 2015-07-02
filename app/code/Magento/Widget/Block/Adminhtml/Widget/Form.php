@@ -46,14 +46,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Widget')]);
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Frontend App')]);
 
         $fieldset->addField(
             'select_widget_type',
             'select',
             [
-                'label' => __('Widget Type'),
-                'title' => __('Widget Type'),
+                'label' => __('Frontend App Type'),
+                'title' => __('Frontend App Type'),
                 'name' => 'widget_type',
                 'required' => true,
                 'onchange' => "wWidget.validateField()",
