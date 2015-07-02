@@ -49,16 +49,14 @@ class Navigation extends AbstractActionController
     {
         $view = new ViewModel;
         if ($this->navigation->getType() === NavModel::NAV_INSTALLER) {
-            $view->setTemplate('/magento/setup/navigation-installer/menu.phtml');
+            $view->setVariable('headerTitle', 'Magento Installation');
         } else {
             if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
                 $view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
             }
-
-            $view->setTemplate('/magento/setup/navigation-updater/menu.phtml');
-
+            $view->setVariable('headerTitle', 'Magento Component Manager');
         }
-
+        $view->setTemplate('/magento/setup/navigation/menu.phtml');
         $view->setTerminal(true);
         $view->setVariable('menu', $this->navigation->getMenuItems());
         $view->setVariable('main', $this->navigation->getMainItems());

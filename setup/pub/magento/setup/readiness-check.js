@@ -4,9 +4,9 @@
  */
 
 'use strict';
-angular.module('readiness-check-updater', [])
+angular.module('readiness-check', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckUpdaterController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
@@ -25,11 +25,11 @@ angular.module('readiness-check-updater', [])
         };
 
         $scope.requestFailedHandler = function(obj) {
-          obj.processed = true;
-          obj.isRequestError = true;
-          $scope.hasErrors = true;
-          $rootScope.hasErrors = true;
-          $scope.stopProgress();
+            obj.processed = true;
+            obj.isRequestError = true;
+            $scope.hasErrors = true;
+            $rootScope.hasErrors = true;
+            $scope.stopProgress();
         }
 
         $scope.completed = false;
@@ -65,7 +65,6 @@ angular.module('readiness-check-updater', [])
             expanded: false,
             isRequestError: false
         };
-
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
@@ -130,8 +129,11 @@ angular.module('readiness-check-updater', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.permissions);
                 }
-            },
-            'updater-application': {
+            }
+        };
+
+        if ($scope.actionFrom === 'updater') {
+            $scope.items['updater-application'] = {
                 url:'index.php/environment/updater-application',
                 show: function() {
                     $scope.startProgress();
@@ -146,14 +148,14 @@ angular.module('readiness-check-updater', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.updater);
                 }
-            }
-        };
+            };
+        }
 
         $scope.isCompleted = function() {
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && $scope.updater.processed;
+                && ($scope.updater.processed || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {
@@ -199,7 +201,7 @@ angular.module('readiness-check-updater', [])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if (nextState.id == 'root.readiness-check-updater.progress') {
+            if ((nextState.id == 'root.readiness-check-updater.progress') || (nextState.id == 'root.readiness-check-installer.progress')) {
                 $scope.progress();
             }
         });

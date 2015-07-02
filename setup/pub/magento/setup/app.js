@@ -10,16 +10,14 @@ var app = angular.module(
         'ui.router',
         'ui.bootstrap',
         'main',
-        'landing-installer',
-        'readiness-check-installer',
+        'landing',
+        'readiness-check',
         'add-database',
         'web-configuration',
         'customize-your-store',
         'create-admin-account',
         'install',
         'success',
-        'landing-updater',
-        'readiness-check-updater',
         'create-backup',
         'complete-backup',
         'component-upgrade',
@@ -29,17 +27,17 @@ var app = angular.module(
 app.config(function ($stateProvider) {
     app.stateProvider = $stateProvider;
 })
-.config(function($provide) {
-    $provide.decorator('$state', function($delegate, $stateParams) {
-        $delegate.forceReload = function() {
-            return $delegate.go($delegate.current, $stateParams, {
-                reload: true,
-                inherit: false,
-                notify: true
-            });
-        };
-        return $delegate;
+    .config(function($provide) {
+        $provide.decorator('$state', function($delegate, $stateParams) {
+            $delegate.forceReload = function() {
+                return $delegate.go($delegate.current, $stateParams, {
+                    reload: true,
+                    inherit: false,
+                    notify: true
+                });
+            };
+            return $delegate;
+        });
+    }).run(function ($rootScope, $state) {
+        $rootScope.$state = $state;
     });
-}).run(function ($rootScope, $state) {
-    $rootScope.$state = $state;
-});

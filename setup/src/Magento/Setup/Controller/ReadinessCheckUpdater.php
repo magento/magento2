@@ -17,6 +17,8 @@ class ReadinessCheckUpdater extends AbstractActionController
     {
         $view = new ViewModel;
         $view->setTerminal(true);
+        $view->setTemplate('/magento/setup/readiness-check.phtml');
+        $view->setVariable('actionFrom', 'updater');
         return $view;
     }
 
@@ -26,7 +28,7 @@ class ReadinessCheckUpdater extends AbstractActionController
     public function progressAction()
     {
         $view = new ViewModel;
-        $view->setTemplate('/magento/setup/readiness-check-updater/progress.phtml');
+        $view->setTemplate('/magento/setup/readiness-check/progress.phtml');
         $view->setTerminal(true);
         return $view;
     }
