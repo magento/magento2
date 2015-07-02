@@ -13,6 +13,13 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos;
 class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
+     * Base part of row locator template for getRow() method.
+     *
+     * @var string
+     */
+    protected $rowPattern = './/tr[%s]';
+
+    /**
      * Locator value for link in action column
      *
      * @var string

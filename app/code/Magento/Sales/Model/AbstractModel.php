@@ -46,16 +46,6 @@ abstract class AbstractModel extends AbstractExtensibleModel
     }
 
     /**
-     * Returns _eventPrefix
-     *
-     * @return string
-     */
-    public function getEventPrefix()
-    {
-        return $this->_eventPrefix;
-    }
-
-    /**
      * Returns _eventObject
      *
      * @return string
