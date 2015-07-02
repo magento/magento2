@@ -129,8 +129,8 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             'text',
             [
                 'name' => 'frontend_label[0]',
-                'label' => __('Attribute Label'),
-                'title' => __('Attribute Label'),
+                'label' => __('Default label'),
+                'title' => __('Default label'),
                 'required' => true,
                 'value' => is_array($labels) ? $labels[0] : $labels
             ]

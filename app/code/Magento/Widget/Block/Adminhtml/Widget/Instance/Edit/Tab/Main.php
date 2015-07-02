@@ -162,8 +162,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             'text',
             [
                 'name' => 'title',
-                'label' => __('Widget Instance Title'),
-                'title' => __('Widget Instance Title'),
+                'label' => __('Frontend App Title'),
+                'title' => __('Frontend App Title'),
                 'class' => '',
                 'required' => true
             ]

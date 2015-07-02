@@ -43,7 +43,7 @@ class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset('set_name', ['legend' => __('Edit Set Name')]);
+        $fieldset = $form->addFieldset('set_name', ['legend' => __('Edit Product Template Name')]);
         $fieldset->addField(
             'attribute_set_name',
             'text',
