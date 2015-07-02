@@ -60,6 +60,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get affected cache tags
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
