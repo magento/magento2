@@ -7,15 +7,14 @@
 define(
     [
         'jquery',
-        'ko',
         'uiComponent',
-        'Magento_Customer/js/model/customer',
         'Magento_Captcha/js/model/captcha',
         'Magento_Captcha/js/model/captchaList'
     ],
-    function ($, ko, Component, customer, Captcha, captchaList) {
-        "use strict";
-        var captchaConfig = window.checkoutConfig.captcha;
+    function ($, Component, Captcha, captchaList) {
+        'use strict';
+        var captchaConfig;
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Captcha/checkout/captcha'
@@ -26,11 +25,16 @@ define(
                 return this.currentCaptcha.getCaptchaValue();
             },
             initialize: function() {
+                this._super();
+                captchaConfig = window[this.configSource]['captcha'];
+
                 $.each(captchaConfig, function(formId, captchaData) {
                     captchaData.formId = formId;
                     captchaList.add(Captcha(captchaData));
                 });
-                this._super();
+            },
+            getIsLoading: function() {
+                return this.currentCaptcha.isLoading
             },
             getCurrentCaptcha: function() {
                 return this.currentCaptcha;

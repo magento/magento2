@@ -6,14 +6,14 @@
 
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
-use Magento\Sales\Model\Resource\EntityRelationInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\Resource\Order\Invoice\Item as InvoiceItemResource;
 use Magento\Sales\Model\Resource\Order\Invoice\Comment as InvoiceCommentResource;
 
 /**
  * Class Relation
  */
-class Relation implements EntityRelationInterface
+class Relation implements RelationInterface
 {
     /**
      * @var InvoiceItemResource
@@ -40,11 +40,11 @@ class Relation implements EntityRelationInterface
     /**
      * Process relations for Shipment
      *
-     * @param \Magento\Sales\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
      */
-    public function processRelation(\Magento\Sales\Model\AbstractModel $object)
+    public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var $object \Magento\Sales\Model\Order\Invoice */
         if (null !== $object->getItems()) {
