@@ -6,7 +6,7 @@
 
 namespace Magento\GiftMessage\Test\TestStep;
 
-use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -19,9 +19,9 @@ class AddGiftMessageStep implements TestStepInterface
     /**
      * Onepage checkout page
      *
-     * @var CheckoutOnepage
+     * @var CheckoutCart
      */
-    protected $checkoutOnepage;
+    protected $checkoutCart;
 
     /**
      * Gift message fixture
@@ -39,13 +39,13 @@ class AddGiftMessageStep implements TestStepInterface
 
     /**
      * @constructor
-     * @param CheckoutOnepage $checkoutOnepage
+     * @param CheckoutCart $checkoutCart
      * @param GiftMessage $giftMessage
      * @param array $products
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, GiftMessage $giftMessage, array $products = [])
+    public function __construct(CheckoutCart $checkoutCart, GiftMessage $giftMessage, array $products = [])
     {
-        $this->checkoutOnepage = $checkoutOnepage;
+        $this->checkoutCart = $checkoutCart;
         $this->giftMessage = $giftMessage;
         $this->products = $products;
     }
@@ -57,6 +57,8 @@ class AddGiftMessageStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutOnepage->getGiftMessagesBlock()->fillGiftMessage($this->giftMessage, $this->products);
+        $this->checkoutCart->open();
+        $this->checkoutCart->getGiftMessagesItemBlock()->fillGiftMessageItem($this->giftMessage, $this->products);
+        $this->checkoutCart->getGiftMessagesOrderBlock()->fillGiftMessageOrder($this->giftMessage, $this->products);
     }
 }

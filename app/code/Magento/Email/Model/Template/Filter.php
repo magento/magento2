@@ -111,6 +111,13 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $backendUrlBuilder;
 
     /**
+     * Include processor
+     *
+     * @var callable|null
+     */
+    protected $_includeProcessor = null;
+
+    /**
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -214,6 +221,49 @@ class Filter extends \Magento\Framework\Filter\Template
             $this->_storeId = $this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;
+    }
+
+    /**
+     * @param string[] $construction
+     * @return mixed
+     */
+    public function includeDirective($construction)
+    {
+        // Processing of {include template=... [...]} statement
+        $includeParameters = $this->_getIncludeParameters($construction[2]);
+        if (!isset($includeParameters['template']) or !$this->getIncludeProcessor()) {
+            // Not specified template or not set include processor
+            $replacedValue = '{Error in include processing}';
+        } else {
+            // Including of template
+            $templateCode = $includeParameters['template'];
+            unset($includeParameters['template']);
+            $includeParameters = array_merge_recursive($includeParameters, $this->_templateVars);
+            $replacedValue = call_user_func($this->getIncludeProcessor(), $templateCode, $includeParameters);
+        }
+        return $replacedValue;
+    }
+
+    /**
+     * Sets the processor of includes.
+     *
+     * @param callable $callback it must return string
+     * @return $this
+     */
+    public function setIncludeProcessor(array $callback)
+    {
+        $this->_includeProcessor = $callback;
+        return $this;
+    }
+
+    /**
+     * Sets the processor of includes.
+     *
+     * @return callable|null
+     */
+    public function getIncludeProcessor()
+    {
+        return is_callable($this->_includeProcessor) ? $this->_includeProcessor : null;
     }
 
     /**

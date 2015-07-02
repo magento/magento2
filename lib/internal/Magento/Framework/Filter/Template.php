@@ -33,13 +33,6 @@ class Template implements \Zend_Filter_Interface
     protected $_templateVars = [];
 
     /**
-     * Include processor
-     *
-     * @var callable|null
-     */
-    protected $_includeProcessor = null;
-
-    /**
      * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
@@ -66,28 +59,6 @@ class Template implements \Zend_Filter_Interface
             $this->_templateVars[$name] = $value;
         }
         return $this;
-    }
-
-    /**
-     * Sets the processor of includes.
-     *
-     * @param callable $callback it must return string
-     * @return $this
-     */
-    public function setIncludeProcessor(array $callback)
-    {
-        $this->_includeProcessor = $callback;
-        return $this;
-    }
-
-    /**
-     * Sets the processor of includes.
-     *
-     * @return callable|null
-     */
-    public function getIncludeProcessor()
-    {
-        return is_callable($this->_includeProcessor) ? $this->_includeProcessor : null;
     }
 
     /**
@@ -150,27 +121,6 @@ class Template implements \Zend_Filter_Interface
         }
 
         $replacedValue = $this->_getVariable($construction[2], '');
-        return $replacedValue;
-    }
-
-    /**
-     * @param string[] $construction
-     * @return mixed
-     */
-    public function includeDirective($construction)
-    {
-        // Processing of {include template=... [...]} statement
-        $includeParameters = $this->_getIncludeParameters($construction[2]);
-        if (!isset($includeParameters['template']) or !$this->getIncludeProcessor()) {
-            // Not specified template or not set include processor
-            $replacedValue = '{Error in include processing}';
-        } else {
-            // Including of template
-            $templateCode = $includeParameters['template'];
-            unset($includeParameters['template']);
-            $includeParameters = array_merge_recursive($includeParameters, $this->_templateVars);
-            $replacedValue = call_user_func($this->getIncludeProcessor(), $templateCode, $includeParameters);
-        }
         return $replacedValue;
     }
 
