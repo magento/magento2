@@ -207,7 +207,7 @@ angular.module('readiness-check', [])
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && (($scope.cronscriptsetup.processed && $scope.updater.processed)
+                && (($scope.cronscriptsetup.processed && $scope.cronscriptupdater.processed && $scope.updater.processed)
                     || ($scope.actionFrom !== 'updater'));
         };
 
