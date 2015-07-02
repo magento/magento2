@@ -13,10 +13,10 @@
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend" />
         <step name="loginCustomerOnFrontend" module="Magento_Customer" next="addProductsToTheCart" />
-        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="addGiftMessage" />
+        <step name="addGiftMessage" module="Magento_GiftMessage" next="proceedToCheckout" />
         <step name="proceedToCheckout" module="Magento_Checkout" next="fillBillingInformation" />
-        <step name="fillBillingInformation" module="Magento_Checkout" next="addGiftMessage" />
-        <step name="addGiftMessage" module="Magento_GiftMessage" next="fillShippingMethod" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
         <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" />

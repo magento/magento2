@@ -6,7 +6,6 @@
 namespace Magento\Ui\Component\Layout;
 
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
-use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
