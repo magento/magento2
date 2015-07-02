@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="billing-address-details" data-bind="if: isAddressDetailsVisible() && currentBillingAddress()">
+    <!-- ko text: currentBillingAddress().firstname --><!-- /ko --> <!-- ko text: currentBillingAddress().lastname --><!-- /ko --><br/>
+    <!-- ko text: currentBillingAddress().street --><!-- /ko --><br/>
+    <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
+
+    <!-- ko text: currentBillingAddress().telephone --><!-- /ko --><br/>
+    <button type="button"
+            class="action action-edit-address"
+            data-bind="visible: !isAddressSameAsShipping(), click: editAddress">
+        <span data-bind="text: $t('Edit')"></span>
+    </button>
+</div>
