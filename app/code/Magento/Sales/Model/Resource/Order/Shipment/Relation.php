@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
-use Magento\Sales\Model\Resource\EntityRelationInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationInterface;
 use Magento\Sales\Model\Resource\Order\Shipment\Item as ShipmentItemResource;
 use Magento\Sales\Model\Resource\Order\Shipment\Comment as ShipmentCommentResource;
 use Magento\Sales\Model\Resource\Order\Shipment\Track as ShipmentTrackResource;
@@ -14,7 +14,7 @@ use Magento\Sales\Model\Resource\Order\Shipment\Track as ShipmentTrackResource;
 /**
  * Class Relation
  */
-class Relation implements EntityRelationInterface
+class Relation implements RelationInterface
 {
     /**
      * @var ShipmentItemResource
@@ -49,11 +49,11 @@ class Relation implements EntityRelationInterface
     /**
      * Process relations for Shipment
      *
-     * @param \Magento\Sales\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
      * @throws \Exception
      */
-    public function processRelation(\Magento\Sales\Model\AbstractModel $object)
+    public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Shipment $object */
         if (null !== $object->getItems()) {

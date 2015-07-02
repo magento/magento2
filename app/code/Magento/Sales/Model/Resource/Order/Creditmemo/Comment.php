@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Creditmemo;
 
 use Magento\Sales\Model\Resource\EntityAbstract;
-use Magento\Sales\Model\Resource\EntitySnapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 
 /**
@@ -34,27 +34,27 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator
      * @param string $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator,
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
+            $attribute,
+            $sequenceManager,
             $resourcePrefix
         );
     }
