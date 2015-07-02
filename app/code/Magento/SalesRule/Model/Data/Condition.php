@@ -12,6 +12,7 @@ use Magento\SalesRule\Api\Data\ConditionInterface;
 /**
  * Class Condition
  *
+ * @codeCoverageIgnore
  */
 class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\ConditionInterface

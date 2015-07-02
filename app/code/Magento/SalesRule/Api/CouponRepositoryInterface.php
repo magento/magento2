@@ -6,44 +6,44 @@
 namespace Magento\SalesRule\Api;
 
 /**
- * Sales rule CRUD interface
+ * Coupon CRUD interface
  *
  * @api
  */
-interface RuleRepositoryInterface
+interface CouponRepositoryInterface
 {
     /**
-     * Save sales rule.
+     * Save coupon.
      *
-     * @param \Magento\SalesRule\Api\Data\RuleInterface $rule
-     * @return \Magento\SalesRule\Api\Data\RuleInterface
+     * @param \Magento\SalesRule\Api\Data\CouponInterface $coupon
+     * @return \Magento\SalesRule\Api\Data\CouponInterface
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If a rule ID is sent but the rule does not exist
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If a coupon ID is sent but the coupon does not exist
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(\Magento\SalesRule\Api\Data\RuleInterface $rule);
+    public function save(\Magento\SalesRule\Api\Data\CouponInterface $coupon);
 
     /**
-     * Get rule by ID.
+     * Get coupon by coupon id.
      *
      * @param int $id
-     * @return \Magento\SalesRule\Api\Data\RuleInterface
+     * @return \Magento\SalesRule\Api\Data\CouponInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($id);
 
     /**
-     * Retrieve sales rules.
+     * Retrieve coupon.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\SalesRule\Api\Data\RuleSearchResultInterface
+     * @return \Magento\SalesRule\Api\Data\CouponSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Delete rule by ID.
+     * Delete coupon by coupon id.
      *
      * @param int $id
      * @return bool true on success

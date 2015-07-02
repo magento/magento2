@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Api\Data;
 /**
  * @api
  */
-interface RuleSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get rules.

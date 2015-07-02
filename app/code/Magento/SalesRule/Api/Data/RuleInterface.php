@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Api\Data;
 
+/**
+ * Interface RuleInterface
+ *
+ * @api
+ */
 interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const FREE_SHIPPING_NONE = 'NONE';

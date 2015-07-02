@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Model\Data;
 /**
  * Class Rule label
  *
+ * @codeCoverageIgnore
  */
 class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\SalesRule\Api\Data\RuleLabelInterface

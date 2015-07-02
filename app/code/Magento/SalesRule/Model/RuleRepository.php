@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Model\Resource;
+namespace Magento\SalesRule\Model;
 
 use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\Framework\Api\Search\FilterGroup;
@@ -14,7 +14,6 @@ use \Magento\SalesRule\Model\Resource\Rule\Collection;
 /**
  * Sales rule CRUD class
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
 {
@@ -49,9 +48,9 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     protected $dataObjectProcessor;
 
     /**
-     * @var \Magento\SalesRule\Api\Data\RuleSearchResultsInterfaceFactory
+     * @var \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory
      */
-    protected $searchResultsFactory;
+    protected $searchResultFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
@@ -69,7 +68,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
      * @param \Magento\SalesRule\Model\Converter\ToDataModel $toDataModelConverter
      * @param \Magento\SalesRule\Model\Converter\ToModel $toModelConverter
-     * @param \Magento\SalesRule\Api\Data\RuleSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $ruleCollectionFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -80,7 +79,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory,
         \Magento\SalesRule\Model\Converter\ToDataModel $toDataModelConverter,
         \Magento\SalesRule\Model\Converter\ToModel $toModelConverter,
-        \Magento\SalesRule\Api\Data\RuleSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $ruleCollectionFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -90,7 +89,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         $this->conditionDataFactory = $conditionDataFactory;
         $this->toDataModelConverter = $toDataModelConverter;
         $this->toModelConverter = $toModelConverter;
-        $this->searchResultsFactory = $searchResultsFactory;
+        $this->searchResultFactory = $searchResultFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->ruleCollectionFactory = $ruleCollectionFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
@@ -166,7 +165,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
             $rules[] = $this->toDataModelConverter->toDataModel($ruleModel);
         }
 
-        $searchResults = $this->searchResultsFactory->create();
+        $searchResults = $this->searchResultFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($rules);
         $searchResults->setTotalCount($collection->getSize());
