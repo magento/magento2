@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model;
 
 use Magento\Framework\Phrase;
@@ -936,5 +935,15 @@ abstract class AbstractModel extends \Magento\Framework\Object
     public function getStoredData()
     {
         return $this->storedData;
+    }
+
+    /**
+     * Returns _eventPrefix
+     *
+     * @return string
+     */
+    public function getEventPrefix()
+    {
+        return $this->_eventPrefix;
     }
 }
