@@ -460,7 +460,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteFile
+     * @cover \Magento\Theme\Model\Wysiwyg\Storage::deleteFile
      */
     public function testDeleteFile()
     {
@@ -477,28 +477,21 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->with($image)
             ->willReturnArgument(0);
 
-        $this->directoryWrite->expects(
-            $this->at(0)
-        )->method(
-            'getRelativePath'
-        )->with(
-            $this->_storageRoot
-        )->will(
-            $this->returnValue($this->_storageRoot)
-        );
+        $this->directoryWrite->expects($this->at(0))
+            ->method('getRelativePath')
+            ->with($this->_storageRoot)
+            ->willReturn($this->_storageRoot);
 
-        $this->directoryWrite->expects(
-            $this->at(1)
-        )->method(
-            'getRelativePath'
-        )->with(
-            $this->_storageRoot . '/' . $image
-        )->will(
-            $this->returnValue($this->_storageRoot . '/' . $image)
-        );
+        $this->directoryWrite->expects($this->at(1))
+            ->method('getRelativePath')
+            ->with($this->_storageRoot . '/' . $image)
+            ->willReturn($this->_storageRoot . '/' . $image);
 
-        $this->directoryWrite->expects($this->any())->method('delete')->with($imagePath);
+        $this->_helperStorage->expects($this->once())
+            ->method('getStorageRoot')
+            ->willReturn('/');
 
+        $this->directoryWrite->expects($this->any())->method('delete');
         $this->assertInstanceOf('Magento\Theme\Model\Wysiwyg\Storage', $this->_storageModel->deleteFile($image));
     }
 
