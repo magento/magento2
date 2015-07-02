@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
+
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;

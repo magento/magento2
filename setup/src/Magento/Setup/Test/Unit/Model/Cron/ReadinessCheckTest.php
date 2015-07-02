@@ -60,7 +60,9 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
             'current_timestamp' => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        $this->write->expects($this->once())->method('writeFile')->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
+        $this->write->expects($this->once())
+            ->method('writeFile')
+            ->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
         $this->readinessCheck->runReadinessCheck();
     }
 

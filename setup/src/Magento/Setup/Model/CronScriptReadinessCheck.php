@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\ReadinessCheck;
@@ -112,8 +113,8 @@ class CronScriptReadinessCheck
                 return ['success' => true];
             }
             return [
-                'success' => true,
-                'notice' => 'Cron Job is running properly, however it is recommended' .
+                'success' => false,
+                'error' => 'Cron Job is running properly, however it is recommended' .
                     'to schedule it to run every 1 minute'
             ];
         }
