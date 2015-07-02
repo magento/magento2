@@ -21,7 +21,7 @@ define(
             totals: totals.totals(),
             getItems: totals.getItems(),
             getItemsQty: function() {
-                return parseInt(this.totals.items_qty) || 0;
+                return parseFloat(this.totals.items_qty);
             },
             isItemsBlockExpanded: function () {
                 return quote.isVirtual() || stepNavigator.isProcessed('shipping');

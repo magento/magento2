@@ -1,12 +1,12 @@
 <?php
 /**
- * Test for \Magento\Checkout\Controller\Onepage\Index
+ * Test for \Magento\Checkout\Controller\Index\Index
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Unit\Controller\Onepage;
+namespace Magento\Checkout\Test\Unit\Controller\Index;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
@@ -71,7 +71,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $redirectMock;
 
     /**
-     * @var \Magento\Checkout\Controller\Onepage\Index
+     * @var \Magento\Checkout\Controller\Index\Index
      */
     private $model;
 
@@ -171,7 +171,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         // SUT
         $this->model = $this->objectManager->getObject(
-            'Magento\Checkout\Controller\Onepage\Index',
+            'Magento\Checkout\Controller\Index\Index',
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->sessionMock,
