@@ -35,7 +35,7 @@
 
 </div>
 
-<div id="php-version" class="rediness-check-item" ng-show="version.visible">
+<div id="php-version" class="readiness-check-item" ng-show="version.visible">
 
     <h3 class="readiness-check-title" ng-hide="version.processed">
         Checking PHP Version...
@@ -58,7 +58,7 @@
 
         <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
 
-            <div class="rediness-check-side">
+            <div class="readiness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
             </div>
@@ -86,7 +86,7 @@
 
 </div>
 
-<div id="php-settings" class="rediness-check-item" ng-show="settings.visible">
+<div id="php-settings" class="readiness-check-item" ng-show="settings.visible">
 
     <h3 class="readiness-check-title" ng-hide="settings.processed">
         Checking PHP Settings...
@@ -113,7 +113,7 @@
             <h3 class="readiness-check-title">PHP Settings Check</h3>
 
             <div ng-repeat="setting in settings.data">
-                <div ng-show="setting.error && setting.helpUrl" class="rediness-check-side">
+                <div ng-show="setting.error && setting.helpUrl" class="readiness-check-side">
                     <p class="side-title">Need Help?</p>
                     <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
                 </div>
@@ -129,7 +129,7 @@
 
 </div>
 
-<div id="php-extensions" class="rediness-check-item" ng-show="extensions.visible">
+<div id="php-extensions" class="readiness-check-item" ng-show="extensions.visible">
 
     <h3 ng-hide="extensions.processed" class="readiness-check-title">
         Checking PHP Extensions...
@@ -169,7 +169,7 @@
                     </span>
                 </div>
 
-                <div class="rediness-check-side">
+                <div class="readiness-check-side">
                     <p class="side-title">Need Help?</p>
                     <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
                 </div>
@@ -214,7 +214,7 @@
 
 </div>
 
-<div class="rediness-check-item" id="php-permissions" ng-show="permissions.visible">
+<div class="readiness-check-item" id="php-permissions" ng-show="permissions.visible">
 
     <h3 class="readiness-check-title" ng-hide="permissions.processed">
         Checking File Permissions...
@@ -246,7 +246,7 @@
 
         <div ng-switch-default ng-init="updateOnError(permissions)">
 
-            <div class="rediness-check-side">
+            <div class="readiness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a>
             </div>
