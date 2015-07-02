@@ -25,7 +25,7 @@ define([
             images: {
                 label: 'images',
                 type: ko.observable('none'),
-                value: ko.observableArray([]),
+                value: ko.observable({images:[], preview:null}),
                 attribute: ko.observable()
             },
             pricing: {
@@ -70,9 +70,28 @@ define([
                     return null;
             }
         },
+        getImageProperty: function (node) {
+            var preview;
+            var types = node.find('[data-role=gallery]').productGallery('option').types;
+            var images = _.map(node.find('[data-role=image]'), function (image) {
+                var imageData = $(image).data('imageData');
+                imageData.galleryTypes = _.pluck(_.filter(types, function (type) {
+                    return type.value == imageData.file;
+                }), 'code');
+                return imageData;
+            });
+            preview = _.find(images, function (image) {
+                return _.contains(image.galleryTypes, 'image');
+            });
+            return {'images': images, preview: preview ? preview.url : ''};
+        },
         force: function (wizard) {
             wizard.data.sections = this.sections;
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
+            this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
+            this.sections().images.attribute().chosen.each(function (option) {
+                option.sections().images = this.getImageProperty($('[data-role=step-gallery-option-'+option.label+']'));
+            }, this);
         },
         back: function (wizard) {
         },

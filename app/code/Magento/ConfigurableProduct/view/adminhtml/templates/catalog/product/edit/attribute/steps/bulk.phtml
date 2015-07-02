@@ -39,7 +39,7 @@
                     </label>
                 </li>
             </ul>
-            <div data-bind="visible: type() == 'single'"
+            <div data-role="step-gallery-single" data-bind="visible: type() == 'single'"
                  style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
             >
                 <label>
@@ -60,18 +60,6 @@
                         <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                         <p class="image-placeholder-text">Click here or drag and drop to add images</p>
                     </div>
-                    <input name="product[image]"
-                           class="image-image"
-                           type="hidden"
-                           value=""/>
-                    <input name="product[small_image]"
-                           class="image-small_image"
-                           type="hidden"
-                           value=""/>
-                    <input name="product[thumbnail]"
-                           class="image-thumbnail"
-                           type="hidden"
-                           value=""/>
 
                     <script data-template="uploader" type="text/x-magento-template">
                         <div id="<%- data.id %>" class="file-row">
@@ -213,7 +201,7 @@
                 </div>
 
             </div>
-            <div data-bind="visible: type() == 'each'">
+            <div data-role="step-gallery-each" data-bind="visible: type() == 'each'">
                 <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
                     options: $parent.attributes,
                     optionsText: 'label',
@@ -222,7 +210,8 @@
                 ></select>
                 <ul style="list-style-type: none;margin-top: 10px" data-bind="if:attribute">
                     <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
-                    <li style="margin-left: 15px;clear:both">
+                    <li style="margin-left: 15px;clear:both" data-bind="attr:{'data-role':'step-gallery-option-' +
+                    label}">
                         <label>
                             <span data-bind="text:label"></span>
                         </label>
