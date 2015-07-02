@@ -48,7 +48,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         /** @var \Magento\Eav\Api\Data\AttributeInterface[] $attributes */
         $attributes = $this->attributeMetadataDataProvider->loadAttributesCollection(
             'customer_address',
-            'customer_register_address'
+            'customer_address_edit'
         );
 
         $elements = [];

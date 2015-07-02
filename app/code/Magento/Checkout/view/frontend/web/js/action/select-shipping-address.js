@@ -14,8 +14,8 @@ define(
         });
         return function(shippingAddress) {
             quote.shippingAddress(shippingAddress);
-            //set billing address same as shipping by default
-            if (shippingAddress.canUseForBilling()) {
+            //set billing address same as shipping by default if it is not empty
+            if (shippingAddress.countryId != undefined && shippingAddress.canUseForBilling()) {
                 quote.billingAddress(shippingAddress);
             }
         };
