@@ -39,7 +39,7 @@ define(
                 this._super()
                     .observe({
                         selectedAddress: null,
-                        isAddressDetailsVisible: quote.shippingAddress() != null,
+                        isAddressDetailsVisible: quote.billingAddress() != null,
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
                         isAddressSameAsShipping: false
                     });
