@@ -5,8 +5,6 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
-use Magento\Framework\Validator\Test\Unit\Test\True;
-
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
