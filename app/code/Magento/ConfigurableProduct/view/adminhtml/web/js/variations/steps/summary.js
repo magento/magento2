@@ -16,6 +16,7 @@ define([
         attributes: ko.observableArray([]),
         grid: ko.observableArray([]),
         attributesName: ko.observableArray([]),
+        nextLabel: $.mage.__('Generate Products'),
 
         /**
          * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
