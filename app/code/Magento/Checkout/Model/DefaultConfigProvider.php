@@ -6,7 +6,6 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Checkout\Helper\Data as CheckoutHelper;
-use Magento\Checkout\Model\Type\Onepage as OnepageCheckout;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Model\Context as CustomerContext;
@@ -23,6 +22,9 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\UrlInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -121,6 +123,53 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $viewConfig;
 
     /**
+     * @var \Magento\Directory\Model\Country\Postcode\ConfigInterface
+     */
+    protected $postCodesConfig;
+
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $directoryHelper;
+
+    /**
+     * @var Cart\ImageProvider
+     */
+    protected $imageProvider;
+
+    /**
+     * @var CartTotalRepositoryInterface
+     */
+    protected $cartTotalRepository;
+
+    /**
+     * Shipping method data factory.
+     *
+     * @var \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory
+     */
+    protected $estimatedAddressFactory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Shipping\Model\Config
+     */
+    protected $shippingMethodConfig;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var \Magento\Quote\Api\PaymentMethodManagementInterface
+     */
+    protected $paymentMethodManagement;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -139,6 +188,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param FormKey $formKey
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
+     * @param Cart\ImageProvider $imageProvider
+     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param CartTotalRepositoryInterface $cartTotalRepository
+     * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\Shipping\Model\Config $shippingMethodConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -159,7 +217,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Customer\Model\Address\Config $addressConfig,
         FormKey $formKey,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Framework\View\ConfigInterface $viewConfig
+        \Magento\Framework\View\ConfigInterface $viewConfig,
+        \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig,
+        Cart\ImageProvider $imageProvider,
+        \Magento\Directory\Helper\Data $directoryHelper,
+        CartTotalRepositoryInterface $cartTotalRepository,
+        \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory,
+        ScopeConfigInterface $scopeConfig,
+        \Magento\Shipping\Model\Config $shippingMethodConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -179,6 +246,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->formKey = $formKey;
         $this->imageHelper = $imageHelper;
         $this->viewConfig = $viewConfig;
+        $this->postCodesConfig = $postCodesConfig;
+        $this->imageProvider = $imageProvider;
+        $this->directoryHelper = $directoryHelper;
+        $this->cartTotalRepository = $cartTotalRepository;
+        $this->estimatedAddressFactory = $estimatedAddressFactory;
+        $this->scopeConfig = $scopeConfig;
+        $this->shippingMethodConfig = $shippingMethodConfig;
+        $this->storeManager = $storeManager;
+        $this->paymentMethodManagement = $paymentMethodManagement;
     }
 
     /**
@@ -186,6 +262,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $quoteId = $this->checkoutSession->getQuote()->getId();
         return [
             'formKey' => $this->formKey->getFormKey(),
             'customerData' => $this->getCustomerData(),
@@ -207,8 +284,70 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'basePriceFormat' => $this->localeFormat->getPriceFormat(
                 null,
                 $this->currencyManager->getDefaultCurrency()
-            )
+            ),
+            'postCodes' => $this->postCodesConfig->getPostCodes(),
+            'imageData' => $this->imageProvider->getImages($quoteId),
+            'countryData' => $this->getCountryData(),
+            'totalsData' => $this->getTotalsData(),
+            'shippingRates' => $this->getDefaultShippingRates(),
+            'shippingPolicy' => [
+                'isEnabled' => $this->scopeConfig->isSetFlag(
+                    'shipping/shipping_policy/enable_shipping_policy',
+                    ScopeInterface::SCOPE_STORE
+                ),
+                'shippingPolicyContent' => nl2br(
+                    $this->scopeConfig->getValue(
+                        'shipping/shipping_policy/shipping_policy_content',
+                        ScopeInterface::SCOPE_STORE
+                    )
+                )
+            ],
+            'activeCarriers' => $this->getActiveCarriers(),
+            'originCountryCode' => $this->getOriginCountryCode(),
+            'paymentMethods' => $this->getPaymentMethods()
         ];
+    }
+
+    /**
+     * Get default shipping rates
+     *
+     * @return array
+     */
+    private function getDefaultShippingRates()
+    {
+        $output = [];
+        $addressKey = null;
+        if ($this->checkoutSession->getQuote()->getId()) {
+            $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
+            /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $estimatedAddress */
+            $estimatedAddress = $this->estimatedAddressFactory->create();
+
+            $address = $quote->getShippingAddress();
+            if ($address &&
+                ($address->getCountryId()
+                    || $address->getPostcode()
+                    || $address->getRegion()
+                    || $address->getRegionId()
+                )
+            ) {
+                $estimatedAddress->setCountryId($address->getCountryId());
+                $estimatedAddress->setPostcode($address->getPostcode());
+                $estimatedAddress->setRegion($address->getRegion());
+                $estimatedAddress->setRegionId($address->getRegionId());
+            } else {
+                $estimatedAddress->setCountryId($this->directoryHelper->getDefaultCountry());
+            }
+            $rates = $this->shippingMethodManager->estimateByAddress($quote->getId(), $estimatedAddress);
+            foreach ($rates as $rate) {
+                $output[] = $rate->__toArray();
+            }
+
+            if ($address->getCustomerAddressId()) {
+                $addressKey = 'customer-address' . $address->getCustomerAddressId();
+            }
+        };
+        return ['key' => $addressKey, 'data' => $output];
+
     }
 
     /**
@@ -270,13 +409,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quoteData = [];
         if ($this->checkoutSession->getQuote()->getId()) {
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
-            // the following condition is a legacy logic left here for compatibility
-            if (!$quote->getCustomer()->getId()) {
-                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod('guest'));
-            } else {
-                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod(null));
-            }
-
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 
@@ -357,22 +489,21 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * Retrieve selected shipping method
      *
-     * @return string
+     * @return array|null
      */
     private function getSelectedShippingMethod()
     {
-        // Shipping method ID contains carrier code and shipping method code
-        $shippingMethodId = '';
+        $shippingMethodData = null;
         try {
             $quoteId = $this->checkoutSession->getQuote()->getId();
             $shippingMethod = $this->shippingMethodManager->get($quoteId);
             if ($shippingMethod) {
-                $shippingMethodId = $shippingMethod->getCarrierCode() . '_' . $shippingMethod->getMethodCode();
+                $shippingMethodData = $shippingMethod->__toArray();
             }
         } catch (\Exception $exception) {
-            $shippingMethodId = '';
+            $shippingMethodData = null;
         }
-        return $shippingMethodId;
+        return $shippingMethodData;
     }
 
     /**
@@ -433,5 +564,98 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected function getStaticBaseUrl()
     {
         return $this->checkoutSession->getQuote()->getStore()->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
+    }
+
+    /**
+     * Return countries data
+     * @return array
+     */
+    private function getCountryData()
+    {
+        $country = [];
+        $regionsData = $this->directoryHelper->getRegionData();
+        foreach ($this->directoryHelper->getCountryCollection() as $code => $data) {
+            $country[$code]['name'] = $data->getName();
+            if (array_key_exists($code, $regionsData)) {
+                foreach ($regionsData[$code] as $key => $region) {
+                    $country[$code]['regions'][$key]['code'] = $region['code'];
+                    $country[$code]['regions'][$key]['name'] = $region['name'];
+                }
+            }
+
+        }
+        return $country;
+    }
+
+    /**
+     * Return quote totals data
+     * @return array
+     */
+    private function getTotalsData()
+    {
+        /** @var \Magento\Quote\Api\Data\TotalsInterface $totals */
+        $totals = $this->cartTotalRepository->get($this->checkoutSession->getQuote()->getId());
+        $items = [];
+        /** @var  \Magento\Quote\Model\Cart\Totals\Item $item */
+        foreach ($totals->getItems() as $item) {
+            $items[] = $item->__toArray();
+        }
+        $totalSegmentsData = [];
+        /** @var \Magento\Quote\Model\Cart\TotalSegment $totalSegment */
+        foreach ($totals->getTotalSegments() as $totalSegment) {
+            $totalSegmentsData[] = $totalSegment->toArray();
+        }
+        $totals->setItems($items);
+        $totals->setTotalSegments($totalSegmentsData);
+        $totalsArray = $totals->toArray();
+        if (is_object($totals->getExtensionAttributes())) {
+            $totalsArray['extension_attributes'] = $totals->getExtensionAttributes()->__toArray();
+        }
+        return $totalsArray;
+    }
+
+    /**
+     * Returns active carriers codes
+     * @return array
+     */
+    private function getActiveCarriers()
+    {
+        $activeCarriers = [];
+        foreach ($this->shippingMethodConfig->getActiveCarriers() as $carrier) {
+            $activeCarriers[] = $carrier->getCarrierCode();
+        }
+        return $activeCarriers;
+    }
+
+    /**
+     * Returns origin country code
+     * @return string
+     */
+    private function getOriginCountryCode()
+    {
+        return $this->scopeConfig->getValue(
+            \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()
+        );
+    }
+
+    /**
+     * Returns array of payment methods
+     * @return array
+     */
+    private function getPaymentMethods()
+    {
+        $paymentMethods = [];
+        $quote = $this->checkoutSession->getQuote();
+        if ($quote->getIsVirtual()) {
+            foreach ($this->paymentMethodManagement->getList($quote->getId()) as $paymentMethod) {
+                $paymentMethods[] = [
+                    'code' => $paymentMethod->getCode(),
+                    'title' => $paymentMethod->getTitle()
+                ];
+            }
+        }
+        return $paymentMethods;
     }
 }

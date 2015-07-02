@@ -35,9 +35,6 @@
         <type id="DN" order="60">
             <label>Diners</label>
         </type>
-        <type id="JC" order="70">
-            <label>JCB</label>
-        </type>
         <type id="MI" order="80">
             <label>Maestro International</label>
         </type>
