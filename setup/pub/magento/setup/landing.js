@@ -4,8 +4,8 @@
  */
 
 'use strict';
-angular.module('landing-updater', ['ngStorage'])
-    .controller('landingUpdaterController', [
+angular.module('landing', ['ngStorage'])
+    .controller('landingController', [
         '$scope',
         '$location',
         '$localStorage',

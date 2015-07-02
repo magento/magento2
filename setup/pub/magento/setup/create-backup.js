@@ -35,6 +35,7 @@ angular.module('create-backup', ['ngStorage'])
                         $scope.loading = false;
                         $scope.nextState();
                     }
+                    $scope.loading = false;
                 })
                 .error(function (data) {
                     $scope.takeBackup.failed = data;
