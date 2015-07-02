@@ -55,10 +55,9 @@ class EngineProvider
     /**
      * Get engine singleton
      *
-     * @param array $data
      * @return EngineInterface
      */
-    public function get(array $data = [])
+    public function get()
     {
         if (!$this->engine) {
             $currentEngine = $this->scopeConfig->getValue(self::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
@@ -69,7 +68,7 @@ class EngineProvider
             }
             $engineClassName = $this->enginePool[$currentEngine];
 
-            $engine = $this->objectManager->create($engineClassName, ['data' => $data]);
+            $engine = $this->objectManager->create($engineClassName);
             if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
                 throw new \LogicException(
                     $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'

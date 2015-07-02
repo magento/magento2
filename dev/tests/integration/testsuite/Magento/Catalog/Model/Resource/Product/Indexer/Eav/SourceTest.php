@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
 /**
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+ * @magentoDbIsolation disabled
  */
 class SourceTest extends \PHPUnit_Framework_TestCase
 {

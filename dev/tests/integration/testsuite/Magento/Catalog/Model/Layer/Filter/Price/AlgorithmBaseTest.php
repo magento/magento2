@@ -34,7 +34,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
     protected $priceResource;
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
