@@ -73,6 +73,10 @@ class Grid extends AbstractGrid
      */
     protected function getGridOriginSelect()
     {
+        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\n', ifnull(sba.city, ''), "
+            . "',', ifnull(sba.region, ''), ',', ifnull(sba.postcode, '')))";
+        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\n', ifnull(ssa.city, ''), "
+            . "',', ifnull(ssa.region, ''), ',', ifnull(ssa.postcode, '')))";
         return $this->getConnection()->select()
             ->from(['sfo' => $this->getTable($this->orderTableName)], [])
             ->joinLeft(
@@ -83,6 +87,11 @@ class Grid extends AbstractGrid
             ->joinLeft(
                 ['ssa' => $this->getTable($this->addressTableName)],
                 'sfo.shipping_address_id = ssa.entity_id',
+                []
+            )
+            ->joinLeft(
+                ['cg' => $this->getTable('customer_group')],
+                'sfo.customer_group_id = cg.customer_group_id',
                 []
             )
             ->columns(
@@ -103,6 +112,13 @@ class Grid extends AbstractGrid
                     'billing_name' => "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))",
                     'created_at' => 'sfo.created_at',
                     'updated_at' => 'sfo.updated_at',
+                    'billing_address' => $billingAddress,
+                    'shipping_address' => $shippingAddress,
+                    'shipping_information' => 'sfo.shipping_description',
+                    'customer_email' => 'sfo.customer_email',
+                    'customer_group' => 'cg.customer_group_code',
+                    'subtotal' => 'sfo.base_subtotal',
+                    'shipping_and_handling' => 'sfo.base_shipping_amount'
                 ]
             );
     }
