@@ -63,7 +63,7 @@ define(
                     && $(loginForm).validation('isValid')
                 ) {
                     this.isLoading(true);
-                    loginAction(loginData);
+                    loginAction(loginData, null, false);
                 }
             }
         });

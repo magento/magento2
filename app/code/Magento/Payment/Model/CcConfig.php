@@ -152,4 +152,18 @@ class CcConfig
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
     }
+
+    /**
+     * Create a file asset that's subject of fallback system
+     *
+     * @param string $fileId
+     * @param array $params
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createAsset($fileId, array $params = [])
+    {
+        $params = array_merge(['_secure' => $this->request->isSecure()], $params);
+        return $this->assetRepo->createAsset($fileId, $params);
+
+    }
 }
