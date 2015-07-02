@@ -27,8 +27,6 @@ class LandingInstaller extends AbstractActionController
         $view = new ViewModel;
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/landing.phtml');
-        $view->setVariable('languages', $this->serviceLocator->get('config')['languages']);
-        $view->setVariable('location', 'en_US');
         $view->setVariable('version', AppInterface::VERSION);
         $view->setVariable('welcomeMsg', $welcomeMsg);
         $view->setVariable('docRef', $docRef);
