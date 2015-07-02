@@ -198,6 +198,413 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     */
+    public function testCreateAccountWithPasswordHashWithExistingCustomer()
+    {
+        $websiteId = 1;
+        $storeId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager
+            ->expects($this->once())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
+     */
+    public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer
+            ->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer
+            ->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $exception = new \Magento\Framework\Exception\AlreadyExistsException(new \Magento\Framework\Phrase('Exception message'));
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customer, $hash)
+            ->willThrowException($exception);
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithPasswordHashWithLocalizedException()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer
+            ->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer
+            ->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Exception message'));
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customer, $hash)
+            ->willThrowException($exception);
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithPasswordHashWithAddressException()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $website->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer
+            ->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer
+            ->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share
+            ->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customer, $hash)
+            ->willReturn($customer);
+
+        $exception = new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('Exception message'));
+        $this->addressRepository
+            ->expects($this->atLeastOnce())
+            ->method('save')
+            ->with($address)
+            ->willThrowException($exception);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('delete')
+            ->with($customer);
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateAccountWithPasswordHashWithoutException()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+        $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
+        $customerName = 'Customer Name';
+        $templateIdentifier = 'Template Identifier';
+        $sender = 'Sender';
+
+        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
+        $website->expects($this->atLeastOnce())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->customerRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn($customer);
+        $this->addressRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->with($address);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->random->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($newLinkToken);
+        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerSecure->expects($this->any())
+            ->method('setRpToken')
+            ->with($newLinkToken);
+        $customerSecure->expects($this->any())
+            ->method('setRpTokenCreatedAt');
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($customerSecure);
+        $this->dataObjectProcessor->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->willReturn([]);
+        $this->scopeConfig->expects($this->at(1))
+            ->method('getValue')
+            ->willReturn($templateIdentifier);
+        $this->scopeConfig->expects($this->at(2))
+            ->method('getValue')
+            ->willReturn($sender);
+        $transport = $this->getMockBuilder('Magento\Framework\Mail\TransportInterface')->getMock();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->with($templateIdentifier)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateOptions')
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setTemplateVars')
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('setFrom')
+            ->with($sender)
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('addTo')
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
+            ->method('getTransport')
+            ->willReturn($transport);
+        $transport->expects($this->once())
+            ->method('sendMessage');
+
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSendPasswordReminderEmail()
