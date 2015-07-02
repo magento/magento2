@@ -36,10 +36,8 @@ class Info extends Block
      */
     public function isPaymentMethodVisible($paymentMethod)
     {
-        return $this->_rootElement->find(
-            sprintf($this->paymentMethodSelector, $paymentMethod),
-            Locator::SELECTOR_XPATH
-        )->isVisible();
+        return $this->_rootElement->find(sprintf($this->paymentMethodSelector, $paymentMethod), Locator::SELECTOR_XPATH)
+            ->isVisible();
     }
 
     /**
