@@ -3,22 +3,22 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Test\Unit\Model\Resource;
+namespace Magento\Framework\Model\Test\Unit\Resource\Db\VersionControl;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class EntityMetadataTest
+ * Class Version Control MetadataTest
  */
-class EntityMetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\EntityMetadata
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Metadata
      */
     protected $entityMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\AbstractModel
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\AbstractModel
      */
     protected $model;
 
@@ -39,7 +39,7 @@ class EntityMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->model = $this->getMock(
-            'Magento\Sales\Model\AbstractModel',
+            'Magento\Framework\Model\AbstractModel',
             [],
             [],
             '',
@@ -63,13 +63,15 @@ class EntityMetadataTest extends \PHPUnit_Framework_TestCase
         );
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
         $this->resource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
-        $this->entityMetadata = $objectManager->getObject('Magento\Sales\Model\Resource\EntityMetadata');
+        $this->entityMetadata = $objectManager->getObject(
+            'Magento\Framework\Model\Resource\Db\VersionControl\Metadata'
+        );
     }
 
     public function testGetFields()
     {
         $mainTable = 'main_table';
-        $expectedDescribedTable = 'described_table';
+        $expectedDescribedTable = ['described_table' => null];
         $this->resource->expects($this->any())->method('getMainTable')->willReturn($mainTable);
         $this->connection->expects($this->once())->method('describeTable')->with($mainTable)->willReturn(
             $expectedDescribedTable

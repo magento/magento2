@@ -15,6 +15,7 @@ use Magento\Framework\Model\Resource\AbstractResource;
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class AbstractDb extends AbstractResource implements SourceProviderInterface
 {
@@ -396,6 +397,7 @@ abstract class AbstractDb extends AbstractResource implements SourceProviderInte
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Exception
      * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
@@ -403,13 +405,16 @@ abstract class AbstractDb extends AbstractResource implements SourceProviderInte
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-        if (!$object->hasDataChanges()) {
-            return $this;
-        }
 
         $this->beginTransaction();
 
         try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
@@ -417,53 +422,13 @@ abstract class AbstractDb extends AbstractResource implements SourceProviderInte
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
-                    $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-                    /**
-                     * Not auto increment primary key support
-                     */
-                    if ($this->_isPkAutoIncrement) {
-                        $data = $this->prepareDataForUpdate($object);
-                        if (!empty($data)) {
-                            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                        }
-                    } else {
-                        $select = $this->_getWriteAdapter()->select()->from(
-                            $this->getMainTable(),
-                            [$this->getIdFieldName()]
-                        )->where(
-                            $condition
-                        );
-                        if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
-                            $data = $this->prepareDataForUpdate($object);
-                            if (!empty($data)) {
-                                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                            }
-                        } else {
-                            $this->_getWriteAdapter()->insert(
-                                $this->getMainTable(),
-                                $this->_prepareDataForSave($object)
-                            );
-                        }
-                    }
+                if ($this->isObjectNotNew($object)) {
+                    $this->updateObject($object);
                 } else {
-                    $bind = $this->_prepareDataForSave($object);
-                    if ($this->_isPkAutoIncrement) {
-                        unset($bind[$this->getIdFieldName()]);
-                    }
-                    $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-
-                    $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
-
-                    if ($this->_useIsObjectNew) {
-                        $object->isObjectNew(false);
-                    }
+                    $this->saveNewObject($object);
                 }
-
                 $this->unserializeFields($object);
-                $this->_afterSave($object);
-
-                $object->afterSave();
+                $this->processAfterSaves($object);
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
@@ -799,5 +764,112 @@ abstract class AbstractDb extends AbstractResource implements SourceProviderInte
         unset($dataObject);
 
         return $data;
+    }
+
+    /**
+     * Check if object is new
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return bool
+     */
+    protected function isObjectNotNew(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew());
+    }
+
+    /**
+     * Save New Object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @throws LocalizedException
+     * @return void
+     */
+    protected function saveNewObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $bind = $this->_prepareDataForSave($object);
+        if ($this->_isPkAutoIncrement) {
+            unset($bind[$this->getIdFieldName()]);
+        }
+        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
+
+        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+
+        if ($this->_useIsObjectNew) {
+            $object->isObjectNew(false);
+        }
+    }
+
+    /**
+     * Update existing object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @throws LocalizedException
+     * @return void
+     */
+    protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        /**
+         * Not auto increment primary key support
+         */
+        if ($this->_isPkAutoIncrement) {
+            $data = $this->prepareDataForUpdate($object);
+            if (!empty($data)) {
+                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+            }
+        } else {
+            $select = $this->_getWriteAdapter()->select()->from(
+                $this->getMainTable(),
+                [$this->getIdFieldName()]
+            )->where(
+                $condition
+            );
+            if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
+                $data = $this->prepareDataForUpdate($object);
+                if (!empty($data)) {
+                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                }
+            } else {
+                $this->_getWriteAdapter()->insert(
+                    $this->getMainTable(),
+                    $this->_prepareDataForSave($object)
+                );
+            }
+        }
+    }
+
+    /**
+     * Sequences of after save call
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    protected function processAfterSaves(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->_afterSave($object);
+        $object->afterSave();
+    }
+
+    /**
+     * Check if object was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return bool
+     */
+    protected function isModified(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $object->hasDataChanges();
+    }
+
+    /**
+     * Process object which was modified
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $this;
     }
 }
