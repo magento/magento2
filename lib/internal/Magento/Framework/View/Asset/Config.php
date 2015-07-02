@@ -111,20 +111,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     }
 
     /**
-     * Get asset minification adapter for specified content type
-     *
-     * @param string $contentType
-     * @return string
-     */
-    public function getAssetMinificationAdapter($contentType)
-    {
-        return (string)$this->scopeConfig->getValue(
-            sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
      * Check whether minify of HTML is on
      *
      * @return bool

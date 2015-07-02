@@ -20,11 +20,9 @@
             <js>
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
-                <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
             </js>
             <css>
                 <minify_files>0</minify_files>
-                <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier</minify_adapter>
             </css>
             <image>
                 <default_adapter>GD2</default_adapter>
