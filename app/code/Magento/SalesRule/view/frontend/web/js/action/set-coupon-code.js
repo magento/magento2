@@ -14,11 +14,11 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
-        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals'
     ],
-    function (ko, $, quote, urlManager, paymentService, messageList, storage, getTotalsAction) {
+    function (ko, $, quote, urlManager, paymentService, errorProcessor, storage, getTotalsAction) {
         'use strict';
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
@@ -42,11 +42,10 @@ define(
                         });
                     }
                 }
-            ).error(
+            ).fail(
                 function (response) {
                     isLoading(false);
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };

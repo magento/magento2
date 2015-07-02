@@ -8,11 +8,11 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'mage/url',
-        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'underscore'
     ],
-    function (quote, urlBuilder, storage, url, messageList, customer, _) {
+    function (quote, urlBuilder, storage, url, errorProcessor, customer, _) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
@@ -50,8 +50,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };

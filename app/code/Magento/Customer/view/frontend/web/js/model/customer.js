@@ -8,10 +8,9 @@ define(
         'jquery',
         'ko',
         'underscore',
-        'mage/storage',
         './address-list'
     ],
-    function($, ko, _, storage, addressList) {
+    function($, ko, _, addressList) {
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
             customerData = {};
