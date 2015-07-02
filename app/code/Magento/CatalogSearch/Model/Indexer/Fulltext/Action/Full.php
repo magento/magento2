@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -131,11 +129,6 @@ class Full
     protected $fulltextResource;
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * @var \Magento\Framework\Search\Request\Config
      */
     protected $searchRequestConfig;
@@ -144,10 +137,6 @@ class Full
      * @var \Magento\Framework\Search\Request\DimensionFactory
      */
     private $dimensionFactory;
-    /**
-     * @var array
-     */
-    private $data;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -164,9 +153,7 @@ class Full
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
-     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
-     * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,9 +171,7 @@ class Full
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
-        PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
-        array $data
+        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -202,9 +187,7 @@ class Full
         $this->localeResolver = $localeResolver;
         $this->localeDate = $localeDate;
         $this->fulltextResource = $fulltextResource;
-        $this->priceCurrency = $priceCurrency;
         $this->dimensionFactory = $dimensionFactory;
-        $this->data = $data;
     }
 
     /**
@@ -826,6 +809,6 @@ class Full
      */
     private function getEngineProvider()
     {
-        return $this->engineProvider->get($this->data);
+        return $this->engineProvider->get();
     }
 }

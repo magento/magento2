@@ -16,6 +16,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
     const STORE_CODE_FROM_FIXTURE = 'fixturestore';
+    const STORE_NAME_FROM_FIXTURE = 'Fixture Store';
 
     private $productData = [
         [
@@ -33,29 +34,21 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
     ];
 
     /**
-     * Create another store one time for testSearch
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
-     */
-    public function testCreateAnotherStore()
-    {
-        /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
-        $store->load('fixturestore');
-        $this->assertNotNull($store->getId());
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @depends testCreateAnotherStore
      */
     public function testGetMultiStore()
     {
         $productData = $this->productData[0];
         $nameInFixtureStore = 'Name in fixture store';
         /** @var $store \Magento\Store\Model\Group   */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
         $store->load(self::STORE_CODE_FROM_FIXTURE);
-        $this->assertNotNull($store->getId(), 'Precondition failed: fixture store was not created.');
+        $this->assertEquals(
+            self::STORE_NAME_FROM_FIXTURE,
+            $store->getName(),
+            'Precondition failed: fixture store was not created.'
+        );
         $sku = $productData[Product::SKU];
         /** @var \Magento\Catalog\Model\Product $product */
         $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
