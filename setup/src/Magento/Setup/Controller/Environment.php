@@ -267,6 +267,11 @@ class Environment extends AbstractActionController
         return new JsonModel($data);
     }
 
+    /**
+     * Verifies Setup Cron status
+     *
+     * @return JsonModel
+     */
     public function cronScriptSetupAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
@@ -281,6 +286,11 @@ class Environment extends AbstractActionController
         return new JsonModel($data);
     }
 
+    /**
+     * Verifies Updater Cron status
+     *
+     * @return JsonModel
+     */
     public function cronScriptUpdaterAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
