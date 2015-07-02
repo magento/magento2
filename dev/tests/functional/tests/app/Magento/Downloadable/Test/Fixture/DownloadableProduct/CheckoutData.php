@@ -39,6 +39,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'subtotal' => 23,
                 ],
             ],
+
             'with_two_bought_links' => [
                 'options' => [
                     'links' => [
@@ -57,6 +58,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
             ],
+
             'forUpdateMiniShoppingCart' => [
                 'options' => [
                     'links' => [
@@ -71,6 +73,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'subtotal' => 22.43,
                 ],
             ],
+
             'default' => [
                 'options' => [
                     'links' => [

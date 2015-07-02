@@ -46,6 +46,7 @@
     &._show {
         visibility: visible;
         .modal-inner-wrap {
+            -webkit-transform: translate(0, 0);
             transform: translate(0, 0);
         }
     }
@@ -62,6 +63,7 @@
     z-index: @modal-slide__z-index;
     &._show {
         .modal-inner-wrap {
+            -webkit-transform: translateX(0);
             transform: translateX(0);
         }
     }
@@ -69,9 +71,11 @@
         height: 100%;
         overflow-y: auto;
         position: static;
+        -webkit-transform: translateX(100%);
         transform: translateX(100%);
         transition-duration: .3s;
         transition-timing-function: ease-in-out;
+        -webkit-transition-property: -webkit-transform, visibility;
         transition-property: transform, visibility;
         width: auto;
     }
@@ -83,18 +87,24 @@
     z-index: @modal-popup__z-index;
     &._show {
         .modal-inner-wrap {
+            -webkit-transform: translateY(0);
             transform: translateY(0);
         }
     }
     .modal-inner-wrap {
+        box-sizing: border-box;
         .vendor-prefix-display(flex);
         .vendor-prefix-flex-direction(column);
         height: auto;
-        margin: @modal-popup__indent-vertical (100% - @modal-popup__width) / 2;
+        left: 0;
+        right: 0;
+        margin: @modal-popup__indent-vertical auto;
         position: absolute;
+        -webkit-transform: translateY(-200%);
         transform: translateY(-200%);
         transition-duration: .2s;
         transition-timing-function: ease;
+        -webkit-transition-property: -webkit-transform, visibility;
         transition-property: transform, visibility;
         width: @modal-popup__width;
     }
@@ -102,10 +112,12 @@
 
 //
 
-._has-modal {
-    height: 100vh;
-    overflow: hidden;
-    width: 100vw;
+body {
+    &._has-modal {
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+    }
 }
 
 // Modals overlay
@@ -156,8 +168,16 @@
     //  If applied, switching outer popup scroll to inner
     &._inner-scroll {
         overflow-y: visible;
+        .ie10 &,
+        .ie9 & {
+            overflow-y: auto;
+        }
         .modal-inner-wrap {
             max-height: 90%;
+            .ie10 &,
+            .ie9 & {
+                max-height: none;
+            }
         }
         .modal-content {
             overflow-y: auto;
