@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
-class InfoAdminCommand extends Command
+class InfoAdminUriCommand extends Command
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -38,7 +38,7 @@ class InfoAdminCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('info:admin')
+        $this->setName('info:adminuri')
             ->setDescription('Displays the Magento Admin URI');
         parent::configure();
     }

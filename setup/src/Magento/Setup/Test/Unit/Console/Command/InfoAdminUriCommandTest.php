@@ -5,11 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\InfoAdminCommand;
+use Magento\Setup\Console\Command\InfoAdminUriCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackendFrontnameGenerator;
 
-class InfoAdminCommandTest extends \PHPUnit_Framework_TestCase
+class InfoAdminUriCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +25,7 @@ class InfoAdminCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->deploymentConfig->expects($this->once())->method('get')->willReturn('admin_qw12er');
 
-        $commandTester = new CommandTester(new InfoAdminCommand($this->deploymentConfig));
+        $commandTester = new CommandTester(new InfoAdminUriCommand($this->deploymentConfig));
         $commandTester->execute([]);
 
         $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
