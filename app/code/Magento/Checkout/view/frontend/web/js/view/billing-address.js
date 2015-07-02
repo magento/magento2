@@ -35,6 +35,13 @@ define(
                 template: 'Magento_Checkout/billing-address'
             },
 
+            initialize: function () {
+                this._super();
+                quote.paymentMethod.subscribe(function() {
+                    this.cancelAddressEdit();
+                }, this);
+            },
+
             initObservable: function () {
                 this._super()
                     .observe({

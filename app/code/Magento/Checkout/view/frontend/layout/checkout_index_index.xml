@@ -263,7 +263,6 @@
                                                                     </item>
                                                                 </item>
                                                             </item>
-                                                            <!-- TODO: add billing address form -->
                                                             <item name="beforeMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">beforeMethods</item>
