@@ -989,6 +989,48 @@ class InstallSchema implements InstallSchemaInterface
             null,
             [],
             'Updated At'
+        )->addColumn(
+            'billing_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'shipping_information',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Method Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'customer_group',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Group'
+        )->addColumn(
+            'subtotal',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Subtotal'
+        )->addColumn(
+            'shipping_and_handling',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Shipping and handling amount'
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['status']),
             ['status']
