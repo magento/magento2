@@ -13,8 +13,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create product according to dataset.
  * 2. Go to frontend.
