@@ -63,7 +63,7 @@ class AbstractCartItem extends Block
      *
      * @var string
      */
-    protected $optionsBlock = './/dl[@class="item-options"]';
+    protected $optionsBlock = './/dl[contains(@class, "item-options")]';
 
     /**
      * Escape currency in price

@@ -65,6 +65,13 @@ class Grid extends GridInterface
     ];
 
     /**
+     * An element locator which allows to select entities in grid.
+     *
+     * @var string
+     */
+    protected $selectItem = 'tbody tr .col-select label input';
+
+    /**
      * Start to create new order.
      */
     public function addNewOrder()

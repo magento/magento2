@@ -186,7 +186,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $rowPattern = '//tr[%s]';
+    protected $rowPattern = '//tbody/tr[%s]';
 
     /**
      * Get backend abstract block

@@ -32,7 +32,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         foreach ($checkoutData['options']['links'] as $link) {
             $keyLink = str_replace('link_', '', $link['label']);
             $checkoutDownloadableOptions[] = [
-                'title' => 'Links',
+                'title' => $downloadableOptions['title'],
                 'value' => $downloadableOptions['downloadable']['link'][$keyLink]['title'],
             ];
         }
