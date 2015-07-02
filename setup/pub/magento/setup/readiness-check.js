@@ -6,7 +6,7 @@
 'use strict';
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', '$sce', 'COUNTER', function ($rootScope, $scope, $http, $timeout, $sce, COUNTER) {
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
@@ -171,6 +171,9 @@ angular.module('readiness-check', [])
                 },
                 process: function(data) {
                     $scope.cronscriptsetup.processed = true;
+                    if (data.errorMessage) {
+                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                    }
                     angular.extend($scope.cronscriptsetup, data);
                     $scope.updateOnProcessed($scope.cronscriptsetup.responseType);
                     $scope.stopProgress();
@@ -187,6 +190,9 @@ angular.module('readiness-check', [])
                 },
                 process: function(data) {
                     $scope.cronscriptupdater.processed = true;
+                    if (data.errorMessage) {
+                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                    }
                     angular.extend($scope.cronscriptupdater, data);
                     $scope.updateOnProcessed($scope.cronscriptupdater.responseType);
                     $scope.stopProgress();

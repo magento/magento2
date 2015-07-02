@@ -364,8 +364,7 @@
                         <span ng-show="cronscriptsetup.expanded">Hide detail</span>
                     </a>
                 </p>
-                <p ng-show="cronscriptsetup.expanded">
-                    {{cronscriptsetup.errorMessage}}
+                <p ng-show="cronscriptsetup.expanded" ng-bind-html="cronscriptsetup.errorMessage">
                 </p>
                 <p ng-show="cronscriptsetup.expanded">If you need more help please visit documentation page.</p>
             </div>
@@ -400,8 +399,7 @@
                         <span ng-show="cronscriptupdater.expanded">Hide detail</span>
                     </a>
                 </p>
-                <p ng-show="cronscriptupdater.expanded">
-                    {{cronscriptupdater.errorMessage}}
+                <p ng-show="cronscriptupdater.expanded" ng-bind-html="cronscriptupdater.errorMessage">
                 </p>
                 <p ng-show="cronscriptupdater.expanded">If you need more help please visit documentation page.</p>
             </div>
