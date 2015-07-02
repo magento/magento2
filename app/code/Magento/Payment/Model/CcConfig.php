@@ -164,6 +164,5 @@ class CcConfig
     {
         $params = array_merge(['_secure' => $this->request->isSecure()], $params);
         return $this->assetRepo->createAsset($fileId, $params);
-
     }
 }
