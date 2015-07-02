@@ -2263,4 +2263,9 @@ return [
         '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
     ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['getCentinelValidator', 'Magento\Paypal\Model\Direct'],
+    ['_getCentinelVpasLabel', 'Magento\Paypal\Model\Info'],
+    ['_getCentinelEciLabel', 'Magento\Paypal\Model\Info'],
+    ['_getPayPalPayflowPro3dSecure', 'Magento\Config\Test\Repository\Config'],
+    ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config']
 ];

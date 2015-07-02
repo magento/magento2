@@ -118,6 +118,7 @@
         "magento/module-offline-shipping": "self.version",
         "magento/module-page-cache": "self.version",
         "magento/module-payment": "self.version",
+        "magento/module-paypal": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
         "magento/module-quote": "self.version",

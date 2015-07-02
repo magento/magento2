@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Paypal\Block\Payflow\Advanced\Iframe
+ */
+?>
+<html>
+<head>
+</head>
+<body>
+<form id="token_form" method="GET" action="<?php echo $block->getTransactionUrl() ?>">
+    <input type="hidden" name="SECURETOKEN" value="<?php echo $block->getSecureToken(); ?>"/>
+    <input type="hidden" name="SECURETOKENID" value="<?php echo $block->getSecureTokenId(); ?>"/>
+    <input type="hidden" name="MODE" value="<?php echo $block->isTestMode() ? 'TEST' : 'LIVE'; ?>"/>
+</form>
+<script>
+    document.getElementById('token_form').submit();
+</script>
+</body>
+</html>
