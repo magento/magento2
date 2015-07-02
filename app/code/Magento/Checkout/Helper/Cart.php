@@ -99,7 +99,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve url for remove product from cart
      *
-     * @param   \Magento\Quote\Model\Quote\Item $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  string
      */
     public function getRemoveUrl($item)
@@ -114,7 +114,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     /**
      * Get post parameters for delete from cart
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return string
      */
     public function getDeletePostJson($item)
