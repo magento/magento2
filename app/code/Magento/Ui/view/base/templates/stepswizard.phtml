@@ -26,14 +26,23 @@
                 <?php } ?>
             </ul>
             <div class="nav-bar-outer-actions">
-                <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next" data-role="step-wizard-next">
-                    <button type="button" class="btn btn-prime"><?= __('Next') ?></button>
+                <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
+                    <button type="button"
+                            class="action-default action-primary action-next-step">
+                        <span><?= __('Next') ?></span>
+                    </button>
                 </div>
-                <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="step-wizard-prev">
-                    <button type="button" class="btn disabled"><?= __('Back') ?></button>
+                <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
+                    <button type="button"
+                            class="action-default action-back-step disabled">
+                        <span><?= __('Back') ?></span>
+                    </button>
                 </div>
-                <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="closeBtn">
-                    <button type="button" class="action-default action-tertiary"><?= __('Cancel') ?></button>
+                <div class="action-wrap" data-role="closeBtn">
+                    <button type="button"
+                            class="action-default action-cancel action-tertiary">
+                        <span><?= __('Cancel') ?></span>
+                    </button>
                 </div>
             </div>
         </div>

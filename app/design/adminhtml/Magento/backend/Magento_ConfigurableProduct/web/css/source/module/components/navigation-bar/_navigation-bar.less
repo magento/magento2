@@ -17,7 +17,11 @@
 
 @nav-bar__color: @color-brownie;
 @nav-bar__font-size: 1.2rem;
-@nav-bar__height__base: @action__base__font-size * @line-height__m + @action__base__font-size * @action__base__padding-top + @action__base__font-size * @action__base__padding-bottom;
+
+@nav-bar__height__base: ((@button__font-size * @button__line-height) +
+    (@button__font-size * @button__padding-top) +
+    (@button__font-size * @button__padding-top));
+
 @nav-bar__indent-top: 3rem;
 @nav-bar__min-height: 5.8rem;
 
@@ -52,15 +56,15 @@
 }
 
 //  Buttons panel
-.nav .btn-group,
 .nav-bar-outer-actions {
     float: right;
     margin-bottom: @nav-bar-items__indent-bottom;
-    .btn-wrap {
+    .action-wrap {
         float: right;
         margin-left: .5rem;
         margin-right: .5rem;
-        .btn {
+
+        .action-default {
             padding-left: .5rem;
             padding-right: .5rem;
         }
@@ -70,15 +74,6 @@
 .nav-bar-outer-actions {
     margin-top: -(@nav-bar__indent-top + @nav-bar__min-height + @nav-bar-items__indent-bottom + .1rem);
     padding-right: @nav__indent-right;
-}
-
-.btn-wrap-try-again {
-    width: 9.5rem;
-}
-
-.btn-wrap-prev,
-.btn-wrap-next {
-    min-width: 8.5rem;
 }
 
 //
