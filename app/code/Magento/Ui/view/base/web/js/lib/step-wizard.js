@@ -14,11 +14,14 @@ define([
     var getStep = _.memoize(function(step) {
         return _.findWhere(stepComponents, {name: step});
     });
-    var Wizard = function (steps, element) {
+    var Wizard = function (steps, element, uiWizard) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
         this.element = element;
+        this.uiWizard = uiWizard;
+        this.nextLabel = uiWizard.nextLabel.text();
+        this.prevLabel = uiWizard.prevLabel.text();
         $(this.element).notification();
         this.move = function (newIndex) {
             if (newIndex > this.index) {
@@ -35,12 +38,14 @@ define([
                 throw new Error(e);
             }
             this.index++;
+            this.updateLabels(this.getStep());
             this.render();
         };
-        this.getStep = function() {
-            return getStep(this.steps[this.index]);
+        this.getStep = function(stepIndex) {
+            return getStep(this.steps[stepIndex || this.index]);
         };
         this._prev = function (newIndex) {
+            this.updateLabels(this.getStep(this.index - 1));
             this.getStep().back(this);
             this.index = newIndex;
         };
@@ -49,6 +54,10 @@ define([
                 error: error,
                 message: $.mage.__(message)
             });
+        };
+        this.updateLabels = function(step) {
+            this.uiWizard.nextLabel.text(step.nextLabel || this.nextLabel);
+            this.uiWizard.prevLabel.text(step.prevLabel || this.prevLabel);
         };
         this.render = function() {
             $(this.element).notification('clear');
@@ -64,7 +73,6 @@ define([
             event: "click",
             buttonNextElement: '[data-role="step-wizard-next"]',
             buttonPrevElement: '[data-role="step-wizard-prev"]',
-            buttonFinalElement: '[data-role="step-wizard-final"]',
             stepRegistryComponent: null,
             steps: null
         },
@@ -76,8 +84,9 @@ define([
         _control: function () {
             var self = this;
             this.prev = this.element.find(this.options.buttonPrevElement);
+            this.prevLabel = $('button', this.prev);
             this.next = this.element.find(this.options.buttonNextElement);
-            this.final = this.element.find(this.options.buttonFinalElement);
+            this.nextLabel = $('button', this.next);
 
             this.next.on('click.' + this.eventNamespace, function (event) {
                 self._activate(self.options.active + 1);
@@ -85,7 +94,6 @@ define([
             this.prev.on('click.' + this.eventNamespace, function (event) {
                 self._activate(self.options.active - 1);
             });
-            this.final.hide();
         },
         load: function (index, event) {
             this._disabledTabs(index);
@@ -100,7 +108,7 @@ define([
 
                 steps(function(component) {
                     if (this.wizard === undefined) {
-                        this.wizard = new Wizard(this.options.steps, tab);
+                        this.wizard = new Wizard(this.options.steps, tab, this);
                         stepComponents = component.steps;
                     }
                     this.wizard.move(index);
@@ -118,14 +126,6 @@ define([
             }
             if (index === 1 && this._way(index) === 'force') {
                 this.prev.find('button').removeClass("disabled");
-            }
-            if (index > this.tabs.length - 2) {
-                this.next.hide();
-                this.final.show();
-            }
-            if (this._way(index) === 'back') {
-                this.final.hide();
-                this.next.show();
             }
         },
         _disabledTabs: function (index) {
