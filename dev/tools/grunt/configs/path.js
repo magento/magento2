@@ -14,10 +14,12 @@ module.exports = {
     tmpSource: 'var/view_preprocessed/source/',
     tmp: 'var',
     css: {
-        setup: 'setup/pub/styles'
+        setup: 'setup/pub/styles',
+        updater: '../magento2-updater/pub/css'
     },
     less: {
-        setup: 'setup/view/styles'
+        setup: 'app/design/adminhtml/Magento/backend/web/app/setup/styles/less',
+        updater: 'app/design/adminhtml/Magento/backend/web/app/updater/styles/less'
     },
     uglify: {
         legacy: 'lib/web/legacy-build.min.js'
