@@ -511,6 +511,8 @@ class AccountManagement implements AccountManagementInterface
             $customer->setStoreId($storeId);
         }
 
+        $customerAddresses = $customer->getAddresses();
+        $customer->setAddresses(null);
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
@@ -521,9 +523,14 @@ class AccountManagement implements AccountManagementInterface
         } catch (LocalizedException $e) {
             throw $e;
         }
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->addressRepository->save($address);
+        try {
+            foreach ($customerAddresses as $address) {
+                $address->setCustomerId($customer->getId());
+                $this->addressRepository->save($address);
+            }
+        } catch (InputException $e) {
+            $this->customerRepository->delete($customer);
+            throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();
