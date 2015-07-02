@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class BlockActions
+ * Class OrderActions
  */
 class OrderActions extends Column
 {
@@ -45,10 +45,6 @@ class OrderActions extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
-    /**
-     * @param array $items
-     * @return array
-     */
     /**
      * Prepare Data Source
      *
