@@ -1,0 +1,42 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: isTaxDisplayedInGrandTotal && isDisplayed() -->
+<tr class="grand totals incl">
+    <th class="mark" scope="row">
+        <strong data-bind="text: $t(inclTaxLabel)"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': $t(inclTaxLabel) }" class="amount">
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
+    </td>
+</tr>
+<tr class="grand totals excl">
+    <th class="mark" scope="row">
+        <strong data-bind="text: $t(exclTaxLabel)"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': exclTaxLabel }" class="amount">
+        <strong><span class="price" data-bind="text: getGrandTotalExclTax()"></span></strong>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: !isTaxDisplayedInGrandTotal && isDisplayed() -->
+<tr class="grand totals">
+    <th class="mark" scope="row">
+        <strong data-bind="text: $t(title)"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': $t(title)}" class="amount">
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: isBaseGrandTotalDisplayNeeded() && isDisplayed() -->
+<tr class="totals charge">
+    <th class="mark" data-bind="text: $t(basicCurrencyMessage)" scope="row"></th>
+    <td class="amount">
+        <span class="price" data-bind="text: getBaseValue(), attr: {'data-th': $t(basicCurrencyMessage)}"></span>
+    </td>
+</tr>
+<!-- /ko -->

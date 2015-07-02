@@ -1,0 +1,132 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Quote\Test\Unit\Model\Resource\Quote;
+
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+
+/**
+ * Class QuoteAddressTest
+ */
+class QuoteAddressTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Quote\Model\Resource\Quote\Address
+     */
+    protected $addressResource;
+
+    /**
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appResourceMock;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMock;
+
+    /**
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteMock;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $adapterMock;
+
+    /**
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
+
+    /**
+     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationCompositeMock;
+
+    /**
+     * Init
+     */
+    public function setUp()
+    {
+        $this->addressMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Address',
+            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
+            [],
+            '',
+            false
+        );
+        $this->quoteMock = $this->getMock(
+            'Magento\Quote\Model\Quote',
+            ['__wakeup', 'getId'],
+            [],
+            '',
+            false
+        );
+        $this->appResourceMock = $this->getMock(
+            'Magento\Framework\App\Resource',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->adapterMock = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->relationCompositeMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->appResourceMock->expects($this->any())
+                              ->method('getConnection')
+                              ->will($this->returnValue($this->adapterMock));
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->adapterMock->expects($this->any())
+                          ->method('describeTable')
+                          ->will($this->returnValue([]));
+        $this->adapterMock->expects($this->any())
+                          ->method('insert');
+        $this->adapterMock->expects($this->any())
+                          ->method('lastInsertId');
+        $this->addressResource = $objectManager->getObject(
+            'Magento\Quote\Model\Resource\Quote\Address',
+            [
+                'resource' => $this->appResourceMock,
+                'entitySnapshot' => $this->entitySnapshotMock,
+                'entityRelationComposite' => $this->relationCompositeMock
+            ]
+        );
+    }
+
+    public function testSave()
+    {
+        $this->entitySnapshotMock->expects($this->once())
+                                 ->method('isModified')
+                                 ->with($this->addressMock)
+                                 ->willReturn(true);
+        $this->entitySnapshotMock->expects($this->once())
+                                 ->method('registerSnapshot')
+                                 ->with($this->addressMock);
+        $this->relationCompositeMock->expects($this->once())
+                                 ->method('processRelations')
+                                 ->with($this->addressMock);
+        $this->addressResource->save($this->addressMock);
+    }
+}
