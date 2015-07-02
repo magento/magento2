@@ -3,16 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Model\Resource\Db\VersionControl;
 
-namespace Magento\Sales\Model\Resource;
-
-use Magento\Sales\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
- * Class EntityRelationComposite
+ * Class RelationComposite
  */
-class EntityRelationComposite
+class RelationComposite
 {
     /**
      * @var array
@@ -37,13 +36,15 @@ class EntityRelationComposite
     }
 
     /**
+     * Process model's relations saves
+     *
      * @param AbstractModel $object
      * @return void
      */
     public function processRelations(AbstractModel $object)
     {
         foreach ($this->relationProcessors as $processor) {
-            /**@var $processor \Magento\Sales\Model\Resource\EntityRelationInterface*/
+            /**@var $processor RelationInterface*/
             $processor->processRelation($object);
         }
         $this->eventManager->dispatch(
