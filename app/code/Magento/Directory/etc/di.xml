@@ -27,4 +27,6 @@
             <argument name="helperData" xsi:type="object">DirectoryHelperDataProxy</argument>
         </arguments>
     </type>
+    <preference for="Magento\Directory\Model\Country\Postcode\ConfigInterface" type="Magento\Directory\Model\Country\Postcode\Config" />
+    <preference for="Magento\Directory\Model\Country\Postcode\ValidatorInterface" type="Magento\Directory\Model\Country\Postcode\Validator" />
 </config>
