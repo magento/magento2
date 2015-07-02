@@ -274,10 +274,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedOrigTemplateVariables' => null,
                 'expectedTemplateStyles' => null,
             ],
-            'copyright in HTML Remains' => [
+            'copyright in HTML Removed' => [
                 'templateType' => 'html',
                 'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
-                'parsedTemplateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
                 'expectedTemplateStyles' => null,
