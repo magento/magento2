@@ -17,7 +17,7 @@ define(
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
-            isPlaceOrderActionAllowed: ko.observable(true),
+            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
             /**
              * Initialize view.
              *
