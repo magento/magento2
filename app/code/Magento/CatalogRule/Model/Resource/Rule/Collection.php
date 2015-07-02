@@ -24,6 +24,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * Set resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
