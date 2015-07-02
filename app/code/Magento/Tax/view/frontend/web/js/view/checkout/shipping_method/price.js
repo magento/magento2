@@ -14,7 +14,7 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Tax/checkout/shipping_method/price',
+                template: 'Magento_Tax/checkout/shipping_method/price'
             },
 
             isDisplayShippingPriceExclTax: window.checkoutConfig.isDisplayShippingPriceExclTax,

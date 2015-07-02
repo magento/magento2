@@ -46,7 +46,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * @param QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository Customer Address repository
-     *
      */
     public function __construct(
         QuoteRepository $quoteRepository,
@@ -80,6 +79,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->collectShippingRates();
         /** @var \Magento\Quote\Model\Quote\Address\Rate $shippingRate */
         $shippingRate = $shippingAddress->getShippingRateByCode($shippingMethod);
+        if (!$shippingRate) {
+            return null;
+        }
         return $this->converter->modelToDataObject($shippingRate, $quote->getQuoteCurrencyCode());
     }
 
@@ -139,10 +141,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
-        }
-        $billingAddress = $quote->getBillingAddress();
-        if (!$billingAddress->getCountryId()) {
-            throw new StateException(__('Billing address is not set'));
         }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
         if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
@@ -222,7 +220,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->setRegionId($regionId);
         $shippingAddress->setRegion($region);
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectShippingRates();
+        $shippingAddress->collectTotals();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
