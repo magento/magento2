@@ -1031,6 +1031,18 @@ class InstallSchema implements InstallSchemaInterface
             '12,4',
             [],
             'Shipping and handling amount'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Name'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Payment Method'
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['status']),
             ['status']
