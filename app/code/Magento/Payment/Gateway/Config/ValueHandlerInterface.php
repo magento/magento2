@@ -10,10 +10,10 @@ interface ValueHandlerInterface
     /**
      * Retrieve method configured value
      *
-     * @param string $field
+     * @param array $subject
      * @param int|null $storeId
      *
      * @return mixed
      */
-    public function handle($field, $storeId = null);
+    public function handle(array $subject, $storeId = null);
 }
