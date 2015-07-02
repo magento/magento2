@@ -9,11 +9,11 @@ define(
         'jquery',
         '../model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
-        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'mage/storage',
         'Magento_Checkout/js/model/totals'
     ],
-    function ($, quote, resourceUrlManager, messageList, storage, totals) {
+    function ($, quote, resourceUrlManager, errorProcessor, storage, totals) {
         "use strict";
         return function (callbacks, deferred) {
             deferred = deferred || $.Deferred();
@@ -36,9 +36,8 @@ define(
             ).error(
                 function (response) {
                     totals.isLoading(false);
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
                     deferred.reject();
+                    errorProcessor.process(response);
                 }
             );
 
