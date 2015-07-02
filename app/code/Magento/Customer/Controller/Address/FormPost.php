@@ -49,6 +49,7 @@ class FormPost extends \Magento\Customer\Controller\Address
      * @param ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
+     * @param HelperData $helperData
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,8 +137,9 @@ class FormPost extends \Magento\Customer\Controller\Address
     /**
      * Update region data
      *
-     * @param $attributeValues
+     * @param array $attributeValues
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function updateRegionData(&$attributeValues)
     {

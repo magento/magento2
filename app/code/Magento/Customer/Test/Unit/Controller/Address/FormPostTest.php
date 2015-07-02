@@ -404,6 +404,8 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
      * @param string $newRegion
      * @param string $newRegionCode
      * @dataProvider dataProviderTestExecute
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testExecute(
         $addressId,
