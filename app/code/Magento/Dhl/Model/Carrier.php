@@ -997,7 +997,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeTo->addChild('City', $rawRequest->getDestCity());
 
         $this->_checkDomesticStatus($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId());
-        if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC && !$this->_isDomestic && !$this->isCountryInEU($rawRequest->getOrigCountryId())) {
+        if ($this->isDutiable($rawRequest->getDestCountryId())) {
             // IsDutiable flag and Dutiable node indicates that cargo is not a documentation
             $nodeBkgDetails->addChild('IsDutiable', 'Y');
             $nodeDutiable = $nodeGetQuote->addChild('Dutiable');
@@ -1651,7 +1651,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $packageType = 'CP';
             }
             $nodeShipmentDetails->addChild('PackageType', $packageType);
-            if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC && !$this->_isDomestic && !$this->isCountryInEU($rawRequest->getOrigCountryId())) {
+            if ($this->isDutiable($rawRequest->getDestCountryId())) {
                 $nodeShipmentDetails->addChild('IsDutiable', 'Y');
             }
             $nodeShipmentDetails->addChild(
@@ -1951,23 +1951,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
-     * Check whether specified country is in EU countries list
-     *
-     * @param string $countryCode
-     * @param null|int $storeId
+     * @param $countryId
      * @return bool
      */
-    public function isCountryInEU($countryCode, $storeId = null)
+    protected function isDutiable($countryId)
     {
-        $euCountries = explode(
-            ',',
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_EU_COUNTRIES_LIST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        );
-
-        return in_array($countryCode, $euCountries);
+        return
+            $this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC &&
+            !$this->_isDomestic &&
+            !$this->_carrierHelper->isCountryInEU($countryId);
     }
 }
