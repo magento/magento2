@@ -6,6 +6,7 @@
 namespace Magento\Setup\Controller;
 
 use Composer\Package\Version\VersionParser;
+use Magento\Setup\Model\CronScriptReadinessCheck;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Magento\Framework\Composer\ComposerInformation;
@@ -50,6 +51,13 @@ class Environment extends AbstractActionController
     protected $filesystem;
 
     /**
+     * Cron Script Readiness Check
+     *
+     * @var CronScriptReadinessCheck
+     */
+    protected $cronScriptReadinessCheck;
+
+    /**
      * Constructor
      *
      * @param PhpInformation $phpInformation
@@ -57,19 +65,22 @@ class Environment extends AbstractActionController
      * @param VersionParser $versionParser
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
+     * @param CronScriptReadinessCheck $cronScriptReadinessCheck
      */
     public function __construct(
         PhpInformation $phpInformation,
         FilePermissions $permissions,
         VersionParser $versionParser,
         ComposerInformation $composerInformation,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        CronScriptReadinessCheck $cronScriptReadinessCheck
     ) {
         $this->phpInformation = $phpInformation;
         $this->permissions = $permissions;
         $this->versionParser = $versionParser;
         $this->composerInformation = $composerInformation;
         $this->filesystem = $filesystem;
+        $this->cronScriptReadinessCheck = $cronScriptReadinessCheck;
     }
 
     /**
@@ -253,6 +264,34 @@ class Environment extends AbstractActionController
         $data = [
             'responseType' => $responseType
         ];
+        return new JsonModel($data);
+    }
+
+    public function cronScriptSetupAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        $setupCheck = $this->cronScriptReadinessCheck->checkSetup();
+        $data = [];
+        if (!$setupCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $setupCheck['error'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
+
+    public function cronScriptUpdaterAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        $setupCheck = $this->cronScriptReadinessCheck->checkUpdater();
+        $data = [];
+        if (!$setupCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $setupCheck['error'];
+        }
+        $data['responseType'] = $responseType;
         return new JsonModel($data);
     }
 }

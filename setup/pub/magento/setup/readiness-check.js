@@ -65,6 +65,20 @@ angular.module('readiness-check', [])
             expanded: false,
             isRequestError: false
         };
+        $scope.cronscriptsetup = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            errorMessage: ''
+        };
+        $scope.cronscriptupdater = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            errorMessage: ''
+        };
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
@@ -149,13 +163,46 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.updater);
                 }
             };
+            $scope.items['cron-script-setup'] = {
+                url:'index.php/environment/cron-script-setup',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.cronscriptsetup.visible = true;
+                },
+                process: function(data) {
+                    $scope.cronscriptsetup.processed = true;
+                    angular.extend($scope.cronscriptsetup, data);
+                    $scope.updateOnProcessed($scope.cronscriptsetup.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.cronscriptsetup);
+                }
+            };
+            $scope.items['cron-script-updater'] = {
+                url:'index.php/environment/cron-script-updater',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.cronscriptupdater.visible = true;
+                },
+                process: function(data) {
+                    $scope.cronscriptupdater.processed = true;
+                    angular.extend($scope.cronscriptupdater, data);
+                    $scope.updateOnProcessed($scope.cronscriptupdater.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.cronscriptupdater);
+                }
+            };
         }
 
         $scope.isCompleted = function() {
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && ($scope.updater.processed || ($scope.actionFrom !== 'updater'));
+                && (($scope.cronscriptsetup.processed && $scope.updater.processed)
+                    || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {

@@ -31,6 +31,7 @@ class DbValidator
      * Constructor
      * 
      * @param ConnectionFactory $connectionFactory
+     * @param Random $random
      */
     public function __construct(ConnectionFactory $connectionFactory, Random $random)
     {

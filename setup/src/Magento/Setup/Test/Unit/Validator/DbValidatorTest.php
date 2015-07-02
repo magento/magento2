@@ -128,7 +128,8 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->once())->method('delete');
         $this->connection->expects($this->exactly(2))
             ->method('fetchAll')
-            ->will($this->returnValueMap([
+            ->will($this->returnValueMap(
+                [
                     ['select * from new_table where testCol = "testing"', [], null, [['testCol' => 'testing']]],
                     ['select * from new_table', [], null, [['testCol' => 'testing']]],
                 ]
@@ -147,7 +148,8 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->once())->method('delete');
         $this->connection->expects($this->exactly(2))
             ->method('fetchAll')
-            ->will($this->returnValueMap([
+            ->will($this->returnValueMap(
+                [
                     ['select * from new_table where testCol = "testing"', [], null, [['testCol' => 'testing']]],
                     ['select * from new_table', [], null, []],
                 ]
