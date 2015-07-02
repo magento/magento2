@@ -5,16 +5,18 @@
  */
 -->
 <!--@subject Please confirm your {{var store.getFrontendName()}} account @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
-"var logo_alt":"Email Logo Image Alt",
-"store url=\"customer/account/\"":"Customer Account Url",
-"var customer.name":"Customer Name",
+<!--@vars {
+"store url=\"\"":"Store Url",
+"store url=\"customer\/account\/\"":"Customer Account Url",
+"store url=\"customer\/account\/confirm\/\" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url":"Confirmation Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
 "var customer.email":"Customer Email",
-"store url=\"customer/account/confirm/\" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url":"Confirmation Url",
-"var store.getFrontendName()|escape":"Store Name"}
-@-->
+"var customer.name":"Customer Name",
+"var logo_alt":"Email Logo Image Alt",
+"var logo_url":"Email Logo Image Url",
+"var store.getFrontendName()":"Store Name"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 

@@ -5,21 +5,23 @@
  */
 -->
 <!--@subject {{var store.getFrontendName()}}: New Order # {{var order.increment_id}} @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
-"var logo_alt":"Email Logo Image Alt",
-"var order.getBillingAddress().getName()":"Guest Customer Name",
-"var store.getFrontendName()":"Store Name",
-"var order.increment_id":"Order Id",
-"var order.getCreatedAtFormatted(1)":"Order Created At (datetime)",
-"var formattedBillingAddress":"Billing Address",
-"var payment_html":"Payment Details",
-"var formattedShippingAddress":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description",
+<!--@vars {
 "layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
-"var order.getEmailCustomerNote()":"Email Order Note"}
-@-->
+"store url=\"\"":"Store Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
+"var formattedBillingAddress|raw":"Billing Address",
+"var formattedShippingAddress|raw":"Shipping Address",
+"var logo_alt":"Email Logo Image Alt",
+"var logo_url":"Email Logo Image Url",
+"var order.getBillingAddress().getName()":"Guest Customer Name",
+"var order.getCreatedAtFormatted(1)":"Order Created At (datetime)",
+"var order.getEmailCustomerNote()":"Email Order Note",
+"var order.getShippingDescription()":"Shipping Description",
+"var order.increment_id":"Order Id",
+"var payment_html|raw":"Payment Details",
+"var store.getFrontendName()":"Store Name"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 

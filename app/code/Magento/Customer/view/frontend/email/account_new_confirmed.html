@@ -5,13 +5,17 @@
  */
 -->
 <!--@subject Welcome to {{var store.getFrontendName()}} @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
-"var logo_alt":"Email Logo Image Alt",
+<!--@vars {
+"store url=\"\"":"Store Url",
+"store url=\"customer\/account\/\"":"Customer Account Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
+"var customer.email":"Customer Email",
 "var customer.name":"Customer Name",
-"store url=\"customer/account/\"":"Customer Account Url"}
-@-->
+"var logo_alt":"Email Logo Image Alt",
+"var logo_url":"Email Logo Image Url",
+"var store.getFrontendName()":"Store Name"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 

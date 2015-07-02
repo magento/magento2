@@ -5,16 +5,18 @@
  */
 -->
 <!--@subject {{var store.getFrontendName()}}: Order # {{var order.increment_id}} update @-->
-<!--@vars
-{"store url=\"\"":"Store Url",
-"var logo_url":"Email Logo Image Url",
-"var logo_alt":"Email Logo Image Alt",
+<!--@vars {
+"store url=\"\"":"Store Url",
+"template config_path=\"design\/email\/footer_template\"":"n\/a",
+"template config_path=\"design\/email\/header_template\"":"n\/a",
 "var billing.getName()":"Guest Customer Name",
-"var order.increment_id":"Order Id",
-"var order.getStatusLabel()":"Order Status",
 "var comment":"Order Comment",
-"var store.getFrontendName()":"Store Name"}
-@-->
+"var logo_alt":"Email Logo Image Alt",
+"var logo_url":"Email Logo Image Url",
+"var order.getStatusLabel()":"Order Status",
+"var order.increment_id":"Order Id",
+"var store.getFrontendName()":"Store Name"
+} @-->
 
 {{template config_path="design/email/header_template"}}
 
