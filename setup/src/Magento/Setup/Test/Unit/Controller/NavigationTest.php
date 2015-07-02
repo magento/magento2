@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\Navigation;
+use Magento\Setup\Model\Navigation as NavModel;
 
 class NavigationTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,14 +42,31 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('nav', $viewModel->getVariables());
     }
 
-    public function testMenuAction()
+    public function testMenuActionUpdater()
     {
+        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
         $viewModel = $this->controller->menuAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $variables = $viewModel->getVariables();
+        $this->assertArrayHasKey('headerTitle', $variables);
+        $this->assertEquals('Magento Component Manager', $variables['headerTitle']);
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
         $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation-updater/menu.phtml', $viewModel->getTemplate());
+        $this->assertSame('/magento/setup/navigation/menu.phtml', $viewModel->getTemplate());
+    }
+
+    public function testMenuActionInstaller()
+    {
+        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
+        $viewModel = $this->controller->menuAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $variables = $viewModel->getVariables();
+        $this->assertArrayHasKey('headerTitle', $variables);
+        $this->assertEquals('Magento Installation', $variables['headerTitle']);
+        $this->assertArrayHasKey('menu', $variables);
+        $this->assertArrayHasKey('main', $variables);
+        $this->assertTrue($viewModel->terminate());
+        $this->assertSame('/magento/setup/navigation/menu.phtml', $viewModel->getTemplate());
     }
 }
