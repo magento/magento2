@@ -38,8 +38,8 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = new \Magento\Payment\Gateway\Validator\CountryValidator(
-            $this->configMock,
-            $this->resultFactoryMock
+            $this->resultFactoryMock,
+            $this->configMock
         );
     }
 
@@ -62,7 +62,7 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid])
+            ->with(['isValid' => $isValid, 'failsDescription' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
@@ -90,7 +90,7 @@ class CountryValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid])
+            ->with(['isValid' => $isValid, 'failsDescription' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));

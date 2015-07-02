@@ -270,6 +270,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param string $now
      * @return void
+     * @codeCoverageIgnore
      */
     public function setNow($now)
     {
@@ -425,6 +426,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param  int|array $productIds
      * @return void
+     * @codeCoverageIgnore
      */
     public function setProductsFilter($productIds)
     {
@@ -435,6 +437,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Returns products filter
      *
      * @return array|int|null
+     * @codeCoverageIgnore
      */
     public function getProductsFilter()
     {

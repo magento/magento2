@@ -17,6 +17,7 @@ define(
         'use strict';
         return Component.extend({
             redirectAfterPlaceOrder: true,
+            isPlaceOrderActionAllowed: ko.observable(true),
             /**
              * Initialize view.
              *
@@ -24,6 +25,11 @@ define(
              */
             initialize: function () {
                 this._super().initChildren();
+
+                quote.billingAddress.subscribe(function(address) {
+                    this.isPlaceOrderActionAllowed((address !== null));
+                }, this);
+
                 return this;
             },
 
