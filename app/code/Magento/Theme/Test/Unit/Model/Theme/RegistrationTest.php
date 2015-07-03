@@ -34,6 +34,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $this->collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Data\CollectionFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemCollection = $this->getMockBuilder('Magento\Theme\Model\Theme\Data\Collection')
             ->disableOriginalConstructor()
