@@ -277,12 +277,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected function _implodeArrayField(array $data)
     {
-       foreach ($data as $key => $value) {
-           if (is_array($value)) {
-               $data[$key] = $this->_implodeArrayValues($data[$key]);
-           }
-       }
-
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->_implodeArrayValues($data[$key]);
+            }
+        }
         return $data;
     }
 
