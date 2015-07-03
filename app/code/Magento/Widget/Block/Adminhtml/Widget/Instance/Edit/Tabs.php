@@ -23,6 +23,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         parent::_construct();
         $this->setId('widget_instace_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Widget Instance'));
+        $this->setTitle(__('Frontend App'));
     }
 }
