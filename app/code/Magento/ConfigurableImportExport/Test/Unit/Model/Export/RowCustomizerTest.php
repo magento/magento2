@@ -4,12 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
+
+use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Test existing product id.
+     *
+     * @var int
+     */
+    protected $initiatedProductId = 11;
+
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
      */
@@ -45,10 +52,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'column_1',
                 'column_2',
                 'column_3',
-                '_super_products_sku',
-                '_super_attribute_code',
-                '_super_attribute_option',
-                '_super_attribute_price_corr',
+                'configurable_variations',
+                'configurable_variation_prices',
+                'configurable_variation_labels',
             ],
             $this->_model->addHeaderColumns(
                 ['column_1', 'column_2', 'column_3']
@@ -119,14 +125,17 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function addDataDataProvider()
     {
+        $expectedConfigurableData = $this->getExpectedConfigurableData();
+        $data = $expectedConfigurableData[$this->initiatedProductId];
+
         return [
             [
-                [
+                '$expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
                 ],
-                [
+                '$data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
@@ -136,22 +145,21 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                [
+                '$expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
-                    '_super_products_sku' => '_sku_',
-                    '_super_attribute_code' => 'code_of_attribute',
-                    '_super_attribute_option' => 'Option Title',
-                    '_super_attribute_price_corr' => '12345%',
+                    'configurable_variations' => $data['configurable_variations'],
+                    'configurable_variation_prices' => $data['configurable_variation_prices'],
+                    'configurable_variation_labels' => $data['configurable_variation_labels'],
                 ],
-                [
+                '$data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
                         'key_3' => 'value_3',
                     ],
-                    'product_id' => 11
+                    'product_id' => $this->initiatedProductId
                 ]
             ]
         ];
@@ -160,24 +168,36 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected function _initConfigurableData()
     {
         $productIds = [1, 2, 3];
-        $attributes = [
-            [
-                [
-                    'pricing_is_percent' => true,
-                    'sku' => '_sku_',
-                    'attribute_code' => 'code_of_attribute',
-                    'option_title' => 'Option Title',
-                    'pricing_value' => 12345,
+        $productAttributesOptions = [
+            [//1 $productAttributeOption
+                [//1opt $optValue
+                    'pricing_is_percent'    => true,
+                    'sku'                   => '_sku_',
+                    'attribute_code'        => 'code_of_attribute',
+                    'option_title'          => 'Option Title',
+                    'pricing_value'         => 112345,
+                    'super_attribute_label' => 'Super attribute label',
                 ],
-                [
-                    'pricing_is_percent' => false,
-                    'sku' => '_sku_',
-                    'attribute_code' => 'code_of_attribute',
-                    'option_title' => 'Option Title',
-                    'pricing_value' => 12345,
+                [//2opt $optValue
+                    'pricing_is_percent'    => false,
+                    'sku'                   => '_sku_',
+                    'attribute_code'        => 'code_of_attribute',
+                    'option_title'          => 'Option Title',
+                    'pricing_value'         => 212345,
+                    'super_attribute_label' => '',
+                ],
+                [//3opt $optValue
+                    'pricing_is_percent'    => false,
+                    'sku'                   => '_sku_2',
+                    'attribute_code'        => 'code_of_attribute_2',
+                    'option_title'          => 'Option Title 2',
+                    'pricing_value'         => 312345,
+                    'super_attribute_label' => 'Super attribute label 2',
                 ],
             ],
         ];
+
+        $expectedConfigurableData = $this->getExpectedConfigurableData();
 
         $productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -188,14 +208,18 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         );
         $productMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(11));
+            ->will($this->returnValue($this->initiatedProductId));
 
         $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', [], [], '', false
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            [],
+            [],
+            '',
+            false
         );
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableOptions')
-            ->will($this->returnValue($attributes));
+            ->will($this->returnValue($productAttributesOptions));
 
         $productMock->expects($this->any())
             ->method('getTypeInstance')
@@ -216,6 +240,83 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->method('fetchItem')
             ->will($this->returnValue(false));
 
+
         $this->_model->prepareData($this->_collectionMock, $productIds);
+
+        $configurableData = $this->getPropertyValue($this->_model, 'configurableData');
+
+        $this->assertEquals($expectedConfigurableData, $configurableData);
+    }
+
+    /**
+     * Return expected configurable data
+     *
+     * @return array
+     */
+    protected function getExpectedConfigurableData()
+    {
+        return [
+            $this->initiatedProductId => [
+                'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, [
+                    '_sku_' => 'sku=_sku_'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                            'code_of_attribute=Option Title',
+                            'code_of_attribute=Option Title',
+                        ]),
+                    '_sku_2' => 'sku=_sku_2'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                            'code_of_attribute_2=Option Title 2',
+                        ])
+                ]),
+                'configurable_variation_prices' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, [
+                    //1
+                    'name=code_of_attribute'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'value=Option Title' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price=112345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price_type=percent',
+                    //2
+                    'name=code_of_attribute'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'value=Option Title' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price=212345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price_type=fixed',
+                    //3
+                    'name=code_of_attribute_2'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'value=Option Title 2' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price=312345' . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                    'price_type=fixed',
+                ]),
+                'configurable_variation_labels' => implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                    'code_of_attribute' => 'code_of_attribute=Super attribute label',
+                    'code_of_attribute_2' => 'code_of_attribute_2=Super attribute label 2',
+                ]),
+            ],
+        ];
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
     }
 }
