@@ -1,6 +1,16 @@
+None,None
+Price,Price
+No,No
+Enabled,Enabled
+"Sort Order","Sort Order"
+Title,Title
+Type,Type
+Export,Export
+Import,Import
 Country,Country
-Region/State,Region/State
 "Zip/Postal Code","Zip/Postal Code"
+Condition,Condition
+Region/State,Region/State
 "Shipping Price","Shipping Price"
 "Export CSV","Export CSV"
 "Store Pickup","Store Pickup"
@@ -12,11 +22,9 @@ Region/State,Region/State
 "# of Items (and above)","# of Items (and above)"
 "Please correct Table Rate code type: %1.","Please correct Table Rate code type: %1."
 "Please correct Table Rate code for type %1: %2.","Please correct Table Rate code for type %1: %2."
-None,None
 "Per Order","Per Order"
 "Per Item","Per Item"
 "Free Shipping","Free Shipping"
-No,No
 "For matching items only","For matching items only"
 "For shipment with matching items","For shipment with matching items"
 "Please correct Table Rates File Format.","Please correct Table Rates File Format."
@@ -28,22 +36,14 @@ No,No
 "Please correct %1 ""%2"" in the Row #%3.","Please correct %1 ""%2"" in the Row #%3."
 "Please correct Shipping Price ""%1"" in the Row #%2.","Please correct Shipping Price ""%1"" in the Row #%2."
 "Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")","Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")"
-"Flat Rate","Flat Rate"
-Enabled,Enabled
-"Method Name","Method Name"
-Price,Price
 "Calculate Handling Fee","Calculate Handling Fee"
 "Handling Fee","Handling Fee"
-"Sort Order","Sort Order"
-Title,Title
-Type,Type
+"Displayed Error Message","Displayed Error Message"
 "Ship to Applicable Countries","Ship to Applicable Countries"
 "Ship to Specific Countries","Ship to Specific Countries"
 "Show Method if Not Applicable","Show Method if Not Applicable"
-"Displayed Error Message","Displayed Error Message"
+"Flat Rate","Flat Rate"
+"Method Name","Method Name"
 "Table Rates","Table Rates"
-Condition,Condition
 "Include Virtual Products in Price Calculation","Include Virtual Products in Price Calculation"
-Export,Export
-Import,Import
 "Minimum Order Amount","Minimum Order Amount"
