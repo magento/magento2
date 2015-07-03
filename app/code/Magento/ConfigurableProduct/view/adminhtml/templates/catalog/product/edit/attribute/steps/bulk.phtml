@@ -7,503 +7,614 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 ?>
 
-<div data-bind="scope: '<?= $block->getComponentName()?>'" class="admin__scope-old" data-role="bulk-step">
-    <h1 class="modal-title" style="padding-bottom: 10px"><?= __('Bulk Images, Pricing, and Inventory') ?></h1>
-    <div style="padding-bottom: 10px">
-        <span><?= __('Based on your selections <span data-bind="text:newProductsCount"></span> new products will be created. Use this step to customize images and pricing for your new products.') ?></span>
+<div data-bind="scope: '<?= $block->getComponentName()?>'" data-role="bulk-step">
+    <h2 class="steps-wizard-title"><?= __('Step 3: Bulk Images, Pricing, and Inventory') ?></h2>
+    <div class="steps-wizard-info">
+        <?= __('Based on your selections <span class="new-products-count" data-bind="text:newProductsCount"></span>
+        new products will be created. Use this step to customize images and pricing for your new products.') ?>
     </div>
 
-    <div data-bind="with: sections().images">
-        <div data-role="section" style="margin-top: 20px;clear:both">
-            <div style="float: left; border: 0px"><?= __('Images') ?></div>
-            <div style="border-bottom: 1px solid gray; clear: both;"></div>
-            <ul style="list-style-type: none; margin-top: 10px;">
-                <li>
-                    <label>
-                        <input type="radio" value="single"
-                               data-bind="checked:type">
+    <div data-bind="with: sections().images" class="steps-wizard-section">
+        <div data-role="section">
+        <div class="steps-wizard-section-title">
+            <span><?= __('Images') ?></span>
+        </div>
+
+        <ul class="steps-wizard-section-list">
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-single-set-radio"
+                           class="admin__control-radio"
+                           value="single"
+                           data-bind="checked:type">
+                    <label for="apply-single-set-radio" class="admin__field-label">
                         <span><?= __('Apply single set of images to all SKUs') ?></span>
                     </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" value="each" data-bind="checked:type">
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-unique-images-radio"
+                           class="admin__control-radio"
+                           value="each"
+                           data-bind="checked:type">
+                    <label for="apply-unique-images-radio" class="admin__field-label">
                         <span><?= __('Apply unique images by attribute to each SKU') ?></span>
                     </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" value="none" checked
-                               data-bind="checked:type">
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="skip-images-uploading-radio"
+                           class="admin__control-radio"
+                           value="none"
+                           checked
+                           data-bind="checked:type">
+                    <label for="skip-images-uploading-radio" class="admin__field-label">
                         <span><?= __('Skip image uploading at this time') ?></span>
                     </label>
-                </li>
-            </ul>
-            <div data-role="step-gallery-single" data-bind="visible: type() == 'single'"
-                 style="list-style-type: none;margin-top: 10px;background-color: lightgrey;"
-            >
-                <label>
-                    <span><?= __('Images') ?></span>
-                </label>
+                </div>
+            </li>
+        </ul>
 
-                <div data-role="gallery" class="gallery" data-images="[]">
-                    <div class="image image-placeholder">
-                        <div data-role="uploader" class="uploader">
-                            <div class="fileinput-button form-buttons button">
-                                <span>Browse Files...</span>
-                                <input type="file" name="image" multiple="multiple"
-                                       data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
-                            </div>
-                            <div class="clear"></div>
+        <div data-role="step-gallery-single" class="attribute-image-selector" data-bind="visible: type() == 'single'">
+            <div data-role="gallery" class="gallery" data-images="[]">
+                <div class="image image-placeholder">
+                    <div data-role="uploader" class="uploader">
+                        <div class="image-browse fileinput-button form-buttons button">
+                            <span><?= __('Browse Files...') ?></span>
+                            <input type="file"
+                                   id=""
+                                   name="image"
+                                   class="admin__control-file"
+                                   multiple="multiple"
+                                   data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
                         </div>
-
-                        <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                        <p class="image-placeholder-text">Click here or drag and drop to add images</p>
                     </div>
-
-                    <script data-template="uploader" type="text/x-magento-template">
-                        <div id="<%- data.id %>" class="file-row">
-                            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
-                            <div class="progressbar-container">
-                                <div class="progressbar upload-progress" style="width: 0%;"></div>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </script>
-
-                    <script data-template="gallery-content" type="text/x-magento-template">
-                        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
-                             data-role="image">
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
-                            <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
-                            <ul class="type-labels" style="display: none">
-                                <li class="type-image">Base Image</li>
-                                <li class="type-small_image">Small Image</li>
-                                <li class="type-thumbnail">Thumbnail</li>
-                            </ul>
-                            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-                            <div class="actions">
-                                <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
-                                    <span>Delete image</span>
-                                </button>
-                                <div class="draggable-handle"></div>
-                            </div>
-                            <div class="image-label"></div>
-                            <div class="image-fade"><span>Hidden</span></div>
-                        </div>
-                    </script>
-
-                    <script data-template="image" type="text/x-magento-template">
-                        <div class="image">
-                            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                            <img
-                                class="product-image"
-                                src="<%- data.url %>"
-                                data-position="<%- data.position %>"
-                                alt="<%- data.label %>" />
-                            <div class="actions">
-                                <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
-                                    <span>Delete image</span>
-                                </button>
-                                <div class="draggable-handle"></div>
-                            </div>
-                            <div class="image-label"></div>
-                            <div class="image-fade"><span>Hidden</span></div>
-                        </div>
-                    </script>
-
-                    <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
-                        <div class="image-panel" data-role="dialog">
-                            <div class="image-panel-preview">
-                                <img src="<%- data.url %>" alt="<%- data.label %>" />
-                            </div>
-                            <div class="image-panel-controls">
-                                <strong class="image-name"><%- data.label %></strong>
-
-                                <button type="button" class="action-remove"
-                                        title="Remove Image">
-                                    <span>Remove Image</span>
-                                </button>
-
-                                <fieldset class="fieldset fieldset-image-panel">
-                                    <div class="field field-image-description">
-                                        <label class="label" for="image-description">
-                                            <span>Alt Text</span>
-                                        </label>
-                                        <div class="control">
-                            <textarea id="image-description"
-                                      rows="3"
-                                      name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="field field-image-role">
-                                        <label class="label">
-                                            <span>Role</span>
-                                        </label>
-                                        <div class="control">
-                                            <ul class="multiselect-alt">
-                                                <li class="item">
-                                                    <label>
-                                                        <input class="image-type"
-                                                               data-role="type-selector"
-                                                               type="checkbox"
-                                                               value="image"
-                                                            />
-                                                        Base Image                                        </label>
-                                                </li>
-                                                <li class="item">
-                                                    <label>
-                                                        <input class="image-type"
-                                                               data-role="type-selector"
-                                                               type="checkbox"
-                                                               value="small_image"
-                                                            />
-                                                        Small Image                                        </label>
-                                                </li>
-                                                <li class="item">
-                                                    <label>
-                                                        <input class="image-type"
-                                                               data-role="type-selector"
-                                                               type="checkbox"
-                                                               value="thumbnail"
-                                                            />
-                                                        Thumbnail                                        </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="field field-image-hide">
-                                        <label class="label">
-                                            <input type="checkbox"
-                                                   data-role="visibility-trigger"
-                                                   value="1"
-                                                   name="product[media_gallery][images][<%- data.file_id %>][disabled]"
-                                            <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                                            <span>Hide from Product Page</span>
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </div>
-
-                            <button type="button" class="action-close" data-role="close-panel" title="Close panel">
-                                <span>Close panel</span>
-                            </button>
-                            <div class="image-pointer"></div>
-                        </div>
-                    </script>
+                    <div class="spacer"></div>
+                    <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
                 </div>
 
-            </div>
-            <div data-role="step-gallery-each" data-bind="visible: type() == 'each'">
-                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
-                    options: $parent.attributes,
-                    optionsText: 'label',
-                    value: attribute,
-                    optionsCaption: 'Select'"
-                ></select>
-                <ul style="list-style-type: none;margin-top: 10px" data-bind="if:attribute">
-                    <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
-                    <li style="margin-left: 15px;clear:both" data-bind="attr:{'data-role':'step-gallery-option-' +
-                    label}">
-                        <label>
-                            <span data-bind="text:label"></span>
-                        </label>
+                <input name="product[image]"
+                       class="image-image"
+                       type="hidden"
+                       value="" />
+                <input name="product[small_image]"
+                       class="image-small_image"
+                       type="hidden"
+                       value="" />
+                <input name="product[thumbnail]"
+                       class="image-thumbnail"
+                       type="hidden"
+                       value="" />
 
-                        <div data-role="gallery" class="gallery" data-images="[]">
-                            <div class="image image-placeholder">
-                                <div data-role="uploader" class="uploader">
-                                    <div class="fileinput-button form-buttons button">
-                                        <span>Browse Files...</span>
-                                        <input type="file" name="image" multiple="multiple"
-                                               data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-
-                                <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                                <p class="image-placeholder-text">Click here or drag and drop to add images</p>
-                            </div>
-                            <input name="product[image]"
-                                   class="image-image"
-                                   type="hidden"
-                                   value=""/>
-                            <input name="product[small_image]"
-                                   class="image-small_image"
-                                   type="hidden"
-                                   value=""/>
-                            <input name="product[thumbnail]"
-                                   class="image-thumbnail"
-                                   type="hidden"
-                                   value=""/>
-
-                            <script data-template="uploader" type="text/x-magento-template">
-                                <div id="<%- data.id %>" class="file-row">
-                                    <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
-                                    <div class="progressbar-container">
-                                        <div class="progressbar upload-progress" style="width: 0%;"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </script>
-
-                            <script data-template="gallery-content" type="text/x-magento-template">
-                                <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
-                                     data-role="image">
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
-                                    <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
-                                    <ul class="type-labels" style="display: none">
-                                        <li class="type-image">Base Image</li>
-                                        <li class="type-small_image">Small Image</li>
-                                        <li class="type-thumbnail">Thumbnail</li>
-                                    </ul>
-                                    <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                                    <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-                                    <div class="actions" >
-                                        <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
-                                            <span>Delete image</span>
-                                        </button>
-                                        <div class="draggable-handle" ></div >
-                                    </div >
-                                    <div class="image-label"></div>
-                                    <div class="image-fade"><span>Hidden</span></div>
-                                </div>
-                            </script>
-
-                            <script data-template="image" type="text/x-magento-template">
-                                <div class="image">
-                                    <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-                                    <img
-                                        class="product-image"
-                                        src="<%- data.url %>"
-                                        data-position="<%- data.position %>"
-                                        alt="<%- data.label %>" />
-                                    <div class="actions">
-                                        <button type="button" class="action-delete" data-role="delete-button" title="Delete image">
-                                            <span>Delete image</span>
-                                        </button>
-                                        <div class="draggable-handle"></div>
-                                    </div>
-                                    <div class="image-label"></div>
-                                    <div class="image-fade"><span>Hidden</span></div>
-                                </div>
-                            </script>
-
-                            <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
-                                <div class="image-panel" data-role="dialog">
-                                    <div class="image-panel-preview">
-                                        <img src="<%- data.url %>" alt="<%- data.label %>" />
-                                    </div>
-                                    <div class="image-panel-controls">
-                                        <strong class="image-name"><%- data.label %></strong>
-
-                                        <button type="button" class="action-remove"
-                                                title="Remove Image">
-                                            <span>Remove Image</span>
-                                        </button>
-
-                                        <fieldset class="fieldset fieldset-image-panel">
-                                            <div class="field field-image-description">
-                                                <label class="label" for="image-description">
-                                                    <span>Alt Text</span>
-                                                </label>
-                                                <div class="control">
-                                                    <textarea
-                                                        id="image-description"
-                                                        rows="3"
-                                                        name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %>
-                                                    </textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="field field-image-role">
-                                                <label class="label">
-                                                    <span>Role</span>
-                                                </label>
-                                                <div class="control">
-                                                    <ul class="multiselect-alt">
-                                                        <li class="item">
-                                                            <label>
-                                                                <input class="image-type"
-                                                                       data-role="type-selector"
-                                                                       type="checkbox"
-                                                                       value="image"
-                                                                    />
-                                                                Base Image                                        </label>
-                                                        </li>
-                                                        <li class="item">
-                                                            <label>
-                                                                <input class="image-type"
-                                                                       data-role="type-selector"
-                                                                       type="checkbox"
-                                                                       value="small_image"
-                                                                    />
-                                                                Small Image                                        </label>
-                                                        </li>
-                                                        <li class="item">
-                                                            <label>
-                                                                <input class="image-type"
-                                                                       data-role="type-selector"
-                                                                       type="checkbox"
-                                                                       value="thumbnail"
-                                                                    />
-                                                                Thumbnail                                        </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <div class="field field-image-hide">
-                                                <label class="label">
-                                                    <input type="checkbox"
-                                                           data-role="visibility-trigger"
-                                                           value="1"
-                                                           name="product[media_gallery][images][<%- data.file_id %>][disabled]"
-                                                    <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                                                    <span>Hide from Product Page</span>
-                                                </label>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-
-                                    <button type="button" class="action-close" data-role="close-panel" title="Close panel">
-                                        <span>Close panel</span>
-                                    </button>
-                                    <div class="image-pointer"></div>
-                                </div>
-                            </script>
+                <script data-template="uploader" type="text/x-magento-template">
+                    <div id="<%- data.id %>" class="file-row">
+                        <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+                        <div class="progressbar-container">
+                            <div class="progressbar upload-progress" style="width: 0%;"></div>
                         </div>
-                    </li>
-                    <!-- /ko -->
-                </ul>
+                    </div>
+                </script>
+
+                <script data-template="gallery-content" type="text/x-magento-template">
+                    <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
+                         data-role="image">
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
+                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                        <div class="spacer"></div>
+                        <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+
+                        <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                            <span><?= __('Remove image') ?></span>
+                        </button>
+                        <div class="draggable-handle"></div>
+                        <div class="image-label"></div>
+                        <div class="image-fade"><span><?= __('Hidden') ?></span></div>
+                    </div>
+                </script>
+
+                <script data-template="image" type="text/x-magento-template">
+                    <div class="image">
+                        <div class="spacer"></div>
+                        <img
+                            class="product-image"
+                            src="<%- data.url %>"
+                            data-position="<%- data.position %>"
+                            alt="<%- data.label %>" />
+                        <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                            <span><?= __('Remove image') ?></span>
+                        </button>
+                        <div class="draggable-handle"></div>
+                        <div class="image-label"></div>
+                        <div class="image-fade"><span><?= __('Hidden') ?></span></div>
+                    </div>
+                </script>
+
+                <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
+                    <div class="image-panel" data-role="dialog">
+                        <div class="image-panel-preview">
+                            <img src="<%- data.url %>" alt="<%- data.label %>" />
+                        </div>
+                        <div class="image-panel-controls">
+                            <strong class="image-name"><%- data.label %></strong>
+
+                            <button type="button" class="action-remove"
+                                    title="Remove Image">
+                                <span><?= __('Remove Image') ?></span>
+                            </button>
+
+                            <fieldset class="admin__fieldset fieldset-image-panel">
+                                <div class="field field-image-description">
+                                    <div class="field field-image-description">
+                                        <span><?= __('Alt Text') ?></span>
+                                    </label>
+                                        <div class="control">
+                                        <textarea id="image-description"
+                                                  class="admin__control-textarea"
+                                                  rows="3"
+                                                  name="product[media_gallery][images][<%- data.file_id %>][label]">
+                                            <%- data.label %></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="field field-image-role">
+                                    <label class="label">
+                                        <span><?= __('Role') ?></span>
+                                    </label>
+                                    <div class="control">
+                                        <ul class="multiselect-alt">
+                                            <li class="item">
+                                                <label>
+                                                    <input class="image-type"
+                                                           data-role="type-selector"
+                                                           type="checkbox"
+                                                           value="image"
+                                                        /><?= __('Base Image') ?></label>
+                                            </li>
+                                            <li class="item">
+                                                <label>
+                                                    <input class="image-type"
+                                                           data-role="type-selector"
+                                                           type="checkbox"
+                                                           value="small_image"
+                                                        /><?= __('Small Image') ?></label>
+                                            </li>
+                                            <li class="item">
+                                                <label>
+                                                    <input class="image-type"
+                                                           data-role="type-selector"
+                                                           type="checkbox"
+                                                           value="thumbnail"
+                                                        /><?= __('Thumbnail') ?></label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="field field-image-hide">
+                                    <label class="label">
+                                    <span><?= __('Hide from Product Page') ?></span>
+                                </label>
+                                <div class="field field-image-hide">
+                                    <label class="label">
+                                        <input type="checkbox"
+                                               data-role="visibility-trigger"
+                                               value="1"
+                                               name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                        <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+                                        <span><?= __('Hide from Product Page') ?></span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <button type="button"
+                                class="action-close"
+                                data-role="close-panel"
+                                title="<?= __('Close panel') ?>">
+                            <span><?= __('Close panel') ?></span>
+                        </button>
+                        <div class="image-pointer"></div>
+                    </div>
+                </script>
+
             </div>
         </div>
-    </div>
+        <div data-role="step-gallery-each" class="attribute-image-selector" data-bind="visible: type() == 'each'">
+            <fieldset class="admin__fieldset bulk-attribute-values">
+                <div class="admin__field">
+                    <label class="admin__field-label"><span><?= __('Select attribute')?></span></label>
+                    <div class="admin__field-control">
+                        <select
+                            class="admin__control-select"
+                            data-bind="
+                                options: $parent.attributes,
+                                optionsText: 'label',
+                                value: attribute,
+                                optionsCaption: 'Select'"></select>
+                    </div>
+                </div>
+            </fieldset>
 
-    <div data-bind="with: sections().pricing">
-        <div data-role="section" style="margin-top: 20px;clear:both">
-            <div style="float: left; border: 0px"><?= __('Pricing') ?></div>
-            <div style="border-bottom: 1px solid gray; clear: both;"></div>
-            <ul style="list-style-type: none; margin-top: 10px;">
-                <li>
-                    <label>
-                        <input type="radio" value="single"
-                               data-bind="checked:type">
-                        <span><?= __('Apply single price to all SKUs') ?></span>
+            <ul class="items attributes-selector-list" data-bind="if:attribute, visible: attribute">
+                <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
+                <li class="item" data-bind="attr:{'data-role':'step-gallery-option-' + label}">
+                    <label class="attribute-label">
+                        <span data-bind="text:label"></span>
                     </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" value="each" data-bind="checked:type">
-                        <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" value="none" checked
-                               data-bind="checked:type">
-                        <span><?= __('Skip pricing at this time') ?></span>
-                    </label>
-                </li>
-            </ul>
-            <div data-bind="visible: type() == 'single'"
-                 style="list-style-type: none;margin-top: 10px;"
-            >
-                <label>
-                    <span><?= __('Pricing') ?></span>
-                    <input type="text" data-bind="value:value">
-                </label>
-            </div>
-            <div data-bind="visible: type() == 'each'">
-                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
-                    options: $parent.attributes,
-                    optionsText: 'label',
-                    value: attribute,
-                    optionsCaption: 'Select'"
-                    ></select>
-                <ul style="list-style-type: none;margin-top: 10px;"
-                    data-bind="if:attribute"
-                    >
-                    <!-- ko foreach: attribute().chosen -->
-                    <li style="margin-left: 15px;">
-                        <label>
-                            <span data-bind="text:label"></span>
-                            <input type="text" data-bind="value:sections()[$parent.label]">
-                        </label>
-                    </li>
-                    <!-- /ko -->
-                </ul>
-            </div>
-        </div>
-    </div>
 
-    <div data-bind="with: sections().inventory">
-        <div data-role="section" style="margin-top: 20px;clear:both">
-            <div style="float: left; border: 0px"><?= __('Inventory') ?></div>
-            <div style="border-bottom: 1px solid gray; clear: both;"></div>
-            <ul style="list-style-type: none; margin-top: 10px;">
-                <li>
-                    <label>
-                        <input type="radio" value="single"
-                               data-bind="checked:type">
-                        <span><?= __('Apply single inventory to each SKUs') ?></span>
-                    </label>
+                    <div data-role="gallery" class="gallery" data-images="[]">
+                        <div class="image image-placeholder">
+                            <div data-role="uploader" class="uploader">
+                                <div class="fileinput-button form-buttons button">
+                                    <span><?= __('Browse Files...') ?></span>
+                                    <input type="file" name="image" multiple="multiple"
+                                           data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
+                                </div>
+                            </div>
+
+                            <div class="spacer"></div>
+                            <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
+                        </div>
+                        <input name="product[image]"
+                               class="image-image"
+                               type="hidden"
+                               value=""/>
+                        <input name="product[small_image]"
+                               class="image-small_image"
+                               type="hidden"
+                               value=""/>
+                        <input name="product[thumbnail]"
+                               class="image-thumbnail"
+                               type="hidden"
+                               value=""/>
+
+                        <script data-template="uploader" type="text/x-magento-template">
+                            <div id="<%- data.id %>" class="file-row">
+                                <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+                                <div class="progressbar-container">
+                                    <div class="progressbar upload-progress" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </script>
+
+                        <script data-template="gallery-content" type="text/x-magento-template">
+                            <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
+                                 data-role="image">
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
+                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                                <ul class="type-labels" style="display: none">
+                                    <li class="type-image">Base Image</li>
+                                    <li class="type-small_image">Small Image</li>
+                                    <li class="type-thumbnail">Thumbnail</li>
+                                </ul>
+                                <div class="spacer"></div>
+                                <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+
+                                <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                                    <span><?= __('Remove image') ?></span>
+                                </button>
+                                <div class="draggable-handle" ></div>
+                                <div class="image-label"></div>
+                                <div class="image-fade"><span><?= __('Hidden') ?></span></div>
+                            </div>
+                        </script>
+
+                        <script data-template="image" type="text/x-magento-template">
+                            <div class="image">
+                               <div class="spacer"></div>
+                                <img
+                                    class="product-image"
+                                    src="<%- data.url %>"
+                                    data-position="<%- data.position %>"
+                                    alt="<%- data.label %>" />
+
+                                <button type="button"
+                                        class="action-remove"
+                                        data-role="delete-button"
+                                        title="<?= __('Remove image') ?>">
+                                    <span><?= __('Remove image') ?></span>
+                                </button>
+                                <div class="draggable-handle"></div>
+
+                                <div class="image-label"></div>
+                                <div class="image-fade"><span><?= __('Hidden') ?></span></div>
+                            </div>
+                        </script>
+
+                        <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
+                            <div class="image-panel" data-role="dialog">
+                                <div class="image-panel-preview">
+                                    <img src="<%- data.url %>" alt="<%- data.label %>" />
+                                </div>
+                                <div class="image-panel-controls">
+                                    <strong class="image-name"><%- data.label %></strong>
+
+                                    <button type="button" class="action-remove"
+                                            title="<?= __('Remove image') ?>">
+                                        <span><?= __('Remove image') ?></span>
+                                    </button>
+
+                                    <fieldset class="admin__fieldset fieldset-image-panel">
+                                        <div class="field field-image-description">
+                                            <label class="label" for="image-description">
+                                                <span><?= __('Alt Text') ?></span>
+                                            </label>
+                                            <div class="control">
+                                                <textarea
+                                                    id="image-description"
+                                                    rows="3"
+                                                    name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %>
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="field field-image-role">
+                                            <label class="label">
+                                                <span><?= __('Role') ?></span>
+                                            </label>
+                                            <div class="control">
+                                                <ul class="multiselect-alt">
+                                                    <li class="item">
+                                                        <label>
+                                                            <input class="image-type"
+                                                                   data-role="type-selector"
+                                                                   type="checkbox"
+                                                                   value="image"
+                                                                />
+                                                            <?= __('Base Image') ?>
+                                                        </label>
+                                                    </li>
+                                                    <li class="item">
+                                                        <label>
+                                                            <input class="image-type"
+                                                                   data-role="type-selector"
+                                                                   type="checkbox"
+                                                                   value="small_image"
+                                                                />
+                                                            <?= __('Small Image') ?>
+                                                        </label>
+                                                    </li>
+                                                    <li class="item">
+                                                        <label>
+                                                            <input class="image-type"
+                                                                   data-role="type-selector"
+                                                                   type="checkbox"
+                                                                   value="thumbnail"
+                                                                />
+                                                            <?= __('Thumbnail') ?>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="field field-image-hide">
+                                            <label class="label">
+                                                <input type="checkbox"
+                                                       data-role="visibility-trigger"
+                                                       value="1"
+                                                       name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                                       <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+                                                <span><?= __('Hide from Product Page') ?></span>
+                                            </label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <button type="button"
+                                        class="action-close"
+                                        data-role="close-panel"
+                                        title="<?= __('Close panel') ?>">
+                                    <span><?= __('Close panel') ?></span>
+                                </button>
+                                <div class="image-pointer"></div>
+                            </div>
+                        </script>
+
+                    </div>
                 </li>
-                <li>
-                    <label>
-                        <input type="radio" value="each" data-bind="checked:type">
-                        <span><?= __('Apply unique inventory by attribute to each SKU') ?></span>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" value="none" checked
-                               data-bind="checked:type">
-                        <span><?= __('Skip inventory at this time') ?></span>
-                    </label>
-                </li>
+                <!-- /ko -->
             </ul>
-            <div data-bind="visible: type() == 'single'"
-                 style="list-style-type: none;margin-top: 10px;"
-                >
-                <label>
-                    <span><?= __('Inventory') ?></span>
-                    <input type="text" data-bind="value:value">
-                </label>
-            </div>
-            <div data-bind="visible: type() == 'each'">
-                <select style="margin-left: 15px;width: 202px;margin-bottom: 10px;" data-bind="
-                    options: $parent.attributes,
-                    optionsText: 'label',
-                    value: attribute,
-                    optionsCaption: 'Select'"
-                ></select>
-                <ul style="list-style-type: none;margin-top: 10px;"
-                    data-bind="if:attribute"
-                    >
-                    <!-- ko foreach: attribute().chosen -->
-                    <li style="margin-left: 15px;">
-                        <label>
-                            <span data-bind="text:label"></span>
-                            <input type="text" data-bind="value:sections()[$parent.label]">
-                        </label>
-                    </li>
-                    <!-- /ko -->
-                </ul>
-            </div>
         </div>
     </div>
 </div>
+
+<div data-bind="with: sections().pricing" class="steps-wizard-section">
+    <div data-role="section">
+        <div class="steps-wizard-section-title">
+            <span><?= __('Pricing') ?></span>
+        </div>
+        <ul class="steps-wizard-section-list">
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-single-price-radio"
+                           class="admin__control-radio"
+                           value="single"
+                           data-bind="checked:type" />
+                    <label for="apply-single-price-radio"
+                           class="admin__field-label">
+                        <span><?= __('Apply single price to all SKUs') ?></span>
+                    </label>
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-unique-prices-radio"
+                           class="admin__control-radio"
+                           value="each"
+                           data-bind="checked:type" />
+                    <label for="apply-unique-prices-radio"
+                           class="admin__field-label">
+                        <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
+                    </label>
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="skip-pricing-radio"
+                           class="admin__control-radio"
+                           value="none"
+                           checked
+                           data-bind="checked:type" />
+                    <label for="skip-pricing-radio" class="admin__field-label">
+                        <span><?= __('Skip pricing at this time') ?></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+        <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
+            <div class="admin__field">
+                <label for="apply-single-price-input" class="admin__field-label">
+                    <span><?= __('Pricing') ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text"
+                           id="apply-single-price-input"
+                           class="admin__control-text"
+                           data-bind="value: value" />
+                </div>
+            </div>
+        </fieldset>
+
+        <div data-bind="visible: type() == 'each'">
+            <fieldset class="admin__fieldset bulk-attribute-values">
+                <div class="admin__field">
+                    <label for="apply-single-price-input" class="admin__field-label">
+                        <span><?= __('Select attribute') ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <select class="admin__control-select" data-bind="
+                                options: $parent.attributes,
+                                optionsText: 'label',
+                                value: attribute,
+                                optionsCaption: 'Select'"></select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                <!-- ko foreach: attribute().chosen -->
+                <div class="admin__field">
+                    <label for="apply-single-price-input" class="admin__field-label">
+                        <span data-bind="text:label"></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                    </div>
+                </div>
+            <!-- /ko -->
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<div data-bind="with: sections().inventory" class="steps-wizard-section">
+    <div data-role="section">
+        <div class="steps-wizard-section-title">
+            <span><?= __('Inventory') ?></span>
+        </div>
+        <ul class="steps-wizard-section-list">
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-single-inventory-radio"
+                           class="admin__control-radio"
+                           value="single"
+                           data-bind="checked: type" />
+                    <label for="apply-single-inventory-radio" class="admin__field-label">
+                        <span><?= __('Apply single inventory to each SKUs') ?></span>
+                    </label>
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="apply-unique-inventory-radio"
+                           class="admin__control-radio"
+                           value="each"
+                           data-bind="checked: type" />
+                    <label for="apply-unique-inventory-radio" class="admin__field-label">
+                        <span><?= __('Apply unique inventory by attribute to each SKU') ?></span>
+                    </label>
+                </div>
+            </li>
+            <li>
+                <div class="admin__field admin__field-option">
+                    <input type="radio"
+                           id="skip-inventory-radio"
+                           class="admin__control-radio"
+                           value="none"
+                           checked
+                           data-bind="checked: type" />
+                    <label for="skip-inventory-radio" class="admin__field-label">
+                        <span><?= __('Skip inventory at this time') ?></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+
+        <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
+            <div class="admin__field">
+                <label for="apply-single-inventory-input" class="admin__field-label">
+                    <span><?= __('Inventory') ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text"
+                           id="apply-single-inventory-input"
+                           class="admin__control-text"
+                           data-bind="value: value" />
+                </div>
+            </div>
+        </fieldset>
+
+        <div data-bind="visible: type() == 'each'">
+            <fieldset class="admin__fieldset bulk-attribute-values">
+                <div class="admin__field">
+                    <label for="apply-single-price-input" class="admin__field-label">
+                        <span><?= __('Select attribute') ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <select class="admin__control-select" data-bind="
+                            options: $parent.attributes,
+                            optionsText: 'label',
+                            value: attribute,
+                            optionsCaption: 'Select'"></select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                <!-- ko foreach: attribute().chosen -->
+                <div class="admin__field">
+                    <label for="apply-single-price-input" class="admin__field-label">
+                        <span data-bind="text:label"></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                    </div>
+                </div>
+                <!-- /ko -->
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+</div>  <!-- ToDo UI: Where is it opened? -->
+
 <script type="text/x-magento-init">
 {
     "*": {

@@ -4,6 +4,10 @@
 //  */
 
 //
+//  Navigation Bar in Steps Wizard
+//  _____________________________________________
+
+//
 //  Variables
 //  _____________________________________________
 
@@ -13,7 +17,11 @@
 
 @nav-bar__color: @color-brownie;
 @nav-bar__font-size: 1.2rem;
-@nav-bar__height__base: @btn__base__font-size * @base__line-height + @btn__base__font-size * @btn__base__padding-top + @btn__base__font-size * @btn__base__padding-bottom;
+
+@nav-bar__height__base: ((@button__font-size * @button__line-height) +
+    (@button__font-size * @button__padding-top) +
+    (@button__font-size * @button__padding-top));
+
 @nav-bar__indent-top: 3rem;
 @nav-bar__min-height: 5.8rem;
 
@@ -31,7 +39,7 @@
 @nav-bar-step__width: 10.3rem;
 
 //
-//  Styles
+//  Common
 //  _____________________________________________
 
 //
@@ -48,33 +56,19 @@
 }
 
 //  Buttons panel
-.nav .btn-group,
 .nav-bar-outer-actions {
     float: right;
     margin-bottom: @nav-bar-items__indent-bottom;
-    .btn-wrap {
+    .action-wrap {
         float: right;
         margin-left: .5rem;
         margin-right: .5rem;
-        .btn {
-            padding-left: .5rem;
-            padding-right: .5rem;
-        }
     }
 }
 
 .nav-bar-outer-actions {
     margin-top: -(@nav-bar__indent-top + @nav-bar__min-height + @nav-bar-items__indent-bottom + .1rem);
     padding-right: @nav__indent-right;
-}
-
-.btn-wrap-try-again {
-    width: 9.5rem;
-}
-
-.btn-wrap-prev,
-.btn-wrap-next {
-    width: 8.5rem;
 }
 
 //
@@ -322,5 +316,27 @@
             margin-top: 1rem;
             padding-top: 1rem;
         }
+    }
+}
+
+.steps-wizard {
+    .nav-bar {
+        margin: @indent__xs 0 0;
+        > li {
+            width: 12rem;
+        }
+        a {
+            text-overflow: initial;
+            white-space: normal;
+        }
+        :after,
+        :before {
+            box-sizing: content-box;
+        }
+    }
+
+    .nav-bar-outer-actions {
+        margin-top: @indent__s;
+        padding-right: 0;
     }
 }
