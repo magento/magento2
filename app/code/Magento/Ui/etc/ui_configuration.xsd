@@ -32,6 +32,7 @@
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="argumentType" name="argument"/>
                     <xs:element type="bookmark" name="bookmark"/>
+                    <xs:element type="exportButton" name="exportButton"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
