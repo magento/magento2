@@ -30,7 +30,9 @@
     <div class="primary">
         <button data-role="review-save" type="submit"
                 data-bind="attr: {title: $t('Place order')}"
-                class="button action primary checkout"><span data-bind="text: $t('Place order')"></span></button>
+                class="button action primary checkout">
+            <span data-bind="text: $t('Place order')"></span>
+        </button>
         <button type="submit" id="originalPlaceOrder" class="hidden"
                 data-bind="click: originalPlaceOrder($parents[1])"></button>
     </div>

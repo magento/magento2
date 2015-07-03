@@ -65,7 +65,7 @@ class CartPriceRulesFixture extends Fixture
         $idField = $model->getIdFieldName();
 
         for ($i = 0; $i < $cartPriceRulesCount; $i++) {
-            $ruleName = sprintf('Shopping Cart Price Rule %1$d', $i);
+            $ruleName = sprintf('Cart Price Rule %1$d', $i);
             $data = [
                 $idField                => null,
                 'product_ids'           => '',
@@ -182,7 +182,7 @@ class CartPriceRulesFixture extends Fixture
      */
     public function getActionTitle()
     {
-        return 'Generating shopping cart price rules';
+        return 'Generating Cart Price Rules';
     }
 
     /**
