@@ -22,11 +22,19 @@
 
 <p class="greeting">{{trans "%name," name=$customer.name}}</p>
 <p>{{trans "You must confirm your %customer_email email before you can log in (link is only valid once):" customer_email=$customer.email}}</p>
-<p>
-    <!-- TODO: Convert to button style -->
-    <a class="button" href='{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}'>
-        {{trans "Confirm Your Account"}}
-    </a>
-</p>
+
+<table class="button" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table class="inner-wrapper" border="0" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                    <td align="center">
+                        <a href="{{store url="customer/account/confirm/" _query_id=$customer.id _query_key=$customer.confirmation _query_back_url=$back_url}}" target="_blank">{{trans "Confirm Your Account"}}</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 {{template config_path="design/email/footer_template"}}
