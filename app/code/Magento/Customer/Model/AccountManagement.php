@@ -483,6 +483,8 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createAccountWithPasswordHash(
         CustomerInterface $customer,
