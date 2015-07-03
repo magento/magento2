@@ -6,7 +6,6 @@ define([
     "uiRegistry",
     "jquery",
     "underscore",
-    "Magento_Ui/js/modal/modal",
     "mage/backend/notification"
 ], function (uiRegistry, $, _) {
     "use strict";
@@ -131,16 +130,7 @@ define([
         _disabledTabs: function (index) {
             this._setupDisabled(_.range(index + 2, this.tabs.length));
         }
-    });
-    $(document).ready(function () {
-        $('[data-role=step-wizard-dialog]').modal({
-            type: 'slide',
-            title: $.mage.__('Create Product Configurations'),
-            buttons: []
-        });
-        $('[data-action=open-steps-wizard]').on('click', function() {
-            $('[data-role=step-wizard-dialog]').trigger('openModal');
-        });
+
     });
 
     return $.mage["step-wizard"];
