@@ -511,7 +511,7 @@ class AccountManagement implements AccountManagementInterface
             $customer->setStoreId($storeId);
         }
 
-        $customerAddresses = $customer->getAddresses();
+        $customerAddresses = $customer->getAddresses() ?: [];
         $customer->setAddresses(null);
         try {
             // If customer exists existing hash will be used by Repository
