@@ -17,50 +17,10 @@
     padding-right: 25px;
 }
 
-#configurable-attributes-container .field-variation > .label {
-    margin-left: -7px;
-}
-
-#configurable-attributes-container .field-variation > .control {
-    width: 43%;
-}
-
-#configurable-attributes-container .col-include {
-    width: 80px;
-}
-
-#configurable-attributes-container .col-actions {
-    width: 80px;
-}
-
-#configurable-attributes-container .col-change-price {
-    width: 120px;
-}
-
-#configurable-attributes-container .field-change-pricing .field {
-    float: left;
-}
-
-#configurable-attributes-container .field-change-pricing .field-pricing-value {
-    width: 60px !important;
-    margin-bottom: 0 !important;
-}
-
-#configurable-attributes-container .field-change-pricing .field-pricing-measure {
-    margin-bottom: 0 !important;
-}
-
 @media screen and (max-width: 960px) {
     [class^="fields-group-"] .field {
         width: auto !important;
     }
-}
-
-#configurable-attributes-container .field-pricing-value .pricing-value {
-    width: 100%;
-    padding: 4px 10px;
-    border-right: none;
-    border-radius: 1px 0 0 1px;
 }
 
 /* "Generate Variations" button */

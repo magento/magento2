@@ -130,9 +130,11 @@
     .css(background, @image-gallery-placeholder__background);
     .css(border, @image-gallery-placeholder__border);
     .css(width, @image-gallery-placeholder__width);
+    box-sizing: border-box;
     display: inline-block;
     float: left;
     margin: 0 .8rem;
+    overflow: hidden;
     position: relative;
 
     .product-image {
@@ -421,15 +423,8 @@
     color: #666;
 }
 
-.image-panel-controls .action-remove,
-.image-panel-controls .action-remove:hover,
-.image-panel-controls .action-remove:active,
-.image-panel-controls .action-remove:focus,
-.image-panel-controls .action-remove[disabled] {
-    color: #a29c94;
-    font: 12px/1.333 Arial, Verdana, sans-serif;
-    text-decoration: underline;
-    margin: 0 0 46px 0;
+.image-panel-controls .action-remove {
+    margin: 0 0 20px 0;
 }
 
 .image-panel-controls .fieldset-image-panel {

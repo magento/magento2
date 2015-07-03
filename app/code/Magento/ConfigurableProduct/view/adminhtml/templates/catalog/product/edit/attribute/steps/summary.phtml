@@ -14,39 +14,35 @@
         <span><?= __('Here are all the products you are going to create. ') ?></span>
     </div>
 
-    <table class="data-grid-configurable">
-        <thead>
+    <div class="admin__data-grid-wrap">
+        <table class="data-grid data-grid-configurable">
+            <thead>
             <tr>
                 <!-- ko foreach: attributesName -->
-                <th style="
-                    border: none;
-                    text-transform: capitalize;
-                    background-color: gray;
-                    color: white;
-                    padding: 13px;
-                    font-size: small;
-                " data-bind="text: $data"></th>
+                <th class="data-grid-th" data-bind="text: $data"></th>
                 <!-- /ko -->
             </tr>
-            <tr style="height: 5px;"></tr>
-        </thead>
-        <tbody data-bind="foreach: grid">
-            <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
-                <!-- ko foreach: $data -->
-                <!-- ko if: $data && $data.preview -->
-                <td class="col-image" style="padding: 10px;text-align: center;border-left: 2px solid grey; width: 10%">
-                    <img data-bind='attr: {src: $data.preview}' />
-                </td>
-                <!-- /ko -->
-                <!-- ko ifnot: $data && $data.preview -->
-                <td style="padding: 10px;text-align: center;border-left: 2px solid grey;">
-                    <span data-bind='text: $data'></span>
-                </td>
-                <!-- /ko -->
-                <!-- /ko -->
-            </tr>
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody data-bind="foreach: grid">
+                <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
+                    <!-- ko foreach: $data -->
+                    <!-- ko if: $data && $data.preview -->
+                    <td class="col-image">
+                        <img data-bind='attr: {src: $data.preview}' />
+                    </td>
+                    <!-- /ko -->
+                    <!-- ko ifnot: $data && $data.preview -->
+                    <td>
+                        <span data-bind='text: $data'></span>
+                    </td>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 
     <div style="display: none" data-role="product-variations-matrix-tmp">
         <script data-template-for="variation-image" type="text/x-magento-template">
