@@ -4,52 +4,10 @@
  */
 define([
     'underscore',
-    'mageUtils'
-], function (_, utils) {
+    'mageUtils',
+    'mage/utils/super'
+], function (_, utils, superWrapper) {
     'use strict';
-
-    /**
-     * Checks if string has a '_super' substring.
-     */
-    var superReg = /\b_super\b/;
-
-    /**
-     * Checks wether the incoming method contains calls of the '_super' property.
-     *
-     * @param {Function} method - Method to be checked.
-     * @returns {Boolean}
-     */
-    function hasSuper(method) {
-        return _.isFunction(method) && superReg.test(method);
-    }
-
-    /**
-     * Wraps the incoming method to implement support of the '_super' method.
-     *
-     * @param {Object} parent - Reference to parents' prototype.
-     * @param {String} name - Name of the method.
-     * @param {Function} method - Method to be wrapped.
-     * @returns {Function} Wrapped method.
-     */
-    function superWrapper(parent, name, method) {
-        return function () {
-            var superTmp = this._super,
-                args = arguments,
-                result;
-
-            this._super = function () {
-                var superArgs = arguments.length ? arguments : args;
-
-                return parent[name].apply(this, superArgs);
-            };
-
-            result = method.apply(this, args);
-
-            this._super = superTmp;
-
-            return result;
-        };
-    }
 
     /**
      * Creates new constructor based on a current prototype properties,
@@ -81,9 +39,7 @@ define([
         child.prototype.constructor = child;
 
         _.each(extender, function (method, name) {
-            child.prototype[name] = hasSuper(method) ?
-                superWrapper(parentProto, name, method) :
-                method;
+            child.prototype[name] = superWrapper.create(method, parentProto, name);
         });
 
         return _.extend(child, {
