@@ -83,5 +83,7 @@ return [
     ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility'],
-    ['Magento\GoogleShopping']
+    ['Magento\GoogleShopping'],
+    ['Magento\Paypal\Block\Standard'],
+    ['Magento\Paypal\Controller\Standard']
 ];
