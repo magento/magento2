@@ -90,7 +90,7 @@ table {
 //  Typography
 //  ---------------------------------------------
 
-//  See _email-extend.less for @font-face declarations
+//  See email-fonts.less for @font-face declarations
 
 @font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
 .typography-all();
@@ -194,6 +194,8 @@ body {
 //  ---------------------------------------------
 
 .button {
+    margin-bottom: @indent__s;
+
     .inner-wrapper {
         td {
             .css(border-radius, @button__border-radius, 1);
@@ -219,12 +221,15 @@ body {
                 background-color: @button-primary__hover__background !important;
             }
 
+            a:active,
             td:active {
                 background-color: @button-primary__active__background !important;
             }
         }
 
-        a:hover {
+        a:active,
+        a:hover,
+        a:visited {
             // Undo general link hover state
             color: @button-primary__color !important;
             text-decoration: none !important;
@@ -235,7 +240,7 @@ body {
     .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
         .button {
             .inner-wrapper {
-                width:100% !important;
+                width: 100% !important;
 
                 td {
                     a {
