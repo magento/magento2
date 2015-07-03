@@ -8,6 +8,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -21,12 +23,37 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Eav\Model\Entity\Type */
     protected $eavConfigType;
 
+    /** @var  Snapshot|\PHPUnit_Framework_MockObject_MockObject */
+    protected $entitySnapshotMock;
+
+    /** @var  RelationComposite|\PHPUnit_Framework_MockObject_MockObject */
+    protected $entityRelationCompositeMock;
+
     protected function setUp()
     {
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            [],
+            [],
+            '',
+            false
+        );
+
+
+        $this->entityRelationCompositeMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
             'Magento\Customer\Model\Resource\Address',
             [
                 'resource' => $this->prepareResource(),
+                'entitySnapshot' => $this->entitySnapshotMock,
+                'entityRelationComposite' => $this->entityRelationCompositeMock,
                 'eavConfig' => $this->prepareEavConfig(),
                 'validatorFactory' => $this->prepareValidatorFactory(),
                 'customerFactory' => $this->prepareCustomerFactory()
@@ -43,22 +70,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        /** @var $customer \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject */
-        $customer = $this->getMock(
-            'Magento\Customer\Model\Customer',
-            ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load'],
-            [],
-            '',
-            false
-        );
-        $customer->expects($this->any())
-            ->method('load')
-            ->willReturnSelf();
-
-        $this->customerFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($customer);
-
         /** @var $address \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject */
         $address = $this->getMock(
             'Magento\Customer\Model\Address',
@@ -78,7 +89,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $address->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $this->entitySnapshotMock->expects($this->once())->method('isModified')->willReturn(true);
+        $this->entityRelationCompositeMock->expects($this->once())->method('processRelations');
         $address->expects($this->once())->method('isSaveAllowed')->willReturn(true);
         $address->expects($this->once())->method('validateBeforeSave');
         $address->expects($this->once())->method('beforeSave');
@@ -87,19 +99,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $address->expects($this->any())->method('getId')->willReturn($addressId);
         $address->expects($this->any())->method('getIsDefaultShipping')->willReturn($isDefaultShipping);
         $address->expects($this->any())->method('getIsDefaultBilling')->willReturn($isDefaultBilling);
-        if ($addressId && ($isDefaultBilling || $isDefaultShipping)) {
-            if ($isDefaultBilling) {
-                $customer->expects($this->once())->method('setDefaultBilling')->with($addressId);
-            }
-            if ($isDefaultShipping) {
-                $customer->expects($this->once())->method('setDefaultShipping')->with($addressId);
-            }
-            $customer->expects($this->once())->method('save');
-        } else {
-            $customer->expects($this->never())->method('setDefaultBilling');
-            $customer->expects($this->never())->method('setDefaultShipping');
-            $customer->expects($this->never())->method('save');
-        }
         $this->addressResource->setType('customer_address');
         $this->addressResource->save($address);
     }

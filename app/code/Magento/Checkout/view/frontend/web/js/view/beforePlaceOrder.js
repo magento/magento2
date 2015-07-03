@@ -9,7 +9,6 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/iterator',
                 displayArea: 'beforePlaceOrder'
             }
         });
