@@ -13,6 +13,16 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected $taxHelperMock;
 
     /**
+     * @var \Magento\Weee\Helper\Data
+     */
+    protected $weeeHelperMock;
+
+    /**
+     * @var \Magento\Weee\Model\Tax
+     */
+    protected $weeeTaxMock;
+
+    /**
      * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContextMock;
@@ -49,6 +59,14 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->weeeHelperMock = $this->getMockBuilder('Magento\Weee\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->weeeTaxMock = $this->getMockBuilder('\Magento\Weee\Model\Tax')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->httpContextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,7 +78,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId'
+                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
+                'getWebsiteId', 'isLoggedIn'
             ])
             ->getMock();
 
@@ -78,57 +97,87 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'httpContext' => $this->httpContextMock,
                 'calculation' => $this->taxCalculationMock,
+                'weeeTax' => $this->weeeTaxMock,
                 'taxHelper' => $this->taxHelperMock,
+                'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock
             ]
         );
     }
 
-    public function testAroundDispatch()
+    /**
+     * @param bool $cache
+     * @param bool $taxEnabled
+     * @param bool $loggedIn
+     * @dataProvider dataProviderAroundDispatch
+     */
+    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
     {
+        $this->customerSessionMock->expects($this->any())
+            ->method('isLoggedIn')
+            ->willReturn($loggedIn);
+
         $this->moduleManagerMock->expects($this->any())
             ->method('isEnabled')
             ->with('Magento_PageCache')
-            ->willReturn(true);
+            ->willReturn($cache);
 
         $this->cacheConfigMock->expects($this->any())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->willReturn($cache);
 
-        $this->taxHelperMock->expects($this->any())
-            ->method('isCatalogPriceDisplayAffectedByTax')
-            ->willReturn(true);
+        if ($cache && $loggedIn) {
+            $this->taxHelperMock->expects($this->any())
+                ->method('isCatalogPriceDisplayAffectedByTax')
+                ->willReturn($taxEnabled);
 
-        $this->customerSessionMock->expects($this->once())
-            ->method('getDefaultTaxBillingAddress')
-            ->willReturn(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('getDefaultTaxShippingAddress')
-            ->willReturn(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('getCustomerTaxClassId')
-            ->willReturn(1);
+            if ($taxEnabled) {
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getDefaultTaxBillingAddress')
+                    ->willReturn(['country_id' => 1, 'region_id' => 1, 'postcode' => 11111]);
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getDefaultTaxShippingAddress')
+                    ->willReturn(['country_id' => 1, 'region_id' => 1, 'postcode' => 11111]);
+                $this->customerSessionMock->expects($this->once())
+                    ->method('getCustomerTaxClassId')
+                    ->willReturn(1);
 
-        $this->taxCalculationMock->expects($this->once())
-            ->method('getTaxRates')
-            ->with(
-                ['country_id' => 1, 'region_id' => null, 'postcode' => 11111],
-                ['country_id' => 1, 'region_id' => null, 'postcode' => 11111],
-                1
-            )
-            ->willReturn([]);
+                $this->taxCalculationMock->expects($this->once())
+                    ->method('getTaxRates')
+                    ->with(
+                        ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                        ['country_id' => 1, 'region_id' => 1, 'postcode' => 11111],
+                        1
+                    )
+                    ->willReturn([]);
 
-        $this->httpContextMock->expects($this->once())
-            ->method('setValue')
-            ->with('tax_rates', [], 0);
+                $this->httpContextMock->expects($this->any())
+                    ->method('setValue')
+                    ->with('tax_rates', [], 0);
+            }
 
-        $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+            $action = $this->objectManager->getObject('Magento\Framework\App\Action\Action');
+            $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
+            $expectedResult = 'expectedResult';
+            $proceed = function ($request) use ($expectedResult) {
+                return $expectedResult;
+            };
+            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderAroundDispatch()
+    {
+        return [
+            [false, false, false],
+            [true, true, false],
+            [true, true, true],
+            [true, false, true],
+            [true, true, true]
+        ];
     }
 }
