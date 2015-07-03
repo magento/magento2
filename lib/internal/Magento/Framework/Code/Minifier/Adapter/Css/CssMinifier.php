@@ -9,7 +9,10 @@ namespace Magento\Framework\Code\Minifier\Adapter\Css;
 use CSSmin;
 use Magento\Framework\Code\Minifier\AdapterInterface;
 
-class CssMinifier implements AdapterInterface
+/**
+ * Adapter for CSSmin library
+ */
+class CSSmin implements AdapterInterface
 {
     /**
      * 'pcre.recursion_limit' value for CSSMin minification

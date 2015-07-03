@@ -34,7 +34,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      * 4 - ensure that new minified CSS is fully workable in all supported browsers
      * 5 - replace `_files/static/css/styles.magento.min.css` with new minified css
      */
-    public function testCssMinifierLibrary()
+    public function testCSSminLibrary()
     {
         /** @var \Magento\Framework\View\Asset\Config $config */
         $config = $this->objectManager->get('Magento\Framework\View\Asset\Config');
