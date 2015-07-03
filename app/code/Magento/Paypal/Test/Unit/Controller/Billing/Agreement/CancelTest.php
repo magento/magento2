@@ -95,7 +95,11 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $title = $this->getMock('Magento\Framework\App\Action\Title', [], [], '', false);
 
-        $this->_controller = new \Magento\Paypal\Controller\Billing\Agreement\Cancel($context, $this->_registry, $title);
+        $this->_controller = new \Magento\Paypal\Controller\Billing\Agreement\Cancel(
+            $context,
+            $this->_registry,
+            $title
+        );
     }
 
     public function testExecuteActionSuccess()
