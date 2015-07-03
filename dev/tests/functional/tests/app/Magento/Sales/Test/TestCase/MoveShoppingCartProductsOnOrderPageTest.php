@@ -31,13 +31,14 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-28540
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MoveShoppingCartProductsOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

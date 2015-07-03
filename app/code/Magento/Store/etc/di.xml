@@ -23,6 +23,11 @@
         <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\Template\File\Validator">
+        <arguments>
+            <argument name="scope" xsi:type="string">store</argument>
+        </arguments>
+    </type>
     <type name="Magento\Store\Model\Config\Reader\Website">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>

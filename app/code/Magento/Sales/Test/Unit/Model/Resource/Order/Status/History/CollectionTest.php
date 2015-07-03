@@ -48,7 +48,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityFactoryMock;
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -59,7 +59,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
         $this->historyItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Status\History',
-            ['__wakeup', 'setData'],
+            ['__wakeup', 'addData'],
             [],
             '',
             false
@@ -74,7 +74,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -97,7 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $data = [['data']];
         $this->historyItemMock->expects($this->once())
-            ->method('setData')
+            ->method('addData')
             ->with($this->equalTo($data[0]))
             ->will($this->returnValue($this->historyItemMock));
 
