@@ -10,14 +10,14 @@ use Psr\Log\LoggerInterface as LogWriter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\SalesSequence\Model\Manager;
 use \Magento\Sales\Model\Resource\EntityAbstract;
-use \Magento\Sales\Model\Resource\EntitySnapshot;
+use \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 
 /**
  * Order status resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb
 {
     /**
      * Status labels table

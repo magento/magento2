@@ -19,7 +19,7 @@
       <data name="product/data/associated/preset" xsi:type="string">simple_downloadable_virtual</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
       <data name="isRequired" xsi:type="string">-</data>
-      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" next="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
