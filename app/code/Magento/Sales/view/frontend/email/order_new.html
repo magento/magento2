@@ -58,7 +58,7 @@
             <table class="message-info">
                 <tr>
                     <td>
-                        {{var order.getEmailCustomerNote()}}
+                        {{var order.getEmailCustomerNote()|escape|nl2br}}
                     </td>
                 </tr>
             </table>
