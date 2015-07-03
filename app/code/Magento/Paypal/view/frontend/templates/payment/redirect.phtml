@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\PayPal\Block\Express\Form
+ */
+?>
+<fieldset class="fieldset paypal items redirect" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
+    <div><?php echo $block->getRedirectMessage(); ?></div>
+    <?php $code = $block->getBillingAgreementCode(); ?>
+    <?php if ($code): ?>
+        <input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox">
+        <label for="<?php echo $code ?>" class="label">
+            <span><?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></span>
+        </label>
+    <?php endif; ?>
+</fieldset>

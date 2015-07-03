@@ -2271,4 +2271,9 @@ return [
     ['_getIncludeParameters', 'Magento\Framework\Filter\Template', '_getParameters'],
     ['setIncludeProcessor', 'Magento\Framework\Filter\Template'],
     ['includeDirective', 'Magento\Framework\Filter\Template'],
+    ['getCentinelValidator', 'Magento\Paypal\Model\Direct'],
+    ['_getCentinelVpasLabel', 'Magento\Paypal\Model\Info'],
+    ['_getCentinelEciLabel', 'Magento\Paypal\Model\Info'],
+    ['_getPayPalPayflowPro3dSecure', 'Magento\Config\Test\Repository\Config'],
+    ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config']
 ];
