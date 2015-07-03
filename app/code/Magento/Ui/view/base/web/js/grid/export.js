@@ -12,11 +12,21 @@ define([
     return Collapsible.extend({
 
         defaults: {
-            template: 'ui/grid/exportButton'
+            template: 'ui/grid/exportButton',
+            params: {
+                filters: {}
+            },
+            filtersConfig: {
+                provider: '${ $.provider }',
+                path: 'params.filters'
+            },
+            imports: {
+                'params.filters': '${ $.filtersConfig.provider }:${ $.filtersConfig.path }'
+            }
         },
 
         applyOption: function (action) {
-            location.href = action.url;
+            location.href = action.url + '?' + $.param({'filters': this.params.filters});
         }
     });
 });
