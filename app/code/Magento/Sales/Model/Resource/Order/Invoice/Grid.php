@@ -119,7 +119,6 @@ class Grid extends AbstractGrid
                 'store_id' => 'sfi.store_id',
                 'store_name' => 'sfo.store_name',
                 'order_id' => 'sfi.order_id',
-                'order_status' => 'sfo.status',
                 'order_increment_id' => 'sfo.increment_id',
                 'order_created_at' => 'sfo.created_at',
                 'customer_id' => 'sfo.customer_id',
@@ -138,7 +137,6 @@ class Grid extends AbstractGrid
                 'subtotal' => 'sfo.base_subtotal',
                 'shipping_and_handling' => 'sfo.base_shipping_amount',
                 'grand_total' => 'sfi.grand_total',
-                'base_grand_total' => 'sfi.base_grand_total',
                 'created_at' => 'sfi.created_at',
                 'updated_at' => 'sfi.updated_at'
             ]

@@ -2942,12 +2942,6 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false],
             'Order Id'
         )->addColumn(
-            'order_status',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            32,
-            [],
-            'Order Status'
-        )->addColumn(
             'order_increment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             50,
@@ -2965,6 +2959,12 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true],
             'Customer Id'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Customer Name'
         )->addColumn(
             'customer_email',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -3050,12 +3050,6 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Grand Total'
         )->addColumn(
-            'base_grand_total',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base Grand Total'
-        )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
@@ -3093,30 +3087,6 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['billing_name']),
             ['billing_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'entity_id', 'sales_invoice', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_invoice'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'order_id', 'sales_order', 'entity_id'),
-            'order_id',
-            $installer->getTable('sales_order'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
-        )->addForeignKey(
-            $installer->getFkName('sales_invoice_grid', 'customer_id', 'customer_entity', 'entity_id'),
-            'customer_id',
-            $installer->getTable('customer_entity'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Invoice Grid'
         );
