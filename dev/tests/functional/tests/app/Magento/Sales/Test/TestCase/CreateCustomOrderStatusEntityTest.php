@@ -51,10 +51,8 @@ class CreateCustomOrderStatusEntityTest extends Injectable
      * @param OrderStatusNew $orderStatusNewPage
      * @return void
      */
-    public function __inject(
-        OrderStatusIndex $orderStatusIndexPage,
-        OrderStatusNew $orderStatusNewPage
-    ) {
+    public function __inject(OrderStatusIndex $orderStatusIndexPage, OrderStatusNew $orderStatusNewPage)
+    {
         $this->orderStatusIndexPage = $orderStatusIndexPage;
         $this->orderStatusNewPage = $orderStatusNewPage;
     }
