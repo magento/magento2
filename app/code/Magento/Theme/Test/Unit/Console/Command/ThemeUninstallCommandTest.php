@@ -7,9 +7,9 @@
 namespace Magento\Theme\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -131,7 +131,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap(
                 [
                     ['test1/composer.json', null, null, '{"name": "dummy"}'],
-                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}'],
+                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}']
                 ]
             ));
         $dirRead->expects($this->any())->method('isExist')->willReturn(true);
@@ -183,7 +183,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 [
                     ['test1/composer.json', null, null, '{"name": "dummy1"}'],
                     ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
-                    ['test4/composer.json', null, null, '{"name": "dummy2"}'],
+                    ['test4/composer.json', null, null, '{"name": "dummy2"}']
                 ]
             ));
         $dirRead->expects($this->any())
@@ -193,7 +193,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     ['test1/composer.json', true],
                     ['test2/composer.json', true],
                     ['test3/composer.json', false],
-                    ['test4/composer.json', true],
+                    ['test4/composer.json', true]
                 ]
             ));
         $this->collection->expects($this->any())

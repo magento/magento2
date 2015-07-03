@@ -7,11 +7,14 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\App\Resource as AppResource;
 
 class JoinProcessorTest extends \PHPUnit_Framework_TestCase
 {
+
     /** @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor */
     private $joinProcessor;
 
@@ -63,7 +66,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $objectManager,
                 'config' => $this->config,
                 'extensionAttributeJoinDataFactory' => $this->extensionAttributeJoinDataFactory,
-                'typeProcessor' => $this->typeProcessor,
+                'typeProcessor' => $this->typeProcessor
             ]
         );
     }
@@ -103,7 +106,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                     'internal_alias' => 'extension_attribute_review_id_db_review_id',
                     'with_db_prefix' => 'extension_attribute_review_id.db_review_id',
                     'setter' => 'setReviewId',
-                ],
+                ]
             ],
             $extensionAttributeJoinData->getSelectFields()
         );

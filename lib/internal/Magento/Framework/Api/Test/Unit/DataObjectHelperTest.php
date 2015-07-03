@@ -8,8 +8,8 @@
 
 namespace Magento\Framework\Api\Test\Unit;
 
-use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\AttributeInterface;
 
 class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,7 +85,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $this->typeProcessor,
                 'objectProcessor' => $this->objectProcessorMock,
                 'methodsMapProcessor' => $this->methodsMapProcessor,
-                'joinProcessor' => $this->joinProcessorMock,
+                'joinProcessor' => $this->joinProcessorMock
             ]
         );
     }
@@ -378,7 +378,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '1',
                         'region' => 'TX',
-                    ],
+                    ]
                 ],
                 [
                     'id' => '2',
@@ -388,8 +388,8 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '2',
                         'region' => 'TX',
-                    ],
-                ],
+                    ]
+                ]
             ],
             [
                 [
@@ -398,7 +398,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '1',
                         'region' => 'TX',
-                    ],
+                    ]
                 ],
                 [
                     'id' => '2',
@@ -408,9 +408,9 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'region' => [
                         'region_id' => '2',
                         'region' => 'TX',
-                    ],
-                ],
-            ],
+                    ]
+                ]
+            ]
         ];
     }
 }

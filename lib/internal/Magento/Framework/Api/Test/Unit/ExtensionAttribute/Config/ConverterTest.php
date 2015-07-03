@@ -108,8 +108,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_FIELDS => [
                             [
                                 Converter::JOIN_FIELD => "library_card_id",
-                                Converter::JOIN_FIELD_COLUMN => "",
-                            ],
+                                Converter::JOIN_FIELD_COLUMN => ""
+                            ]
                         ],
                         Converter::JOIN_ON_FIELD => "id",
                         Converter::JOIN_REFERENCE_FIELD => "customer_id",
@@ -123,12 +123,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_FIELDS => [
                             [
                                 Converter::JOIN_FIELD => "comment",
-                                Converter::JOIN_FIELD_COLUMN => "",
+                                Converter::JOIN_FIELD_COLUMN => ""
                             ],
                             [
                                 Converter::JOIN_FIELD => "rating",
-                                Converter::JOIN_FIELD_COLUMN => "",
-                            ],
+                                Converter::JOIN_FIELD_COLUMN => ""
+                            ]
                         ],
                         Converter::JOIN_ON_FIELD => "customer_id",
                         Converter::JOIN_REFERENCE_FIELD => "customer_id",

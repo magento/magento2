@@ -17,7 +17,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $expectedExtensionAttributes = [
             'firstname' => 'firstname',
             'lastname' => 'lastname',
-            'email' => 'admin@example.com',
+            'email' => 'admin@example.com'
         ];
 
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */

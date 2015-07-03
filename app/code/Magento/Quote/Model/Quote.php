@@ -10,13 +10,13 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model

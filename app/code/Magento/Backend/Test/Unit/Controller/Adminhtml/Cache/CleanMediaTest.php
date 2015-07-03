@@ -41,7 +41,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
                     'objectManager' => $objectManager,
                     'helper' => $backendHelper,
                     'request' => $request,
-                    'messageManager' => $messageManager,
+                    'messageManager' => $messageManager
                 ]
             )
         );
@@ -65,7 +65,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         $controller = $helper->getObject(
             'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia',
             [
-                'context' => $context,
+                'context' => $context
             ]
         );
 

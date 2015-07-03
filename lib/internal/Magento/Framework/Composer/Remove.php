@@ -56,7 +56,7 @@ class Remove
                 [
                     'command' => 'remove',
                     'packages' => $packages,
-                    '--working-dir' => $this->directoryList->getRoot() . '/' . $vendor . '/..',
+                    '--working-dir' => $this->directoryList->getRoot() . '/' . $vendor . '/..'
                 ]
             )
         );

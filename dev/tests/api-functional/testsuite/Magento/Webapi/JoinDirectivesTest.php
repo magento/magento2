@@ -6,11 +6,11 @@
 
 namespace Magento\Webapi;
 
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\FilterBuilder;
 
 class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -130,7 +130,7 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         return [
             'firstname' => $this->user->getFirstname(),
             'lastname' => $this->user->getLastname(),
-            'email' => $this->user->getEmail(),
+            'email' => $this->user->getEmail()
         ];
     }
 }

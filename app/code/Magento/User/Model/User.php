@@ -6,8 +6,8 @@
 namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\User\Api\Data\UserInterface;
 
 /**
@@ -183,7 +183,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 '_encryptor',
                 '_transportBuilder',
                 '_storeManager',
-                '_validatorBeforeSave',
+                '_validatorBeforeSave'
             ]
         );
     }
@@ -280,6 +280,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         return true;
+
     }
 
     /**

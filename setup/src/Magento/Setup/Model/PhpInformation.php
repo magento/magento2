@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Filesystem;
+
 /**
  * Class PhpInformation
  *
@@ -13,6 +15,7 @@ namespace Magento\Setup\Model;
  */
 class PhpInformation
 {
+
     /**
      * Allowed XDebug nested level
      */

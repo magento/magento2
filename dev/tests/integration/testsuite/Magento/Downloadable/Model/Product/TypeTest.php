@@ -84,7 +84,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($links);
         $samples = $this->_model->getSamples($product);
         $this->assertNotEmpty($samples->getData());
-        $i = 0;
+        $i=0;
         foreach ($links as $link) {
             $i++;
             $linkData = $link->getData();
@@ -93,7 +93,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             $linkData['title'] = 'Updated downloadable link #' . $i;
             $downloadableData['link'][] = $linkData;
         }
-        $i = 0;
+        $i=0;
         foreach ($samples as $sample) {
             $i++;
             $sampleData = $sample->getData();
@@ -133,7 +133,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $expectedExtensionAttributes = [
             'firstname' => 'firstname',
             'lastname' => 'lastname',
-            'email' => 'admin@example.com',
+            'email' => 'admin@example.com'
         ];
         $links = $this->_model->getLinks($product);
         $this->assertNotEmpty($links);

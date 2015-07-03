@@ -9,9 +9,9 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
 /**
  * Product Test
@@ -332,9 +332,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'customAttributeFactory' => $this->attributeValueFactory,
                 'entityCollectionProvider' => $this->entityCollectionProviderMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
-                'data' => ['id' => 1],
+                'data' => ['id' => 1]
             ]
         );
+
     }
 
     public function testGetAttributes()
@@ -563,11 +564,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function getProductReindexProvider()
     {
-        return [
+        return array(
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
-            'set 3' => [false, false, 1, 0],
-        ];
+            'set 3' => [false, false, 1, 0]
+        );
     }
 
     public function testPriceReindexCallback()
@@ -583,7 +584,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'categoryRepository' => $this->categoryRepository,
-                'data' => [],
+                'data' => []
             ]
         );
         $this->productPriceProcessor->expects($this->once())->method('reindexRow');
@@ -631,8 +632,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'name' => 'value',
                     'category_ids' => [1],
                     'affected_category_ids' => [1],
-                    'is_changed_categories' => true,
-                ],
+                    'is_changed_categories' => true
+                ]
             ],
             'status and category change' => [
                 [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
@@ -643,7 +644,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'category_ids' => [2],
                     'status' => 1,
                     'affected_category_ids' => [1, 2],
-                    'is_changed_categories' => true,
+                    'is_changed_categories' => true
                 ],
             ],
             'status change only' => [
@@ -660,14 +661,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'category_ids' => [],
                     'status' => 1,
                     'is_changed_categories' => true,
-                    'affected_category_ids' => [5],
+                    'affected_category_ids' => [5]
                 ],
             ],
             'no status changes' => [
                 [0 => 'catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
-            ],
+            ]
         ];
     }
 
@@ -1071,7 +1072,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'value_id' => 2,
                     'file' => 'smallImageFile.jpg',
                 ],
-            ],
+            ]
         ];
         $this->model->setData('media_gallery', $mediaEntries);
 
@@ -1132,10 +1133,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                         'data' => [
                             ImageContentInterface::NAME => 'product_image',
                             ImageContentInterface::TYPE => 'image/jpg',
-                            ImageContentInterface::BASE64_ENCODED_DATA => 'content_data',
-                        ],
-                    ],
-                ],
+                            ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
+                        ]
+                    ]
+                ]
             ],
         ];
 
@@ -1252,7 +1253,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productModel = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
             [
-                'catalogProductType' => $catalogProductTypeMock,
+                'catalogProductType' => $catalogProductTypeMock
             ]
         );
 
@@ -1270,7 +1271,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         return [
             'receive empty array' => [[]],
             'receive null' => [null],
-            'receive non-empty array' => [['non-empty', 'array', 'of', 'values']],
+            'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
         ];
     }
 
@@ -1288,7 +1289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product',
             [
                 'catalogProductOption' => $optionInstanceMock,
-                'joinProcessor' => $joinProcessorMock,
+                'joinProcessor' => $joinProcessorMock
             ]
         );
         $productModel->setHasOptions(true);
@@ -1334,7 +1335,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $expectedOptions = [
             $option1Id => $optionMock1,
-            $option2Id => $optionMock2,
+            $option2Id => $optionMock2
         ];
         $this->assertEquals($expectedOptions, $productModel->getOptions());
 

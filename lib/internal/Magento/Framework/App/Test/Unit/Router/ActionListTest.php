@@ -88,6 +88,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($module, $area, $namespace, $action, $data, $expected)
     {
+
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->will($this->returnValue(false));
@@ -123,7 +124,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Index',
                 ['magento\module\controller\area\namespace\index' => $mockClassName],
-                $actionClass,
+                $actionClass
             ],
             [
                 'Magento_Module',
@@ -131,7 +132,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Index',
                 ['magento\module\controller\namespace\index' => $mockClassName],
-                $actionClass,
+                $actionClass
             ],
             [
                 'Magento_Module',
@@ -139,7 +140,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Catch',
                 ['magento\module\controller\area\namespace\catchaction' => $mockClassName],
-                $actionClass,
+                $actionClass
             ],
             [
                 'Magento_Module',
@@ -147,7 +148,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Index',
                 ['magento\module\controller\area\namespace\index' => 'Not_Exist_Class'],
-                null,
+                null
             ],
             [
                 'Magento_Module',
@@ -155,7 +156,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Namespace',
                 'Index',
                 [],
-                null,
+                null
             ],
         ];
     }

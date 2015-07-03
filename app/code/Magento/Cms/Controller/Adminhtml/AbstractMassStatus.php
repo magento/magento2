@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class AbstractMassStatus
@@ -36,6 +36,7 @@ class AbstractMassStatus extends \Magento\Backend\App\Action
      * @var string
      */
     protected $model = 'Magento\Framework\Model\AbstractModel';
+
 
     /**
      * Item status

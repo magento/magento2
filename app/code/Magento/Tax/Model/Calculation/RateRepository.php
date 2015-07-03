@@ -14,6 +14,8 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
@@ -250,7 +252,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
                     InputException::INVALID_FIELD_VALUE,
                     [
                         'fieldName' => 'country_id',
-                        'value' => $countryCode,
+                        'value' => $countryCode
                     ]
                 )
             );

@@ -5,11 +5,12 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use Magento\Tax\Model\Calculation\RateRepository;
+use \Magento\Tax\Model\Calculation\RateRepository;
+
 use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -350,13 +351,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'entity_already_exists' => [
                 new AlreadyExistsException(__('Entity already exists')),
                 'Magento\Framework\Exception\AlreadyExistsException',
-                'Entity already exists',
+                'Entity already exists'
             ],
             'cannot_save_title' => [
                 new LocalizedException(__('Cannot save titles')),
                 'Magento\Framework\Exception\LocalizedException',
-                'Cannot save titles',
-            ],
+                'Cannot save titles'
+            ]
         ];
     }
 
@@ -398,6 +399,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
         $rateMock = $this->getTaxRateMock([]);
 
+
         $collectionMock->expects($this->once())->method('joinRegionTable');
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
         $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
@@ -405,6 +407,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
         $rateMock->expects($this->any())->method('getCollection')->will($this->returnValue($collectionMock));
+
+
 
         $this->searchResultMock->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
         $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(count($items))

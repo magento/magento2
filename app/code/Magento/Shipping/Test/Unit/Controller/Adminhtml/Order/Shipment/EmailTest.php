@@ -6,7 +6,8 @@
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
+use \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
+
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -99,7 +100,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getSession',
                 'getActionFlag',
                 'getHelper',
-                'getResultFactory',
+                'getResultFactory'
             ],
             [],
             '',
@@ -168,7 +169,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoader,
                 'request' => $this->request,
-                'response' => $this->response,
+                'response' => $this->response
             ]
         );
     }

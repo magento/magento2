@@ -92,7 +92,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             'Magento\Checkout\Controller\Cart\Configure',
             [
                 'context' => $this->contextMock,
-                'cart' => $this->cartMock,
+                'cart' => $this->cartMock
             ]
         );
     }
@@ -189,7 +189,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturnMap([
                 ['id', null, $quotaId],
-                ['product_id', null, $productIdInRequest],
+                ['product_id', null, $productIdInRequest]
             ]);
         $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);

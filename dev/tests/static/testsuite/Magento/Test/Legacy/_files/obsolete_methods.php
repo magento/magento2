@@ -2128,12 +2128,12 @@ return [
     [
         'process',
         'Magento\Framework\Api\ExtensionAttributesFactory',
-        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::process',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::process'
     ],
     [
         'extractExtensionAttributes',
         'Magento\Framework\Api\ExtensionAttributesFactory',
-        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::extractExtensionAttributes',
+        'Magento\Framework\Api\ExtensionAttribute\JoinProcessor::extractExtensionAttributes'
     ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],
