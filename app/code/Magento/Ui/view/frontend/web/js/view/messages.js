@@ -27,7 +27,8 @@ define(
             this.isHidden.subscribe(function () {
                 if (self.isHidden()) {
                     setTimeout(function () {
-                        $('#message').hide('blind', {}, 500)
+                        var messageSelector = '[data-role=checkout-messages]';
+                        $(messageSelector).hide('blind', {}, 500)
                     }, 5000);
                 }
             });

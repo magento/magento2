@@ -17,9 +17,10 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Ui/js/model/messageList',
         'mage/storage',
-        'Magento_Checkout/js/action/get-totals'
+        'Magento_Checkout/js/action/get-totals',
+        'mage/translate'
     ],
-    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction) {
+    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction, $t) {
         'use strict';
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
