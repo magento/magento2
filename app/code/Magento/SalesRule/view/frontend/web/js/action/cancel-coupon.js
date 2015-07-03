@@ -24,15 +24,15 @@ define(
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getCancelCouponUrl(quoteId);
+            var message = $t('Your coupon was successfully removed');
             messageList.clear();
             return storage.delete(
                 url,
                 false
             ).done(
                 function (response) {
-                    isLoading(false);
                     var deferred = $.Deferred();
-
+                    isLoading(false);
                     getTotalsAction([], deferred);
                     $.when(deferred).done(function() {
                         isApplied(false);
@@ -40,6 +40,7 @@ define(
                             paymentService.getAvailablePaymentMethods()
                         );
                     });
+                    messageList.addSuccessMessage({'message': message});
                 }
             ).fail(
                 function (response) {
