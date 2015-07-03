@@ -3661,4 +3661,6 @@ return [
     ['Magento\Framework\View\Element\UiComponent\JsConfigInterface'],
     ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['Magento\Framework\Code\Minifier\Adapter\Js\JSMin'],
+    ['\Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier'],
 ];
