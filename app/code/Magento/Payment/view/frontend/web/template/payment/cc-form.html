@@ -19,13 +19,14 @@
             <ul class="credit-card-types">
                 <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
                 <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
-                    <!-- if picture -->
+                    <!--ko if: $parent.getIcons(item.value) -->
                     <img data-bind="attr: {
-                        'src': 'Magento_Payment::images/cc/'+ item.value + '.png',
-                        'alt': item.type
+                        'src': $parent.getIcons(item.value).url,
+                        'alt': item.type,
+                        'width': $parent.getIcons(item.value).width,
+                        'height': $parent.getIcons(item.value).height
                         }">
-                    <!-- if NOpicture -->
-                    <span><!-- ko text: item.type --><!-- /ko --></span>
+                    <!--/ko-->
                 </li>
                 <!--/ko-->
             </ul>
