@@ -290,7 +290,7 @@
     </type>
     <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
         <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier</argument>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Css\CSSmin</argument>
         </arguments>
     </virtualType>
     <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
