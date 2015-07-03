@@ -65,6 +65,15 @@
             &:empty {
                 display: none;
             }
+            .item {
+                + .item {
+                    margin-top: @indent__m;
+                }
+            } 
+        }
+        .attribute-label {
+            .font-size(16);
+            margin-bottom: @indent__xs;
         }
         .image-panel {
             margin: 0;
@@ -98,22 +107,128 @@
 .gallery {
     &:extend(.abs-clearfix all);
     .css(background, @image-gallery__background);
-    padding: @indent__s 0;
-    .gallery-item {
-        display: inline-block;
-        margin: 0 1.5rem 1rem 0;
+    padding: @indent__s .3rem;
+    .draggable-handle {
+        cursor: move;
+        height: 20px;
+        left: 3px;
+        position: absolute;
+        top: 2px;
+        width: 20px;
+        z-index: 2;
+        .icon-font(
+        @icon-gripper__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color
+        );
     }
-    .image {
-        .css(background, @image-gallery-placeholder__background);
-        .css(border, @image-gallery-placeholder__border);
+}
+
+.image {
+    .css(background, @image-gallery-placeholder__background);
+    .css(border, @image-gallery-placeholder__border);
+    .css(width, @image-gallery-placeholder__width);
+    display: inline-block;
+    float: left;
+    margin: 0 .8rem;
+    position: relative;
+
+    .product-image {
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .spacer {
+        .css(height,  @image-gallery-placeholder__height);
         .css(width, @image-gallery-placeholder__width);
-        display: inline-block;
+    }
+
+    //  Image Placeholder
+    &.image-placeholder {
         position: relative;
+        .icon-font(
+        @icon-camera__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 4rem,
+        @_icon-font-color: @image-gallery-placeholder-icon__color,
+        @_icon-font-text-hide: true
+        );
+        &:before {
+            position: absolute;
+            top: 12px;
+            width: 100%;
+            z-index: 1;
+        }
+        .fileinput-button {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            > span {
+                display: none;
+            }
+        }
+        input[type="file"] {
+            border: 500px solid transparent;
+            bottom: 0;
+            cursor: pointer;
+            font-size: 10em;
+            height: 100%;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            z-index: 2;
+        }
+
+        //  ToDo UI: loader styles
+        .file-row,
+        &.loading:after {
+            background: #fff url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+            bottom: 0;
+            height: auto;
+            left: 0;
+            margin: auto;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            text-indent: -999em;
+            top: 0;
+            width: auto;
+            z-index: 5;
+        }
     }
-    .gallery-item,
-    .image {
-        float: left; // ToDo UI: resolve
+
+    .image-placeholder-text {
+        .font-size(11);
+        bottom: 0;
+        color: @color-blue-dodger;
+        left: 0;
+        line-height: 1.333;
+        margin-bottom: 15%;
+        padding: 0 @indent__s;
+        position: absolute;
+        right: 0;
+        text-align: center;
     }
+
+    &.ui-sortable-placeholder {
+        background: @color-blue-clear-sky;
+        border: 1px solid @color-blue-dodger;
+        visibility: visible !important;
+    }
+
     .action-remove {
         &:extend(.abs-action-reset all);
         bottom: 6px;
@@ -132,21 +247,23 @@
         @_icon-font-text-hide: true
         );
     }
-    .draggable-handle { // ToDo UI: check step #2 4 same
-        cursor: ns-resize;
-        height: 20px;
-        left: 3px;
+
+    //  ToDo UI: review image-fade
+    .image-fade {
+        background: rgba(247, 242, 236, .8);
+        bottom: 0;
+        color: #a69a8f;
+        content: attr(data-image-hidden-label);
+        font-weight: 500;
+        font: 18px/110px Arial, sans-serif;
+        left: 0;
         position: absolute;
-        top: 2px;
-        width: 20px;
-        z-index: 2;
-        .icon-font(
-        @icon-gripper__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color
-        );
+        right: 0;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        visibility: hidden;
+        z-index: 3;
     }
 
     .image-label {
@@ -166,122 +283,6 @@
         @_icon-font-text-hide: true
         );
     }
-
-//  ToDo UI: review image-fade
-    .image-fade {
-        background: rgba(247, 242, 236, .8);
-        bottom: 0;
-        color: #a69a8f;
-        content: attr(data-image-hidden-label);
-        font-weight: 500;
-        font: 18px/110px Arial, sans-serif;
-        left: 0;
-        position: absolute;
-        right: 0;
-        text-align: center;
-        text-transform: uppercase;
-        top: 0;
-        visibility: hidden;
-        z-index: 3;
-    }
-
-    //  Image Placeholder
-    .image-placeholder {
-        position: relative;
-        .icon-font(
-        @icon-camera__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 4rem,
-        @_icon-font-color: @image-gallery-placeholder-icon__color,
-        @_icon-font-text-hide: true
-        );
-        &:before {
-            position: absolute;
-            top: 12px;
-            width: 100%;
-            z-index: 1;
-        }
-        .fileinput-button {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            > span {
-                display: none;
-            }
-        }
-        input[type="file"] {
-              position: absolute;
-              top: 0;
-              right: 0;
-              left: 0;
-              bottom: 0;
-              width: 100%;
-              height: 100%;
-              opacity: 0;
-              border: 500px solid transparent;
-              font-size: 10em;
-              z-index: 2;
-              cursor: pointer;
-          }
-        .file-row,
-        &.loading:after {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 0;
-            width: auto;
-            height: auto;
-            margin: auto;
-            overflow: hidden;
-            background: #fff url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
-            z-index: 5;
-            text-indent: -999em;
-        }
-    }
-
-
-//    .gallery .image-placeholder {
-//        background-position: 50% 30%;
-//    }
-
-    .gallery .image-placeholder-text {
-    }
-
-    .image-placeholder-text {
-        .font-size(11);
-        bottom: 0;
-        color: @color-blue-dodger;
-        left: 0;
-        line-height: 1.333;
-        margin-bottom: 15%;
-        padding: 0 @indent__s;
-        position: absolute;
-        right: 0;
-        text-align: center;
-    }
-
-    .image-browse {
-
-    }
-
-    .product-image {
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 100%;
-        z-index: 1;
-    }
-
-    .spacer {
-        .css(height,  @image-gallery-placeholder__height);
-        .css(width, @image-gallery-placeholder__width);
-    }
 }
 
 .image.hidden-for-front .image-fade {
@@ -294,71 +295,48 @@
 
 // ToDo UI: Refactor below
 
-.image,
-.gallery .ui-state-highlight {
-    position: relative;
-    width: 17.874%;
-    border-radius: 4px;
-    float: left;
-    margin: 5px 1%;
-    overflow: hidden;
-    background: #fff;
-}
-
-.image.base-image .image-label {
-    visibility: visible;
-}
-.image.active {
-    box-shadow: 0 0 10px #2ea9ec;
-}
-
-//.image .actions {
-//    position: absolute;
-//    top: 0;
-//    right: 0;
-//    bottom: 0;
-//    left: 0;
-//    text-align: center;
-//    -webkit-touch-callout: none;
-//    -webkit-user-select: none;
-//    -khtml-user-select: none;
-//    -moz-user-select: none;
-//    -ms-user-select: none;
-//    user-select: none;
-//    z-index: 1;
+//.image,
+//.gallery .ui-state-highlight {
+//    position: relative;
+//    width: 17.874%;
+//    border-radius: 4px;
+//    float: left;
+//    margin: 5px 1%;
+//    overflow: hidden;
+//    background: #fff;
 //}
 
-.image .actions [class^="action-"],
-.image[data-image-hidden]:hover .actions [class^="action-"],
-.image.hidden-for-front:hover .actions [class^="action-"] {
-    visibility: hidden;
-}
-
-.image:hover .actions [class^="action-"],
-.image[data-image-hidden]:hover .actions .action-delete,
-.hidden-for-front:hover .actions .action-delete {
-    visibility: visible;
-}
-
-//.image .action-delete {
-//    position: absolute;
-//    top: 2px;
-//    right: 2px;
-//    z-index: 2;
+//.image.base-image .image-label {
+//    visibility: visible;
 //}
-
-.image .action-make-base {
-    position: absolute;
-    bottom: 20px;
-    left: 10%;
-    right: 10%;
-    padding: 5px;
-    margin: auto;
-}
-
-.image.base-image .action-make-base {
-    display: none;
-}
+//.image.active {
+//    box-shadow: 0 0 10px #2ea9ec;
+//}
+//
+//.image .actions [class^="action-"],
+//.image[data-image-hidden]:hover .actions [class^="action-"],
+//.image.hidden-for-front:hover .actions [class^="action-"] {
+//    visibility: hidden;
+//}
+//
+//.image:hover .actions [class^="action-"],
+//.image[data-image-hidden]:hover .actions .action-delete,
+//.hidden-for-front:hover .actions .action-delete {
+//    visibility: visible;
+//}
+//
+//.image .action-make-base {
+//    position: absolute;
+//    bottom: 20px;
+//    left: 10%;
+//    right: 10%;
+//    padding: 5px;
+//    margin: auto;
+//}
+//
+//.image.base-image .action-make-base {
+//    display: none;
+//}
 
 //.image .draggable-handle {
 //    position: absolute;
@@ -377,21 +355,16 @@
 //.image .draggable-handle:before {
 //    content: '';
 //}
-
-.gallery .image .action-make-base {
-    width: 70%;
-}
+//
+//.gallery .image .action-make-base {
+//    width: 70%;
+//}
 
 //.gallery .image .action-delete {
 //    top: 5px;
 //    right: 5px;
 //}
 
-.image.ui-sortable-placeholder {
-    background: #d7ebf5;
-    border: 1px dotted #93dbff;
-    visibility: visible !important;
-}
 
 //
 //  Gallery image panel
@@ -514,11 +487,11 @@
 
 //  ToDo UI: replace with styles by design
 
-.gallery {
-    //
-    //  Custom Multiselect
-    //  --------------------------------------
+//
+//  Custom Multiselect
+//  --------------------------------------
 
+.gallery {
     .multiselect-alt {
         margin: 0;
         padding: 0;
