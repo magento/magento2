@@ -65,11 +65,13 @@ class View extends AbstractPlugin
         $needInvalidation = $store->isObjectNew();
         $result = $proceed($store);
         if ($needInvalidation) {
-            $subject->addCommitCallback(
-                function () use ($store) {
-                    $this->clearIndex($store);
-                }
-            );
+//            // @todo move to before reindex
+//            $subject->addCommitCallback(
+//                function () use ($store) {
+//                    //if (transactionLevel == 0)
+//                    $this->clearIndex($store);
+//                }
+//            );
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
         return $result;
