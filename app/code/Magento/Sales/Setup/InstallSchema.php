@@ -1043,6 +1043,12 @@ class InstallSchema implements InstallSchemaInterface
             255,
             [],
             'Payment Method'
+        )->addColumn(
+            'total_refunded',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Total Refunded'
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['status']),
             ['status']
