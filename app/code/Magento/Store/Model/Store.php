@@ -9,6 +9,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Store model
  *
@@ -477,8 +479,7 @@ class Store extends AbstractModel implements
      * @return string|null
      * @deprecated
      */
-    protected function _getConfig($path)
-    {
+    protected function _getConfig($path) {
         return $this->getConfig($path);
     }
 

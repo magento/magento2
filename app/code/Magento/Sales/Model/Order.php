@@ -598,7 +598,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             self::STATE_PAYMENT_REVIEW,
             self::STATE_COMPLETE,
             self::STATE_CLOSED,
-            self::STATE_HOLDED,
+            self::STATE_HOLDED
         ];
         if (in_array($this->getState(), $notHoldableStates)) {
             return false;

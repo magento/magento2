@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n;
 
+
 /**
  *  Service Locator (instead DI container)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
