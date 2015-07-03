@@ -10,7 +10,7 @@
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
-                <item name="checkout_onepage" xsi:type="string">/checkout/onepage</item>
+                <item name="checkout_index" xsi:type="string">/checkout</item>
             </argument>
         </arguments>
     </type>
