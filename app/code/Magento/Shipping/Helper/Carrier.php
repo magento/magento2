@@ -156,7 +156,6 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isCountryInEU($countryCode, $storeId = null)
     {
-
         $euCountries = explode(
             ',',
             $this->scopeConfig->getValue(
