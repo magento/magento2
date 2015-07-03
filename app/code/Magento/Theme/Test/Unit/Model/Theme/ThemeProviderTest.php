@@ -62,8 +62,10 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\CollectionFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $themeFactory = $this->getMockBuilder('Magento\Theme\Model\ThemeFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $collection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
