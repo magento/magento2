@@ -121,7 +121,7 @@ define([
                 return;
             }
             $('[data-role=configurable-attributes-container]').html('');
-            $('[data-role=product-variations-matrix]').html($('[data-role=product-variations-matrix-tmp]').show().html());
+            $('[data-role=product-variations-matrix]').html($('[data-role=product-variations-matrix-tmp]').html());
             this.initImageUpload();
             $('[data-role=step-wizard-dialog]').trigger('closeModal');
         },
