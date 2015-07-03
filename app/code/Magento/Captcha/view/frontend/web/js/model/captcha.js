@@ -6,10 +6,11 @@
 /*global alert*/
 define(
     [
+        'jquery',
         'ko',
         'Magento_Captcha/js/action/refresh'
     ],
-    function(ko, refreshAction) {
+    function($, ko, refreshAction) {
         return function (captchaData) {
             return {
                 formId: captchaData.formId,
@@ -20,6 +21,7 @@ define(
                 isCaseSensitive: captchaData.isCaseSensitive,
                 imageHeight: captchaData.imageHeight,
                 refreshUrl: captchaData.refreshUrl,
+                isLoading: ko.observable(false),
 
                 getFormId: function () {
                     return this.formId;
@@ -70,7 +72,14 @@ define(
                     this.captchaValue(value);
                 },
                 refresh: function() {
-                    refreshAction(this.getRefreshUrl(), this.getFormId(), this.getImageSource());
+                    var refresh,
+                        self = this;
+                    this.isLoading(true);
+
+                    refresh = refreshAction(this.getRefreshUrl(), this.getFormId(), this.getImageSource());
+                    $.when(refresh).done(function() {
+                        self.isLoading(false);
+                    });
                 }
             };
         }
