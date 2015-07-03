@@ -23,6 +23,7 @@ class FileProviderTest extends \PHPUnit_Framework_TestCase
     {
         $fileFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File\CollectionFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->file = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File\Collection')
             ->disableOriginalConstructor()

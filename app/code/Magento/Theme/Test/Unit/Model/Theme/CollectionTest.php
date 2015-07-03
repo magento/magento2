@@ -46,6 +46,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->themeConfigFactory = $this->getMockBuilder('Magento\Framework\Config\ThemeFactory')
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->directory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
             ->disableOriginalConstructor()
