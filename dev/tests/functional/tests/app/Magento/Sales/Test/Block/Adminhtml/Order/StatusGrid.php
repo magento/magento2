@@ -57,4 +57,16 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
             throw new \Exception('Searched item was not found.');
         }
     }
+
+    /**
+     * Check on assign.
+     *
+     * @param array $filter
+     * @return bool
+     */
+    public function isAssign(array $filter)
+    {
+        $this->search($filter);
+        return $this->_rootElement->find($this->unassignLink)->isVisible();
+    }
 }

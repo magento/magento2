@@ -51,6 +51,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * Validation
      *
      * @param mixed $value
