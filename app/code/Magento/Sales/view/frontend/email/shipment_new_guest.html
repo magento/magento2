@@ -60,6 +60,7 @@
                 </tr>
             </table>
             {{/depend}}
+            {{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
@@ -87,7 +88,6 @@
                 </tr>
             </table>
             {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
-            {{block class='Magento\\Framework\\View\\Element\\Template' area='frontend' template='Magento_Sales::email/shipment/track.phtml' shipment=$shipment order=$order}}
         </td>
     </tr>
 </table>

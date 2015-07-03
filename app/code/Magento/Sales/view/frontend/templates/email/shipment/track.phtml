@@ -10,7 +10,8 @@
 <?php $_shipment = $block->getShipment() ?>
 <?php $_order = $block->getOrder() ?>
 <?php if ($_shipment && $_order && $_shipment->getAllTracks()): ?>
-<table>
+<br />
+<table class="shipment-track">
     <thead>
         <tr>
             <th><?= __('Shipped By') ?></th>
@@ -18,9 +19,9 @@
         </tr>
     </thead>
     <tbody>
-    <?php $i = 0; foreach ($_shipment->getAllTracks() as $_item): $i++ ?>
-        <tr <?= $i % 2 ? ' ' : '' ?>>
-            <td><?= $block->escapeHtml($_item->getTitle()) ?></td>
+    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
+        <tr>
+            <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
             <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
         </tr>
     <?php endforeach ?>

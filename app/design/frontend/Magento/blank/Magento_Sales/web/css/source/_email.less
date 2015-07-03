@@ -13,6 +13,27 @@
 
 .order-details {
     width: 100%;
+
+    tr {
+        > td {
+            padding: @email-content__padding__base;
+            width: 50%;
+
+            h3 {
+                margin-top: @email-content__padding__base;
+            }
+        }
+
+        & + tr {
+            > td {
+                padding: 0 @email-content__padding__base @email-content__padding__base;
+
+                h3 {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
 }
 
 //  Remove address and phone number link color on iOS
@@ -23,6 +44,33 @@
     .order-details {
         td {
             display: block;
+        }
+    }
+}
+
+//
+//  Shipment Tracking
+//  --------------------------------------
+
+.shipment-track {
+    .table(@table__width, 0);
+
+    thead,
+    tbody {
+        > tr {
+            > th,
+            > td {
+                background-color: @color-gray95;
+                padding: @email-content__padding__base;
+                width: 50%;
+            }
+
+            & + tr {
+                th,
+                td {
+                    padding-top: 0;
+                }
+            }
         }
     }
 }
