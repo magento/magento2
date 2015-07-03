@@ -82,6 +82,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     *
      */
     public function testCategoryMove()
     {
@@ -119,7 +122,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     * @depends testReindexAll
      */
     public function testCategoryDelete()
     {
@@ -147,11 +150,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     *
      */
     public function testCategoryCreate()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(3);
 
@@ -193,8 +196,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         foreach ($categories as $categoryId) {
             $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
-
-        $categorySixth->delete();
     }
 
     /**

@@ -44,7 +44,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->with('write')
+            ->with(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
             ->willReturn($this->adapter);
         $this->indexScopeResolver = $this->getMockBuilder('\Magento\Search\Model\ScopeResolver\IndexScopeResolver')
             ->setMethods(['resolve'])
@@ -58,7 +58,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\Indexer\IndexStructure',
+            \Magento\CatalogSearch\Model\Indexer\IndexStructure::class,
             [
                 'resource' => $this->resource,
                 'indexScopeResolver' => $this->indexScopeResolver,

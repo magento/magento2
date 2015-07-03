@@ -12,9 +12,6 @@ namespace Magento\Catalog\Block\Product\ProductList;
  */
 class RelatedTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @magentoDbIsolation disabled
-     */
     public function testAll()
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */

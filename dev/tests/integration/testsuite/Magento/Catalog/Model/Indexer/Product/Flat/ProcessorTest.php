@@ -85,7 +85,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php

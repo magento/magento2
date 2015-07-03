@@ -297,9 +297,6 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($this->_model->getCustomOptions()));
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     public function testCanBeShowInCategory()
     {
         $this->_model->load(1);
@@ -308,9 +305,6 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue((bool)$this->_model->canBeShowInCategory(3));
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     public function testGetAvailableInCategories()
     {
         $this->assertEquals([], $this->_model->getAvailableInCategories());
