@@ -4,62 +4,60 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Block\Onepage\Payment;
+namespace Magento\Checkout\Test\Block\Onepage;
 
-use Magento\Mtf\Block\Form;
+use Magento\Mtf\Block\Block;
 use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
- * Class Methods
- * One page checkout status payment method block
- *
+ * Checkout payment block.
  */
-class Methods extends Form
+class Payment extends Block
 {
     /**
-     * Payment method input selector
+     * Payment method input selector.
      *
      * @var string
      */
     protected $paymentMethodInput = '#p_method_%s';
 
     /**
-     * Labels for payment methods
+     * Labels for payment methods.
      *
      * @var string
      */
     protected $paymentMethodLabels = '[for^=p_method_]';
 
     /**
-     * Label for payment methods
+     * Label for payment methods.
      *
      * @var string
      */
     protected $paymentMethodLabel = '[for=%s]';
 
     /**
-     * Continue checkout button
-     *
-     * @var string
-     */
-    protected $continue = '#payment-buttons-container button';
-
-    /**
-     * Wait element
+     * Wait element.
      *
      * @var string
      */
     protected $waitElement = '.loading-mask';
 
     /**
-     * Purchase order number selector
+     * Purchase order number selector.
      *
      * @var string
      */
     protected $purchaseOrderNumber = '#po_number';
 
     /**
-     * Select payment method
+     * Selector for active payment method.
+     *
+     * @var string
+     */
+    protected $activePaymentMethodSelector = '.payment-method._active';
+
+    /**
+     * Select payment method.
      *
      * @param array $payment
      * @param CreditCard|null $creditCard
@@ -91,20 +89,17 @@ class Methods extends Form
     }
 
     /**
-     * Press "Continue" button
+     * Get selected payment method block.
      *
-     * @return void
+     * @return \Magento\Checkout\Test\Block\Onepage\Payment\Method
      */
-    public function clickContinue()
+    public function getSelectedPaymentMethodBlock()
     {
-        $this->_rootElement->find($this->continue)->click();
-        $browser = $this->browser;
-        $selector = $this->waitElement;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() == false ? true : null;
-            }
+        $element = $this->_rootElement->find($this->activePaymentMethodSelector);
+
+        return $this->blockFactory->create(
+            '\Magento\Checkout\Test\Block\Onepage\Payment\Method',
+            ['element' => $element]
         );
     }
 }

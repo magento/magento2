@@ -38,6 +38,13 @@ class Method extends Block
     protected $waitElement = '.loading-mask';
 
     /**
+     * Block wait element
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
+
+    /**
      * Select shipping method
      *
      * @param array $method
@@ -45,9 +52,9 @@ class Method extends Block
      */
     public function selectShippingMethod(array $method)
     {
-        sleep(5);
+        sleep(3);
         $selector = sprintf($this->shippingMethod, $method['shipping_method'], $method['shipping_service']);
-        $this->waitForElementVisible($selector, Locator::SELECTOR_XPATH);
+        $this->waitForElementNotVisible($this->blockWaitElement);
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 

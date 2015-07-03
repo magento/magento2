@@ -90,7 +90,7 @@ class Login extends Form
         $mapping = $this->dataMapping($data);
         $login['email'] = $mapping['email'];
         $this->_fill($login);
-        $this->waitForElementVisible('._block-content-loading');
+        sleep(3);
         $this->waitForElementNotVisible('._block-content-loading');
         $password['password'] = $mapping['password'];
         $this->_fill($password);
