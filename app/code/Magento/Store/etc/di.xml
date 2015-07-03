@@ -295,7 +295,7 @@
     </virtualType>
     <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
         <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</argument>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Js\JShrink</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
