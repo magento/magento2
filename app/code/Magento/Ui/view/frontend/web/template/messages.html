@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="messages" data-bind="visible: isVisible(), click: removeAll">
+<div data-role="checkout-messages" class="messages" data-bind="visible: isVisible(), click: removeAll">
     <!-- ko foreach: errorList -->
     <div class="message message-error error">
         <div data-ui-id="checkout-cart-validationmessages-message-error" data-bind="text: $data"></div>
