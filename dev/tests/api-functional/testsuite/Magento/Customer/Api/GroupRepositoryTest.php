@@ -873,8 +873,8 @@ class GroupRepositoryTest extends WebapiAbstract
                     'id' => 0,
                     'code' => 'NOT LOGGED IN',
                     'tax_class_id' => 3,
-                    'tax_class_name' => 'Retail Customer',
-                ],
+                    'tax_class_name' => 'Retail Customer'
+                ]
             ],
             [
                 'code',
@@ -883,8 +883,8 @@ class GroupRepositoryTest extends WebapiAbstract
                     'id' => 1,
                     'code' => 'General',
                     'tax_class_id' => 3,
-                    'tax_class_name' => 'Retail Customer',
-                ],
+                    'tax_class_name' => 'Retail Customer'
+                ]
             ],
             [
                 'id',
@@ -893,8 +893,8 @@ class GroupRepositoryTest extends WebapiAbstract
                     'id' => 2,
                     'code' => 'Wholesale',
                     'tax_class_id' => 3,
-                    'tax_class_name' => 'Retail Customer',
-                ],
+                    'tax_class_name' => 'Retail Customer'
+                ]
             ],
             [
                 'code',
@@ -903,9 +903,9 @@ class GroupRepositoryTest extends WebapiAbstract
                     'id' => 3,
                     'code' => 'Retailer',
                     'tax_class_id' => 3,
-                    'tax_class_name' => 'Retail Customer',
-                ],
-            ],
+                    'tax_class_name' => 'Retail Customer'
+                ]
+            ]
         ];
     }
 

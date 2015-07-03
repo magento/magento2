@@ -5,11 +5,12 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -165,10 +166,10 @@ class Application
         \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
-            \Magento\Framework\App\State::PARAM_MODE => $appMode,
+            \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
-        $driverPool = new \Magento\Framework\Filesystem\DriverPool();
-        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool();
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
@@ -318,14 +319,14 @@ class Application
                                 'Magento\Framework\Logger\Handler\Exception',
                                 ['filePath' => $this->installDir]
                             ),
-                            'filePath' => $this->installDir,
+                            'filePath' => $this->installDir
                         ]
                     ),
                     'debug'  => $objectManager->create(
                         'Magento\Framework\Logger\Handler\Debug',
                         ['filePath' => $this->installDir]
                     ),
-                ],
+                ]
             ]
         );
         $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
@@ -337,8 +338,9 @@ class Application
             'preferences' => [
                 'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
                 'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
-                'Magento\Framework\Mail\Template\TransportBuilder' => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
-            ],
+                'Magento\Framework\Mail\Template\TransportBuilder'
+                    => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
+            ]
         ];
         if ($this->loadTestExtensionAttributes) {
             $objectManagerConfiguration = array_merge(
@@ -362,9 +364,9 @@ class Application
                     'integration_tests' => [
                         'instance' => 'Magento\TestFramework\Event\Magento',
                         'method' => 'initStoreAfter',
-                        'name' => 'integration_tests',
-                    ],
-                ],
+                        'name' => 'integration_tests'
+                    ]
+                ]
             ]
         );
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);

@@ -161,7 +161,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         'identifier' => 'unique_title_123',
         'stores' => ['0'],
         'is_active' => '1',
-        'content' => '"><script>alert("cookie: "+document.cookie)</script>',
+        'content' => '"><script>alert("cookie: "+document.cookie)</script>'
         ];
 
         $filteredPostData = [
@@ -169,7 +169,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'identifier' => 'unique_title_123',
             'stores' => ['0'],
             'is_active' => '1',
-            'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;',
+            'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;'
         ];
 
         $this->dataProcessorMock->expects($this->any())
@@ -214,7 +214,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->sessionMock->expects($this->atLeastOnce())->method('setFormData')->with(false);
 
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
@@ -222,7 +222,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
@@ -254,7 +254,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with(__('This block no longer exists.'));
 
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }

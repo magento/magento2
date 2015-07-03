@@ -75,7 +75,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
                 'getTitle',
                 'getView',
                 'getResultRedirectFactory',
-                'getResultFactory',
+                'getResultFactory'
             ],
             [],
             '',

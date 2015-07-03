@@ -10,13 +10,13 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model
@@ -799,33 +799,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->setIsVirtual($this->getIsVirtual());
 
         parent::beforeSave();
-    }
-
-    /**
-     * Save related items
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-
-        if (null !== $this->_addresses) {
-            $this->getAddressesCollection()->save();
-        }
-
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-
-        if (null !== $this->_payments) {
-            $this->getPaymentsCollection()->save();
-        }
-
-        if (null !== $this->_currentPayment) {
-            $this->getPayment()->save();
-        }
-        return $this;
     }
 
     /**
@@ -2494,6 +2467,46 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->collectTotals()->save();
         }
         return parent::_afterLoad();
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function addressCollectionWasSet()
+    {
+        return null !== $this->_addresses;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function paymentsCollectionWasSet()
+    {
+        return null !== $this->_payments;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function currentPaymentWasSet()
+    {
+        return null !== $this->_currentPayment;
     }
 
     /**

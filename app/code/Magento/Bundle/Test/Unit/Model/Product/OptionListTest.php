@@ -71,7 +71,7 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
                 'optionFactory' => $this->optionFactoryMock,
                 'linkList' => $this->linkListMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesFactoryMock,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesFactoryMock
             ]
         );
     }

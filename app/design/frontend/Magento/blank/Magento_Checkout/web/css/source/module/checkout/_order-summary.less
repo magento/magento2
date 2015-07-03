@@ -1,0 +1,171 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkout-summary__background-color: @color-white-smoke;
+@checkout-summary__padding: 22px @indent__l;
+
+@checkout-summary-title__margin: @indent__s;
+@checkout-summary-mark-value__color: @color-gray60;
+
+@checkout-summary-items__max-height: 370px;
+@checkout-summary-items__padding: 15px;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    //
+    //  Order Summary
+    //  ---------------------------------------------
+
+    .opc-block-summary {
+        &:extend(.abs-add-box-sizing all);
+        .css(background, @checkout-summary__background-color);
+        .css(padding, @checkout-summary__padding);
+        margin: 0 0 @indent__base;
+
+        > .title {
+            &:extend(.abs-checkout-title all);
+            display: block;
+        }
+
+        //  Totals table
+        .table-totals {
+            &:extend(.abs-sidebar-totals all);
+        }
+
+        .mark {
+            .value {
+                .css(color, @checkout-summary-mark-value__color);
+                display: block;
+            }
+        }
+
+        .grand.incl {
+            & + .grand.excl {
+                .mark,
+                .amount {
+                    border-top: 0;
+                    .font-size(14);
+                    padding-top: 0;
+                    strong {
+                        font-weight: @font-weight__regular;
+                    }
+                }
+            }
+        }
+
+        .not-calculated {
+            font-style: italic;
+        }
+
+        //
+        //  Items list
+        //  ---------------------------------------------
+
+        //  Block title
+        .items-in-cart {
+            > .title {
+                border-bottom: @border-width__base solid @border-color__base;
+                .css(padding, @indent__s @indent__xl @indent__s 0);
+                cursor: pointer;
+                .icon-font(
+                @icon-down,
+                @_icon-font-size: 30px,
+                @_icon-font-line-height: 12px,
+                @_icon-font-text-hide: true,
+                @_icon-font-margin: 3px 0 0,
+                @_icon-font-position: after,
+                @_icon-font-display: block
+                );
+                margin-bottom: 0;
+                position: relative;
+                &:after {
+                    position: absolute;
+                    right: 0;
+                    top: @indent__s;
+                }
+                strong {
+                    .font-size(18);
+                    font-weight: @font-weight__light;
+                    margin: 0;
+                }
+            }
+            &.active {
+                > .title {
+                    .icon-font-symbol(
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
+                    );
+                }
+            }
+            .product {
+                position: relative;
+            }
+        }
+
+        //  Cart items
+        .minicart-items-wrapper {
+            .css(margin, 0 -(@checkout-summary-items__padding) 0 0);
+            .css(max-height, @checkout-summary-items__max-height);
+            .css(padding, @checkout-summary-items__padding @checkout-summary-items__padding 0 0);
+            border: 0;
+        }
+        .column.main & {
+            .product-item {
+                margin: 0;
+                padding-left: 0;
+            }
+        }
+        .product-item {
+            .product-item-inner {
+                display: table;
+                margin: 0 0 @indent__s;
+                width: 100%;
+            }
+            .product-item-name-block {
+                display: table-cell;
+                padding-right: @indent__xs;
+                text-align: left;
+            }
+            .subtotal {
+                display: table-cell;
+                text-align: right;
+            }
+            .price {
+                .font-size(16);
+                font-weight: @font-weight__regular;
+            }
+            .price-including-tax {
+                & + .price-excluding-tax {
+                    margin: 0;
+                    .price {
+                        .font-size(10);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .opc-summary-wrapper {
+        .modal-header {
+            .action-close {
+                display: none;
+            }
+        }
+    }
+}

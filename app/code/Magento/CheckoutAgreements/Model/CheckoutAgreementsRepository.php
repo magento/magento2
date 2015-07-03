@@ -8,16 +8,16 @@
 
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
-use Magento\CheckoutAgreements\Model\Resource\Agreement as AgreementResource;
-use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
+use Magento\CheckoutAgreements\Model\Resource\Agreement as AgreementResource;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 
 /**
  * Checkout agreement repository.
