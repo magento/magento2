@@ -126,6 +126,11 @@
                     <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
                 </div>
+                <!-- ko if: errorValidationMessage().length > 0 -->
+                <div class="message notice">
+                    <span><!-- ko text: $t(errorValidationMessage())--><!-- /ko --></span>
+                </div>
+                <!-- /ko -->
                 <div class="actions-toolbar" id="shipping-method-buttons-container">
                     <div class="primary">
                         <button data-role="opc-continue" type="submit" class="button action continue primary">
