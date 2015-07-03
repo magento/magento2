@@ -36,7 +36,11 @@ class CacheEnableManageCommandTest extends CacheManageCommandTestAbstract
         $this->assertEquals($output, $commandTester->getDisplay());
     }
 
-    public function testExecuteDataProvider() {
+    /**
+     * @return array
+     */
+    public function testExecuteDataProvider()
+    {
         return [
             'no parameters' => [
                 [],

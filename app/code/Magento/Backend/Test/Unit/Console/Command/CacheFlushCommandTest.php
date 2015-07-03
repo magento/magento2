@@ -17,25 +17,55 @@ class CacheFlushManageCommandTest extends CacheManageCommandTestAbstract
         $this->command = new CacheFlushCommand($this->cacheManager);
     }
 
-    public function testExecute()
+    /**
+     * @param $param
+     * @param $types
+     * @param $output
+     * @dataProvider testExecuteDataProvider
+     */
+    public function testExecute($param, $types, $output)
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('flush')->with(['A', 'B']);
-        $param = ['types' => ['A', 'B']];
+        $this->cacheManager->expects($this->once())->method('flush')->with($types);
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
-        $expect = 'Flushed cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL;
-        $this->assertEquals($expect, $commandTester->getDisplay());
+
+        $this->assertEquals($output, $commandTester->getDisplay());
     }
 
-    public function testExecuteAllCacheType()
+    /**
+     * @return array
+     */
+    public function testExecuteDataProvider()
     {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('flush')->with(['A', 'B', 'C']);
-        $param = ['--all' => true];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-        $expect = 'Flushed cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL . 'C' . PHP_EOL;
-        $this->assertEquals($expect, $commandTester->getDisplay());
+        return [
+            'no parameters' => [
+                [],
+                ['A', 'B', 'C'],
+                $this->getExpectedOutput(['A', 'B', 'C']),
+            ],
+            'explicit --all' => [
+                ['--all' => true, 'types' => 'A'],
+                ['A', 'B', 'C'],
+                $this->getExpectedOutput(['A', 'B', 'C']),
+            ],
+            'specific types' => [
+                ['types' => ['A', 'B']],
+                ['A', 'B'],
+                $this->getExpectedOutput(['A', 'B']),
+            ],
+        ];
+    }
+
+    /**
+     * Get expected output based on set of types operated on
+     *
+     * @param array $types
+     * @return string
+     */
+    public function getExpectedOutput(array $types)
+    {
+        return 'Flushed cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }
 }

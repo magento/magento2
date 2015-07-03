@@ -9,13 +9,8 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheDisableManageCommandTest extends CacheManageCommandTestAbstract
+class CacheDisableCommandTest extends CacheManageCommandTestAbstract
 {
-    /**
-     * @var AbstractCacheManageCommand
-     */
-    protected $command;
-
     public function setUp()
     {
         parent::setUp();
@@ -40,7 +35,10 @@ class CacheDisableManageCommandTest extends CacheManageCommandTestAbstract
         $this->assertEquals($output, $commandTester->getDisplay());
     }
 
-    public function testExecuteDataProvider ()
+    /**
+     * @return array
+     */
+    public function testExecuteDataProvider()
     {
         return [
             'no parameters' => [
