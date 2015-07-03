@@ -25,7 +25,7 @@
             <div class="block block-guest">
                 <div class="block-title">
                     <strong id="block-guest-heading" role="heading" aria-level="2">
-                    <!--ko text: $t('Checkout as a Guest')--><!--/ko-->
+                    <!--ko text: $t('Check Out as a Guest')--><!--/ko-->
                     </strong>
                 </div>
                 <div class="block-content" aria-labelledby="block-guest-heading">
@@ -37,11 +37,11 @@
                             <!-- ko ifnot: isGuestCheckoutAllowed -->
                                 <!-- ko if: isCustomerLoginRequired -->
                                     <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
-                                    <button  data-bind="click: setCheckoutMethod"  data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"registerUrl"}'><span data-bind="text: $t('Register')"></span></button>
+                                    <button data-bind="click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"registerUrl"}'><span data-bind="text: $t('Create an Account')"></span></button>
                                 <!-- /ko -->
                                 <!-- ko ifnot: isCustomerLoginRequired -->
                                     <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
-                                    <button  data-bind="click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Register')"></span></button>
+                                    <button data-bind="click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Create an Account')"></span></button>
                                 <!-- /ko -->
                             <!-- /ko -->
                         </div>
@@ -59,7 +59,7 @@
                           method="post"
                           data-mage-init='{"validation":{}}'>
                         <fieldset class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
-                            <div class="field note" data-bind="text: $t('Already registered? Please log in below:')"></div>
+                            <div class="field note" data-bind="text: $t('Already registered? Please sign in below:')"></div>
                             <div class="field email required">
                                 <label class="label" for="login-email"><span data-bind="text: $t('Email')"></span></label>
                                 <div class="control">

@@ -26,7 +26,7 @@ class Menu extends Block
      *
      * @var string
      */
-    protected $subMenu = './/li[@role="menu-item" and a[span="%s"]]/div[@class="submenu"]';
+    protected $subMenu = './/li[@role="menu-item" and a[span="%s"]]/div[contains(@class, "submenu")]';
 
     /**
      * Submenu item selector.

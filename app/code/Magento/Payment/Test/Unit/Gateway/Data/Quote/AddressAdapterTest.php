@@ -32,8 +32,8 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
     public function testGetRegion()
     {
         $expected = 'California';
-        $this->quoteAddressMock->expects($this->once())->method('getRegion')->willReturn($expected);
-        $this->assertEquals($expected, $this->model->getRegion());
+        $this->quoteAddressMock->expects($this->once())->method('getRegionCode')->willReturn($expected);
+        $this->assertEquals($expected, $this->model->getRegionCode());
     }
 
     public function testGetCountryId()

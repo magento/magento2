@@ -47,8 +47,7 @@ define([
             _.bindAll(this, 'reset');
 
             this._super();
-
-            this.initialValue = this.getInititalValue();
+            this.initialValue = this.getInitialValue();
 
             this.value(this.initialValue);
 
@@ -97,7 +96,7 @@ define([
          *
          * @returns {*} Elements' value.
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var values = [this.value(), this.default],
                 value;
 

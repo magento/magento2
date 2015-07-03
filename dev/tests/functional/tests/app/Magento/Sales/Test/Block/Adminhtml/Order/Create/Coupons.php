@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
-use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Block\Form;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Client\Locator;
 

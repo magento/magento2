@@ -16,7 +16,7 @@ class Index extends \Magento\Checkout\Controller\Onepage
     public function execute()
     {
         if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->canOnepageCheckout()) {
-            $this->messageManager->addError(__('The onepage checkout is disabled.'));
+            $this->messageManager->addError(__('One-page checkout is turned off.'));
             return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
         $quote = $this->getOnepage()->getQuote();

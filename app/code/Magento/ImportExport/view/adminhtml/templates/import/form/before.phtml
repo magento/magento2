@@ -32,6 +32,12 @@ require(['jquery', 'prototype'], function(jQuery){
         entityBehaviors: <?php echo $block->getEntityBehaviors() ?>,
 
         /**
+         * Base url
+         * @type {string}
+         */
+        sampleFilesBaseUrl: '<?php echo $block->getBaseUrl() ?>' + 'pub/',
+
+        /**
          * Reset selected index
          * @param {string} elementId
          */
@@ -93,6 +99,23 @@ require(['jquery', 'prototype'], function(jQuery){
         },
 
         /**
+         * Show/hide sample file link
+         * @param {string} entityId
+         */
+        showSampleFile: function(entityId) {
+            var sampleFileSpan = jQuery('#sample-file-span');
+            if (entityId) {
+                var sampleFileLink = this.sampleFilesBaseUrl + entityId + '.csv';
+                jQuery('#sample-file-link').attr('href', sampleFileLink);
+                if (sampleFileSpan.is(':hidden')) {
+                    sampleFileSpan.show();
+                }
+            } else {
+                sampleFileSpan.hide();
+            }
+        },
+
+        /**
          * Handle value change in entity type selector
          */
         handleEntityTypeSelector: function() {
@@ -100,9 +123,11 @@ require(['jquery', 'prototype'], function(jQuery){
             if (entity && entity.val()) {
                 this.showBehavior(entity.val());
                 this.showUploadFile(true);
+                this.showSampleFile(entity.val());
             } else {
                 this.showBehavior(false);
                 this.showUploadFile(false);
+                this.showSampleFile(false);
             }
         },
 

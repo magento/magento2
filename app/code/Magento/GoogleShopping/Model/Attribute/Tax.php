@@ -165,7 +165,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 $ratesTotal += count($regions);
                 if ($ratesTotal > self::RATES_MAX) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Google shopping only supports %1 tax rates per product', self::RATES_MAX)
+                        __('Google shopping only supports %1 tax rates per product.', self::RATES_MAX)
                     );
                 }
                 foreach ($regions as $region) {

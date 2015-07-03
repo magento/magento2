@@ -86,4 +86,24 @@ class QuoteAdapter implements OrderAdapterInterface
             ['address' => $this->quote->getShippingAddress()]
         );
     }
+
+    /**
+     * Returns order store id
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        return $this->quote->getStoreId();
+    }
+
+    /**
+     * Returns order id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->quote->getId();
+    }
 }

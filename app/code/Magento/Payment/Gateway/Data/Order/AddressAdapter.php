@@ -28,9 +28,9 @@ class AddressAdapter implements AddressAdapterInterface
      *
      * @return string
      */
-    public function getRegion()
+    public function getRegionCode()
     {
-        return $this->address->getRegion();
+        return $this->address->getRegionCode();
     }
 
     /**

@@ -22,11 +22,19 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('We couldn\'t send the email order.'));
+                $this->messageManager->addError(__('We can\'t send the email order right now.'));
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             }
             return $this->resultRedirectFactory->create()->setPath('sales/order/view', ['order_id' => $order->getId()]);
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::email');
     }
 }

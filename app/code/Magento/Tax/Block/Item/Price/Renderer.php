@@ -224,7 +224,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
         $totalAmount = $item->getRowTotal()
             - $item->getDiscountAmount()
             + $item->getTaxAmount()
-            + $item->getHiddenTaxAmount();
+            + $item->getDiscountTaxCompensationAmount();
 
         return $totalAmount;
     }
@@ -240,7 +240,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
         $totalAmount = $item->getBaseRowTotal()
             - $item->getBaseDiscountAmount()
             + $item->getBaseTaxAmount()
-            + $item->getBaseHiddenTaxAmount();
+            + $item->getBaseDiscountTaxCompensationAmount();
 
         return $totalAmount;
     }

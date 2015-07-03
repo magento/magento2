@@ -147,8 +147,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Set Type for COUNT SQL Select
+     * @codeCoverageIgnore
      *
-     * @codeCoverageIgnoreStart
      * @param int $type
      * @return $this
      */
@@ -160,6 +160,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Set product entity id
+     * @codeCoverageIgnore
      *
      * @param string $entityId
      * @return $this
@@ -172,6 +173,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Get product entity id
+     * @codeCoverageIgnore
      *
      * @return int
      */
@@ -182,6 +184,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Set product entity table name
+     * @codeCoverageIgnore
      *
      * @param string $value
      * @return $this
@@ -194,6 +197,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Get product entity table name
+     * @codeCoverageIgnore
      *
      * @return string
      */
@@ -204,6 +208,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Get product attribute set  id
+     * @codeCoverageIgnore
      *
      * @return int
      */
@@ -214,6 +219,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * Set product attribute set id
+     * @codeCoverageIgnore
      *
      * @param int $value
      * @return $this
@@ -223,7 +229,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->_productEntityAttributeSetId = $value;
         return $this;
     }
-    //@codeCoverageIgnoreEnd
 
     /**
      * Join fields

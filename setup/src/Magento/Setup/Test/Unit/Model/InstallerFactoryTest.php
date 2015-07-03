@@ -88,7 +88,7 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($returnValueMap));
 
-        $log = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
+        $log = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $resourceFactoryMock = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);
         $resourceFactoryMock
             ->expects($this->any())

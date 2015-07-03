@@ -28,10 +28,13 @@ class ConfigsApplyFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         foreach ($configs['config'] as $config) {
+            $backendModel = isset($config['backend_model'])
+                ?
+                $config['backend_model'] : 'Magento\Framework\App\Config\Value';
             /**
-             * @var \Magento\Framework\App\Config\Value $configData
+             * @var \Magento\Framework\App\Config\ValueInterface $configData
              */
-            $configData = $this->fixtureModel->getObjectManager()->create('Magento\Framework\App\Config\Value');
+            $configData = $this->fixtureModel->getObjectManager()->create($backendModel);
             $configData->setPath($config['path'])
                 ->setScope($config['scope'])
                 ->setScopeId($config['scopeId'])

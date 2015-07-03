@@ -11,9 +11,9 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
- * Class ResourcesPopup
  * Integration resources popup container.
  */
 class ResourcesPopup extends Form
@@ -38,6 +38,13 @@ class ResourcesPopup extends Form
      * @var string
      */
     protected $content = '#integrations-activate-permissions-content';
+
+    /**
+     * Css selector for tree element.
+     *
+     * @var string
+     */
+    protected $tree = '[data-role="tree-resources-container"]';
 
     /**
      * @constructor
@@ -90,5 +97,16 @@ class ResourcesPopup extends Form
     public function clickReauthorizeButton()
     {
         $this->_rootElement->find($this->reauthorizeButtonSelector)->click();
+    }
+
+    /**
+     * Get tree structure for selected nodes.
+     *
+     * @param int|null $level
+     * @return array
+     */
+    public function getStructure($level = null)
+    {
+        return $this->_rootElement->find($this->tree, Locator::SELECTOR_CSS, 'jquerytree')->getStructure($level);
     }
 }

@@ -14,9 +14,9 @@ define([
     var inputNode = {
         parent: '${ $.$data.parentName }',
         type: 'form.input',
-        name: '<%= $data.index %>_input',
-        dataScope: '<%= $data.customEntry %>',
-        customScope: '<%= $data.customScope %>',
+        name: '${ $.$data.index }_input',
+        dataScope: '${ $.$data.customEntry }',
+        customScope: '${ $.$data.customScope }',
         sortOrder: {
             after: '${ $.$data.name }'
         },
@@ -157,6 +157,7 @@ define([
         initFilter: function () {
             var filter = this.filterBy;
 
+            this.filter(this.default, filter.field);
             this.setLinks({
                 filter: filter.target
             }, 'imports');
@@ -181,7 +182,7 @@ define([
          *
          * @returns {Number|String}
          */
-        getInititalValue: function () {
+        getInitialValue: function () {
             var value = this._super();
 
             if (value !== '') {

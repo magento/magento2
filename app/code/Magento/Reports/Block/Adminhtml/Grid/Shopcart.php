@@ -28,6 +28,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * StoreIds setter
+     * @codeCoverageIgnore
      *
      * @param array $storeIds
      * @return $this

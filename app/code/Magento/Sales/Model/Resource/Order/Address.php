@@ -117,7 +117,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         $warnings = $this->_validator->validate($object);
         if (!empty($warnings)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot save address:\n%1", implode("\n", $warnings))
+                __("We can't save the address:\n%1", implode("\n", $warnings))
             );
         }
         return $this;

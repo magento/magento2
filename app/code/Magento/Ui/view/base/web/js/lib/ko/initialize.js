@@ -14,11 +14,11 @@ define([
     './bind/optgroup',
     './bind/fadeVisible',
     './bind/mage-init',
+    './bind/after-render',
     './extender/observable_array'
-], function(ko, templateEngine) {
+], function (ko, templateEngine) {
     'use strict';
 
     ko.setTemplateEngine(templateEngine);
     ko.applyBindings();
-
 });

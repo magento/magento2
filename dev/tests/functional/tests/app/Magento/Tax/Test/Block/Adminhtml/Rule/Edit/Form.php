@@ -262,27 +262,6 @@ class Form extends FormInterface
     }
 
     /**
-     * Getting all options in Tax Rate multi select list.
-     *
-     * @return array
-     */
-    public function getAllTaxRates()
-    {
-        $browser = $this->browser;
-        $taxRateMultiSelectList = $this->taxRateMultiSelectList;
-        $browser->waitUntil(
-            function () use ($browser, $taxRateMultiSelectList) {
-                $element = $browser->find($taxRateMultiSelectList);
-                return $element->isVisible() ? true : null;
-            }
-        );
-        /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRates */
-        $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
-
-        return $taxRates->getAllValues();
-    }
-
-    /**
      * Click 'Add New' button.
      *
      * @param SimpleElement $element
@@ -297,5 +276,47 @@ class Form extends FormInterface
             }
         );
         $element->find($this->addNewButton)->click();
+    }
+
+    /**
+     * Wait until tax rate element appears.
+     */
+    protected function waitForTaxRates()
+    {
+        $browser = $this->browser;
+        $taxRateMultiSelectList = $this->taxRateMultiSelectList;
+        $browser->waitUntil(
+            function () use ($browser, $taxRateMultiSelectList) {
+                $element = $browser->find($taxRateMultiSelectList);
+                return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Getting all options in Tax Rate multi select list.
+     *
+     * @return array
+     */
+    public function getAllTaxRates()
+    {
+        $this->waitForTaxRates();
+        /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRates */
+        $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+
+        return $taxRates->getAllValues();
+    }
+
+    /**
+     * Check whether tax rate is visible in the list.
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function isTaxRateAvailable($value)
+    {
+        /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRate */
+        $taxRate = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+        return $taxRate->isValueVisible($value);
     }
 }

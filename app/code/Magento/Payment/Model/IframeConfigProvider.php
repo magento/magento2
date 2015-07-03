@@ -22,6 +22,11 @@ use Psr\Log\LoggerInterface;
 class IframeConfigProvider implements ConfigProviderInterface
 {
     /**
+     * Default length of Cc year field
+     */
+    const DEFAULT_YEAR_LENGTH = 2;
+
+    /**
      * @var Repository
      */
     protected $assetRepo;
@@ -92,6 +97,7 @@ class IframeConfigProvider implements ConfigProviderInterface
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],
                     'saveOrderUrl' => [$this->methodCode => $this->getSaveOrderUrl()],
+                    'expireYearLength' => [$this->methodCode => $this->getExpireDateYearLength()]
                 ]
             ]
         ];
@@ -113,6 +119,16 @@ class IframeConfigProvider implements ConfigProviderInterface
         }
 
         return  $result;
+    }
+
+    /**
+     * Returns Cc expire year length
+     *
+     * @return int
+     */
+    protected function getExpireDateYearLength()
+    {
+         return (int)$this->getMethodConfigData('cc_year_length') ?: self::DEFAULT_YEAR_LENGTH;
     }
 
     /**

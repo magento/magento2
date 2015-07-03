@@ -111,13 +111,13 @@
     <field name="is_wysiwyg_enabled" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_used_for_promo_rules" is_required="">
+    <field name="is_used_for_promo_rules" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
     <field name="search_weight" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="options" is_required="" source="Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options">
+    <field name="options" is_required="" group="properties" source="Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options">
       <default_value xsi:type="null"/>
     </field>
     <field name="default_value_text" group="advanced-properties"/>

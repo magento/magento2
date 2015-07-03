@@ -14,25 +14,45 @@ class SuggestedAttributeList
      *
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
      */
-    protected $_attributeColFactory;
+    protected $attributeCollectionFactory;
 
     /**
      * Catalog resource helper
      *
      * @var \Magento\Catalog\Model\Resource\Helper
      */
-    protected $_resourceHelper;
+    protected $resourceHelper;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * Application Event Dispatcher
+     *
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * Object Factory
+     *
+     * @var \Magento\Framework\ObjectFactory
+     */
+    protected $objectFactory;
+
+    /**
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\ObjectFactory $objectFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper
+        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\ObjectFactory $objectFactory
     ) {
-        $this->_attributeColFactory = $attributeColFactory;
-        $this->_resourceHelper = $resourceHelper;
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
+        $this->resourceHelper = $resourceHelper;
+        $this->objectFactory = $objectFactory;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -43,12 +63,14 @@ class SuggestedAttributeList
      */
     public function getSuggestedAttributes($labelPart)
     {
-        $escapedLabelPart = $this->_resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
+        $escapedLabelPart = $this->resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
+        $availableFrontendTypes = $this->getAvailableFrontendTypes();
+
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $collection = $this->_attributeColFactory->create();
+        $collection = $this->attributeCollectionFactory->create();
         $collection->addFieldToFilter(
-            'frontend_input',
-            'select'
+            'main_table.frontend_input',
+            ['in' => $availableFrontendTypes->getData('values')]
         )->addFieldToFilter(
             'frontend_label',
             ['like' => $escapedLabelPart]
@@ -78,5 +100,23 @@ class SuggestedAttributeList
             }
         }
         return $result;
+    }
+
+    /**
+     * @return \Magento\Framework\Object
+     */
+    private function getAvailableFrontendTypes()
+    {
+        $availableFrontendTypes = $this->objectFactory->create();
+        $availableFrontendTypes->setData(
+            [
+                'values' => ['select']
+            ]
+        );
+        $this->eventManager->dispatch(
+            'product_suggested_attribute_frontend_type_init_after',
+            ['types_dto' => $availableFrontendTypes]
+        );
+        return $availableFrontendTypes;
     }
 }

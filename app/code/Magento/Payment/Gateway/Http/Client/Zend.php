@@ -8,6 +8,8 @@ namespace Magento\Payment\Gateway\Http\Client;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Payment\Gateway\Http\ClientInterface;
+use Magento\Payment\Gateway\Http\ConverterInterface;
+use Magento\Payment\Model\Method\Logger;
 
 class Zend implements ClientInterface
 {
@@ -17,20 +19,28 @@ class Zend implements ClientInterface
     private $clientFactory;
 
     /**
-     * @var \Magento\Payment\Gateway\Http\ConverterInterface
+     * @var ConverterInterface
      */
     private $converter;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @param ZendClientFactory $clientFactory
-     * @param \Magento\Payment\Gateway\Http\ConverterInterface $converter
+     * @param ConverterInterface $converter
+     * @param Logger $logger
      */
     public function __construct(
         ZendClientFactory $clientFactory,
-        \Magento\Payment\Gateway\Http\ConverterInterface $converter
+        ConverterInterface $converter,
+        Logger $logger
     ) {
         $this->clientFactory = $clientFactory;
         $this->converter = $converter;
+        $this->logger = $logger;
     }
 
     /**
@@ -38,6 +48,10 @@ class Zend implements ClientInterface
      */
     public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject)
     {
+        $log = [
+            'request' => $transferObject->getBody()
+        ];
+        $result = [];
         /** @var ZendClient $client */
         $client = $this->clientFactory->create();
 
@@ -61,11 +75,17 @@ class Zend implements ClientInterface
 
         try {
             $response = $client->request();
-            return $this->converter->convert($response->getBody());
+
+            $result = $this->converter->convert($response->getBody());
+            $log['response'] = $result;
         } catch (\Zend_Http_Client_Exception $e) {
             throw new \Magento\Payment\Gateway\Http\ClientException(__($e->getMessage()));
         } catch (\Magento\Payment\Gateway\Http\ConverterException $e) {
             throw $e;
+        } finally {
+            $this->logger->debug($log);
         }
+
+        return $result;
     }
 }

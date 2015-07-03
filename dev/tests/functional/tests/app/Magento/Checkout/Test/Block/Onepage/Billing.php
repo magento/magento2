@@ -48,8 +48,6 @@ class Billing extends Form
         $isShippingAddress = false
     ) {
         if ($billingAddress) {
-            //@TODO: MAGETWO-34756
-            sleep(5);
             $this->fill($billingAddress);
         }
         if ($isShippingAddress) {

@@ -309,7 +309,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->review->expects($this->once())->method('aggregate')
             ->willReturnSelf();
         $this->messageManager->expects($this->once())->method('addSuccess')
-            ->with(__('Your review has been accepted for moderation.'))
+            ->with(__('You submitted your review for moderation.'))
             ->willReturnSelf();
         $this->reviewSession->expects($this->once())->method('getRedirectUrl')
             ->with(true)

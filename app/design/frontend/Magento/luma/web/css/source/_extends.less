@@ -753,11 +753,8 @@
     margin: 0;
     > .title {
         &:extend(.abs-toggling-title all);
-        .column.main & {
-            strong {
-                .font-size(14);
-                font-weight: @font-weight__semibold;
-            }
+        &:after {
+            color: @color-gray52;
         }
     }
     .content {

@@ -103,7 +103,7 @@ class Configure extends AbstractConfigureBlock
     {
         $context = $this->_rootElement;
         $selector = $this->configureForm;
-        return $this->browser->waitUntil(
+        $this->browser->waitUntil(
             function () use ($context, $selector) {
                 return $context->find($selector)->isVisible() ? true : null;
             }
@@ -119,7 +119,7 @@ class Configure extends AbstractConfigureBlock
     {
         $context = $this->_rootElement;
         $selector = $this->configureForm;
-        return $this->browser->waitUntil(
+        $this->browser->waitUntil(
             function () use ($context, $selector) {
                 return $context->find($selector)->isVisible() ? null : true;
             }

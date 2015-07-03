@@ -13,6 +13,8 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data

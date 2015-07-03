@@ -545,7 +545,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -706,7 +706,7 @@ abstract class AbstractEntity
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
+                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
                 );
             }
 

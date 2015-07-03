@@ -8,7 +8,7 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\GoogleShopping;
 /**
  * @magentoAppArea adminhtml
  */
-class TypesTest extends \Magento\Backend\Utility\Controller
+class TypesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testIndexAction()
     {

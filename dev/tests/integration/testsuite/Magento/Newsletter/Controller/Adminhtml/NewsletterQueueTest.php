@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
+class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Newsletter\Model\Template
@@ -62,7 +62,7 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(['The newsletter queue has been saved.']),
+            $this->equalTo(['You saved the newsletter queue.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
