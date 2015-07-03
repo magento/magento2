@@ -14,5 +14,12 @@ var config = {
             uiRegistry: 'Magento_Ui/js/lib/registry/registry',
             uiLayout: 'Magento_Ui/js/core/renderer/layout'
         }
+    },
+    config: {
+        mixins: {
+            'Magento_Ui/js/grid/controls/columns': {
+                'mage/requirejs/columnsMixin': true
+            }
+        }
     }
 };
