@@ -61,7 +61,9 @@ define(
                     $.when(placeOrder).fail(function(){
                         self.isPlaceOrderActionAllowed(true);
                     });
+                    return true;
                 }
+                return false;
             },
 
             selectPaymentMethod: function() {
