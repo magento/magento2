@@ -10,8 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Login
- * One page checkout status login block
+ * One page checkout status login block.
  */
 class Login extends Form
 {
@@ -51,7 +50,7 @@ class Login extends Form
     protected $loadingMask = '.loading-mask';
 
     /**
-     * Select how to perform checkout whether guest or registered customer
+     * Select how to perform checkout whether guest or registered customer.
      *
      * @param FixtureInterface $fixture
      * @return void
@@ -68,7 +67,7 @@ class Login extends Form
     }
 
     /**
-     * Perform guest checkout
+     * Perform guest checkout.
      *
      * @return void
      */
@@ -79,27 +78,20 @@ class Login extends Form
     }
 
     /**
-     * Login customer during checkout
+     * Login customer during checkout.
      *
      * @param FixtureInterface $customer
      * @return void
      */
     public function loginCustomer(FixtureInterface $customer)
     {
-        $data = $customer->getData();
-        $mapping = $this->dataMapping($data);
-        $login['email'] = $mapping['email'];
-        $this->_fill($login);
-        sleep(3);
-        $this->waitForElementNotVisible('._block-content-loading');
-        $password['password'] = $mapping['password'];
-        $this->_fill($password);
+        $this->fill($customer);
         $this->_rootElement->find($this->login)->click();
         $this->waitForElementNotVisible($this->loadingMask);
     }
 
     /**
-     * Click continue on checkout method block
+     * Click continue on checkout method block.
      *
      * @return void
      */

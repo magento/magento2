@@ -7,7 +7,6 @@
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
 use Magento\Mtf\Block\Block;
-use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
  * Checkout payment method block.
@@ -15,21 +14,14 @@ use Magento\Payment\Test\Fixture\CreditCard;
 class Method extends Block
 {
     /**
-     * Wait element
+     * Wait element.
      *
      * @var string
      */
     protected $waitElement = '.loading-mask';
 
     /**
-     * Purchase order number selector
-     *
-     * @var string
-     */
-    protected $purchaseOrderNumber = '#po_number';
-
-    /**
-     * Continue checkout button.
+     * Place order button selector.
      *
      * @var string
      */
@@ -56,14 +48,14 @@ class Method extends Block
     /**
      * Get "Billing Address" block.
      *
-     * @return \Magento\Checkout\Test\Block\Onepage\Payment\Methods\Billing
+     * @return \Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing
      */
     public function getBillingBlock()
     {
         $element = $this->_rootElement->find($this->billingAddressSelector);
 
         return $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Onepage\Payment\Methods\Billing',
+            '\Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing',
             ['element' => $element]
         );
     }

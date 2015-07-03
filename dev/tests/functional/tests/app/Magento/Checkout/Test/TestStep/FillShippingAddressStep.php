@@ -30,26 +30,16 @@ class FillShippingAddressStep implements TestStepInterface
     protected $shippingAddress;
 
     /**
-     * Checkout method.
-     *
-     * @var string
-     */
-    protected $checkoutMethod;
-
-    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param Address $shippingAddress
-     * @param string $checkoutMethod
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        $checkoutMethod,
         Address $shippingAddress = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->shippingAddress = $shippingAddress;
-        $this->checkoutMethod = $checkoutMethod;
     }
 
     /**
@@ -59,8 +49,8 @@ class FillShippingAddressStep implements TestStepInterface
      */
     public function run()
     {
-        if (!empty($this->shippingAddress)) {
-            $this->checkoutOnepage->getShippingBlock()->fillShipping($this->shippingAddress);
+        if ($this->shippingAddress) {
+            $this->checkoutOnepage->getShippingBlock()->fill($this->shippingAddress);
         }
     }
 }

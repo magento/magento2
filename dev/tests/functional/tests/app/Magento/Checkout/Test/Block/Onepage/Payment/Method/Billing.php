@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Block\Onepage\Payment\Methods;
+namespace Magento\Checkout\Test\Block\Onepage\Payment\Method;
 
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
@@ -43,12 +42,10 @@ class Billing extends Form
      * @param Address $billingAddress
      * @return void
      */
-    public function fillBilling(Address $billingAddress = null)
+    public function fillBilling(Address $billingAddress)
     {
-        if ($billingAddress) {
-            $this->fill($billingAddress);
-            $this->clickUpdate();
-        }
+        $this->fill($billingAddress);
+        $this->clickUpdate();
         $this->waitForElementNotVisible($this->waitElement);
     }
 

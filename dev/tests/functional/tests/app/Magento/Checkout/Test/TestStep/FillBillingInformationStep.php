@@ -12,31 +12,23 @@ use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 
 /**
- * Class FillBillingInformationStep
- * Fill billing information
+ * Fill billing information.
  */
 class FillBillingInformationStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Address fixture
+     * Address fixture.
      *
      * @var Address
      */
     protected $billingAddress;
-
-    /**
-     * Checkout method
-     *
-     * @var string
-     */
-    protected $checkoutMethod;
 
     /**
      * "Same as Shipping" checkbox value assertion.
@@ -55,36 +47,36 @@ class FillBillingInformationStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
+     * @param AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox
      * @param Address $billingAddress
-     * @param AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox,
-     * @param string $checkoutMethod
      * @param string $billingCheckboxState
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        $checkoutMethod,
         AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox,
         Address $billingAddress = null,
         $billingCheckboxState = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->billingAddress = $billingAddress;
-        $this->checkoutMethod = $checkoutMethod;
         $this->assertBillingAddressCheckbox = $assertBillingAddressCheckbox;
         $this->billingCheckboxState = $billingCheckboxState;
     }
 
     /**
-     * Fill billing address
+     * Fill billing address.
      *
      * @return void
      */
     public function run()
     {
-        if ($this->billingCheckboxState !== null) {
+        if ($this->billingCheckboxState) {
             $this->assertBillingAddressCheckbox->processAssert($this->checkoutOnepage, $this->billingCheckboxState);
         }
-        $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();
-        $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
+
+        if ($this->billingAddress) {
+            $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();
+            $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
+        }
     }
 }
