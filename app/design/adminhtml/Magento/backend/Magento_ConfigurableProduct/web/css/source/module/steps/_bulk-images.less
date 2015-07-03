@@ -5,14 +5,14 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @steps-wizard-gallery-image__background-color: @color-white-fog;
 @steps-wizard-gallery-image__padding: 14px @indent__base;
 
 //
 //  Common
-//  ---------------------------------------------
+//  _____________________________________________
 
 .steps-wizard {
 
@@ -51,19 +51,20 @@
             &:extend(.abs-list-reset-styles all);
         }
     }
+
     .attribute-image-selector {
         .attribute-label {
             display: block;
             margin: 0 0 @indent__s;
         }
-        .gallery {
-            .clearfix();
-            background: @color-gray-light01;
-            padding: @indent__m 0;
-            .image {
-                width: 200px;
-            }
-        }
+//        .gallery {
+//            .clearfix();
+//            background: @color-gray-light01;
+//
+//            .image {
+//                width: 125px;
+//            }
+//        }
         .attributes-selector-list {
             border: 1px solid @color-gray-light01;
             list-style-type: none;
@@ -80,5 +81,509 @@
 
     .bulk-attribute-values {
         max-width: 400px;
+    }
+}
+
+//  ToDo UI: Make Image Management styles global for all product management
+
+//
+//  Image Management Variables
+//  _____________________________________________
+
+@image-gallery__background: @color-white-fog;
+@image-gallery-placeholder__background: @color-white;
+@image-gallery-placeholder__border: 1px solid @color-gray80;
+@image-gallery-placeholder__height: 125px;
+@image-gallery-placeholder__width: @image-gallery-placeholder__height;
+@image-gallery-icons__color: @color-gray62;
+@image-gallery-icons__hover__color: @color-gray52;
+@image-gallery-placeholder-icon__color: @color-gray80;
+
+//
+//  Image Management
+//  _____________________________________________
+
+.gallery {
+    &:extend(.abs-clearfix all);
+    .css(background, @image-gallery__background);
+    padding: @indent__s 0;
+    .gallery-item {
+        display: inline-block;
+        margin: 0 1.5rem 1rem 0;
+    }
+    .image {
+        .css(background, @image-gallery-placeholder__background);
+        .css(border, @image-gallery-placeholder__border);
+        .css(width, @image-gallery-placeholder__width);
+        display: inline-block;
+        position: relative;
+    }
+    .gallery-item,
+    .image {
+        float: left; // ToDo UI: resolve
+    }
+    .action-delete {
+        &:extend(.abs-action-reset all);
+        bottom: 6px;
+        cursor: pointer;
+        height: 20px;
+        left: 6px;
+        position: absolute;
+        width: 20px;
+        z-index: 2;
+        .icon-font(
+        @icon-delete__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color,
+        @_icon-font-text-hide: true
+        );
+    }
+    .draggable-handle { // ToDo UI: check step #2 4 same
+        cursor: ns-resize;
+        height: 20px;
+        left: 3px;
+        position: absolute;
+        top: 2px;
+        width: 20px;
+        z-index: 2;
+        .icon-font(
+        @icon-gripper__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color
+        );
+    }
+
+    .image-label {
+        bottom: 6px;
+        cursor: pointer;
+        height: 20px;
+        position: absolute;
+        right: 3px;
+        width: 20px;
+        z-index: 2;
+        .icon-font(
+        @icon-tag__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color,
+        @_icon-font-text-hide: true
+        );
+    }
+
+//  ToDo UI: review image-fade
+    .image-fade {
+        background: rgba(247, 242, 236, .8);
+        bottom: 0;
+        color: #a69a8f;
+        content: attr(data-image-hidden-label);
+        font-weight: 500;
+        font: 18px/110px Arial, sans-serif;
+        left: 0;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        visibility: hidden;
+        z-index: 3;
+    }
+
+    //  Image Placeholder
+    .image-placeholder {
+        position: relative;
+        .icon-font(
+        @icon-camera__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 4rem,
+        @_icon-font-color: @image-gallery-placeholder-icon__color,
+        @_icon-font-text-hide: true
+        );
+        &:before {
+            position: absolute;
+            top: 12px;
+            width: 100%;
+            z-index: 1;
+        }
+        .fileinput-button {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            > span {
+                display: none;
+            }
+        }
+        input[type="file"] {
+              position: absolute;
+              top: 0;
+              right: 0;
+              left: 0;
+              bottom: 0;
+              width: 100%;
+              height: 100%;
+              opacity: 0;
+              border: 500px solid transparent;
+              font-size: 10em;
+              z-index: 2;
+              cursor: pointer;
+          }
+        .file-row,
+        &.loading:after {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            margin: auto;
+            overflow: hidden;
+            background: #fff url(../images/ajax-loader-big.gif) no-repeat 50% 50%;
+            z-index: 5;
+            text-indent: -999em;
+        }
+    }
+
+
+//    .gallery .image-placeholder {
+//        background-position: 50% 30%;
+//    }
+
+    .gallery .image-placeholder-text {
+    }
+
+    .image-placeholder-text {
+        .font-size(11);
+        bottom: 0;
+        color: @color-blue-dodger;
+        left: 0;
+        line-height: 1.333;
+        margin-bottom: 15%;
+        padding: 0 @indent__s;
+        position: absolute;
+        right: 0;
+        text-align: center;
+    }
+
+    .image-browse {
+
+    }
+
+    .product-image {
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .spacer {
+        .css(height,  @image-gallery-placeholder__height);
+        .css(width, @image-gallery-placeholder__width);
+    }
+}
+
+.image.hidden-for-front .image-fade {
+    visibility: visible;
+}
+
+.gallery .image.hidden-for-front .image-fade {
+    line-height: 160px;
+}
+
+// ToDo UI: Refactor below
+
+.image,
+.gallery .ui-state-highlight {
+    position: relative;
+    width: 17.874%;
+    border-radius: 4px;
+    float: left;
+    margin: 5px 1%;
+    overflow: hidden;
+    background: #fff;
+}
+
+.image.base-image .image-label {
+    visibility: visible;
+}
+.image.active {
+    box-shadow: 0 0 10px #2ea9ec;
+}
+
+//.image .actions {
+//    position: absolute;
+//    top: 0;
+//    right: 0;
+//    bottom: 0;
+//    left: 0;
+//    text-align: center;
+//    -webkit-touch-callout: none;
+//    -webkit-user-select: none;
+//    -khtml-user-select: none;
+//    -moz-user-select: none;
+//    -ms-user-select: none;
+//    user-select: none;
+//    z-index: 1;
+//}
+
+.image .actions [class^="action-"],
+.image[data-image-hidden]:hover .actions [class^="action-"],
+.image.hidden-for-front:hover .actions [class^="action-"] {
+    visibility: hidden;
+}
+
+.image:hover .actions [class^="action-"],
+.image[data-image-hidden]:hover .actions .action-delete,
+.hidden-for-front:hover .actions .action-delete {
+    visibility: visible;
+}
+
+//.image .action-delete {
+//    position: absolute;
+//    top: 2px;
+//    right: 2px;
+//    z-index: 2;
+//}
+
+.image .action-make-base {
+    position: absolute;
+    bottom: 20px;
+    left: 10%;
+    right: 10%;
+    padding: 5px;
+    margin: auto;
+}
+
+.image.base-image .action-make-base {
+    display: none;
+}
+
+//.image .draggable-handle {
+//    position: absolute;
+//    width: 14px;
+//    height: 8px;
+//    cursor: move;
+//    left: 0;
+//    right: 0;
+//    bottom: 5px;
+//    top: auto;
+//    margin: auto;
+//    background: url(Magento_Backend::images/draggable-handle-bg.png) no-repeat;
+//    z-index: 2;
+//}
+//
+//.image .draggable-handle:before {
+//    content: '';
+//}
+
+.gallery .image .action-make-base {
+    width: 70%;
+}
+
+//.gallery .image .action-delete {
+//    top: 5px;
+//    right: 5px;
+//}
+
+.image.ui-sortable-placeholder {
+    background: #d7ebf5;
+    border: 1px dotted #93dbff;
+    visibility: visible !important;
+}
+
+//
+//  Gallery image panel
+//  ---------------------------------------------
+
+.image-panel {
+    &:extend(.abs-clearfix all);
+    display: none;
+    position: relative;
+    top: 5px;
+    clear: both;
+    background: #fff;
+    margin: 0 -18px 15px;
+    padding: 20px 15px;
+    box-shadow: 0 1px 3px #aaa inset;
+    border-bottom: 1px solid #cfd0cb;
+}
+
+.image-pointer {
+    position: absolute;
+    left: 50%;
+    top: -11px;
+    margin-left: -14px;
+    width: 28px;
+    height: 15px;
+    background: url(Magento_Backend::images/gallery-image-panel-corner.png) no-repeat;
+}
+
+.image-panel-controls,
+.image-panel-preview {
+    float: left;
+    width: 65.95744680199999%;
+    margin-left: 2.127659574%;
+}
+
+.image-panel-preview {
+    margin-left: 0;
+}
+
+.image-panel-controls {
+    width: 29.914893614%;
+    padding: 28px 1% 0 1%;
+}
+
+.image-panel-controls .image-name {
+    display: block;
+    margin: 0 0 3px;
+    color: #666;
+}
+
+.image-file-params {
+    margin: 0 0 10px 0;
+    font-size: 11px;
+    color: #666;
+}
+
+.image-panel-controls .action-remove,
+.image-panel-controls .action-remove:hover,
+.image-panel-controls .action-remove:active,
+.image-panel-controls .action-remove:focus,
+.image-panel-controls .action-remove[disabled] {
+    color: #a29c94;
+    font: 12px/1.333 Arial, Verdana, sans-serif;
+    text-decoration: underline;
+    margin: 0 0 46px 0;
+}
+
+.image-panel-controls .fieldset-image-panel {
+    padding: 0 5px 0 0;
+}
+
+.image-panel-controls .fieldset-image-panel .field {
+    margin-bottom: 30px;
+}
+
+.image-panel-controls .fieldset-image-panel .label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+    padding-top: 0;
+}
+
+.image-panel-controls .fieldset-image-panel .field > .control,
+.image-panel-controls textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+.image-panel-preview img {
+    width: 100%;
+}
+
+.image-panel .action-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    .icon-font(
+    @_icon-font-content: @icon-close-mage__content,
+    @_icon-font: @icons-admin__font-name,
+    @_icon-font-size: 2rem,
+    @_icon-font-color: @color-brownie-vanilla,
+    @_icon-font-color-hover: @color-brownie-vanilla
+    );
+}
+//
+//.image-panel .action-close:before {
+//    font-family: 'MUI-Icons';
+//    font-style: normal;
+//    speak: none;
+//    font-weight: normal;
+//    -webkit-font-smoothing: antialiased;
+//    content: '\e07d'; /* close icon */
+//    font-size: 16px;
+//    color: #bbb;
+//}
+
+.image-panel .action-close span {
+    display: none;
+}
+
+//  ToDo UI: replace with styles by design
+
+.gallery {
+    //
+    //  Custom Multiselect
+    //  --------------------------------------
+
+    .multiselect-alt {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        color: #333;
+    }
+
+    .multiselect-alt .item {
+        position: relative;
+        border-top: 1px solid #fff;
+        cursor: pointer;
+    }
+
+    .multiselect-alt .item:first-child {
+        border-top: 0;
+    }
+
+    .multiselect-alt .item.selected {
+        background: #d7ebf5;
+    }
+
+    .multiselect-alt .item.selected:hover {
+        background: #afdef2;
+    }
+
+    .multiselect-alt label {
+        display: block;
+        cursor: pointer;
+        padding: 6px 25px 5px;
+    }
+
+    .multiselect-alt .item.selected label:before {
+        position: absolute;
+        left: 8px;
+        top: 1px;
+        bottom: 0;
+        width: 10px;
+        line-height: 28px;
+        font-family: 'MUI-Icons';
+        font-style: normal;
+        speak: none;
+        font-weight: normal;
+        -webkit-font-smoothing: antialiased;
+        content: '\e01e'; // checked icon
+        text-align: center;
+        color: #7ba4b1;
+        font-size: 9px;
+        text-shadow: 0 -1px 1px #60727b;
+    }
+
+    .multiselect-alt input[type="checkbox"] {
+        width: 0;
+        height: 0;
+        opacity: 0;
+        margin: 0;
+        padding: 0;
     }
 }
