@@ -25,6 +25,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             [
                 $objectManager->get('Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory'),
                 $objectManager->get('Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'),
+                $objectManager->get('Magento\Framework\App\Resource'),
                 $params
             ]
         );
