@@ -983,14 +983,18 @@ class Onepage
                 $redirectUrl
             )->setLastRealOrderId(
                 $order->getIncrementId()
+            )->setLastOrderStatus(
+                $order->getStatus()
             );
         }
 
         $this->_eventManager->dispatch(
             'checkout_submit_all_after',
-            ['order' => $order, 'quote' => $this->getQuote()]
+            [
+                'order' => $order,
+                'quote' => $this->getQuote()
+            ]
         );
-
         return $this;
     }
 
