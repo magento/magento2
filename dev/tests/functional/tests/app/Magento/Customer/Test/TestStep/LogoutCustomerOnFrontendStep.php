@@ -54,6 +54,7 @@ class LogoutCustomerOnFrontendStep implements TestStepInterface
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
+        $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
         if ($this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
             $this->cmsIndex->getLinksBlock()->openLink('Sign Out');
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
