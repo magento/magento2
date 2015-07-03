@@ -16,4 +16,14 @@ class Summary extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     {
         return __('Summary');
     }
+
+    /**
+     * Get url to upload files
+     *
+     * @return string
+     */
+    public function getImageUploadUrl()
+    {
+        return $this->getUrl('catalog/product_gallery/upload');
+    }
 }
