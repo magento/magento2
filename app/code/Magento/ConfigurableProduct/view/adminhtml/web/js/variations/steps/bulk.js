@@ -87,13 +87,27 @@ define([
                 ? {'images': images, preview: preview.url, file: preview.file}
                 : null;
         },
+        fillImagesSection: function () {
+            switch (this.sections().images.type()) {
+                case 'each':
+                    this.sections().images.attribute().chosen.each(function (option) {
+                        option.sections().images = this.getImageProperty(
+                            $('[data-role=step-gallery-option-'+option.label+']')
+                        );
+                    }, this);
+                    break;
+                case 'single':
+                    this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
+                    break;
+                default:
+                    this.sections().images.value(null);
+                    break;
+            }
+        },
         force: function (wizard) {
             wizard.data.sections = this.sections;
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
-            this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
-            this.sections().images.attribute().chosen.each(function (option) {
-                option.sections().images = this.getImageProperty($('[data-role=step-gallery-option-'+option.label+']'));
-            }, this);
+            this.fillImagesSection();
         },
         back: function (wizard) {
         },
