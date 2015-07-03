@@ -46,14 +46,21 @@ define(
              * Place order.
              */
             placeOrder: function () {
-                var emailValidationResult = customer.isLoggedIn(),
+                var self = this,
+                    placeOrder,
+                    emailValidationResult = customer.isLoggedIn(),
                     loginFormSelector = 'form[data-role=email-with-possible-login]';
                 if (!customer.isLoggedIn()) {
                     $(loginFormSelector).validation();
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
                 }
                 if (emailValidationResult && this.validate()) {
-                    placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+                    this.isPlaceOrderActionAllowed(false);
+                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+
+                    $.when(placeOrder).fail(function(){
+                        self.isPlaceOrderActionAllowed(true);
+                    });
                 }
             },
 
