@@ -9,89 +9,64 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheDisableCommandTest extends \PHPUnit_Framework_TestCase
+class CacheDisableManageCommandTest extends CacheManageCommandTestAbstract
 {
     /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCacheManageCommand
      */
-    private $cacheManager;
-
-    /**
-     * @var CacheDisableCommand
-     */
-    private $command;
+    protected $command;
 
     public function setUp()
     {
-        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        parent::setUp();
         $this->command = new CacheDisableCommand($this->cacheManager);
     }
 
-    public function testExecute()
-    {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager
-            ->expects($this->once())
-            ->method('setEnabled')
-            ->with(['A', 'B'], false)
-            ->willReturn(['A', 'B']);
-        $param = ['types' => ['A', 'B']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-
-        $expect = 'Changed cache status:' . PHP_EOL;
-        foreach (['A', 'B'] as $cacheType) {
-            $expect .= sprintf('%30s: %d -> %d', $cacheType, true, false) . PHP_EOL;
-        }
-
-        $this->assertEquals($expect, $commandTester->getDisplay());
-    }
-
-    public function testExecuteAll()
-    {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager
-            ->expects($this->once())
-            ->method('setEnabled')
-            ->with(['A', 'B', 'C'], false)
-            ->willReturn(['A', 'B', 'C']);
-        $param = ['--all' => true];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-
-        $expect = 'Changed cache status:' . PHP_EOL;
-        foreach (['A', 'B', 'C'] as $cacheType) {
-            $expect .= sprintf('%30s: %d -> %d', $cacheType, true, false) . PHP_EOL;
-        }
-        $this->assertEquals($expect, $commandTester->getDisplay());
-    }
-
-    public function testExecuteNoChanges()
-    {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager
-            ->expects($this->once())
-            ->method('setEnabled')
-            ->with(['A', 'B'], false)
-            ->willReturn([]);
-        $this->cacheManager->expects($this->never())->method('clean');
-        $param = ['types' => ['A', 'B']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
-
-        $expect = 'There is nothing to change in cache status' . PHP_EOL;
-        $this->assertEquals($expect, $commandTester->getDisplay());
-    }
-
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following requested cache types are not supported:
+     * @param $param
+     * @param $enable
+     * @param $result
+     * @param $output
+     * @dataProvider testExecuteDataProvider
      */
-    public function testExecuteInvalidCacheType()
+    public function testExecute($param, $enable, $result, $output)
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $param = ['types' => ['A', 'D']];
+        $this->cacheManager->expects($this->once())->method('setEnabled')->with($enable, false)->willReturn($result);
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
+
+        $this->assertEquals($output, $commandTester->getDisplay());
+    }
+
+    public function testExecuteDataProvider ()
+    {
+        return [
+            'no parameters' => [
+                [],
+                ['A', 'B', 'C'],
+                ['A', 'B', 'C'],
+                $this->getExpectedChangeOutput(['A', 'B', 'C'], false),
+            ],
+            'explicit --all' => [
+                ['--all' => true, 'types' => 'A'],
+                ['A', 'B', 'C'],
+                ['A', 'B', 'C'],
+                $this->getExpectedChangeOutput(['A', 'B', 'C'], false),
+            ],
+            'specific types' => [
+                ['types' => ['A', 'B']],
+                ['A', 'B'],
+                ['A', 'B'],
+                $this->getExpectedChangeOutput(['A', 'B'], false),
+            ],
+            'no changes' => [
+                ['types' => ['A', 'B']],
+                ['A', 'B'],
+                [],
+                $this->getExpectedChangeOutput([], false),
+            ],
+        ];
     }
 }

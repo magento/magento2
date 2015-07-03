@@ -9,6 +9,7 @@ namespace Magento\Backend\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
@@ -41,6 +42,18 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
         parent::configure();
     }
 
+    /**
+     * Initialize defaults dependent on argument input
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        if ($input->getArgument(self::INPUT_KEY_TYPES) === []) {
+            $input->setOption(self::INPUT_KEY_ALL, true);
+        }
+    }
 
     /**
      * Get requested cache types
