@@ -37,16 +37,29 @@ class FillBillingAddressStep implements TestStepInterface
     protected $saveAddress;
 
     /**
+     * Flag for set same as billing shipping address.
+     *
+     * @var string
+     */
+    protected $setShippingAddress;
+
+    /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
      * @param Address $billingAddress
      * @param string $saveAddress
+     * @param bool $setShippingAddress [optional]
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, Address $billingAddress, $saveAddress = 'No')
-    {
+    public function __construct(
+        OrderCreateIndex $orderCreateIndex,
+        Address $billingAddress,
+        $saveAddress = 'No',
+        $setShippingAddress = true
+    ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->billingAddress = $billingAddress;
         $this->saveAddress = $saveAddress;
+        $this->setShippingAddress = $setShippingAddress;
     }
 
     /**
@@ -56,7 +69,8 @@ class FillBillingAddressStep implements TestStepInterface
      */
     public function run()
     {
-        $this->orderCreateIndex->getCreateBlock()->fillAddresses($this->billingAddress, $this->saveAddress);
+        $this->orderCreateIndex->getCreateBlock()
+            ->fillAddresses($this->billingAddress, $this->saveAddress, $this->setShippingAddress);
 
         return ['billingAddress' => $this->billingAddress];
     }
