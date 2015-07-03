@@ -106,4 +106,14 @@ class OrderAdapter implements OrderAdapterInterface
     {
         return $this->order->getEntityId();
     }
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return float|null
+     */
+    public function getGrandTotalAmount()
+    {
+        return $this->order->getBaseGrandTotal();
+    }
 }

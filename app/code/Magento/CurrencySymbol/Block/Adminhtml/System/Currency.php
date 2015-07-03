@@ -60,6 +60,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get header
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getHeader()
     {
@@ -70,6 +71,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get save button html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getSaveButtonHtml()
     {
@@ -80,6 +82,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get reset button html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getResetButtonHtml()
     {
@@ -90,6 +93,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get import button html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getImportButtonHtml()
     {
@@ -100,6 +104,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get services html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getServicesHtml()
     {
@@ -110,6 +115,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get rates matrix html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRatesMatrixHtml()
     {
@@ -120,6 +126,7 @@ class Currency extends \Magento\Backend\Block\Template
      * Get import form action url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getImportFormAction()
     {
