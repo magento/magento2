@@ -25,7 +25,7 @@
 
 <div class="message notice">
     <div>
-        <?php echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returns no results.') ?>
+        <?php echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
         <?php echo $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>

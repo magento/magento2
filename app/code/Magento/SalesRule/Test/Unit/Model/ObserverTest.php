@@ -339,7 +339,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManager->expects($this->once())
             ->method('addWarning')
-            ->with(sprintf('1 Shopping Cart Price Rules based on "%s" attribute have been disabled.', $attributeCode));
+            ->with(sprintf('1 Cart Price Rules based on "%s" attribute have been disabled.', $attributeCode));
     }
 
     public function testCatalogAttributeSaveAfter()

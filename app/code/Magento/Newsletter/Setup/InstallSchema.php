@@ -107,7 +107,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Template Id'
+                'Template ID'
             )
             ->addColumn(
                 'template_code',
@@ -122,13 +122,6 @@ class InstallSchema implements InstallSchemaInterface
                 '64k',
                 [],
                 'Template Text'
-            )
-            ->addColumn(
-                'template_text_preprocessed',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                '64k',
-                [],
-                'Template Text Preprocessed'
             )
             ->addColumn(
                 'template_styles',
@@ -218,7 +211,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Template Id'
+                'Template ID'
             )
             ->addColumn(
                 'newsletter_type',

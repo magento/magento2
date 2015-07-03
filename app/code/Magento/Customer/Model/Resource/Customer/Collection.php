@@ -9,8 +9,9 @@ namespace Magento\Customer\Model\Resource\Customer;
  * Customers collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
+class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
     /**
      * Name of collection model
@@ -37,6 +38,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param string $modelName
@@ -53,6 +55,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Object\Copy\Config $fieldsetConfig,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
@@ -69,6 +72,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
+            $entitySnapshot,
             $connection
         );
     }

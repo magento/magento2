@@ -408,7 +408,7 @@ define([
                     this.assignThemeSuccess(response, stores, themeId);
                 }, this),
                 error: $.proxy(function() {
-                    var message = $.mage.__('Sorry, something went wrong.');
+                    var message = $.mage.__('Sorry, something went wrong. That\'s all we know.');
                     this._dialog.messages.set(message, 'error');
                 }, this)
             });

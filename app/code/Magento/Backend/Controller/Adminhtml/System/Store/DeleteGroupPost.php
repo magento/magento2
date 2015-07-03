@@ -21,7 +21,7 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Group')->load($itemId))) {
-            $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
+            $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
@@ -35,7 +35,7 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         try {
             $model->delete();
-            $this->messageManager->addSuccess(__('The store has been deleted.'));
+            $this->messageManager->addSuccess(__('You deleted the store.'));
             return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

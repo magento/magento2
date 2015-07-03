@@ -6,12 +6,14 @@
 define([
     "jquery",
     "mage/template",
-    "jquery/ui"
+    "jquery/ui",
+    "Magento_Payment/js/model/credit-card-validation/validator"
 ], function($, mageTemplate){
-    "use strict";
+    'use strict';
 
     $.widget('mage.transparent', {
         options: {
+            context: null,
             placeOrderSelector: '[data-role="review-save"]',
             paymentFormSelector: '#co-payment-form',
             updateSelectorPrefix: '#checkout-',
@@ -34,9 +36,24 @@ define([
 
         _create: function() {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            $(this.options.placeOrderSelector)
-                .off('click')
-                .on('click', $.proxy(this._placeOrderHandler, this));
+
+            if (this.options.context) {
+                this.options.context.setPlaceOrderHandler($.proxy(this._orderSave, this));
+                this.options.context.setValidateHandler($.proxy(this._validateHandler, this));
+            } else {
+                $(this.options.placeOrderSelector)
+                    .off('click')
+                    .on('click', $.proxy(this._placeOrderHandler, this));
+            }
+        },
+
+        /**
+         * handler for credit card validation
+         * @return {Boolean}
+         * @private
+         */
+        _validateHandler: function() {
+            return (this.element.validation && this.element.validation('isValid'));
         },
 
         /**
@@ -45,7 +62,7 @@ define([
          * @private
          */
         _placeOrderHandler: function() {
-            if (this.element.validation && this.element.validation('isValid')) {
+            if (this._validateHandler()) {
                 this._orderSave();
             }
             return false;
@@ -65,7 +82,7 @@ define([
                 '[data-container="' + this.options.gateway + '-cc-type"]'
             ).val();
 
-            $.ajax({
+            return $.ajax({
                 url: this.options.orderSaveUrl,
                 type: 'post',
                 context: this,
@@ -110,7 +127,6 @@ define([
                     inputs: data
                 }
             });
-
             $(tmpl).appendTo($(iframeSelector)).submit();
         },
 

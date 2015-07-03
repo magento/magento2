@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Model\Resource\Product\Index;
 
 /**
@@ -14,16 +12,22 @@ namespace Magento\Reports\Model\Resource\Product\Index;
 abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * DateItime instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
+     * Reports helper
+     *
      * @var \Magento\Reports\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -55,7 +59,9 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             return $this;
         }
         $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()->from($this->getMainTable())->where('visitor_id = ?', $object->getVisitorId());
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('visitor_id = ?', $object->getVisitorId());
 
         $rowSet = $select->query()->fetchAll();
         foreach ($rowSet as $row) {
@@ -76,7 +82,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
 
             if ($idx) {
                 /**
-                 * If we are here it means that we have two rows: one with known customer, but second just visitor is set
+                 * If we are here it means that we have two rows: one with known customer and second with guest visitor
                  * One row should be updated with customer_id, second should be deleted
                  */
                 $adapter->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
@@ -192,7 +198,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
      * Add information about product ids to visitor/customer
      *
      * @param \Magento\Framework\Object|\Magento\Reports\Model\Product\Index\AbstractIndex $object
-     * @param array $productIds
+     * @param int[] $productIds
      * @return $this
      */
     public function registerIds(\Magento\Framework\Object $object, $productIds)

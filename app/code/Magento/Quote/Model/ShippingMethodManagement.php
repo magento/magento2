@@ -34,17 +34,27 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $converter;
 
     /**
+     * Customer Address repository
+     *
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository Customer Address repository
      */
     public function __construct(
         QuoteRepository $quoteRepository,
-        Cart\ShippingMethodConverter $converter
+        Cart\ShippingMethodConverter $converter,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -69,6 +79,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->collectShippingRates();
         /** @var \Magento\Quote\Model\Quote\Address\Rate $shippingRate */
         $shippingRate = $shippingAddress->getShippingRateByCode($shippingMethod);
+        if (!$shippingRate) {
+            return null;
+        }
         return $this->converter->modelToDataObject($shippingRate, $quote->getQuoteCurrencyCode());
     }
 
@@ -129,10 +142,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         if (!$shippingAddress->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
-        $billingAddress = $quote->getBillingAddress();
-        if (!$billingAddress->getCountryId()) {
-            throw new StateException(__('Billing address is not set'));
-        }
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
         if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
             throw new NoSuchEntityException(
@@ -145,5 +154,79 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
             throw new CouldNotSaveException(__('Cannot set shipping method. %1', $e->getMessage()));
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+
+        // no methods applicable for empty carts or carts with virtual products
+        if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
+            return [];
+        }
+
+        return $this->getEstimatedRates(
+            $quote,
+            $address->getCountryId(),
+            $address->getPostcode(),
+            $address->getRegionId(),
+            $address->getRegion()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function estimateByAddressId($cartId, $addressId)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+
+        // no methods applicable for empty carts or carts with virtual products
+        if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
+            return [];
+        }
+        $address = $this->addressRepository->getById($addressId);
+
+        return $this->getEstimatedRates(
+            $quote,
+            $address->getCountryId(),
+            $address->getPostcode(),
+            $address->getRegionId(),
+            $address->getRegion()
+        );
+    }
+
+    /**
+     * Get estimated rates
+     *
+     * @param Quote $quote
+     * @param int $country
+     * @param string $postcode
+     * @param int $regionId
+     * @param string $region
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     */
+    protected function getEstimatedRates(\Magento\Quote\Model\Quote $quote, $country, $postcode, $regionId, $region)
+    {
+        $output = [];
+        $shippingAddress = $quote->getShippingAddress();
+        $shippingAddress->setCountryId($country);
+        $shippingAddress->setPostcode($postcode);
+        $shippingAddress->setRegionId($regionId);
+        $shippingAddress->setRegion($region);
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals();
+        $shippingRates = $shippingAddress->getGroupedAllShippingRates();
+        foreach ($shippingRates as $carrierRates) {
+            foreach ($carrierRates as $rate) {
+                $output[] = $this->converter->modelToDataObject($rate, $quote->getQuoteCurrencyCode());
+            }
+        }
+        return $output;
     }
 }

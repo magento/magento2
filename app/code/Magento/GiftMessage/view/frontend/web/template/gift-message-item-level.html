@@ -1,0 +1,55 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<!-- ko if: isActive() -->
+<a href="#"
+   class="action action-gift"
+   data-bind="
+   click: $data.toggleFormBlockVisibility.bind($data),
+   css: {_active: formBlockVisibility() || resultBlockVisibility()}
+   ">
+    <span data-bind="text: $t('Gift options')"></span>
+</a>
+<div class="gift-content" data-bind="css: {_active: formBlockVisibility() || resultBlockVisibility()}"> <!-- add class "active" to display the content -->
+    <!-- ko ifnot: resultBlockVisibility() -->
+        <div class="gift-options">
+            <!-- ko foreach: getRegion('additionalOptions') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko template: formTemplate --><!--/ko-->
+        </div>
+    <!-- /ko -->
+    <!-- ko if: resultBlockVisibility() -->
+        <div class="gift-summary">
+            <!-- ko foreach: getRegion('additionalOptions') -->
+                <!--ko template: appliedTemplate --><!-- /ko -->
+            <!-- /ko -->
+
+            <!-- ko if: getObservable('message') -->
+                <div class="gift-message-summary">
+                    <span data-bind="text: $t('Message') + ':'"></span>
+                    <!-- ko text: getObservable('message') --><!-- /ko -->
+                </div>
+            <!-- /ko -->
+            
+            <div class="actions-toolbar">
+                <div class="secondary">
+                    <button type="submit" class="action action-edit" data-bind="
+                            click: $data.editOptions.bind($data),
+                            attr: {title: $t('Edit')">
+                        <span data-bind="text: $t('Edit')"></span>
+                    </button>
+                    <button class="action action-delete" data-bind="
+                            click: $data.deleteOptions.bind($data),
+                            attr: {title: $t('Delete')">
+                        <span data-bind="text: $t('Delete')"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <!-- /ko -->
+</div>
+<!-- /ko -->

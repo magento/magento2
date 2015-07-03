@@ -183,7 +183,7 @@ define([
             if (json.isGuestCheckoutAllowed) {
                 
                 if( !guestChecked && !registerChecked ){
-                    alert( $.mage.__('You can create an account or check out as a guest.') );
+                    alert( $.mage.__('Please create an account or check out as a guest.') );
                     
                     return false;
                 }

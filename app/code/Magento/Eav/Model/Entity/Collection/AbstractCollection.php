@@ -896,6 +896,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         \Magento\Framework\Profiler::start('set_orig_data');
         foreach ($this->_items as $item) {
             $item->setOrigData();
+            $this->beforeAddLoadedItem($item);
         }
         \Magento\Framework\Profiler::stop('set_orig_data');
 

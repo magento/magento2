@@ -178,6 +178,13 @@
             </item>
         </argument>
     </textarea>
+    <multiline class="Magento\Ui\Component\Form\Element\Multiline">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+            </item>
+        </argument>
+    </multiline>
     <!-- Form elements -->
 
     <!-- Form element data types -->

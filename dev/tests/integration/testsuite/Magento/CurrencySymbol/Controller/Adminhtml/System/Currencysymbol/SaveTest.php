@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-class SaveTest extends \Magento\Backend\Utility\Controller
+class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
 
     /**
