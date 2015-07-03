@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="CheckoutOnepage" mca="checkout/onepage" module="Magento_Checkout">
+  <page name="CheckoutOnepage" mca="checkout/index" module="Magento_Checkout">
     <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="#checkout-step-authentication" strategy="css selector"/>
     <block name="billingBlock" class="Magento\Checkout\Test\Block\Onepage\Billing" locator="#checkout-step-billing" strategy="css selector"/>
     <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector"/>
