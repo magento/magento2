@@ -37,7 +37,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCSSminLibrary()
     {
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
-        $adapter = $this->objectManager->get('Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier');
+        $adapter = $this->objectManager->get('Magento\Framework\Code\Minifier\Adapter\Css\CSSmin');
         $this->assertEquals(
             file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
             $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.css')),
