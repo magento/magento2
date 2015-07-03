@@ -31,7 +31,7 @@ define([
         };
         this._next = function () {
             try {
-                this.getStep().force(this);
+                this.force();
             } catch (e) {
                 this.notifyMessage(e.message, true);
                 throw new Error(e);
@@ -42,6 +42,9 @@ define([
         };
         this.getStep = function(stepIndex) {
             return getStep(this.steps[stepIndex || this.index]);
+        };
+        this.force = function() {
+            this.getStep().force(this);
         };
         this._prev = function (newIndex) {
             this.updateLabels(this.getStep(this.index - 1));
@@ -88,6 +91,10 @@ define([
             this.nextLabel = $('button', this.next);
 
             this.next.on('click.' + this.eventNamespace, function (event) {
+                // TODO: try to avoid ui.tabs for simplify logic
+                if ((self.options.active+1) == (self.options.steps.length)) {
+                    self.wizard.force();
+                }
                 self._activate(self.options.active + 1);
             });
             this.prev.on('click.' + this.eventNamespace, function (event) {

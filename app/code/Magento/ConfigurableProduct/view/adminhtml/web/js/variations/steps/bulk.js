@@ -83,7 +83,9 @@ define([
             preview = _.find(images, function (image) {
                 return _.contains(image.galleryTypes, 'image');
             });
-            return {'images': images, preview: preview ? preview.url : ''};
+            return images.length && preview
+                ? {'images': images, preview: preview.url, file: preview.file}
+                : null;
         },
         force: function (wizard) {
             wizard.data.sections = this.sections;

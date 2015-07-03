@@ -20,16 +20,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
         <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
             <fieldset class="fieldset">
-                <div class="field" id="variations-search-field">
-                    <label class="label" for="configurable-attribute-selector"><span>Search</span></label>
-                    <div class="control">
-                        <input type="text" id="configurable-attribute-selector" class="input-text search"
-                               placeholder="start typing to search attribute" title="Select Attribute"
-                               autocomplete="off"/>
-                    </div>
-                    <?php echo $block->getChildHtml('add_attribute'); ?>
-                </div>
-
                 <?php echo $block->getChildHtml('generator'); ?>
 
                 <!-- Select Associated Product popup -->
@@ -89,14 +79,8 @@ require([
             inventoryAvailabilityField.removeProp('disabled');
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
-            $.each($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes(), function() {
-                $('#attribute-' + this.code + '-container select').prop('disabled', true);
-            })
         })
         .on('hide', function() {
-            if ($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes().length) {
-                return;
-            }
             currentProductTemplateControl
                 .removeClass('disabled')
                 .removeProp('disabled');
@@ -131,47 +115,6 @@ require([
     });
 
     $('[data-panel=product-variations]')
-        .on('generate', '[data-role=product-variations-matrix]', function(event, data) {
-            var form = $('[data-form=edit-product]');
-            if (!form.valid()) {
-                form.data('validator').focusInvalid();
-                return;
-            }
-            $.ajax({
-                url: data.url,
-                data: form.serialize(),
-                dataType: 'html',
-                context: variationsContainer,
-                showLoader: true
-            }).success(function(data) {
-                $('[data-role=product-variations-generator]').html(data).trigger('contentUpdated');
-                $('#product_type_id').val('configurable').trigger('change');
-            });
-        })
-        .on('add-option', '[data-action=add-option]', function(event) {
-            var attributeContainer = $(event.target).closest('[data-role=configurable-attribute]'),
-                panel = attributeContainer.closest('[data-panel=product-variations]'),
-                newOptionsCount = attributeContainer.data('newOptionsCount') || 0,
-                attribute = attributeContainer.data('attribute'),
-                tmpl;
-
-            tmpl = mageTemplate(panel.find('[data-template-for=new-option]').html(), {
-                data: {
-                    attribute: {
-                        id: attribute.attribute_id || attribute.id
-                    },
-                    option: {
-                        id: 'new-option-' + newOptionsCount
-                    }
-                }
-            });
-
-            attributeContainer.find('[data-role=options]')
-                .append($(tmpl))
-                .trigger('contentUpdated');
-            
-            attributeContainer.data('newOptionsCount', ++newOptionsCount);
-        })
         .on('disable', '[data-role=product-variations-matrix]', function() {
             $(this).html('');
         })
@@ -210,7 +153,7 @@ require([
                 if ($gridRow.find(columnSelectorTemplate.replace('%s', 'entity_id')).length) {
                     var $matrixRow = $button.parents('[data-role=row]');
 
-                    $.each('name,sku,qty,weight,entity_id'.split(','), function () {
+                    $.each('name,sku,qty,weight,entity_id,price'.split(','), function () {
                         var columnSelector = columnSelectorTemplate.replace('%s', this),
                             target = $matrixRow.find(columnSelector),
                             value = $.trim($gridRow.find(columnSelector).text()),
@@ -231,7 +174,7 @@ require([
                     if (imageElement.length) {
                         imageElement.attr('src', $gridRow.find('[data-role=image-url]').val());
                     } else {
-                        var tmpl = matrix.find('[data-template-for=variation-image]').html();
+                        var tmpl = $('[data-role=product-variations-matrix]').find('[data-template-for=variation-image]').html();
 
                         tmpl = mageTemplate(tmpl, {
                             data: {

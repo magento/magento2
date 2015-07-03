@@ -7,10 +7,7 @@
 ?>
 <div data-role="product-variations-generator">
     <!-- Configurable Attributes list -->
-    <div id="configurable-attributes-container"
-         data-role="configurable-attributes-container"
-         data-mage-init='{"variationsAttributes":{}}'>
-        <?php echo $block->getChildHtml('template'); ?>
+    <div id="configurable-attributes-container" data-role="configurable-attributes-container" data-mage-init='{"variationsAttributes":{}}'>
         <?php
         foreach ($block->getAttributes() as $attribute) {
             echo $block->getChildBlock('attribute-renderer')->render([
@@ -18,9 +15,6 @@
             ]);
         } ?>
     </div>
-
-    <!-- "Generate Variations" button -->
-    <?php echo $block->getChildHtml('generate'); ?>
 
     <!-- Variations -->
     <div id="product-variations-matrix" data-role="product-variations-matrix">

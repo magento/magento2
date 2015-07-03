@@ -1184,7 +1184,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $configDefaultValue = $this->stockConfiguration->getManageStock($product->getStoreId());
         $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
             $configDefaultValue ? 1 : 0;
-        if (!empty($postData['image'])) {
+        if (!empty($postData['image']) && empty($postData['media_gallery'])) {
             $postData['small_image'] = $postData['thumbnail'] = $postData['image'];
             $postData['media_gallery']['images'][] = [
                 'position' => 1,
