@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="sales_order_payment_place_end">
+        <observer name="paypal" instance="Magento\Paypal\Model\Observer" method="addBillingAgreementToSession" />
+    </event>
+    <event name="sales_order_payment_transaction_html_txn_id">
+        <observer name="paypal_transaction_html" instance="Magento\Paypal\Model\Observer" method="observeHtmlTransactionId" />
+    </event>
+</config>
