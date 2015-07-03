@@ -165,7 +165,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * - Catalog Prices = Including Tax
      * - Shipping Prices = Including Tax
      * - Apply Customer Tax = After Discount
-     * - Create a shopping cart price rule with % discount applied to the Shipping Amount
+     * - Create a cart price rule with % discount applied to the Shipping Amount
      * - run shopping cart and estimate shipping
      * - go to PayPal
      *

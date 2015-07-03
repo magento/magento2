@@ -25,7 +25,12 @@
         </div>
         <div class="actions-toolbar" data-bind="visible: !isInAction()">
             <div class="primary">
-                <button data-role="review-save" type="submit" data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}" class="button action primary checkout"><span data-bind="text: $t('Continue')"></span></button>
+                <button data-role="review-save"
+                        type="submit"
+                        data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
+                        class="button action primary checkout">
+                    <span data-bind="text: $t('Continue')"></span>
+                </button>
             </div>
         </div>
         <div data-bind="visible: isInAction()">

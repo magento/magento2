@@ -18,7 +18,7 @@ define(
             redirectAfterPlaceOrder: false,
             isInAction: iframe.isInAction,
             /**
-             * Get action url for payment mathod iframe.
+             * Get action url for payment method iframe.
              * @returns {String}
              */
             getActionUrl: function () {
