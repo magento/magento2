@@ -51,7 +51,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     {
         if (!$this->getFlag('states_joined')) {
             $this->_idFieldName = 'status_state';
-            $this->getSelect()->joinLeft(
+            $this->getSelect()->joinRight(
                 ['state_table' => $this->getTable('sales_order_status_state')],
                 'main_table.status=state_table.status',
                 ['state', 'is_default', 'visible_on_front']
