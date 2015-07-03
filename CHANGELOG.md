@@ -1,3 +1,38 @@
+0.74.0-beta16
+=============
+* Framework improvements:
+    * Improved declaration of JS widgets with mixins node
+    * Optimized Magento\Framework\View\Element\Template for production mode
+    * Added color picker JS library
+* Various improvements:
+    * Implemented enhanced checkout flow
+    * Increased security of search filters
+    * Added price variation caching based on WEEE
+    * Updated adapter in payment gateway
+    * Data version control was implemented on Customer and Quote modules to reduce number of unnecessary model saves
+    * Optimized Magento\PageCache\Model\Observer\ProcessLayoutRenderElement::execute
+    * Added event to make an ability to add elements on a main tab of attribute editing page
+    * Email markup duplication is eliminated and email content management is simplified
+* Tests:
+    * Increased timeout for HTTP requests in api-functional test framework to avoid error "HTTP request failed"
+    * Increased unit test coverage for Reports, CatalogRule, Config and CurrencySymbol modules
+    * Functional tests maintenance for Tax, Sales, Reports modules
+    * Created fixture generation scripts for functional tests
+    * Fixed CheckoutWithGiftMessagesTest functional test
+* Fixed bugs:
+    * Fixed wrong redirect after adding to compare, wish list or cart from private content blocks
+    * Fixed an issue where tax information was not saved in orders
+    * Fixed an issue where total amount was not set in the correct place
+    * Fixed an issue where product options details were missing while adding to wish list
+    * Fixed an issue with empty customer first name and last name when new address is added on backend
+    * Fixed an issue where it was not possible to create customer from backend if there was custom attribute
+    * Fixed an issue where email could not be retrieved from Quote address after adding an address in backend order creation
+    * Fixed XSS in order details
+* GitHub issues and requests:
+    * [#1389](https://github.com/magento/magento2/pull/1389) -- Replaced string check with simpler logic
+    * [#1412](https://github.com/magento/magento2/pull/1412) -- Fix typo - change getChildhtml to getChildHtml
+    * [#1415](https://github.com/magento/magento2/pull/1415) -- Add placeholder containers to invoice and shipment creation sections
+
 0.74.0-beta15
 =============
 * Framework improvements:
@@ -56,10 +91,10 @@
 0.74.0-beta14
 =============
 * Framework improvements:
-    * Introduced an ability to uninstall modules which were installed via composer (bin/magento module:uninstall <moduleName>)
-    * Introduced an ability to uninstall themes (bin/magento theme:uninstall <themeName>)
+    * Introduced an ability to uninstall modules which were installed via composer (bin/magento module:uninstall 'moduleName')
+    * Introduced an ability to uninstall themes (bin/magento theme:uninstall 'themeName')
     * Introduced an ability to backup and rollback DB and Media via CLI (bin/magento setup:backup, options are --code, --db or --media)
-    * Introduced an ability to uninstall language packages (bin/magento i18n:uninstall <languagePack>)
+    * Introduced an ability to uninstall language packages (bin/magento i18n:uninstall 'languagePack')
     * Introduced API notation for the following modules: Backend, Backup, Cron, Log, PageCache
     * Added join processors to search services, joined config for services with extension attributes
     * Renamed hidden_tax to discount_tax_compensation
@@ -72,14 +107,14 @@
     * Fixed an issue where it was impossible to save existent Grouped Product with no child items
     * Fixed an issue where message "We don't have as many "conf1" as you requested" appeared
     * Fixed an issue where second product from bundle product was ordered as separate item after checkout
-    * Fixed an issue where configs for payments and shippings were not encrypted
+    * Fixed an issue where configs for payments and shipping providers were not encrypted
     * Fixed an issue where Table Rates shipping method did not work
     * Fixed an issue where admin could not set locale properly on Account page
     * Fixed incomplete generated results of single tenant compiler
     * Fixed an issue with full page caching where one set of prices was cached for all customers
     * Fixed incorrect urls for private content
     * Fixed an issue where it was not possible to assign a product link to another product using API
-    * Fixed an issue where zipcode was not displayed as required field on Create New Order page
+    * Fixed an issue where zip code was not displayed as required field on Create New Order page
     * Fixed the Sample Data re-installation
     * Fixed random fails on inventory tab for test CreateSimpleProductEntityTest
 * Tests:
