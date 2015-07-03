@@ -8,10 +8,10 @@ namespace Magento\Framework\Module\ModuleList;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
-use Magento\Framework\Module\ModuleRegistryInterface;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Module\ModuleRegistryInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem

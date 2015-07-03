@@ -41,7 +41,7 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMock(
             'Magento\Framework\ObjectManager\Code\Generator\Repository',
             [
-                '_validateData',
+                '_validateData'
             ],
             [
                 '\Magento\Framework\ObjectManager\Code\Generator\Sample',
@@ -49,7 +49,7 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
                 $this->ioObjectMock,
                 null,
                 null,
-                $this->getMock('Magento\Framework\Filesystem\FileResolver'),
+                $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
 

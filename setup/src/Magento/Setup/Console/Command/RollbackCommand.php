@@ -127,6 +127,7 @@ class RollbackCommand extends AbstractSetupCommand
             }
             $this->doRollback($input, $output);
             $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
+
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {

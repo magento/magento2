@@ -120,7 +120,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'coreRegistry' => $this->coreRegistryMock,
-                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock
             ]
         );
     }
@@ -238,7 +238,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [null, 'New Block', 'New Block'],
-            [2, 'Edit Block', 'Edit Block'],
+            [2, 'Edit Block', 'Edit Block']
         ];
     }
 }

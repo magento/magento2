@@ -57,7 +57,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                             'description' => $this->_getCollectionFactoryClassName(),
                         ],
                     ],
-                ],
+                ]
             ],
             [
                 'name' => 'registry',
@@ -71,7 +71,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                             'description' => 'array',
                         ],
                     ],
-                ],
+                ]
             ],
             [
                 'name' => 'extensionAttributesJoinProcessor',
@@ -84,7 +84,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                             'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
                         ],
                     ],
-                ],
+                ]
             ],
         ];
         return $properties;
@@ -174,15 +174,15 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'param',
                         'description' => $this->_getCollectionFactoryClassName()
-                            . " \$" . $this->_getSourceCollectionFactoryPropertyName(),
+                            . " \$" . $this->_getSourceCollectionFactoryPropertyName()
                     ],
                     [
                         'name' => 'param',
                         'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface'
-                            . " \$extensionAttributesJoinProcessor",
+                            . " \$extensionAttributesJoinProcessor"
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -234,7 +234,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => self::NO_SUCH_ENTITY_EXCEPTION,
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -267,7 +267,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->_getResultClassName(),
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -300,7 +300,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName(),
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -322,7 +322,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'docblock' => [
                 'shortDescription' => 'Perform persist operations',
                 'tags' => [],
-            ],
+            ]
         ];
     }
 
@@ -356,7 +356,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName(),
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -390,7 +390,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => 'bool',
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -425,7 +425,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => 'bool',
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -454,7 +454,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName() . ' $entity',
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -497,7 +497,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                         'description' => $this->getSourceClassName() . '[]',
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -518,7 +518,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->_getDeleteMethod(),
             $this->_getDeleteByIdMethod(),
             $this->_getFlushMethod(),
-            $this->_getSaveMethod(),
+            $this->_getSaveMethod()
         ];
     }
 

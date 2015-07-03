@@ -6,12 +6,15 @@
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Join processor allows to join extension attributes during collections loading.
@@ -114,7 +117,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                     . ($useFieldInAlias ? '.' . $selectField[Converter::JOIN_FIELD] : ''),
                 JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS => $referenceTableAlias . '_' . $internalFieldName,
                 JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX => $referenceTableAlias . '.' . $internalFieldName,
-                JoinDataInterface::SELECT_FIELD_SETTER => $setterName,
+                JoinDataInterface::SELECT_FIELD_SETTER => $setterName
             ];
         }
         return $selectFieldsAliases;

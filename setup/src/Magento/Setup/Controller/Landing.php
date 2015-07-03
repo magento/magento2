@@ -20,7 +20,7 @@ class Landing extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel();
+        $view = new ViewModel;
         $view->setTerminal(true);
         $view->setVariable('languages', $this->serviceLocator->get('config')['languages']);
         $view->setVariable('location', 'en_US');

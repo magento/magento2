@@ -13,8 +13,8 @@ use Magento\Framework\Composer\Remove;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\DependencyChecker;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
 use Magento\Framework\Setup\BackupRollbackFactory;
@@ -352,6 +352,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $packages[] = $this->packageInfo->getPackageName($module);
         }
         $this->remove->remove($packages);
+
     }
 
     /**

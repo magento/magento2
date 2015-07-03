@@ -135,7 +135,7 @@ class Config
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ),
             '/* {{ ips }} */' => $this->_getAccessList(),
-            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
+            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions()
         ];
     }
 

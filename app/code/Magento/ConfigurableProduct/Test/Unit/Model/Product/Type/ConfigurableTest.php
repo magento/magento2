@@ -25,7 +25,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'position' => 0,
             'label' => 'Some Super Attribute',
             'values' => [],
-        ],
+        ]
     ];
 
     /**
@@ -200,7 +200,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $coreRegistry,
                 'logger' => $logger,
                 'stockConfiguration' => $this->_stockConfiguration,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
     }
@@ -290,7 +290,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'usesSource',
                 'getIsUserDefined',
                 '__wakeup',
-                '__sleep',
+                '__sleep'
             ],
             [],
             '',
@@ -807,23 +807,25 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGenerateSimpleProducts()
     {
         $productsData = [
-            6 => [
+            6 =>
+                [
                     'image' => 'image.jpg',
                     'name' => 'config-red',
                     'configurable_attribute' => '{"new_attr":"6"}',
                     'sku' => 'config-red',
-                    'quantity_and_stock_status' => [
+                    'quantity_and_stock_status' =>
+                        [
                             'qty' => '',
                         ],
                     'weight' => '333',
-                ],
+                ]
         ];
         $stockData = [
             'manage_stock' => '0',
             'use_config_enable_qty_increments' => '1',
             'use_config_qty_increments' => '1',
             'use_config_manage_stock' => 0,
-            'is_decimal_divided' => 0,
+            'is_decimal_divided' => 0
         ];
 
         $parentProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
@@ -835,7 +837,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'getNewVariationsAttributeSetId',
                     'getStockData',
                     'getQuantityAndStockStatus',
-                    'getWebsiteIds',
+                    'getWebsiteIds'
                 ]
             )
             ->disableOriginalConstructor()
@@ -854,7 +856,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'addData',
                     'setWebsiteIds',
                     'setStatus',
-                    'setVisibility',
+                    'setVisibility'
                 ]
             )
             ->disableOriginalConstructor()
@@ -953,3 +955,4 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['product_id'], $this->_model->generateSimpleProducts($parentProductMock, $productsData));
     }
 }
+

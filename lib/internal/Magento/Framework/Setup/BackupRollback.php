@@ -7,8 +7,8 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Backup\Exception\NotEnoughPermissions;
 use Magento\Framework\Backup\Factory;
+use Magento\Framework\Backup\Exception\NotEnoughPermissions;
 use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
@@ -110,7 +110,7 @@ class BackupRollback
         $this->log->log($granularType . ' backup is starting...');
         $fsBackup->create();
         $this->log->log(
-            $granularType . ' backup filename: ' . $fsBackup->getBackupFilename()
+            $granularType. ' backup filename: ' . $fsBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
@@ -266,7 +266,7 @@ class BackupRollback
             $this->directoryList->getPath(DirectoryList::VAR_DIR),
             $this->directoryList->getRoot() . '/.idea',
             $this->directoryList->getRoot() . '/.svn',
-            $this->directoryList->getRoot() . '/.git',
+            $this->directoryList->getRoot() . '/.git'
         ];
     }
 

@@ -6,10 +6,11 @@
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-use Magento\Tax\Model\TaxClass\Repository;
-use Magento\Framework\Api\SearchCriteria;
+use \Magento\Tax\Model\TaxClass\Repository;
+
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Api\SearchCriteria;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,7 +106,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'taxClassResource' => $this->taxClassResourceMock,
                 'searchResultsFactory' => $this->searchResultFactory,
                 'taxClassCollectionFactory' => $this->taxClassCollectionFactory,
-                'joinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'joinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
     }
@@ -356,7 +357,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [''],
-            ['ERROR'],
+            ['ERROR']
         ];
     }
 }

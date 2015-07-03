@@ -5,17 +5,18 @@
  */
 namespace Magento\Theme\Model;
 
-use Magento\Framework\App\Config\ValueInterface;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
-use Magento\Framework\View\DesignInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\App\Config\ValueInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ThemeValidator
  */
 class ThemeValidator
 {
+
     /**
      * Store Manager
      *
@@ -36,6 +37,7 @@ class ThemeValidator
      * @var ValueInterface $configData
      */
     private $configData;
+
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -71,7 +73,7 @@ class ThemeValidator
             ->addFieldToFilter('path', DesignInterface::XML_PATH_THEME_ID)
             ->addFieldToFilter('value', ['in' => array_keys($themesById)]);
         foreach ($configData as $row) {
-            switch ($row['scope']) {
+            switch($row['scope']) {
                 case 'default':
                     $messages[] = '<error>' . $themesById[$row['value']] . ' is in use in default config' . '</error>';
                     break;

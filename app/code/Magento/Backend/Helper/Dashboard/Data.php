@@ -80,7 +80,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             '7d' => __('Last 7 Days'),
             '1m' => __('Current Month'),
             '1y' => __('YTD'),
-            '2y' => __('2YTD'),
+            '2y' => __('2YTD')
         ];
     }
 
