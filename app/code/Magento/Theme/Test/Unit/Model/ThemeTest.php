@@ -299,7 +299,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->resourceCollection->expects($this->at(0))
             ->method('addFieldToFilter')
             ->with('parent_id', 1)
-            ->willReturnSelf();;
+            ->willReturnSelf();
         $this->resourceCollection->expects($this->at(1))
             ->method('addFieldToFilter')
             ->with('type', Theme::TYPE_STAGING)
@@ -331,7 +331,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->resourceCollection->expects($this->at(0))
             ->method('addFieldToFilter')
             ->with('parent_id', 1)
-            ->willReturnSelf();;
+            ->willReturnSelf();
         $this->resourceCollection->expects($this->at(1))
             ->method('addFieldToFilter')
             ->with('type', Theme::TYPE_STAGING)

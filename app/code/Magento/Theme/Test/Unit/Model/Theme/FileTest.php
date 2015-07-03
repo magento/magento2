@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\View\Design\Theme\Customization\FileServiceFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Theme\Model\Theme\File;
 
@@ -26,7 +27,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $themeFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileServiceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileServiceFactory;
 

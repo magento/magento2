@@ -466,7 +466,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $image = 'image.jpg';
         $storagePath = $this->_storageRoot;
-        $imagePath = $storagePath . '/' . $image;
 
         $this->_helperStorage->expects($this->once())
             ->method('getCurrentPath')

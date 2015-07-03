@@ -50,6 +50,11 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testRegister()
     {
         $image = 'preview.jpg';
