@@ -73,6 +73,16 @@ class Grid extends AbstractGrid
      */
     protected function getGridOriginSelect()
     {
+        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\\n', ifnull(sba.city, ''), "
+            . "', ', ifnull(sba.region, ''), ', ', ifnull(sba.postcode, '')))";
+        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\\n', ifnull(ssa.city, ''), "
+            . "', ', ifnull(ssa.region, ''), ', ', ifnull(ssa.postcode, '')))";
+        $customerName = "trim(concat(ifnull(sfo.customer_firstname, ''), ' ', ifnull(sfo.customer_lastname, '')))";
+        $paymentMethodSelect = $this->getConnection()->select()->from(
+            'sales_order_payment', ['method']
+        )->where(
+            '`parent_id` = sfo.entity_id'
+        )->limit(1);
         return $this->getConnection()->select()
             ->from(['sfo' => $this->getTable($this->orderTableName)], [])
             ->joinLeft(
@@ -103,6 +113,15 @@ class Grid extends AbstractGrid
                     'billing_name' => "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))",
                     'created_at' => 'sfo.created_at',
                     'updated_at' => 'sfo.updated_at',
+                    'billing_address' => $billingAddress,
+                    'shipping_address' => $shippingAddress,
+                    'shipping_information' => 'sfo.shipping_description',
+                    'customer_email' => 'sfo.customer_email',
+                    'customer_group' => 'sfo.customer_group_id',
+                    'subtotal' => 'sfo.base_subtotal',
+                    'shipping_and_handling' => 'sfo.base_shipping_amount',
+                    'customer_name' => $customerName,
+                    'payment_method' => sprintf('(%s)', $paymentMethodSelect)
                 ]
             );
     }
