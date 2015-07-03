@@ -37,11 +37,15 @@
             <p>{{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$store.getUrl('customer/account/') |raw}}</p>
             <p>
                 {{trans
-                    'If you have any questions, please feel free to contact us at <a href="mailto:%support_email">%support_email</a> or by phone at %support_phone.'
-                    
-                    support_email=$store.getConfig('trans_email/ident_support/email')
-                    support_phone=$store.getConfig('general/store_information/phone')
-                |raw}}
+                    'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>'
+
+                    store_email=$store_email
+                |raw}}{{depend store_phone}}
+                    {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
+                {{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
             </p>
         </td>
     </tr>

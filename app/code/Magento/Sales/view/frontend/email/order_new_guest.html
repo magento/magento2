@@ -33,18 +33,22 @@
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
                 {{trans "Once your package ships we will send an email with a link to track your order."}}
                 {{trans
-                    'If you have any questions about your order please contact us at <a href="mailto:%support_email">%support_email</a> or call us at %store_phone.'
+                    'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>'
 
-                    support_email=$store.getConfig('trans_email/ident_support/email')
-                    store_phone=$store.getConfig('general/store_information/phone')
-                |raw}}
+                    store_email=$store_email
+                |raw}}{{depend store_phone}}
+                    {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
+                {{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
             </p>
-            <p>{{trans "Your order confirmation is below. Thank you again for your business."}}</p>
         </td>
     </tr>
     <tr class="email-summary">
         <td>
-            <h1>{{trans "Your Order #%increment_id (placed on %created_at)" increment_id=$order.increment_id created_at=$order.getCreatedAtFormatted(1)}}</h1>
+            <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
+            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
         </td>
     </tr>
     <tr class="email-information">
