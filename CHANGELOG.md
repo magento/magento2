@@ -13,6 +13,13 @@
     * Optimized Magento\PageCache\Model\Observer\ProcessLayoutRenderElement::execute
     * Added event to make an ability to add elements on a main tab of attribute editing page
     * Email markup duplication is eliminated and email content management is simplified
+    * Implemented and ability to update/replace and export advanced product prices
+    * Added import history
+    * Implemented and ability to export configurable products
+* Payment improvements:
+    * Moved PayPal solutions back to CE
+    * PayPal Payments Standard is updated to PayPal Express Checkout API
+    * Improved conflict resolution rules for PayPal configuration
 * Tests:
     * Increased timeout for HTTP requests in api-functional test framework to avoid error "HTTP request failed"
     * Increased unit test coverage for Reports, CatalogRule, Config and CurrencySymbol modules
