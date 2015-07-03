@@ -3,10 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Directory data block
- */
 namespace Magento\Directory\Block;
 
 class Data extends \Magento\Framework\View\Element\Template
@@ -85,6 +81,20 @@ class Data extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve list of top destinations countries
+     *
+     * @return array
+     */
+    protected function getTopDestinations()
+    {
+        $destinations = (string)$this->_scopeConfig->getValue(
+            'general/country/destinations',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return !empty($destinations) ? explode(',', $destinations) : [];
+    }
+
+    /**
      * @param null|string $defValue
      * @param string $name
      * @param string $id
@@ -102,7 +112,9 @@ class Data extends \Magento\Framework\View\Element\Template
         if ($cache) {
             $options = unserialize($cache);
         } else {
-            $options = $this->getCountryCollection()->toOptionArray();
+            $options = $this->getCountryCollection()
+                ->setForegroundCountries($this->getTopDestinations())
+                ->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(

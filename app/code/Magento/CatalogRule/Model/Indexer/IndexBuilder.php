@@ -19,6 +19,15 @@ class IndexBuilder
     const SECONDS_IN_DAY = 86400;
 
     /**
+     * CatalogRuleGroupWebsite columns list
+     *
+     * This array contain list of CatalogRuleGroupWebsite table columns
+     *
+     * @var array
+     */
+    protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
+
+    /**
      * @var \Magento\Framework\App\Resource
      */
     protected $resource;
@@ -415,8 +424,6 @@ class IndexBuilder
      */
     protected function applyAllRules(Product $product = null)
     {
-        $write = $this->getWriteAdapter();
-
         $fromDate = mktime(0, 0, 0, date('m'), date('d') - 1);
         $toDate = mktime(0, 0, 0, date('m'), date('d') + 1);
 
@@ -499,6 +506,17 @@ class IndexBuilder
             $this->saveRuleProductPrices($dayPrices);
         }
 
+        return $this->updateCatalogRuleGroupWebsiteData();
+    }
+
+    /**
+     * Update CatalogRuleGroupWebsite data
+     *
+     * @return $this
+     */
+    protected function updateCatalogRuleGroupWebsiteData()
+    {
+        $write = $this->getWriteAdapter();
         $write->delete($this->getTable('catalogrule_group_website'), []);
 
         $timestamp = $this->dateTime->gmtTimestamp();
@@ -507,11 +525,15 @@ class IndexBuilder
             true
         )->from(
             $this->getTable('catalogrule_product'),
-            ['rule_id', 'customer_group_id', 'website_id']
+            $this->_catalogRuleGroupWebsiteColumnsList
         )->where(
             "{$timestamp} >= from_time AND (({$timestamp} <= to_time AND to_time > 0) OR to_time = 0)"
         );
-        $query = $select->insertFromSelect($this->getTable('catalogrule_group_website'));
+        $query = $select->insertFromSelect(
+            $this->getTable('catalogrule_group_website'),
+            $this->_catalogRuleGroupWebsiteColumnsList
+        );
+
         $write->query($query);
 
         return $this;
@@ -658,7 +680,6 @@ class IndexBuilder
                 $arrData[$key]['latest_start_date'] = $this->dateFormat->formatDate($data['latest_start_date'], false);
                 $arrData[$key]['earliest_end_date'] = $this->dateFormat->formatDate($data['earliest_end_date'], false);
             }
-            $adapter->insertOnDuplicate($this->getTable('catalogrule_affected_product'), array_unique($productIds));
             $adapter->insertOnDuplicate($this->getTable('catalogrule_product_price'), $arrData);
         } catch (\Exception $e) {
             throw $e;

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Model\Resource\Report;
 
 /**
@@ -22,21 +20,29 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
     protected $_flag = null;
 
     /**
+     * Logger instance
+     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
+     * Locale date instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
+     * Reports flag factory
+     *
      * @var \Magento\Reports\Model\FlagFactory
      */
     protected $_reportsFlagFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -179,7 +185,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param string $whereColumn
      * @param null|string|\DateTime $from
      * @param null|string|\DateTime $to
-     * @param array $additionalWhere
+     * @param [][] $additionalWhere
      * @param string $alias
      * @return \Magento\Framework\DB\Select
      */
@@ -281,12 +287,12 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      *
      * @param string $table
      * @param string $relatedTable
-     * @param array $joinCondition
+     * @param [] $joinCondition
      * @param string $column
      * @param string $whereColumn
      * @param string|null $from
      * @param string|null $to
-     * @param array $additionalWhere
+     * @param [][] $additionalWhere
      * @param string $alias
      * @param string $relatedAlias
      * @return \Magento\Framework\DB\Select
@@ -353,7 +359,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
     /**
      * Retrieve query for attribute with timezone conversion
      *
-     * @param string|array $table
+     * @param string|[] $table
      * @param string $column
      * @param null|mixed $from
      * @param null|mixed $to

@@ -50,9 +50,9 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
         } catch (\Exception $e) {
             $flag->unlock();
             $this->notifier->addMajor(
-                __('An error has occurred while deleting products from google shopping account.'),
+                __('Something went wrong while deleting products from the Google shopping account.'),
                 __(
-                    'One or more products were not deleted from google shopping account. Refer to the log file for details.'
+                    'One or more products were not deleted from the Google shopping account. Please review the log file for details.'
                 )
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);

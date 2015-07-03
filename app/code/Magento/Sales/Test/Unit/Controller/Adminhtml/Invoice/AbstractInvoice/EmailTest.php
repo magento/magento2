@@ -182,7 +182,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with('We sent the message.');
+            ->with('You sent the message.');
 
         $this->resultRedirectFactory->expects($this->atLeastOnce())
             ->method('create')

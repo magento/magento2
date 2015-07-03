@@ -40,7 +40,7 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
         } catch (\Exception $e) {
             $flag->unlock();
             $this->notifier->addMajor(
-                __('An error has occurred while adding products to google shopping account.'),
+                __('Something went wrong while adding products to the Google shopping account.'),
                 $e->getMessage()
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);

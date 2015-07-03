@@ -60,6 +60,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get affected cache tags
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
@@ -105,7 +106,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         if (!$id) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Could not rebuild index for undefined product')
+                __('We can\'t rebuild the index for an undefined product.')
             );
         }
         $this->doExecuteRow($id);
