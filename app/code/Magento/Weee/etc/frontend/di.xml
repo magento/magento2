@@ -13,4 +13,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="weee-app-action-dispatchController-context-plugin"
+                type="Magento\Weee\Model\App\Action\ContextPlugin"/>
+    </type>
 </config>

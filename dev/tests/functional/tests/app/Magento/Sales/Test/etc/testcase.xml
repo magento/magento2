@@ -33,17 +33,6 @@
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
-    <scenario name="MoveRecentlyViewedProductsOnOrderPageTest" firstStep="createProducts">
-        <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend" />
-        <step name="loginCustomerOnFrontend" module="Magento_Customer" next="openProductsOnFrontend" />
-        <step name="openProductsOnFrontend" module="Magento_Catalog" next="openCustomerOnBackend" />
-        <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount" />
-        <step name="createOrderFromCustomerAccount" module="Magento_Customer" next="selectStore" />
-        <step name="selectStore" module="Magento_Sales" next="addRecentlyViewedProductsToCart" />
-        <step name="addRecentlyViewedProductsToCart" module="Magento_Sales" next="configureProducts" />
-        <step name="configureProducts" module="Magento_Sales" />
-    </scenario>
     <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />
