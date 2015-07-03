@@ -541,6 +541,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Manually set a theme that will be used by getParams. Used to force the loading of an email template from a
+     * specific theme.
+     *
+     * @param string $templateId
+     * @param string $theme
+     * @return $this
+     */
+    public function setForcedTheme($templateId, $theme)
+    {
+        $area = $this->emailConfig->getTemplateArea($templateId);
+        $this->design->setDesignTheme($theme, $area);
+        return $this;
+    }
+
+    /**
      * Returns the design params for the template being processed
      *
      * @return array

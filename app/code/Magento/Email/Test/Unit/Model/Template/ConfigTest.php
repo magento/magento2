@@ -34,6 +34,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $emailTemplateFileSystem;
 
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileSystem;
+
     protected function setUp()
     {
         $this->_dataStorage = $this->getMock(
@@ -64,12 +69,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->fileSystem = $this->getMock(
+            '\Magento\Framework\Filesystem',
+            [],
+            [],
+            '',
+            false
+        );
         $this->_model = $this->getMockBuilder('\Magento\Email\Model\Template\Config')
             ->setConstructorArgs(
                 [
                     $this->_dataStorage,
                     $this->_moduleReader,
                     $this->emailTemplateFileSystem,
+                    $this->fileSystem
                 ]
             )
             ->setMethods(['getThemeTemplates'])
@@ -78,7 +91,109 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $this->assertEquals(['template_one', 'template_two'], $this->_model->getAvailableTemplates());
+        $this->_model->expects($this->atLeastOnce())
+            ->method('getThemeTemplates')
+            ->will($this->returnValue([]));
+
+        $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
+
+        foreach ($this->_model->getAvailableTemplates() as $templateOptions) {
+            $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
+            $expectedOptions = $expectedTemplates[$templateOptions['value']];
+
+            $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
+            $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
+        }
+    }
+
+    public function testGetThemeTemplates()
+    {
+        $themeDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['search'])
+            ->getMockForAbstractClass();
+
+        $templates = require __DIR__ . '/Config/_files/email_templates_merged.php';
+
+        $templateId = 'template_one';
+        $template = $templates[$templateId];
+
+        $area = $template['area'];
+        $searchThemePath = '*/*';
+        $foundThemePath = 'Vendor/custom_theme';
+        $module = $template['module'];
+        $filename = $template['file'];
+        $emailDirectory = \Magento\Framework\App\Filesystem\DirectoryList::EMAIL;
+        $themeDirectory->expects($this->once())
+            ->method('search')
+            ->with("{$area}/{$searchThemePath}/{$module}/{$emailDirectory}/{$filename}")
+            ->will($this->returnValue(["{$area}/{$foundThemePath}/{$module}/{$emailDirectory}/{$filename}"]));
+
+        $this->fileSystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($themeDirectory));
+
+        $this->_model = $this->getMockBuilder('\Magento\Email\Model\Template\Config')
+            ->setConstructorArgs(
+                [
+                    $this->_dataStorage,
+                    $this->_moduleReader,
+                    $this->emailTemplateFileSystem,
+                    $this->fileSystem
+                ]
+            )
+            ->setMethods(null)
+            ->getMock();
+
+        foreach ($this->_model->getThemeTemplates($templateId) as $templateOptions) {
+            $this->assertEquals(
+                sprintf(
+                    '%s (%s)',
+                    $template['label'],
+                    $foundThemePath
+                ),
+                $templateOptions['label']
+            );
+            $this->assertEquals(sprintf(
+                    '%s/%s',
+                    $templateId,
+                    $foundThemePath
+                ),
+                $templateOptions['value']
+            );
+            $this->assertEquals($template['module'], $templateOptions['group']);
+        }
+    }
+
+    /**
+     * @dataProvider parseTemplateCodePartsDataProvider
+     *
+     * @param string $input
+     * @param array $expectedOutput
+     */
+    public function testParseTemplateIdParts($input, $expectedOutput)
+    {
+        $this->assertEquals($this->_model->parseTemplateIdParts($input), $expectedOutput);
+    }
+
+    public function parseTemplateCodePartsDataProvider()
+    {
+        return [
+            'Template ID with no theme' => [
+                'random_template_code',
+                [
+                    'templateId' => 'random_template_code',
+                    'theme' => null,
+                ],
+            ],
+            'Template ID with theme' => [
+                'random_template_code/Vendor/CustomTheme',
+                [
+                    'templateId' => 'random_template_code',
+                    'theme' => 'Vendor/CustomTheme',
+                ],
+            ],
+        ];
     }
 
     public function testGetTemplateLabel()
@@ -190,7 +305,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Email\Model\Template\Config(
             $dataStorage,
             $this->_moduleReader,
-            $this->emailTemplateFileSystem
+            $this->emailTemplateFileSystem,
+            $this->fileSystem
         );
         if (!$argument) {
             $model->{$getterMethod}('fixture');

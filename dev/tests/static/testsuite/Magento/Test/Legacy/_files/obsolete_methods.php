@@ -2263,6 +2263,19 @@ return [
         '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
     ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
+    ['getUsedDefaultForPaths', 'Magento\Email\Block\Adminhtml\Template\Edit'],
+    ['getSystemConfigPathsWhereUsedAsDefault', 'Magento\Email\Model\BackendTemplate'],
+    ['_findEmailTemplateUsages', 'Magento\Email\Model\BackendTemplate'],
+    [
+        'getSystemConfigPathsWhereUsedCurrently',
+        'Magento\Email\Model\BackendTemplate',
+        'Magento\Email\Model\BackendTemplate::getSystemConfigPathsWhereCurrentlyUsed',
+    ],
+    [
+        'getUsedCurrentlyForPaths',
+        'Magento\Email\Block\Adminhtml\Template\Edit',
+        'Magento\Email\Block\Adminhtml\Template\Edit::getCurrentlyUsedForPaths',
+    ],
     ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
     ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
     ['loadByCode', 'Magento\Newsletter\Model\Resource'],
