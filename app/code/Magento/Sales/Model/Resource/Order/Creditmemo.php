@@ -9,7 +9,7 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\EntitySnapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 
 /**
