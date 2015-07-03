@@ -5,27 +5,29 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class MassHold extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
+class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * Hold selected orders
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('selected', []);
         $countHoldOrder = 0;
+        $countNonHoldOrder = 0;
 
-        foreach ($orderIds as $orderId) {
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        foreach ($collection->getItems() as $order) {
             if ($order->canHold()) {
                 $order->hold()->save();
-                $countHoldOrder++;
+                ++$countHoldOrder;
+            } else {
+                ++$countNonHoldOrder;
             }
         }
-
-        $countNonHoldOrder = count($orderIds) - $countHoldOrder;
 
         if ($countNonHoldOrder) {
             if ($countHoldOrder) {

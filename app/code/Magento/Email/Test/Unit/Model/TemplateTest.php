@@ -71,6 +71,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $emailConfig;
 
+    /**
+     * @var \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterTemplate;
+
     public function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -107,6 +112,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filterTemplate = $this->getMockBuilder('Magento\Email\Model\Template\Filter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filterTemplate->expects($this->any())
+            ->method('setUseAbsoluteLinks')
+            ->will($this->returnSelf());
+        $this->filterTemplate->expects($this->any())
+            ->method('setStoreId')
+            ->will($this->returnSelf());
+        $this->emailFilterFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->filterTemplate));
     }
 
     /**
@@ -150,27 +167,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetAndGetTemplateFilter()
     {
         $model = $this->getModelMock();
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $model->setTemplateFilter($filterTemplate);
-        $this->assertSame($filterTemplate, $model->getTemplateFilter());
+        $model->setTemplateFilter($this->filterTemplate);
+        $this->assertSame($this->filterTemplate, $model->getTemplateFilter());
     }
 
     public function testGetTemplateFilterWithEmptyValue()
     {
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->setMethods(['setUseAbsoluteLinks', 'setStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterTemplate->expects($this->once())
-            ->method('setUseAbsoluteLinks')
-            ->will($this->returnSelf());
-        $filterTemplate->expects($this->once())
-            ->method('setStoreId')
-            ->will($this->returnSelf());
-        $this->emailFilterFactory->method('create')
-            ->will($this->returnValue($filterTemplate));
         $designConfig = $this->getMockBuilder('Magento\Framework\Object')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
@@ -181,7 +183,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getDesignConfig')
             ->will($this->returnValue($designConfig));
 
-        $this->assertSame($filterTemplate, $model->getTemplateFilter());
+        $this->assertSame($this->filterTemplate, $model->getTemplateFilter());
     }
 
     /**
@@ -408,29 +410,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->setMethods([
-                'setUseSessionInUrl',
-                'setPlainTemplateMode',
-                'setVariables',
-                'setStoreId',
-                'filter',
-                'getStoreId',
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('setUseSessionInUrl')
             ->with(false)
             ->will($this->returnSelf());
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
             ->with($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT)
             ->will($this->returnSelf());
-        $filterTemplate->expects($this->any())
+        $this->filterTemplate->expects($this->any())
             ->method('setStoreId')
             ->will($this->returnSelf());
-        $filterTemplate->expects($this->any())
+        $this->filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue($storeId));
 
@@ -446,7 +437,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
 
         $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText']);
-        $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
         $designConfig = $this->getMockBuilder('Magento\Framework\Object')
@@ -454,13 +444,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 'storeId';
-        $designConfig->expects($this->once())
+        $designConfig->expects($this->exactly(2))
             ->method('getStore')
             ->will($this->returnValue($storeId));
         $model->expects($this->once())
+            ->method('_applyDesignConfig')
+            ->willReturnSelf();
+        $model->expects($this->exactly(2))
             ->method('getDesignConfig')
             ->will($this->returnValue($designConfig));
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
+            ->method('setIncludeProcessor')
+            ->willReturnSelf();
+        $this->filterTemplate->expects($this->once())
             ->method('setVariables')
             ->with(array_merge([ 'this' => $model], $expectedVariables));
 
@@ -468,7 +464,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('getPreparedTemplateText')
             ->will($this->returnValue($preparedTemplateText));
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('filter')
             ->with($preparedTemplateText)
             ->will($this->returnValue($expectedResult));
@@ -556,13 +552,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $templateSubject = 'templateSubject';
         $model->setTemplateSubject($templateSubject);
 
-        $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
-            ->setMethods(['setVariables', 'setStoreId', 'filter'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $model->expects($this->once())
             ->method('getTemplateFilter')
-            ->will($this->returnValue($filterTemplate));
+            ->will($this->returnValue($this->filterTemplate));
 
         $model->expects($this->once())
             ->method('_applyDesignConfig');
@@ -579,18 +571,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getDesignConfig')
             ->will($this->returnValue($designConfig));
 
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('setStoreId')
             ->with($storeId)
             ->will($this->returnSelf());
         $expectedResult = 'expected';
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('filter')
             ->with($templateSubject)
             ->will($this->returnValue($expectedResult));
 
         $variables = [ 'key' => 'value' ];
-        $filterTemplate->expects($this->once())
+        $this->filterTemplate->expects($this->once())
             ->method('setVariables')
             ->with(array_merge($variables, ['this' => $model]));
         $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));

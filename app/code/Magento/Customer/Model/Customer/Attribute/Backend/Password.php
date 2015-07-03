@@ -53,17 +53,8 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 );
             }
 
-            if ($this->string->substr(
-                $password,
-                0,
-                1
-            ) == ' ' || $this->string->substr(
-                $password,
-                $length - 1,
-                1
-            ) == ' '
-            ) {
-                throw new LocalizedException(__('The password can\'t begin or end with a space.'));
+            if (trim($password) != $password) {
+                throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 
             $object->setPasswordHash($object->hashPassword($password));
