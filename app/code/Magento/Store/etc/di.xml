@@ -288,6 +288,16 @@
             <argument name="modulePrefix" xsi:type="string">store</argument>
         </arguments>
     </type>
+    <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
+        <arguments>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
+        <arguments>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
             <argument name="preProcessors" xsi:type="array">
@@ -295,6 +305,7 @@
                     <item name="css" xsi:type="array">
                         <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
                         <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
                     </item>
                     <item name="less" xsi:type="array">
                         <item name="magento_import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
@@ -304,6 +315,12 @@
                 <item name="css" xsi:type="array">
                     <item name="css" xsi:type="array">
                         <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
+                    </item>
+                </item>
+                <item name="js" xsi:type="array">
+                    <item name="js" xsi:type="array">
+                        <item name="js_min" xsi:type="string">jsMinificationProcessor</item>
                     </item>
                 </item>
             </argument>
