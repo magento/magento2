@@ -33,19 +33,6 @@ class Shipping extends Form
     protected $waitElement = '.loading-mask';
 
     /**
-     * Fill form data. Unset 'email' field as it absent in current form
-     *
-     * @param array $fields
-     * @param SimpleElement $element
-     * @return void
-     */
-    protected function _fill(array $fields, SimpleElement $element = null)
-    {
-        unset($fields['email']);
-        parent::_fill($fields, $element);
-    }
-
-    /**
      * Fill shipping address
      *
      * @param $fixture
@@ -60,7 +47,5 @@ class Shipping extends Form
             return;
         }
         $this->fill($fixture);
-//        $this->_rootElement->find($this->continue, Locator::SELECTOR_CSS)->click();
-//        $this->waitForElementNotVisible($this->waitElement);
     }
 }
