@@ -3,47 +3,17 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Import Variables
+//  ---------------------------------------------
+
+@import 'variables/_buttons.less';
+@import 'variables/_colors.less';
+@import 'variables/_typography.less';
+
 //  Paths
 
 @path-to-pub: '../../pub/';
-
-//
-//  Colors
-//  ---------------------------------------------
-
-@color-brownie: #514943;
-@color-brownie-light: #676056;
-@color-gray65: #a6a6a6;
-@color-gray68: #adadad;
-@color-gray75: #bfbfbf;
-@color-gray80: #ccc;
-@color-gray82: #d1d1d1;
-@color-gray83: #d4d4d4;
-@color-gray84: #d6d6d6;
-@color-gray85: #d9d9d9;
-@color-gray98: #fafafa;
-@color-lazy-sun: #fffbbb;
-@color-blue-dodger: #008bdb;
-@color-blue-pure: #007bdb;
-@color-green-apple: #79a22e;
-@color-green-islamic: #090;
-@color-dark-brownie: #41362f;
-@color-brown-darkie: #41362f;
-@color-phoenix-down: #e04f00;
-@color-phoenix: #eb5202;
-@color-phoenix-almost-rise: #ef672f;
-@color-phoenix-rise: #f65405;
-@color-tomato-brick: #e22626;
-@color-strawberry-milkshake: #ee7d7d;
-@color-cyan-light: #e0f6fe;
-@color-pink: #fcc;
-
-//  Nesting colors
-@color-prime: @color-phoenix;
-@color-tertiary: @color-brownie;
-@color-success: @color-green-apple;
-@color-warning: @color-phoenix-almost-rise;
-@color-failed: @color-tomato-brick;
 
 //
 //  Break points
@@ -87,11 +57,8 @@
 @font-weight__regular: 400;
 @font-weight__semibold: 600;
 @font-weight__bold: 700;
-
-@base__color: @color-gray19;
 @font-family__base: 'Open Sans', @font-family__sans-serif;
-@base__font-size: 1.4rem;
-@base__line-height: 1.4;
+
 
 @small__font-size: @base__font-size * .85;
 
@@ -108,17 +75,6 @@
 @container__indent: 2rem;
 
 @main__indent-top: 3rem;
-
-//
-//  Buttons
-//  ---------------------------------------------
-
-//  Sizes
-
-@btn__base__font-size: 1.6rem;
-@btn__base__padding-top: .45em;
-@btn__base__padding-bottom: @btn__base__padding-top;
-@btn__height__base: @btn__base__font-size * @base__line-height + @btn__base__font-size * @btn__base__padding-top + @btn__base__font-size * @btn__base__padding-bottom;
 
 //
 //  Forms

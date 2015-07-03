@@ -60,7 +60,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
         )->setType(
             'button'
         )->setLabel(
-            __('Add New Attribute')
+            __('Create New Attribute')
         );
         return $attributeCreate->toHtml();
     }
