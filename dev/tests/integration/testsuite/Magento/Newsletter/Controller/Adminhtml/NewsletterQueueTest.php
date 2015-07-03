@@ -49,7 +49,14 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
             'text' => 'newsletter text',
         ];
         $this->getRequest()->setPostValue($postForQueue);
-        $this->_model->loadByCode('some_unique_code');
+
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
+        // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
+        // instead of existing one.
+        $this->assertEquals('some_unique_code', $this->_model->getTemplateCode());
+
         $this->getRequest()->setParam('template_id', $this->_model->getId());
         $this->dispatch('backend/newsletter/queue/save');
 
