@@ -55,6 +55,30 @@
             <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
+    <virtualType name="QuoteAddressRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Address\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\Resource\Quote\Address">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">QuoteAddressRelationsComposite</argument>
+        </arguments>
+    </type>
+    <virtualType name="QuoteRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Quote\Model\Quote\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\Resource\Quote">
+        <arguments>
+            <argument name="entityRelationComposite" xsi:type="object">QuoteRelationsComposite</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
     <preference for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface" type="Magento\Quote\Model\Cart\TotalsAdditionalData" />
     <preference for="\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="\Magento\Quote\Model\Quote\Address\CustomAttributeList" />

@@ -33,6 +33,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -49,6 +50,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Pelago\Emogrifier $emogrifier,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
@@ -65,7 +67,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $layout,
             $layoutFactory,
             $appState,
-            $backendUrlBuilder
+            $backendUrlBuilder,
+            $emogrifier
         );
     }
 
@@ -77,7 +80,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function widgetDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
 
         // Determine what name block should have in layout
         $name = null;
@@ -119,7 +122,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
