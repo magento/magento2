@@ -107,8 +107,11 @@ class File implements MergeableInterface
         $result = $this->join($result, $this->context->getPath());
         $result = $this->join($result, $this->module);
         $result = $this->join($result, $this->filePath);
-        if ($this->assetConfig->isAssetMinification($this->contentType)) {
-            $result = substr($result, 0, -strlen($this->contentType)) . 'min.' . $this->contentType;
+        if (
+            $this->assetConfig->isAssetMinification($extension = pathinfo($result, PATHINFO_EXTENSION)) &&
+            substr($result, -strlen($extension) - 5, 5) != '.min.'
+        ) {
+            $result = substr($result, 0, -strlen($extension)) . 'min.' . $extension;
         }
         return $result;
     }
