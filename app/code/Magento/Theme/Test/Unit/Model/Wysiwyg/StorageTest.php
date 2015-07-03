@@ -465,7 +465,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testDeleteFile()
     {
         $image = 'image.jpg';
-        $storagePath = $this->_storageRoot;
 
         $this->_helperStorage->expects($this->once())
             ->method('getCurrentPath')
