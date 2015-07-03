@@ -55,4 +55,11 @@ interface OrderAdapterInterface
      * @return int
      */
     public function getId();
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return float
+     */
+    public function getGrandTotalAmount();
 }

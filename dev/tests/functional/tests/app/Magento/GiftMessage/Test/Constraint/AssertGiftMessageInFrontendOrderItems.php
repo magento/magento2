@@ -62,6 +62,10 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
                     'message' => $itemGiftMessage->getMessage(),
                 ];
             }
+            if ($product->getIsVirtual() == 'Yes') {
+                $expectedData = [];
+            }
+
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedData,
                 $customerOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
