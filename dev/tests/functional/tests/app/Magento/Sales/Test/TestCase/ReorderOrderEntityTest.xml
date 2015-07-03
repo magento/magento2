@@ -12,7 +12,7 @@
             <data name="order/dataSet" xsi:type="string">two_simple_product</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="customer/dataSet" xsi:type="string">default</data>
-            <data name="billingAddress/dataSet" xsi:type="string">US_address_1</data>
+            <data name="billingAddress/dataSet" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
