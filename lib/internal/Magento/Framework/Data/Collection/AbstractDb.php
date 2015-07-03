@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Data\Collection;
 
-use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -577,12 +577,24 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                     $item->setIdFieldName($this->getIdFieldName());
                 }
                 $item->addData($row);
+                $this->beforeAddLoadedItem($item);
                 $this->addItem($item);
             }
         }
         $this->_setIsLoaded();
         $this->_afterLoad();
         return $this;
+    }
+
+    /**
+     * Let do something before add loaded item in collection
+     *
+     * @param \Magento\Framework\Object $item
+     * @return \Magento\Framework\Object
+     */
+    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    {
+        return $item;
     }
 
     /**

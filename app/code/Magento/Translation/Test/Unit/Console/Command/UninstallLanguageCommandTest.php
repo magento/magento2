@@ -6,13 +6,13 @@
 
 namespace Magento\Translation\Test\Unit\Console\Command;
 
-use Magento\Framework\App\Cache;
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
-use Magento\Framework\Setup\BackupRollbackFactory;
-use Magento\Translation\Console\Command\UninstallLanguageCommand;
+use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\App\Cache;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Translation\Console\Command\UninstallLanguageCommand;
+use Magento\Framework\Setup\BackupRollbackFactory;
 
 class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,6 +71,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+
         $this->command = new UninstallLanguageCommand(
             $this->dependencyChecker,
             $this->remove,
@@ -95,7 +96,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
-                    'vendor/language-ua_ua' => 'magento2-language',
+                    'vendor/language-ua_ua' => 'magento2-language'
                 ]
             );
 
@@ -125,7 +126,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
-                    'vendor/language-ua_ua' => 'magento2-language',
+                    'vendor/language-ua_ua' => 'magento2-language'
                 ]
             );
 
@@ -150,7 +151,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
-                    'vendor/language-ua_ua' => 'magento2-language',
+                    'vendor/language-ua_ua' => 'magento2-language'
                 ]
             );
 
@@ -165,6 +166,8 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
     }
 
+
+
     public function testExecutePackageNoLanguage()
     {
         $dependencies['vendor/language-ua_ua'] = [];
@@ -178,7 +181,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getRootRequiredPackageTypesByName')
             ->willReturn(
                 [
-                    'vendor/language-ua_ua' => 'library',
+                    'vendor/language-ua_ua' => 'library'
                 ]
             );
 

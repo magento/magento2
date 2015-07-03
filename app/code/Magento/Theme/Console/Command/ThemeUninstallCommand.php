@@ -8,23 +8,23 @@ namespace Magento\Theme\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Model\Theme\Data\Collection;
 use Magento\Theme\Model\Theme\ThemeProvider;
-use Magento\Theme\Model\ThemeValidator;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
+use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Theme\Model\ThemeValidator;
 
 /**
  * Command for uninstalling theme and backup-code feature

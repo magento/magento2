@@ -5,8 +5,8 @@
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\Framework\Controller\ResultFactory;
 
 class StockAll extends UnsubscribeController
 {

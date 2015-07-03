@@ -7,26 +7,25 @@
 define(
     [
         'Magento_Captcha/js/view/checkout/defaultCaptcha',
-        'Magento_Customer/js/model/customer',
-        'Magento_Captcha/js/model/captchaList'
+        'Magento_Captcha/js/model/captchaList',
+        'Magento_Customer/js/action/login'
     ],
-    function (defaultCaptcha, customer, captchaList) {
-        "use strict";
+    function (defaultCaptcha, captchaList, loginAction) {
+        'use strict';
         return defaultCaptcha.extend({
             initialize: function() {
                 this._super();
-                var currentCaptcha = captchaList.getCaptchaByFormId(this.formId);
+                var currentCaptcha = captchaList.getCaptchaByFormId(this.formId),
+                    self = this;
+
                 if (currentCaptcha != null) {
                     currentCaptcha.setIsVisible(true);
                     this.setCurrentCaptcha(currentCaptcha);
-                    this.updateCaptchaOnFailedLogin();
-                }
-            },
-            updateCaptchaOnFailedLogin: function () {
-                if (this.formId == 'user_login') {
-                    var self = this;
-                    customer.getFailedLoginAttempts().subscribe(function() {
-                        self.refresh();
+
+                    loginAction.registerLoginCallback(function(loginData) {
+                        if (loginData.captcha_form_id && loginData.captcha_form_id == self.formId) {
+                            self.refresh();
+                        }
                     });
                 }
             }

@@ -144,7 +144,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'emailConfig' => $this->emailConfig,
                     'filterFactory' => $this->filterFactory,
-                    'templateFactory' => $this->templateFactory,
+                    'templateFactory' => $this->templateFactory
                 ]
             ),
             '',
@@ -361,7 +361,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
                 'Magento\Email\Model\AbstractTemplate',
                 [
                     'design' => $designMock,
-                    'storeManager' => $storeManagerMock,
+                    'storeManager' => $storeManagerMock
                 ]
             )
         );

@@ -6,13 +6,13 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -2622,6 +2622,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $images[] = $this->convertFromMediaGalleryInterface($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
+
         }
         return $this;
     }

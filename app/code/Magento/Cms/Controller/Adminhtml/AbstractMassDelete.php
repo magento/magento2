@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class AbstractMassDelete

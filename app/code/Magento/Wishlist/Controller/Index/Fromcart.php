@@ -6,10 +6,10 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Fromcart extends Action\Action implements IndexInterface
 {

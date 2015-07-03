@@ -7,6 +7,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;

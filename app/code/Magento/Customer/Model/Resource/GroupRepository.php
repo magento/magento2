@@ -6,16 +6,16 @@
 
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Customer\Api\Data\GroupExtensionInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Resource\Group\Collection;
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Customer\Api\Data\GroupExtensionInterface;
 
 /**
  * Customer group CRUD class

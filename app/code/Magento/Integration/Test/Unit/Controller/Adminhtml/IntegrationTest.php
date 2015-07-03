@@ -239,7 +239,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'response' => $this->_responseMock,
             'messageManager' => $this->_messageManager,
             'resultRedirectFactory' => $this->resultRedirectFactory,
-            'resultFactory' => $this->resultFactory,
+            'resultFactory' => $this->resultFactory
         ];
 
         $this->_backendActionCtxMock = $this->_objectManagerHelper->getObject(

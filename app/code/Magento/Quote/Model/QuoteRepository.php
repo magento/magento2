@@ -5,13 +5,14 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
