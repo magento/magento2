@@ -3661,4 +3661,12 @@ return [
     ['Magento\Framework\View\Element\UiComponent\JsConfigInterface'],
     ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['Magento\Framework\View\Asset\Minified\AbstractAsset'],
+    ['Magento\Framework\View\Asset\Minified\ImmutablePathAsset'],
+    ['Magento\Framework\View\Asset\Minified\MutablePathAsset'],
+    ['Magento\Framework\View\Asset\MinifyService'],
+    ['Magento\Framework\View\Test\Unit\Asset\Minified\AbstractAssetTestCase'],
+    ['Magento\Framework\View\Test\Unit\Asset\Minified\ImmutablePathAssetTest'],
+    ['Magento\Framework\View\Test\Unit\Asset\Minified\MutablePathAssetTest'],
+    ['Magento\Framework\View\Test\Unit\Asset\MinifyServiceTest'],
 ];
