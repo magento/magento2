@@ -6,11 +6,13 @@ define([
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'jquery',
-    'ko'
-], function (Component, customerData, $, ko) {
+    'ko',
+    'mage/url'
+], function (Component, customerData, $, ko, url) {
     'use strict';
 
     var sidebarInitialized = false;
+    url.setBaseUrl(window.checkout.baseUrl);
 
     function initSidebar() {
         var minicart = $("[data-block='minicart']");
