@@ -180,7 +180,6 @@
 
 .admin__scope-old .image-placeholder {
     position: relative;
-    background: #fff url(Magento_Backend::images/image-placeholder.png) no-repeat 50% 0;
 }
 
 .admin__scope-old .image-placeholder .fileinput-button {
