@@ -80,33 +80,68 @@ class Grid extends AbstractGrid
      */
     protected function getGridOriginSelect()
     {
-        return $this->getConnection()->select()
-            ->from(['sfi' => $this->getTable($this->invoiceTableName)], [])
-            ->join(['sfo' => $this->getTable($this->orderTableName)], 'sfi.order_id = sfo.entity_id', [])
-            ->joinLeft(
-                ['sba' => $this->getTable($this->addressTableName)],
-                'sfo.billing_address_id = sba.entity_id',
-                []
-            )
-            ->columns(
-                [
-                    'entity_id' => 'sfi.entity_id',
-                    'store_id' => 'sfi.store_id',
-                    'base_grand_total' => 'sfi.base_grand_total',
-                    'grand_total' => 'sfi.grand_total',
-                    'order_id' => 'sfi.order_id',
-                    'state' => 'sfi.state',
-                    'store_currency_code' => 'sfi.store_currency_code',
-                    'order_currency_code' => 'sfi.order_currency_code',
-                    'base_currency_code' => 'sfi.base_currency_code',
-                    'global_currency_code' => 'sfi.global_currency_code',
-                    'increment_id' => 'sfi.increment_id',
-                    'order_increment_id' => 'sfo.increment_id',
-                    'created_at' => 'sfi.created_at',
-                    'updated_at' => 'sfi.updated_at',
-                    'order_created_at' => 'sfo.created_at',
-                    'billing_name' => "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))",
-                ]
-            );
+        $paymentMethodSelect = $this->getConnection()->select()->from(
+            'sales_order_payment', ['method']
+        )->where(
+            '`parent_id` = sfi.order_id'
+        )->limit(1);
+
+        $customerName = "trim(concat(ifnull(sfo.customer_firstname, ''), ' ', ifnull(sfo.customer_lastname, '')))";
+
+        $billingName = "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))";
+
+        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\n', ifnull(sba.city, ''), "
+            . "',', ifnull(sba.region, ''), ',', ifnull(sba.postcode, '')))";
+
+        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\n', ifnull(ssa.city, ''), "
+            . "',', ifnull(ssa.region, ''), ',', ifnull(ssa.postcode, '')))";
+
+        return $this->getConnection()->select()->from(
+            ['sfi' => $this->getTable($this->invoiceTableName)],
+            []
+        )->join(
+            ['sfo' => $this->getTable($this->orderTableName)],
+            'sfi.order_id = sfo.entity_id',
+            []
+        )->joinLeft(
+            ['sba' => $this->getTable($this->addressTableName)],
+            'sfo.billing_address_id = sba.entity_id',
+            []
+        )->joinLeft(
+            ['ssa' => $this->getTable($this->addressTableName)],
+            'sfo.shipping_address_id = ssa.entity_id',
+            []
+        )->columns(
+            [
+                'entity_id' => 'sfi.entity_id',
+                'increment_id' => 'sfi.increment_id',
+                'state' => 'sfi.state',
+                'store_id' => 'sfi.store_id',
+                'store_name' => 'sfo.store_name',
+                'order_id' => 'sfi.order_id',
+                'order_status' => 'sfo.status',
+                'order_increment_id' => 'sfo.increment_id',
+                'order_created_at' => 'sfo.created_at',
+                'customer_id' => 'sfo.customer_id',
+                'customer_name' => $customerName,
+                'customer_email' => 'sfo.customer_email',
+                'customer_group_id' => 'sfo.customer_group_id',
+                'payment_method' => sprintf('(%s)', $paymentMethodSelect),
+                'store_currency_code' => 'sfi.store_currency_code',
+                'order_currency_code' => 'sfi.order_currency_code',
+                'base_currency_code' => 'sfi.base_currency_code',
+                'global_currency_code' => 'sfi.global_currency_code',
+                'billing_name' => $billingName,
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress,
+                'shipping_information' => 'sfo.shipping_description',
+                'subtotal' => 'sfo.base_subtotal',
+                'shipping_and_handling' => 'sfo.base_shipping_amount',
+                'grand_total' => 'sfi.grand_total',
+                'base_grand_total' => 'sfi.base_grand_total',
+                'created_at' => 'sfi.created_at',
+                'updated_at' => 'sfi.updated_at'
+            ]
+        );
     }
 }
