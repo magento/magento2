@@ -8,9 +8,10 @@ define(
         '../model/url-builder',
         'mage/storage',
         'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'mage/url'
     ],
-    function(urlBuilder, storage, messageList, url) {
+    function(urlBuilder, storage, messageList, errorProcessor, url) {
         "use strict";
         return function(giftMessage, remove) {
             url.setBaseUrl(giftMessage.getConfigValue('baseUrl'));
@@ -48,8 +49,7 @@ define(
                 }
             ).fail(
                 function(response) {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };
