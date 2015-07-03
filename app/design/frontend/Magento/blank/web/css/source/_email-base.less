@@ -194,7 +194,9 @@ body {
 //  ---------------------------------------------
 
 .button {
-    margin-bottom: @indent__s;
+    & > tr > td {
+        padding-bottom: @indent__s;
+    }
 
     .inner-wrapper {
         td {
