@@ -22,7 +22,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Shipment\Grid\Colle
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Registry $registryManager
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -32,7 +32,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Shipment\Grid\Colle
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\Registry $registryManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
