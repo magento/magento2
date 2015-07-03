@@ -12,7 +12,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Class AssertGiftMessageInBackendOrder
  * Assert that message from dataset is displayed on order(s) view page on backend.
  */
 class AssertGiftMessageInBackendOrder extends AbstractAssertForm
@@ -46,6 +45,8 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
         array $products,
         $orderId
     ) {
+        $expectedData = [];
+        $actualData = [];
         $orderIndex->open()->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
         if ($giftMessage->getAllowGiftMessagesForOrder()) {
@@ -54,8 +55,9 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
         }
 
         if ($giftMessage->getAllowGiftOptionsForItems()) {
-            foreach ($products as $key => $product) {
-                $expectedData[] = $giftMessage->getItems()[$key]->getData();
+            foreach ($giftMessage->getItems() as $key => $giftMessageItem) {
+                $expectedData[] = $giftMessageItem->getData();
+                $product = $products[$key];
                 $actualData[] = $salesOrderView->getGiftItemsBlock()->getItemProduct($product)
                     ->getGiftMessageFormData($giftMessage);
             }

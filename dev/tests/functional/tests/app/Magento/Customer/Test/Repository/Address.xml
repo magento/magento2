@@ -199,7 +199,7 @@
             <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
             <field name="postcode" xsi:type="string">SE1 7RW</field>
             <field name="country_id" xsi:type="string">United Kingdom</field>
-            <field name="region_id" xsi:type="string">London</field>
+            <field name="region" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
             <field name="vat_id" xsi:type="string">584451913</field>
             <field name="default_billing" xsi:type="string">Yes</field>

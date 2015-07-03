@@ -154,11 +154,11 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     {
         $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceExclTax();
         $actualPrices['cart_item_price_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceInclTax();
         $actualPrices['cart_item_subtotal_excl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPrice();
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceExclTax();
         $actualPrices['cart_item_subtotal_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceInclTax();
 

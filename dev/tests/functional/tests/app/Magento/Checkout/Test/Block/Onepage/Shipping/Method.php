@@ -10,7 +10,6 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Method
  * One page checkout status shipping method block
  *
  */
@@ -21,7 +20,7 @@ class Method extends Block
      *
      * @var string
      */
-    protected $shippingMethod = '//dt[text()="%s"]/following-sibling::*//label/span[contains(text()[2], "%s")]';
+    protected $shippingMethod = '//tr[//td[contains(text(),"%s")] and //td[contains(text(),"%s")]]//label';
 
     /**
      * Continue checkout button
