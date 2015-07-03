@@ -143,8 +143,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertStringMatchesFormat(
-            '%AThank you, %A'
-            . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject()) . '%A',
+            '%A' . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject())
+            . ' wants to share this Wish List%A',
             $actualResult
         );
     }
