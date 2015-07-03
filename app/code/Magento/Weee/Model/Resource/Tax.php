@@ -52,4 +52,38 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         return $this->_getReadAdapter()->fetchOne($select);
     }
+
+    /**
+     * @param int $countryId
+     * @param int $regionId
+     * @param int $websiteId
+     * @return boolean
+     */
+    public function isWeeeInLocation($countryId, $regionId, $websiteId)
+    {
+        // Check if there is a weee_tax for the country and region
+        $attributeSelect = $this->getReadConnection()->select();
+        $attributeSelect->from(
+            $this->getTable('weee_tax'),
+            'value'
+        )->where(
+            'website_id IN(?)',
+            [$websiteId, 0]
+        )->where(
+            'country = ?',
+            $countryId
+        )->where(
+            'state = ?',
+            $regionId
+        )->limit(
+            1
+        );
+
+        $value = $this->getReadConnection()->fetchOne($attributeSelect);
+        if ($value) {
+            return true;
+        }
+
+        return false;
+    }
 }
