@@ -26,6 +26,9 @@ define(
             },
             isVisible: ko.observable(quote.isVirtual()),
             quoteIsVirtual: quote.isVirtual(),
+            isPaymentMethodsAvailable: ko.computed(function () {
+                return paymentService.getAvailablePaymentMethods().length > 0;
+            }),
 
             initialize: function () {
                 this._super();
