@@ -23,7 +23,7 @@ use Magento\Framework\Search\RequestInterface;
  */
 class Mapper
 {
-    const SQL_ENTITIES_MATCH_LIMIT = 10000;
+    const SQL_ENTITIES_MATCH_LIMIT = 100000;
     /**
      * @var ScoreBuilder
      */

@@ -35,6 +35,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoApiDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGetMultiStore()

@@ -47,13 +47,27 @@ class IndexScopeResolver implements IndexScopeResolverInterface
         foreach ($dimensions as $dimension) {
             switch ($dimension->getName()) {
                 case 'scope':
-                    $tableNameParts[] = $dimension->getName() .
-                        $this->scopeResolver->getScope($dimension->getValue())->getId();
+                    $tableNameParts[] = $dimension->getName() . $this->getScopeId($dimension);
                     break;
                 default:
                     $tableNameParts[] = $dimension->getName() . $dimension->getValue();
             }
         }
         return $this->resource->getTableName(implode('_', $tableNameParts));
+    }
+
+    /**
+     * Get scope id by code
+     *
+     * @param Dimension $dimension
+     * @return int
+     */
+    private function getScopeId($dimension)
+    {
+        if (is_numeric($dimension->getValue())) {
+            return $dimension->getValue();
+        } else {
+            return $this->scopeResolver->getScope($dimension->getValue())->getId();
+        }
     }
 }

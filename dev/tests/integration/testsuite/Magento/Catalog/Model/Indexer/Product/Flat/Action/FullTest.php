@@ -31,7 +31,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php

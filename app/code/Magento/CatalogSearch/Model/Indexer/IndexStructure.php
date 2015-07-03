@@ -102,7 +102,7 @@ class IndexStructure
      */
     private function getAdapter()
     {
-        $adapter = $this->resource->getConnection('write');
+        $adapter = $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
         return $adapter;
     }
 }
