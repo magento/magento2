@@ -210,7 +210,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 '{{trans "foobar"}}',
                 ['foobar' => 'barfoo'],
                 'barfoo',
-            ],
+            ]
         ];
     }
 
@@ -244,23 +244,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         return [
             'CSS from theme' => [
                 'file="css/email-1.css"',
-                'color: #111;',
+                'color: #111;'
             ],
             'CSS from parent theme' => [
                 'file="css/email-2.css"',
-                'color: #222;',
+                'color: #222;'
             ],
             'CSS from grandparent theme' => [
                 'file="css/email-3.css"',
-                'color: #333;',
+                'color: #333;'
             ],
             'Missing file parameter' => [
                 '',
-                '/* "file" parameter must be specified */',
+                '/* "file" parameter must be specified */'
             ],
             'Empty or missing file' => [
                 'file="css/non-existent-file.css"',
-                '/* Contents of css/non-existent-file.css could not be loaded or is empty */',
+                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
             ],
             'File with compilation error results in error message' => [
                 'file="css/file-with-error.css"',

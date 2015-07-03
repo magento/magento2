@@ -158,7 +158,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * [key:value, "key2":"value2", [
      *     [123, foo],
      * ]]
-     *
+     * 
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

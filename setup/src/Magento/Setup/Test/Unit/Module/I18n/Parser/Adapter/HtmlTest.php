@@ -46,7 +46,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
                 'phrase' => 'Phrase 2 with %a_lot of extra info for the brilliant %customer_name.',
                 'file' => $this->_testFile,
                 'line' => null,
-                'quote' => Phrase::QUOTE_DOUBLE,
+                'quote' => Phrase::QUOTE_DOUBLE
             ],
         ];
 

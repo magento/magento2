@@ -64,12 +64,12 @@ class Resolver implements ResolverInterface
                             $this->directory . '/lib/web/mage/',
                             $this->directory . '/lib/web/varien/',
                         ],
-                        'fileMask' => '/\.(js|phtml)$/',
+                        'fileMask' => '/\.(js|phtml)$/'
                     ],
                     [
                         'type' => 'xml',
                         'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
-                        'fileMask' => '/\.xml$/',
+                        'fileMask' => '/\.xml$/'
                     ],
                 ];
             } else {

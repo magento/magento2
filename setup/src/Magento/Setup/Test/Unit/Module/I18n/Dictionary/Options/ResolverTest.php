@@ -60,13 +60,13 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                             $sourceFirst . '/lib/web/mage/',
                             $sourceFirst . '/lib/web/varien/',
                         ],
-                        'fileMask' => '/\.(js|phtml)$/',
+                        'fileMask' => '/\.(js|phtml)$/'
                     ],
                     [
                         'type' => 'xml',
                         'paths' => [$sourceFirst . '/app/code/', $sourceFirst . '/app/design/'],
-                        'fileMask' => '/\.xml$/',
-                    ],
+                        'fileMask' => '/\.xml$/'
+                    ]
                 ],
             ],
             [
@@ -76,8 +76,8 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                     ['type' => 'php', 'paths' => [$sourceSecond], 'fileMask' => '/\.(php|phtml)$/'],
                     ['type' => 'html', 'paths' => [$sourceSecond], 'fileMask' => '/\.html/'],
                     ['type' => 'js', 'paths' => [$sourceSecond], 'fileMask' => '/\.(js|phtml)$/'],
-                    ['type' => 'xml', 'paths' => [$sourceSecond], 'fileMask' => '/\.xml$/'],
-                ],
+                    ['type' => 'xml', 'paths' => [$sourceSecond], 'fileMask' => '/\.xml$/']
+                ]
             ],
         ];
     }

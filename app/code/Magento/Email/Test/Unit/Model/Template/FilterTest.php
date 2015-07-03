@@ -172,8 +172,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function transDirectiveDataProvider()
-    {
+    public function transDirectiveDataProvider() {
         return [
             'empty directive' => [
                 '{{trans}}',
@@ -224,7 +223,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 '{{trans "Hello %adjective world!" adjective="$mood"}}',
                 'Hello happy world!',
                 [
-                    'mood' => 'happy',
+                    'mood' => 'happy'
                 ],
             ],
         ];
