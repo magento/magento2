@@ -9,21 +9,11 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheFlushCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheFlushCommandTest extends \PHPUnit_Framework_TestCase
+class CacheFlushManageCommandTest extends CacheManageCommandTestAbstract
 {
-    /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheManager;
-
-    /**
-     * @var CacheFlushCommand
-     */
-    private $command;
-
     public function setUp()
     {
-        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        parent::setUp();
         $this->command = new CacheFlushCommand($this->cacheManager);
     }
 
@@ -36,18 +26,6 @@ class CacheFlushCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute($param);
         $expect = 'Flushed cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL;
         $this->assertEquals($expect, $commandTester->getDisplay());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The following requested cache types are not supported:
-     */
-    public function testExecuteInvalidCacheType()
-    {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $param = ['types' => ['A', 'D']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($param);
     }
 
     public function testExecuteAllCacheType()
