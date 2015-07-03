@@ -23,16 +23,6 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $resourceHelperMock;
 
     /**
@@ -63,20 +53,6 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->eventManagerMock = $this->getMock(
-            '\Magento\Framework\Event\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectFactoryMock = $this->getMock(
-            '\Magento\Framework\ObjectFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->collectionMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\Collection',
             [],
@@ -102,7 +78,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->collectionMock)
         );
         $valueMap = [
-            ['main_table.frontend_input', ['in' => 123 ], $this->collectionMock],
+            ['frontend_input', 'select', $this->collectionMock],
             ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
             ['is_user_defined', 1, $this->collectionMock],
             ['is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock],
@@ -131,19 +107,12 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         );
         $this->suggestedListModel = new \Magento\ConfigurableProduct\Model\SuggestedAttributeList(
             $this->attributeFactoryMock,
-            $this->resourceHelperMock,
-            $this->eventManagerMock,
-            $this->objectFactoryMock
+            $this->resourceHelperMock
         );
     }
 
     public function testGetSuggestedAttributesIfTheyApplicable()
     {
-        $object = $this->getMock('\Magento\Framework\Object', [], [], '', false);
-        $object->expects($this->once())->method('setData');
-        $object->expects($this->once())->method('getData')->willReturn(123);
-        $this->objectFactoryMock->expects($this->once())->method('create')->willReturn($object);
-
         $source = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
             [],
@@ -163,10 +132,6 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuggestedAttributesIfTheyNotApplicable()
     {
-        $object = $this->getMock('\Magento\Framework\Object', [], [], '', false);
-        $object->expects($this->once())->method('setData');
-        $object->expects($this->once())->method('getData')->willReturn(123);
-        $this->objectFactoryMock->expects($this->once())->method('create')->willReturn($object);
         $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(['simple']));
         $this->attributeMock->expects($this->never())->method('getId');
         $this->attributeMock->expects($this->never())->method('getFrontendLabel');
