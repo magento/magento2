@@ -614,8 +614,12 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         $this->_verifyThisTransactionExists();
         if (null === $this->_paymentObject && $shouldLoad) {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             $payment = $this->_paymentFactory->create()->load($this->getPaymentId());
             if ($payment->getId()) {
+                if (!$payment->getOrder()) {
+                    $payment->setOrder($this->getOrder());
+                }
                 $this->setOrderPaymentObject($payment);
             }
         }
