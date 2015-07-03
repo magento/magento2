@@ -17,7 +17,7 @@ define(
                 displayArea: 'actions'
             },
             getActiveView: function() {
-                var view = this.getViewByCode(quote.getPaymentMethod()());
+                var view = this.getViewByCode(quote.paymentMethod());
                 return view ? view : this.getDefaultView();
             },
             getViewByCode: function(code) {

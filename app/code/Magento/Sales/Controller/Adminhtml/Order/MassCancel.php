@@ -5,20 +5,21 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
+class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * Cancel selected orders
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('selected', []);
         $countCancelOrder = 0;
         $countNonCancelOrder = 0;
-        foreach ($orderIds as $orderId) {
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        foreach ($collection->getItems() as $order) {
             if ($order->canCancel()) {
                 $order->cancel()->save();
                 $countCancelOrder++;

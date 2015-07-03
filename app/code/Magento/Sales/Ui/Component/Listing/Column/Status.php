@@ -6,12 +6,40 @@
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
 
 /**
  * Class Status
  */
 class Status extends Column
 {
+    /**
+     * @var string[]
+     */
+    protected $statuses;
+
+    /**
+     * Constructor
+     *
+     * @param ContextInterface $context
+     * @param CollectionFactory $collectionFactory
+     * @param UiComponentFactory $uiComponentFactory
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        CollectionFactory $collectionFactory,
+        UiComponentFactory $uiComponentFactory,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->statuses = $collectionFactory->create()->toOptionHash();
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
     /**
      * Prepare Data Source
      *
@@ -22,7 +50,7 @@ class Status extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = ucfirst($item[$this->getData('name')]);
+                $item[$this->getData('name')] = $this->statuses[$item[$this->getData('name')]];
             }
         }
     }

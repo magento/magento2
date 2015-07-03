@@ -5,21 +5,22 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+
+class MassUnhold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * Unhold selected orders
      *
+     * @param AbstractCollection $collection
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function execute()
+    protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('selected', []);
         $countUnHoldOrder = 0;
         $countNonUnHoldOrder = 0;
 
-        foreach ($orderIds as $orderId) {
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        foreach ($collection->getItems() as $order) {
             if ($order->canUnhold()) {
                 $order->unhold()->save();
                 $countUnHoldOrder++;
