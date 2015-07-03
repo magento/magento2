@@ -333,6 +333,7 @@
                 <item name="attribute_key_0" xsi:type="array">
                     <item name="options" xsi:type="array">
                         <item name="option_key_0" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
                             <item name="pricing_value" xsi:type="string">1</item>
                             <item name="include" xsi:type="string">Yes</item>
                             <item name="is_percent" xsi:type="string">No</item>

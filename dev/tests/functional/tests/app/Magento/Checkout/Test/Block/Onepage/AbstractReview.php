@@ -27,6 +27,13 @@ abstract class AbstractReview extends Block
     protected $continueCheckoutButton = '#review-buttons-container button';
 
     /**
+     * Product item block locator.
+     *
+     * @var string
+     */
+    protected $productItemByName = './/li[contains(@class,"product-item") and contains(.,"%s")]';
+
+    /**
      * Grand total search mask.
      *
      * @var string
@@ -38,14 +45,14 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $grandTotalExclTax = '[class="grand totals excl"] td>strong';
+    protected $grandTotalExclTax = '.grand.totals.excl .price';
 
     /**
      * Grand total including tax search mask.
      *
      * @var string
      */
-    protected $grandTotalInclTax = '[class="grand totals incl"] td>strong';
+    protected $grandTotalInclTax = '.grand.totals.incl .price';
 
     /**
      * Subtotal search mask.
@@ -59,28 +66,28 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $subtotalExclTax = '[class="totals sub excl"] span';
+    protected $subtotalExclTax = '.totals.sub.excl .price';
 
     /**
      * Subtotal including tax search mask.
      *
      * @var string
      */
-    protected $subtotalInclTax = '[class="totals sub incl"] span';
+    protected $subtotalInclTax = '.totals.sub.incl .price';
 
     /**
      * Tax search mask.
      *
      * @var string
      */
-    protected $tax = '.totals-tax span';
+    protected $tax = '.totals-tax .price';
 
     /**
      * Discount search mask.
      *
      * @var string
      */
-    protected $discount = '[class="totals"] .amount>span';
+    protected $discount = '.totals.discount .price';
 
     /**
      * Shipping excluding tax search mask.
@@ -94,21 +101,21 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $shippingInclTax = '[class="totals shipping incl"] span';
+    protected $shippingInclTax = '.totals.shipping.incl .price';
 
     /**
      * Product price excluding tax search mask.
      *
      * @var string
      */
-    protected $itemExclTax = '//tr[contains (.,"%s")]/td[@class="col price"]/span[@class="price-excluding-tax"]/span';
+    protected $itemExclTax = '.price-excluding-tax .price';
 
     /**
      * Product price including tax search mask.
      *
      * @var string
      */
-    protected $itemInclTax = '//tr[contains (.,"%s")]/td[@class="col price"]/span[@class="price-including-tax"]/span';
+    protected $itemInclTax = '.price-including-tax .price';
 
     // @codingStandardsIgnoreStart
     /**
@@ -116,14 +123,14 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $itemSubExclTax = '//tr[contains (.,"%s")]/td[@class="col subtotal"]/span[@class="price-excluding-tax"]/span';
+    protected $itemSubExclTax = '.subtotal .price-excluding-tax .price';
 
     /**
      * Product price subtotal including tax search mask.
      *
      * @var string
      */
-    protected $itemSubInclTax = '//tr[contains (.,"%s")]/td[@class="col subtotal"]/span[@class="price-including-tax"]/span';
+    protected $itemSubInclTax = '.subtotal .price-including-tax .price';
     // @codingStandardsIgnoreEnd
 
     /**
@@ -163,8 +170,11 @@ abstract class AbstractReview extends Block
      */
     public function getItemPriceExclTax($productName)
     {
-        $locator = sprintf($this->itemExclTax, $productName);
-        $price = $this->_rootElement->find($locator, Locator::SELECTOR_XPATH);
+        $productItem = $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+        $price = $productItem->find($this->itemExclTax);
         return $price->isVisible() ? $this->escapeCurrency($price->getText()) : null;
     }
 
@@ -176,8 +186,11 @@ abstract class AbstractReview extends Block
      */
     public function getItemPriceInclTax($productName)
     {
-        $locator = sprintf($this->itemInclTax, $productName);
-        $price = $this->_rootElement->find($locator, Locator::SELECTOR_XPATH);
+        $productItem = $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+        $price = $productItem->find($this->itemInclTax);
         return $price->isVisible() ? $this->escapeCurrency($price->getText()) : null;
     }
 
@@ -189,8 +202,11 @@ abstract class AbstractReview extends Block
      */
     public function getItemSubExclTax($productName)
     {
-        $locator = sprintf($this->itemSubExclTax, $productName);
-        $price = $this->_rootElement->find($locator, Locator::SELECTOR_XPATH);
+        $productItem = $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+        $price = $productItem->find($this->itemSubExclTax);
         return $price->isVisible() ? $this->escapeCurrency($price->getText()) : null;
     }
 
@@ -202,8 +218,11 @@ abstract class AbstractReview extends Block
      */
     public function getItemSubInclTax($productName)
     {
-        $locator = sprintf($this->itemSubInclTax, $productName);
-        $price = $this->_rootElement->find($locator, Locator::SELECTOR_XPATH);
+        $productItem = $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+        $price = $productItem->find($this->itemSubInclTax);
         return $price->isVisible() ? $this->escapeCurrency($price->getText()) : null;
     }
 
@@ -236,8 +255,8 @@ abstract class AbstractReview extends Block
      */
     public function getTax()
     {
-        $tax = $this->_rootElement->find($this->tax, Locator::SELECTOR_CSS)->getText();
-        return $this->escapeCurrency($tax);
+        $tax = $this->_rootElement->find($this->tax, Locator::SELECTOR_CSS);
+        return $tax->isVisible() ? $this->escapeCurrency($tax->getText()) : null;
     }
 
     /**
@@ -302,7 +321,6 @@ abstract class AbstractReview extends Block
      */
     public function getShippingExclTax()
     {
-        $this->waitForElementVisible($this->shippingExclTax);
         $subTotal = $this->_rootElement->find($this->shippingExclTax, Locator::SELECTOR_CSS);
         return $subTotal->isVisible() ? $this->escapeCurrency($subTotal->getText()) : null;
     }

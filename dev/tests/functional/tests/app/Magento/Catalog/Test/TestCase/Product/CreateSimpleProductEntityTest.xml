@@ -337,7 +337,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation19">
-            <data name="description" xsi:type="string">Create product with cross-sell products</data>
+            <data name="description" xsi:type="string">MAGETWO-29081: Create product with cross-sell products</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -354,7 +354,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCrossSells" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation20">
-            <data name="description" xsi:type="string">Create product with up-sell products</data>
+            <data name="description" xsi:type="string">MAGETWO-29105: Create product with up-sell products</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -371,7 +371,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductUpSells" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation21">
-            <data name="description" xsi:type="string">Create product with related products</data>
+            <data name="description" xsi:type="string">MAGETWO-29352: Create product with related products</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>

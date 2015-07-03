@@ -6,13 +6,13 @@
 
 namespace Magento\Checkout\Test\Block\Onepage;
 
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Checkout\Test\Fixture\Checkout;
 
 /**
- * Class Shipping
  * One page checkout status shipping block
  *
  */
@@ -60,5 +60,16 @@ class Shipping extends Form
         $this->fill($shippingAddress);
         $this->_rootElement->find($this->continue, Locator::SELECTOR_CSS)->click();
         $this->waitForElementNotVisible($this->waitElement);
+    }
+
+    /**
+     * Fill shipping address
+     *
+     * @param Address $address
+     * @return void
+     */
+    public function fillShippingAddress(Address $address)
+    {
+        $this->fill($address);
     }
 }
