@@ -17,6 +17,8 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Save action
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractAction
 {
