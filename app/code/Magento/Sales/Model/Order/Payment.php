@@ -314,7 +314,7 @@ class Payment extends Info implements OrderPaymentInterface
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -347,12 +347,12 @@ class Payment extends Info implements OrderPaymentInterface
                 break;
             case ($message):
             case ($originalOrderState && $message):
-            case ($originalOrderState != $orderState):
-            case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState)
-                    ->setStatus($orderStatus)
-                    ->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified($isCustomerNotified);
+                if ($originalOrderState != $orderState || $originalOrderStatus != $orderStatus) {
+                    $order->setState($orderState)
+                        ->setStatus($orderStatus)
+                        ->addStatusHistoryComment($message)
+                        ->setIsCustomerNotified($isCustomerNotified);
+                }
                 break;
             default:
                 break;
@@ -407,6 +407,9 @@ class Payment extends Info implements OrderPaymentInterface
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
@@ -444,7 +447,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         }
         $status = false;
-        if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
+        if (!$invoice->getIsPaid()) {
             // attempt to capture: this can trigger "is_transaction_pending"
             $method = $this->getMethodInstance();
             $method->setStore(
@@ -1241,7 +1244,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         } else {
             if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PAYMENT_REVIEW;
+                $state = Order::STATE_PROCESSING;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1525,7 +1528,10 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (is_string($preparedMessage)) {
+            if (
+                is_string($preparedMessage)
+                || $preparedMessage instanceof \Magento\Framework\Phrase
+            ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
                     $preparedMessage

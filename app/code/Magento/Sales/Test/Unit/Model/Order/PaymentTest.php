@@ -133,7 +133,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'denyPayment',
                     'fetchTransactionInfo',
                     'canCapture',
-                    'canRefund'
+                    'canRefund',
+                    'canOrder',
                 ]
             )
             ->getMock();
@@ -365,7 +366,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseCurrency')
             ->willReturn($baseCurrencyMock);
 
-        $this->assertOrderUpdated(Order::STATE_PAYMENT_REVIEW, Order::STATUS_FRAUD, $message);
+        $this->assertOrderUpdated(Order::STATE_PROCESSING, Order::STATUS_FRAUD, $message);
 
         $this->paymentMethodMock->expects($this->once())
             ->method('authorize')
