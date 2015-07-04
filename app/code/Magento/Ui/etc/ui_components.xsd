@@ -109,6 +109,11 @@
             <xs:extension base="input"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="filterSearch">
+        <xs:complexContent>
+            <xs:extension base="input"/>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="container">
         <xs:complexContent>
             <xs:extension base="ui_element">

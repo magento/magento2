@@ -88,6 +88,18 @@
                 </item>
             </argument>
         </exportButton>
+        <filterSearch name="fulltext">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid_data_source</item>
+                    <item name="chipsProvider" xsi:type="string">sales_order_grid.sales_order_grid.listing_top.listing_filters_chips</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">sales_order_grid.sales_order_grid.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.search</item>
+                    </item>
+                </item>
+            </argument>
+        </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
