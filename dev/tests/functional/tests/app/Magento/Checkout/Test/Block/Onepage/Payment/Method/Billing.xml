@@ -8,11 +8,11 @@
 <mapping strict="0">
     <wrapper>billingAddress</wrapper>
     <fields>
-        <firstname />
-        <lastname />
         <email>
             <selector>[name='customerDetails[email]']</selector>
         </email>
+        <firstname />
+        <lastname />
         <company />
         <street>
             <selector>[name='billingAddress[street][0]']</selector>
