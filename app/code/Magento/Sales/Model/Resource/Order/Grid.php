@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Sales\Model\Resource\AbstractGrid;
+use Magento\Framework\Model\Resource\Db\Context;
 
 /**
  * Class Grid
@@ -16,7 +17,45 @@ class Grid extends AbstractGrid
     /**
      * @var string
      */
-    protected $gridTableName = 'sales_order_grid';
+    protected $gridTableName;
+
+    /**
+     * @var string
+     */
+    protected $mainTableName;
+
+    /**
+     * @var array
+     */
+    protected $joins;
+
+    /**
+     * @var array
+     */
+    protected $columns;
+
+    /**
+     * @param Context $context
+     * @param string $mainTableName
+     * @param string $gridTableName
+     * @param array $joins
+     * @param array $columns
+     * @param string|null $resourcePrefix
+     */
+    public function __construct(
+        Context $context,
+        $mainTableName,
+        $gridTableName,
+        array $joins = [],
+        array $columns = [],
+        $resourcePrefix = null
+    ) {
+        $this->mainTableName = $mainTableName;
+        $this->gridTableName = $gridTableName;
+        $this->joins = $joins;
+        $this->columns = $columns;
+        parent::__construct($context, $resourcePrefix);
+    }
 
     /**
      * Adds new orders to the grid.
@@ -30,7 +69,7 @@ class Grid extends AbstractGrid
     public function refresh($value, $field = null)
     {
         $select = $this->getGridOriginSelect()
-            ->where(($field ?: 'sfo.entity_id') . ' = ?', $value);
+            ->where(($field ?: $this->mainTableName . '.entity_id') . ' = ?', $value);
 
         return $this->getConnection()->query(
             $this->getConnection()
@@ -53,7 +92,7 @@ class Grid extends AbstractGrid
     public function refreshBySchedule()
     {
         $select = $this->getGridOriginSelect()
-            ->where('sfo.updated_at >= ?', $this->getLastUpdatedAtValue());
+            ->where($this->mainTableName . '.updated_at >= ?', $this->getLastUpdatedAtValue());
 
         return $this->getConnection()->query(
             $this->getConnection()
@@ -73,56 +112,26 @@ class Grid extends AbstractGrid
      */
     protected function getGridOriginSelect()
     {
-        $billingAddress = "trim(concat(ifnull(sba.street, ''), '\\n', ifnull(sba.city, ''), "
-            . "', ', ifnull(sba.region, ''), ', ', ifnull(sba.postcode, '')))";
-        $shippingAddress = "trim(concat(ifnull(ssa.street, ''), '\\n', ifnull(ssa.city, ''), "
-            . "', ', ifnull(ssa.region, ''), ', ', ifnull(ssa.postcode, '')))";
-        $customerName = "trim(concat(ifnull(sfo.customer_firstname, ''), ' ', ifnull(sfo.customer_lastname, '')))";
-        $paymentMethodSelect = $this->getConnection()->select()->from(
-            'sales_order_payment', ['method']
-        )->where(
-            '`parent_id` = sfo.entity_id'
-        )->limit(1);
-        return $this->getConnection()->select()
-            ->from(['sfo' => $this->getTable($this->orderTableName)], [])
-            ->joinLeft(
-                ['sba' => $this->getTable($this->addressTableName)],
-                'sfo.billing_address_id = sba.entity_id',
+        $select = $this->getConnection()->select()
+            ->from([$this->mainTableName => $this->getTable($this->mainTableName)], []);
+        foreach ($this->joins as $joinName => $data) {
+            $select->joinLeft(
+                [$joinName => $this->getTable($data['table'])],
+                sprintf(
+                    '%s.%s = %s.%s',
+                    $this->mainTableName,
+                    $data['origin_column'],
+                    $joinName,
+                    $data['target_column']
+                ),
                 []
-            )
-            ->joinLeft(
-                ['ssa' => $this->getTable($this->addressTableName)],
-                'sfo.shipping_address_id = ssa.entity_id',
-                []
-            )
-            ->columns(
-                [
-                    'entity_id' => 'sfo.entity_id',
-                    'status' => 'sfo.status',
-                    'store_id' => 'sfo.store_id',
-                    'store_name' => 'sfo.store_name',
-                    'customer_id' => 'sfo.customer_id',
-                    'base_grand_total' => 'sfo.base_grand_total',
-                    'base_total_paid' => 'sfo.base_total_paid',
-                    'grand_total' => 'sfo.grand_total',
-                    'total_paid' => 'sfo.total_paid',
-                    'increment_id' => 'sfo.increment_id',
-                    'base_currency_code' => 'sfo.base_currency_code',
-                    'order_currency_code' => 'sfo.order_currency_code',
-                    'shipping_name' => "trim(concat(ifnull(ssa.firstname, ''), ' ' ,ifnull(ssa.lastname, '')))",
-                    'billing_name' => "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))",
-                    'created_at' => 'sfo.created_at',
-                    'updated_at' => 'sfo.updated_at',
-                    'billing_address' => $billingAddress,
-                    'shipping_address' => $shippingAddress,
-                    'shipping_information' => 'sfo.shipping_description',
-                    'customer_email' => 'sfo.customer_email',
-                    'customer_group' => 'sfo.customer_group_id',
-                    'subtotal' => 'sfo.base_subtotal',
-                    'shipping_and_handling' => 'sfo.base_shipping_amount',
-                    'customer_name' => $customerName,
-                    'payment_method' => sprintf('(%s)', $paymentMethodSelect)
-                ]
             );
+        }
+        $columns = [];
+        foreach ($this->columns as $key => $value) {
+            $columns[$key] = new \Zend_Db_Expr((string) $value);
+        }
+
+        return $select->columns($columns);
     }
 }

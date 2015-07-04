@@ -599,6 +599,19 @@
                 </item>
             </argument>
         </column>
+        <column name="total_refunded" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Total Refunded</item>
+                </item>
+            </argument>
+        </column>
         <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
