@@ -51,15 +51,19 @@
         <div class="field">
             <div data-role="configurable-attribute">
                 <!-- ko foreach: {data: attributes, as: 'attribute'} -->
-                <input name="attributes[]" data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}" type="hidden"/>
-                <input data-bind="value: attribute.id, attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}" type="hidden"/>
-                <input data-bind="value: attribute.code, attr: {name: $parent.getAttributeRowName(attribute, 'code')}" type="hidden"/>
-                <input data-bind="value: attribute.label, attr: {name: $parent.getAttributeRowName(attribute, 'label')}" type="hidden"/>
-                <input data-bind="value: $index(), attr: {name: $parent.getAttributeRowName(attribute, 'position')}" type="hidden"/>
-                <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
-                <input value="1" data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}" type="hidden"/>
-                <input data-bind="value: option.value, attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}" type="hidden"/>
-                <!-- /ko -->
+                <div data-role="attribute-info">
+                    <input name="attributes[]" data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}" type="hidden"/>
+                    <input data-bind="value: attribute.id, attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}" type="hidden"/>
+                    <input data-bind="value: attribute.code, attr: {name: $parent.getAttributeRowName(attribute, 'code')}" type="hidden"/>
+                    <input data-bind="value: attribute.label, attr: {name: $parent.getAttributeRowName(attribute, 'label')}" type="hidden"/>
+                    <input data-bind="value: $index(), attr: {name: $parent.getAttributeRowName(attribute, 'position')}" type="hidden"/>
+                    <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
+                    <div data-role="option-info">
+                        <input value="1" data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}" type="hidden"/>
+                        <input data-bind="value: option.value, attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}" type="hidden"/>
+                    </div>
+                    <!-- /ko -->
+                </div>
                 <!-- /ko -->
             </div>
             <div class="control">
