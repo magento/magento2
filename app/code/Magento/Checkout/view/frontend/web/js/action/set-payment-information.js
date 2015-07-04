@@ -7,10 +7,10 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
-        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer'
     ],
-    function (quote, urlBuilder, storage, messageList, customer) {
+    function (quote, urlBuilder, storage, errorProcessor, customer) {
         'use strict';
 
         return function () {
@@ -47,8 +47,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    errorProcessor.process(response);
                 }
             );
         };
