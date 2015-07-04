@@ -239,14 +239,14 @@
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
-                                optionsCaption: 'Select'"></select>
+                                optionsCaption: '<?= __("Select")?>'"></select>
                     </div>
                 </div>
             </fieldset>
 
             <ul class="items attributes-selector-list" data-bind="if:attribute, visible: attribute">
                 <!-- ko foreach: {data: attribute().chosen, afterRender: $parent.bindGalleries} -->
-                <li class="item" data-bind="attr:{'data-role':'step-gallery-option-' + label}">
+                <li class="item" data-bind="attr:{'data-role':'step-gallery-option-' + id}">
                     <label class="attribute-label">
                         <span data-bind="text:label"></span>
                     </label>
