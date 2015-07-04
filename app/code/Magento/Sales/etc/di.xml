@@ -144,7 +144,7 @@
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">OrderInvoiceGrid</argument>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
@@ -314,12 +314,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Sales\Model\Resource\GridPool">
-        <arguments>
-            <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
-        </arguments>
-    </type>
-    <virtualType name="OrderInvoiceGrid" type="Magento\Sales\Model\Resource\Order\Grid">
+    <virtualType name="Magento\Sales\Model\Resource\Order\Invoice\Grid" type="Magento\Sales\Model\Resource\Grid">
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_invoice</argument>
             <argument name="gridTableName" xsi:type="string">sales_invoice_grid</argument>
@@ -370,11 +365,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Sales\Model\Resource\GridPool">
-        <arguments>
-            <argument name="invoiceGrid" xsi:type="object">OrderInvoiceGrid</argument>
-        </arguments>
-    </type>
     <virtualType name="CustomerNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
         <arguments>
             <argument name="columns" xsi:type="array">
@@ -432,4 +422,10 @@
             <argument name="targetColumn" xsi:type="string">sales_order.entity_id</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Sales\Model\Resource\GridPool">
+        <arguments>
+            <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
+            <argument name="invoiceGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
+        </arguments>
+    </type>
 </config>
