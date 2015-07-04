@@ -17,36 +17,33 @@
     text-align: center;
     width: @component-indicator__size;
 
-    &::before {
+    &::before,
+    &::after {
         background: @color-white;
+        display: block;
+        opacity: 0;
+        position: absolute;
+        transition: opacity .2s linear .1s;
+        visibility: hidden;
+    }
+    &::before {
         border-radius: 1px;
         border: 1px solid @color-gray68;
         box-shadow: 0 0 2px rgba(0,0,0,.4);
         content: attr(data-label);
-        display: block;
         font-size: @font-size__s;
         margin: 34px 0 0 -10px;
         min-width: 50px;
-        opacity: 0;
         padding: 4px 5px;
-        position: absolute;
-        transition: opacity .2s linear;
-        visibility: hidden;
     }
     &::after {
-        background: @color-white;
         border: 1px solid darken(@color-gray68, 8);
         border-width: 1px 0 0 1px;
         box-shadow: -1px -1px 1px rgba(0,0,0,.1);
         content: '';
-        display: block;
         height: 10px;
         margin: 9px 0 0 5px;
-        opacity: 0;
-        position: absolute;
         transform: rotate(45deg);
-        transition: opacity .2s linear .1s;
-        visibility: hidden;
         width: 10px;
     }
     &:hover {
@@ -55,9 +52,6 @@
             opacity: 1;
             transition: opacity .2s linear 0;
             visibility: visible;
-        }
-        &::after {
-            transition: opacity .2s linear 0;
         }
     }
     span {
