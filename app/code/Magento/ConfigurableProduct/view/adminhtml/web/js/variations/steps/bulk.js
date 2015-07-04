@@ -61,7 +61,7 @@ define([
                 case 'each':
                     return _.find(this.sections()[section].attribute().chosen, function (chosen) {
                         return _.find(options, function (option) {
-                            return chosen.label == option.label;
+                            return chosen.id == option.id;
                         });
                     }).sections()[section];
                 case 'single':
@@ -92,7 +92,7 @@ define([
                 case 'each':
                     this.sections().images.attribute().chosen.each(function (option) {
                         option.sections().images = this.getImageProperty(
-                            $('[data-role=step-gallery-option-'+option.label+']')
+                            $('[data-role=step-gallery-option-'+option.id+']')
                         );
                     }, this);
                     break;

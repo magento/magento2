@@ -7,8 +7,9 @@ define([
     'jquery',
     'ko',
     'underscore',
+    'mageUtils',
     'Magento_Ui/js/lib/collapsible'
-], function (Component, $, ko, _, Collapsible) {
+], function (Component, $, ko, _, utils, Collapsible) {
     'use strict';
 
     //connect items with observableArrays
@@ -36,13 +37,13 @@ define([
 
     var viewModel = Collapsible.extend({
         attributes: ko.observableArray([]),
-        createOption: function (attribute) {
-            attribute.options.push({value: 0, label: ''});
+        createOption: function () {
+            this.options.push({value: 0, label: '', id: utils.uniqueid()});
         },
         saveOption: function (option) {
             this.options.remove(option);
             this.options.push(option);
-            this.chosenOptions.push(option.value);
+            this.chosenOptions.push(option.id);
         },
         removeOption: function (option) {
             this.options.remove(option);
@@ -56,7 +57,10 @@ define([
         },
         createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
-            attribute.options = ko.observableArray(attribute.options);
+            attribute.options = ko.observableArray(_.map(attribute.options, function (option) {
+                option.id = utils.uniqueid();
+                return option;
+            }));
             attribute.opened = ko.observable(this.initialOpened(index));
             attribute.collapsible = ko.observable(true);
             return attribute;
@@ -68,16 +72,16 @@ define([
         saveAttribute: function () {
             this.attributes.each(function(attribute) {
                 attribute.chosen = [];
-                attribute.chosenOptions.each(function(key) {
-                    attribute.chosen.push(attribute.options.findWhere({value:key}));
+                attribute.chosenOptions.each(function(id) {
+                    attribute.chosen.push(attribute.options.findWhere({id:id}));
                 });
             });
         },
         selectAllAttributes: function (attribute) {
-            this.chosenOptions(_.pluck(attribute.options(), 'value'));
+            this.chosenOptions(_.pluck(attribute.options(), 'id'));
         },
         deSelectAllAttributes: function (attribute) {
-            this.chosenOptions.removeAll();
+            attribute.chosenOptions.removeAll();
         },
         render: function(wizard) {
             this.wizard = wizard;

@@ -45,8 +45,9 @@
                             <input
                                 type="checkbox"
                                 class="admin__control-checkbox"
-                                data-bind="checkedValue: value, checked: !value || $parent.chosenOptions" />
-                            <label data-bind="text: label, visible: label" class="admin__field-label"></label>
+                                data-bind="checkedValue: id, checked: $parent.chosenOptions, attr:{id:id}" />
+                            <label data-bind="text: label, visible: label, attr:{for:id}"
+                                   class="admin__field-label"></label>
                         </div>
                         <div class="admin__field admin__field-create-new" data-bind="visible: !label">
                             <div class="admin__field-control">
