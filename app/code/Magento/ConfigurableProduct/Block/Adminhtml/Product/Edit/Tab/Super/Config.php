@@ -170,10 +170,6 @@ class Config extends Widget implements TabInterface
             foreach ($attributes as &$attribute) {
                 if (isset($attribute['values']) && is_array($attribute['values'])) {
                     foreach ($attribute['values'] as &$attributeValue) {
-                        if (!$this->getCanReadPrice()) {
-                            $attributeValue['pricing_value'] = '';
-                            $attributeValue['is_percent'] = 0;
-                        }
                         $attributeValue['can_edit_price'] = $this->getCanEditPrice();
                         $attributeValue['can_read_price'] = $this->getCanReadPrice();
                     }
