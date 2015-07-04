@@ -3,12 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Model\Resource\Page\Collection;
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+namespace Magento\Framework\View\Element\UiComponent\DataProvider;
+
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection as Collection;
+
 /**
  * Class DataProvider
  */
@@ -36,11 +35,6 @@ class DataProvider implements DataProviderInterface
     protected $requestFieldName;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
      * @var Collection
      */
     protected $collection;
@@ -65,7 +59,7 @@ class DataProvider implements DataProviderInterface
      * @param $name
      * @param $primaryFieldName
      * @param $requestFieldName
-     * @param CollectionFactory $collectionFactory
+     * @param Collection $collection
      * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
@@ -74,7 +68,7 @@ class DataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $collectionFactory,
+        Collection $collection,
         FilterPool $filterPool,
         array $meta = [],
         array $data = []
@@ -83,8 +77,7 @@ class DataProvider implements DataProviderInterface
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->filterPool = $filterPool;
-        $this->collection = $collectionFactory->create();
-        $this->collection->setFirstStoreFlag(true);
+        $this->collection = $collection;
         $this->meta = $meta;
         $this->data = $data;
     }
