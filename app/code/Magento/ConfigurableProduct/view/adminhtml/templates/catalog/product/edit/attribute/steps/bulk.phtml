@@ -97,22 +97,41 @@
                         <div class="progressbar-container">
                             <div class="progressbar upload-progress" style="width: 0%;"></div>
                         </div>
+                        <div class="spinner">
+                            <span></span><span></span><span></span><span></span>
+                            <span></span><span></span><span></span><span></span>
+                        </div>
                     </div>
                 </script>
 
                 <script data-template="gallery-content" type="text/x-magento-template">
                     <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
                          data-role="image">
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
-                        <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][position]"
+                               value="<%- data.position %>"
+                               class="position"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][file]"
+                               value="<%- data.file %>"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][value_id]"
+                               value="<%- data.value_id %>"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][label]"
+                               value="<%- data.label %>"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                               value="<%- data.disabled %>"/>
+                        <input type="hidden"
+                               name="product[media_gallery][images][<%- data.file_id %>][removed]"
+                               value="" class="is-removed"/>
                         <div class="spacer"></div>
                         <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-
-                        <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                        <button type="button"
+                                class="action-remove"
+                                data-role="delete-button"
+                                title="<?= __('Remove image') ?>">
                             <span><?= __('Remove image') ?></span>
                         </button>
                         <div class="draggable-handle"></div>
@@ -129,7 +148,10 @@
                             src="<%- data.url %>"
                             data-position="<%- data.position %>"
                             alt="<%- data.label %>" />
-                        <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                        <button type="button"
+                                class="action-remove"
+                                data-role="delete-button"
+                                title="<?= __('Remove image') ?>">
                             <span><?= __('Remove image') ?></span>
                         </button>
                         <div class="draggable-handle"></div>
@@ -263,6 +285,10 @@
 
                             <div class="spacer"></div>
                             <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
+                            <div class="spinner">
+                               <span></span><span></span><span></span><span></span>
+                               <span></span><span></span><span></span><span></span>
+                            </div>
                         </div>
                         <input name="product[image]"
                                class="image-image"
@@ -283,27 +309,47 @@
                                 <div class="progressbar-container">
                                     <div class="progressbar upload-progress" style="width: 0%;"></div>
                                 </div>
+                                <div class="spinner">
+                                    <span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
                             </div>
                         </script>
 
                         <script data-template="gallery-content" type="text/x-magento-template">
                             <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
                                  data-role="image">
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][file]" value="<%- data.file %>"/>
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][label]" value="<%- data.label %>"/>
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
-                                <input type="hidden" name="product[media_gallery][images][<%- data.file_id %>][removed]" value="" class="is-removed"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][position]"
+                                       value="<%- data.position %>" class="position"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][file]"
+                                       value="<%- data.file %>"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][value_id]"
+                                       value="<%- data.value_id %>"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][label]"
+                                       value="<%- data.label %>"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                       value="<%- data.disabled %>"/>
+                                <input type="hidden"
+                                       name="product[media_gallery][images][<%- data.file_id %>][removed]"
+                                       value=""
+                                       class="is-removed"/>
                                 <ul class="type-labels" style="display: none">
-                                    <li class="type-image">Base Image</li>
-                                    <li class="type-small_image">Small Image</li>
-                                    <li class="type-thumbnail">Thumbnail</li>
+                                    <li class="type-image"><?= __('Base Image') ?></li>
+                                    <li class="type-small_image"><?= __('Small Image') ?></li>
+                                    <li class="type-thumbnail"><?= __('Thumbnail') ?></li>
                                 </ul>
                                 <div class="spacer"></div>
                                 <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
 
-                                <button type="button" class="action-remove" data-role="delete-button" title="<?= __('Remove image') ?>">
+                                <button type="button"
+                                        class="action-remove"
+                                        data-role="delete-button"
+                                        title="<?= __('Remove image') ?>">
                                     <span><?= __('Remove image') ?></span>
                                 </button>
                                 <div class="draggable-handle" ></div>
@@ -356,8 +402,7 @@
                                                 <textarea
                                                     id="image-description"
                                                     rows="3"
-                                                    name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %>
-                                                </textarea>
+                                                    name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
                                             </div>
                                         </div>
 
