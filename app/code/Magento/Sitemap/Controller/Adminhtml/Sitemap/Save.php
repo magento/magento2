@@ -12,13 +12,13 @@ use Magento\Framework\Controller;
 class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**
-     * Validate path to generate
+     * Validate path for generation
      *
      * @param array $data
      * @return bool
      * @throws \Exception
      */
-    protected function validatePathToGenerate(array $data)
+    protected function validatePath(array $data)
     {
         if (!empty($data['sitemap_filename']) && !empty($data['sitemap_path'])) {
             $data['sitemap_path'] = '/' . ltrim($data['sitemap_path'], '/');
@@ -65,12 +65,12 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     }
 
     /**
-     * Save model
+     * Save data
      *
      * @param array $data
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
+     * @return string|bool
      */
-    protected function saveModel($data)
+    protected function saveData($data)
     {
         // init model and set data
         /** @var \Magento\Sitemap\Model\Sitemap $model */
@@ -86,27 +86,46 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $this->messageManager->addSuccess(__('You saved the sitemap.'));
             // clear previously saved data from session
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-
-            // check if 'Save and Continue'
-            if ($this->getRequest()->getParam('back')) {
-                return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)
-                    ->setPath('adminhtml/*/edit', ['sitemap_id' => $model->getId()]);
-            }
-            // go to grid or forward to generate action
-            if ($this->getRequest()->getParam('generate')) {
-                $this->getRequest()->setParam('sitemap_id', $model->getId());
-                return $this->resultFactory->create(Controller\ResultFactory::TYPE_FORWARD)->forward('generate');
-            }
-            return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)->setPath('adminhtml/*/');
+            return $model->getId();
         } catch (\Exception $e) {
             // display error message
             $this->messageManager->addError($e->getMessage());
             // save data in session
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
-            // redirect to edit form
-            return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)
-                ->setPath('adminhtml/*/edit', ['sitemap_id' => $this->getRequest()->getParam('sitemap_id')]);
         }
+        return false;
+    }
+
+    /**
+     * Get result after saving data
+     *
+     * @param string|bool $id
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    protected function getResult($id)
+    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
+        if ($id) {
+            // check if 'Save and Continue'
+            if ($this->getRequest()->getParam('back')) {
+                $resultRedirect->setPath('adminhtml/*/edit', ['sitemap_id' => $id]);
+                return $resultRedirect;
+            }
+            // go to grid or forward to generate action
+            if ($this->getRequest()->getParam('generate')) {
+                $this->getRequest()->setParam('sitemap_id', $id);
+                return $this->resultFactory->create(Controller\ResultFactory::TYPE_FORWARD)
+                    ->forward('generate');
+            }
+            $resultRedirect->setPath('adminhtml/*/');
+            return $resultRedirect;
+        }
+        $resultRedirect->setPath(
+            'adminhtml/*/edit',
+            ['sitemap_id' => $this->getRequest()->getParam('sitemap_id')]
+        );
+        return $resultRedirect;
     }
 
     /**
@@ -118,17 +137,19 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // check if data sent
         $data = $this->getRequest()->getPostValue();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
         if ($data) {
-            if (!$this->validatePathToGenerate($data)) {
-                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
-                return $resultRedirect->setPath(
+            if (!$this->validatePath($data)) {
+                $resultRedirect->setPath(
                     'adminhtml/*/edit',
                     ['sitemap_id' => $this->getRequest()->getParam('sitemap_id')]
                 );
+                return $resultRedirect;
             }
-            $this->saveModel($data);
+            return $this->getResult($this->saveData($data));
         }
-        return $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT)->setPath('adminhtml/*/');
+        $resultRedirect->setPath('adminhtml/*/');
+        return $resultRedirect;
     }
 }
