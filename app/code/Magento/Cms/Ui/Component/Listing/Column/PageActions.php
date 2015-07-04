@@ -26,6 +26,9 @@ class PageActions extends Column
     /** @var UrlInterface */
     protected $urlBuilder;
 
+    /** @var string */
+    private $urlEdit;
+
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
@@ -33,6 +36,7 @@ class PageActions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @param string $urlEdit
      */
     public function __construct(
         ContextInterface $context,
@@ -40,10 +44,12 @@ class PageActions extends Column
         UrlBuilder $actionUrlBuilder,
         UrlInterface $urlBuilder,
         array $components = [],
-        array $data = []
+        array $data = [],
+        $urlEdit = self::CMS_URL_PATH_EDIT
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
+        $this->urlEdit = $urlEdit;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -60,7 +66,7 @@ class PageActions extends Column
                 $name = $this->getData('name');
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_EDIT, ['page_id' => $item['page_id']]),
+                        'href' => $this->urlBuilder->getUrl($this->urlEdit, ['page_id' => $item['page_id']]),
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
