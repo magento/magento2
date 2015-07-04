@@ -122,6 +122,27 @@
     ], function ($) {
 
         /**
+         * Retrieve list of attributes
+         *
+         * @return {Array}
+         */
+        var getAttributes = function ($node) {
+            return $.map(
+                $node.find('[data-role=configurable-attribute] [data-role=attribute-info]') || [],
+                function (attribute) {
+                    var $attribute = $(attribute);
+
+                    return {
+                        id: $attribute.find('[name$="[attribute_id]"]').val(),
+                        code: $attribute.find('[name$="[code]"]').val(),
+                        label: $attribute.find('[name$="[label]"]').val(),
+                        position: $attribute.find('[name$="[position]"]').val()
+                    };
+                }
+            );
+        };
+
+        /**
          * This fix was made in order to properly handle 'stopImmediatePropagation'.
          */
         $('#save-split-button .item').on('click', function(event) {
@@ -131,7 +152,7 @@
 
             var extendingAttributes = [];
 
-            $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
+            $.each(getAttributes($('[data-role=product-variations-matrix]')), function () {
                 if (!$('#attribute-' + this.code + '-container').length) {
                     extendingAttributes.push(this.id);
                 }
@@ -148,8 +169,7 @@
 
             event.stopImmediatePropagation();
 
-            $form.data('target', event.target)
-                .dialog('open');
+            $form.data('target', event.target).dialog('open');
         });
 
     });
