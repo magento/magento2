@@ -2245,6 +2245,8 @@ class InstallSchema implements InstallSchemaInterface
 
         /**
          * Create table 'sales_shipment_grid'
+         *
+         * @add order_id, shipping_description
          */
         $table = $installer->getConnection()->newTable(
             $installer->getTable('sales_shipment_grid')
@@ -2255,17 +2257,23 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Entity Id'
         )->addColumn(
+            'increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            32,
+            [ 'nullable' => false],
+            'Increment Id'
+        )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true],
             'Store Id'
         )->addColumn(
-            'total_qty',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Total Qty'
+            'order_increment_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            ['nullable' => false],
+            'Order Increment Id'
         )->addColumn(
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2273,23 +2281,71 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false],
             'Order Id'
         )->addColumn(
+            'order_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false],
+            'Order Increment Id'
+        )->addColumn(
+            'customer_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            ['nullable' => false],
+            'Customer Name'
+        )->addColumn(
+            'total_qty',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Total Qty'
+        )->addColumn(
             'shipment_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             [],
             'Shipment Status'
         )->addColumn(
-            'increment_id',
+            'order_status',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            32,
             [],
-            'Increment Id'
+            'Order'
         )->addColumn(
-            'order_increment_id',
+            'billing_address',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            50,
+            255,
             [],
-            'Order Increment Id'
+            'Billing Address'
+        )->addColumn(
+            'shipping_address',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Shipping Address'
+        )->addColumn(
+            'billing_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Billing Name'
+        )->addColumn(
+            'shipping_name',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Shipping Name'
+        )->addColumn(
+            'customer_email',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            128,
+            [],
+            'Customer Email'
+        )->addColumn(
+            'payment_method',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            [],
+            'Payment Method'
         )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
@@ -2297,40 +2353,52 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Created At'
         )->addColumn(
-            'order_created_at',
+            'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
             [],
-            'Order Created At'
-        )->addColumn(
-            'shipping_name',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            [],
-            'Shipping Name'
+            'Updated At'
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['store_id']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                [
+                    'increment_id',
+                    'store_id'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['increment_id', 'store_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['store_id']
+            ),
             ['store_id']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['total_qty']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['total_qty']
+            ),
             ['total_qty']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['order_id']),
-            ['order_id']
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['order_increment_id']
+            ),
+            ['order_increment_id']
         )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['shipment_status']),
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                ['shipment_status']
+            ),
             ['shipment_status']
         )->addIndex(
             $installer->getIdxName(
                 'sales_shipment_grid',
-                ['increment_id'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ['order_status']
             ),
-            ['increment_id'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
-        )->addIndex(
-            $installer->getIdxName('sales_shipment_grid', ['order_increment_id']),
-            ['order_increment_id']
+            ['order_status']
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['created_at']),
             ['created_at']
@@ -2340,18 +2408,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['shipping_name']),
             ['shipping_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_shipment_grid', 'entity_id', 'sales_shipment', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_shipment'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_shipment_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName('sales_shipment_grid', ['billing_name']),
+            ['billing_name']
         )->setComment(
             'Sales Flat Shipment Grid'
         );

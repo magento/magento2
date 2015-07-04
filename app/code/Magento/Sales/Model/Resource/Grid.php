@@ -76,7 +76,7 @@ class Grid extends AbstractGrid
                 ->insertFromSelect(
                     $select,
                     $this->getTable($this->gridTableName),
-                    [],
+                    array_keys($this->columns),
                     AdapterInterface::INSERT_ON_DUPLICATE
                 )
         );
@@ -99,7 +99,7 @@ class Grid extends AbstractGrid
                 ->insertFromSelect(
                     $select,
                     $this->getTable($this->gridTableName),
-                    [],
+                    array_keys($this->columns),
                     AdapterInterface::INSERT_ON_DUPLICATE
                 )
         );
@@ -131,7 +131,7 @@ class Grid extends AbstractGrid
         foreach ($this->columns as $key => $value) {
             $columns[$key] = new \Zend_Db_Expr((string) $value);
         }
-
-        return $select->columns($columns);
+        $select->columns($columns);
+        return $select;
     }
 }

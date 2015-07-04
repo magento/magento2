@@ -25,7 +25,7 @@ class GridPool
     public function __construct(
         \Magento\Sales\Model\Resource\Grid $orderGrid,
         \Magento\Sales\Model\Resource\Grid $invoiceGrid,
-        ShipmentGrid $shipmentGrid,
+        \Magento\Sales\Model\Resource\Grid $shipmentGrid,
         CreditmemoGrid $creditmemoGrid
     ) {
         $this->grids = [
