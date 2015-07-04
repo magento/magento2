@@ -3671,4 +3671,29 @@ return [
     ['Magento\Framework\View\Element\UiComponent\JsConfigInterface'],
     ['Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin'],
     ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
+    ['Magento\Authorizenet\Block\Authorizenet\Form\Cc'],
+    ['Magento\Authorizenet\Block\Authorizenet\Info\Cc'],
+    ['Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Payment\Cancel'],
+    ['Magento\Authorizenet\Controller\Authorizenet\Payment\Cancel'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\Cctype',
+        'Magento\Authorizenet\Model\Source\Cctype'
+    ],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Source\PaymentAction',
+        'Magento\Authorizenet\Model\Source\PaymentAction'
+    ],
+    ['Magento\Authorizenet\Model\Authorizenet\Cards'],
+    [
+        'Magento\Authorizenet\Model\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Debug'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug\Collection',
+        'Magento\Authorizenet\Model\Resource\Debug\Collection'
+    ],
+    [
+        'Magento\Authorizenet\Model\Resource\Authorizenet\Debug',
+        'Magento\Authorizenet\Model\Resource\Debug'
+    ]
 ];
