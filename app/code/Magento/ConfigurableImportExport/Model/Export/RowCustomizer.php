@@ -6,6 +6,7 @@
 namespace Magento\ConfigurableImportExport\Model\Export;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
+use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 class RowCustomizer implements RowCustomizerInterface
 {
@@ -36,15 +37,39 @@ class RowCustomizer implements RowCustomizerInterface
 
             foreach ($productAttributesOptions as $productAttributeOption) {
                 $this->configurableData[$product->getId()] = [];
-                foreach ($productAttributeOption as $optionValues) {
-                    $priceType = $optionValues['pricing_is_percent'] ? '%' : '';
-                    $this->configurableData[$product->getId()][] = [
-                        '_super_products_sku' => $optionValues['sku'],
-                        '_super_attribute_code' => $optionValues['attribute_code'],
-                        '_super_attribute_option' => $optionValues['option_title'],
-                        '_super_attribute_price_corr' => $optionValues['pricing_value'] . $priceType,
-                    ];
+                $variations = [];
+                $variationsPrices = [];
+                $variationsLabels = [];
+                foreach ($productAttributeOption as $optValues) {
+                    $variations[$optValues['sku']][] =
+                        $optValues['attribute_code'] . '=' . $optValues['option_title'];
+                    $priceType = $optValues['pricing_is_percent'] ? 'percent' : 'fixed';
+                    $variationsPrices[] =
+                        'name=' . $optValues['attribute_code'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                        'value=' . $optValues['option_title'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                        'price=' . $optValues['pricing_value'] . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR .
+                        'price_type=' . $priceType;
+                    if (!empty($optValues['super_attribute_label'])) {
+                        $variationsLabels[$optValues['attribute_code']] =
+                            $optValues['attribute_code'] . '=' . $optValues['super_attribute_label'];
+                    }
                 }
+
+                foreach ($variations as $sku => $values) {
+                    $variations[$sku] =
+                        'sku=' . $sku . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+                }
+                $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
+                $variationsPrices = array_unique($variationsPrices);
+                $variationsPrices = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variationsPrices);
+                $variationsLabels = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
+
+                $this->configurableData[$product->getId()] = [
+                    'configurable_variations' => $variations,
+                    'configurable_variation_prices' => $variationsPrices,
+                    'configurable_variation_labels' => $variationsLabels,
+                ];
             }
         }
     }
@@ -62,10 +87,9 @@ class RowCustomizer implements RowCustomizerInterface
             $columns = array_merge(
                 $columns,
                 [
-                    '_super_products_sku',
-                    '_super_attribute_code',
-                    '_super_attribute_option',
-                    '_super_attribute_price_corr'
+                    'configurable_variations',
+                    'configurable_variation_prices',
+                    'configurable_variation_labels',
                 ]
             );
         }
@@ -82,7 +106,7 @@ class RowCustomizer implements RowCustomizerInterface
     public function addData($dataRow, $productId)
     {
         if (!empty($this->configurableData[$productId])) {
-            $dataRow = array_merge($dataRow, array_shift($this->configurableData[$productId]));
+            $dataRow = array_merge($dataRow, $this->configurableData[$productId]);
         }
         return $dataRow;
     }
