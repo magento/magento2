@@ -268,6 +268,19 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
+     * Get timezone for store
+     *
+     * @param mixed $store
+     * @param string $createdAt
+     * @return string
+     */
+    public function getTimezoneForStore($store, $createdAt)
+    {
+        $timezone = $this->getCreatedAtStoreDate($store, $createdAt)->getTimezone();
+        return $timezone ?: $this->_localeDate->getDefaultTimezone();
+    }
+
+    /**
      * Get object created at date
      *
      * @param string $createdAt
