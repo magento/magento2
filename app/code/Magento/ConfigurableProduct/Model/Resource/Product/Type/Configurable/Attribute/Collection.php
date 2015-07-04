@@ -7,7 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute;
 
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data as PriceData;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
@@ -22,13 +21,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @var string
      */
     protected $_labelTable;
-
-    /**
-     * Configurable attributes price table name
-     *
-     * @var string
-     */
-    protected $_priceTable;
 
     /**
      * Product instance
@@ -59,13 +51,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_storeManager;
 
     /**
-     * Price values cache
-     *
-     * @var PriceData
-     */
-    protected $priceData;
-
-    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -74,7 +59,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource
-     * @param PriceData $priceData
      * @param \Zend_Db_Adapter_Abstract $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,13 +71,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource,
-        PriceData $priceData,
         $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
-        $this->priceData = $priceData;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -109,7 +91,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute'
         );
         $this->_labelTable = $this->getTable('catalog_product_super_attribute_label');
-        $this->_priceTable = $this->getTable('catalog_product_super_attribute_pricing');
     }
 
     /**
@@ -174,7 +155,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_loadLabels();
         \Magento\Framework\Profiler::stop('TTT3:' . __METHOD__);
         \Magento\Framework\Profiler::start('TTT4:' . __METHOD__, ['group' => 'TTT4', 'method' => __METHOD__]);
-        $this->_loadPrices();
         $this->loadOptions();
         \Magento\Framework\Profiler::stop('TTT4:' . __METHOD__);
         return $this;
@@ -277,6 +257,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                                 $values[$itemId . ':' . $option['value']] = [
                                     'value_index' => $option['value'],
                                     'label' => $option['label'],
+                                    'product_super_attribute_id' => $itemId,
+                                    'default_label' => $option['label'],
+                                    'store_label' => $option['label'],
+                                    'use_default_value' => true,
                                 ];
                         }
                     }
@@ -284,132 +268,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 $item->setOptions($values);
             }
         }
-        return $values;
-    }
-
-    /**
-     * Load attribute prices information
-     *
-     * @return $this
-     */
-    protected function _loadPrices()
-    {
-        if ($this->count()) {
-            $values = $this->getPriceValues();
-
-            foreach ($values as $data) {
-                $item = $this->getItemById($data['product_super_attribute_id']);
-                //the price values is cached, it could have gotten out of sync with current items
-                //when a filter is added, in that case, we just ignore the data from the cache
-                if ($item) {
-                    $item->addPrice($data);
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Retrieve price values
-     *
-     * @return array
-     * @deprecated TODO: MAGETWO-23739 remove method
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function getPriceValues()
-    {
-        $cachedPriceData = $this->priceData->getProductPrice($this->getProduct()->getId());
-        if (false !== $cachedPriceData) {
-            return $cachedPriceData;
-        }
-
-        $pricings = [0 => []];
-
-        if ($this->_catalogData->isPriceGlobal()) {
-            $websiteId = 0;
-        } else {
-            $websiteId = (int) $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
-            $pricing[$websiteId] = [];
-        }
-
-        $select = $this->getConnection()->select()->from(
-            ['price' => $this->_priceTable]
-        )->where(
-            'price.product_super_attribute_id IN (?)',
-            array_keys($this->_items)
-        );
-
-        if ($websiteId > 0) {
-            $select->where('price.website_id IN(?)', [0, $websiteId]);
-        } else {
-            $select->where('price.website_id = ?', 0);
-        }
-
-        $query = $this->getConnection()->query($select);
-
-        while ($row = $query->fetch()) {
-            $pricings[(int)$row['website_id']][] = $row;
-        }
-
-        $values = [];
-        $usedProducts = $this->getProductType()->getUsedProducts($this->getProduct());
-        if ($usedProducts) {
-            foreach ($this->_items as $item) {
-                $productAttribute = $item->getProductAttribute();
-                if (!$productAttribute instanceof AbstractAttribute) {
-                    continue;
-                }
-                $itemId = $item->getId();
-                $options = $this->getIncludedOptions($usedProducts, $productAttribute);
-                foreach ($options as $option) {
-                    foreach ($usedProducts as $associatedProduct) {
-                        $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
-                        if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
-                            // If option available in associated product
-                            if (!isset($values[$item->getId() . ':' . $option['value']])) {
-                                $values[$itemId . ':' . $option['value']] = [
-                                    'product_super_attribute_id' => $itemId,
-                                    'value_index' => $option['value'],
-                                    'label' => $option['label'],
-                                    'default_label' => $option['label'],
-                                    'store_label' => $option['label'],
-                                    'is_percent' => 0,
-                                    'pricing_value' => null,
-                                    'use_default_value' => true,
-                                ];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach ($pricings[0] as $pricing) {
-            // Addding pricing to options
-            $valueKey = $pricing['product_super_attribute_id'] . ':' . $pricing['value_index'];
-            if (isset($values[$valueKey])) {
-                $values[$valueKey]['pricing_value'] = $pricing['pricing_value'];
-                $values[$valueKey]['is_percent'] = $pricing['is_percent'];
-                $values[$valueKey]['value_id'] = $pricing['value_id'];
-                $values[$valueKey]['use_default_value'] = true;
-            }
-        }
-
-        if ($websiteId && isset($pricings[$websiteId])) {
-            foreach ($pricings[$websiteId] as $pricing) {
-                $valueKey = $pricing['product_super_attribute_id'] . ':' . $pricing['value_index'];
-                if (isset($values[$valueKey])) {
-                    $values[$valueKey]['pricing_value'] = $pricing['pricing_value'];
-                    $values[$valueKey]['is_percent'] = $pricing['is_percent'];
-                    $values[$valueKey]['value_id'] = $pricing['value_id'];
-                    $values[$valueKey]['use_default_value'] = false;
-                }
-            }
-        }
-
-        $this->priceData->setProductPrice($this->getProduct()->getId(), $values);
-
         return $values;
     }
 

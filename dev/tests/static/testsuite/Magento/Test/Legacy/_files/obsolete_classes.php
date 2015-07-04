@@ -7,6 +7,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
     ['Mage_Admin_Model_Acl', 'Magento_Acl'],
@@ -3656,5 +3659,10 @@ return [
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsInvalidCcTest'],
     ['Magento\Centinel\Test\TestCase\CentinelPaymentsValidCcTest'],
     ['Magento\Centinel\CreateOrderTest'],
-    ['Magento\Payment\Model\Checks\PaymentMethodChecksInterface', 'Magento\Payment\Model\MethodInterface']
+    ['Magento\Payment\Model\Checks\PaymentMethodChecksInterface', 'Magento\Payment\Model\MethodInterface'],
+    ['Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tabs\Configurable'],
+    ['Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable'],
 ];
