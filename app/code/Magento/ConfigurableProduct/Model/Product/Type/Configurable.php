@@ -158,6 +158,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $jsonHelper;
 
+    /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media */
+    protected $media;
+
     /**
      * @codingStandardsIgnoreStart/End
      *
@@ -205,7 +208,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_entityFactory = $entityFactory;
@@ -218,6 +222,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_scopeConfig = $scopeConfig;
         $this->stockConfiguration = $stockConfiguration;
         $this->jsonHelper = $jsonHelper;
+        $this->media = $media;
+
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -1077,6 +1083,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $this->_prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
+        $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
@@ -1202,5 +1209,44 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setVisibility(
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
         );
+    }
+
+    /**
+     * Duplicate images for variations
+     *
+     * @param $productsData
+     */
+    protected function duplicateImagesForVariations(&$productsData)
+    {
+        $imagesForCopy = [];
+        foreach ($productsData as $variationId => $simpleProductData) {
+            if (!isset($simpleProductData['media_gallery']['images'])) {
+                continue;
+            }
+
+            foreach ($simpleProductData['media_gallery']['images'] as $imageId => $image) {
+                $image['variation_id'] = $variationId;
+                if (isset($imagesForCopy[$imageId][0])) {
+                    // skip duplicate image for first product
+                    unset($imagesForCopy[$imageId][0]);
+                }
+                $imagesForCopy[$imageId][] = $image;
+            }
+        }
+        foreach ($imagesForCopy as $imageId => $variationImages) {
+            foreach ($variationImages as $image) {
+                $file = $image['file'];
+                $variationId = $image['variation_id'];
+                $newFile = $this->media->duplicateImageFromTmp($file);
+                $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
+                foreach (['small_image', 'thumbnail', 'image'] as $imageType) {
+                    if (isset($productsData[$variationId][$imageType])
+                        && $productsData[$variationId][$imageType] == $file
+                    ) {
+                        $productsData[$variationId][$imageType] = $newFile;
+                    }
+                }
+            }
+        }
     }
 }
