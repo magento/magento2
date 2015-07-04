@@ -86,10 +86,7 @@ class NamespaceResolver
      */
     protected function prepareName($name)
     {
-        $explodeString = strpos(
-            $name,
-            '\\'
-        ) === false ? '_' : '\\';
+        $explodeString = strpos($name, '\\') === false ? '_' : '\\';
         return explode($explodeString, strtolower($name));
     }
 }
