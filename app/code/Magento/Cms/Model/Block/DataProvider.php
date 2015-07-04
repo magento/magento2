@@ -8,6 +8,7 @@ namespace Magento\Cms\Model\Block;
 use Magento\Cms\Model\Resource\Block\Collection;
 use Magento\Cms\Model\Resource\Block\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -49,6 +50,11 @@ class DataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
+     * @var FilterPool
+     */
+    protected $filterPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -61,6 +67,7 @@ class DataProvider implements DataProviderInterface
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
@@ -145,10 +152,14 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    /**
+     * @inheritdoc
+     */
+    public function addFilter($condition, $field = null,  $type = 'regular')
     {
-        $this->collection->addFieldToFilter($field, $condition);
+        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
+
 
     /**
      * Add field to select
@@ -216,6 +227,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->toArray();
     }
 
@@ -226,6 +238,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->count();
     }
 

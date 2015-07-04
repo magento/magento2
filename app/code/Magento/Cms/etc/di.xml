@@ -69,4 +69,10 @@
             <argument name="filterPool" xsi:type="object">PagesGirdFilterPool</argument>
         </arguments>
     </type>
+    <virtualType name="PageGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Cms\Model\Resource\Page\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">PagesGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
 </config>
