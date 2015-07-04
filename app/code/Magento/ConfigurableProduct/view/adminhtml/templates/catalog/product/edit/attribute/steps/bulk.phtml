@@ -64,7 +64,7 @@
             <div data-role="gallery" class="gallery" data-images="[]">
                 <div class="image image-placeholder">
                     <div data-role="uploader" class="uploader">
-                        <div class="image-browse fileinput-button form-buttons button">
+                        <div class="image-browse">
                             <span><?= __('Browse Files...') ?></span>
                             <input type="file"
                                    id=""
@@ -74,7 +74,6 @@
                                    data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
                         </div>
                     </div>
-                    <div class="spacer"></div>
                     <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
                 </div>
 
@@ -109,8 +108,7 @@
                          data-role="image">
                         <input type="hidden"
                                name="product[media_gallery][images][<%- data.file_id %>][position]"
-                               value="<%- data.position %>"
-                               class="position"/>
+                               value="<%- data.position %>"/>
                         <input type="hidden"
                                name="product[media_gallery][images][<%- data.file_id %>][file]"
                                value="<%- data.file %>"/>
@@ -124,9 +122,7 @@
                                name="product[media_gallery][images][<%- data.file_id %>][disabled]"
                                value="<%- data.disabled %>"/>
                         <input type="hidden"
-                               name="product[media_gallery][images][<%- data.file_id %>][removed]"
-                               value="" class="is-removed"/>
-                        <div class="spacer"></div>
+                               name="product[media_gallery][images][<%- data.file_id %>][removed]"/>
                         <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
                         <button type="button"
                                 class="action-remove"
@@ -142,7 +138,6 @@
 
                 <script data-template="image" type="text/x-magento-template">
                     <div class="image">
-                        <div class="spacer"></div>
                         <img
                             class="product-image"
                             src="<%- data.url %>"
@@ -151,7 +146,7 @@
                         <button type="button"
                                 class="action-remove"
                                 data-role="delete-button"
-                                title="<?= __('Remove image') ?>">
+                                title="<?= $block->escapeHtml(__('Remove image')) ?>">
                             <span><?= __('Remove image') ?></span>
                         </button>
                         <div class="draggable-handle"></div>
@@ -169,7 +164,7 @@
                             <strong class="image-name"><%- data.label %></strong>
 
                             <button type="button" class="action-remove"
-                                    title="Remove Image">
+                                    title="<?= $block->escapeHtml(__('Remove Image')) ?>">
                                 <span><?= __('Remove Image') ?></span>
                             </button>
 
@@ -237,7 +232,7 @@
                         <button type="button"
                                 class="action-close"
                                 data-role="close-panel"
-                                title="<?= __('Close panel') ?>">
+                                title="<?= $block->escapeHtml(__('Close panel')) ?>">
                             <span><?= __('Close panel') ?></span>
                         </button>
                         <div class="image-pointer"></div>
@@ -272,14 +267,12 @@
                     <div data-role="gallery" class="gallery" data-images="[]">
                         <div class="image image-placeholder">
                             <div data-role="uploader" class="uploader">
-                                <div class="fileinput-button form-buttons button">
+                                <div class="image-browse">
                                     <span><?= __('Browse Files...') ?></span>
                                     <input type="file" name="image" multiple="multiple"
                                            data-url="<?=$this->getUrl('catalog/product_gallery/upload') ?>" />
                                 </div>
                             </div>
-
-                            <div class="spacer"></div>
                             <p class="image-placeholder-text"><?= __('Browse to find or drag image here') ?></p>
                             <div class="spinner">
                                <span></span><span></span><span></span><span></span>
@@ -339,16 +332,15 @@
                                     <li class="type-small_image"><?= __('Small Image') ?></li>
                                     <li class="type-thumbnail"><?= __('Thumbnail') ?></li>
                                 </ul>
-                                <div class="spacer"></div>
                                 <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
 
                                 <button type="button"
                                         class="action-remove"
                                         data-role="delete-button"
-                                        title="<?= __('Remove image') ?>">
+                                        title="<?= $block->escapeHtml(__('Remove image')) ?>">
                                     <span><?= __('Remove image') ?></span>
                                 </button>
-                                <div class="draggable-handle" ></div>
+                                <div class="draggable-handle"></div>
                                 <div class="image-label"></div>
                                 <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                             </div>
@@ -356,7 +348,6 @@
 
                         <script data-template="image" type="text/x-magento-template">
                             <div class="image">
-                               <div class="spacer"></div>
                                 <img
                                     class="product-image"
                                     src="<%- data.url %>"
@@ -366,11 +357,10 @@
                                 <button type="button"
                                         class="action-remove"
                                         data-role="delete-button"
-                                        title="<?= __('Remove image') ?>">
+                                        title="<?= $block->escapeHtml(__('Remove image')) ?>">
                                     <span><?= __('Remove image') ?></span>
                                 </button>
                                 <div class="draggable-handle"></div>
-
                                 <div class="image-label"></div>
                                 <div class="image-fade"><span><?= __('Hidden') ?></span></div>
                             </div>
@@ -458,7 +448,7 @@
                                 <button type="button"
                                         class="action-close"
                                         data-role="close-panel"
-                                        title="<?= __('Close panel') ?>">
+                                        title="<?= $block->escapeHtml(__('Close panel')) ?>">
                                     <span><?= __('Close panel') ?></span>
                                 </button>
                                 <div class="image-pointer"></div>

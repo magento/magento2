@@ -109,20 +109,24 @@
 
 .gallery {
     &:extend(.abs-clearfix all);
-    .css(background, @image-gallery__background);
-    padding: @indent__s .3rem;
+    background: @image-gallery__background;
+    padding: @indent__s .3rem 0;
+    .image {
+        margin-bottom: @indent__s;
+    }
 }
 
 .image {
-    .css(background, @image-gallery-placeholder__background);
-    .css(border, @image-gallery-placeholder__border);
-    .css(width, @image-gallery-placeholder__width);
+    background: @image-gallery-placeholder__background;
+    border: @image-gallery-placeholder__border;
     box-sizing: border-box;
     display: inline-block;
     float: left;
+    height: @image-gallery-placeholder__height;
     margin: 0 .8rem;
     overflow: hidden;
     position: relative;
+    width: @image-gallery-placeholder__width;
 
     .product-image {
         bottom: 0;
@@ -132,12 +136,7 @@
         right: 0;
         top: 0;
         width: 100%;
-        .css(z-index, @image-gallery-image__z-index);
-    }
-
-    .spacer {
-        .css(height,  @image-gallery-placeholder__height);
-        .css(width, @image-gallery-placeholder__width);
+        z-index: @image-gallery-image__z-index;
     }
 
     //  Image Placeholder
@@ -154,9 +153,9 @@
             position: absolute;
             top: 12px;
             width: 100%;
-            .css(z-index, @image-gallery-image__z-index);
+            z-index: @image-gallery-image__z-index;
         }
-        .fileinput-button {
+        .image-browse {
             bottom: 0;
             left: 0;
             position: absolute;
@@ -178,7 +177,7 @@
             right: 0;
             top: 0;
             width: 100%;
-            .css(z-index, @image-gallery-action__z-index);
+            z-index: @image-gallery-action__z-index;
         }
 
         .spinner {
@@ -188,7 +187,6 @@
         &.loading,
         .file-row {
             .spinner {
-                .css(z-index, @image-gallery-fade__z-index);
                 background: @color-white;
                 display: block;
                 height: 100%;
@@ -197,6 +195,7 @@
                 position: absolute;
                 top: 0;
                 width: 100%;
+                z-index: @image-gallery-fade__z-index;
                 > span {
                     left: 50%;
                     top: 50%;
@@ -239,7 +238,7 @@
         left: 6px;
         position: absolute;
         width: 20px;
-        .css(z-index, @image-gallery-action__z-index);
+        z-index: @image-gallery-action__z-index;
         .icon-font(
         @icon-delete__content,
         @_icon-font: @icons-admin__font-name,
@@ -251,8 +250,6 @@
     }
 
     .image-fade {
-        .css(line-height, @image-gallery-placeholder__height);
-        .css(z-index, @image-gallery-image-hidden__z-index);
         .font-size(18);
         background: rgba(255, 255, 255, .8);
         bottom: 0;
@@ -260,12 +257,14 @@
         content: attr(data-image-hidden-label);
         font-weight: @font-weight__semibold;
         left: 0;
+        line-height: @image-gallery-placeholder__height;
         position: absolute;
         right: 0;
         text-align: center;
         text-transform: uppercase;
         top: 0;
         visibility: hidden;
+        z-index: @image-gallery-image-hidden__z-index;
     }
 
     &.hidden-for-front {
@@ -281,7 +280,7 @@
         position: absolute;
         right: 3px;
         width: 20px;
-        .css(z-index, @image-gallery-action__z-index);
+        z-index: @image-gallery-action__z-index)
         .icon-font(
         @icon-tag__content,
         @_icon-font: @icons-admin__font-name,
@@ -299,7 +298,7 @@
         position: absolute;
         top: 2px;
         width: 20px;
-        .css(z-index, @image-gallery-action__z-index);
+        z-index: @image-gallery-action__z-index;
         .icon-font(
         @icon-gripper__content,
         @_icon-font: @icons-admin__font-name,
@@ -411,7 +410,7 @@
         @_icon-font-color-hover: @color-brownie-vanilla
         );
         span {
-            display: none;
+            &:extend(.abs-visually-hidden all);
         }
     }
 }

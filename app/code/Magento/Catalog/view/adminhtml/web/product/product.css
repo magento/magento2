@@ -17,11 +17,27 @@
     position: relative;
     border: 2px dotted #ccc;
     margin-bottom: 2px;
-    padding: 5px 0;
+    padding: 5px 0 0;
+}
+
+.admin__scope-old .images .image {
+    margin-bottom: 5px;
 }
 
 .admin__scope-old .image .spacer {
     width: 100%;
+}
+
+.admin__scope-old .image.image-placeholder .fileinput-button {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.admin__scope-old .image.image-placeholder .fileinput-button > span {
+    display: none;
 }
 
 .admin__scope-old .image .product-image {
