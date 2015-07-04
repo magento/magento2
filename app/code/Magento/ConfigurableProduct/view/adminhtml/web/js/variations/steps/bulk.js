@@ -105,9 +105,26 @@ define([
             }
         },
         force: function (wizard) {
+            this.validate();
             wizard.data.sections = this.sections;
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
             this.fillImagesSection();
+        },
+        validate: function () {
+            _.each(this.sections(), function (section) {
+                switch (section.type()) {
+                    case 'each':
+                        if (!section.attribute()) {
+                            throw new Error($.mage.__('Please, select attribute for the section ' + section.label));
+                        }
+                        break;
+                    case 'single':
+                        if (!section.value()) {
+                            throw new Error($.mage.__('Please fill in the values for the section ' + section.label));
+                        }
+                        break;
+                }
+            }, this);
         },
         back: function (wizard) {
         },
