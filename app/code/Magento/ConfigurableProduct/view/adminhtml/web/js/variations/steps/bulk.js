@@ -105,10 +105,10 @@ define([
             }
         },
         force: function (wizard) {
+            this.fillImagesSection();
             this.validate();
             wizard.data.sections = this.sections;
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
-            this.fillImagesSection();
         },
         validate: function () {
             _.each(this.sections(), function (section) {
