@@ -113,7 +113,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         if (count($attributes)) {
             foreach ($attributes as $attribute) {
                 /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-                if ($attribute->getData('prices')) {
+                if ($attribute->getData('options')) {
                     return true;
                 }
             }

@@ -411,7 +411,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 'label' => $attribute->getLabel(),
                 'use_default' => $attribute->getUseDefault(),
                 'position' => $attribute->getPosition(),
-                'values' => $attribute->getPrices() ? $attribute->getPrices() : [],
+                'values' => $attribute->getOptions() ? $attribute->getOptions() : [],
                 'attribute_id' => $eavAttribute->getId(),
                 'attribute_code' => $eavAttribute->getAttributeCode(),
                 'frontend_label' => $eavAttribute->getFrontend()->getLabel(),
@@ -924,7 +924,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (count($attributes)) {
             foreach ($attributes as $attribute) {
                 /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-                if ($attribute->getData('prices')) {
+                if ($attribute->getData('options')) {
                     return true;
                 }
             }
