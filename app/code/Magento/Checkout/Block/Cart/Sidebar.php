@@ -88,7 +88,7 @@ class Sidebar extends AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage');
+        return $this->getUrl('checkout');
     }
 
     /**
