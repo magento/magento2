@@ -114,16 +114,17 @@ define([
             this.grid(this.generateGrid(this.generateVariation(this.attributes()), wizard.data.sectionHelper));
         },
         force: function (wizard) {
-            var form = $('[data-form=edit-product]');
-            if (!form.valid()) {
-                form.data('validator').focusInvalid();
-                wizard.wizardDialog.trigger('closeModal');
+            var $dialog = $('[data-role=step-wizard-dialog]');
+            var $form = $('[data-form=edit-product]');
+            if (!$form.valid()) {
+                $form.data('validator').focusInvalid();
+                $dialog.trigger('closeModal');
                 return;
             }
             $('[data-role=configurable-attributes-container]').html('');
             $('[data-role=product-variations-matrix]').html($('[data-role=product-variations-matrix-tmp]').html());
             this.initImageUpload();
-            $('[data-role=step-wizard-dialog]').trigger('closeModal');
+            $dialog.trigger('closeModal');
         },
         back: function (wizard) {
         },
