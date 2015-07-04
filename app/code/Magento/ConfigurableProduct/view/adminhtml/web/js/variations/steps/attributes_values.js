@@ -38,7 +38,8 @@ define([
     var viewModel = Collapsible.extend({
         attributes: ko.observableArray([]),
         createOption: function () {
-            this.options.push({value: 0, label: '', id: utils.uniqueid()});
+            // this - current attribute
+            this.options.push({value: 0, label: '', id: utils.uniqueid(), attribute_id: this.id, is_new: true});
         },
         saveOption: function (option) {
             this.options.remove(option);
@@ -49,7 +50,7 @@ define([
             this.options.remove(option);
         },
         removeAttribute: function (attribute) {
-            viewModel.prototype.attributes.remove(attribute);
+            this.attributes.remove(attribute);
             this.wizard.notifyMessage(
                 $.mage.__('An attribute has been removed. This attribute will no longer appear in your configurations.'),
                 false
@@ -86,11 +87,44 @@ define([
         deSelectAllAttributes: function (attribute) {
             attribute.chosenOptions.removeAll();
         },
+        saveOptions: function() {
+            var options = [];
+            this.attributes.each(function(attribute) {
+                attribute.chosenOptions.each(function(id) {
+                    var option = attribute.options.findWhere({id:id, is_new: true});
+                    if (option) {
+                        options.push(option);
+                    }
+                });
+            });
+            if (!options.length) {
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: this.createOptionsUrl,
+                data: {options: options},
+                showLoader: true
+            }).done(function(options) {
+                this.attributes.each(function(attribute) {
+                    _.each(options, function(newOptionId, oldOptionId) {
+                        var option = attribute.options.findWhere({id:oldOptionId});
+                        if (option) {
+                            attribute.options.remove(option);
+                            option.is_new = false;
+                            option.value = newOptionId;
+                            attribute.options.push(option);
+                        }
+                    });
+                });
+
+            }.bind(this));
+        },
         render: function(wizard) {
             this.wizard = wizard;
             $.ajax({
                 type: "POST",
-                url: this.options_url,
+                url: this.optionsUrl,
                 data: {attributes: wizard.data.attributesIds()},
                 showLoader: true
             }).done(function(attributes){
@@ -98,12 +132,13 @@ define([
             }.bind(this));
         },
         force: function(wizard) {
-            viewModel.prototype.saveAttribute(wizard);
+            this.saveOptions();
+            this.saveAttribute(wizard);
 
             wizard.data.attributes = this.attributes;
         },
         back: function(wizard) {
-            wizard.data.attributesIds(viewModel.prototype.attributes().pluck('id'));
+            wizard.data.attributesIds(this.attributes().pluck('id'));
         }
     });
     return viewModel;
