@@ -86,7 +86,8 @@
                     "<?= $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
                         "appendTo": "<?= $block->getParentComponentName()?>",
-                        "options_url": "<?= $block->getUrl('catalog/product_attribute/getAttributes')?>"
+                        "optionsUrl": "<?= $block->getUrl('catalog/product_attribute/getAttributes')?>",
+                        "createOptionsUrl": "<?= $block->getUrl('catalog/product_attribute/createOptions')?>"
                     }
                 }
             }
