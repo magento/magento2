@@ -268,7 +268,7 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Resource\Order\Grid">
+    <virtualType name="Magento\Sales\Model\Resource\Order\Grid" type="Magento\Sales\Model\Resource\Grid">
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_order</argument>
             <argument name="gridTableName" xsi:type="string">sales_order_grid</argument>
@@ -312,6 +312,11 @@
                 <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
                 <item name="total_refunded" xsi:type="string">sales_order.total_refunded</item>
             </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sales\Model\Resource\GridPool">
+        <arguments>
+            <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
         </arguments>
     </type>
     <virtualType name="CustomerNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">

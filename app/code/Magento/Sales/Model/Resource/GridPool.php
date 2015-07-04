@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model\Resource;
 
 use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
 use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
 
@@ -19,13 +18,13 @@ class GridPool
     protected $grids;
 
     /**
-     * @param OrderGrid $orderGrid
+     * @param \Magento\Sales\Model\Resource\Grid $orderGrid
      * @param InvoiceGrid $invoiceGrid
      * @param ShipmentGrid $shipmentGrid
      * @param CreditmemoGrid $creditmemoGrid
      */
     public function __construct(
-        OrderGrid $orderGrid,
+        \Magento\Sales\Model\Resource\Grid $orderGrid,
         InvoiceGrid $invoiceGrid,
         ShipmentGrid $shipmentGrid,
         CreditmemoGrid $creditmemoGrid
