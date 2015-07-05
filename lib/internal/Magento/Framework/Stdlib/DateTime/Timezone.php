@@ -157,7 +157,7 @@ class Timezone implements TimezoneInterface
                 $locale,
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::SHORT,
-                $timezone
+                new \DateTimeZone($timezone)
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
@@ -251,7 +251,7 @@ class Timezone implements TimezoneInterface
             $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
-            $timezone ?: $date->getTimezone(),
+            $timezone ?: $date->getTimezone() ?: new \DateTimeZone(\DateTimeZone::UTC),
             null,
             $pattern
         );
