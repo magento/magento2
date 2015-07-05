@@ -113,6 +113,10 @@
                 </predicate>
             </event>
         </events>
+        <events selector="[data-enable='express']">
+            <event value="0" name="deactivate-express"/>
+            <event value="1" name="activate-express"/>
+        </events>
         <relation target="wps_other">
             <rule type="disable" event="activate"/>
         </relation>
@@ -132,7 +136,8 @@
             <rule type="paypal/express/unlock-configuration" event="deactivate">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
-            <rule type="paypal/express/mark-enable" event=":load"/>
+            <rule type="paypal/express/mark-disable" event="deactivate-express"/>
+            <rule type="paypal/express/mark-enable" event="activate-express"/>
             <rule type="paypal/express/lock-configuration-conditional" event=":load"/>
         </relation>
         <relation target=":self">
