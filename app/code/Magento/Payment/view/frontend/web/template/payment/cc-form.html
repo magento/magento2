@@ -31,10 +31,10 @@
                 <!--/ko-->
             </ul>
             <input type="hidden"
-                   name="payment[cc_number]"
+                   name="payment[cc_type]"
                    class="input-text"
                    value=""
-                   data-bind="attr: {id: getCode() + '_cc_type'}, value: creditCardType">
+                   data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'}, value: creditCardType">
         </div>
     </div>
     <div class="field number required">
