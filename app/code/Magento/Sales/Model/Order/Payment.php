@@ -1014,9 +1014,14 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
-        $result = $isOnline ?
-            $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())->denyPayment($this) :
-            (bool)$this->getNotificationResult();
+        if ($isOnline) {
+            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+            $method = $this->getMethodInstance();
+            $method->setStore($this->getOrder()->getStoreId());
+            $result = $method->denyPayment($this);
+        } else {
+            $result = (bool)$this->getNotificationResult();
+        }
 
         if ($result) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);

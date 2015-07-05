@@ -454,7 +454,7 @@ class Adapter implements MethodInterface
             'deny_payment',
             $payment
         );
-        return false;
+        return $this;
     }
 
     /**
