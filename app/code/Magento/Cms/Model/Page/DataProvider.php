@@ -8,7 +8,7 @@ namespace Magento\Cms\Model\Page;
 use Magento\Cms\Model\Resource\Page\Collection;
 use Magento\Cms\Model\Resource\Page\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 /**
  * Class DataProvider
  */
@@ -58,10 +58,15 @@ class DataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
+     * @var FilterPool
+     */
+    protected $filterPool;
+    /**
+     * @param $name
+     * @param $primaryFieldName
+     * @param $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -70,13 +75,14 @@ class DataProvider implements DataProviderInterface
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
         $this->name = $name;
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-
+        $this->filterPool = $filterPool;
         $this->collection = $collectionFactory->create();
         $this->collection->setFirstStoreFlag(true);
         $this->meta = $meta;
@@ -156,9 +162,9 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($field, $condition = null)
+    public function addFilter($condition, $field = null,  $type = 'regular')
     {
-        $this->collection->addFieldToFilter($field, $condition);
+        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
 
     /**
@@ -227,6 +233,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->toArray();
     }
 
@@ -237,6 +244,7 @@ class DataProvider implements DataProviderInterface
      */
     public function count()
     {
+        $this->filterPool->applyFilters($this->collection);
         return $this->collection->count();
     }
 
