@@ -9,6 +9,7 @@ use Magento\Cms\Model\Resource\Page\Collection;
 use Magento\Cms\Model\Resource\Page\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+
 /**
  * Class DataProvider
  */
@@ -61,6 +62,7 @@ class DataProvider implements DataProviderInterface
      * @var FilterPool
      */
     protected $filterPool;
+
     /**
      * @param $name
      * @param $primaryFieldName
