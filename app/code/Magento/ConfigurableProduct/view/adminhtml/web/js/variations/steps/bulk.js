@@ -80,6 +80,9 @@ define([
                 }), 'code');
                 return imageData;
             });
+            images = _.reject(images, function (image) {
+                return image.removed == true;
+            });
             preview = _.find(images, function (image) {
                 return _.contains(image.galleryTypes, 'image');
             });
