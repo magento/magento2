@@ -36,14 +36,14 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
         $expected = [
             [
-                'product_sku' => 'grouped-product',
+                'sku' => 'grouped-product',
                 'link_type' => 'associated',
                 'linked_product_sku' => 'simple-1',
                 'linked_product_type' => 'simple',
                 'position' => 1,
             ],
             [
-                'product_sku' => 'grouped-product',
+                'sku' => 'grouped-product',
                 'link_type' => 'associated',
                 'linked_product_sku' => 'virtual-product',
                 'linked_product_type' => 'virtual',

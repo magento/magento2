@@ -10,9 +10,12 @@
         <input
             class="admin__control-checkbox"
             type="checkbox"
-            data-bind="checked: selected,
-                   value: row[indexField],
-                   attr: {id: 'check' + row[indexField]}">
+            data-bind="
+                checked: selected,
+                value: row[indexField],
+                attr: {
+                    id: 'check' + row[indexField]
+                }">
         <label data-bind="attr: {for: 'check' + row[indexField]}"></label>
     </label>
 </td>

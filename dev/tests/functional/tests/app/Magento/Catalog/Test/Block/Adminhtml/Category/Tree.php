@@ -11,53 +11,52 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\Element\TreeElement;
+use Magento\Backend\Test\Block\Template;
 
 /**
- * Class Tree
- * Categories tree block
+ * Categories tree block.
  */
 class Tree extends Block
 {
     /**
-     * 'Add Subcategory' button
+     * 'Add Subcategory' button.
      *
      * @var string
      */
     protected $addSubcategory = '#add_subcategory_button';
 
     /**
-     * 'Add Root Category' button
+     * 'Add Root Category' button.
      *
      * @var string
      */
     protected $addRootCategory = '#add_root_category_button';
 
     /**
-     * 'Expand All' link
+     * 'Expand All' link.
      *
      * @var string
      */
     protected $expandAll = 'a[onclick*=expandTree]';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Category tree
+     * Category tree.
      *
      * @var string
      */
     protected $treeElement = '.tree-holder';
 
     /**
-     * Get backend abstract block
+     * Get backend abstract block.
      *
-     * @return \Magento\Backend\Test\Block\Template
+     * @return Template
      */
     protected function getTemplateBlock()
     {
@@ -68,7 +67,7 @@ class Tree extends Block
     }
 
     /**
-     * Press 'Add Subcategory' button
+     * Press 'Add Subcategory' button.
      *
      * @return void
      */
@@ -79,7 +78,7 @@ class Tree extends Block
     }
 
     /**
-     * Press 'Add Root Category' button
+     * Press 'Add Root Category' button.
      *
      * @return void
      */
@@ -90,7 +89,7 @@ class Tree extends Block
     }
 
     /**
-     * Select Default category
+     * Select Default category.
      *
      * @param FixtureInterface $category
      * @param bool $fullPath
@@ -102,6 +101,9 @@ class Tree extends Block
         if (!$fullPath) {
             array_pop($parentPath);
         }
+        if (empty($parentPath)) {
+            return;
+        }
         $path = implode('/', $parentPath);
 
         $this->expandAllCategories();
@@ -110,7 +112,7 @@ class Tree extends Block
     }
 
     /**
-     * Prepare category path
+     * Prepare category path.
      *
      * @param Category $category
      * @return array
@@ -129,28 +131,7 @@ class Tree extends Block
     }
 
     /**
-     * Find category name in array
-     *
-     * @param array $structure
-     * @param array $category
-     * @return bool
-     */
-    protected function inTree(array $structure, array &$category)
-    {
-        $element = array_shift($category);
-        foreach ($structure as $item) {
-            $result = strpos($item['name'], $element);
-            if ($result !== false && !empty($item['subnodes'])) {
-                return $this->inTree($item['subnodes'], $category);
-            } elseif ($result !== false && empty($category)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check category in category tree
+     * Check category in category tree.
      *
      * @param Category $category
      * @return bool
@@ -158,24 +139,13 @@ class Tree extends Block
     public function isCategoryVisible(Category $category)
     {
         $categoryPath = $this->prepareFullCategoryPath($category);
-        /** @var TreeElement $treeElement */
-        $treeElement = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree');
-        $structure = $treeElement->getStructure();
-        $result = false;
-        $element = array_shift($categoryPath);
-        foreach ($structure as $item) {
-            $searchResult = strpos($item['name'], $element);
-            if ($searchResult !== false && !empty($item['subnodes'])) {
-                $result = $this->inTree($item['subnodes'], $categoryPath);
-            } elseif ($searchResult !== false && empty($categoryPath)) {
-                $result = true;
-            }
-        }
-        return $result;
+        $categoryPath = implode('/', $categoryPath);
+        return $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')
+            ->isElementVisible($categoryPath);
     }
 
     /**
-     * Expand all categories tree
+     * Expand all categories tree.
      *
      * @return void
      */

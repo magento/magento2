@@ -41,7 +41,7 @@
     <div class="admin__table-wrapper" id="order-items_grid">
     <?php if (count($_items)>10): ?>
         <div class="actions update actions-update">
-            <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+            <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
         </div>
     <?php endif; ?>
         <table class="data-table admin__table-primary order-tables">
@@ -199,7 +199,7 @@
     </div>
 
     <div class="order-discounts">
-        <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+        <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
         <div id="order-coupons" class="order-coupons"><?php echo $block->getChildHtml();?></div>
     </div>
 

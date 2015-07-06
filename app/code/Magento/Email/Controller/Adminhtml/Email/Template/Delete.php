@@ -22,7 +22,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
                 if (count($template->getSystemConfigPathsWhereUsedCurrently()) == 0) {
                     $template->delete();
                     // display success message
-                    $this->messageManager->addSuccess(__('The email template has been deleted.'));
+                    $this->messageManager->addSuccess(__('You deleted the email template.'));
                     $this->_objectManager->get('Magento\Framework\App\ReinitableConfig')->reinit();
                     // go to grid
                     $this->_redirect('adminhtml/*/');

@@ -517,7 +517,7 @@ class Cart extends Object implements CartInterface
 
         if ($qtyRecalculatedFlag) {
             $this->messageManager->addNotice(
-                __('Some products quantities were recalculated because of quantity increment mismatch.')
+                __('We adjusted product quantities to fit the required increments.')
             );
         }
 

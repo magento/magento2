@@ -32,7 +32,7 @@ class AssertProductTemplateInGrid extends AbstractConstraint
         $productSetPage->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $productSetPage->getGrid()->isRowVisible($filterAttributeSet),
-            'Attribute Set \'' . $filterAttributeSet['set_name'] . '\' is absent in Product Template grid.'
+            'Product Template \'' . $filterAttributeSet['set_name'] . '\' is absent in Product Template grid.'
         );
     }
 

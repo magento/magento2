@@ -76,7 +76,7 @@ class Window extends \Magento\Backend\Block\Template
         if ($this->canShow()) {
             $this->setHeaderText($this->escapeHtml(__('Incoming Message')));
             $this->setCloseText($this->escapeHtml(__('close')));
-            $this->setReadDetailsText($this->escapeHtml(__('Read details')));
+            $this->setReadDetailsText($this->escapeHtml(__('Read Details')));
             $this->setNoticeMessageText($this->escapeHtml($this->_getLatestItem()->getTitle()));
             $this->setNoticeMessageUrl($this->escapeUrl($this->_getLatestItem()->getUrl()));
             $this->setSeverityText('critical');

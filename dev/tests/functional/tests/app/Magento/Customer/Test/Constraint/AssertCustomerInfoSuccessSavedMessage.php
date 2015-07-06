@@ -18,7 +18,7 @@ class AssertCustomerInfoSuccessSavedMessage extends AbstractConstraint
     const SEVERITY = 'low';
     /* end tags */
 
-    const SUCCESS_MESSAGE = 'The account information has been saved.';
+    const SUCCESS_MESSAGE = 'You saved the account information.';
 
     /**
      * Asserts that success message equals to expected message

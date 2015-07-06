@@ -160,6 +160,7 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'product_id' => 'super_attribute.product_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
+                    'super_attribute_label' => 'attribute_label.value',
                 ]
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
@@ -191,6 +192,16 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     [
                         'option_value.option_id = entity_value.value',
                         'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    ]
+                ),
+                []
+            )->joinLeft(
+                ['attribute_label' => $this->getTable('catalog_product_super_attribute_label')],
+                implode(
+                    ' AND ',
+                    [
+                        'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
+                        'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     ]
                 ),
                 []

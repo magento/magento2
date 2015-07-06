@@ -29,7 +29,12 @@ class StockItemTest extends WebapiAbstract
     /**
      * Resource path
      */
-    const RESOURCE_PATH = '/V1/stockItems';
+    const RESOURCE_GET_PATH = '/V1/stockItems';
+
+    /**
+     * Resource path
+     */
+    const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
 
     /** @var \Magento\Catalog\Model\Resource\Product\Collection */
     protected $productCollection;
@@ -73,7 +78,7 @@ class StockItemTest extends WebapiAbstract
         $productSku = 'simple1';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/$productSku",
+                'resourcePath' => self::RESOURCE_GET_PATH . "/$productSku",
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -100,9 +105,13 @@ class StockItemTest extends WebapiAbstract
     {
         $stockItemOld = $this->getStockItemBySku($fixtureData);
         $productSku = 'simple1';
+        $itemId = $stockItemOld['item_id'];
+
+        $resourcePath = str_replace([':productSku', ':itemId'], [$productSku, $itemId], self::RESOURCE_PUT_PATH);
+
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/$productSku",
+                'resourcePath' => $resourcePath,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [

@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test class for Magento\User\Controller\Adminhtml\User\InvalidateToken.
  */
-class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
+class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/User/_files/user_with_role.php

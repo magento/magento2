@@ -122,4 +122,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\XFrameOptPlugin">
+        <arguments>
+            <argument name="xFrameOpt" xsi:type="const">Magento\Framework\App\Response\XFrameOptPlugin::BACKEND_X_FRAME_OPT</argument>
+        </arguments>
+    </type>
 </config>
