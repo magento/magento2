@@ -17,7 +17,7 @@ interface FilterApplierInterface
      * Apply filter
      *
      * @param AbstractDb $collection
-     * @param $filters
+     * @param array $filters
      * @return mixed
      */
     public function apply(AbstractDb $collection, $filters);

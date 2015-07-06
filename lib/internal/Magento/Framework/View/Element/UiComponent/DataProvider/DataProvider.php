@@ -57,9 +57,9 @@ class DataProvider implements DataProviderInterface
     protected $filterPool;
 
     /**
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param Collection $collection
      * @param FilterPool $filterPool
      * @param array $meta
@@ -81,6 +81,14 @@ class DataProvider implements DataProviderInterface
         $this->collection = $collection;
         $this->meta = $meta;
         $this->data = $data;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
     }
 
     /**
@@ -156,7 +164,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null,  $type = 'regular')
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
         $this->filterPool->registerNewFilter($condition, $field, $type);
     }
