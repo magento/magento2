@@ -84,6 +84,14 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * @return Collection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    /**
      * Get Data Provider name
      *
      * @return string

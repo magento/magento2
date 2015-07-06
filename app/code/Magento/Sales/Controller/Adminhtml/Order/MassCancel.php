@@ -18,22 +18,22 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
     protected function massAction(AbstractCollection $collection)
     {
         $countCancelOrder = 0;
-        $countNonCancelOrder = 0;
         foreach ($collection->getItems() as $order) {
-            if ($order->canCancel()) {
-                $order->cancel()->save();
-                $countCancelOrder++;
-            } else {
-                $countNonCancelOrder++;
+            if (!$order->canCancel()) {
+                continue;
             }
+            $order->cancel();
+            $order->save();
+            $countCancelOrder++;
         }
-        if ($countNonCancelOrder) {
-            if ($countCancelOrder) {
-                $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
-            } else {
-                $this->messageManager->addError(__('You cannot cancel the order(s).'));
-            }
+        $countNonCancelOrder = $collection->count() - $countCancelOrder;
+
+        if ($countNonCancelOrder && $countCancelOrder) {
+            $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
+        } elseif ($countNonCancelOrder) {
+            $this->messageManager->addError(__('You cannot cancel the order(s).'));
         }
+
         if ($countCancelOrder) {
             $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
         }

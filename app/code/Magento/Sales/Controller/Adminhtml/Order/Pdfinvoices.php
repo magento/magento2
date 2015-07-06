@@ -19,7 +19,6 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMass
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('selected');
         $resultRedirect = $this->resultRedirectFactory->create();
         $flag = false;
         /** @var \Magento\Sales\Model\Order $order */

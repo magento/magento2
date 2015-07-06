@@ -70,7 +70,6 @@ class Grid extends AbstractGrid
     {
         $select = $this->getGridOriginSelect()
             ->where(($field ?: $this->mainTableName . '.entity_id') . ' = ?', $value);
-
         return $this->getConnection()->query(
             $this->getConnection()
                 ->insertFromSelect(

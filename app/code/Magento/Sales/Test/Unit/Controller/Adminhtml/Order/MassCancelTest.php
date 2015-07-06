@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class MassCancelTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassCancelTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,6 +70,11 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderCollectionMock;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -83,7 +89,8 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
                 'getSession',
                 'getActionFlag',
                 'getHelper',
-                'getResultRedirectFactory'
+                'getResultRedirectFactory',
+                'getResultFactory'
             ],
             [],
             '',
@@ -119,18 +126,28 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [],
-            [],
-            '',
-            false
-        );
+
+        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', ['get', 'set'], [], '', false);
         $this->helperMock = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
         $this->resultRedirectMock = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
+
+        $redirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->willReturn($redirectMock);
 
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
@@ -143,128 +160,206 @@ class MassCancelTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getResultRedirectFactory')
             ->willReturn($resultRedirectFactory);
+        $this->contextMock->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($resultFactoryMock);
 
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassCancel',
             [
-                'context' => $this->contextMock,
-                'request' => $this->requestMock,
-                'response' => $this->responseMock
+                'context' => $this->contextMock
             ]
         );
     }
 
+    /**
+     * Test for selected orders
+     * Two orders, only $order1 can be canceled
+     */
     public function testExecuteTwoOrderCanceled()
     {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
-            ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->exactly(2))
-            ->method('canCancel')
-            ->willReturn(true);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('cancel')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->exactly(2))
-            ->method('save')
-            ->willReturnSelf();
-        $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
-            ->with('We canceled 2 order(s).');
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('sales/*/')
-            ->willReturnSelf();
-        $this->massAction->execute();
-    }
+        $selected = [1, 2];
+        $countOrders = count($selected);
 
-    public function testExecuteOneOrderCannotBeCanceled()
-    {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
+        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('selected')
+            ->willReturn($selected);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('excluded')
+            ->willReturn([]);
+
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->at(1))
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['in' => $selected]);
+        $this->orderCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$order1, $order2]);
+
+        $order1->expects($this->once())
             ->method('canCancel')
             ->willReturn(true);
-        $this->orderMock->expects($this->at(2))
+        $order1->expects($this->once())
+            ->method('cancel');
+        $order1->expects($this->once())
+            ->method('save');
+
+        $this->orderCollectionMock->expects($this->once())
+            ->method('count')
+            ->willReturn($countOrders);
+
+        $order2->expects($this->once())
             ->method('canCancel')
             ->willReturn(false);
-        $this->orderMock->expects($this->exactly(1))
-            ->method('cancel')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->exactly(1))
-            ->method('save')
-            ->willReturnSelf();
+
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('1 order(s) cannot be canceled.');
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addSuccess')
+            ->with('We canceled 1 order(s).');
+
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')
             ->willReturnSelf();
+
         $this->massAction->execute();
     }
 
-    public function testExecuteCannotCancelEachOrders()
+    /**
+     * Test for excluded orders
+     * Two orders could't be canceled
+     */
+    public function testExcludedOrderCannotBeCanceled()
     {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
+        $excluded = [1, 2];
+        $countOrders = count($excluded);
+
+        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('selected')
+            ->willReturn([]);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('excluded')
+            ->willReturn($excluded);
+
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->exactly(2))
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['nin' => $excluded]);
+        $this->orderCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$order1, $order2]);
+
+        $order1->expects($this->once())
             ->method('canCancel')
             ->willReturn(false);
-        $this->orderMock->expects($this->never())
-            ->method('cancel')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->never())
-            ->method('save')
-            ->willReturnSelf();
+
+        $this->orderCollectionMock->expects($this->once())
+            ->method('count')
+            ->willReturn($countOrders);
+
+        $order2->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(false);
+
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('You cannot cancel the order(s).');
+
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')
             ->willReturnSelf();
+
+        $this->massAction->execute();
+    }
+
+    public function testNoExcludedNoSelectedOrders()
+    {
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addError')
+            ->with('Please select item(s).');
+
+        $this->massAction->execute();
+    }
+
+    /**
+     * Order throws exception while canceling
+     */
+    public function testException()
+    {
+        $selected = [1];
+        $exception = new \Exception('Can not cancel');
+
+        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('selected')
+            ->willReturn($selected);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('excluded')
+            ->willReturn([]);
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['in' => $selected]);
+        $this->orderCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$order1]);
+
+        $order1->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(true);
+        $order1->expects($this->once())
+            ->method('cancel')
+            ->willThrowException($exception);
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addError')
+            ->with('Can not cancel');
+
         $this->massAction->execute();
     }
 }
