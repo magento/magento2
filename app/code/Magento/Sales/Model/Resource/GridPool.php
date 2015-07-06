@@ -19,14 +19,14 @@ class GridPool
     /**
      * @param \Magento\Sales\Model\Resource\Grid $orderGrid
      * @param \Magento\Sales\Model\Resource\Grid $invoiceGrid
-     * @param ShipmentGrid $shipmentGrid
-     * @param CreditmemoGrid $creditmemoGrid
+     * @param \Magento\Sales\Model\Resource\Grid $shipmentGrid
+     * @param \Magento\Sales\Model\Resource\Grid $creditmemoGrid
      */
     public function __construct(
         \Magento\Sales\Model\Resource\Grid $orderGrid,
         \Magento\Sales\Model\Resource\Grid $invoiceGrid,
         \Magento\Sales\Model\Resource\Grid $shipmentGrid,
-        CreditmemoGrid $creditmemoGrid
+        \Magento\Sales\Model\Resource\Grid $creditmemoGrid
     ) {
         $this->grids = [
             'order_grid' => $orderGrid,
