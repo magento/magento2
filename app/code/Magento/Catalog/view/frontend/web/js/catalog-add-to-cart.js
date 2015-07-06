@@ -49,6 +49,7 @@ define([
 
         ajaxSubmit: function(form) {
             var self = this;
+            $(self.options.minicartSelector).trigger('contentLoading');
             $.ajax({
                 url: form.attr('action'),
                 data: form.serialize(),
