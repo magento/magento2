@@ -245,7 +245,78 @@
         @_icon-font-size: 1.8rem,
         @_icon-font-color: @image-gallery-icons__color,
         @_icon-font-color-hover: @image-gallery-icons__hover__color,
-        @_icon-font-text-hide: true
+        @_icon-font-text-hide: true,
+        @_icon-font-display: none
+        );
+    }
+
+    .image-label {
+        bottom: 6px;
+        cursor: pointer;
+        height: 20px;
+        position: absolute;
+        right: 3px;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+        .icon-font(
+        @icon-tag__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color,
+        @_icon-font-text-hide: true,
+        @_icon-font-display: none
+        );
+    }
+
+    &:hover {
+        .action-remove,
+        .image-label {
+            display: block;
+        }
+    }
+
+    &.base-image {
+        .image-label {
+            // ToDo UI: remove after image roles labels implemented
+            background: url(../Magento_Backend/images/gallery-image-base-label.png) no-repeat;
+            bottom: 0;
+            display: block;
+            height: 33px;
+            right: 0;
+            width: 33px;
+            &:before {
+                display: none;
+            }
+        }
+        &:hover {
+            .image-label {
+                background: none;
+                bottom: 6px;
+                height: 20px;
+                right: 3px;
+                width: 20px;
+                &:before {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .draggable-handle {
+        cursor: move;
+        height: 20px;
+        left: 3px;
+        position: absolute;
+        top: 2px;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+        .icon-font(
+        @icon-gripper__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: 1.8rem,
+        @_icon-font-color: @image-gallery-icons__color,
+        @_icon-font-color-hover: @image-gallery-icons__hover__color
         );
     }
 
@@ -272,41 +343,6 @@
             visibility: visible;
         }
     }
-
-    .image-label {
-        bottom: 6px;
-        cursor: pointer;
-        height: 20px;
-        position: absolute;
-        right: 3px;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
-        .icon-font(
-        @icon-tag__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color,
-        @_icon-font-text-hide: true
-        );
-    }
-
-    .draggable-handle {
-        cursor: move;
-        height: 20px;
-        left: 3px;
-        position: absolute;
-        top: 2px;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
-        .icon-font(
-        @icon-gripper__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color
-        );
-    }
 }
 
 //
@@ -327,7 +363,7 @@
 }
 
 .image-pointer {
-    background: url(Magento_Backend::images/gallery-image-panel-corner.png) no-repeat;
+    background: url(../Magento_Backend/images/gallery-image-panel-corner.png) no-repeat;
     height: 15px;
     left: 50%;
     margin-left: -14px;

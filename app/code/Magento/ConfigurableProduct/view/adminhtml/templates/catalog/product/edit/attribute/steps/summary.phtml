@@ -66,37 +66,37 @@
                 </div>
                 <!-- /ko -->
             </div>
-            <div class="control">
-                <table class="admin__table-secondary">
+            <div class="admin__data-grid-wrap">
+                <table class="data-grid"">
                     <thead>
-                    <tr>
-                        <th class="col-display" data-column="display">
-                            <?= __('Display'); ?>
-                        </th>
-                        <th class="col-image" data-column="image">
-                            <?= __('Image'); ?>
-                        </th>
-                        <th class="col-name"  data-column="name">
-                            <?= __('Name'); ?>
-                        </th>
-                        <th class="col-sku" data-column="sku">
-                            <?= __('SKU'); ?>
-                        </th>
-                        <th class="col-price" data-column="price">
-                            <?= __('Price'); ?>
-                        </th>
-                        <th class="col-qty" data-column="qty">
-                            <?= __('Quantity'); ?>
-                        </th>
-                        <th class="col-weight" data-column="weight">
-                            <?= __('Weight'); ?>
-                        </th>
-                        <!-- ko if: productMatrix()[0] -->
-                        <!-- ko foreach: productMatrix()[0].options -->
-                        <th data-bind="attr: {class:'col-' + $data.attribute_code}, text: $data.attribute_label"></th>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                    </tr>
+                        <tr>
+                            <th class="data-grid-th col-display" data-column="display">
+                                <?= __('Display'); ?>
+                            </th>
+                            <th class="data-grid-th col-image" data-column="image">
+                                <?= __('Image'); ?>
+                            </th>
+                            <th class="data-grid-th col-name"  data-column="name">
+                                <?= __('Name'); ?>
+                            </th>
+                            <th class="data-grid-th col-sku" data-column="sku">
+                                <?= __('SKU'); ?>
+                            </th>
+                            <th class="data-grid-th col-price" data-column="price">
+                                <?= __('Price'); ?>
+                            </th>
+                            <th class="data-grid-th col-qty" data-column="qty">
+                                <?= __('Quantity'); ?>
+                            </th>
+                            <th class="data-grid-th col-weight" data-column="weight">
+                                <?= __('Weight'); ?>
+                            </th>
+                            <!-- ko if: productMatrix()[0] -->
+                                <!-- ko foreach: productMatrix()[0].options -->
+                                    <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code}, text: $data.attribute_label"></th>
+                                <!-- /ko -->
+                            <!-- /ko -->
+                        </tr>
                     </thead>
                     <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
                     <tr data-role="row" data-bind="attr: {class:  $index() % 2 ? 'even' : ''}">
