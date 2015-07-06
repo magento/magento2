@@ -19,128 +19,127 @@ $productByUsedAttributes = $block->getAssociatedProducts();
 
 <h3 class="title"><?php echo __('Current Variations'); ?></h3>
 
-<div class="field">
-    <div class="control">
-        <table class="admin__table-secondary">
-            <thead>
-                <tr>
-                    <th class="col-display" data-column="display">
-                        <?php echo __('Display'); ?>
-                    </th>
-                    <th class="col-image" data-column="image">
-                        <?php echo __('Image'); ?>
-                    </th>
-                    <th class="col-name <?php echo $block->getAttributeFrontendClass('name'); ?>" data-column="name">
-                        <?php echo __('Name'); ?>
-                    </th>
-                    <th class="col-sku <?php echo $block->getAttributeFrontendClass('sku'); ?>" data-column="sku">
-                        <?php echo __('SKU'); ?>
-                    </th>
-                    <th class="col-price" data-column="price">
-                        <?php echo __('Price'); ?>
-                    </th>
-                    <th class="col-qty" data-column="qty">
-                        <?php echo __('Quantity'); ?>
-                    </th>
-                    <th class="col-weight <?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight')); ?>" data-column="weight">
-                        <?php echo __('Weight'); ?>
-                    </th>
-                    <?php
-                    foreach ($usedProductAttributes as $attribute) {
-                        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<th class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel(0))) . '">', $attribute->getStoreLabel(0), '</th>', PHP_EOL;
-                    }
-                    ?>
-                    <th class="col-actions hidden"></th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-            $isEven = true;
-            $productPrice = (float)$block->getProduct()->getPrice();
-            foreach ($variations as $variation) {
-                $attributeValues = [];
-                $attributeLabels = [];
-                $attributeStoreLabels = [];
-                $price = $productPrice;
+<div class="admin__data-grid-wrap">
+    <table class="data-grid">
+        <thead>
+            <tr>
+                <th class="data-grid-th col-display" data-column="display">
+                    <?php echo __('Display'); ?>
+                </th>
+                <th class="data-grid-th col-image" data-column="image">
+                    <?php echo __('Image'); ?>
+                </th>
+                <th class="data-grid-th col-name <?php echo $block->getAttributeFrontendClass('name'); ?>" data-column="name">
+                    <?php echo __('Name'); ?>
+                </th>
+                <th class="data-grid-th col-sku <?php echo $block->getAttributeFrontendClass('sku'); ?>" data-column="sku">
+                    <?php echo __('SKU'); ?>
+                </th>
+                <th class="data-grid-th col-price" data-column="price">
+                    <?php echo __('Price'); ?>
+                </th>
+                <th class="data-grid-th col-qty" data-column="qty">
+                    <?php echo __('Quantity'); ?>
+                </th>
+                <th class="data-grid-th col-weight <?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight')); ?>" data-column="weight">
+                    <?php echo __('Weight'); ?>
+                </th>
+                <?php
                 foreach ($usedProductAttributes as $attribute) {
                     /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-
-                    $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
-                    $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
+                    echo '<th class="data-grid-th col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel(0))) . '">', $attribute->getStoreLabel(0), '</th>', PHP_EOL;
                 }
-                $attributeLabels = $block->escapeHtml($attributeLabels);
-                $key = implode('-', $attributeValues);
-                if (isset($productByUsedAttributes[$key])) {
-                    $product = $productByUsedAttributes[$key];
-                    $price = $originPrice = $product->getPrice();
-                    ?>
+                ?>
+                <th class="col-actions hidden"></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        $isEven = true;
+        $productPrice = (float)$block->getProduct()->getPrice();
+        foreach ($variations as $variation) {
+            $attributeValues = [];
+            $attributeLabels = [];
+            $attributeStoreLabels = [];
+            $price = $productPrice;
+            foreach ($usedProductAttributes as $attribute) {
+                /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
 
-                <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
-                    <td class="col-display" data-column="display">
-                        <input type="checkbox" name="associated_product_ids[]" data-column="entity_id"
-                               value="<?php echo $product->getId()?>" class="checkbox"
-                               checked="checked"/>
-                    </td>
-                    <td class="col-image" data-column="image">
-                        <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($product, 'image')->resize(32);
-                    ?>"
-                             class="variation" data-role="image"/>
-                    </td>
-                    <td class="col-name" data-column="name">
-                        <a href="<?php echo $block->getEditProductUrl($product->getId())?>"
-                           target="_blank"><?php echo $block->escapeHtml($product->getName())?></a>
-
-                        <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
-                    ?>"
-                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
-                    ?>">
-                            <span><?php echo __('Choose');
-                    ?></span>
-                        </button>
-                    </td>
-                    <td class="col-sku" data-column="sku">
-                        <span data-column="sku"><?php echo $block->escapeHtml($product->getSku())?></span>
-                    </td>
-                    <td class="col-price" data-column="price">
-                        <?php echo $block->renderPrice($price);
-                    ?>
-                    </td>
-                    <td class="col-qty" data-column="qty"><?php echo $block->getProductStockQty($product) ?></td>
-                    <td class="col-weight" data-column="weight"><?php echo $product->getWeight()?></td>
-                    <?php
-                    foreach ($usedProductAttributes as $attribute) {
-                        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<td class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
-                            $block->escapeHtml($variation[$attribute->getId()]['label']), '</td>', PHP_EOL;
-                    }
-                    ?>
-                    <td class="col-actions hidden" data-column="actions">
-                        <div class="actions-split">
-                            <button type="button" class="action-default">
-                                <span>Edit</span>
-                            </button>
-                            <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                                <span>Select</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="item">Reset Variation</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                    <?php
-
-                }
-                $isEven = !$isEven;
+                $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
+                $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
             }
-            ?>
-            </tbody>
-        </table>
-    </div>
+            $attributeLabels = $block->escapeHtml($attributeLabels);
+            $key = implode('-', $attributeValues);
+            if (isset($productByUsedAttributes[$key])) {
+                $product = $productByUsedAttributes[$key];
+                $price = $originPrice = $product->getPrice();
+                ?>
+
+            <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
+                <td class="col-display" data-column="display">
+                    <input type="checkbox" name="associated_product_ids[]" data-column="entity_id"
+                           value="<?php echo $product->getId()?>" class="checkbox"
+                           checked="checked"/>
+                </td>
+                <td class="col-image" data-column="image">
+                    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($product, 'image')->resize(32);
+                ?>"
+                         class="variation" data-role="image"/>
+                </td>
+                <td class="col-name" data-column="name">
+                    <a href="<?php echo $block->getEditProductUrl($product->getId())?>"
+                       target="_blank"><?php echo $block->escapeHtml($product->getName())?></a>
+
+                    <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
+                ?>"
+                            data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
+                ?>">
+                        <span><?php echo __('Choose');
+                ?></span>
+                    </button>
+                </td>
+                <td class="col-sku" data-column="sku">
+                    <span data-column="sku"><?php echo $block->escapeHtml($product->getSku())?></span>
+                </td>
+                <td class="col-price" data-column="price">
+                    <?php echo $block->renderPrice($price);
+                ?>
+                </td>
+                <td class="col-qty" data-column="qty"><?php echo $block->getProductStockQty($product) ?></td>
+                <td class="col-weight" data-column="weight"><?php echo $product->getWeight()?></td>
+                <?php
+                foreach ($usedProductAttributes as $attribute) {
+                    /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+                    echo '<td class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
+                        $block->escapeHtml($variation[$attribute->getId()]['label']), '</td>', PHP_EOL;
+                }
+                ?>
+                <td class="col-actions hidden" data-column="actions">
+                    <div class="actions-split">
+                        <button type="button" class="action-default">
+                            <span>Edit</span>
+                        </button>
+                        <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
+                            <span>Select</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="item">Reset Variation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                <?php
+
+            }
+            $isEven = !$isEven;
+        }
+        ?>
+        </tbody>
+    </table>
 </div>
+
 <script data-template-for="variation-image" type="text/x-magento-template">
     <img src="<%- data.url %>" class="variation" data-role="image"/>
 </script>
