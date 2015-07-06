@@ -10,7 +10,7 @@ namespace Magento\Quote\Model\Resource\Quote\Address;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Collection
 {
     /**
      * Event prefix

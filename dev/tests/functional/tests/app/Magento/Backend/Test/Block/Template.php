@@ -10,27 +10,26 @@ namespace Magento\Backend\Test\Block;
 use Magento\Mtf\Block\Block;
 
 /**
- * Class Template
  * Backend abstract block
  */
 class Template extends Block
 {
     /**
-     * Magento loader
+     * Magento loader.
      *
      * @var string
      */
     protected $loader = '[data-role="loader"]';
 
     /**
-     * Magento varienLoader.js loader
+     * Magento varienLoader.js loader.
      *
      * @var string
      */
     protected $loaderOld = '#loading-mask #loading_mask_loader';
 
     /**
-     * Wait until loader will be disappeared
+     * Wait until loader will be disappeared.
      *
      * @return void
      */
