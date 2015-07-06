@@ -104,7 +104,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     /**
      * Apply custom columns before load
      *
-     * @return void
+     * @return $this
      */
     protected function _beforeLoad()
     {
@@ -112,5 +112,6 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
         }
+        return parent::_beforeLoad();
     }
 }
