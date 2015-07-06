@@ -169,9 +169,12 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     }
 
     /**
+     * Validate quote
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @throws InputException
      * @throws NoSuchEntityException
+     * @return void
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
