@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta15",
+    "version": "0.74.0-beta16",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -103,7 +103,6 @@
         "magento/module-google-adwords": "self.version",
         "magento/module-google-analytics": "self.version",
         "magento/module-google-optimizer": "self.version",
-        "magento/module-google-shopping": "self.version",
         "magento/module-grouped-import-export": "self.version",
         "magento/module-grouped-product": "self.version",
         "magento/module-import-export": "self.version",
