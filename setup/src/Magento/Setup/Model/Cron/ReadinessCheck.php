@@ -100,9 +100,11 @@ class ReadinessCheck
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMsg;
         }
 
-        $jsonData = json_decode($write->readFile(self::CRON_JOB_STATUS_FILE), true);
-        if (isset($jsonData[self::KEY_CURRENT_TIMESTAMP])) {
-            $resultJsonRawData[self::KEY_LAST_TIMESTAMP] = $jsonData[self::KEY_CURRENT_TIMESTAMP];
+        if ($write->isExist(self::CRON_JOB_STATUS_FILE)) {
+            $jsonData = json_decode($write->readFile(self::CRON_JOB_STATUS_FILE), true);
+            if (isset($jsonData[self::KEY_CURRENT_TIMESTAMP])) {
+                $resultJsonRawData[self::KEY_LAST_TIMESTAMP] = $jsonData[self::KEY_CURRENT_TIMESTAMP];
+            }
         }
         $resultJsonRawData[self::KEY_CURRENT_TIMESTAMP] = time();
 
