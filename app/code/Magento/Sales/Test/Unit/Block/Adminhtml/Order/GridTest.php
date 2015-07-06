@@ -63,7 +63,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $collectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Grid\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $dataProviderMock = $this->getMockBuilder('Magento\Sales\Model\Order\DataProvider')
+        $providerName = 'Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider';
+        $dataProviderMock = $this->getMockBuilder($providerName)
             ->disableOriginalConstructor()
             ->getMock();
         $componentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
