@@ -7,21 +7,24 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
-    'mage/url'
+    'mage/url',
+    'sidebar'
 ], function (Component, customerData, $, ko, url) {
     'use strict';
 
     var sidebarInitialized = false;
+
     url.setBaseUrl(window.checkout.baseUrl);
 
     function initSidebar() {
         var minicart = $("[data-block='minicart']");
+
         minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
         }
         sidebarInitialized = true;
-        minicart.mage('sidebar', {
+        minicart.sidebar({
             "targetElement": "div.block.block-minicart",
             "url": {
                 "checkout": window.checkout.checkoutUrl,
@@ -64,12 +67,14 @@ define([
             });
         },
         initSidebar: ko.observable(initSidebar),
-        closeSidebar: function(element) {
+        closeSidebar: function() {
             var minicart = $('[data-block="minicart"]');
+
             minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();
                 minicart.find('[data-role="dropdownDialog"]').dropdownDialog("close");
             });
+
             return true;
         },
         getItemRenderer: function (productType) {
