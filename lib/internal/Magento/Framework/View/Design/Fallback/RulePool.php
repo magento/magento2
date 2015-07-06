@@ -163,8 +163,9 @@ class RulePool
     }
 
     /**
-     * Retrieve newly created fallback rule for email templates. Emails are only loaded in a modular context, so a
-     * non-modular rule is not specified.
+     * Retrieve newly created fallback rule for email templates.
+     *
+     * Emails are only loaded in a modular context, so a non-modular rule is not specified.
      *
      * @return RuleInterface
      */
@@ -174,8 +175,8 @@ class RulePool
         $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
         return new Composite(
             [
-                new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/" . DirectoryList::EMAIL)),
-                new Simple("$modulesDir/<namespace>/<module>/view/<area>/" . DirectoryList::EMAIL),
+                new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/email")),
+                new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
             ]
         );
     }
