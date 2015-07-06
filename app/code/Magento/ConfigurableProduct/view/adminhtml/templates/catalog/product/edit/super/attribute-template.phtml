@@ -27,7 +27,7 @@ $id = $block->escapeHtml($attribute['attribute_id']);
     $namePrefix = 'product[configurable_attributes_data][' . $id . '][values]';
     foreach ($attribute['options'] as $option) {
         $valueIndex = $option['value'];
-    ?>
+        ?>
         <input type="hidden" name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][value_index]"
                value="<?php echo $block->escapeHtml($valueIndex); ?>">
         <input type="hidden" name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][include]" value="1"/>

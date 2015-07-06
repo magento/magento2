@@ -275,7 +275,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('getName')->willReturn('product_name');
         $this->messageManager->expects($this->once())
             ->method('addNotice')
-            ->with('Please log in to download your product or purchase <a href="product_url">product_name</a>.');
+            ->with('Please sign in to download your product or purchase <a href="product_url">product_name</a>.');
         $this->session->expects($this->once())->method('authenticate')->with($this->link)->willReturn(true);
         $this->objectManager->expects($this->at(4))
             ->method('create')

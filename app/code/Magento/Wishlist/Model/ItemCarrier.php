@@ -153,7 +153,7 @@ class ItemCarrier
                 }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
-                $messages[] = __('We can\'t add this item to your cart right now.');
+                $messages[] = __('We can\'t add this item to your shopping cart right now.');
             }
         }
 

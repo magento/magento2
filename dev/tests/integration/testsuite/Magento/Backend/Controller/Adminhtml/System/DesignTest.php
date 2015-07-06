@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml\System;
 /**
  * @magentoAppArea adminhtml
  */
-class DesignTest extends \Magento\Backend\Utility\Controller
+class DesignTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @covers \Magento\Backend\App\Action::_addLeft

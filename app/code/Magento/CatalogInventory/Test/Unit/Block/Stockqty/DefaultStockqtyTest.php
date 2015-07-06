@@ -30,6 +30,11 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockRegistryMock;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -44,12 +49,16 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
         $this->stockRegistryMock = $this->getMockBuilder('Magento\CatalogInventory\Api\StockRegistryInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->block = $objectManager->getObject(
             'Magento\CatalogInventory\Block\Stockqty\DefaultStockqty',
             [
                 'registry' => $this->registryMock,
                 'stockState' => $this->stockState,
-                'stockRegistry' => $this->stockRegistryMock
+                'stockRegistry' => $this->stockRegistryMock,
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
@@ -197,5 +206,11 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
         $dataArray = $property->getValue($this->block);
         $dataArray[$key] = $value;
         $property->setValue($this->block, $dataArray);
+    }
+
+    public function testGetThresholdQty()
+    {
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(5);
+        $this->assertEquals(5, $this->block->getThresholdQty());
     }
 }

@@ -113,6 +113,29 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     */
+    public function testGetList()
+    {
+        $taxClassName = 'Get Me';
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName($taxClassName)
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
+        $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        /** @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterface */
+        $searchResult = $this->taxClassRepository->getList($searchCriteriaBuilder->create());
+        $items = $searchResult->getItems();
+        /** @var \Magento\Tax\Api\Data\TaxClassInterface */
+        $taxClass = array_pop($items);
+        $this->assertInstanceOf('Magento\Tax\Api\Data\TaxClassInterface', $taxClass);
+        $this->assertEquals($taxClassName, $taxClass->getClassName());
+        $this->assertEquals($taxClassId, $taxClass->getClassId());
+        $this->assertEquals(TaxClassManagementInterface::TYPE_CUSTOMER, $taxClass->getClassType());
+    }
+
+    /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with class_id = -9999
      */

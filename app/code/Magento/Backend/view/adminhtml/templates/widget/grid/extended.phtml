@@ -116,7 +116,7 @@ $numColumns = sizeof($block->getColumns());
                             <?php echo __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
-                            <button href="#"
+                            <button type="button"
                                     title="<?php echo __('Next page') ?>"
                                     class="action-next"
                                     onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;">

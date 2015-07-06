@@ -9,7 +9,7 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
-class CountryValidator implements ValidatorInterface
+class CountryValidator extends AbstractValidator
 {
     /**
      * @var \Magento\Payment\Gateway\ConfigInterface
@@ -17,20 +17,15 @@ class CountryValidator implements ValidatorInterface
     private $config;
 
     /**
-     * @var ResultInterfaceFactory
-     */
-    private $resultFactory;
-
-    /**
-     * @param \Magento\Payment\Gateway\ConfigInterface $config
      * @param ResultInterfaceFactory $resultFactory
+     * @param \Magento\Payment\Gateway\ConfigInterface $config
      */
     public function __construct(
-        ConfigInterface $config,
-        ResultInterfaceFactory $resultFactory
+        ResultInterfaceFactory $resultFactory,
+        ConfigInterface $config
     ) {
         $this->config = $config;
-        $this->resultFactory = $resultFactory;
+        parent::__construct($resultFactory);
     }
 
     /**
@@ -55,10 +50,6 @@ class CountryValidator implements ValidatorInterface
             }
         }
 
-        return $this->resultFactory->create(
-            [
-                'isValid' => $isValid
-            ]
-        );
+        return $this->createResult($isValid);
     }
 }

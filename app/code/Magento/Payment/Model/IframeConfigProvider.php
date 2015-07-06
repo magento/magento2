@@ -22,6 +22,16 @@ use Psr\Log\LoggerInterface;
 class IframeConfigProvider implements ConfigProviderInterface
 {
     /**
+     * Default length of Cc year field
+     */
+    const DEFAULT_YEAR_LENGTH = 2;
+
+    /**
+     * Checkout identifier for transparent iframe payments
+     */
+    const CHECKOUT_IDENTIFIER = 'checkout_flow';
+
+    /**
      * @var Repository
      */
     protected $assetRepo;
@@ -88,10 +98,11 @@ class IframeConfigProvider implements ConfigProviderInterface
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],
-                    'controllerName' => [$this->methodCode => $this->getController()],
+                    'controllerName' => [$this->methodCode => self::CHECKOUT_IDENTIFIER],
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],
                     'saveOrderUrl' => [$this->methodCode => $this->getSaveOrderUrl()],
+                    'expireYearLength' => [$this->methodCode => $this->getExpireDateYearLength()]
                 ]
             ]
         ];
@@ -113,6 +124,16 @@ class IframeConfigProvider implements ConfigProviderInterface
         }
 
         return  $result;
+    }
+
+    /**
+     * Returns Cc expire year length
+     *
+     * @return int
+     */
+    protected function getExpireDateYearLength()
+    {
+         return (int)$this->getMethodConfigData('cc_year_length') ?: self::DEFAULT_YEAR_LENGTH;
     }
 
     /**
@@ -149,16 +170,6 @@ class IframeConfigProvider implements ConfigProviderInterface
             $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
-    }
-
-    /**
-     * Retrieve the controller name
-     *
-     * @return string
-     */
-    protected function getController()
-    {
-        return $this->request->getControllerName();
     }
 
     /**

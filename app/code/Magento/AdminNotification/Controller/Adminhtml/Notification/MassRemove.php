@@ -33,4 +33,12 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_AdminNotification::adminnotification_remove');
+    }
 }

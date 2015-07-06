@@ -96,6 +96,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set period
+     * @codeCoverageIgnore
      *
      * @param int $period
      * @return $this
@@ -108,6 +109,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set interval
+     * @codeCoverageIgnore
      *
      * @param \DateTime $fromDate
      * @param \DateTime $toDate
@@ -260,6 +262,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set store ids
+     * @codeCoverageIgnore
      *
      * @param array $storeIds
      * @return $this
@@ -272,6 +275,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get store ids
+     * @codeCoverageIgnore
      *
      * @return array
      */
@@ -292,6 +296,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set page size
+     * @codeCoverageIgnore
      *
      * @param int $size
      * @return $this
@@ -304,6 +309,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get page size
+     * @codeCoverageIgnore
      *
      * @return int
      */

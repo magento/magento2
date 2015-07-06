@@ -12,16 +12,12 @@ use Magento\Install\Test\Fixture\Install as InstallConfig;
 use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Config\DataInterface;
 use Magento\Install\Test\Constraint\AssertAgreementTextPresent;
 use Magento\Install\Test\Constraint\AssertSuccessfulReadinessCheck;
-use Magento\Mtf\ObjectManagerFactory;
 
 /**
  * PLEASE ADD NECESSARY INFO BEFORE RUNNING TEST TO
  * ../dev/tests/functional/config/config.xml
- *
- * Test Flow:
  *
  * Preconditions:
  * 1. Uninstall Magento.
@@ -67,20 +63,20 @@ class InstallTest extends Injectable
      */
     public function __prepare()
     {
-        $config = ObjectManagerFactory::getObjectManager()->get('Magento\Mtf\Config\DataInterface');
+        $config = $this->objectManager->get('Magento\Mtf\Config\DataInterface');
         // Prepare config data
         $configData['dbHost'] = $config->get('install/0/host/0');
         $configData['dbUser'] = $config->get('install/0/user/0');
         $configData['dbPassword'] = $config->get('install/0/password/0');
         $configData['dbName'] = $config->get('install/0/dbName/0');
-        $configData['web'] = $config->get('install/0/baseUrl/0');
+        $configData['baseUrl'] = $config->get('install/0/baseUrl/0');
         $configData['admin'] = $config->get('install/0/backendName/0');
 
         return ['configData' => $configData];
     }
 
     /**
-     * Injection data.
+     * Uninstall Magento.
      *
      * @param CmsIndex $homePage
      * @param Install $installPage
@@ -99,24 +95,24 @@ class InstallTest extends Injectable
      * Install Magento via web interface.
      *
      * @param User $user
-     * @param array $install
      * @param array $configData
      * @param FixtureFactory $fixtureFactory
      * @param AssertAgreementTextPresent $assertLicense
      * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param array $install [optional]
      * @return array
      */
     public function test(
         User $user,
-        array $install,
         array $configData,
         FixtureFactory $fixtureFactory,
         AssertAgreementTextPresent $assertLicense,
-        AssertSuccessfulReadinessCheck $assertReadiness
+        AssertSuccessfulReadinessCheck $assertReadiness,
+        array $install = []
     ) {
         $dataConfig = array_merge($install, $configData);
-        if ($dataConfig['httpsFront'] != "-") {
-            $dataConfig['https'] = str_replace('http', 'https', $dataConfig['web']);
+        if (isset($dataConfig['httpsFront'])) {
+            $dataConfig['https'] = str_replace('http', 'https', $dataConfig['baseUrl']);
         }
         /** @var InstallConfig $installConfig */
         $installConfig = $fixtureFactory->create('Magento\Install\Test\Fixture\Install', ['data' => $dataConfig]);
