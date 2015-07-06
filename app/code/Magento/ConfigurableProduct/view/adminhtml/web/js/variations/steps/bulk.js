@@ -15,44 +15,47 @@ define([
 ], function (Component, $, ko, _, Collapsible, mageTemplate) {
     'use strict';
 
-    var MakeSections = function(){
-        return {
-            images: {
-                label: 'images',
-                type: ko.observable('none'),
-                value: ko.observable({images:[], preview:null}),
-                attribute: ko.observable()
-            },
-            pricing: {
-                label: 'price',
-                type: ko.observable('none'),
-                value: ko.observable(0),
-                attribute: ko.observable()
-            },
-            inventory: {
-                label: 'quantity',
-                type: ko.observable('none'),
-                value: ko.observable(0),
-                attribute: ko.observable()
-            }
-        };
-    };
-
     var viewModel;
     viewModel = Component.extend({
+        initialize: function () {
+            this.makeSections = function() {
+                return {
+                    images: {
+                        label: 'images',
+                        type: ko.observable('none'),
+                        value: ko.observable({images: [], preview: null}),
+                        attribute: ko.observable()
+                    },
+                    pricing: {
+                        label: 'price',
+                        type: ko.observable('none'),
+                        value: ko.observable(0),
+                        attribute: ko.observable(),
+                        currencySymbol: this.currencySymbol
+                    },
+                    inventory: {
+                        label: 'quantity',
+                        type: ko.observable('none'),
+                        value: ko.observable(0),
+                        attribute: ko.observable()
+                    }
+                };
+            };
+            this._super();
+            this.sections = ko.observable(this.makeSections());
+        },
         attributes: ko.observableArray([]),
         newProductsCount: ko.observable(),
         types: ['each', 'single', 'none'],
-        sections: ko.observable(MakeSections()),
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
             var count = 1;
             this.attributes.each(function (attribute) {
                 count *= attribute.chosen.length;
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable(MakeSections());
-                });
-            });
+                    option.sections = ko.observable(this.makeSections());
+                }, this);
+            }, this);
             _.each(this.sections(), function (section) {
                 section.attribute(null);
             });
