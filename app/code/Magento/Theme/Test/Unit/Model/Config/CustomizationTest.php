@@ -68,6 +68,8 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Theme\Model\Config\Customization::getAssignedThemeCustomizations
      * @covers \Magento\Theme\Model\Config\Customization::hasThemeAssigned
+     * @covers \Magento\Theme\Model\Config\Customization::_prepareThemeCustomizations
+     * @covers \Magento\Theme\Model\Config\Customization::__construct
      */
     public function testGetAssignedThemeCustomizations()
     {
@@ -91,6 +93,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Config\Customization::getUnassignedThemeCustomizations
+     * @covers \Magento\Theme\Model\Config\Customization::__construct
      */
     public function testGetUnassignedThemeCustomizations()
     {
@@ -113,6 +116,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Config\Customization::getStoresByThemes
+     * @covers \Magento\Theme\Model\Config\Customization::__construct
      */
     public function testGetStoresByThemes()
     {
@@ -130,6 +134,8 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
+     * @covers \Magento\Theme\Model\Config\Customization::_getConfigurationThemeId
+     * @covers \Magento\Theme\Model\Config\Customization::__construct
      */
     public function testIsThemeAssignedToDefaultStore()
     {
@@ -152,6 +158,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
+     * @covers \Magento\Theme\Model\Config\Customization::_isThemeAssignedToSpecificStore
      */
     public function testIsThemeAssignedToConcreteStore()
     {
