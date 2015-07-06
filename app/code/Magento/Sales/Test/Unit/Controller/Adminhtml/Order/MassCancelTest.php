@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class MassCancelTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassCancelTest extends \PHPUnit_Framework_TestCase
 {
