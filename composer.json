@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "0.74.0-beta15",
+    "version": "0.74.0-beta16",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -34,6 +34,7 @@
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.11.0",
         "oyejorge/less.php": "1.7.0.3",
+        "pelago/emogrifier": "0.1.1",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*",
         "symfony/console": "~2.3 <2.7"
@@ -102,7 +103,6 @@
         "magento/module-google-adwords": "self.version",
         "magento/module-google-analytics": "self.version",
         "magento/module-google-optimizer": "self.version",
-        "magento/module-google-shopping": "self.version",
         "magento/module-grouped-import-export": "self.version",
         "magento/module-grouped-product": "self.version",
         "magento/module-import-export": "self.version",
@@ -118,6 +118,7 @@
         "magento/module-offline-shipping": "self.version",
         "magento/module-page-cache": "self.version",
         "magento/module-payment": "self.version",
+        "magento/module-paypal": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
         "magento/module-quote": "self.version",

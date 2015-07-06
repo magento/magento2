@@ -24,6 +24,6 @@ class Instance extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_widget_instance';
         $this->_headerText = __('Manage Widget Instances');
         parent::_construct();
-        $this->buttonList->update('add', 'label', __('Add New Widget Instance'));
+        $this->buttonList->update('add', 'label', __('Add Frontend App'));
     }
 }

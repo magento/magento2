@@ -161,7 +161,8 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
                     'pricing_value' => 'attribute_pricing.pricing_value',
-                    'pricing_is_percent' => 'attribute_pricing.is_percent'
+                    'pricing_is_percent' => 'attribute_pricing.is_percent',
+                    'super_attribute_label' =>  'attribute_label.value'
                 ]
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
@@ -203,6 +204,16 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     [
                         'super_attribute.product_super_attribute_id = attribute_pricing.product_super_attribute_id',
                         'entity_value.value = attribute_pricing.value_index'
+                    ]
+                ),
+                []
+            )->joinLeft(
+                ['attribute_label' => $this->getTable('catalog_product_super_attribute_label')],
+                implode(
+                    ' AND ',
+                    [
+                        'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
+                        'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     ]
                 ),
                 []

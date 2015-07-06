@@ -13,10 +13,11 @@ define(
     function($, storage, messageList, customerData) {
         'use strict';
         var callbacks = [],
-            action = function(loginData, redirectUrl) {
+            action = function(loginData, redirectUrl, isGlobal) {
                 return storage.post(
                     'customer/ajax/login',
-                    JSON.stringify(loginData)
+                    JSON.stringify(loginData),
+                    isGlobal
                 ).done(function (response) {
                     if (response.errors) {
                         messageList.addErrorMessage(response);

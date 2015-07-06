@@ -140,8 +140,8 @@ class Actions extends Generic implements TabInterface
             'stop_rules_processing',
             'select',
             [
-                'label' => __('Subsequent rules'),
-                'title' => __('Subsequent rules'),
+                'label' => __('Discard subsequent rules'),
+                'title' => __('Discard subsequent rules'),
                 'name' => 'stop_rules_processing',
                 'options' => ['1' => __('Yes'), '0' => __('No')]
             ]

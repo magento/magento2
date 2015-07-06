@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class ItemIdProcessor implements LayoutProcessorInterface
 {
@@ -13,10 +13,10 @@ class ItemIdProcessor implements LayoutProcessorInterface
      * Adds item ID to giftOptionsCartItem configuration and name
      *
      * @param array $jsLayout
-     * @param Item $item
+     * @param AbstractItem $item
      * @return array
      */
-    public function process($jsLayout, Item $item)
+    public function process($jsLayout, AbstractItem $item)
     {
         if (isset($jsLayout['components']['giftOptionsCartItem'])) {
             if (!isset($jsLayout['components']['giftOptionsCartItem']['config'])) {
