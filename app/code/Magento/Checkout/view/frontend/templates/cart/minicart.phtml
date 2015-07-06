@@ -9,12 +9,12 @@
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 
-<div data-block="minicart" class="minicart-wrapper" >
+<div data-block="minicart" class="minicart-wrapper">
     <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>"
        data-bind="scope: 'minicart_content'">
         <span class="text"><?php echo __('My Cart'); ?></span>
         <span class="counter qty empty"
-              data-bind="css: { empty: cart().summary_count == 0 }">
+              data-bind="css: { empty: cart().summary_count == 0 }, blockLoader: isLoading">
             <span class="counter-number"><!-- ko text: cart().summary_count --><!-- /ko --></span>
             <span class="counter-label">
             <!-- ko if: cart().summary_count -->

@@ -12,6 +12,7 @@ define([
     'use strict';
 
     var sidebarInitialized = false;
+    var addToCartCalls = 0;
     url.setBaseUrl(window.checkout.baseUrl);
 
     function initSidebar() {
@@ -57,12 +58,20 @@ define([
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
+            var self = this;
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
+                addToCartCalls--;
+                this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
+            }, this);
+            $('[data-block="minicart"]').on('contentLoading', function(event) {
+                addToCartCalls++;
+                self.isLoading(true);
             });
         },
+        isLoading: ko.observable(false),
         initSidebar: ko.observable(initSidebar),
         closeSidebar: function(element) {
             var minicart = $('[data-block="minicart"]');
