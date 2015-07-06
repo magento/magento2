@@ -1,0 +1,132 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Paypal\Block\Express\Review */
+
+?>
+<div class="page-title-wrapper">
+    <h1 class="page-title"><span class="base"><?php echo __('Review Order') ?></span></h1>
+</div>
+<div class="paypal-review view">
+    <div class="block block-order-details-view">
+        <div class="block-content">
+            <?php if ($block->getShippingAddress()): ?>
+                <div class="box box-order-shipping-method">
+                    <strong class="box-title"><span><?php echo __('Shipping Method') ?></span></strong>
+                    <div class="box-content">
+                        <form method="post" id="shipping-method-form"
+                              action="<?php echo $block->escapeHtml($block->getShippingMethodSubmitUrl()) ?>"
+                              class="form">
+                            <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()): ?>
+                                <?php if ($groups = $block->getShippingRateGroups()): ?>
+                                    <?php $currentRate = $block->getCurrentShippingRate(); ?>
+                                    <div class="field shipping required">
+                                        <select name="shipping_method" id="shipping-method" class="select">
+                                            <?php if (!$currentRate): ?>
+                                                <option value="">
+                                                    <?php echo __('Please select a shipping method...') ?>
+                                                </option>
+                                            <?php endif; ?>
+                                            <?php foreach ($groups as $code => $rates): ?>
+                                                <optgroup
+                                                    label="<?php echo $block->escapeHtml($block->getCarrierName($code)) ?>">
+                                                    <?php foreach ($rates as $rate): ?>
+                                                        <option
+                                                            value="<?php echo $block->renderShippingRateValue($rate) ?>"<?php echo($currentRate === $rate) ? ' selected="selected"' : ''; ?>>
+                                                            <?php echo $block->renderShippingRateOption($rate) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </optgroup>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="actions-toolbar">
+                                        <div class="primary">
+                                            <button id="update-shipping-method-submit" type="submit"
+                                                    class="action update primary">
+                                                <span><?php echo __('Update Shipping Method') ?></span></button>
+                                        </div>
+                                    </div>
+                                <?php else: ?>
+                                    <p><?php echo __('Sorry, no quotes are available for this order right now.') ?></p>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <p><?php echo $block->renderShippingRateOption($block->getCurrentShippingRate()) ?></p>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
+                <div class="box box-order-shipping-address">
+                    <strong class="box-title"><span><?php echo __('Shipping Address') ?></span></strong>
+                    <div class="box-content">
+                        <address><?php echo $block->renderAddress($block->getShippingAddress()) ?></address>
+                    </div>
+                    <?php if ($block->getCanEditShippingAddress()): ?>
+                        <div class="box-actions">
+                            <a href="<?php echo $block->getEditUrl() ?>"
+                               class="action edit"><span><?php echo __('Edit') ?></span></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+            <div class="box box-order-billing-address">
+                <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
+                <div class="box-content">
+                    <?php echo $block->escapeHtml($block->getPaymentMethodTitle()) ?>
+                </div>
+            <?php if ($block->getEditUrl()): ?>
+                <div class="box-actions">
+                    <a href="<?php echo $block->getEditUrl() ?>" class="action edit">
+                        <span><?php echo __('Edit Payment Information') ?></span>
+                    </a>
+                </div>
+            <?php endif ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="paypal-review-items">
+        <div class="paypal-review-title">
+            <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
+            <a href="<?php echo $block->getUrl('checkout/cart') ?>"
+               class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
+        </div>
+
+        <div id="details-reload" class="table-wrapper order-items">
+            <?php echo $block->getChildHtml('details') ?>
+        </div>
+
+        <form method="post" id="order-review-form" action="<?php echo $block->getPlaceOrderUrl() ?>" class="form">
+            <?php echo $block->getChildHtml('agreements'); ?>
+            <div class="actions-toolbar" id="review-buttons-container">
+                <div class="primary">
+                    <button type="button" id="review-button" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                    <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                </div>
+                <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
+                   <span><?php echo __('Submitting order information...') ?></span>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#order-review-form": {
+            "validation": {},
+            "orderReview": {
+                "shippingSubmitFormSelector": "#shipping-method-form",
+                "shippingSelector": "#shipping-method",
+                "shippingMethodUpdateUrl": "<?php echo $block->escapeHtml($block->getUpdateShippingMethodsUrl()) ?>",
+                "isAjax": <?php echo $block->getUseAjax() ? 'true' : 'false' ?>
+            }
+        }
+    }
+</script>

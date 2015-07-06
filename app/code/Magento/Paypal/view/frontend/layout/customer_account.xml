@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Billing Agreements</title>
+    </head>
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-billing-agreements-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">paypal/billing_agreement</argument>
+                    <argument name="label" xsi:type="string">Billing Agreements</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
