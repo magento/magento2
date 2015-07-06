@@ -68,9 +68,8 @@ define([
                         });
                     }).sections()[section];
                 case 'single':
-                    return this.sections()[section].value();
                 case 'none':
-                    return null;
+                    return this.sections()[section].value();
             }
         },
         getImageProperty: function (node) {
@@ -87,11 +86,10 @@ define([
                 return image.removed == true;
             });
             preview = _.find(images, function (image) {
-                return _.contains(image.galleryTypes, 'image');
+                return _.contains(image.galleryTypes, 'thumbnail');
             });
-            return images.length && preview
-                ? {'images': images, preview: preview.url, file: preview.file}
-                : null;
+            preview = preview || {url: this.noImage, file: null};
+            return {'images': images, preview: preview.url, file: preview.file};
         },
         fillImagesSection: function () {
             switch (this.sections().images.type()) {
@@ -106,7 +104,7 @@ define([
                     this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
                     break;
                 default:
-                    this.sections().images.value(null);
+                    this.sections().images.value({'images': [], preview: this.noImage, file: null});
                     break;
             }
         },
