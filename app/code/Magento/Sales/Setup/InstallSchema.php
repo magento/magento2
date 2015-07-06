@@ -3971,10 +3971,13 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo_grid',
-                ['increment_id'],
+                [
+                    'increment_id',
+                    'store_id'
+                ],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            ['increment_id'],
+            ['increment_id', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['order_increment_id']),
@@ -3988,18 +3991,6 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
             ['billing_name']
-        )->addForeignKey(
-            $installer->getFkName('sales_creditmemo_grid', 'entity_id', 'sales_creditmemo', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_creditmemo'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_creditmemo_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Creditmemo Grid'
         );
