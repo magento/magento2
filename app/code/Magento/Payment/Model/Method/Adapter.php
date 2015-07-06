@@ -366,6 +366,7 @@ class Adapter implements MethodInterface
             $payment,
             ['amount' => $amount]
         );
+
         return $this;
     }
 
@@ -379,6 +380,7 @@ class Adapter implements MethodInterface
             $payment,
             ['amount' => $amount]
         );
+
         return $this;
     }
 
@@ -406,6 +408,7 @@ class Adapter implements MethodInterface
             $payment,
             ['amount' => $amount]
         );
+
         return $this;
     }
 
@@ -418,6 +421,7 @@ class Adapter implements MethodInterface
             'cancel',
             $payment
         );
+
         return $this;
     }
 
@@ -430,6 +434,7 @@ class Adapter implements MethodInterface
             'void',
             $payment
         );
+
         return $this;
     }
 
@@ -442,6 +447,7 @@ class Adapter implements MethodInterface
             'accept_payment',
             $payment
         );
+
         return $this;
     }
 
@@ -454,6 +460,7 @@ class Adapter implements MethodInterface
             'deny_payment',
             $payment
         );
+
         return $this;
     }
 

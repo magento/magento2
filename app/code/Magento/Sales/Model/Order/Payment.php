@@ -1018,6 +1018,7 @@ class Payment extends Info implements OrderPaymentInterface
             /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
             $method = $this->getMethodInstance();
             $method->setStore($this->getOrder()->getStoreId());
+
             $result = $method->denyPayment($this);
         } else {
             $result = (bool)$this->getNotificationResult();
