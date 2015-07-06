@@ -20,23 +20,23 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Email\Model\Template\FileSystem
+     * @var \Magento\Framework\View\FileSystem
      */
-    protected $emailTemplateFileSystem;
+    protected $fileSystem;
 
     /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
-     * @param \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
+     * @param \Magento\Framework\View\FileSystem $fileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
+        \Magento\Framework\View\FileSystem $fileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
-        $this->emailTemplateFileSystem = $emailTemplateFileSystem;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -107,13 +107,11 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             $designParams['area'] = $this->getTemplateArea($templateId);
         }
         $module = $this->getTemplateModule($templateId);
-        if ($module) {
-            $designParams['module'] = $module;
-        }
+        $designParams['module'] = $module;
 
         $file = $this->_getInfo($templateId, 'file');
 
-        return $this->emailTemplateFileSystem->getEmailTemplateFileName($file, $module, $designParams);
+        return $this->fileSystem->getEmailTemplateFileName($file, $designParams, $module);
     }
 
     /**
