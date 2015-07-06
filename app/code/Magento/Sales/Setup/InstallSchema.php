@@ -3167,58 +3167,26 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName(
                 'sales_invoice_grid',
-                ['increment_id'],
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'billing_name',
+                    'billing_address',
+                    'shipping_address',
+                    'customer_name',
+                    'customer_email'
+                ],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             ),
-            ['increment_id'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['order_increment_id'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['order_increment_id'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['billing_name'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['billing_name'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['billing_address'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['billing_address'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['shipping_address'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['shipping_address'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['customer_name'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['customer_name'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
-        )->addIndex(
-            $installer->getIdxName(
-                'sales_invoice_grid',
-                ['customer_email'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            ['customer_email'],
+            [
+                'increment_id',
+                'order_increment_id',
+                'billing_name',
+                'billing_address',
+                'shipping_address',
+                'customer_name',
+                'customer_email'
+            ],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Invoice Grid'

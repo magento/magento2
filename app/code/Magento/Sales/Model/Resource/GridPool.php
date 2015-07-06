@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Model\Resource;
 
-use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
-use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
-
+/**
+ * Class GridPool
+ */
 class GridPool
 {
     /**
