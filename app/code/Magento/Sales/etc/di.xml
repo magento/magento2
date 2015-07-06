@@ -356,7 +356,6 @@
                 <item name="updated_at" xsi:type="string">sales_shipment.updated_at</item>
                 <item name="order_id" xsi:type="string">sales_shipment.order_id</item>
                 <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
-                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
             </argument>
         </arguments>
     </virtualType>
