@@ -17,7 +17,7 @@ class RegularFilter implements FilterApplierInterface
      * Apply regular filters like collection filters
      *
      * @param AbstractDb $collection
-     * @param $filters
+     * @param array $filters
      * @return void
      */
     public function apply(AbstractDb $collection, $filters)
