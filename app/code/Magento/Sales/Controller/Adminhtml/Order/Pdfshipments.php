@@ -19,11 +19,10 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $orderIds = $this->getRequest()->getPost('selected');
         $resultRedirect = $this->resultRedirectFactory->create();
         $flag = false;
         /** @var \Magento\Sales\Model\Order $order */
-        foreach ($orderIds as $orderId) {
+        foreach ($collection->getItems() as $order) {
             $shipments = $order->getShipmentsCollection();
             if ($shipments->getSize()) {
                 $flag = true;
