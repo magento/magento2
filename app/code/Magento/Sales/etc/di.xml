@@ -512,17 +512,6 @@
             <argument name="targetColumn" xsi:type="string">sales_order.entity_id</argument>
         </arguments>
     </virtualType>
-    <virtualType name="PaymentMethodForShipment" type="Magento\Sales\Model\Resource\Order\Grid\Sql\SubSelect">
-        <arguments>
-            <argument name="connectionName" xsi:type="string">sales_read</argument>
-            <argument name="table" xsi:type="string">sales_order_payment</argument>
-            <argument name="columns" xsi:type="array">
-                <item name="method" xsi:type="string">method</item>
-            </argument>
-            <argument name="originColumn" xsi:type="string">parent_id</argument>
-            <argument name="targetColumn" xsi:type="string">sales_shipment.order_id</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Sales\Model\Resource\GridPool">
         <arguments>
             <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
