@@ -20,7 +20,6 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductInCustomerWishlistOnBackendGrid" />
         </variation>
         <variation name="ViewProductInCustomerWishlistOnBackendTestVariation4">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34633</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductInCustomerWishlistOnBackendGrid" />
         </variation>

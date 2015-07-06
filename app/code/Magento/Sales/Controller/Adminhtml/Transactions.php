@@ -86,13 +86,6 @@ class Transactions extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'fetch':
-                return $this->_authorization->isAllowed('Magento_Sales::transactions_fetch');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Sales::transactions');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Sales::transactions');
     }
 }

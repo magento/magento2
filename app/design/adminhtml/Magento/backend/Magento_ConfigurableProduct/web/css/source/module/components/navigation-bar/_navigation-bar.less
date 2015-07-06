@@ -47,10 +47,10 @@
 //  ---------------------------------------------
 
 .nav {
+    &:extend(.abs-clearfix all);
     background-color: @nav__background-color;
     border-bottom: 1px solid @nav__border-color;
     border-top: 1px solid @nav__border-color;
-    .extend__clearer();
     display: none;
     padding: @nav-bar-dot__size @nav__indent-right 0 0;
 }
@@ -191,8 +191,8 @@
         //  Visited step link bullet
         &:after {
             background-color: @nav-bar__color;
-            border: .4rem solid @nav-bar__color;
             border-radius: 100%;
+            border: 4px solid @nav-bar__color;
             color: @color-white;
             content: counter(i);
             counter-increment: i;
@@ -210,10 +210,10 @@
         //  Visited step link bullet wrap
         &:before {
             background-color: @nav-bar-bullet-wrap__background-color;
-            border: 1px solid transparent;
             border-bottom-color: @nav-bar-bullet-wrap__border-bottom-color;
             border-radius: 100%;
             border-top-color: @nav-bar-bullet-wrap__border-top-color;
+            border: 1px solid transparent;
             content: '';
             height: @nav-bar-dot__size - .1;
             left: 50%;
@@ -273,7 +273,7 @@
         margin-top: 0;
     }
     .nav-bar {
-        .extend__clearer();
+        &:extend(.abs-clearfix all);
         display: block;
         margin-bottom: 0;
         margin-left: auto;

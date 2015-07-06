@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml;
 
 /**
@@ -16,36 +14,8 @@ namespace Magento\Reports\Block\Adminhtml;
 class Wishlist extends \Magento\Backend\Block\Template
 {
     /**
-     * @var int
-     */
-    public $wishlists_count;
-
-    /**
-     * @var int
-     */
-    public $items_bought;
-
-    /**
-     * @var int
-     */
-    public $shared_count;
-
-    /**
-     * @var int
-     */
-    public $referrals_count;
-
-    /**
-     * @var int
-     */
-    public $conversions_count;
-
-    /**
-     * @var int
-     */
-    public $customer_with_wishlist;
-
-    /**
+     * Template file
+     *
      * @var string
      */
     protected $_template = 'report/wishlist.phtml';
@@ -58,6 +28,8 @@ class Wishlist extends \Magento\Backend\Block\Template
     protected $_wishlistFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Wishlist\CollectionFactory $wishlistFactory
      * @param array $data
@@ -72,9 +44,9 @@ class Wishlist extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return $this
+     * {@inheritdoc}
      */
-    public function _beforeToHtml()
+    protected function _beforeToHtml()
     {
         $this->setChild(
             'grid',

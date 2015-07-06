@@ -90,7 +90,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetText()
     {
-        $messageStart = 'Your web server is configured incorrectly.';
+        $messageStart = 'Your web server is set up incorrectly';
 
         $this->assertStringStartsWith($messageStart, (string)$this->_messageModel->getText());
     }

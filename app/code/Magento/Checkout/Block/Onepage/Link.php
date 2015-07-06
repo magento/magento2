@@ -45,7 +45,7 @@ class Link extends \Magento\Framework\View\Element\Template
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage');
+        return $this->getUrl('checkout');
     }
 
     /**

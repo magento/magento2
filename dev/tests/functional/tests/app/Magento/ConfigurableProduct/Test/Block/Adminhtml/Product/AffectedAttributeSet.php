@@ -10,7 +10,7 @@ use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Backend\Test\Block\Widget\Form as ParentForm;
+use Magento\Mtf\Block\Form as ParentForm;
 
 /**
  * Class AffectedAttributeSet

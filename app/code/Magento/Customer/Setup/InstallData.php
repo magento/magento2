@@ -73,7 +73,7 @@ class InstallData implements InstallDataInterface
         $attributesInfo = [
             'vat_id' => [
                 'label' => 'VAT number',
-                'type' => 'varchar',
+                'type' => 'static',
                 'input' => 'text',
                 'position' => 140,
                 'visible' => true,
@@ -83,17 +83,17 @@ class InstallData implements InstallDataInterface
                 'label' => 'VAT number validity',
                 'visible' => false,
                 'required' => false,
-                'type' => 'int',
+                'type' => 'static',
             ],
             'vat_request_id' => [
                 'label' => 'VAT number validation request ID',
-                'type' => 'varchar',
+                'type' => 'static',
                 'visible' => false,
                 'required' => false,
             ],
             'vat_request_date' => [
                 'label' => 'VAT number validation request date',
-                'type' => 'varchar',
+                'type' => 'static',
                 'visible' => false,
                 'required' => false,
             ],
@@ -101,7 +101,7 @@ class InstallData implements InstallDataInterface
                 'label' => 'VAT number validation request success',
                 'visible' => false,
                 'required' => false,
-                'type' => 'int',
+                'type' => 'static',
             ],
         ];
 

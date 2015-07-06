@@ -57,6 +57,11 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     protected $addressCollectionFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\AddressRegistry $addressRegistry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -64,6 +69,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressCollectionFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         \Magento\Customer\Model\AddressFactory $addressFactory,
@@ -72,7 +78,8 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         \Magento\Customer\Model\Resource\Address $addressResourceModel,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
-        \Magento\Customer\Model\Resource\Address\CollectionFactory $addressCollectionFactory
+        \Magento\Customer\Model\Resource\Address\CollectionFactory $addressCollectionFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->addressFactory = $addressFactory;
         $this->addressRegistry = $addressRegistry;
@@ -81,6 +88,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->directoryData = $directoryData;
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -146,6 +154,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
 
         /** @var Collection $collection */
         $collection = $this->addressCollectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\AddressInterface');
         // Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);

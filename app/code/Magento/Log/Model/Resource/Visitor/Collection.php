@@ -111,6 +111,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Filter for customers only
      *
      * @return $this
+     * @api
      */
     public function showCustomersOnly()
     {
@@ -174,6 +175,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @api
      */
     public function getIsOnlineFilterUsed()
     {
@@ -185,6 +187,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int[]|int $storeIds
      * @return void
+     * @api
      */
     public function addVisitorStoreFilter($storeIds)
     {

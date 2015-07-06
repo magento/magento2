@@ -15,10 +15,26 @@ class HandlerChainTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $handler2 = $this->getMockBuilder('Magento\Payment\Gateway\Response\HandlerInterface')
             ->getMockForAbstractClass();
-
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [
+                        'handler1' => 'Magento\Payment\Gateway\Response\HandlerInterface',
+                        'handler2' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+                    ],
+                    'type' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$handler1, $handler2]));
@@ -32,7 +48,13 @@ class HandlerChainTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->with($handlingSubject, $response);
 
-        $chain = new HandlerChain($tMap);
+        $chain = new HandlerChain(
+            [
+                'handler1' => 'Magento\Payment\Gateway\Response\HandlerInterface',
+                'handler2' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+            ],
+            $tMapFactory
+        );
         $chain->handle($handlingSubject, $response);
     }
 }

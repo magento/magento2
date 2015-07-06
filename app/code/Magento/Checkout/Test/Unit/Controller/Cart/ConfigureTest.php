@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
+use Magento\Framework\Controller\ResultFactory;
+
 /**
  * Shopping cart edit tests
  */
@@ -16,9 +18,9 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageFactoryMock;
+    protected $resultFactoryMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\Redirect | \PHPUnit_Framework_MockObject_MockObject
@@ -57,6 +59,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface');
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
@@ -64,32 +67,32 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         $this->cartMock = $this->getMockBuilder('Magento\Checkout\Model\Cart')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $resultRedirectFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->resultRedirectMock);
+        $this->contextMock->expects($this->once())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $this->contextMock->expects($this->once())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $this->contextMock->expects($this->once())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManagerMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->configureController = $objectManagerHelper->getObject(
             'Magento\Checkout\Controller\Cart\Configure',
             [
-                'request' => $this->requestMock,
-                'response' => $this->responseMock,
-                'objectManager' => $this->objectManagerMock,
-                'messageManager' => $this->messageManagerMock,
-                'cart' => $this->cartMock,
-                'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultRedirectFactory' => $resultRedirectFactoryMock
+                'context' => $this->contextMock,
+                'cart' => $this->cartMock
             ]
         );
     }
@@ -134,7 +137,10 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
         $quoteItemMock->expects($this->exactly(1))->method('getBuyRequest')->willReturn($buyRequestMock);
 
-        $this->resultPageFactoryMock->expects($this->once())->method('create')->willReturn($pageMock);
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_PAGE, [])
+            ->willReturn($pageMock);
         $this->objectManagerMock->expects($this->at(0))
             ->method('get')
             ->with('Magento\Catalog\Helper\Product\View')
@@ -196,6 +202,10 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('checkout/cart', [])
             ->willReturnSelf();
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
         $this->assertSame($this->resultRedirectMock, $this->configureController->execute());
     }
 }
