@@ -13,18 +13,27 @@ use Magento\Framework\Data\Collection\AbstractDb;
  */
 class FilterPool
 {
+    /**
+     * @var array
+     */
     protected $filters = [];
 
+    /**
+     * @var array
+     */
     protected $appliers;
 
+    /**
+     * @param array $appliers
+     */
     public function __construct(array $appliers = [])
     {
         $this->appliers = $appliers;
     }
 
     /**
-     * @param $condition
-     * @param $field
+     * @param string|int|array|null $condition
+     * @param string|null|array $field
      * @param $type
      */
     public function registerNewFilter($condition, $field, $type)
@@ -47,6 +56,5 @@ class FilterPool
                 $filterApplier->apply($collection, $filter);
             }
         }
-
     }
 }
