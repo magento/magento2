@@ -12,7 +12,7 @@ interface AddressAdapterInterface
      *
      * @return string
      */
-    public function getRegion();
+    public function getRegionCode();
 
     /**
      * Get country id

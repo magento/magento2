@@ -95,7 +95,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'created_at',
-            ['header' => __('Purchase Date'), 'index' => 'created_at', 'type' => 'datetime']
+            ['header' => __('Purchased'), 'index' => 'created_at', 'type' => 'datetime']
         );
 
         $this->addColumn('billing_name', ['header' => __('Bill-to Name'), 'index' => 'billing_name']);

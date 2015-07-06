@@ -317,39 +317,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Billing address is not set
-     */
-    public function testSetMethodWithoutBillingAddress()
-    {
-        $cartId = 12;
-        $carrierCode = 34;
-        $methodCode = 56;
-        $countryId = 1;
-
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
-        $this->shippingAddressMock->expects($this->once())
-            ->method('getCountryId')->will($this->returnValue($countryId));
-        $billingAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            ['getCountryId', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->quoteMock->expects($this->once())
-            ->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
-        $billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
-
-        $this->model->set($cartId, $carrierCode, $methodCode);
-    }
-
-    /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Carrier with such method not found: 34, 56
      */
@@ -365,16 +332,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
-        $billingAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            ['getCountryId', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->quoteMock->expects($this->once())
-            ->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
-        $billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(23));
         $this->shippingAddressMock->expects($this->once())
             ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddressMock->expects($this->once())
@@ -405,19 +362,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->shippingAddressMock->expects($this->once())
             ->method('getCountryId')->will($this->returnValue($countryId));
-        $billingAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            [
-                'getCountryId',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->quoteMock->expects($this->once())
-            ->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
-        $billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(23));
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
@@ -464,19 +408,6 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
-        $billingAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
-            [
-                'getCountryId',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->quoteMock->expects($this->once())
-            ->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
-        $billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(23));
         $this->shippingAddressMock->expects($this->once())
             ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddressMock->expects($this->once())

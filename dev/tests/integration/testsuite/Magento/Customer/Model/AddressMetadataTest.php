@@ -94,7 +94,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Customer\Model\Data\AttributeMetadata', $attributeMetadata);
         $this->assertEquals('company', $attributeMetadata->getAttributeCode(), 'Attribute code is invalid');
         $this->assertNotEmpty($attributeMetadata->getValidationRules(), 'Validation rules are not set');
-        $this->assertEquals('varchar', $attributeMetadata->getBackendType(), 'Backend type is invalid');
+        $this->assertEquals('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
         $this->assertEquals('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
     }
 }

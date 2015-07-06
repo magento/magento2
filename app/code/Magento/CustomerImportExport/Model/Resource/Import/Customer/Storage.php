@@ -24,7 +24,7 @@ class Storage
     /**
      * Existing customers information. In form of:
      *
-     * [customer e-mail] => array(
+     * [customer email] => array(
      *    [website id 1] => customer_id 1,
      *    [website id 2] => customer_id 2,
      *           ...       =>     ...      ,

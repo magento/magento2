@@ -94,6 +94,16 @@
             }
         }
     }
+    .nested {
+        .field.qty {
+            .label {
+                .css(font-weight, @form-field-label__font-weight);
+                .css(margin, 0 0 @indent__xs);
+                display: inline-block;
+            }
+            .css(margin-top, @form-field__vertical-indent);
+        }
+    }
     p.required {
         .css(color, @form-field-label-asterisk__color);
     }
@@ -109,7 +119,8 @@
         .legend.title {
             &:extend(.abs-reset-left-margin all);
         }
-        .bundle-options-wrapper {
+        .bundle-options-wrapper,
+        .product-options-wrapper {
             float: left;
             width: 57%;
         }

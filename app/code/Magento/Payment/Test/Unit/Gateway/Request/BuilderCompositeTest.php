@@ -11,13 +11,28 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuildEmpty()
     {
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [],
+                    'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
-        $builder = new BuilderComposite($tMap);
+
+        $builder = new BuilderComposite([], $tMapFactory);
         static::assertEquals([], $builder->build([]));
     }
 
@@ -27,12 +42,18 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             'user' => 'Mrs G. Crump',
             'url' => 'https://url.in',
             'amount' => 10.00,
-            'currecy' => 'pound',
+            'currency' => 'pound',
             'address' => '46 Egernon Crescent',
             'item' => 'gas cooker',
             'quantity' => 1
         ];
-
+        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerBuilder = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
             ->getMockForAbstractClass();
         $productBuilder = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
@@ -53,7 +74,7 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(
                 [
                     'amount' => 10.00,
-                    'currecy' => 'pound',
+                    'currency' => 'pound',
                     'item' => 'gas cooker',
                     'quantity' => 1
                 ]
@@ -66,14 +87,31 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [
+                        'customer' => 'Magento\Payment\Gateway\Request\BuilderInterface',
+                        'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
+                        'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                    ],
+                    'type' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                ]
+            )
+            ->willReturn($tMap);
         $tMap->expects(static::once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$customerBuilder, $productBuilder, $magentoBuilder]));
 
-        $builder = new BuilderComposite($tMap);
+        $builder = new BuilderComposite(
+            [
+                'customer' => 'Magento\Payment\Gateway\Request\BuilderInterface',
+                'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
+                'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+            ],
+            $tMapFactory
+        );
 
         static::assertEquals($expectedRequest, $builder->build([]));
     }

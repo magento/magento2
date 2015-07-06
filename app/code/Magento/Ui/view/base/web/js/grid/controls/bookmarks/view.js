@@ -58,12 +58,19 @@ define([
         },
 
         /**
-         * Retrieves current data.
+         * Retrieves copied views' data.
          *
-         * @returns {Object}
+         * @param {String} [path] - Path to the specific property.
+         * @returns {*}
          */
-        getData: function () {
-            return utils.copy(this.data.items);
+        getData: function (path) {
+            var data = this.data.items;
+
+            if (path) {
+                data = utils.nested(data, path);
+            }
+
+            return utils.copy(data);
         },
 
         /**
