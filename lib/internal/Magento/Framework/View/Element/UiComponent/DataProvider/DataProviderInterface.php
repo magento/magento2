@@ -91,8 +91,8 @@ interface DataProviderInterface
     /**
      * Add field filter to collection
      *
-     * @param $condition
-     * @param null $field
+     * @param string|int|array|null $condition
+     * @param null|string|array $field
      * @param string $type
      * @return mixed
      */
