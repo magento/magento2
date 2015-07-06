@@ -243,37 +243,37 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
-     * Hidden tax invoiced.
+     * Discount tax compensation invoiced.
      */
-    const HIDDEN_TAX_INVOICED = 'hidden_tax_invoiced';
+    const DISCOUNT_TAX_COMPENSATION_INVOICED = 'discount_tax_compensation_invoiced';
     /*
-     * Base hidden tax invoiced.
+     * Base discount tax compensation invoiced.
      */
-    const BASE_HIDDEN_TAX_INVOICED = 'base_hidden_tax_invoiced';
+    const BASE_DISCOUNT_TAX_COMPENSATION_INVOICED = 'base_discount_tax_compensation_invoiced';
     /*
-     * Hidden tax refunded.
+     * Discount tax compensation refunded.
      */
-    const HIDDEN_TAX_REFUNDED = 'hidden_tax_refunded';
+    const DISCOUNT_TAX_COMPENSATION_REFUNDED = 'discount_tax_compensation_refunded';
     /*
-     * Base hidden tax refunded.
+     * Base discount tax compensation refunded.
      */
-    const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
+    const BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED = 'base_discount_tax_compensation_refunded';
     /*
      * Tax canceled flag
      */
     const TAX_CANCELED = 'tax_canceled';
     /*
-     * Hidden-tax-canceled flag.
+     * Discount-tax-compensation-canceled flag.
      */
-    const HIDDEN_TAX_CANCELED = 'hidden_tax_canceled';
+    const DISCOUNT_TAX_COMPENSATION_CANCELED = 'discount_tax_compensation_canceled';
     /*
      * Tax refunded.
      */
@@ -454,25 +454,25 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getBaseDiscountRefunded();
 
     /**
-     * Gets the base hidden tax amount for the order item.
+     * Gets the base discount tax compensation amount for the order item.
      *
-     * @return float|null Base hidden tax amount.
+     * @return float Base discount tax compensation amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
-     * Gets the base hidden tax invoiced for the order item.
+     * Gets the base discount tax compensation invoiced for the order item.
      *
-     * @return float|null Base hidden tax invoiced.
+     * @return float Base discount tax compensation invoiced.
      */
-    public function getBaseHiddenTaxInvoiced();
+    public function getBaseDiscountTaxCompensationInvoiced();
 
     /**
-     * Gets the base hidden tax refunded for the order item.
+     * Gets the base discount tax compensation refunded for the order item.
      *
-     * @return float|null Base hidden tax refunded.
+     * @return float Base discount tax compensation refunded.
      */
-    public function getBaseHiddenTaxRefunded();
+    public function getBaseDiscountTaxCompensationRefunded();
 
     /**
      * Gets the base original price for the order item.
@@ -735,32 +735,32 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getGwTaxAmountRefunded();
 
     /**
-     * Gets the hidden tax amount for the order item.
+     * Gets the discount tax compensation amount for the order item.
      *
-     * @return float|null Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
-     * Gets the hidden tax canceled for the order item.
+     * Gets the discount tax compensation canceled for the order item.
      *
-     * @return float|null Hidden tax canceled.
+     * @return float Discount tax compensation canceled.
      */
-    public function getHiddenTaxCanceled();
+    public function getDiscountTaxCompensationCanceled();
 
     /**
-     * Gets the hidden tax invoiced for the order item.
+     * Gets the discount tax compensation invoiced for the order item.
      *
-     * @return float|null Hidden tax invoiced.
+     * @return float Discount tax compensation invoiced.
      */
-    public function getHiddenTaxInvoiced();
+    public function getDiscountTaxCompensationInvoiced();
 
     /**
-     * Gets the hidden tax refunded for the order item.
+     * Gets the discount tax compensation refunded for the order item.
      *
-     * @return float|null Hidden tax refunded.
+     * @return float Discount tax compensation refunded.
      */
-    public function getHiddenTaxRefunded();
+    public function getDiscountTaxCompensationRefunded();
 
     /**
      * Gets the is-quantity-decimal flag value for the order item.
@@ -1512,52 +1512,52 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function setBaseRowTotalInclTax($amount);
 
     /**
-     * Sets the hidden tax amount for the order item.
+     * Sets the discount tax compensation amount for the order item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for the order item.
+     * Sets the base discount tax compensation amount for the order item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the hidden tax invoiced for the order item.
+     * Sets the discount tax compensation invoiced for the order item.
      *
-     * @param float $hiddenTaxInvoiced
+     * @param float $discountTaxCompensationInvoiced
      * @return $this
      */
-    public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
+    public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced);
 
     /**
-     * Sets the base hidden tax invoiced for the order item.
+     * Sets the base discount tax compensation invoiced for the order item.
      *
-     * @param float $baseHiddenTaxInvoiced
+     * @param float $baseDiscountTaxCompensationInvoiced
      * @return $this
      */
-    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
+    public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced);
 
     /**
-     * Sets the hidden tax refunded for the order item.
+     * Sets the discount tax compensation refunded for the order item.
      *
-     * @param float $hiddenTaxRefunded
+     * @param float $discountTaxCompensationRefunded
      * @return $this
      */
-    public function setHiddenTaxRefunded($hiddenTaxRefunded);
+    public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded);
 
     /**
-     * Sets the base hidden tax refunded for the order item.
+     * Sets the base discount tax compensation refunded for the order item.
      *
-     * @param float $baseHiddenTaxRefunded
+     * @param float $baseDiscountTaxCompensationRefunded
      * @return $this
      */
-    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
+    public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded);
 
     /**
      * Sets the tax canceled for the order item.
@@ -1568,12 +1568,12 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function setTaxCanceled($taxCanceled);
 
     /**
-     * Sets the hidden tax canceled for the order item.
+     * Sets the discount tax compensation canceled for the order item.
      *
-     * @param float $hiddenTaxCanceled
+     * @param float $discountTaxCompensationCanceled
      * @return $this
      */
-    public function setHiddenTaxCanceled($hiddenTaxCanceled);
+    public function setDiscountTaxCompensationCanceled($discountTaxCompensationCanceled);
 
     /**
      * Sets the tax refunded for the order item.

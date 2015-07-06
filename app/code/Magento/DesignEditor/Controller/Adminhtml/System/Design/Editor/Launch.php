@@ -159,7 +159,7 @@ class Launch extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             $this->_redirect('adminhtml/*/');
             return;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Sorry, something went wrong.'));
+            $this->messageManager->addException($e, __('Sorry, something went wrong. That\'s all we know.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_redirect('adminhtml/*/');
             return;

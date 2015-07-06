@@ -40,6 +40,7 @@ class DateTime
      * @param string|\DateTime|bool|null $date
      * @param boolean $includeTime
      * @return string|null
+     * @api
      */
     public function formatDate($date, $includeTime = true)
     {

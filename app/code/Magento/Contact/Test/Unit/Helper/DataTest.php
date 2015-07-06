@@ -4,28 +4,34 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Contact\Test\Unit\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Contact\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * Helper
+     *
+     * @var \Magento\Contact\Helper\Data
      */
     protected $_helper;
 
     /**
+     * Scope config mock
+     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfig;
 
     /**
+     * Customer session mock
+     *
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_customerSession;
 
     /**
+     * Customer view helper mock
+     *
      * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_customerViewHelper;
@@ -35,7 +41,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = '\Magento\Contact\Helper\Data';
         $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /**
+         * @var \Magento\Framework\App\Helper\Context $context
+         */
         $context = $arguments['context'];
         $this->_scopeConfig = $context->getScopeConfig();
         $this->_customerSession = $arguments['customerSession'];
@@ -58,7 +66,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue(null));
 
-        $this->assertTrue(is_null($this->_helper->isEnabled()));
+        $this->assertTrue(null === $this->_helper->isEnabled());
     }
 
     public function testGetUserNameNotLoggedIn()
@@ -104,8 +112,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession->expects($this->once())
             ->method('isLoggedIn')
             ->will($this->returnValue(true));
+
         $customerDataObject = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
-        $customerDataObject->expects($this->once())->method('getEmail')->will($this->returnValue('customer@email.com'));
+        $customerDataObject->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('customer@email.com'));
+
         $this->_customerSession->expects($this->once())
             ->method('getCustomerDataObject')
             ->will($this->returnValue($customerDataObject));

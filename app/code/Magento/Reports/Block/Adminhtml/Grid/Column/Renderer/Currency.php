@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
@@ -24,15 +22,15 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Curren
     public function render(\Magento\Framework\Object $row)
     {
         $data = $row->getData($this->getColumn()->getIndex());
-        $currency_code = $this->_getCurrencyCode($row);
+        $currencyCode = $this->_getCurrencyCode($row);
 
-        if (!$currency_code) {
+        if (!$currencyCode) {
             return $data;
         }
 
         $data = floatval($data) * $this->_getRate($row);
         $data = sprintf("%f", $data);
-        $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
+        $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
         return $data;
     }
 }

@@ -14,6 +14,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertAttributeOptionsOnProductForm extends AbstractConstraint
 {
     /**
+     * Assert all product attribute options on product creation form.
+     *
      * @return void
      */
     public function processAssert()

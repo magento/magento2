@@ -34,15 +34,16 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
         $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())
+        $resultFactory->expects($this->atLeastOnce())
             ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
-        $additionalParams = ['resultRedirectFactory' => $resultRedirectFactory];
+        $additionalParams = ['resultFactory' => $resultFactory];
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
             $this->initContext($additionalParams),
             $productBuilder,

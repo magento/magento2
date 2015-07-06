@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
  * See COPYING.txt for license details.
  * @magentoAppArea adminhtml
  */
-class FileTest extends \Magento\Backend\Utility\Controller
+class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testUploadAction()
     {

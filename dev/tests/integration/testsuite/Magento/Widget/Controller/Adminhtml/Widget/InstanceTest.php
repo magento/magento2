@@ -8,7 +8,7 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 /**
  * @magentoAppArea adminhtml
  */
-class InstanceTest extends \Magento\Backend\Utility\Controller
+class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     protected function setUp()
     {

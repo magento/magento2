@@ -10,7 +10,7 @@ interface ConverterInterface
     /**
      * Converts gateway response to ENV structure
      *
-     * @param string $response
+     * @param mixed $response
      * @return array
      * @throws \Magento\Payment\Gateway\Http\ConverterException
      */

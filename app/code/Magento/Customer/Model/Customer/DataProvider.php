@@ -9,7 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
-use Magento\Ui\DataProvider\EavValidationRule;
+use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
 
@@ -45,7 +45,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
         'sortOrder' => 'sort_order',
         'notice' => 'note',
         'default' => 'default_value',
-        'size' => 'scope_multiline_count'
+        'size' => 'multiline_count',
     ];
 
     /**
@@ -60,9 +60,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
     ];
 
     /**
-     * @var EavValidationRule
+     * @var EavValidationRules
      */
-    protected $eavValidationRule;
+    protected $eavValidationRules;
 
     /**
      * Constructor
@@ -70,7 +70,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param EavValidationRule $eavValidationRule
+     * @param EavValidationRules $eavValidationRules
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param array $meta
@@ -80,14 +80,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        EavValidationRule $eavValidationRule,
+        EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->eavValidationRule = $eavValidationRule;
+        $this->eavValidationRules = $eavValidationRules;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
@@ -169,7 +169,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractEavDataProvider
                 }
             }
 
-            $rules = $this->eavValidationRule->build($attribute, $meta[$code]);
+            $rules = $this->eavValidationRules->build($attribute, $meta[$code]);
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }

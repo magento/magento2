@@ -95,13 +95,13 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
             'linked_product_type' => 'virtual',
             'linked_product_sku' => 'virtual-product',
             'position' => 100,
-            'product_sku' => 'simple',
+            'sku' => 'simple',
             'link_type' => 'related',
         ];
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
+                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

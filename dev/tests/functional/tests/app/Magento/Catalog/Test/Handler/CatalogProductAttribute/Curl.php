@@ -90,7 +90,7 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
 
         if ($fixture->hasData('options')) {
             $optionsData = $fixture->getData()['options'];
-            foreach ($matches[1] as $key => $optionId) {
+            foreach (array_unique($matches[1]) as $key => $optionId) {
                 $optionsData[$key]['id'] = $optionId;
             }
             $resultData['options'] = $optionsData;

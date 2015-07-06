@@ -108,13 +108,13 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      */
     const NAME = 'name';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
      * WEEE tax disposition.
      */
@@ -174,11 +174,11 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getBaseDiscountAmount();
 
     /**
-     * Gets the base hidden tax amount for a credit memo item.
+     * Gets the base discount tax compensation amount for a credit memo item.
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base price for a credit memo item.
@@ -273,11 +273,11 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setEntityId($entityId);
 
     /**
-     * Gets the hidden tax amount for a credit memo item.
+     * Gets the discount tax compensation amount for a credit memo item.
      *
-     * @return float|null Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the name for a credit memo item.
@@ -560,20 +560,20 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setName($name);
 
     /**
-     * Sets the hidden tax amount for a credit memo item.
+     * Sets the discount tax compensation amount for a credit memo item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for a credit memo item.
+     * Sets the base discount tax compensation amount for a credit memo item.
      *
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the WEEE tax disposition for a credit memo item.
