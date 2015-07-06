@@ -79,7 +79,7 @@ class Deployer
     protected $jsTranslationConfig;
 
     /**
-     * @var array
+     * @var \Magento\Framework\View\Design\ThemeInterface[]
      */
     private $parentTheme;
 
@@ -147,7 +147,7 @@ class Deployer
                             ($fileTheme == '' || $fileTheme == $themePath ||
                                 in_array(
                                     $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
-                                    $this->findAncestors($area, $themePath)
+                                    $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
@@ -326,39 +326,33 @@ class Deployer
     }
 
     /**
-     * Find ancestor themes by looking up the theme configuration file
+     * Find ancestor themes
      *
-     * @param string $fileArea
-     * @param string $themePath
+     * @param string $themeFullPath
      * @return string[]
      */
-    private function findAncestors($fileArea, $themePath)
+    private function findAncestors($themeFullPath)
     {
         $ancestors = [];
-        $fullThemePath = $fileArea . Theme::THEME_PATH_SEPARATOR . $themePath;
-        if (!isset($this->parentTheme[$fullThemePath])) {
-            $themesRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-            /** @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory */
-            $themeConfigFactory = $this->objectManager->get('Magento\Framework\Config\ThemeFactory');
-            $themeConfig = $themeConfigFactory->create(
-                ['configContent' => $themesRead->readFile($fullThemePath . '/theme.xml')]
-            );
-            $parentThemeParts = $themeConfig->getParentTheme();
-            if ($parentThemeParts) {
-                $this->parentTheme[$fullThemePath] = $fileArea . Theme::THEME_PATH_SEPARATOR .
-                    implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts);
-                $ancestors[] = $this->parentTheme[$fullThemePath];
+        if (!isset($this->parentTheme[$themeFullPath])) {
+            /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
+            $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+            $theme = $themeCollection->getThemeByFullPath($themeFullPath);
+            $parentTheme = $theme->getParentTheme();
+            if ($parentTheme) {
+                $this->parentTheme[$themeFullPath] = $parentTheme;
+                $ancestors[] = $parentTheme->getFullPath();
                 $ancestors = array_merge(
                     $ancestors,
-                    $this->findAncestors($fileArea, implode(Theme::THEME_PATH_SEPARATOR, $parentThemeParts))
+                    $this->findAncestors($parentTheme->getFullPath())
                 );
             }
         } else {
-            $ancestors[] = $this->parentTheme[$fullThemePath];
-            $themePath = explode(Theme::THEME_PATH_SEPARATOR, $this->parentTheme[$fullThemePath], 2)[1];
+            $parentTheme = $this->parentTheme[$themeFullPath];
+            $ancestors[] = $parentTheme->getFullPath();
             $ancestors = array_merge(
                 $ancestors,
-                $this->findAncestors($fileArea, $themePath)
+                $this->findAncestors($parentTheme->getFullPath())
             );
         }
         return $ancestors;
