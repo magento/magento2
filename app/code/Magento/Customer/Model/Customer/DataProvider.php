@@ -221,7 +221,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null,  $type = 'regular')
+    public function addFilter($condition, $field = null, $type = 'regular')
     {
         $this->filterPool->registerNewFilter($condition, $field, $type);
     }

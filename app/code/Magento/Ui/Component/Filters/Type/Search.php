@@ -11,6 +11,11 @@ namespace Magento\Ui\Component\Filters\Type;
  */
 class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
 {
+    /**
+     * Get component name
+     *
+     * @return string
+     */
     public function getComponentName()
     {
         return 'keyword_search';

@@ -49,6 +49,8 @@ class SubSelect
     protected $connection;
 
     /**
+     * @param Resource $resource
+     * @param string $connectionName
      * @param string $table
      * @param string[] $columns
      * @param string $originColumn
@@ -76,7 +78,8 @@ class SubSelect
     public function __toString()
     {
         $select = $this->getConnection()->select()->from(
-            $this->table, array_values($this->columns)
+            $this->table,
+            array_values($this->columns)
         )->where(
             sprintf('`%s` = %s', $this->originColumn, $this->targetColumn)
         )->limit(1);

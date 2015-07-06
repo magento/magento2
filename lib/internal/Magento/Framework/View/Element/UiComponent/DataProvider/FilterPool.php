@@ -34,7 +34,8 @@ class FilterPool
     /**
      * @param string|int|array|null $condition
      * @param string|null|array $field
-     * @param $type
+     * @param string $type
+     * @return void
      */
     public function registerNewFilter($condition, $field, $type)
     {
@@ -46,6 +47,7 @@ class FilterPool
 
     /**
      * @param AbstractDb $collection
+     * @return void
      */
     public function applyFilters(AbstractDb $collection)
     {
