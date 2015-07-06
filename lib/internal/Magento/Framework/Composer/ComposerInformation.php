@@ -162,7 +162,7 @@ class ComposerInformation
         $packages = [];
         /** @var PackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-            $packages[] = [
+            $packages[$package->getName()] = [
                 'name' => $package->getName(),
                 'type' => $package->getType(),
                 'version' => $package->getVersion()
@@ -182,8 +182,9 @@ class ComposerInformation
         foreach ($this->getRootRequiredPackageTypesByNameVersion() as $package) {
             $latestProductVersion = $this->getLatestNonDevVersion($package['name']);
             if ($latestProductVersion && version_compare($latestProductVersion, $package['version'], '>')) {
-                $availableVersions[] = [
-                    'name' => $package['name'],
+                $packageName = $package['name'];
+                $availableVersions[$packageName] = [
+                    'name' => $packageName,
                     'latestVersion' => $latestProductVersion
                 ];
             }
