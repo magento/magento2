@@ -310,6 +310,9 @@ class Payment extends Info implements OrderPaymentInterface
                 $orderState = $order->getState() ? $order->getState() : $orderState;
                 $orderStatus = $order->getStatus() ? $order->getStatus() : $orderStatus;
             }
+        } else {
+            $order->setState($orderState)
+                ->setStatus($orderStatus);
         }
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
