@@ -11,6 +11,13 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 interface DataProviderInterface
 {
     /**
+     * Return collection model
+     *
+     * @return mixed
+     */
+    public function getCollection();
+
+    /**
      * Get Data Provider name
      *
      * @return string
