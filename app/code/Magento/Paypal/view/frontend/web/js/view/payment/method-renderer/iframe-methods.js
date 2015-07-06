@@ -28,8 +28,14 @@ define(
              * Places order in pending payment status.
              */
             placePendingPaymentOrder: function () {
-                this.placeOrder(false);
-                this.isInAction(true);
+                if (this.placeOrder()) {
+                    this.isInAction(true);
+                    // capture all click events
+                    document.addEventListener('click', function(event) {
+                        event.stopImmediatePropagation();
+                        event.preventDefault();
+                    }, true);
+                }
             }
         });
     }
