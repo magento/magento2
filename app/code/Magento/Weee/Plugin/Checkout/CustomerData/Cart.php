@@ -19,22 +19,28 @@ class Cart extends \Magento\Tax\Plugin\Checkout\CustomerData\Cart
     protected $checkoutHelper;
 
     /**
-     * @var \Magento\Weee\Block\Item\Price\Renderer
+     * @var \Magento\Tax\Block\Item\Price\Renderer
      */
     protected $itemPriceRenderer;
 
     /**
+     * @var \Magento\Weee\Block\Item\Price\Renderer
+     */
+    protected $itemWeePriceRenderer;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Weee\Block\Item\Price\Renderer $itemPriceRenderer
+     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
+     * @param \Magento\Weee\Block\Item\Price\Renderer $itemWeePriceRenderer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Weee\Block\Item\Price\Renderer $itemPriceRenderer
+        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer,
+        \Magento\Weee\Block\Item\Price\Renderer $itemWeePriceRenderer
     ) {
-        $this->checkoutSession = $checkoutSession;
-        $this->checkoutHelper = $checkoutHelper;
-        $this->itemPriceRenderer = $itemPriceRenderer;
+        parent::__construct($checkoutSession, $checkoutHelper, $itemPriceRenderer);
+        $this->itemPriceRenderer = $itemWeePriceRenderer;
     }
 }
