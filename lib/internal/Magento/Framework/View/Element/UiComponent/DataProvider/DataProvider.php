@@ -55,6 +55,7 @@ class DataProvider implements DataProviderInterface
      * @var FilterPool
      */
     protected $filterPool;
+
     /**
      * @param $name
      * @param $primaryFieldName
