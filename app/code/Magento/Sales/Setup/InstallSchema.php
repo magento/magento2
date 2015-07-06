@@ -2258,9 +2258,9 @@ class InstallSchema implements InstallSchemaInterface
             'Entity Id'
         )->addColumn(
             'increment_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            32,
-            [ 'nullable' => false],
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
             'Increment Id'
         )->addColumn(
             'store_id',
@@ -2423,6 +2423,30 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_shipment_grid', ['billing_name']),
             ['billing_name']
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_shipment_grid',
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'shipping_name',
+                    'customer_name',
+                    'customer_email',
+                    'billing_address',
+                    'shipping_address'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'order_increment_id',
+                'shipping_name',
+                'customer_name',
+                'customer_email',
+                'billing_address',
+                'shipping_address'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Shipment Grid'
         );
@@ -3030,12 +3054,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             [],
             'Order Created At'
-        )->addColumn(
-            'customer_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['unsigned' => true],
-            'Customer Id'
         )->addColumn(
             'customer_name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
