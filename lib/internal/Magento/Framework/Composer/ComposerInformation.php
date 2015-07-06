@@ -8,12 +8,32 @@ namespace Magento\Framework\Composer;
 
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
+use Composer\Package\Version\VersionParser;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
  */
 class ComposerInformation
 {
+    /**#@+
+     * Composer command
+     */
+    const COMPOSER_SHOW = 'show';
+    /**#@-*/
+
+    /**#@+
+     * Composer command params and options
+     */
+    const PARAM_COMMAND = 'command';
+    const PARAM_PACKAGE = 'package';
+    const PARAM_AVAILABLE = '--available';
+    /**#@-*/
+
+    /**
+     * @var \Magento\Composer\MagentoComposerApplication
+     */
+    private $application;
+
     /**
      * @var \Composer\Composer
      */
@@ -35,8 +55,8 @@ class ComposerInformation
     ) {
 
         // Create Composer
-        $application = $applicationFactory->create();
-        $this->composer = $application->createComposer();
+        $this->application = $applicationFactory->create();
+        $this->composer = $this->application->createComposer();
         $this->locker = $this->composer->getLocker();
     }
 
@@ -149,6 +169,70 @@ class ComposerInformation
                 ];
         }
         return $packages;
+    }
+
+    /**
+     * Get list of available for update versions for packages
+     *
+     * @return array
+     */
+    public function getPackagesForUpdate()
+    {
+        $availableVersions = [];
+        foreach ($this->getRootRequiredPackageTypesByNameVersion() as $package) {
+            $latestProductVersion = $this->getLatestNonDevVersion($package['name']);
+            if ($latestProductVersion && version_compare($latestProductVersion, $package['version'], '>')) {
+                $availableVersions[] = [
+                    'name' => $package['name'],
+                    'latestVersion' => $latestProductVersion
+                ];
+            }
+        }
+        return $availableVersions;
+    }
+
+    /**
+     * Retrieve the latest available stable version for a package
+     *
+     * @param string $package
+     * @return string
+     */
+    private function getLatestNonDevVersion($package)
+    {
+        $versionParser = new VersionParser();
+        foreach ($this->getPackageAvailableVersions($package) as $version) {
+            if ($versionParser->parseStability($version) != 'dev') {
+                return $versionParser->normalize($version);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Retrieve all available versions for a package
+     *
+     * @param string $package
+     * @return array
+     * @throws \RuntimeException
+     */
+    private function getPackageAvailableVersions($package)
+    {
+        $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+
+        $commandParams = [
+            self::PARAM_COMMAND => self::COMPOSER_SHOW,
+            self::PARAM_PACKAGE => $package,
+            self::PARAM_AVAILABLE => true
+        ];
+        $result = $this->application->runComposerCommand($commandParams);
+        $matches = [];
+        preg_match($versionsPattern, $result, $matches);
+        if (!isset($matches[1])) {
+            throw new \RuntimeException(
+                sprintf('Couldn\'t get available versions for package %s', $commandParams[self::PARAM_PACKAGE])
+            );
+        }
+        return explode(', ', $matches[1]);
     }
 
     /**
