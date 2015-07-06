@@ -1,3 +1,4 @@
+app/code/Magento/Authorizenet
 app/code/Magento/Bundle
 app/code/Magento/Captcha
 app/code/Magento/Catalog
