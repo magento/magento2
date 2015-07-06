@@ -154,7 +154,7 @@
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Creditmemo\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
@@ -359,7 +359,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="CreditmemoGrid" type="Magento\Sales\Model\Resource\Grid">
+    <virtualType name="CreditmemoGridAggregator" type="Magento\Sales\Model\Resource\Grid">
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_creditmemo</argument>
             <argument name="gridTableName" xsi:type="string">sales_creditmemo_grid</argument>
@@ -389,9 +389,9 @@
                 <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
                 <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
                 <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
-                <item name="creditmemo_status" xsi:type="object">sales_creditmemo.creditmemo_status</item>
-                <item name="base_grand_total" xsi:type="object">sales_creditmemo.base_grand_total</item>
-                <item name="state" xsi:type="object">sales_creditmemo.state</item>
+                <item name="creditmemo_status" xsi:type="string">sales_creditmemo.creditmemo_status</item>
+                <item name="base_grand_total" xsi:type="string">sales_creditmemo.base_grand_total</item>
+                <item name="state" xsi:type="string">sales_creditmemo.state</item>
                 <item name="store_id" xsi:type="string">sales_creditmemo.store_id</item>
                 <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
                 <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
@@ -531,7 +531,7 @@
             <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
             <argument name="invoiceGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
             <argument name="shipmentGrid" xsi:type="object">ShipmentGridAggregator</argument>
-            <argument name="creditmemoGrid" xsi:type="object">\CreditmemoGrid</argument>
+            <argument name="creditmemoGrid" xsi:type="object">\CreditmemoGridAggregator</argument>
         </arguments>
     </type>
     <virtualType name="SalesGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
