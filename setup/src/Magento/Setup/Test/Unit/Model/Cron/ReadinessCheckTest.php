@@ -25,7 +25,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\Filesystem\Directory\Write
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
      */
     private $write;
 
@@ -54,7 +54,8 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->method('checkDatabaseConnection')
             ->willThrowException(new \Magento\Setup\Exception('Connection failure'));
         $this->dbValidator->expects($this->never())->method('checkDatabaseWrite');
-        $this->write->expects($this->once())->method('readFile')->willReturn('');
+        $this->write->expects($this->once())->method('isExist')->willReturn(false);
+        $this->write->expects($this->never())->method('readFile');
         $expected = [
             'readiness_checks' => ['db_write_permission_verified' => false, 'error' => 'Connection failure'],
             'current_timestamp' => 100
@@ -71,7 +72,8 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection');
         $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(false);
-        $this->write->expects($this->once())->method('readFile')->willReturn('');
+        $this->write->expects($this->once())->method('isExist')->willReturn(false);
+        $this->write->expects($this->never())->method('readFile');
         $expected = [
             'readiness_checks' => [
                 'db_write_permission_verified' => false,
@@ -91,7 +93,8 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection');
         $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(true);
-        $this->write->expects($this->once())->method('readFile')->willReturn('');
+        $this->write->expects($this->once())->method('isExist')->willReturn(false);
+        $this->write->expects($this->never())->method('readFile');
         $expected = [
             'readiness_checks' => ['db_write_permission_verified' => true],
             'current_timestamp' => 100
@@ -108,6 +111,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection');
         $this->dbValidator->expects($this->once())->method('checkDatabaseWrite')->willReturn(true);
+        $this->write->expects($this->once())->method('isExist')->willReturn(true);
         $this->write->expects($this->once())->method('readFile')->willReturn('{"current_timestamp": 50}');
         $expected = [
             'readiness_checks' => ['db_write_permission_verified' => true],
