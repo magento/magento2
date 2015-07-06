@@ -307,12 +307,12 @@
             </filterSelect>
             <filterSelect name="payment_method">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Group\Options</argument>
+                    <argument name="class" xsi:type="string">Magento\Payment\Ui\Component\Listing\Column\Method\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">customer_group_id</item>
+                        <item name="dataScope" xsi:type="string">payment_method</item>
                         <item name="label" xsi:type="string" translate="true">Payment Method</item>
                     </item>
                 </argument>

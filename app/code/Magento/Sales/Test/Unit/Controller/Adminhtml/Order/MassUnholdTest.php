@@ -139,7 +139,10 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         $this->contextMock->expects($this->once())->method('getActionFlag')->willReturn($this->actionFlagMock);
         $this->contextMock->expects($this->once())->method('getHelper')->willReturn($this->helperMock);
-        $this->contextMock->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
+        $this->contextMock
+            ->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($resultRedirectFactory);
 
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassUnhold',

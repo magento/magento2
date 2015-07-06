@@ -120,7 +120,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_order',
                 'sales_shipment',
                 'sales_creditmemo_grid',
-                'sales_invoice_grid',
                 'sales_order_grid',
                 'sales_shipment_grid',
             ];
@@ -140,7 +139,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_order',
                 'sales_shipment',
                 'sales_creditmemo_grid',
-                'sales_invoice_grid',
                 'sales_order_grid',
                 'sales_shipment_grid',
             ];
