@@ -85,7 +85,7 @@ define([
             this.attributes.each(function(attribute) {
                 attribute.chosen = [];
                 if (!attribute.chosenOptions.getLength()) {
-                    throw new Error($.mage.__('Please, select option(s) for the attributes'));
+                    throw new Error($.mage.__('Select options for all attributes or remove unused attributes.'));
                 }
                 attribute.chosenOptions.each(function(id) {
                     attribute.chosen.push(attribute.options.findWhere({id:id}));
