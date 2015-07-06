@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main\Renderer;
 
 /**
- * Renderer for specific checkbox that is used on Rule Information tab in Shopping cart price rules
+ * Renderer for specific checkbox that is used on Rule Information tab in Cart Price Rules
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */

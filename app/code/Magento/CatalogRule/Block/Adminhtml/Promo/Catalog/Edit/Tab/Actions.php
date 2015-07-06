@@ -15,6 +15,7 @@ class Actions extends Generic implements TabInterface
      * Prepare content for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -25,6 +26,7 @@ class Actions extends Generic implements TabInterface
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -35,6 +37,7 @@ class Actions extends Generic implements TabInterface
      * Returns status flag about this tab can be showen or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -45,6 +48,7 @@ class Actions extends Generic implements TabInterface
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -136,8 +140,8 @@ class Actions extends Generic implements TabInterface
             'stop_rules_processing',
             'select',
             [
-                'label' => __('Subsequent rules'),
-                'title' => __('Subsequent rules'),
+                'label' => __('Discard subsequent rules'),
+                'title' => __('Discard subsequent rules'),
                 'name' => 'stop_rules_processing',
                 'options' => ['1' => __('Yes'), '0' => __('No')]
             ]
