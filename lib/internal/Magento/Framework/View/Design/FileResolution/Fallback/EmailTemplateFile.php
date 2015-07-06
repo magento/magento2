@@ -45,6 +45,8 @@ class EmailTemplateFile
     }
 
     /**
+     * Get fallback type
+     *
      * @return string
      */
     protected function getFallbackType()
