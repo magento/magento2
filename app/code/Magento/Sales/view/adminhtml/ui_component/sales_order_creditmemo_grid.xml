@@ -142,7 +142,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">created_at</item>
-                        <item name="label" xsi:type="string" translate="true">Creditmemo Date</item>
+                        <item name="label" xsi:type="string" translate="true">Created</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
                         </item>
@@ -173,7 +173,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">order_increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Order #</item>
+                        <item name="label" xsi:type="string" translate="true">Order</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
                         </item>
@@ -237,15 +237,56 @@
                     </item>
                 </argument>
             </filterInput>
+            <filterSelect name="creditmemo_status">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="dataScope" xsi:type="string">creditmemo_status</item>
+                        <item name="label" xsi:type="string" translate="true">Status</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterRange name="base_grand_total">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">base_grand_total</item>
+                        <item name="label" xsi:type="string" translate="true">Refunded</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">From</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">To</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
             <filterSelect name="state">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Invoice\State\Options</argument>
+                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="dataScope" xsi:type="string">state</item>
-                        <item name="label" xsi:type="string" translate="true">Status</item>
+                        <item name="label" xsi:type="string" translate="true">Order Status</item>
                     </item>
                 </argument>
             </filterSelect>
@@ -557,7 +598,7 @@
                 </item>
             </argument>
         </column>
-        <column name="creditmemo_status" class="Magento\Sales\Ui\Component\Listing\Column\Invoice\State">
+        <column name="creditmemo_status"><!--class with statuses-->
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
@@ -569,28 +610,27 @@
                 </item>
             </argument>
         </column>
-        <column name="customer_name">
+        <column name="base_grand_total">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Customer Name</item>
+                    <item name="label" xsi:type="string" translate="true">Refunded</item>
                 </item>
             </argument>
         </column>
-        <column name="total_qty">
+        <column name="state"><!--class with statuses-->
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Total Quantity</item>
+                    <item name="label" xsi:type="string" translate="true">Order Status</item>
                 </item>
             </argument>
         </column>
@@ -637,6 +677,19 @@
                 </item>
             </argument>
         </column>
+        <column name="customer_name">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Customer Name</item>
+                </item>
+            </argument>
+        </column>
         <column name="customer_email">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
@@ -647,6 +700,19 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
+                </item>
+            </argument>
+        </column>
+        <column name="customer_group">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Customer Group</item>
                 </item>
             </argument>
         </column>
@@ -673,6 +739,71 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Shipping Information</item>
+                </item>
+            </argument>
+        </column>
+        <column name="subtotal">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Subtotal</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_and_handling">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Shipping &amp; Handling</item>
+                </item>
+            </argument>
+        </column>
+        <column name="adjustment_positive">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Adjustment Refund</item>
+                </item>
+            </argument>
+        </column>
+        <column name="adjustment_negative">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Adjustment Fee</item>
+                </item>
+            </argument>
+        </column>
+        <column name="grand_total">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Grand Total</item>
                 </item>
             </argument>
         </column>
