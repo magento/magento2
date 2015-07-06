@@ -1090,24 +1090,28 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_order_grid', ['updated_at']),
             ['updated_at']
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'customer_id', 'customer_entity', 'entity_id'),
-            'customer_id',
-            $installer->getTable('customer_entity'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'entity_id', 'sales_order', 'entity_id'),
-            'entity_id',
-            $installer->getTable('sales_order'),
-            'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('sales_order_grid', 'store_id', 'store', 'store_id'),
-            'store_id',
-            $installer->getTable('store'),
-            'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_order_grid',
+                [
+                    'billing_name',
+                    'shipping_name',
+                    'shipping_address',
+                    'billing_address',
+                    'customer_name',
+                    'customer_email'
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'billing_name',
+                'shipping_name',
+                'shipping_address',
+                'billing_address',
+                'customer_name',
+                'customer_email'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Order Grid'
         );
@@ -4009,6 +4013,27 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
             ['billing_name']
+        )->addIndex(
+            $installer->getIdxName(
+                'sales_creditmemo_grid',
+                [
+                    'increment_id',
+                    'order_increment_id',
+                    'billing_name',
+                    'customer_name',
+                    'customer_email'
+
+                ],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+            ),
+            [
+                'increment_id',
+                'order_increment_id',
+                'billing_name',
+                'customer_name',
+                'customer_email'
+            ],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
         )->setComment(
             'Sales Flat Creditmemo Grid'
         );
