@@ -540,8 +540,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Return associative array of parameters, using
-     * __trans to identify the nameless text argument
+     * Parses directive construction into a multipart array containing the text value and key/value pairs of parameters
      *
      * @param string $value raw parameters
      * @return array always a two-part array in the format [value, [param, ...]]
@@ -581,16 +580,17 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * Explodes modifiers out of a given string value returning
-     * the value and modifiers in a two-element array. If none
-     * are found, returns an array with null modifier string.
+     * Explode modifiers out of a given string
+     *
+     * This will return the value and modifiers in a two-element array. Where no modifiers are present in the passed
+     * value an array with a null modifier string will be returned
      *
      * Syntax: some text value, etc|modifier string
      *
      * Result: ['some text value, etc', 'modifier string']
      *
-     * @param $value
-     * @param null $default assumed modifier if none present
+     * @param string $value
+     * @param string $default assumed modifier if none present
      * @return array
      */
     protected function explodeModifiers($value, $default = null)
