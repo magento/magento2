@@ -8,6 +8,8 @@ namespace Magento\Install\Test\Block;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Database form.
@@ -27,6 +29,28 @@ class Database extends Form
      * @var string
      */
     protected $next = "[ng-click*='testConnection']";
+
+    /**
+     * Fill database form.
+     *
+     * @param FixtureInterface $fixture
+     * @param SimpleElement|null $element
+     * @return $this
+     */
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
+    {
+        $data = $fixture->getData();
+        $dbData = [];
+        foreach ($data as $key => $value) {
+            if (strpos($key, 'db') === 0) {
+                $dbData[$key] = $value;
+            }
+        }
+        $mapping = $this->dataMapping($dbData);
+        $this->_fill($mapping, $element);
+
+        return $this;
+    }
 
     /**
      * Get 'Test connection successful.' message.

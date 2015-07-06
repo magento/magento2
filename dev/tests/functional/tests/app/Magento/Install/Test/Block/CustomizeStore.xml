@@ -7,13 +7,13 @@
 -->
 <mapping strict="0">
     <fields>
-        <currency>
-            <selector>[ng-model*='currency']</selector>
+        <storeCurrency>
+            <selector>#storeCurrency</selector>
             <input>select</input>
-        </currency>
-        <language>
-            <selector>[ng-model*='language']</selector>
+        </storeCurrency>
+        <storeLanguage>
+            <selector>#storeLanguage</selector>
             <input>select</input>
-        </language>
+        </storeLanguage>
     </fields>
 </mapping>

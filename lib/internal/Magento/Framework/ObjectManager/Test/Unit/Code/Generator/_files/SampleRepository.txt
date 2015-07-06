@@ -1,7 +1,7 @@
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
- * Repository class for
+ * Repository class for @see
  * \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
  */
 class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generator\SampleRepositoryInterface
@@ -22,13 +22,20 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
     protected $sampleInterfaceSearchResultFactory = null;
 
     /**
-     * Magento\Framework\ObjectManager\Code\Generator\SampleInterface[]
+     * \Magento\Framework\ObjectManager\Code\Generator\SampleInterface[]
      *
      * @var array
      */
     protected $registry = array(
         
     );
+
+    /**
+     * Extension attributes join processor.
+     *
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor = null;
 
     /**
      * Repository constructor
@@ -38,11 +45,14 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * @param
      * \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory
      * $sampleInterfaceSearchResultFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * $extensionAttributesJoinProcessor
      */
-    public function __construct(\Magento\Framework\ObjectManager\Code\Generator\SampleInterfacePersistor $sampleInterfacePersistor, \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory $sampleInterfaceSearchResultFactory)
+    public function __construct(\Magento\Framework\ObjectManager\Code\Generator\SampleInterfacePersistor $sampleInterfacePersistor, \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory $sampleInterfaceSearchResultFactory, \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor)
     {
         $this->sampleInterfacePersistor = $sampleInterfacePersistor;
         $this->sampleInterfaceSearchResultFactory = $sampleInterfaceSearchResultFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -53,13 +63,13 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($id, $arguments = array())
+    public function get($id)
     {
         if (!$id) {
             throw new \Magento\Framework\Exception\InputException('ID required');
         }
         if (!isset($this->registry[$id])) {
-            $entity = $this->sampleInterfacePersistor->loadEntity($id, $arguments);
+            $entity = $this->sampleInterfacePersistor->loadEntity($id);
             if (!$entity->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException('Requested entity doesn\'t exist');
             }
@@ -94,13 +104,13 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * Find entities by criteria
      *
      * @param \Magento\Framework\Api\SearchCriteria  $criteria
-     * @param array $arguments
-     * @return \Magento\Framework\ObjectManager\Code\Generator\Sample[]
+     * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface[]
      */
-    public function find(\Magento\Framework\Api\SearchCriteria $criteria, $arguments = array())
+    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
     {
         $collection = $this->sampleInterfaceSearchResultFactory->create();
-        foreach($criteria->getFilterGroups() as $filterGroup) {
+        $this->extensionAttributesJoinProcessor->process($collection);
+        foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
@@ -125,11 +135,25 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * Register entity to delete
      *
      * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity
+     * @return bool
      */
-    public function delete(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity, $arguments = array())
+    public function delete(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
         $this->sampleInterfacePersistor->registerDeleted($entity);
-        $this->sampleInterfacePersistor->save($entity);
+        return $this->sampleInterfacePersistor->doPersistEntity($entity);
+    }
+
+    /**
+     * Delete entity by Id
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function deleteById($id)
+    {
+        $entity = $this->get($id);
+        $this->sampleInterfacePersistor->registerDeleted($entity);
+        return $this->sampleInterfacePersistor->doPersistEntity($entity);
     }
 
     /**
@@ -147,9 +171,11 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * Perform persist operations for one entity
      *
      * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity
+     * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
      */
-    public function save(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity, $arguments = array())
+    public function save(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
-        return $this->sampleInterfacePersistor->doPersistEntity($entity);
+        $this->sampleInterfacePersistor->doPersistEntity($entity);
+        return $entity;
     }
 }

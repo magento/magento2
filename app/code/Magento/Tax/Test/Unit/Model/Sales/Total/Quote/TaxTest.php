@@ -695,10 +695,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address->setBaseTotalAmount('subtotal', 1);
         $address->setTotalAmount('tax', 1);
         $address->setBaseTotalAmount('tax', 1);
-        $address->setTotalAmount('hidden_tax', 1);
-        $address->setBaseTotalAmount('hidden_tax', 1);
-        $address->setTotalAmount('shipping_hidden_tax', 1);
-        $address->setBaseTotalAmount('shipping_hidden_tax', 1);
+        $address->setTotalAmount('discount_tax_compensation', 1);
+        $address->setBaseTotalAmount('discount_tax_compensation', 1);
+        $address->setTotalAmount('shipping_discount_tax_compensation', 1);
+        $address->setBaseTotalAmount('shipping_discount_tax_compensation', 1);
         $address->setSubtotalInclTax(1);
         $address->setBaseSubtotalInclTax(1);
 
@@ -712,12 +712,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, $address->getTotalAmount('subtotal'));
         $this->assertEquals(0, $address->getTotalAmount('tax'));
-        $this->assertEquals(0, $address->getTotalAmount('hidden_tax'));
-        $this->assertEquals(0, $address->getTotalAmount('shipping_hidden_tax'));
+        $this->assertEquals(0, $address->getTotalAmount('discount_tax_compensation'));
+        $this->assertEquals(0, $address->getTotalAmount('shipping_discount_tax_compensation'));
         $this->assertEquals(0, $address->getBaseTotalAmount('subtotal'));
         $this->assertEquals(0, $address->getBaseTotalAmount('tax'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('hidden_tax'));
-        $this->assertEquals(0, $address->getBaseTotalAmount('shipping_hidden_tax'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('discount_tax_compensation'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('shipping_discount_tax_compensation'));
         $this->assertEquals(0, $address->getSubtotalInclTax());
         $this->assertEquals(0, $address->getBaseSubtotalInclTax());
     }

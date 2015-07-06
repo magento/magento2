@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class ProductTest extends \Magento\Backend\Utility\Controller
+class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testSaveActionWithDangerRequest()
     {

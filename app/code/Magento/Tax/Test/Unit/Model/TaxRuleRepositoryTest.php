@@ -47,6 +47,11 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesJoinProcessorMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -78,13 +83,21 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock('\Magento\Tax\Model\Resource\Calculation\Rule', [], [], '', false);
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
             $this->searchResultFactory,
             $this->ruleFactory,
             $this->collectionFactory,
-            $this->resource
+            $this->resource,
+            $this->extensionAttributesJoinProcessorMock
         );
     }
 
@@ -180,6 +193,10 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
+
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($collectionMock);
 
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);

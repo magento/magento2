@@ -20,9 +20,6 @@
 
 @steps-wizard-attribute-option-width: 100%/3;
 
-@steps-wizard-attribute-draggable__color: @color-dark-gray;
-@steps-wizard-attribute-draggable__hover__color: darken(@color-dark-gray, 10%);
-
 //
 //  Common
 //  ---------------------------------------------
@@ -81,38 +78,22 @@
     }
 
     .attribute-draggable {
-        cursor: move;
         cursor: -moz-grab;
         cursor: -webkit-grab;
+        cursor: move;
         display: inline-block;
         font-size: 0;
+        margin-top: -4px;
         padding: 0 @indent__s 0 0;
         vertical-align: middle;
 
-        &:hover {
-            > span {
-                &:after,
-                &:before {
-                    background: @steps-wizard-attribute-draggable__hover__color;
-                }
-            }
-        }
-
-        > span {
-            display: block;
-            margin: 0 0 .2rem;
-            &:before {
-                margin-right: .2rem;
-            }
-            &:after,
-            &:before {
-                background: @steps-wizard-attribute-draggable__color;
-                content: '';
-                display: inline-block;
-                height: .3rem;
-                width: .3rem;
-            }
-        }
+        .icon-font(
+            @icon-gripper__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 1.8rem,
+            @_icon-font-color: @image-gallery-icons__color,
+            @_icon-font-color-hover: @image-gallery-icons__hover__color
+        );
     }
 
     .attribute-options {

@@ -11,7 +11,7 @@ interface CommandInterface
      * Executes command basing on business object
      *
      * @param array $commandSubject
-     * @return void
+     * @return null|Command\ResultInterface
      */
     public function execute(array $commandSubject);
 }

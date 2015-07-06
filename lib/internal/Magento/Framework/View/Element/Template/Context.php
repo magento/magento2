@@ -62,6 +62,17 @@ class Context extends \Magento\Framework\View\Element\Context
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\View\Element\Template\File\Resolver
+     */
+    protected $resolver;
+
+    /**
+     * @var \Magento\Framework\View\Element\Template\File\Validator
+     */
+    protected $validator;
+
+    /**
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -85,6 +96,8 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
+     * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -111,7 +124,9 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\Page\Config $pageConfig
+        \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Element\Template\File\Resolver $resolver,
+        \Magento\Framework\View\Element\Template\File\Validator $validator
     ) {
         parent::__construct(
             $request,
@@ -132,7 +147,8 @@ class Context extends \Magento\Framework\View\Element\Context
             $localeDate,
             $inlineTranslation
         );
-
+        $this->resolver = $resolver;
+        $this->validator = $validator;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
         $this->_logger = $logger;
@@ -140,6 +156,26 @@ class Context extends \Magento\Framework\View\Element\Context
         $this->_viewFileSystem = $viewFileSystem;
         $this->enginePool = $enginePool;
         $this->pageConfig = $pageConfig;
+    }
+
+    /**
+     * Get template file resolver
+     *
+     * @return File\Resolver
+     */
+    public function getResolver()
+    {
+        return $this->resolver;
+    }
+
+    /**
+     * Get validator
+     *
+     * @return File\Validator
+     */
+    public function getValidator()
+    {
+        return $this->validator;
     }
 
     /**

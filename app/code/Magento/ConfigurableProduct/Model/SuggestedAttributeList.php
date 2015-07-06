@@ -20,7 +20,6 @@ class SuggestedAttributeList
      * @var \Magento\Catalog\Model\Resource\Helper
      */
     protected $_resourceHelper;
-
     /**
      * @param ConfigurableAttributeHandler $configurableAttributeHandler
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
@@ -32,7 +31,6 @@ class SuggestedAttributeList
         $this->configurableAttributeHandler = $configurableAttributeHandler;
         $this->_resourceHelper = $resourceHelper;
     }
-
     /**
      * Retrieve list of attributes with admin store label containing $labelPart
      *
@@ -47,7 +45,6 @@ class SuggestedAttributeList
             'frontend_label',
             ['like' => $escapedLabelPart]
         );
-
         $result = [];
         foreach ($collection->getItems() as $id => $attribute) {
             /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */

@@ -12,15 +12,12 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Update Integration Entity
- *
- * Test Flow:
  * Preconditions:
- * 1. Integration is created
+ * 1. Integration is created.
  *
  * Steps:
  * 1. Log in to backend as admin user.
- * 2. Navigate to System > Extensions > Integrations
+ * 2. Navigate to System > Extensions > Integrations.
  * 3. Select an integration in the grid.
  * 4. Edit test value(s) according to dataset.
  * 5. Click "Save" button.
@@ -37,21 +34,21 @@ class UpdateIntegrationEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Integration grid page
+     * Integration grid page.
      *
      * @var IntegrationIndex
      */
     protected $integrationIndexPage;
 
     /**
-     * Integration edit page
+     * Integration edit page.
      *
      * @var IntegrationNew
      */
     protected $integrationNewPage;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param IntegrationIndex $integrationIndex
      * @param IntegrationNew $integrationNew
@@ -64,7 +61,7 @@ class UpdateIntegrationEntityTest extends Injectable
     }
 
     /**
-     * Update Integration Entity test
+     * Update Integration Entity test.
      *
      * @param Integration $initialIntegration
      * @param Integration $integration

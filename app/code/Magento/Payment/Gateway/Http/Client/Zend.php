@@ -8,6 +8,9 @@ namespace Magento\Payment\Gateway\Http\Client;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Payment\Gateway\Http\ClientInterface;
+use Magento\Payment\Gateway\Http\ConverterInterface;
+use Magento\Payment\Gateway\Http\TransferInterface;
+use Magento\Payment\Model\Method\Logger;
 
 class Zend implements ClientInterface
 {
@@ -17,27 +20,40 @@ class Zend implements ClientInterface
     private $clientFactory;
 
     /**
-     * @var \Magento\Payment\Gateway\Http\ConverterInterface
+     * @var ConverterInterface | null
      */
     private $converter;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @param ZendClientFactory $clientFactory
-     * @param \Magento\Payment\Gateway\Http\ConverterInterface $converter
+     * @param Logger $logger
+     * @param ConverterInterface | null $converter
      */
     public function __construct(
         ZendClientFactory $clientFactory,
-        \Magento\Payment\Gateway\Http\ConverterInterface $converter
+        Logger $logger,
+        ConverterInterface $converter = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->converter = $converter;
+        $this->logger = $logger;
     }
 
     /**
      * {inheritdoc}
      */
-    public function placeRequest(\Magento\Payment\Gateway\Http\TransferInterface $transferObject)
+    public function placeRequest(TransferInterface $transferObject)
     {
+        $log = [
+            'request' => $transferObject->getBody(),
+            'request_uri' => $transferObject->getUri()
+        ];
+        $result = [];
         /** @var ZendClient $client */
         $client = $this->clientFactory->create();
 
@@ -52,7 +68,12 @@ class Zend implements ClientInterface
                 $client->setParameterPost($transferObject->getBody());
                 break;
             default:
-                throw new \LogicException(sprintf('Unsupported HTTP method %s', $transferObject->getMethod()));
+                throw new \LogicException(
+                    sprintf(
+                        'Unsupported HTTP method %s',
+                        $transferObject->getMethod()
+                    )
+                );
         }
 
         $client->setHeaders($transferObject->getHeaders());
@@ -61,11 +82,21 @@ class Zend implements ClientInterface
 
         try {
             $response = $client->request();
-            return $this->converter->convert($response->getBody());
+
+            $result = $this->converter
+                ? $this->converter->convert($response->getBody())
+                : [$response->getBody()];
+            $log['response'] = $result;
         } catch (\Zend_Http_Client_Exception $e) {
-            throw new \Magento\Payment\Gateway\Http\ClientException(__($e->getMessage()));
+            throw new \Magento\Payment\Gateway\Http\ClientException(
+                __($e->getMessage())
+            );
         } catch (\Magento\Payment\Gateway\Http\ConverterException $e) {
             throw $e;
+        } finally {
+            $this->logger->debug($log);
         }
+
+        return $result;
     }
 }

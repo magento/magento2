@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Save' button
  * 6. Perform all assertions
  *
- * @ticketId MAGETWO-23881
+ * @ZephyrId MAGETWO-23881
  */
 class UpdateCustomerBackendEntityTest extends Injectable
 {
