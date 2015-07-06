@@ -43,10 +43,8 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
 
         $collection = $this->_objectManager->create($this->collection);
         try {
-            if (isset($excluded)) {
-                if (!empty($excluded)) {
-                    $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-                }
+            if (!empty($excluded)) {
+                $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
                 $this->massAction($collection);
             } elseif (!empty($selected)) {
                 $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
