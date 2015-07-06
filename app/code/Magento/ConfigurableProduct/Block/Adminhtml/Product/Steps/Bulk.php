@@ -42,4 +42,12 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     {
         return $this->image->getDefaultPlaceholderUrl();
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        return $this->_storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
+    }
 }
