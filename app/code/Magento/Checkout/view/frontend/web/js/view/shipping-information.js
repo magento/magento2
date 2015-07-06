@@ -10,9 +10,11 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-service',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/model/sidebar',
+        'Magento_Checkout/js/view/sidebar'
     ],
-    function($, Component, quote, shippingService, stepNavigator) {
+    function($, Component, quote, shippingService, stepNavigator, sidebarModel) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -28,8 +30,7 @@ define(
             },
 
             back: function() {
-                // Temp solution for closing summary sliding panel on mobile MAGETWO-3864
-                $('#opc-sidebar').modal('toggleModal');
+                sidebarModel.hide();
                 stepNavigator.back();
             }
         });
