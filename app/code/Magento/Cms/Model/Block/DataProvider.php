@@ -59,6 +59,7 @@ class DataProvider implements DataProviderInterface
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
+     * @param FilterPool $filterPool
      * @param array $meta
      * @param array $data
      */
@@ -75,6 +76,7 @@ class DataProvider implements DataProviderInterface
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->collection = $collectionFactory->create();
+        $this->filterPool = $filterPool;
         $this->meta = $meta;
         $this->data = $data;
     }
@@ -152,6 +154,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
+
     /**
      * @inheritdoc
      */
@@ -159,7 +162,6 @@ class DataProvider implements DataProviderInterface
     {
         $this->filterPool->registerNewFilter($condition, $field, $type);
     }
-
 
     /**
      * Add field to select
