@@ -57,12 +57,18 @@ define([
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
+            var self = this;
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
+                this.isLoading(false);
                 sidebarInitialized = false;
+            }, this);
+            $('[data-block="minicart"]').on('contentLoading', function(event) {
+                self.isLoading(true);
             });
         },
+        isLoading: ko.observable(false),
         initSidebar: ko.observable(initSidebar),
         closeSidebar: function(element) {
             var minicart = $('[data-block="minicart"]');
