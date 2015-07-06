@@ -89,7 +89,7 @@ angular.module('readiness-check', [])
         };
         // TODO: hardcode it right now
         $localStorage.packages = [
-            {name: 'symfony/console', version: '2.9'}
+            {name: 'symfony/console', version: '2.5'}
         ];
         if ($localStorage.packages) {
             $scope.componentdependency.packages = $localStorage.packages;
