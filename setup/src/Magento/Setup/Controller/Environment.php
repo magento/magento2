@@ -7,6 +7,8 @@ namespace Magento\Setup\Controller;
 
 use Composer\Package\Version\VersionParser;
 use Magento\Setup\Model\CronScriptReadinessCheck;
+use Magento\Setup\Model\DependencyReadinessCheck;
+use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Magento\Framework\Composer\ComposerInformation;
@@ -58,6 +60,13 @@ class Environment extends AbstractActionController
     protected $cronScriptReadinessCheck;
 
     /**
+     * Dependency Readiness Check
+     *
+     * @var DependencyReadinessCheck
+     */
+    protected $dependencyReadinessCheck;
+
+    /**
      * Constructor
      *
      * @param PhpInformation $phpInformation
@@ -66,6 +75,7 @@ class Environment extends AbstractActionController
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
      * @param CronScriptReadinessCheck $cronScriptReadinessCheck
+     * @param DependencyReadinessCheck $dependencyReadinessCheck
      */
     public function __construct(
         PhpInformation $phpInformation,
@@ -73,7 +83,8 @@ class Environment extends AbstractActionController
         VersionParser $versionParser,
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
-        CronScriptReadinessCheck $cronScriptReadinessCheck
+        CronScriptReadinessCheck $cronScriptReadinessCheck,
+        DependencyReadinessCheck $dependencyReadinessCheck
     ) {
         $this->phpInformation = $phpInformation;
         $this->permissions = $permissions;
@@ -81,6 +92,7 @@ class Environment extends AbstractActionController
         $this->composerInformation = $composerInformation;
         $this->filesystem = $filesystem;
         $this->cronScriptReadinessCheck = $cronScriptReadinessCheck;
+        $this->dependencyReadinessCheck = $dependencyReadinessCheck;
     }
 
     /**
@@ -300,6 +312,29 @@ class Environment extends AbstractActionController
         if (!$setupCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $setupCheck['error'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
+
+    /**
+     * Verifies component dependency
+     *
+     * @return JsonModel
+     */
+    public function componentDependencyAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        $data = [];
+        foreach ($packages as $package) {
+            $data[] = implode(' ', $package);
+        }
+        $dependencyCheck = $this->dependencyReadinessCheck->runReadinessCheck($data);
+        $data = [];
+        if (!$dependencyCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $dependencyCheck['error'];
         }
         $data['responseType'] = $responseType;
         return new JsonModel($data);

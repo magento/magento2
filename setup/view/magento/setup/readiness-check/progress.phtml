@@ -406,3 +406,38 @@
         </div>
     </div>
 </div>
+
+<div id="component-dependency" class="rediness-check-item" ng-show="componentdependency.visible">
+    <h3 class="readiness-check-title" ng-hide="componentdependency.processed">
+        Checking Component Dependency...
+    </h3>
+
+    <div ng-show="componentdependency.processed" ng-switch="componentdependency.responseType">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(componentdependency)">
+            <span class="readiness-check-icon icon-success-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Component Dependency</h3>
+                <p>
+                    Component Dependency is correct.
+                </p>
+            </div>
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(componentdependency)">
+            <span class="readiness-check-icon icon-failed-round"></span>
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">Check Component Dependency</h3>
+                <p>
+                    Component Dependency is incorrect.
+                    <a href="#component-dependency" ng-click="updateOnExpand(componentdependency)">
+                        <span ng-hide="componentdependency.expanded">Show detail</span>
+                        <span ng-show="componentdependency.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="componentdependency.expanded" ng-bind-html="componentdependency.errorMessage">
+                </p>
+                <p ng-show="componentdependency.expanded">If you need more help please visit documentation page.</p>
+            </div>
+        </div>
+    </div>
+</div>

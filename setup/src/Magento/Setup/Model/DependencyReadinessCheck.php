@@ -7,18 +7,23 @@ namespace Magento\Setup\Model;
 
 use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
-use Magento\Framework\Filesystem;
 
 /**
- * This class checks for dependencies between components after an upgrade
+ * This class checks for dependencies between components after an upgrade. It is used in readiness check.
  */
 class DependencyReadinessCheck
 {
     /**
-     * @var Filesystem
+     * @var ComposerJsonFinder
      */
-    private $filesystem;
+    private $composerJsonFinder;
+
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
     /**
      * @var MagentoComposerApplication
@@ -28,35 +33,43 @@ class DependencyReadinessCheck
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
+     * @param ComposerJsonFinder $composerJsonFinder
+     * @param DirectoryList $directoryList
      * @param MagentoComposerApplicationFactory $composerAppFactory
      */
-    public function __construct(Filesystem $filesystem, MagentoComposerApplicationFactory $composerAppFactory)
-    {
-        $this->filesystem = $filesystem;
+    public function __construct(
+        ComposerJsonFinder $composerJsonFinder,
+        DirectoryList $directoryList,
+        MagentoComposerApplicationFactory $composerAppFactory
+    ) {
+        $this->composerJsonFinder = $composerJsonFinder;
+        $this->directoryList = $directoryList;
         $this->composerApp = $composerAppFactory->create();
     }
 
-    public function runReadinessCheck()
-    {
-        // TODO: copy composer.json file to var
-        $workingDir = '';
-        $varWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $result = $this->composerApp->runComposerCommand(['command' => 'update', '--dry-run' => true], $workingDir);
-        if ($this->parseOutput($result)) {
-            return ['success' => true];
-        }
-        return ['success' => false];
-    }
-
     /**
-     * Parse Composer output
+     * Run Composer dependency check
      *
-     * @param string $output
-     * @return bool
+     * @param array $packages
+     * @return array
+     * @throws \Exception
      */
-    private function parseOutput($output)
+    public function runReadinessCheck(array $packages)
     {
-        return true;
+        $composerJson = $this->composerJsonFinder->findComposerJson();
+        copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
+        $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
+        try {
+            // run require
+            $this->composerApp->runComposerCommand(
+                ['command' => 'require', 'packages' => $packages, '--no-update' => true],
+                $workingDir
+            );
+            $this->composerApp->runComposerCommand(['command' => 'update', '--dry-run' => true], $workingDir);
+            return ['success' => true];
+        } catch (\RuntimeException $e) {
+            $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
+            return ['success' => false, 'error' => $message];
+        }
     }
 }

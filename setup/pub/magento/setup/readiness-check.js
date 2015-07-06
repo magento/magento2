@@ -6,7 +6,7 @@
 'use strict';
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', '$sce', 'COUNTER', function ($rootScope, $scope, $http, $timeout, $sce, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, COUNTER) {
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
@@ -79,6 +79,21 @@ angular.module('readiness-check', [])
             isRequestError: false,
             errorMessage: ''
         };
+        $scope.componentdependency = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            errorMessage: '',
+            packages: null
+        };
+        // TODO: hardcode it right now
+        $localStorage.packages = [
+            {name: 'symfony/console', version: '2.9'}
+        ];
+        if ($localStorage.packages) {
+            $scope.componentdependency.packages = $localStorage.packages;
+        }
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
@@ -201,13 +216,33 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.cronscriptupdater);
                 }
             };
+            $scope.items['component-dependency'] = {
+                url: 'index.php/environment/component-dependency',
+                params: $scope.componentdependency.packages,
+                show: function() {
+                    $scope.startProgress();
+                    $scope.componentdependency.visible = true;
+                },
+                process: function(data) {
+                    $scope.componentdependency.processed = true;
+                    if (data.errorMessage) {
+                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                    }
+                    angular.extend($scope.componentdependency, data);
+                    $scope.updateOnProcessed($scope.componentdependency.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.componentdependency);
+                }
+            }
         }
 
         $scope.isCompleted = function() {
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && (($scope.cronscriptsetup.processed && $scope.cronscriptupdater.processed && $scope.updater.processed)
+                && (($scope.cronscriptsetup.processed && $scope.cronscriptupdater.processed && $scope.componentdependency.processed && $scope.updater.processed)
                     || ($scope.actionFrom !== 'updater'));
         };
 
@@ -235,6 +270,13 @@ angular.module('readiness-check', [])
         };
 
         $scope.query = function(item) {
+            if (item.params) {
+                return $http.post(item.url, item.params)
+                    .success(function(data) { item.process(data) })
+                    .error(function(data, status) {
+                        item.fail();
+                    });
+            }
             return $http.get(item.url, {timeout: 3000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {

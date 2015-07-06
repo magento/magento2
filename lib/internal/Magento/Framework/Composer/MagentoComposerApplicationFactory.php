@@ -28,21 +28,10 @@ class MagentoComposerApplicationFactory
      * @param DirectoryList $directoryList
      * @throws \Exception
      */
-    public function __construct(DirectoryList $directoryList)
+    public function __construct(ComposerJsonFinder $composerJsonFinder, DirectoryList $directoryList)
     {
-        // composer.json is in same directory as vendor
-        $vendorPath = $directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-        $vendorDir = require "{$vendorPath}";
-
-        $composerJson = $directoryList->getPath(DirectoryList::ROOT) . "/{$vendorDir}/../composer.json";
-
-        $this->pathToComposerJson = realpath($composerJson);
-
+        $this->pathToComposerJson = $composerJsonFinder->findComposerJson();
         $this->pathToComposerHome = $directoryList->getPath(DirectoryList::COMPOSER_HOME);
-
-        if ($this->pathToComposerJson === false) {
-            throw new \Exception('Composer file not found: ' . $composerJson);
-        }
     }
 
     /**
