@@ -83,16 +83,15 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
     }
 
     /**
-     * Add selected data
+     * Apply custom columns before load
      *
-     * @return \Magento\Sales\Model\Resource\Report\Refunded\Collection\Order
+     * @return void
      */
-    protected function _initSelect()
+    protected function _beforeLoad()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
         }
-        return parent::_initSelect();
     }
 }
