@@ -12,6 +12,7 @@ define([
     'use strict';
 
     var sidebarInitialized = false;
+    var addToCartCalls = 0;
     url.setBaseUrl(window.checkout.baseUrl);
 
     function initSidebar() {
@@ -61,10 +62,12 @@ define([
             this._super();
             this.cart = customerData.get('cart');
             this.cart.subscribe(function () {
-                this.isLoading(false);
+                addToCartCalls--;
+                this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function(event) {
+                addToCartCalls++;
                 self.isLoading(true);
             });
         },
