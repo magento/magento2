@@ -109,9 +109,11 @@
                 </field>
                 <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Welcome Email</label>
-                    <comment>This email will be sent instead of default welcome email, after account confirmation.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
-                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <comment><![CDATA[
+                        This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br />
+                        Email template chosen based on theme fallback when "Default" option is selected.
+                    ]]></comment>
                 </field>
                 <field id="generate_human_friendly_id" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Generate Human-Friendly Customer ID</label>
