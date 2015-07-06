@@ -120,8 +120,7 @@
                                     <span><?= __('Upload Image'); ?></span>
                                     <input name="image" type="file"
                                            data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                           title="<?= __('Upload Image');
-                                           ?>"/>
+                                           title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
                                 </div>
                                 <button type="button" class="action toggle no-display" data-toggle="dropdown"
                                         data-mage-init='{"dropdown":{}}'>
@@ -148,7 +147,7 @@
                             <button type="button"
                                     data-action="choose"
                                     class="action-choose"
-                                    title="<?= __('Choose'); ?>"
+                                    title="<?= $block->escapeHtml(__('Choose')); ?>"
                                     data-bind="attr: {'data-attributes': variation.attribute}">
                                 <span><?= __('Choose'); ?></span>
                             </button>
