@@ -10,7 +10,7 @@ define([
     'Magento_Ui/js/lib/registry/registry',
     'jquery',
     'mage/translate'
-], function(ko, registry, $) {
+], function (ko, registry, $) {
     'use strict';
 
     var i18n = $.mage.__;
@@ -29,7 +29,7 @@ define([
             paths.push(components[key]);
         }
 
-        registry.get(paths, function() {
+        registry.get(paths, function () {
 
             for (key in components) {
                 context[key] = registry.get(components[key]);
@@ -48,13 +48,17 @@ define([
      */
     function applyComponents(el, bindingContext, component) {
         component = bindingContext.createChildContext(component);
-        
-        ko.utils.extend(component, { $t: i18n });
+
+        ko.utils.extend(component, {
+            $t: i18n
+        });
 
         ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
-        
+
         ko.applyBindingsToDescendants(component, el);
     }
+
+    ko.virtualElements.allowedBindings.scope = true;
 
     ko.bindingHandlers.scope = {
 
@@ -63,7 +67,9 @@ define([
          * @returns {Object} - Knockout declaration for it to let binding control descendants.
          */
         init: function () {
-            return { controlsDescendantBindings: true };
+            return {
+                controlsDescendantBindings: true
+            };
         },
 
         /**
@@ -75,13 +81,17 @@ define([
          * @param {Object} viewModel - Object, which represents view model binded to el.
          * @param {ko.bindingContext} bindingContext - Instance of ko.bindingContext, passed to binding initially.
          */
-        update: function(el, valueAccessor, allBindings, viewModel, bindingContext) {
+        update: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
             var component = valueAccessor(),
                 apply = applyComponents.bind(this, el, bindingContext);
 
-            typeof component === 'object' ?
-                getMultiple(component, apply) :
+            if (typeof component === 'object') {
+                getMultiple(component, apply);
+            } else if (typeof component === 'string') {
                 registry.get(component, apply);
+            } else if (typeof component === 'function') {
+                component(apply);
+            }
         }
     };
 });
