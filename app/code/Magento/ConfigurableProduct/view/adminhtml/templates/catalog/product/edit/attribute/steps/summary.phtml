@@ -101,18 +101,22 @@
                     <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
                     <tr data-role="row" data-bind="attr: {class:  $index() % 2 ? 'even' : ''}">
                         <td class="col-display" data-column="display">
-                            <input type="checkbox" name="associated_product_ids[]" value="" class="checkbox" data-column="entity_id" checked="checked"/>
+                            <input type="checkbox"
+                                   name="associated_product_ids[]"
+                                   value=""
+                                   class="checkbox"
+                                   data-column="entity_id" checked="checked"/>
                         </td>
                         <td class="col-image" data-column="image">
                             <div class="actions split actions-image-uploader">
                                 <!-- ko ifnot: variation.images -->
                                 <div class="action-upload action split" data-action="upload-image">
-                                    <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
+                                    <input type="hidden"
+                                           data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
                                     <span><?= __('Upload Image'); ?></span>
                                     <input name="image" type="file"
                                            data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                           title="<?= __('Upload Image');
-                                           ?>"/>
+                                           title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
                                 </div>
                                 <button type="button" class="action toggle no-display" data-toggle="dropdown"
                                         data-mage-init='{"dropdown":{}}'>
@@ -120,7 +124,8 @@
                                 </button>
                                 <!-- /ko -->
                                 <!-- ko if: variation.images -->
-                                    <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image" />
+                                <img data-bind='attr: {src: variation.images.preview}' class="variation"
+                                     data-role="image"/>
                                     <span data-bind="html: $parent.generateImageGallery(variation)"></span>
                                 <!-- /ko -->
                                 <ul class="dropdown">
@@ -135,7 +140,10 @@
                                    data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
                             <input type="hidden"
                                    data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
-                            <button type="button" data-action="choose" class="action-choose" title="<?= __('Choose'); ?>"
+                            <button type="button"
+                                    data-action="choose"
+                                    class="action-choose"
+                                    title="<?= $block->escapeHtml(__('Choose')); ?>"
                                     data-bind="attr: {'data-attributes': variation.attribute}">
                                 <span><?= __('Choose'); ?></span>
                             </button>
@@ -146,15 +154,22 @@
                         </td>
                         <td class="col-price" data-column="price">
                             <div class="addon">
-                                <input type="text" id="" class="validate-zero-or-greater" data-bind="attr: {id: $parent.getRowId(variation, 'price'), name: $parent.getVariationRowName(variation, 'price'), value: variation.price}"/>
-                                <label class="addafter" data-bind="attr: {for: $parent.getRowId(variation, 'price')"><strong>$</strong></label>
+                                <input type="text"
+                                       id=""
+                                       class="validate-zero-or-greater"
+                                       data-bind="attr: {id: $parent.getRowId(variation, 'price'), name: $parent.getVariationRowName(variation, 'price'), value: variation.price}"/>
+                                <label class="addafter"
+                                       data-bind="attr: {for: $parent.getRowId(variation, 'price')"><strong>$</strong></label>
                             </div>
                         </td>
                         <td class="col-qty" data-column="qty">
-                            <input type="text" class="validate-number" data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.inventory}"/>
+                            <input type="text"
+                                   class="validate-number"
+                                   data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.inventory}"/>
                         </td>
                         <td class="col-weight" data-column="weight">
-                            <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
+                            <input type="text"
+                                   data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
                         </td>
                         <!-- ko foreach: variation.options -->
                         <td data-bind="text: label"></td>
