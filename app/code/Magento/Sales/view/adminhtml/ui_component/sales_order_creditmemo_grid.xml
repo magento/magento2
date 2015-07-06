@@ -239,12 +239,12 @@
             </filterInput>
             <filterSelect name="creditmemo_status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Invoice\State\Options</argument>
+                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">state</item>
+                        <item name="dataScope" xsi:type="string">creditmemo_status</item>
                         <item name="label" xsi:type="string" translate="true">Status</item>
                     </item>
                 </argument>
@@ -598,7 +598,7 @@
                 </item>
             </argument>
         </column>
-        <column name="creditmemo_status" class="Magento\Sales\Ui\Component\Listing\Column\Invoice\State">
+        <column name="creditmemo_status"><!--class with statuses-->
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
@@ -619,6 +619,18 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Refunded</item>
+                </item>
+            </argument>
+        </column>
+        <column name="state"><!--class with statuses-->
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Order Status</item>
                 </item>
             </argument>
         </column>
