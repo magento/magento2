@@ -255,8 +255,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
-        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
 
+        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
         $this->assertOrderUpdated(Order::STATE_NEW, $newOrderStatus);
 
         $this->paymentMethodMock->expects($this->once())
