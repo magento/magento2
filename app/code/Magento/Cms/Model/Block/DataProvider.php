@@ -260,4 +260,13 @@ class DataProvider implements DataProviderInterface
     {
         $this->data['config'] = $config;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
 }
