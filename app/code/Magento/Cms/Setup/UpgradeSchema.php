@@ -33,16 +33,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'cms_page',
                 $setup->getIdxName(
                     'cms_page',
-                    ['title', 'meta_keywords', 'meta_description', 'identifier'],
+                    ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
                     AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
-                ['title', 'meta_keywords', 'meta_description', 'identifier'],
+                ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             );
             $connection->addIndex(
                 'cms_block',
-                $setup->getIdxName('cms_block', ['title', 'identifier'], AdapterInterface::INDEX_TYPE_FULLTEXT),
-                ['title', 'identifier'],
+                $setup->getIdxName(
+                    'cms_block',
+                    ['title', 'identifier', 'content'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['title', 'identifier', 'content'],
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
