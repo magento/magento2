@@ -5,38 +5,43 @@
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
-use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class CustomerGroup
+ * Class OrderActions
  */
-class CustomerGroup extends Column
+class OrderCreditmemoActions extends Column
 {
     /**
-     * @var GroupRepositoryInterface
+     * Url path
      */
-    protected $groupRepository;
+    const URL_PATH_VIEW = 'sales/creditmemo/view';
+
+    /**
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
 
     /**
      * Constructor
      *
      * @param ContextInterface $context
-     * @param GroupRepositoryInterface $groupRepository
      * @param UiComponentFactory $uiComponentFactory
+     * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        GroupRepositoryInterface $groupRepository,
+        UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
     ) {
-        $this->groupRepository = $groupRepository;
+        $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -50,8 +55,19 @@ class CustomerGroup extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->groupRepository->getById($item[$this->getData('name')])
-                    ->getCode();
+                if (isset($item['entity_id'])) {
+                    $item[$this->getData('name')] = [
+                        'view' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                static::URL_PATH_VIEW,
+                                [
+                                    'creditmemo_id' => $item['entity_id']
+                                ]
+                            ),
+                            'label' => __('View')
+                        ]
+                    ];
+                }
             }
         }
     }

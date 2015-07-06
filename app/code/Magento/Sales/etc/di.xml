@@ -149,12 +149,12 @@
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
         <arguments>
-            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Creditmemo\Grid</argument>
+            <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Sales\Model\Observer\Order\SendEmails" type="Magento\Sales\Model\Observer\SendEmails">
@@ -314,11 +314,16 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Sales\Model\Resource\Order\Shipment\Grid" type="Magento\Sales\Model\Resource\Grid">
+    <virtualType name="ShipmentGridAggregator" type="Magento\Sales\Model\Resource\Grid">
         <arguments>
-            <argument name="mainTableName" xsi:type="string">sales_order</argument>
+            <argument name="mainTableName" xsi:type="string">sales_shipment</argument>
             <argument name="gridTableName" xsi:type="string">sales_shipment_grid</argument>
             <argument name="joins" xsi:type="array">
+                <item name="sales_order" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
                 <item name="sales_shipping_address" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order_address</item>
                     <item name="origin_column" xsi:type="string">shipping_address_id</item>
@@ -328,11 +333,6 @@
                     <item name="table" xsi:type="string">sales_order_address</item>
                     <item name="origin_column" xsi:type="string">billing_address_id</item>
                     <item name="target_column" xsi:type="string">entity_id</item>
-                </item>
-                <item name="sales_shipment" xsi:type="array">
-                    <item name="table" xsi:type="string">sales_shipment</item>
-                    <item name="origin_column" xsi:type="string">entity_id</item>
-                    <item name="target_column" xsi:type="string">order_id</item>
                 </item>
             </argument>
             <argument name="columns" xsi:type="array">
@@ -350,11 +350,70 @@
                 <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
                 <item name="shipping_name" xsi:type="object">ShippingNameAggregator</item>
                 <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
                 <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
                 <item name="created_at" xsi:type="string">sales_shipment.created_at</item>
                 <item name="updated_at" xsi:type="string">sales_shipment.updated_at</item>
-                <item name="order_id" xsi:type="string">sales_order.entity_id</item>
+                <item name="order_id" xsi:type="string">sales_shipment.order_id</item>
                 <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CreditmemoGridAggregator" type="Magento\Sales\Model\Resource\Grid">
+        <arguments>
+            <argument name="mainTableName" xsi:type="string">sales_creditmemo</argument>
+            <argument name="gridTableName" xsi:type="string">sales_creditmemo_grid</argument>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_shipping_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">shipping_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_billing_address" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_address</item>
+                    <item name="origin_column" xsi:type="string">billing_address_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+                <item name="sales_order" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="entity_id" xsi:type="string">sales_creditmemo.entity_id</item>
+                <item name="increment_id" xsi:type="string">sales_creditmemo.increment_id</item>
+                <item name="created_at" xsi:type="string">sales_creditmemo.created_at</item>
+                <item name="updated_at" xsi:type="string">sales_creditmemo.updated_at</item>
+                <item name="order_id" xsi:type="string">sales_order.entity_id</item>
+                <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
+                <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
+                <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="creditmemo_status" xsi:type="string">sales_creditmemo.creditmemo_status</item>
+                <item name="base_grand_total" xsi:type="string">sales_creditmemo.base_grand_total</item>
+                <item name="state" xsi:type="string">sales_creditmemo.state</item>
+                <item name="store_id" xsi:type="string">sales_creditmemo.store_id</item>
+                <item name="billing_address" xsi:type="object">BillingAddressAggregator</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregator</item>
+                <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
+                <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
+                <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
+                <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
+                <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
+                <item name="subtotal" xsi:type="string">sales_creditmemo.subtotal</item>
+                <item name="shipping_and_handling" xsi:type="string">sales_creditmemo.subtotal</item><!--!!!-->
+                <item name="adjustment_positive" xsi:type="string">sales_creditmemo.adjustment_positive</item>
+                <item name="adjustment_negative" xsi:type="string">sales_creditmemo.adjustment_negative</item>
+                <item name="grand_total" xsi:type="string">sales_creditmemo.grand_total</item>
+                <item name="store_to_order_rate" xsi:type="string">sales_creditmemo.store_to_order_rate</item>
+                <item name="base_to_order_rate" xsi:type="string">sales_creditmemo.base_to_order_rate</item>
+                <item name="store_to_base_rate" xsi:type="string">sales_creditmemo.store_to_base_rate</item>
+                <item name="base_to_global_rate" xsi:type="string">sales_creditmemo.base_to_global_rate</item>
+                <item name="invoice_id" xsi:type="string">sales_creditmemo.invoice_id</item>
+                <item name="store_currency_code" xsi:type="string">sales_creditmemo.store_currency_code</item>
+                <item name="order_currency_code" xsi:type="string">sales_creditmemo.order_currency_code</item>
+                <item name="base_currency_code" xsi:type="string">sales_creditmemo.base_currency_code</item>
+                <item name="global_currency_code" xsi:type="string">sales_creditmemo.global_currency_code</item>
             </argument>
         </arguments>
     </virtualType>
@@ -388,7 +447,6 @@
                 <item name="order_id" xsi:type="string">sales_invoice.order_id</item>
                 <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
                 <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
-                <item name="customer_id" xsi:type="string">sales_order.customer_id</item>
                 <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
                 <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
                 <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
@@ -471,7 +529,8 @@
         <arguments>
             <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
             <argument name="invoiceGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
-            <argument name="shipmentGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Grid</argument>
+            <argument name="shipmentGrid" xsi:type="object">ShipmentGridAggregator</argument>
+            <argument name="creditmemoGrid" xsi:type="object">\CreditmemoGridAggregator</argument>
         </arguments>
     </type>
     <virtualType name="SalesGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
@@ -497,6 +556,12 @@
     <virtualType name="ShipmentGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CreditmemoGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
