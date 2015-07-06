@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement */ ?>
+<p><?php echo __('Your billing agreement # is: %1.', sprintf('<a href="%s">%s</a>', $block->escapeHtml($block->getAgreementUrl()), $block->escapeHtml($block->getAgreementRefId())))?></p>

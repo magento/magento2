@@ -1171,4 +1171,29 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->quote->getItemsCollection();
     }
+
+    public function testGetAllItems()
+    {
+        $itemOneMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+            ->setMethods(['isDeleted'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemOneMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+
+        $itemTwoMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Item')
+            ->setMethods(['isDeleted'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemTwoMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(true);
+
+        $items = [$itemOneMock, $itemTwoMock];
+        $itemResult = [$itemOneMock];
+        $this->quote->setData('items_collection', $items);
+
+        $this->assertEquals($itemResult, $this->quote->getAllItems());
+    }
 }
