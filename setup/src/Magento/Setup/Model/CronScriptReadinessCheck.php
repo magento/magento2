@@ -114,7 +114,7 @@ class CronScriptReadinessCheck
             }
             return [
                 'success' => false,
-                'error' => 'Cron Job is running properly, however it is recommended' .
+                'error' => 'Cron Job is running properly, however it is recommended ' .
                     'to schedule it to run every 1 minute'
             ];
         }
