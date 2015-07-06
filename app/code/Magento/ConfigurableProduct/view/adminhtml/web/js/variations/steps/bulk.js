@@ -15,13 +15,8 @@ define([
 ], function (Component, $, ko, _, Collapsible, mageTemplate) {
     'use strict';
 
-    //TODO: where unique id for options
-    var viewModel;
-    viewModel = Component.extend({
-        attributes: ko.observableArray([]),
-        newProductsCount: ko.observable(),
-        types: ['each', 'single', 'none'],
-        sections: ko.observable({
+    var MakeSections = function(){
+        return {
             images: {
                 label: 'images',
                 type: ko.observable('none'),
@@ -29,25 +24,33 @@ define([
                 attribute: ko.observable()
             },
             pricing: {
-                label: 'pricing',
+                label: 'price',
                 type: ko.observable('none'),
                 value: ko.observable(0),
                 attribute: ko.observable()
             },
             inventory: {
-                label: 'inventory',
+                label: 'quantity',
                 type: ko.observable('none'),
                 value: ko.observable(0),
                 attribute: ko.observable()
             }
-        }),
+        };
+    };
+
+    var viewModel;
+    viewModel = Component.extend({
+        attributes: ko.observableArray([]),
+        newProductsCount: ko.observable(),
+        types: ['each', 'single', 'none'],
+        sections: ko.observable(MakeSections()),
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
             var count = 1;
             this.attributes.each(function (attribute) {
                 count *= attribute.chosen.length;
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable({images:'',pricing:'',inventory:''});
+                    option.sections = ko.observable(MakeSections());
                 });
             });
             _.each(this.sections(), function (section) {
