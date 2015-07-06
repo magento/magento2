@@ -44,16 +44,16 @@ class GridPoolTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->orderGridMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Grid', [], [], '', false
+            'Magento\Sales\Model\Resource\Grid', [], [], '', false
         );
         $this->invoiceGridMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Invoice\Grid', [], [], '', false
+            'Magento\Sales\Model\Resource\Grid', [], [], '', false
         );
         $this->shipmentGridMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Shipment\Grid', [], [], '', false
+            'Magento\Sales\Model\Resource\Grid', [], [], '', false
         );
         $this->creditmemoGridMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Creditmemo\Grid', [], [], '', false
+            'Magento\Sales\Model\Resource\Grid', [], [], '', false
         );
         $this->statementMock = $this->getMockForAbstractClass('Zend_Db_Statement_Interface');
         $this->gridPool = new \Magento\Sales\Model\Resource\GridPool(
