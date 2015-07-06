@@ -147,8 +147,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'product_id' => 'super_attribute.product_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
-                    'pricing_value' => 'attribute_pricing.pricing_value',
-                    'pricing_is_percent' => 'attribute_pricing.is_percent',
                     'super_attribute_label' =>  'attribute_label.value'
                 ]
             )
