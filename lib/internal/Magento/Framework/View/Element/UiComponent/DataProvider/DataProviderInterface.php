@@ -11,6 +11,13 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 interface DataProviderInterface
 {
     /**
+     * Return collection model
+     *
+     * @return mixed
+     */
+    public function getCollection();
+
+    /**
      * Get Data Provider name
      *
      * @return string
@@ -96,7 +103,7 @@ interface DataProviderInterface
      * @param string $type
      * @return mixed
      */
-    public function addFilter($condition, $field = null,  $type = 'regular');
+    public function addFilter($condition, $field = null, $type = 'regular');
 
     /**
      * Add ORDER BY to the end or to the beginning
