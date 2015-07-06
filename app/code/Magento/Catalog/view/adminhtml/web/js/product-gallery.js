@@ -169,6 +169,7 @@ define([
          */
         _removeItem: function (event, imageData) {
             var $imageContainer = this.findElement(imageData);
+            imageData.removed = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
         },
 
@@ -270,11 +271,6 @@ define([
                     $(event.currentTarget).addClass('active');
                     this._showDialog($(event.currentTarget).data('imageData'));
                 }
-            };
-            events['click .action-remove'] = function (event) {
-                var $imageContainer = $(event.currentTarget).closest('[data-role=dialog]').data('imageContainer');
-                this.element.find('[data-role=dialog]').trigger('close');
-                this.element.trigger('removeItem', $imageContainer.data('imageData'));
             };
             this._on(events);
             this.element.on('sortstart', $.proxy(function () {
