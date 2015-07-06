@@ -89,6 +89,27 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('library', $requiredPackagesAndTypes['composer/composer']);
     }
 
+    public function testGetPackagesForUpdate()
+    {
+        $packageName = 'composer/composer';
+
+        $this->setupDirectoryMock('testSkeleton');
+        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+
+        $requiredPackages = $composerInfo->getRootRequiredPackageTypesByNameVersion();
+        $this->assertArrayHasKey($packageName, $requiredPackages);
+
+        $packagesForUpdate = $composerInfo->getPackagesForUpdate();
+        $this->assertArrayHasKey($packageName, $packagesForUpdate);
+        $this->assertTrue(
+            version_compare(
+                $packagesForUpdate[$packageName]['latestVersion'],
+                $requiredPackages[$packageName]['version'],
+                '>'
+            )
+        );
+    }
+
     /**
      * Data provider that returns directories containing different types of composer files.
      *
