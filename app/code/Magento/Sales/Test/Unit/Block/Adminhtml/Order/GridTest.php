@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Block\Adminhtml\Order;
+namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order;
 
 /**
  * Class GridTest
