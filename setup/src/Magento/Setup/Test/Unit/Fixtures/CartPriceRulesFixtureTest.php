@@ -132,7 +132,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testGetActionTitle()
     {
-        $this->assertSame('Generating shopping cart price rules', $this->model->getActionTitle());
+        $this->assertSame('Generating Cart Price Rules', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
