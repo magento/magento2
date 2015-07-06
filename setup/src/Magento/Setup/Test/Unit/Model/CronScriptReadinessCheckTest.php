@@ -63,7 +63,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => false,
-            'error' => 'Cron Job is running properly, however it is recommended' .
+            'error' => 'Cron Job is running properly, however it is recommended ' .
                 'to schedule it to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
@@ -115,7 +115,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => false,
-            'error' => 'Cron Job is running properly, however it is recommended' .
+            'error' => 'Cron Job is running properly, however it is recommended ' .
                 'to schedule it to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
