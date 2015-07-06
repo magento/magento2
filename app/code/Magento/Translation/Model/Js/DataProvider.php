@@ -72,6 +72,11 @@ class DataProvider implements DataProviderInterface
         $dictionary = [];
 
         $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
+
+        foreach ($this->filesUtility->getStaticHtmlFiles($this->appState->getAreaCode(), $themePath) as $staticFile) {
+            $files[] = $staticFile;
+        }
+
         foreach ($files as $filePath) {
             $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
             foreach ($this->getPhrases($content) as $phrase) {
@@ -99,7 +104,11 @@ class DataProvider implements DataProviderInterface
             $result = preg_match_all($pattern, $content, $matches);
 
             if ($result) {
-                $phrases = array_merge($phrases, $matches[1]);
+                if (isset($matches[1])) {
+                    foreach ($matches[1] as $match) {
+                        $phrases[] = $match;
+                    }
+                }
             }
             if (false === $result) {
                 throw new \Exception(
