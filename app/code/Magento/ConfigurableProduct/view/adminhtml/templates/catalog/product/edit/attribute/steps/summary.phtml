@@ -109,7 +109,7 @@
                         </td>
                         <td class="col-image" data-column="image">
                             <div class="actions split actions-image-uploader">
-                                <!-- ko ifnot: variation.images -->
+                                <!-- ko ifnot: variation.images.file -->
                                 <div class="action-upload action split" data-action="upload-image">
                                     <input type="hidden"
                                            data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
@@ -123,7 +123,7 @@
                                     <span><?= __('Select'); ?></span>
                                 </button>
                                 <!-- /ko -->
-                                <!-- ko if: variation.images -->
+                                <!-- ko if: variation.images.file -->
                                 <img data-bind='attr: {src: variation.images.preview}' class="variation"
                                      data-role="image"/>
                                     <span data-bind="html: $parent.generateImageGallery(variation)"></span>
