@@ -535,7 +535,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return '';
         }
 
-        $text = (new \Magento\Framework\Phrase($text, $params))->render();
+        $text = __($text, $params)->render();
         return $this->applyModifiers($text, $modifiers);
     }
 
