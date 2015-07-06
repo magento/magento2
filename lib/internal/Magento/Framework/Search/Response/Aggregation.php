@@ -5,20 +5,23 @@
  */
 namespace Magento\Framework\Search\Response;
 
+use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Search\BucketInterface;
+
 /**
  * Faceted data
  */
-class Aggregation implements \IteratorAggregate
+class Aggregation implements AggregationInterface
 {
     /**
      * Buckets array
      *
-     * @var Bucket[]
+     * @var BucketInterface[]
      */
     protected $buckets;
 
     /**
-     * @param Bucket[] $buckets
+     * @param BucketInterface[] $buckets
      */
     public function __construct(array $buckets)
     {
@@ -26,9 +29,7 @@ class Aggregation implements \IteratorAggregate
     }
 
     /**
-     * Implementation of \IteratorAggregate::getIterator()
-     *
-     * @return \ArrayIterator
+     * {@inheritdoc}
      */
     public function getIterator()
     {
@@ -36,10 +37,7 @@ class Aggregation implements \IteratorAggregate
     }
 
     /**
-     * Get Document field
-     *
-     * @param string $bucketName
-     * @return Bucket
+     * {@inheritdoc}
      */
     public function getBucket($bucketName)
     {
@@ -47,9 +45,7 @@ class Aggregation implements \IteratorAggregate
     }
 
     /**
-     * Get Document field names
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getBucketNames()
     {
