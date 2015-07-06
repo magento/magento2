@@ -1094,6 +1094,7 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName(
                 'sales_order_grid',
                 [
+                    'increment_id',
                     'billing_name',
                     'shipping_name',
                     'shipping_address',
@@ -1104,6 +1105,7 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             ),
             [
+                'increment_id',
                 'billing_name',
                 'shipping_name',
                 'shipping_address',
@@ -4020,9 +4022,10 @@ class InstallSchema implements InstallSchemaInterface
                     'increment_id',
                     'order_increment_id',
                     'billing_name',
+                    'billing_address',
+                    'shipping_address',
                     'customer_name',
                     'customer_email'
-
                 ],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             ),
@@ -4030,6 +4033,8 @@ class InstallSchema implements InstallSchemaInterface
                 'increment_id',
                 'order_increment_id',
                 'billing_name',
+                'billing_address',
+                'shipping_address',
                 'customer_name',
                 'customer_email'
             ],
