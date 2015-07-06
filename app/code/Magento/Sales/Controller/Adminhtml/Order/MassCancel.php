@@ -30,7 +30,7 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
 
         if ($countNonCancelOrder && $countCancelOrder) {
             $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
-        } elseif($countNonCancelOrder) {
+        } elseif ($countNonCancelOrder) {
             $this->messageManager->addError(__('You cannot cancel the order(s).'));
         }
 

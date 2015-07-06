@@ -31,8 +31,8 @@ class CustomerGroup extends Column
      */
     public function __construct(
         ContextInterface $context,
-        GroupRepositoryInterface $groupRepository,
         UiComponentFactory $uiComponentFactory,
+        GroupRepositoryInterface $groupRepository,
         array $components = [],
         array $data = []
     ) {
