@@ -26,6 +26,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 
     /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
      */
     public function __construct(
