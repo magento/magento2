@@ -8,10 +8,10 @@
 ?>
 
 <div data-bind="scope: '<?= $block->getComponentName()?>'" data-role="bulk-step">
-    <h2 class="steps-wizard-title"><?= __('Step 3: Bulk Images, Pricing, and Inventory') ?></h2>
+    <h2 class="steps-wizard-title"><?= __('Step 3: Bulk Images, Price, and Quantity') ?></h2>
     <div class="steps-wizard-info">
         <?= __('Based on your selections <span class="new-products-count" data-bind="text:newProductsCount"></span>
-        new products will be created. Use this step to customize images and pricing for your new products.') ?>
+        new products will be created. Use this step to customize images and price for your new products.') ?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">
@@ -461,7 +461,7 @@
 <div data-bind="with: sections().pricing" class="steps-wizard-section">
     <div data-role="section">
         <div class="steps-wizard-section-title">
-            <span><?= __('Pricing') ?></span>
+            <span><?= __('Price') ?></span>
         </div>
         <ul class="steps-wizard-section-list">
             <li>
@@ -499,7 +499,7 @@
                            checked
                            data-bind="checked:type" />
                     <label for="skip-pricing-radio" class="admin__field-label">
-                        <span><?= __('Skip pricing at this time') ?></span>
+                        <span><?= __('Skip price at this time') ?></span>
                     </label>
                 </div>
             </li>
@@ -507,7 +507,7 @@
         <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
             <div class="admin__field">
                 <label for="apply-single-price-input" class="admin__field-label">
-                    <span><?= __('Pricing') ?></span>
+                    <span><?= __('Price') ?></span>
                 </label>
                 <div class="admin__field-control">
                     <input type="text"
@@ -552,7 +552,7 @@
 <div data-bind="with: sections().inventory" class="steps-wizard-section">
     <div data-role="section">
         <div class="steps-wizard-section-title">
-            <span><?= __('Inventory') ?></span>
+            <span><?= __('Quantity') ?></span>
         </div>
         <ul class="steps-wizard-section-list">
             <li>
@@ -563,7 +563,7 @@
                            value="single"
                            data-bind="checked: type" />
                     <label for="apply-single-inventory-radio" class="admin__field-label">
-                        <span><?= __('Apply single inventory to each SKUs') ?></span>
+                        <span><?= __('Apply single quantity to each SKUs') ?></span>
                     </label>
                 </div>
             </li>
@@ -575,7 +575,7 @@
                            value="each"
                            data-bind="checked: type" />
                     <label for="apply-unique-inventory-radio" class="admin__field-label">
-                        <span><?= __('Apply unique inventory by attribute to each SKU') ?></span>
+                        <span><?= __('Apply unique quantity by attribute to each SKU') ?></span>
                     </label>
                 </div>
             </li>
@@ -588,7 +588,7 @@
                            checked
                            data-bind="checked: type" />
                     <label for="skip-inventory-radio" class="admin__field-label">
-                        <span><?= __('Skip inventory at this time') ?></span>
+                        <span><?= __('Skip quantity at this time') ?></span>
                     </label>
                 </div>
             </li>
@@ -597,7 +597,7 @@
         <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
             <div class="admin__field">
                 <label for="apply-single-inventory-input" class="admin__field-label">
-                    <span><?= __('Inventory') ?></span>
+                    <span><?= __('Quantity') ?></span>
                 </label>
                 <div class="admin__field-control">
                     <input type="text"

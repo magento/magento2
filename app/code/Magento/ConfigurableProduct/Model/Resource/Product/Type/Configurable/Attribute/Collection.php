@@ -234,11 +234,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * @return array
+     * @return void
      */
     protected function loadOptions()
     {
-        $values = [];
         $usedProducts = $this->getProductType()->getUsedProducts($this->getProduct());
         if ($usedProducts) {
             foreach ($this->_items as $item) {
@@ -254,7 +253,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                     foreach ($usedProducts as $associatedProduct) {
                         $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
                         if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
-                                $values[] = [
+                                $values[$itemId . ':' . $option['value']] = [
                                     'value_index' => $option['value'],
                                     'label' => $option['label'],
                                     'product_super_attribute_id' => $itemId,
@@ -265,10 +264,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                         }
                     }
                 }
+                $values = array_values($values);
                 $item->setOptions($values);
             }
         }
-        return $values;
     }
 
     /**
