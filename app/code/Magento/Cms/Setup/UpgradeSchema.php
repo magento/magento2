@@ -28,9 +28,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $connection = $installer->getConnection();
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
             $connection->addIndex(
-                'cms_page',
+                $installer->getTable('cms_page'),
                 $setup->getIdxName(
-                    'cms_page',
+                    $installer->getTable('cms_page'),
                     ['title', 'meta_keywords', 'meta_description', 'identifier', 'content'],
                     AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
@@ -38,9 +38,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 AdapterInterface::INDEX_TYPE_FULLTEXT
             );
             $connection->addIndex(
-                'cms_block',
+                $installer->getTable('cms_block'),
                 $setup->getIdxName(
-                    'cms_block',
+                    $installer->getTable('cms_block'),
                     ['title', 'identifier', 'content'],
                     AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
