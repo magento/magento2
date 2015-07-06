@@ -18,12 +18,13 @@ class FulltextFilter implements FilterApplierInterface
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *
      * @param DbResource $resource
+     * @param string $indexTable
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getFulltextIndexColumns(DbResource $resource)
+    protected function getFulltextIndexColumns(DbResource $resource, $indexTable)
     {
-        $indexes = $resource->getReadConnection()->getIndexList($resource->getMainTable());
+        $indexes = $resource->getReadConnection()->getIndexList($indexTable);
         foreach ($indexes as $index) {
             if (strtoupper($index['INDEX_TYPE']) == 'FULLTEXT') {
                 return $index['COLUMNS_LIST'];
@@ -41,7 +42,7 @@ class FulltextFilter implements FilterApplierInterface
      */
     public function apply(DbCollection $collection, $filters)
     {
-        $columns = $this->getFulltextIndexColumns($collection->getResource());
+        $columns = $this->getFulltextIndexColumns($collection->getResource(), $collection->getMainTable());
         if (!$columns) {
             return;
         }
