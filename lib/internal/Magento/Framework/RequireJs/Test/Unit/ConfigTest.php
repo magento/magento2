@@ -128,6 +128,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
+    if (!require.s.contexts._._nameToUrl) {
+        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
+        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
+            if (!ext && !skipExt) {
+                ext = '.min.js';
+            }
+            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
+                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+        }
+    }
 require.config({"baseUrl":""});
 (function() {
 relative/file_one.js content
