@@ -349,14 +349,14 @@ class Image extends AbstractHelper
 
     /**
      * Get Placeholder
-     *
+     * @param null|string $placeholder
      * @return string
      */
-    public function getPlaceholder()
+    public function getPlaceholder($placeholder = null)
     {
         if (!$this->_placeholder) {
-            $attr = $this->_getModel()->getDestinationSubdir();
-            $this->_placeholder = 'Magento_Catalog::images/product/placeholder/' . $attr . '.jpg';
+            $placeholder = $placeholder?: $this->_getModel()->getDestinationSubdir();
+            $this->_placeholder = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
         }
         return $this->_placeholder;
     }
@@ -439,12 +439,13 @@ class Image extends AbstractHelper
     }
 
     /**
+     * @param null|string $placeholder
      * @return string
      */
-    public function getDefaultPlaceholderUrl()
+    public function getDefaultPlaceholderUrl($placeholder = null)
     {
         try {
-            $url = $this->_assetRepo->getUrl($this->getPlaceholder());
+            $url = $this->_assetRepo->getUrl($this->getPlaceholder($placeholder));
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $url = $this->_urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);

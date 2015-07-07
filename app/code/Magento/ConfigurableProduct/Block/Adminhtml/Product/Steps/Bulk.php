@@ -14,16 +14,13 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @parem \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Image $image
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Object $object,
         \Magento\Catalog\Helper\Image $image
     ) {
         parent::__construct($context);
-        $image->init($object, 'thumbnail');
         $this->image = $image;
     }
 
@@ -40,7 +37,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      */
     public function getNoImageUrl()
     {
-        return $this->image->getDefaultPlaceholderUrl();
+        return $this->image->getDefaultPlaceholderUrl('thumbnail');
     }
 
     /**
