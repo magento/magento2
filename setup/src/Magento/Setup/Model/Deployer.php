@@ -6,13 +6,11 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Theme;
-use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -69,11 +67,6 @@ class Deployer
      * @var JsTranslationConfig
      */
     protected $jsTranslationConfig;
-
-    /**
-     * @var \Magento\Framework\View\Design\ThemeInterface[]
-     */
-    private $parentTheme;
 
     /**
      * @param Files $filesUtil
@@ -310,36 +303,22 @@ class Deployer
     }
 
     /**
-     * Find ancestor themes
+     * Find ancestor themes' full paths
      *
      * @param string $themeFullPath
      * @return string[]
      */
     private function findAncestors($themeFullPath)
     {
-        $ancestors = [];
-        if (!isset($this->parentTheme[$themeFullPath])) {
-            /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
-            $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
-            $theme = $themeCollection->getThemeByFullPath($themeFullPath);
-            $parentTheme = $theme->getParentTheme();
-            if ($parentTheme) {
-                $this->parentTheme[$themeFullPath] = $parentTheme;
-                $ancestors[] = $parentTheme->getFullPath();
-                $ancestors = array_merge(
-                    $ancestors,
-                    $this->findAncestors($parentTheme->getFullPath())
-                );
-            }
-        } else {
-            $parentTheme = $this->parentTheme[$themeFullPath];
-            $ancestors[] = $parentTheme->getFullPath();
-            $ancestors = array_merge(
-                $ancestors,
-                $this->findAncestors($parentTheme->getFullPath())
-            );
+        /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
+        $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+        $theme = $themeCollection->getThemeByFullPath($themeFullPath);
+        $ancestors = $theme->getInheritedThemes();
+        $ancestorThemeFullPath = [];
+        foreach ($ancestors as $ancestor) {
+            $ancestorThemeFullPath[] = $ancestor->getFullPath();
         }
-        return $ancestors;
+        return $ancestorThemeFullPath;
     }
 
     /**
