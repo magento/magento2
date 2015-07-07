@@ -54,8 +54,8 @@ define(
                 quote.billingAddress.subscribe(function(newAddress) {
                     this.isAddressSameAsShipping(
                         newAddress != null
-                        && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
-                        && !quote.isVirtual()
+                            && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
                     );
                     this.isAddressDetailsVisible(true);
                 }, this);
@@ -124,8 +124,8 @@ define(
                     // restore 'Same As Shipping' checkbox state
                     this.isAddressSameAsShipping(
                         quote.billingAddress() != null
-                        && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
-                        && !quote.isVirtual()
+                            && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
                     );
                     this.isAddressDetailsVisible(true);
                 }
