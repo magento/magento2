@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Product;
 
 /**
@@ -15,6 +13,9 @@ namespace Magento\Reports\Block\Product;
  */
 class Compared extends \Magento\Reports\Block\Product\AbstractProduct
 {
+    /**
+     * Config path for compared products count
+     */
     const XML_PATH_RECENTLY_COMPARED_COUNT = 'catalog/recently_products/compared_count';
 
     /**
@@ -34,7 +35,10 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
         if ($this->hasData('page_size')) {
             return $this->getData('page_size');
         }
-        return $this->_scopeConfig->getValue(self::XML_PATH_RECENTLY_COMPARED_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_RECENTLY_COMPARED_COUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

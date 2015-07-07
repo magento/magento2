@@ -94,7 +94,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlEmptyCart()
     {
         $this->assertEquals(0, $this->block->getCollection()->getSize());
-        $this->assertContains("There are no items in customer's shopping cart at the moment", $this->block->toHtml());
+        $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
     }
 
     /**

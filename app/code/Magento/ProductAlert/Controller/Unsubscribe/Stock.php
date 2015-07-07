@@ -70,7 +70,7 @@ class Stock extends UnsubscribeController
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
+            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;

@@ -695,7 +695,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(3.14);
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
-        $this->assertEquals('We can\'t add this item to your cart right now.', $result);
+        $this->assertEquals('We can\'t add this item to your shopping cart right now.', $result);
     }
 
     /**

@@ -676,7 +676,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$this->canVoid()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Void action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The void action is not available.'));
         }
         return $this;
     }

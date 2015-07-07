@@ -10,7 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * @magentoAppArea adminhtml
  */
-class TaxTest extends \Magento\Backend\Utility\Controller
+class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @dataProvider ajaxActionDataProvider

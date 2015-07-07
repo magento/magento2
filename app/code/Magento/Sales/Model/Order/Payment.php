@@ -187,6 +187,40 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * Sets transaction id for current payment
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->setData('transaction_id', $transactionId);
+        return $this;
+    }
+
+    /**
+     * Sets transaction close flag
+     *
+     * @param bool $isClosed
+     * @return $this
+     */
+    public function setIsTransactionClosed($isClosed)
+    {
+        $this->setData('is_transaction_closed', (bool)$isClosed);
+        return $this;
+    }
+
+    /**
+     * Returns transaction parent
+     *
+     * @return string
+     */
+    public function getParentTransactionId()
+    {
+        return $this->getData('parent_transaction_id');
+    }
+
+    /**
      * Check order payment capture action availability
      *
      * @return bool
@@ -276,11 +310,14 @@ class Payment extends Info implements OrderPaymentInterface
                 $orderState = $order->getState() ? $order->getState() : $orderState;
                 $orderStatus = $order->getStatus() ? $order->getStatus() : $orderStatus;
             }
+        } else {
+            $order->setState($orderState)
+                ->setStatus($orderStatus);
         }
 
         $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+        if (!array_key_exists($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
             $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
 
@@ -313,12 +350,12 @@ class Payment extends Info implements OrderPaymentInterface
                 break;
             case ($message):
             case ($originalOrderState && $message):
-            case ($originalOrderState != $orderState):
-            case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState)
-                    ->setStatus($orderStatus)
-                    ->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified($isCustomerNotified);
+                if ($originalOrderState != $orderState || $originalOrderStatus != $orderStatus) {
+                    $order->setState($orderState)
+                        ->setStatus($orderStatus)
+                        ->addStatusHistoryComment($message)
+                        ->setIsCustomerNotified($isCustomerNotified);
+                }
                 break;
             default:
                 break;
@@ -373,6 +410,9 @@ class Payment extends Info implements OrderPaymentInterface
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             return $this;
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
@@ -410,7 +450,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         }
         $status = false;
-        if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
+        if (!$invoice->getIsPaid()) {
             // attempt to capture: this can trigger "is_transaction_pending"
             $method = $this->getMethodInstance();
             $method->setStore(
@@ -653,6 +693,30 @@ class Payment extends Info implements OrderPaymentInterface
             $this->setMessage(__('Registered a Void notification.'));
         }
         return $this->_void(false, $amount);
+    }
+
+    /**
+     * Sets creditmemo for current payment
+     *
+     * @param Creditmemo $creditmemo
+     * @return $this
+     */
+    public function setCreditmemo(Creditmemo $creditmemo)
+    {
+        $this->setData('creditmemo', $creditmemo);
+        return $this;
+    }
+
+    /**
+     * Returns Creditmemo assigned for this payment
+     *
+     * @return Creditmemo|null
+     */
+    public function getCreditmemo()
+    {
+        return $this->getData('creditmemo') instanceof Creditmemo
+            ? $this->getData('creditmemo')
+            : null;
     }
 
     /**
@@ -956,9 +1020,15 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
 
-        $result = $isOnline ?
-            $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())->denyPayment($this) :
-            (bool)$this->getNotificationResult();
+        if ($isOnline) {
+            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+            $method = $this->getMethodInstance();
+            $method->setStore($this->getOrder()->getStoreId());
+
+            $result = $method->denyPayment($this);
+        } else {
+            $result = (bool)$this->getNotificationResult();
+        }
 
         if ($result) {
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
@@ -1183,7 +1253,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
         } else {
             if ($this->getIsFraudDetected()) {
-                $state = Order::STATE_PAYMENT_REVIEW;
+                $state = Order::STATE_PROCESSING;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1467,7 +1537,10 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (is_string($preparedMessage)) {
+            if (
+                is_string($preparedMessage)
+                || $preparedMessage instanceof \Magento\Framework\Phrase
+            ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
                     $preparedMessage
