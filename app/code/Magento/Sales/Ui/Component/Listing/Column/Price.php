@@ -24,15 +24,15 @@ class Price extends Column
      * Constructor
      *
      * @param ContextInterface $context
-     * @param PriceCurrencyInterface $priceFormatter
      * @param UiComponentFactory $uiComponentFactory
+     * @param PriceCurrencyInterface $priceFormatter
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        PriceCurrencyInterface $priceFormatter,
         UiComponentFactory $uiComponentFactory,
+        PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = []
     ) {
