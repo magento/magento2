@@ -133,7 +133,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'denyPayment',
                     'fetchTransactionInfo',
                     'canCapture',
-                    'canRefund'
+                    'canRefund',
+                    'canOrder',
                 ]
             )
             ->getMock();
@@ -254,8 +255,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
-        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
+        $this->paymentMethodMock->expects($this->any())
+            ->method('getConfigData')
+            ->with('order_status', null)
+            ->willReturn($newOrderStatus);
 
+        $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
         $this->assertOrderUpdated(Order::STATE_NEW, $newOrderStatus);
 
         $this->paymentMethodMock->expects($this->once())
@@ -365,7 +370,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseCurrency')
             ->willReturn($baseCurrencyMock);
 
-        $this->assertOrderUpdated(Order::STATE_PAYMENT_REVIEW, Order::STATUS_FRAUD, $message);
+        $this->assertOrderUpdated(Order::STATE_PROCESSING, Order::STATUS_FRAUD, $message);
 
         $this->paymentMethodMock->expects($this->once())
             ->method('authorize')
