@@ -28,6 +28,9 @@
 
 @modal-slide-header__padding-vertical: 2.1rem;
 
+@modal-popup-image-box__max-height: 50rem;
+@modal-popup-image-box__border-color: @color-gray80;
+
 //
 //  Utilities
 //  ---------------------------------------------
@@ -180,6 +183,20 @@
         margin-top: auto;
         padding-top: @modal-popup__padding;
         padding-bottom: @modal-popup__padding;
+    }
+    &._image-box {
+        .thumbnail-preview {
+            text-align: center;
+            .thumbnail-preview-image-block {
+                border: 1px solid @modal-popup-image-box__border-color;
+                display: inline-block;
+                margin: 0 0 @indent__base;
+                padding: @indent__base;
+            }
+            .thumbnail-preview-image {
+                max-height: @modal-popup-image-box__max-height;
+            }
+        }
     }
 }
 
