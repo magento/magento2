@@ -109,35 +109,14 @@
                     </item>
                 </item>
             </argument>
-            <filterRange name="increment_id">
+            <filterInput name="increment_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Creditmemo</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
-                        </item>
+                        <item name="label" xsi:type="string" translate="true">Credit Memo</item>
                     </item>
                 </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
+            </filterInput>
             <filterRange name="created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -169,35 +148,14 @@
                     </argument>
                 </filterDate>
             </filterRange>
-            <filterRange name="order_increment_id">
+            <filterInput name="order_increment_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">order_increment_id</item>
                         <item name="label" xsi:type="string" translate="true">Order</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
-                        </item>
                     </item>
                 </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
+            </filterInput>
             <filterRange name="order_created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -237,18 +195,6 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterSelect name="creditmemo_status">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">creditmemo_status</item>
-                        <item name="label" xsi:type="string" translate="true">Status</item>
-                    </item>
-                </argument>
-            </filterSelect>
             <filterRange name="base_grand_total">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -278,14 +224,14 @@
                     </argument>
                 </filterInput>
             </filterRange>
-            <filterSelect name="state">
+            <filterSelect name="order_status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Status\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">state</item>
+                        <item name="dataScope" xsi:type="string">order_status</item>
                         <item name="label" xsi:type="string" translate="true">Order Status</item>
                     </item>
                 </argument>
@@ -348,12 +294,12 @@
             </filterSelect>
             <filterSelect name="payment_method">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Group\Options</argument>
+                    <argument name="class" xsi:type="string">Magento\Payment\Ui\Component\Listing\Column\Method\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">customer_group_id</item>
+                        <item name="dataScope" xsi:type="string">payment_method</item>
                         <item name="label" xsi:type="string" translate="true">Payment Method</item>
                     </item>
                 </argument>
@@ -424,10 +370,10 @@
                     </argument>
                 </filterInput>
             </filterRange>
-            <filterRange name="grand_total">
+            <filterRange name="order_base_grand_total">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">grand_total</item>
+                        <item name="dataScope" xsi:type="string">order_base_grand_total</item>
                         <item name="label" xsi:type="string" translate="true">Grand Total</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
@@ -543,7 +489,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Credit Memo</item>
                 </item>
@@ -568,7 +513,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Order</item>
                 </item>
@@ -598,19 +542,7 @@
                 </item>
             </argument>
         </column>
-        <column name="creditmemo_status"><!--class with statuses-->
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                </item>
-            </argument>
-        </column>
-        <column name="base_grand_total">
+        <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -622,7 +554,7 @@
                 </item>
             </argument>
         </column>
-        <column name="state"><!--class with statuses-->
+        <column name="order_status" class="Magento\Sales\Ui\Component\Listing\Column\Status">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
@@ -703,7 +635,7 @@
                 </item>
             </argument>
         </column>
-        <column name="customer_group">
+        <column name="customer_group_id" class="Magento\Sales\Ui\Component\Listing\Column\CustomerGroup">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -742,7 +674,7 @@
                 </item>
             </argument>
         </column>
-        <column name="subtotal">
+        <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -755,7 +687,7 @@
                 </item>
             </argument>
         </column>
-        <column name="shipping_and_handling">
+        <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -768,7 +700,7 @@
                 </item>
             </argument>
         </column>
-        <column name="adjustment_positive">
+        <column name="adjustment_positive" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -781,7 +713,7 @@
                 </item>
             </argument>
         </column>
-        <column name="adjustment_negative">
+        <column name="adjustment_negative" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -794,7 +726,7 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total">
+        <column name="order_base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
