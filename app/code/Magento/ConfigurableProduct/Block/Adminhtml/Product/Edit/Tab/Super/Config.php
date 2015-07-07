@@ -49,6 +49,9 @@ class Config extends Widget implements TabInterface
      */
     protected $_jsonEncoder;
 
+    /** @var \Magento\Catalog\Helper\Image */
+    protected $image;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -65,6 +68,7 @@ class Config extends Widget implements TabInterface
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \Magento\Catalog\Helper\Image $image,
         array $data = []
     ) {
         $this->_configurableType = $configurableType;
@@ -72,6 +76,7 @@ class Config extends Widget implements TabInterface
         $this->_catalogData = $catalogData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_localeCurrency = $localeCurrency;
+        $this->image = $image;
         parent::__construct($context, $data);
     }
 
@@ -312,4 +317,13 @@ class Config extends Widget implements TabInterface
             $this->_scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default')
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getNoImageUrl()
+    {
+        return $this->image->getDefaultPlaceholderUrl('thumbnail');
+    }
+
 }
