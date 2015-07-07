@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Search;
 
-use Magento\Framework\Search\Response\Aggregation\Value;
-
 /**
  * Facet Bucket
  */
@@ -22,7 +20,7 @@ interface BucketInterface
     /**
      * Get field values
      *
-     * @return AggregationValueInterface[]
+     * @return \Magento\Framework\Search\AggregationValueInterface[]
      */
     public function getValues();
 }

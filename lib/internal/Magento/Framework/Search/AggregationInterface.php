@@ -14,9 +14,16 @@ interface AggregationInterface
      * Get Document field
      *
      * @param string $bucketName
-     * @return BucketInterface
+     * @return \Magento\Framework\Search\BucketInterface
      */
     public function getBucket($bucketName);
+
+    /**
+     * Get all Document fields
+     *
+     * @return \Magento\Framework\Search\BucketInterface[]
+     */
+    public function getBuckets();
 
     /**
      * Get Document field names
