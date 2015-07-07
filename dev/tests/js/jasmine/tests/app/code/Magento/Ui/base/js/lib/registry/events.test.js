@@ -11,10 +11,10 @@ define([
 
     describe('Magento_Ui/js/lib/registry/events', function () {
         var storage = {
-                has : function(elem){
+                has : function(){
                     return false;
                 },
-                get : function(elem){
+                get : function(){
                     return [];
                 }
             },
