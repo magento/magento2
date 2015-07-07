@@ -190,29 +190,11 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.cronScriptSetup);
                 }
             };
-            $scope.items['component-dependency'] = {
-                url: 'index.php/environment/component-dependency',
-                params: $scope.componentdependency.packages,
-                show: function() {
-                    $scope.startProgress();
-                    $scope.componentdependency.visible = true;
-                },
-                process: function(data) {
-                    $scope.componentdependency.processed = true;
-                    if (data.errorMessage) {
-                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
-                    }
-                    angular.extend($scope.componentdependency, data);
-                    $scope.updateOnProcessed($scope.componentdependency.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.componentdependency);
-                }
-            }
+
         }
 
         $scope.isCompleted = function() {
+            $scope.componentdependency.processed = true;
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
