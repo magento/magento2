@@ -24,15 +24,15 @@ class State extends Column
      * Constructor
      *
      * @param ContextInterface $context
-     * @param InvoiceFactory $invoiceFactory
      * @param UiComponentFactory $uiComponentFactory
+     * @param InvoiceFactory $invoiceFactory
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        InvoiceFactory $invoiceFactory,
         UiComponentFactory $uiComponentFactory,
+        InvoiceFactory $invoiceFactory,
         array $components = [],
         array $data = []
     ) {

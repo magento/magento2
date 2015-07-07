@@ -24,15 +24,15 @@ class PaymentMethod extends Column
      * Constructor
      *
      * @param ContextInterface $context
-     * @param Data $paymentHelper
      * @param UiComponentFactory $uiComponentFactory
+     * @param Data $paymentHelper
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        Data $paymentHelper,
         UiComponentFactory $uiComponentFactory,
+        Data $paymentHelper,
         array $components = [],
         array $data = []
     ) {
