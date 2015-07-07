@@ -42,12 +42,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                     }
                 }
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(
-                    __(
-                        'If there is an account associated with %1 you will receive an email with a link to reset your password.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($email)
-                    )
-                );
+                $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
@@ -57,7 +52,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                 $this->messageManager->addError(__('Please correct this email address:'));
             }
         } elseif (!empty($params)) {
-            $this->messageManager->addError(__('The email address is empty.'));
+            $this->messageManager->addError(__('Please enter an email address.'));
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();

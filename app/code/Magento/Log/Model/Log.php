@@ -39,7 +39,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -47,7 +47,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -81,6 +81,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * Clean Logs
      *
      * @return $this
+     * @api
      */
     public function clean()
     {

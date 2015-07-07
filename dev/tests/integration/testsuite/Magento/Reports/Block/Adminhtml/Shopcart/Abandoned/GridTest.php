@@ -26,6 +26,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
         $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
         /** @var Grid $grid */
         $grid = $layout->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid');
+        $grid->getRequest()->setParams(['filter' => base64_encode(urlencode('email=customer@example.com'))]);
         $result = $grid->getPreparedCollection();
 
         $this->assertCount(1, $result->getItems());

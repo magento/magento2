@@ -128,7 +128,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
+            'email' => '',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
@@ -158,6 +158,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         //custom checks for street, region and address_type
         $this->assertEquals($addressData['street'], $quote->getShippingAddress()->getStreet());
         unset($addressData['street']);
+        unset($addressData['email']);
 
         $this->assertEquals('shipping', $savedData['address_type']);
         //check the rest of fields
@@ -306,7 +307,6 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'email' => 'cat@dog.com',
             'company' => 'eBay Inc',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',

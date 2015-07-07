@@ -14,10 +14,7 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false,
-            template:       'ui/content/content',
-            listens: {
-                loading: 'toggleLoadState'
-            }
+            template:       'ui/content/content'
         },
 
         /**
@@ -81,10 +78,6 @@ define([
             if (active && this.shouldLoad()) {
                 this.loadData();
             }
-        },
-
-        toggleLoadState: function (value) {
-            this.trigger(value ? 'loading' : 'loaded');
         },
 
         /**

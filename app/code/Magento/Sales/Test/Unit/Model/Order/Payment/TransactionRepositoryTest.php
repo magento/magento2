@@ -42,7 +42,7 @@ class TransactionRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->transactionFactory = $this->getMock(
             'Magento\Sales\Model\Order\Payment\TransactionFactory',
-            [],
+            ['create'],
             [],
             '',
             false

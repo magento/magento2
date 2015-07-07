@@ -10,12 +10,11 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Sales\Model\Resource\Order;
 
 /**
  * Sales Collection
  */
-class Collection extends \Magento\Framework\Data\Collection\Db
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Totals data
@@ -46,18 +45,6 @@ class Collection extends \Magento\Framework\Data\Collection\Db
     protected $_orderStateCondition = null;
 
     /**
-     * Core event manager proxy
-     *
-     * @var ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
-     * @var Order
-     */
-    protected $_orderResource;
-
-    /**
      * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
@@ -72,24 +59,34 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
-     * @param Order $resource
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         EntityFactory $entityFactory,
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        Order $resource,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
-        $this->_eventManager = $eventManager;
-        $this->_orderResource = $resource;
         $this->_storeCollectionFactory = $storeCollectionFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $this->_orderResource->getReadConnection());
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->_init('Magento\Sales\Model\Order', 'Magento\Sales\Model\Resource\Order');
     }
 
     /**
@@ -136,22 +133,21 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      */
     protected function _beforeLoad()
     {
-        $this->getSelect()->from(
-            ['sales' => $this->_orderResource->getMainTable()],
-            [
-                'store_id',
-                'lifetime' => new \Zend_Db_Expr('SUM(sales.base_grand_total)'),
-                'base_lifetime' => new \Zend_Db_Expr('SUM(sales.base_grand_total * sales.base_to_global_rate)'),
-                'avgsale' => new \Zend_Db_Expr('AVG(sales.base_grand_total)'),
-                'base_avgsale' => new \Zend_Db_Expr('AVG(sales.base_grand_total * sales.base_to_global_rate)'),
-                'num_orders' => new \Zend_Db_Expr('COUNT(sales.base_grand_total)')
-            ]
-        )->group(
-            'sales.store_id'
-        );
+        $this->getSelect()
+            ->columns(
+                [
+                    'store_id',
+                    'lifetime' => new \Zend_Db_Expr('SUM(base_grand_total)'),
+                    'base_lifetime' => new \Zend_Db_Expr('SUM(base_grand_total * base_to_global_rate)'),
+                    'avgsale' => new \Zend_Db_Expr('AVG(base_grand_total)'),
+                    'base_avgsale' => new \Zend_Db_Expr('AVG(base_grand_total * base_to_global_rate)'),
+                    'num_orders' => new \Zend_Db_Expr('COUNT(base_grand_total)')
+                ]
+            )
+            ->group('store_id');
 
         if ($this->_customerId) {
-            $this->addFieldToFilter('sales.customer_id', $this->_customerId);
+            $this->addFieldToFilter('customer_id', $this->_customerId);
         }
 
         if ($this->_state !== null) {

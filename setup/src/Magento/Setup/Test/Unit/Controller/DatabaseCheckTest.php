@@ -25,9 +25,8 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $webLogger = $this->getMock('\Magento\Setup\Model\WebLogger', [], [], '', false);
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
-        $this->controller = new DatabaseCheck($webLogger, $this->dbValidator);
+        $this->controller = new DatabaseCheck($this->dbValidator);
     }
 
     public function testIndexAction()

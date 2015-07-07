@@ -13,13 +13,14 @@ class Tax extends AbstractTotal
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
         $totalTax = 0;
         $baseTotalTax = 0;
-        $totalHiddenTax = 0;
-        $baseTotalHiddenTax = 0;
+        $totalDiscountTaxCompensation = 0;
+        $baseTotalDiscountTaxCompensation = 0;
 
         $order = $invoice->getOrder();
 
@@ -28,7 +29,7 @@ class Tax extends AbstractTotal
             $orderItem = $item->getOrderItem();
             $orderItemQty = $orderItem->getQtyOrdered();
 
-            if (($orderItem->getTaxAmount() || $orderItem->getHiddenTaxAmount()) && $orderItemQty) {
+            if (($orderItem->getTaxAmount() || $orderItem->getDiscountTaxCompensationAmount()) && $orderItemQty) {
                 if ($item->getOrderItem()->isDummy() || $item->getQty() <= 0) {
                     continue;
                 }
@@ -38,68 +39,79 @@ class Tax extends AbstractTotal
                  */
                 $tax = $orderItem->getTaxAmount() - $orderItem->getTaxInvoiced();
                 $baseTax = $orderItem->getBaseTaxAmount() - $orderItem->getBaseTaxInvoiced();
-                $hiddenTax = $orderItem->getHiddenTaxAmount() - $orderItem->getHiddenTaxInvoiced();
-                $baseHiddenTax = $orderItem->getBaseHiddenTaxAmount() - $orderItem->getBaseHiddenTaxInvoiced();
+                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationAmount() -
+                    $orderItem->getDiscountTaxCompensationInvoiced();
+                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationAmount() -
+                    $orderItem->getBaseDiscountTaxCompensationInvoiced();
                 if (!$item->isLast()) {
                     $availableQty = $orderItemQty - $orderItem->getQtyInvoiced();
                     $tax = $invoice->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax = $invoice->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
-                    $hiddenTax = $invoice->roundPrice($hiddenTax / $availableQty * $item->getQty());
-                    $baseHiddenTax = $invoice->roundPrice($baseHiddenTax / $availableQty * $item->getQty(), 'base');
+                    $discountTaxCompensation = $invoice->roundPrice(
+                        $discountTaxCompensation / $availableQty * $item->getQty()
+                    );
+                    $baseDiscountTaxCompensation = $invoice->roundPrice(
+                        $baseDiscountTaxCompensation /
+                        $availableQty * $item->getQty(),
+                        'base'
+                    );
                 }
 
                 $item->setTaxAmount($tax);
                 $item->setBaseTaxAmount($baseTax);
-                $item->setHiddenTaxAmount($hiddenTax);
-                $item->setBaseHiddenTaxAmount($baseHiddenTax);
+                $item->setDiscountTaxCompensationAmount($discountTaxCompensation);
+                $item->setBaseDiscountTaxCompensationAmount($baseDiscountTaxCompensation);
 
                 $totalTax += $tax;
                 $baseTotalTax += $baseTax;
-                $totalHiddenTax += $hiddenTax;
-                $baseTotalHiddenTax += $baseHiddenTax;
+                $totalDiscountTaxCompensation += $discountTaxCompensation;
+                $baseTotalDiscountTaxCompensation += $baseDiscountTaxCompensation;
             }
         }
 
         if ($this->_canIncludeShipping($invoice)) {
             $totalTax += $order->getShippingTaxAmount();
             $baseTotalTax += $order->getBaseShippingTaxAmount();
-            $totalHiddenTax += $order->getShippingHiddenTaxAmount();
-            $baseTotalHiddenTax += $order->getBaseShippingHiddenTaxAmnt();
+            $totalDiscountTaxCompensation += $order->getShippingDiscountTaxCompensationAmount();
+            $baseTotalDiscountTaxCompensation += $order->getBaseShippingDiscountTaxCompensationAmnt();
             $invoice->setShippingTaxAmount($order->getShippingTaxAmount());
             $invoice->setBaseShippingTaxAmount($order->getBaseShippingTaxAmount());
-            $invoice->setShippingHiddenTaxAmount($order->getShippingHiddenTaxAmount());
-            $invoice->setBaseShippingHiddenTaxAmnt($order->getBaseShippingHiddenTaxAmnt());
+            $invoice->setShippingDiscountTaxCompensationAmount($order->getShippingDiscountTaxCompensationAmount());
+            $invoice->setBaseShippingDiscountTaxCompensationAmnt($order->getBaseShippingDiscountTaxCompensationAmnt());
         }
         $allowedTax = $order->getTaxAmount() - $order->getTaxInvoiced();
         $allowedBaseTax = $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced();
-        $allowedHiddenTax = $order->getHiddenTaxAmount() +
-            $order->getShippingHiddenTaxAmount() -
-            $order->getHiddenTaxInvoiced() -
-            $order->getShippingHiddenTaxInvoiced();
-        $allowedBaseHiddenTax = $order->getBaseHiddenTaxAmount() +
-            $order->getBaseShippingHiddenTaxAmnt() -
-            $order->getBaseHiddenTaxInvoiced() -
-            $order->getBaseShippingHiddenTaxInvoiced();
+        $allowedDiscountTaxCompensation = $order->getDiscountTaxCompensationAmount() +
+            $order->getShippingDiscountTaxCompensationAmount() -
+            $order->getDiscountTaxCompensationInvoiced() -
+            $order->getShippingDiscountTaxCompensationInvoiced();
+        $allowedBaseDiscountTaxCompensation = $order->getBaseDiscountTaxCompensationAmount() +
+            $order->getBaseShippingDiscountTaxCompensationAmnt() -
+            $order->getBaseDiscountTaxCompensationInvoiced() -
+            $order->getBaseShippingDiscountTaxCompensationInvoiced();
 
         if ($invoice->isLast()) {
             $totalTax = $allowedTax;
             $baseTotalTax = $allowedBaseTax;
-            $totalHiddenTax = $allowedHiddenTax;
-            $baseTotalHiddenTax = $allowedBaseHiddenTax;
+            $totalDiscountTaxCompensation = $allowedDiscountTaxCompensation;
+            $baseTotalDiscountTaxCompensation = $allowedBaseDiscountTaxCompensation;
         } else {
             $totalTax = min($allowedTax, $totalTax);
             $baseTotalTax = min($allowedBaseTax, $baseTotalTax);
-            $totalHiddenTax = min($allowedHiddenTax, $totalHiddenTax);
-            $baseTotalHiddenTax = min($allowedBaseHiddenTax, $baseTotalHiddenTax);
+            $totalDiscountTaxCompensation = min($allowedDiscountTaxCompensation, $totalDiscountTaxCompensation);
+            $baseTotalDiscountTaxCompensation = min(
+                $allowedBaseDiscountTaxCompensation,
+                $baseTotalDiscountTaxCompensation
+            );
         }
 
         $invoice->setTaxAmount($totalTax);
         $invoice->setBaseTaxAmount($baseTotalTax);
-        $invoice->setHiddenTaxAmount($totalHiddenTax);
-        $invoice->setBaseHiddenTaxAmount($baseTotalHiddenTax);
+        $invoice->setDiscountTaxCompensationAmount($totalDiscountTaxCompensation);
+        $invoice->setBaseDiscountTaxCompensationAmount($baseTotalDiscountTaxCompensation);
 
-        $invoice->setGrandTotal($invoice->getGrandTotal() + $totalTax + $totalHiddenTax);
-        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseTotalTax + $baseTotalHiddenTax);
+        $invoice->setGrandTotal($invoice->getGrandTotal() + $totalTax + $totalDiscountTaxCompensation);
+        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation);
 
         return $this;
     }

@@ -49,7 +49,6 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
      */
     public function searchAndUnassign(array $filter)
     {
-        $this->openFilterBlock();
         $this->search($filter);
         $selectItem = $this->_rootElement->find($this->unassignLink);
         if ($selectItem->isVisible()) {
@@ -57,5 +56,17 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
         } else {
             throw new \Exception('Searched item was not found.');
         }
+    }
+
+    /**
+     * Check on assign.
+     *
+     * @param array $filter
+     * @return bool
+     */
+    public function isAssign(array $filter)
+    {
+        $this->search($filter);
+        return $this->_rootElement->find($this->unassignLink)->isVisible();
     }
 }

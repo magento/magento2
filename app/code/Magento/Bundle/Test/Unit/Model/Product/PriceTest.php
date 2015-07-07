@@ -62,8 +62,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
-            '\Magento\CatalogRule\Model\Resource\RuleFactory',
-            [],
+            'Magento\CatalogRule\Model\Resource\RuleFactory',
+            ['create'],
             [],
             '',
             false
@@ -77,8 +77,20 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
             ->getMockForAbstractClass();
-        $gpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory', [], [], '', false);
-        $tpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory', [], [], '', false);
+        $gpFactory = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $tpFactory = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $objectManagerHelper = new ObjectManagerHelper($this);

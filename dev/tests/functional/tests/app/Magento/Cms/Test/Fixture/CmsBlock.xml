@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="cmsBlock" module="Magento_Cms" type="flat" entity_type="cms_block" collection="Magento\Cms\Model\Resource\Block\Grid\Collection" identifier="identifier"
-             handler_interface="Magento\Cms\Test\Handler\CmsBlock\CmsBlockInterface" class="Magento\Cms\Test\Fixture\CmsBlock">
+             handler_interface="Magento\Cms\Test\Handler\CmsBlock\CmsBlockInterface" repository_class="Magento\Cms\Test\Repository\CmsBlock" class="Magento\Cms\Test\Fixture\CmsBlock">
         <dataset name="default">
             <field name="title" xsi:type="string">block_%isolation%</field>
             <field name="identifier" xsi:type="string">identifier_%isolation%</field>

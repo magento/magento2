@@ -89,7 +89,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(['The address has been saved.']),
+            $this->equalTo(['You saved the address.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $address = $this->accountManagement->getDefaultBillingAddress(1);
@@ -157,7 +157,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(['The address has been deleted.']),
+            $this->equalTo(['You deleted the address.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
@@ -174,7 +174,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(['An error occurred while deleting the address.']),
+            $this->equalTo(['We can\'t delete the address right now.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

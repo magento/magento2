@@ -33,6 +33,11 @@ class OperationFactory
     const REPOSITORY_GENERATOR = 'repository_generator';
 
     /**
+     * Service data attributes generator
+     */
+    const DATA_ATTRIBUTES_GENERATOR = 'extension_attributes_generator';
+
+    /**
      * Application code generator
      */
     const APPLICATION_CODE_GENERATOR = 'application_code_generator';
@@ -43,6 +48,7 @@ class OperationFactory
      * @var array
      */
     private $operationsDefinitions = [
+        self::DATA_ATTRIBUTES_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator',
         self::AREA_CONFIG_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\Area',
         self::APPLICATION_CODE_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator',
         self::INTERCEPTION => 'Magento\Setup\Module\Di\App\Task\Operation\Interception',

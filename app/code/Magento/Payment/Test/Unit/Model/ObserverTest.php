@@ -210,7 +210,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $order->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
         $methodInstance = $this->getMockBuilder(
             'Magento\Payment\Model\MethodInterface'
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->getMockForAbstractClass();
         $paymentMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodInstance));
         $methodInstance->expects($this->once())->method('getCode')->will($this->returnValue($methodCode));
         return $order;
@@ -223,10 +223,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     private function _getPreparedActiveMethods()
     {
-        $mockedMethods = ['getCode', 'getFormBlockType', 'getTitle', 'getConfigData'];
         $method1 = $this->getMockBuilder(
             'Magento\Payment\Model\MethodInterface'
-        )->disableOriginalConstructor()->setMethods($mockedMethods)->getMock();
+        )->getMockForAbstractClass();
         $method1->expects($this->once())->method('getConfigData')->with('order_status')->will(
             $this->returnValue(self::ORDER_STATUS)
         );
@@ -236,7 +235,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $method2 = $this->getMockBuilder(
             'Magento\Payment\Model\MethodInterface'
-        )->disableOriginalConstructor()->setMethods($mockedMethods)->getMock();
+        )->getMockForAbstractClass();
         $method2->expects($this->once())->method('getConfigData')->with('order_status')->will(
             $this->returnValue('not_a_status')
         );

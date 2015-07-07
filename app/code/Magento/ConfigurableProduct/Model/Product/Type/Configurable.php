@@ -159,6 +159,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $jsonHelper;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -181,6 +186,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -205,7 +211,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_entityFactory = $entityFactory;
@@ -218,6 +225,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_scopeConfig = $scopeConfig;
         $this->stockConfiguration = $stockConfiguration;
         $this->jsonHelper = $jsonHelper;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -370,7 +378,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $configurableAttributes = $this->getConfigurableAttributeCollection($product)->orderByPosition()->load();
+            $configurableAttributes = $this->getConfigurableAttributeCollection($product);
+            $this->extensionAttributesJoinProcessor->process($configurableAttributes);
+            $configurableAttributes->orderByPosition()->load();
             $product->setData($this->_configurableAttributes, $configurableAttributes);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
@@ -791,7 +801,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
 
                     if (!isset($_result[0])) {
-                        return __('Cannot add the item to shopping cart')->render();
+                        return __('You can\'t add the item to shopping cart.')->render();
                     }
 
                     /**
@@ -864,7 +874,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify the product\'s option(s).');
+        return __('You need to choose options for your item.');
     }
 
     /**

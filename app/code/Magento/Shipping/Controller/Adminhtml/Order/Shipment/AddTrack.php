@@ -76,7 +76,7 @@ class AddTrack extends \Magento\Backend\App\Action
             } else {
                 $response = [
                     'error' => true,
-                    'message' => __('Cannot initialize shipment for adding tracking number.'),
+                    'message' => __('We can\'t initialize shipment for adding tracking number.'),
                 ];
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

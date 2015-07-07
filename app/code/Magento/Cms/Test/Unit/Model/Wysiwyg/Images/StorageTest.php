@@ -165,7 +165,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->_storageCollectionFactoryMock = $this->getMock(
             'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -259,7 +259,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\Magento\Framework\Exception\LocalizedException',
-            sprintf('We cannot delete root directory %s.', self::STORAGE_ROOT_DIR)
+            sprintf('We can\'t delete root directory %s right now.', self::STORAGE_ROOT_DIR)
         );
         $this->_model->deleteDirectory(self::STORAGE_ROOT_DIR);
     }

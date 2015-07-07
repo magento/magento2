@@ -43,6 +43,7 @@ function setPostcodeOptional(zipElement, country) {
     } else {
         zipElement.addClassName('required-entry');
         zipElement.up('div.field').addClassName('required');
+        zipElement.up('div.field').addClassName('_required');
     }
 }
 

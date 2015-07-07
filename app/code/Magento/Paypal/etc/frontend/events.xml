@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="hss_save_order_after_submit" instance="Magento\Paypal\Model\Observer" method="saveOrderAfterSubmit" />
+    </event>
+    <event name="checkout_controller_onepage_saveOrder">
+        <observer name="hss_save_order_onepage" instance="Magento\Paypal\Model\Observer" method="setResponseAfterSaveOrder" />
+    </event>
+    <event name="shortcut_buttons_container">
+        <observer name="paypal_shortcuts" instance="Magento\Paypal\Model\Observer" method="addPaypalShortcuts" />
+    </event>
+</config>

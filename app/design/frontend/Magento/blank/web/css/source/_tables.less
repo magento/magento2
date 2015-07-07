@@ -23,11 +23,13 @@ table {
         @_table_border-width: @table__border-width
     );
     tfoot {
-        > tr:first-child {
-            th,
-            td {
-                border-top: @table__border-width @table__border-style @table__border-color;
-                padding-top: @indent__base;
+        > tr {
+            &:first-child {
+                th,
+                td {
+                    border-top: @table__border-width @table__border-style @table__border-color;
+                    padding-top: @indent__base;
+                }
             }
         }
         .mark {
@@ -83,6 +85,19 @@ table {
                     padding-right: 0;
                     text-align: right;
                     width: 30%;
+                }
+            }
+            &.additional-attributes {
+                tbody {
+                    th {
+                        &:extend(.abs-no-display-s all);
+                    }
+                    td {
+                        &:last-child {
+                            border: none;
+                            padding: 0 0 @indent__xs;
+                        }
+                    }
                 }
             }
         }

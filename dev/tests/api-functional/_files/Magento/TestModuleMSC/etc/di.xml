@@ -13,7 +13,7 @@
     <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject" />
     <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject" />
 
-    <virtualType name="Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
+    <virtualType name="Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig" type="Magento\Framework\Api\ExtensionAttribute\Config\MetadataConfig">
         <arguments>
             <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModuleMSC\Model\Data\Eav\AttributeMetadataBuilder</argument>
             <argument name="dataObjectClassName" xsi:type="string">Magento\TestModuleMSC\Model\Data\Item</argument>

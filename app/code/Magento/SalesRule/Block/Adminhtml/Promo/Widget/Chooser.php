@@ -144,7 +144,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'from_date',
             [
-                'header' => __('Start on'),
+                'header' => __('Start'),
                 'align' => 'left',
                 'width' => '120px',
                 'type' => 'date',
@@ -155,7 +155,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'to_date',
             [
-                'header' => __('End on'),
+                'header' => __('End'),
                 'align' => 'left',
                 'width' => '120px',
                 'type' => 'date',

@@ -35,7 +35,6 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -77,7 +76,7 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
         $customerForm = $customerIndexEdit->getCustomerForm();
         $customerForm->openTab('wishlist');
         $filter = ['product_name' => $product->getName()];
-        $customerForm->getTabElement('wishlist')->getSearchGridBlock()->searchAndAction($filter, 'Delete');
+        $customerForm->getTab('wishlist')->getSearchGridBlock()->searchAndAction($filter, 'Delete');
 
         return ['products' => [$product]];
     }

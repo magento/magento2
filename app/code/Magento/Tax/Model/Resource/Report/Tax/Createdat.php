@@ -46,10 +46,6 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $writeAdapter = $this->_getWriteAdapter();
         $salesAdapter = $this->_resources->getConnection('sales_read');
 
@@ -69,7 +65,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             }
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect, false, $salesAdapter);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $writeAdapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['e' => $this->getTable('sales_order')],

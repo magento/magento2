@@ -159,7 +159,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -173,7 +173,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         TransactionFactory $transactionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_paymentFactory = $paymentFactory;
@@ -614,8 +614,12 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         $this->_verifyThisTransactionExists();
         if (null === $this->_paymentObject && $shouldLoad) {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
             $payment = $this->_paymentFactory->create()->load($this->getPaymentId());
             if ($payment->getId()) {
+                if (!$payment->getOrder()) {
+                    $payment->setOrder($this->getOrder());
+                }
                 $this->setOrderPaymentObject($payment);
             }
         }
@@ -892,7 +896,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The Transaction ID field cannot be empty.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a Transaction ID.'));
         }
     }
 
@@ -911,6 +915,7 @@ class Transaction extends AbstractModel implements TransactionInterface
         $this->_verifyTxnType();
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Returns transaction_id
      *
@@ -980,6 +985,17 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
+     * Get HTML format for transaction id
+     *
+     * @return string
+     */
+    public function getHtmlTxnId()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_html_txn_id', $this->_getEventData());
+        return isset($this->_data['html_txn_id']) ? $this->_data['html_txn_id'] : $this->getTxnId();
+    }
+
+    /**
      * Returns parent_txn_id
      *
      * @return string
@@ -1009,7 +1025,6 @@ class Transaction extends AbstractModel implements TransactionInterface
         return $this->getData(TransactionInterface::IS_CLOSED);
     }
 
-    //@codeCoverageIgnoreStart
     /**
      * Gets the created-at timestamp for the transaction.
      *

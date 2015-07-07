@@ -57,6 +57,7 @@ class Info extends \Magento\Framework\View\Element\Template
         $this->addressRenderer = $addressRenderer;
         $this->paymentHelper = $paymentHelper;
         $this->coreRegistry = $registry;
+        $this->_isScopePrivate = true;
         parent::__construct($context, $data);
     }
 

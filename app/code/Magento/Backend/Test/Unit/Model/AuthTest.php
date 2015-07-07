@@ -50,7 +50,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage Please correct the user name or password.
+     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testLoginFailed()
     {
@@ -59,8 +59,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Backend\Model\Auth\Credential\StorageInterface')
             ->will($this->returnValue($this->_credentialStorage));
-        $exceptionMock =
-            new \Magento\Framework\Exception\LocalizedException(__('Please correct the user name or password.'));
+        $exceptionMock = new \Magento\Framework\Exception\LocalizedException(
+            __('You did not sign in correctly or your account is temporarily disabled.')
+        );
         $this->_credentialStorage
             ->expects($this->once())
             ->method('login')

@@ -5,15 +5,14 @@
  */
 
 /**
- * Shipment tracking control form
- *
+ * Invoice tracking control form
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
 class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
     /**
-     * Retrieve shipment model instance
+     * Retrieve invoice
      *
      * @return \Magento\Sales\Model\Order\Shipment
      */
@@ -23,9 +22,9 @@ class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     }
 
     /**
-     * Retrieve
+     * Retrieve carriers
      *
-     * @return unknown
+     * @return array
      */
     protected function _getCarriersInstances()
     {

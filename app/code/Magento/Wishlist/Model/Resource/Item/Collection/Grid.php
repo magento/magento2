@@ -107,7 +107,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      *
      * @param   string $field
      * @param   string $direction
-     * @return  \Magento\Framework\Data\Collection\Db
+     * @return  \Magento\Framework\Data\Collection\AbstractDb
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -128,7 +128,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param string|array $field
      * @param null|string|array $condition
      * @see self::_getConditionSql for $condition
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function addFieldToFilter($field, $condition = null)
     {

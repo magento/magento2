@@ -5,6 +5,8 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLinks\Plugin;
 
+use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
+
 class Grouped
 {
     /**
@@ -22,8 +24,9 @@ class Grouped
         \Magento\Catalog\Model\Product $product,
         array $links
     ) {
-        if (isset($links['associated']) && !$product->getGroupedReadonly()) {
-            $product->setGroupedLinkData((array)$links['associated']);
+        if ($product->getTypeId() == TypeGrouped::TYPE_CODE && !$product->getGroupedReadonly()) {
+            $links = isset($links['associated']) ? $links['associated'] : $product->getGroupedLinkData();
+            $product->setGroupedLinkData((array)$links);
         }
     }
 }
