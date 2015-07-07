@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Authorizenet\Model\Directpost\Observer">
+        <arguments>
+            <argument name="authorizenetData" xsi:type="object">Magento\Authorizenet\Helper\Data\Proxy</argument>
+            <argument name="jsonHelper" xsi:type="object">Magento\Framework\Json\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Authorizenet\Model\Directpost\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">authorizenet_directpost</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Authorizenet\Model\Directpost\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Authorizenet\Model\Directpost\Session\Storage</argument>
+        </arguments>
+    </type>
+</config>
