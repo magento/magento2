@@ -199,14 +199,13 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(200)
-            ->will($this->returnSelf());;
+            ->will($this->returnSelf());
         $this->responseMock->expects($this->once())
             ->method('sendHeaders')
             ->will($this->returnSelf());
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
-
         $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\WriteInterface')
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
