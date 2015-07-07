@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\Paypal\Block\Express\Shortcut
+ */
+?>
+<?php
+$labelPosition = '';
+if ($block->isOrPositionBefore()) {
+    $labelPosition = ' before';
+} elseif ($block->isOrPositionAfter()) {
+    $labelPosition = ' after';
+}
+?>
+<?php $shortcutHtmlId = $block->getShortcutHtmlId() ?>
+<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo <?php echo $shortcutHtmlId ?>">
+    <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $block->getCheckoutUrl() ?>"
+           src="<?php echo $block->getImageUrl() ?>"
+           alt="<?php echo __('Checkout with PayPal'); ?>"
+           title="<?php echo __('Checkout with PayPal'); ?>"/>
+    <?php if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()): ?>
+        <?php
+        $confirmationUrl = $block->getConfirmationUrl();
+        $isInCatalogProduct = $block->getIsInCatalogProduct();
+    endif; ?>
+    <?php if ($block->getAdditionalLinkImage()): ?>
+        <?php $linkImage = $block->getAdditionalLinkImage() ?>
+        <a href="<?php echo $linkImage['href']?>"><img src="<?php echo $linkImage['src']?>" /></a>
+    <?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        ".paypal-logo.<?php echo $shortcutHtmlId ?>": {
+            "paypalCheckout": {
+                "confirmMessage": "<?php echo $block->escapeJsQuote($block->getConfirmationMessage())?>",
+                "confirmUrl": "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
+                "isCatalogProduct": "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
+                "paypalCheckoutSelector": "#pp-checkout-url",
+                "shortcutContainerClass": "<?php echo "." . $shortcutHtmlId ?>"
+            }
+        }
+    }
+</script>
+</div>

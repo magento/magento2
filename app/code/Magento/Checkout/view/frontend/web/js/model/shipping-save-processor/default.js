@@ -11,9 +11,9 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/payment/method-converter',
-        'Magento_Ui/js/model/messageList'
+        'Magento_Checkout/js/model/error-processor'
     ],
-    function (ko, quote, resourceUrlManager, storage, paymentService, methodConverter, messageList) {
+    function (ko, quote, resourceUrlManager, storage, paymentService, methodConverter, errorProcessor) {
         'use strict';
 
         return {
@@ -36,8 +36,7 @@ define(
                     }
                 ).fail(
                     function (response) {
-                        var error = JSON.parse(response.responseText);
-                        messageList.addErrorMessage(error);
+                        errorProcessor.process(response);
                     }
                 );
             }
