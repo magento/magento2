@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
+use Magento\Setup\Model\Cron\ReadinessCheck;
 use Magento\Setup\Model\CronScriptReadinessCheck;
 
 class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
@@ -47,7 +48,12 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckSetupCronError()
     {
-        $json = ['readiness_checks' => ['db_write_permission_verified' => false, 'error' => 'error']];
+        $json = [
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
+                'error' => 'error'
+            ]
+        ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => false, 'error' => 'error'];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
@@ -56,9 +62,9 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckSetupBadTime()
     {
         $json = [
-            'readiness_checks' => ['db_write_permission_verified' => true],
-            'current_timestamp' => 200,
-            'last_timestamp' => 100
+            ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+            ReadinessCheck::KEY_LAST_TIMESTAMP => 100
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
@@ -72,9 +78,9 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckSetup()
     {
         $json = [
-            'readiness_checks' => ['db_write_permission_verified' => true],
-            'current_timestamp' => 200,
-            'last_timestamp' => 140
+            ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+            ReadinessCheck::KEY_LAST_TIMESTAMP => 140
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => true];
@@ -99,7 +105,12 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckUpdaterCronError()
     {
-        $json = ['readiness_checks' => ['file_permissions_verified' => false, 'error' => 'error']];
+        $json = [
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                CronScriptReadinessCheck::UPDATER_KEY_FILE_PERMISSIONS_VERIFIED => false,
+                'error' => 'error'
+            ]
+        ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => false, 'error' => 'error'];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
@@ -108,9 +119,11 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckUpdaterBadTime()
     {
         $json = [
-            'readiness_checks' => ['file_permissions_verified' => true],
-            'current_timestamp' => 200,
-            'last_timestamp' => 100
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                CronScriptReadinessCheck::UPDATER_KEY_FILE_PERMISSIONS_VERIFIED => true
+            ],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+            ReadinessCheck::KEY_LAST_TIMESTAMP => 100
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
@@ -124,9 +137,11 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckUpdater()
     {
         $json = [
-            'readiness_checks' => ['file_permissions_verified' => true],
-            'current_timestamp' => 200,
-            'last_timestamp' => 140
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                CronScriptReadinessCheck::UPDATER_KEY_FILE_PERMISSIONS_VERIFIED => true
+            ],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+            ReadinessCheck::KEY_LAST_TIMESTAMP => 140
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = ['success' => true];

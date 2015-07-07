@@ -280,38 +280,28 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * Verifies Setup Cron status
+     * Verifies Setup and Updater Cron status
      *
      * @return JsonModel
      */
-    public function cronScriptSetupAction()
+    public function cronScriptAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
 
         $setupCheck = $this->cronScriptReadinessCheck->checkSetup();
+        $updaterCheck = $this->cronScriptReadinessCheck->checkUpdater();
         $data = [];
         if (!$setupCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $setupCheck['error'];
         }
-        $data['responseType'] = $responseType;
-        return new JsonModel($data);
-    }
-
-    /**
-     * Verifies Updater Cron status
-     *
-     * @return JsonModel
-     */
-    public function cronScriptUpdaterAction()
-    {
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-
-        $setupCheck = $this->cronScriptReadinessCheck->checkUpdater();
-        $data = [];
-        if (!$setupCheck['success']) {
+        if (!$updaterCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            $data['errorMessage'] = $setupCheck['error'];
+            if (isset($data['errorMessage'])) {
+                $data['errorMessage'] .= '<br/>' . $updaterCheck['error'];
+            } else {
+                $data['errorMessage'] = $updaterCheck['error'];
+            }
         }
         $data['responseType'] = $responseType;
         return new JsonModel($data);

@@ -65,14 +65,7 @@ angular.module('readiness-check', [])
             expanded: false,
             isRequestError: false
         };
-        $scope.cronscriptsetup = {
-            visible: false,
-            processed: false,
-            expanded: false,
-            isRequestError: false,
-            errorMessage: ''
-        };
-        $scope.cronscriptupdater = {
+        $scope.cronScript = {
             visible: false,
             processed: false,
             expanded: false,
@@ -178,42 +171,23 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.updater);
                 }
             };
-            $scope.items['cron-script-setup'] = {
-                url:'index.php/environment/cron-script-setup',
+            $scope.items['cron-script'] = {
+                url:'index.php/environment/cron-script',
                 show: function() {
                     $scope.startProgress();
-                    $scope.cronscriptsetup.visible = true;
+                    $scope.cronScript.visible = true;
                 },
                 process: function(data) {
-                    $scope.cronscriptsetup.processed = true;
+                    $scope.cronScript.processed = true;
                     if (data.errorMessage) {
                         data.errorMessage = $sce.trustAsHtml(data.errorMessage);
                     }
-                    angular.extend($scope.cronscriptsetup, data);
-                    $scope.updateOnProcessed($scope.cronscriptsetup.responseType);
+                    angular.extend($scope.cronScript, data);
+                    $scope.updateOnProcessed($scope.cronScript.responseType);
                     $scope.stopProgress();
                 },
                 fail: function() {
-                    $scope.requestFailedHandler($scope.cronscriptsetup);
-                }
-            };
-            $scope.items['cron-script-updater'] = {
-                url:'index.php/environment/cron-script-updater',
-                show: function() {
-                    $scope.startProgress();
-                    $scope.cronscriptupdater.visible = true;
-                },
-                process: function(data) {
-                    $scope.cronscriptupdater.processed = true;
-                    if (data.errorMessage) {
-                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
-                    }
-                    angular.extend($scope.cronscriptupdater, data);
-                    $scope.updateOnProcessed($scope.cronscriptupdater.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.cronscriptupdater);
+                    $scope.requestFailedHandler($scope.cronScriptSetup);
                 }
             };
             $scope.items['component-dependency'] = {
@@ -242,7 +216,7 @@ angular.module('readiness-check', [])
             return $scope.version.processed
                 && $scope.extensions.processed
                 && $scope.permissions.processed
-                && (($scope.cronscriptsetup.processed && $scope.cronscriptupdater.processed && $scope.componentdependency.processed && $scope.updater.processed)
+                && (($scope.cronScript.processed && $scope.componentdependency.processed && $scope.updater.processed)
                     || ($scope.actionFrom !== 'updater'));
         };
 

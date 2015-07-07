@@ -30,6 +30,8 @@ class CronScriptReadinessCheck
      */
     const UPDATER_CRON_JOB_STATS_FILE = '.update_cronjob_status';
 
+    const UPDATER_KEY_FILE_PERMISSIONS_VERIFIED = 'file_permissions_verified';
+
     /**
      * @var Filesystem
      */
@@ -78,10 +80,10 @@ class CronScriptReadinessCheck
             switch ($type) {
                 case self::SETUP:
                     $key = ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED;
-                    $jsonData = json_decode($read->readFile(ReadinessCheck::CRON_JOB_STATUS_FILE), true);
+                    $jsonData = json_decode($read->readFile(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE), true);
                     break;
                 case self::UPDATER:
-                    $key = 'file_permissions_verified';
+                    $key = self::UPDATER_KEY_FILE_PERMISSIONS_VERIFIED;
                     $jsonData = json_decode($read->readFile(self::UPDATER_CRON_JOB_STATS_FILE), true);
                     break;
                 default:
@@ -91,11 +93,13 @@ class CronScriptReadinessCheck
             return ['success' => false, 'error' => 'Cron Job has not been configured yet'];
         }
 
-        if (isset($jsonData['readiness_checks']) && isset($jsonData['readiness_checks'][$key])) {
-            if ($jsonData['readiness_checks'][$key]) {
+        if (isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS])
+            && isset($jsonData[ReadinessCheck::KEY_READINESS_CHECKS][$key])
+        ) {
+            if ($jsonData[ReadinessCheck::KEY_READINESS_CHECKS][$key]) {
                 return $this->checkCronTime($jsonData);
             }
-            return ['success' => false, 'error' => $jsonData['readiness_checks']['error']];
+            return ['success' => false, 'error' => $jsonData[ReadinessCheck::KEY_READINESS_CHECKS]['error']];
         }
         return ['success' => false, 'error' => 'Cron Job has not been configured yet'];
     }
@@ -104,12 +108,16 @@ class CronScriptReadinessCheck
      * Check if Cron Job time interval is within acceptable range
      *
      * @param array $jsonData
-     * @return bool
+     * @return array
      */
     private function checkCronTime(array $jsonData)
     {
-        if (isset($jsonData['current_timestamp']) && isset($jsonData['last_timestamp'])) {
-            if (($jsonData['current_timestamp'] - $jsonData['last_timestamp']) < 90) {
+        if (isset($jsonData[ReadinessCheck::KEY_CURRENT_TIMESTAMP])
+            && isset($jsonData[ReadinessCheck::KEY_LAST_TIMESTAMP])
+        ) {
+            $timeDifference = $jsonData[ReadinessCheck::KEY_CURRENT_TIMESTAMP] -
+                $jsonData[ReadinessCheck::KEY_LAST_TIMESTAMP];
+            if ($timeDifference < 90) {
                 return ['success' => true];
             }
             return [
@@ -118,6 +126,6 @@ class CronScriptReadinessCheck
                     'to schedule it to run every 1 minute'
             ];
         }
-        return ['success' => false, 'error' => 'Unable to determine last run timestamp'];
+        return ['success' => false, 'error' => 'Unable to determine Cron time interval'];
     }
 }

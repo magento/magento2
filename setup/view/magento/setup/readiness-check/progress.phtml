@@ -337,13 +337,13 @@
 
 </div>
 
-<div id="cron-script-setup" class="rediness-check-item" ng-show="cronscriptsetup.visible">
-    <h3 class="readiness-check-title" ng-hide="cronscriptsetup.processed">
+<div id="cron-script" class="rediness-check-item" ng-show="cronScript.visible">
+    <h3 class="readiness-check-title" ng-hide="cronScript.processed">
         Checking Setup Application Cron Script...
     </h3>
 
-    <div ng-show="cronscriptsetup.processed" ng-switch="cronscriptsetup.responseType">
-        <div ng-switch-when="success" ng-init="updateOnSuccess(cronscriptsetup)">
+    <div ng-show="cronScript.processed" ng-switch="cronScript.responseType">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(cronScript)">
             <span class="readiness-check-icon icon-success-round"></span>
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Setup Application Cron Script</h3>
@@ -353,55 +353,20 @@
             </div>
         </div>
 
-        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(cronscriptsetup)">
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(cronScript)">
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
                 <h3 class="readiness-check-title">Check Setup Application Cron Script</h3>
                 <p>
                     Cron is configured incorrectly.
-                    <a href="#cron-script-setup" ng-click="updateOnExpand(cronscriptsetup)">
-                        <span ng-hide="cronscriptsetup.expanded">Show detail</span>
-                        <span ng-show="cronscriptsetup.expanded">Hide detail</span>
+                    <a href="#cron-script-setup" ng-click="updateOnExpand(cronScript)">
+                        <span ng-hide="cronScript.expanded">Show detail</span>
+                        <span ng-show="cronScript.expanded">Hide detail</span>
                     </a>
                 </p>
-                <p ng-show="cronscriptsetup.expanded" ng-bind-html="cronscriptsetup.errorMessage">
+                <p ng-show="cronScript.expanded" ng-bind-html="cronScript.errorMessage">
                 </p>
-                <p ng-show="cronscriptsetup.expanded">If you need more help please visit documentation page.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="cron-script-updater" class="rediness-check-item" ng-show="cronscriptupdater.visible">
-    <h3 class="readiness-check-title" ng-hide="cronscriptupdater.processed">
-        Checking Setup Application Cron Script...
-    </h3>
-
-    <div ng-show="cronscriptupdater.processed" ng-switch="cronscriptupdater.responseType">
-        <div ng-switch-when="success" ng-init="updateOnSuccess(cronscriptupdater)">
-            <span class="readiness-check-icon icon-success-round"></span>
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">Check Updater Application Cron Script</h3>
-                <p>
-                    Cron is configured correctly.
-                </p>
-            </div>
-        </div>
-
-        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(cronscriptupdater)">
-            <span class="readiness-check-icon icon-failed-round"></span>
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">Check Updater Application Cron Script</h3>
-                <p>
-                    Cron is configured incorrectly.
-                    <a href="#cron-script-updater" ng-click="updateOnExpand(cronscriptupdater)">
-                        <span ng-hide="cronscriptupdater.expanded">Show detail</span>
-                        <span ng-show="cronscriptupdater.expanded">Hide detail</span>
-                    </a>
-                </p>
-                <p ng-show="cronscriptupdater.expanded" ng-bind-html="cronscriptupdater.errorMessage">
-                </p>
-                <p ng-show="cronscriptupdater.expanded">If you need more help please visit documentation page.</p>
+                <p ng-show="cronScript.expanded">If you need more help please visit documentation page.</p>
             </div>
         </div>
     </div>

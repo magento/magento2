@@ -67,8 +67,9 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->readinessCheck->runReadinessCheck() || $this->status->isUpdateInProgress() ||
-            $this->status->isUpdateError()
+        if (!$this->readinessCheck->runReadinessCheck()
+            || $this->status->isUpdateInProgress()
+            || $this->status->isUpdateError()
         ) {
             return;
         }
