@@ -68,9 +68,23 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
-            'success' => false,
-            'error' => 'Cron Job is running properly, however it is recommended ' .
-                'to schedule it to run every 1 minute'
+            'success' => true,
+            'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+        ];
+        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
+    }
+
+    public function testCheckSetupUnknownTime()
+    {
+        $json = [
+            ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+        ];
+        $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
+        $expected = [
+            'success' => true,
+            'notice' => 'Unable to determine Cron time interval. ' .
+                'It is recommended to schedule Cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
@@ -127,9 +141,25 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         ];
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
-            'success' => false,
-            'error' => 'Cron Job is running properly, however it is recommended ' .
-                'to schedule it to run every 1 minute'
+            'success' => true,
+            'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+        ];
+        $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
+    }
+
+    public function testCheckUpdaterUnknownTime()
+    {
+        $json = [
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                CronScriptReadinessCheck::UPDATER_KEY_FILE_PERMISSIONS_VERIFIED => true
+            ],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 200,
+        ];
+        $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
+        $expected = [
+            'success' => true,
+            'notice' => 'Unable to determine Cron time interval. ' .
+                'It is recommended to schedule Cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }

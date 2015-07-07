@@ -102,7 +102,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->method('checkUpdater')
             ->willReturn(['success' => true]);
         $expected = new JsonModel(
-            ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR, 'errorMessage' => 'error message setup']
+            [
+                'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
+                'setupErrorMessage' => 'Error from Setup Application Cron Script:<br/>error message setup'
+            ]
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
     }
@@ -113,7 +116,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ->method('checkUpdater')
             ->willReturn(['success' => false, 'error' => 'error message updater']);
         $expected = new JsonModel(
-            ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR, 'errorMessage' => 'error message updater']
+            [
+                'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
+                'updaterErrorMessage' => 'Error from Updater Application Cron Script:<br/>error message updater'
+            ]
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
     }
@@ -129,7 +135,58 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $expected = new JsonModel(
             [
                 'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                'errorMessage' => 'error message setup<br/>error message updater'
+                'setupErrorMessage' => 'Error from Setup Application Cron Script:<br/>error message setup',
+                'updaterErrorMessage' => 'Error from Updater Application Cron Script:<br/>error message updater',
+            ]
+        );
+        $this->assertEquals($expected, $this->environment->cronScriptAction());
+    }
+
+    public function testCronScriptActionSetupNotice()
+    {
+        $this->cronScriptReadinessCheck->expects($this->once())
+            ->method('checkSetup')
+            ->willReturn(['success' => true, 'notice' => 'notice setup']);
+        $this->cronScriptReadinessCheck->expects($this->once())
+            ->method('checkUpdater')
+            ->willReturn(['success' => true]);
+        $expected = new JsonModel(
+            [
+                'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
+                'setupNoticeMessage' => 'Notice from Setup Application Cron Script:<br/>notice setup'
+            ]
+        );
+        $this->assertEquals($expected, $this->environment->cronScriptAction());
+    }
+
+    public function testCronScriptActionUpdaterNotice()
+    {
+        $this->cronScriptReadinessCheck->expects($this->once())->method('checkSetup')->willReturn(['success' => true]);
+        $this->cronScriptReadinessCheck->expects($this->once())
+            ->method('checkUpdater')
+            ->willReturn(['success' => true, 'notice' => 'notice updater']);
+        $expected = new JsonModel(
+            [
+                'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
+                'updaterNoticeMessage' => 'Notice from Updater Application Cron Script:<br/>notice updater'
+            ]
+        );
+        $this->assertEquals($expected, $this->environment->cronScriptAction());
+    }
+
+    public function testCronScriptActionBothNotice()
+    {
+        $this->cronScriptReadinessCheck->expects($this->once())
+            ->method('checkSetup')
+            ->willReturn(['success' => true, 'notice' => 'notice setup']);
+        $this->cronScriptReadinessCheck->expects($this->once())
+            ->method('checkUpdater')
+            ->willReturn(['success' => true, 'notice' => 'notice updater']);
+        $expected = new JsonModel(
+            [
+                'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
+                'setupNoticeMessage' => 'Notice from Setup Application Cron Script:<br/>notice setup',
+                'updaterNoticeMessage' => 'Notice from Updater Application Cron Script:<br/>notice updater'
             ]
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());

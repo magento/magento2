@@ -70,7 +70,11 @@ angular.module('readiness-check', [])
             processed: false,
             expanded: false,
             isRequestError: false,
-            errorMessage: ''
+            notice: false,
+            setupErrorMessage: '',
+            updaterErrorMessage: '',
+            setupNoticeMessage: '',
+            updaterNoticeMessage: '',
         };
         $scope.componentdependency = {
             visible: false,
@@ -179,8 +183,19 @@ angular.module('readiness-check', [])
                 },
                 process: function(data) {
                     $scope.cronScript.processed = true;
-                    if (data.errorMessage) {
-                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                    if (data.setupErrorMessage) {
+                        data.setupErrorMessage = $sce.trustAsHtml(data.setupErrorMessage);
+                    }
+                    if (data.updaterErrorMessage) {
+                        data.updaterErrorMessage = $sce.trustAsHtml(data.updaterErrorMessage);
+                    }
+                    if (data.setupNoticeMessage) {
+                        $scope.cronScript.notice = true;
+                        data.setupNoticeMessage = $sce.trustAsHtml(data.setupNoticeMessage);
+                    }
+                    if (data.updaterNoticeMessage) {
+                        $scope.cronScript.notice = true;
+                        data.updaterNoticeMessage = $sce.trustAsHtml(data.updaterNoticeMessage);
                     }
                     angular.extend($scope.cronScript, data);
                     $scope.updateOnProcessed($scope.cronScript.responseType);

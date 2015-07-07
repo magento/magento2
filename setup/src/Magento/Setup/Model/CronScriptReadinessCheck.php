@@ -124,11 +124,14 @@ class CronScriptReadinessCheck
                 return ['success' => true];
             }
             return [
-                'success' => false,
-                'error' => 'Cron Job is running properly, however it is recommended ' .
-                    'to schedule it to run every 1 minute'
+                'success' => true,
+                'notice' => 'It is recommended to schedule Cron to run every 1 minute'
             ];
         }
-        return ['success' => false, 'error' => 'Unable to determine Cron time interval'];
+        return [
+            'success' => true,
+            'notice' => 'Unable to determine Cron time interval. ' .
+                'It is recommended to schedule Cron to run every 1 minute'
+        ];
     }
 }
