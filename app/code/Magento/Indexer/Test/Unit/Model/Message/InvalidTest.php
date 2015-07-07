@@ -7,7 +7,6 @@ namespace Magento\Indexer\Test\Unit\Model\Message;
 
 class InvalidTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Indexer\Model\Indexer
      */
