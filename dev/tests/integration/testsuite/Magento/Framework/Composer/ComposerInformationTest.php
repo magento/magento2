@@ -29,7 +29,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var BufferIoFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $bufferIoFactory;
+    private $bufferIoFactoryMock;
 
     public function setUp()
     {
@@ -40,8 +40,8 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->will($this->returnValue($this->directoryReadMock));
         $this->ioMock = $this->getMock('Composer\IO\BufferIO', [], [], '', false);
-        $this->bufferIoFactory = $this->getMock('Magento\Framework\Composer\BufferIoFactory', [], [], '', false);
-        $this->bufferIoFactory->expects($this->any())->method('create')->willReturn($this->ioMock);
+        $this->bufferIoFactoryMock = $this->getMock('Magento\Framework\Composer\BufferIoFactory', [], [], '', false);
+        $this->bufferIoFactoryMock->expects($this->any())->method('create')->willReturn($this->ioMock);
     }
 
     /**
@@ -70,7 +70,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredPhpVersion($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactory);
+        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
         $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
     }
 
@@ -82,7 +82,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactory);
+        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
@@ -99,7 +99,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactory);
+        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
 
         $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
@@ -128,6 +128,6 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testNoLock()
     {
         $this->setupDirectoryMock('notARealDirectory');
-        new ComposerInformation($this->filesystemMock, $this->bufferIoFactory);
+        new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
     }
 }
