@@ -232,7 +232,7 @@ angular.module('readiness-check', [])
                 && $scope.extensions.processed
                 && $scope.permissions.processed
                 && (($scope.cronScript.processed && $scope.componentdependency.processed && $scope.updater.processed)
-                    || ($scope.actionFrom !== 'updater'));
+                || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {
