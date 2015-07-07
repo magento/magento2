@@ -6,9 +6,6 @@
 namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\Search\AggregationInterface;
-use Magento\Framework\Api\Search\DocumentInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 interface SearchResultInterface extends  SearchResultsInterface
 {
@@ -22,25 +19,25 @@ interface SearchResultInterface extends  SearchResultsInterface
     /**#@-*/
 
     /**
-     * @return DocumentInterface[]
+     * @return \Magento\Framework\Api\Search\DocumentInterface[]
      */
     public function getItems();
 
     /**
      * Set items list.
      *
-     * @param DocumentInterface[] $items
+     * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
      * @return $this
      */
     public function setItems(array $items = null);
 
     /**
-     * @return AggregationInterface
+     * @return \Magento\Framework\Search\AggregationInterface
      */
     public function getAggregations();
 
     /**
-     * @param AggregationInterface $aggregations
+     * @param \Magento\Framework\Search\AggregationInterface $aggregations
      * @return $this
      */
     public function setAggregations($aggregations);
@@ -48,7 +45,7 @@ interface SearchResultInterface extends  SearchResultsInterface
     /**
      * Get search criteria.
      *
-     * @return SearchCriteriaInterface
+     * @return \Magento\Framework\Api\Search\SearchCriteriaInterface
      */
     public function getSearchCriteria();
 }
