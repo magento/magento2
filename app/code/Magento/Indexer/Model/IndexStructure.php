@@ -61,7 +61,7 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function delete($index, array $dimensions)
+    public function delete($index, array $dimensions = [])
     {
         $adapter = $this->getAdapter();
         $this->dropTable($adapter, $this->indexScopeResolver->resolve($index, $dimensions));
@@ -74,7 +74,7 @@ class IndexStructure
      * @param Dimension[] $dimensions
      * @return void
      */
-    public function create($index, array $filterFields, array $dimensions)
+    public function create($index, array $filterFields, array $dimensions = [])
     {
         $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
         if ($filterFields) {
@@ -139,10 +139,20 @@ class IndexStructure
     {
         $adapter = $this->getAdapter();
         $table = $adapter->newTable($tableName);
+        $table->addColumn(
+            'entity_id',
+            Table::TYPE_INTEGER,
+            10,
+            ['unsigned' => true, 'nullable' => false],
+            'Entity ID'
+        );
         foreach ($fields as $field) {
+            if ($field['type'] !== 'filterable') {
+                continue;
+            }
             $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => $field['type'], 'size' => $field['size']];
+                : ['type' => $field['type'], 'size' => isset($field['size']) ? $field['size'] : null];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];
