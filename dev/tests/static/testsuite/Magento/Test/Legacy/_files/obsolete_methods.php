@@ -2262,7 +2262,7 @@ return [
     [
         'getConfigureUrl',
         'Magento\Checkout\Block\Cart\Item\Renderer',
-        '\Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl'
+        'Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit::getConfigureUrl',
     ],
     ['getCurrenCategoryKey', 'Magento\Catalog\Block\Navigation', 'getCurrentCategoryKey'],
     ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
@@ -2275,5 +2275,10 @@ return [
     ['_getCentinelVpasLabel', 'Magento\Paypal\Model\Info'],
     ['_getCentinelEciLabel', 'Magento\Paypal\Model\Info'],
     ['_getPayPalPayflowPro3dSecure', 'Magento\Config\Test\Repository\Config'],
-    ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config']
+    ['_getPayPalPaymentsPro3dSecure', 'Magento\Config\Test\Repository\Config'],
+    [
+        'getCreatedAtFormated',
+        'Magento\Sales\Model\Order',
+        'Magento\Sales\Model\Order::getCreatedAtFormatted',
+    ],
 ];
