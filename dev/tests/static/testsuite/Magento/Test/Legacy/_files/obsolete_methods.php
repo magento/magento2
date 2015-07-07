@@ -2281,4 +2281,9 @@ return [
         'Magento\Sales\Model\Order',
         'Magento\Sales\Model\Order::getCreatedAtFormatted',
     ],
+    [
+        '_getConfig',
+        'Magento\Store\Model\Store',
+        'Magento\Store\Model\Store::getConfig',
+    ]
 ];

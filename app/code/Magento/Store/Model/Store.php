@@ -475,17 +475,6 @@ class Store extends AbstractModel implements
     /**
      * Retrieve store configuration data
      *
-     * @param $path
-     * @return string|null
-     * @deprecated
-     */
-    protected function _getConfig($path) {
-        return $this->getConfig($path);
-    }
-
-    /**
-     * Retrieve store configuration data
-     *
      * @param   string $path
      * @return  string|null
      */
@@ -560,25 +549,25 @@ class Store extends AbstractModel implements
                     $path = $secure
                         ? self::XML_PATH_SECURE_BASE_URL
                         : self::XML_PATH_UNSECURE_BASE_URL;
-                    $url = $this->_getConfig($path);
+                    $url = $this->getConfig($path);
                     break;
 
                 case \Magento\Framework\UrlInterface::URL_TYPE_LINK:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
-                    $url = $this->_getConfig($path);
+                    $url = $this->getConfig($path);
                     $url = $this->_updatePathUseRewrites($url);
                     $url = $this->_updatePathUseStoreView($url);
                     break;
 
                 case \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
-                    $url = $this->_getConfig($path);
+                    $url = $this->getConfig($path);
                     $url = $this->_updatePathUseRewrites($url);
                     break;
 
                 case \Magento\Framework\UrlInterface::URL_TYPE_STATIC:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_STATIC_URL : self::XML_PATH_UNSECURE_BASE_STATIC_URL;
-                    $url = $this->_getConfig($path);
+                    $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(
                             \Magento\Framework\UrlInterface::URL_TYPE_WEB,
@@ -593,7 +582,7 @@ class Store extends AbstractModel implements
                     $url = $this->_getMediaScriptUrl($this->filesystem, $secure);
                     if (!$url) {
                         $path = $secure ? self::XML_PATH_SECURE_BASE_MEDIA_URL : self::XML_PATH_UNSECURE_BASE_MEDIA_URL;
-                        $url = $this->_getConfig($path);
+                        $url = $this->getConfig($path);
                         if (!$url) {
                             $url = $this->getBaseUrl(
                                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
@@ -648,7 +637,7 @@ class Store extends AbstractModel implements
      */
     protected function _updatePathUseRewrites($url)
     {
-        if ($this->getForceDisableRewrites() || !$this->_getConfig(self::XML_PATH_USE_REWRITES)) {
+        if ($this->getForceDisableRewrites() || !$this->getConfig(self::XML_PATH_USE_REWRITES)) {
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
@@ -681,7 +670,7 @@ class Store extends AbstractModel implements
      */
     protected function _getMediaScriptUrl(\Magento\Framework\Filesystem $filesystem, $secure)
     {
-        if (!$this->_getConfig(self::XML_PATH_USE_REWRITES) && $this->_coreFileStorageDatabase->checkDbUsage()) {
+        if (!$this->getConfig(self::XML_PATH_USE_REWRITES) && $this->_coreFileStorageDatabase->checkDbUsage()) {
             return $this->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $secure
@@ -715,7 +704,7 @@ class Store extends AbstractModel implements
     {
         return !($this->hasDisableStoreInUrl() &&
             $this->getDisableStoreInUrl()) &&
-            $this->_getConfig(self::XML_PATH_STORE_IN_URL);
+            $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -798,14 +787,14 @@ class Store extends AbstractModel implements
      */
     public function getBaseCurrencyCode()
     {
-        $configValue = $this->_getConfig(self::XML_PATH_PRICE_SCOPE);
+        $configValue = $this->getConfig(self::XML_PATH_PRICE_SCOPE);
         if ($configValue == self::PRICE_SCOPE_GLOBAL) {
             return $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
         } else {
-            return $this->_getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
+            return $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
         }
     }
 
@@ -831,7 +820,7 @@ class Store extends AbstractModel implements
      */
     public function getDefaultCurrencyCode()
     {
-        $result = $this->_getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT);
+        $result = $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT);
         return $result;
     }
 
@@ -910,7 +899,7 @@ class Store extends AbstractModel implements
     {
         $codes = $this->getData('available_currency_codes');
         if (null === $codes) {
-            $codes = explode(',', $this->_getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW));
+            $codes = explode(',', $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW));
             // add base currency, if it is not in allowed currencies
             $baseCurrencyCode = $this->getBaseCurrencyCode();
             if (!in_array($baseCurrencyCode, $codes)) {
@@ -941,7 +930,7 @@ class Store extends AbstractModel implements
      */
     public function getAllowedCurrencies()
     {
-        return explode(',', $this->_getConfig($this->_currencyInstalled));
+        return explode(',', $this->getConfig($this->_currencyInstalled));
     }
 
     /**
