@@ -514,6 +514,7 @@
                            id="apply-single-price-input"
                            class="admin__control-text"
                            data-bind="value: value" />
+                    <span data-bind="text:currencySymbol"></span>
                 </div>
             </div>
         </fieldset>
@@ -541,6 +542,7 @@
                     </label>
                     <div class="admin__field-control">
                         <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                        <span data-bind="text:$parent.currencySymbol"></span>
                     </div>
                 </div>
             <!-- /ko -->
@@ -648,7 +650,9 @@
             "components": {
                 "<?= $block->getComponentName()?>": {
                     "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
-                    "appendTo": "<?= $block->getParentComponentName()?>"
+                    "appendTo": "<?= $block->getParentComponentName()?>",
+                    "noImage": "<?= $block->getNoImageUrl() ?>",
+                    "currencySymbol": "<?= $block->getCurrencySymbol() ?>"
                 }
             }
         }
