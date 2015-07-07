@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class OrderTest extends \Magento\Backend\Utility\Controller
+class OrderTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testIndexAction()
     {
@@ -100,7 +100,7 @@ class OrderTest extends \Magento\Backend\Utility\Controller
             [
                 'status' => 'processing',
                 'comment' => '',
-                'response' => '{"error":true,"message":"Comment text cannot be empty."}'
+                'response' => '{"error":true,"message":"Please enter a comment."}'
             ]
         ];
     }

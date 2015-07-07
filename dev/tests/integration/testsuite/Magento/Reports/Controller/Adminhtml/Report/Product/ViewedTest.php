@@ -11,7 +11,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 /**
  * @magentoAppArea adminhtml
  */
-class ViewedTest extends \Magento\Backend\Utility\Controller
+class ViewedTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testExecute()
     {

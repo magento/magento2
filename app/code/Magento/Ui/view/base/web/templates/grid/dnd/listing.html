@@ -1,0 +1,42 @@
+
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<table 
+    class="data-grid _dragging-copy _hidden"
+    data-bind="
+        afterRender: function (elem) { dnd('setDragTable', elem); }
+    ">
+    <thead data-part="head">
+        <tr data-part="head.row">
+            <!-- ko foreach: elems -->
+                <!-- ko if: dragging -->
+                    <!-- ko template: getHeader() --><!-- /ko -->
+                <!-- /ko -->
+            <!-- /ko -->
+        </tr>
+    </thead>
+    <tbody data-part="body">
+        <!-- ko if: hasData() -->
+            <!-- ko foreach: { data: rows, as: 'row' } -->
+                <tr data-part="body.row">
+                    <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
+                        <!-- ko if: dragging -->
+                            <!-- ko template: getBody() --><!-- /ko -->
+                        <!-- /ko -->
+                    <!-- /ko -->
+                </tr>
+            <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko ifnot: hasData() -->
+            <tr class="data-grid-tr-no-data">
+                <td data-bind="attr: { colspan: countVisible() },
+                               text: $t('We couldn\'t find any records.')"></td>
+            </tr>
+        <!-- /ko -->
+    </tbody>
+</table>

@@ -11,7 +11,8 @@ var config = {
     map: {
         '*': {
             uiComponent: 'Magento_Ui/js/lib/component/main',
-            uiRegistry: 'Magento_Ui/js/lib/registry/registry'
+            uiRegistry: 'Magento_Ui/js/lib/registry/registry',
+            uiLayout: 'Magento_Ui/js/core/renderer/layout'
         }
     }
 };

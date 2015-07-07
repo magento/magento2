@@ -82,7 +82,7 @@
             <group id="captcha" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>CAPTCHA</label>
                 <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable CAPTCHA on Frontend</label>
+                    <label>Enable CAPTCHA on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="font" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">

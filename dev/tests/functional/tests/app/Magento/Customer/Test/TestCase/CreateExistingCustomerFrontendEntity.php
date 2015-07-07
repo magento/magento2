@@ -13,11 +13,9 @@ use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateExistingCustomerFrontendEntity
- *
- * Test Flow:
  * Preconditions:
- *  1.Customer is created
+ *  1.Customer is created.
+ *
  * Steps:
  * 1. Go to frontend.
  * 2. Click Register link.
@@ -36,14 +34,14 @@ class CreateExistingCustomerFrontendEntity extends Injectable
     /* end tags */
 
     /**
-     * Page CustomerAccountCreate
+     * Page CustomerAccountCreate.
      *
      * @var CustomerAccountCreate
      */
     protected $customerAccountCreate;
 
     /**
-     * Page CustomerAccountLogout
+     * Page CustomerAccountLogout.
      *
      * @var CustomerAccountLogout
      */
@@ -57,51 +55,48 @@ class CreateExistingCustomerFrontendEntity extends Injectable
     protected $cmsIndex;
 
     /**
-     * Injection data
+     * Inject pages.
      *
      * @param CustomerAccountCreate $customerAccountCreate
      * @param CustomerAccountLogout $customerAccountLogout
      * @param CmsIndex $cmsIndex
-     * @param Customer $customer
      * @return array
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
         CustomerAccountLogout $customerAccountLogout,
-        CmsIndex $cmsIndex,
-        Customer $customer
+        CmsIndex $cmsIndex
     ) {
         $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
-        //Precondition
-        $customer->persist();
-        return [
-            'customer' => $customer,
-        ];
     }
 
     /**
-     * Create Existing Customer account on frontend
+     * Create Existing Customer account on frontend.
      *
      * @param Customer $customer
      * @return void
      */
     public function testCreateExistingCustomer(Customer $customer)
     {
-        //Steps
+        // Precondition
+        $existingCustomer = clone $customer;
+        $customer->persist();
+
+        // Steps
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Register');
-        $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
+        $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
+        $this->customerAccountCreate->getRegisterForm()->registerCustomer($existingCustomer);
     }
 
     /**
-     * Logout customer from frontend account
+     * Logout customer from frontend account.
      *
      * @return void
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
     }
 }

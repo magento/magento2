@@ -8,8 +8,19 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Helper\Address as HelperAddress;
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Escaper;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Message\ManagerInterface;
+
 /**
- * Customer module observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -24,49 +35,73 @@ class Observer
     const VIV_CURRENTLY_SAVED_ADDRESS = 'currently_saved_address';
 
     /**
-     * Customer address
-     *
-     * @var \Magento\Customer\Helper\Address
+     * @var HelperAddress
      */
-    protected $_customerAddress = null;
+    protected $_customerAddress;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * Customer data
-     *
-     * @var \Magento\Customer\Model\Vat
+     * @var Vat
      */
     protected $_customerVat;
 
     /**
-     * Group Management
-     *
-     * @var \Magento\Customer\Api\GroupManagementInterface
+     * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
-     * @param \Magento\Customer\Model\Vat $customerVat
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
+     * @var AppState
+     */
+    protected $appState;
+
+    /**
+     * @param Vat $customerVat
+     * @param HelperAddress $customerAddress
+     * @param Registry $coreRegistry
+     * @param GroupManagementInterface $groupManagement
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ManagerInterface $messageManager
+     * @param Escaper $escaper
+     * @param AppState $appState
      */
     public function __construct(
-        \Magento\Customer\Model\Vat $customerVat,
-        \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement
+        Vat $customerVat,
+        HelperAddress $customerAddress,
+        Registry $coreRegistry,
+        GroupManagementInterface $groupManagement,
+        ScopeConfigInterface $scopeConfig,
+        ManagerInterface $messageManager,
+        Escaper $escaper,
+        AppState $appState
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
         $this->_groupManagement = $groupManagement;
+        $this->scopeConfig = $scopeConfig;
+        $this->messageManager = $messageManager;
+        $this->escaper = $escaper;
+        $this->appState = $appState;
     }
 
     /**
@@ -77,9 +112,9 @@ class Observer
      */
     protected function _isDefaultBilling($address)
     {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling() ||
-            $address->getIsPrimaryBilling() ||
-            $address->getIsDefaultBilling();
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling()
+            || $address->getIsPrimaryBilling()
+            || $address->getIsDefaultBilling();
     }
 
     /**
@@ -90,9 +125,9 @@ class Observer
      */
     protected function _isDefaultShipping($address)
     {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping() ||
-            $address->getIsPrimaryShipping() ||
-            $address->getIsDefaultShipping();
+        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping()
+            || $address->getIsPrimaryShipping()
+            || $address->getIsDefaultShipping();
     }
 
     /**
@@ -112,7 +147,7 @@ class Observer
         }
 
         $configAddressType = $this->_customerAddress->getTaxCalculationAddressType();
-        if ($configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING) {
+        if ($configAddressType == AbstractAddress::TYPE_SHIPPING) {
             return $this->_isDefaultShipping($address);
         }
         return $this->_isDefaultBilling($address);
@@ -136,11 +171,9 @@ class Observer
             $this->_coreRegistry->register(self::VIV_CURRENTLY_SAVED_ADDRESS, $customerAddress->getId());
         } else {
             $configAddressType = $this->_customerAddress->getTaxCalculationAddressType();
-
-            $forceProcess = $configAddressType ==
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING ? $customerAddress->getIsDefaultShipping() : $customerAddress
-                    ->getIsDefaultBilling();
-
+            $forceProcess = $configAddressType == AbstractAddress::TYPE_SHIPPING
+                ? $customerAddress->getIsDefaultShipping()
+                : $customerAddress->getIsDefaultBilling();
             if ($forceProcess) {
                 $customerAddress->setForceProcess(true);
             } else {
@@ -162,13 +195,9 @@ class Observer
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
 
-        if (!$this->_customerAddress->isVatValidationEnabled(
-            $customer->getStore()
-        ) || $this->_coreRegistry->registry(
-            self::VIV_PROCESSED_FLAG
-        ) || !$this->_canProcessAddress(
-            $customerAddress
-        )
+        if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
+            || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
+            || !$this->_canProcessAddress($customerAddress)
         ) {
             return;
         }
@@ -176,12 +205,10 @@ class Observer
         try {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, true);
 
-            if ($customerAddress->getVatId() == '' || !$this->_customerVat->isCountryInEU(
-                $customerAddress->getCountry()
-            )
+            if ($customerAddress->getVatId() == ''
+                || !$this->_customerVat->isCountryInEU($customerAddress->getCountry())
             ) {
                 $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
-
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
@@ -204,9 +231,99 @@ class Observer
                 }
 
                 $customerAddress->setVatValidationResult($result);
+
+                if ($this->appState->getAreaCode() == Area::AREA_FRONTEND) {
+                    if ($result->getIsValid()) {
+                        $this->addValidMessage($customerAddress, $result);
+                    } elseif ($result->getRequestSuccess()) {
+                        $this->addInvalidMessage($customerAddress);
+                    } else {
+                        $this->addErrorMessage($customerAddress);
+                    }
+                }
             }
         } catch (\Exception $e) {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);
         }
+    }
+
+    /**
+     * Add success message for valid VAT ID
+     *
+     * @param Address $customerAddress
+     * @param $validationResult
+     * @return $this
+     */
+    protected function addValidMessage($customerAddress, $validationResult)
+    {
+        $message = [
+            (string)__('Your VAT ID was successfully validated.'),
+        ];
+
+        $customer = $customerAddress->getCustomer();
+        if (!$this->scopeConfig->isSetFlag(HelperAddress::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT)
+            && !$customer->getDisableAutoGroupChange()
+        ) {
+            $customerVatClass = $this->_customerVat->getCustomerVatClass(
+                $customerAddress->getCountryId(),
+                $validationResult
+            );
+            $message[] = $customerVatClass == Vat::VAT_CLASS_DOMESTIC
+                    ? (string)__('You will be charged tax.')
+                    : (string)__('You will not be charged tax.');
+        }
+
+        $this->messageManager->addSuccess(implode(' ', $message));
+        return $this;
+    }
+
+    /**
+     * Add error message for invalid VAT ID
+     *
+     * @param Address $customerAddress
+     * @return $this
+     */
+    protected function addInvalidMessage($customerAddress)
+    {
+        $vatId = $this->escaper->escapeHtml($customerAddress->getVatId());
+        $message = [
+            (string)__('The VAT ID entered (%1) is not a valid VAT ID.', $vatId),
+        ];
+
+        $customer = $customerAddress->getCustomer();
+        if (!$this->scopeConfig->isSetFlag(HelperAddress::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT)
+            && !$customer->getDisableAutoGroupChange()
+        ) {
+            $message[] = (string)__('You will be charged tax.');
+        }
+
+        $this->messageManager->addError(implode(' ', $message));
+        return $this;
+    }
+
+    /**
+     * Add error message
+     *
+     * @param Address $customerAddress
+     * @return $this
+     */
+    protected function addErrorMessage($customerAddress)
+    {
+        $message = [
+            (string)__('Your Tax ID cannot be validated.'),
+        ];
+
+        $customer = $customerAddress->getCustomer();
+        if (!$this->scopeConfig->isSetFlag(HelperAddress::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT)
+            && !$customer->getDisableAutoGroupChange()
+        ) {
+            $message[] = (string)__('You will be charged tax.');
+        }
+
+        $email = $this->scopeConfig->getValue('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE);
+        $message[] = (string)__('If you believe this is an error, please contact us at %1', $email);
+
+        $this->messageManager->addError(implode(' ', $message));
+        return $this;
     }
 }

@@ -15,16 +15,9 @@ abstract class AbstractAction
     /**
      * Default Product Type Price indexer resource model
      *
-     * @var string
+     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
      */
-    protected $_defaultPriceIndexer;
-
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Framework\App\Resource
-     */
-    protected $_resource;
+    protected $_defaultIndexerResource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -78,14 +71,6 @@ abstract class AbstractAction
     protected $_indexers;
 
     /**
-     * Flag that defines if need to use "_idx" index table suffix instead of "_tmp"
-     *
-     * @var bool
-     */
-    protected $_useIdxTable = false;
-
-    /**
-     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -93,10 +78,9 @@ abstract class AbstractAction
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory
-     * @param string $defaultPriceIndexer
+     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -104,9 +88,8 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory,
-        $defaultPriceIndexer
+        \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
     ) {
-        $this->_resource = $resource;
         $this->_config = $config;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
@@ -114,20 +97,8 @@ abstract class AbstractAction
         $this->_dateTime = $dateTime;
         $this->_catalogProductType = $catalogProductType;
         $this->_indexerPriceFactory = $indexerPriceFactory;
-        $this->_defaultPriceIndexer = $defaultPriceIndexer;
-    }
-
-    /**
-     * Retrieve connection instance
-     *
-     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getConnection()
-    {
-        if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection('write');
-        }
-        return $this->_connection;
+        $this->_defaultIndexerResource = $defaultIndexerResource;
+        $this->_connection = $this->_defaultIndexerResource->getWriteConnection();
     }
 
     /**
@@ -147,11 +118,11 @@ abstract class AbstractAction
     protected function _syncData(array $processIds = [])
     {
         // delete invalid rows
-        $select = $this->_getConnection()->select()->from(
-            ['index_price' => $this->_getTable('catalog_product_index_price')],
+        $select = $this->_connection->select()->from(
+            ['index_price' => $this->_defaultIndexerResource->getTable('catalog_product_index_price')],
             null
         )->joinLeft(
-            ['ip_tmp' => $this->_getIdxTable()],
+            ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
             'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
             []
         )->where(
@@ -161,21 +132,13 @@ abstract class AbstractAction
             $select->where('index_price.entity_id IN(?)', $processIds);
         }
         $sql = $select->deleteFromSelect('index_price');
-        $this->_getConnection()->query($sql);
+        $this->_connection->query($sql);
 
-        $this->_insertFromTable($this->_getIdxTable(), $this->_getTable('catalog_product_index_price'));
+        $this->_insertFromTable(
+            $this->_defaultIndexerResource->getIdxTable(),
+            $this->_defaultIndexerResource->getTable('catalog_product_index_price')
+        );
         return $this;
-    }
-
-    /**
-     * Returns table name for given entity
-     *
-     * @param string $entityName
-     * @return string
-     */
-    protected function _getTable($entityName)
-    {
-        return $this->_resource->getTableName($entityName);
     }
 
     /**
@@ -185,14 +148,13 @@ abstract class AbstractAction
      */
     protected function _prepareWebsiteDateTable()
     {
-        $write = $this->_getConnection();
         $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
 
-        $select = $write->select()->from(
-            ['cw' => $this->_getTable('store_website')],
+        $select = $this->_connection->select()->from(
+            ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
             ['website_id']
         )->join(
-            ['csg' => $this->_getTable('store_group')],
+            ['csg' => $this->_defaultIndexerResource->getTable('store_group')],
             'cw.default_group_id = csg.group_id',
             ['store_id' => 'default_store_id']
         )->where(
@@ -200,7 +162,7 @@ abstract class AbstractAction
         );
 
         $data = [];
-        foreach ($write->fetchAll($select) as $item) {
+        foreach ($this->_connection->fetchAll($select) as $item) {
             /** @var $website \Magento\Store\Model\Website */
             $website = $this->_storeManager->getWebsite($item['website_id']);
 
@@ -229,10 +191,12 @@ abstract class AbstractAction
             }
         }
 
-        $table = $this->_getTable('catalog_product_index_website');
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_index_website');
         $this->_emptyTable($table);
         if ($data) {
-            $write->insertMultiple($table, $data);
+            foreach ($data as $row) {
+                $this->_connection->insertOnDuplicate($table, $row, array_keys($row));
+            }
         }
 
         return $this;
@@ -246,24 +210,27 @@ abstract class AbstractAction
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
-        $write = $this->_getConnection();
-        $table = $this->_getTable('catalog_product_index_tier_price');
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_index_tier_price');
         $this->_emptyTable($table);
 
-        $websiteExpression = $write->getCheckSql('tp.website_id = 0', 'ROUND(tp.value * cwd.rate, 4)', 'tp.value');
-        $select = $write->select()->from(
-            ['tp' => $this->_getTable(['catalog_product_entity', 'tier_price'])],
+        $websiteExpression = $this->_connection->getCheckSql(
+            'tp.website_id = 0',
+            'ROUND(tp.value * cwd.rate, 4)',
+            'tp.value'
+        );
+        $select = $this->_connection->select()->from(
+            ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
             ['entity_id']
         )->join(
-            ['cg' => $this->_getTable('customer_group')],
+            ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
             ['customer_group_id']
         )->join(
-            ['cw' => $this->_getTable('store_website')],
+            ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
             'tp.website_id = 0 OR tp.website_id = cw.website_id',
             ['website_id']
         )->join(
-            ['cwd' => $this->_getTable('catalog_product_index_website')],
+            ['cwd' => $this->_defaultIndexerResource->getTable('catalog_product_index_website')],
             'cw.website_id = cwd.website_id',
             []
         )->where(
@@ -279,7 +246,7 @@ abstract class AbstractAction
         }
 
         $query = $select->insertFromSelect($table);
-        $write->query($query);
+        $this->_connection->query($query);
 
         return $this;
     }
@@ -292,24 +259,27 @@ abstract class AbstractAction
      */
     protected function _prepareGroupPriceIndex($entityIds = null)
     {
-        $write = $this->_getConnection();
-        $table = $this->_getTable('catalog_product_index_group_price');
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_index_group_price');
         $this->_emptyTable($table);
 
-        $websiteExpression = $write->getCheckSql('gp.website_id = 0', 'ROUND(gp.value * cwd.rate, 4)', 'gp.value');
-        $select = $write->select()->from(
-            ['gp' => $this->_getTable(['catalog_product_entity', 'group_price'])],
+        $websiteExpression = $this->_connection->getCheckSql(
+            'gp.website_id = 0',
+            'ROUND(gp.value * cwd.rate, 4)',
+            'gp.value'
+        );
+        $select = $this->_connection->select()->from(
+            ['gp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'group_price'])],
             ['entity_id']
         )->join(
-            ['cg' => $this->_getTable('customer_group')],
+            ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
             ['customer_group_id']
         )->join(
-            ['cw' => $this->_getTable('store_website')],
+            ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
             'gp.website_id = 0 OR gp.website_id = cw.website_id',
             ['website_id']
         )->join(
-            ['cwd' => $this->_getTable('catalog_product_index_website')],
+            ['cwd' => $this->_defaultIndexerResource->getTable('catalog_product_index_website')],
             'cw.website_id = cwd.website_id',
             []
         )->where(
@@ -325,7 +295,7 @@ abstract class AbstractAction
         }
 
         $query = $select->insertFromSelect($table);
-        $write->query($query);
+        $this->_connection->query($query);
 
         return $this;
     }
@@ -343,7 +313,7 @@ abstract class AbstractAction
             foreach ($types as $typeId => $typeInfo) {
                 $modelName = isset(
                     $typeInfo['price_indexer']
-                ) ? $typeInfo['price_indexer'] : $this->_defaultPriceIndexer;
+                ) ? $typeInfo['price_indexer'] : get_class($this->_defaultIndexerResource);
 
                 $isComposite = !empty($typeInfo['composite']);
                 $indexer = $this->_indexerPriceFactory->create(
@@ -377,7 +347,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Copy data from source table of read adapter to destination table of index adapter
+     * Copy data from source table to destination
      *
      * @param string $sourceTable
      * @param string $destTable
@@ -386,47 +356,19 @@ abstract class AbstractAction
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
-        $connection = $this->_getConnection();
-        $sourceColumns = array_keys($connection->describeTable($sourceTable));
-        $targetColumns = array_keys($connection->describeTable($destTable));
-        $select = $connection->select()->from($sourceTable, $sourceColumns);
+        $sourceColumns = array_keys($this->_connection->describeTable($sourceTable));
+        $targetColumns = array_keys($this->_connection->describeTable($destTable));
+        $select = $this->_connection->select()->from($sourceTable, $sourceColumns);
         if ($where) {
             $select->where($where);
         }
-        $query = $connection->insertFromSelect(
+        $query = $this->_connection->insertFromSelect(
             $select,
             $destTable,
             $targetColumns,
             \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
         );
-        $connection->query($query);
-    }
-
-    /**
-     * Set or get what either "_idx" or "_tmp" suffixed temporary index table need to use
-     *
-     * @param bool $value
-     * @return bool
-     */
-    protected function _useIdxTable($value = null)
-    {
-        if ($value !== null) {
-            $this->_useIdxTable = (bool)$value;
-        }
-        return $this->_useIdxTable;
-    }
-
-    /**
-     * Retrieve temporary index table name
-     *
-     * @return string
-     */
-    protected function _getIdxTable()
-    {
-        if ($this->_useIdxTable()) {
-            return $this->_getTable('catalog_product_index_price_idx');
-        }
-        return $this->_getTable('catalog_product_index_price_tmp');
+        $this->_connection->query($query);
     }
 
     /**
@@ -437,7 +379,7 @@ abstract class AbstractAction
      */
     protected function _emptyTable($table)
     {
-        $this->_getConnection()->delete($table);
+        $this->_connection->delete($table);
     }
 
     /**
@@ -449,11 +391,11 @@ abstract class AbstractAction
      */
     protected function _reindexRows($changedIds = [])
     {
-        $this->_emptyTable($this->_getIdxTable());
+        $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
         $this->_prepareWebsiteDateTable();
 
         $select = $this->_connection->select()->from(
-            $this->_getTable('catalog_product_entity'),
+            $this->_defaultIndexerResource->getTable('catalog_product_entity'),
             ['entity_id', 'type_id']
         )->where(
             'entity_id IN(?)',
@@ -479,10 +421,10 @@ abstract class AbstractAction
 
         if (!empty($notCompositeIds)) {
             $select = $this->_connection->select()->from(
-                ['l' => $this->_getTable('catalog_product_relation')],
+                ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
                 'parent_id'
             )->join(
-                ['e' => $this->_getTable('catalog_product_entity')],
+                ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
                 'e.entity_id = l.parent_id',
                 ['type_id']
             )->where(
@@ -525,9 +467,8 @@ abstract class AbstractAction
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
-        $write = $this->_connection;
-        $select = $write->select()->from(
-            $this->_getTable('catalog_product_relation'),
+        $select = $this->_connection->select()->from(
+            $this->_defaultIndexerResource->getTable('catalog_product_relation'),
             ['child_id']
         )->where(
             'parent_id IN(?)',
@@ -537,17 +478,17 @@ abstract class AbstractAction
             $select->where('child_id NOT IN(?)', $excludeIds);
         }
 
-        $children = $write->fetchCol($select);
+        $children = $this->_connection->fetchCol($select);
 
         if ($children) {
-            $select = $write->select()->from(
-                $this->_getTable('catalog_product_index_price')
+            $select = $this->_connection->select()->from(
+                $this->_defaultIndexerResource->getTable('catalog_product_index_price')
             )->where(
                 'entity_id IN(?)',
                 $children
             );
-            $query = $select->insertFromSelect($this->_getIdxTable(), [], false);
-            $write->query($query);
+            $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
+            $this->_connection->query($query);
         }
 
         return $this;
