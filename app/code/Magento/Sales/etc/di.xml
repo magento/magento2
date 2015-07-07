@@ -565,4 +565,9 @@
             <argument name="filterPool" xsi:type="object" shared="false">SalesGirdFilterPool</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Sales\Model\Order\Config">
+        <arguments>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+        </arguments>
+    </type>
 </config>
