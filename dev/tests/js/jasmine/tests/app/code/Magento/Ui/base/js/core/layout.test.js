@@ -3,18 +3,19 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mageUtils',
-    'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
-    'uiRegistry'
-    ],
-    function (utils, Component, layout, registry) {
-        'use strict';
+    'underscore',
+    'Magento_Ui/js/core/renderer/layout'
+], function (_, layout) {
+    'use strict';
 
-        describe('Magento_Ui/js/core/layout', function(){
+    describe('Magento_Ui/js/core/layout', function(){
+        var layoutObj;
 
-            beforeEach(function(){
-
-            });
+        beforeEach(function(){
+            layoutObj = layout;
+        });
+        it('is executable', function(){
+           expect(typeof layoutObj).toEqual("function");
         });
     });
+});
