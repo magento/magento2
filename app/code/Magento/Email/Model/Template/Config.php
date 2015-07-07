@@ -22,9 +22,9 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Email\Model\Template\FileSystem
+     * @var \Magento\Framework\Filesystem
      */
-    protected $emailTemplateFileSystem;
+    protected $fileSystem;
 
     /**
      * Themes directory
@@ -34,20 +34,26 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     private $themesDirectory;
 
     /**
+     * @var \Magento\Framework\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
-     * @param \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem
      * @param \Magento\Framework\Filesystem $fileSystem
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Email\Model\Template\FileSystem $emailTemplateFileSystem,
-        \Magento\Framework\Filesystem $fileSystem
+        \Magento\Framework\Filesystem $fileSystem,
+        \Magento\Framework\View\FileSystem $viewFileSystem
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
-        $this->emailTemplateFileSystem = $emailTemplateFileSystem;
         $this->themesDirectory = $fileSystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->viewFileSystem = $viewFileSystem;
     }
 
     /**
@@ -193,13 +199,11 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             $designParams['area'] = $this->getTemplateArea($templateId);
         }
         $module = $this->getTemplateModule($templateId);
-        if ($module) {
-            $designParams['module'] = $module;
-        }
+        $designParams['module'] = $module;
 
         $file = $this->_getInfo($templateId, 'file');
 
-        return $this->emailTemplateFileSystem->getEmailTemplateFileName($file, $module, $designParams);
+        return $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
     }
 
     /**
