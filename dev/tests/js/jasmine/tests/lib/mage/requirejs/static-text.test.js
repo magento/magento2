@@ -28,7 +28,7 @@ define([
                 external.path
             ], function (data) {
                 expect(text._load).toHaveBeenCalled();
-                expect(data).toEqual(external.result);
+                expect(data.replace(/\s+/g,' ')).toEqual(external.result.replace(/\s+/g,' '));
 
                 done();
             });
