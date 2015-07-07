@@ -18,7 +18,7 @@ class GridPool
 
     /**
      * @param array $grids
-    */
+     */
     public function __construct(array $grids)
     {
         $this->grids = $grids;
