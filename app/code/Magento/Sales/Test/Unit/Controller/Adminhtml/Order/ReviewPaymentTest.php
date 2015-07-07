@@ -77,7 +77,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentMock = $this->getMock(
             'Magento\Sales\Model\Order\Payment',
-            ['update'],
+            ['update', 'getIsTransactionApproved'],
             [],
             '',
             false
@@ -143,15 +143,18 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->orderMock->expects($this->once())->method('load')->with($orderId)->willReturn($this->orderMock);
         $this->orderMock->expects($this->any())->method('getId')->willReturn($orderId);
-        $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
         $this->orderMock->expects($this->once())->method('save')->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->once())->method('addSuccess')
-            ->with('The payment update has been made.');
-
-        $this->resultRedirectMock->expects($this->once())->method('setPath')->with('sales/*/')->willReturnSelf();
-
         $this->paymentMock->expects($this->once())->method('update');
+        $this->paymentMock->expects($this->any())->method('getIsTransactionApproved')->willReturn(true);
+        
+        $this->messageManagerMock->expects($this->once())->method('addSuccess');
+
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view')
+            ->willReturnSelf();
 
         $result = $this->reviewPayment->execute();
         $this->assertEquals($this->resultRedirectMock, $result);
