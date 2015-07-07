@@ -21,7 +21,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
     protected $_stringsCount;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Js
+     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Html
      */
     protected $_adapter;
 
