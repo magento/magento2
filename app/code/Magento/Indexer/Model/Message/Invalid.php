@@ -59,7 +59,9 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      */
     public function getText()
     {
+        // @codingStandardsIgnoreStart
         return __('One or more of the indexers are not valid. Please add Magento cron file to crontab or launch cron.php manually.');
+        // @codingStandardsIgnoreEnd
     }
 
     /**
