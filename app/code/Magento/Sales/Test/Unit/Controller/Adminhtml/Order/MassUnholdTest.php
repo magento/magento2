@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class MassHoldTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassUnholdTest extends \PHPUnit_Framework_TestCase
 {
