@@ -45,7 +45,9 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
     }
 
     /**
-     * @return ResponseInterface|void
+     * @param AbstractCollection $collection
+     * @return ResponseInterface
+     * @throws \Exception
      */
     public function massAction(AbstractCollection $collection)
     {
