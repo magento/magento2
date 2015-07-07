@@ -92,9 +92,8 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            foreach ($this->dataTypes as $dataType) {
-                $this->insertDocuments($dataType, $batchDocuments, $dimensions);
-            }
+            $this->insertDocumentsForSearchable($batchDocuments, $dimensions);
+            $this->insertDocumentsForFilterable($batchDocuments, $dimensions);
         }
     }
 
@@ -155,21 +154,57 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @param string $dataType
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
      */
-    private function insertDocuments($dataType, array $documents, array $dimensions)
+    private function insertDocumentsForSearchable(array $documents, array $dimensions)
     {
-        if ($dataType === $this->dataTypes[0]) {
-            $documents = $this->prepareSearchableFields($documents);
-        }
-        $this->_getWriteAdapter()->insertOnDuplicate(
-            $this->getTableName($dataType, $dimensions),
-            $documents,
+        $this->getAdapter()->insertOnDuplicate(
+            $this->getTableName($this->dataTypes[0], $dimensions),
+            $this->prepareSearchableFields($documents),
             ['data_index']
         );
+    }
+
+    /**
+     * @param array $documents
+     * @param Dimension[] $dimensions
+     * @return void
+     */
+    private function insertDocumentsForFilterable(array $documents, array $dimensions)
+    {
+        $onDuplicate = [];
+        foreach ($this->fields as $field) {
+            if ($field['type'] === $this->dataTypes[1]) {
+                $onDuplicate[] = $field['name'];
+            }
+        }
+
+        $this->getAdapter()->insertOnDuplicate(
+            $this->getTableName($this->dataTypes[1], $dimensions),
+            $this->prepareFilterableFields($documents),
+            $onDuplicate
+        );
+    }
+
+    /**
+     * @param array $documents
+     * @return array
+     */
+    private function prepareFilterableFields(array $documents)
+    {
+        $insertDocuments = [];
+        foreach ($documents as $entityId => $document) {
+            $documentFlat = ['entity_id' => $entityId];
+            foreach ($this->fields as $field) {
+                if ($field['type'] == $this->dataTypes[1]) {
+                    $documentFlat[$field['name']] = $document[$field['name']];
+                }
+            }
+            $insertDocuments[] = $documentFlat;
+        }
+        return $insertDocuments;
     }
 
     /**
@@ -180,12 +215,14 @@ class IndexerHandler implements IndexerInterface
     {
         $insertDocuments = [];
         foreach ($documents as $entityId => $document) {
-            foreach ($document as $attributeId => $fieldValue) {
-                $insertDocuments[] = [
-                    'entity_id' => $entityId,
-                    'attribute_id' => $attributeId,
-                    'data_index' => $fieldValue,
-                ];
+            foreach ($this->fields as $field) {
+                if ($field['type'] === $this->dataTypes[0]) {
+                    $insertDocuments[] = [
+                        'entity_id' => $entityId,
+                        'attribute_id' => $field['name'],
+                        'data_index' => $document[$field['name']],
+                    ];
+                }
             }
         }
 

@@ -9,17 +9,19 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\App\Resource\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\DB\Select;
+use Magento\Framework\IndexerInterface;
 use Magento\Framework\Stdlib\String as StdString;
 use Magento\Indexer\Model\ActionInterface;
 use Magento\Indexer\Model\FieldsetPool;
 use Magento\Indexer\Model\HandlerPool;
-use Magento\Indexer\Model\SaveHandlerPool;
+use Magento\Indexer\Model\IndexStructure;
+use Magento\Indexer\Model\SaveHandlerFactory;
 use Magento\Framework\App\Resource\SourcePool;
 use Magento\Indexer\Model\HandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Base implements ActionInterface
 {
@@ -88,9 +90,9 @@ class Base implements ActionInterface
     protected $handlerPool;
 
     /**
-     * @var SaveHandlerPool
+     * @var SaveHandlerFactory
      */
-    protected $saveHandlerPool;
+    protected $saveHandlerFactory;
 
     /**
      * @var String
@@ -98,26 +100,43 @@ class Base implements ActionInterface
     protected $string;
 
     /**
-     * @var []
+     * @var IndexStructure
      */
-    protected $columns = [];
+    protected $indexStructure;
+
+    /**
+     * @var array
+     */
+    protected $filterable = [];
+
+    /**
+     * @var array
+     */
+    protected $searchable = [];
+
+    /**
+     * @var IndexerInterface
+     */
+    protected $saveHandler;
 
     /**
      * @param AppResource $resource
      * @param SourcePool $sourcePool
      * @param HandlerPool $handlerPool
-     * @param SaveHandlerPool $saveHandlerPool
+     * @param SaveHandlerFactory $saveHandlerFactory
      * @param FieldsetPool $fieldsetPool
      * @param StdString $string
+     * @param IndexStructure $indexStructure
      * @param array $data
      */
     public function __construct(
         AppResource $resource,
         SourcePool $sourcePool,
         HandlerPool $handlerPool,
-        SaveHandlerPool $saveHandlerPool,
+        SaveHandlerFactory $saveHandlerFactory,
         FieldsetPool $fieldsetPool,
         StdString $string,
+        IndexStructure $indexStructure,
         $data = []
     ) {
         $this->connection = $resource->getConnection('write');
@@ -125,8 +144,9 @@ class Base implements ActionInterface
         $this->data = $data;
         $this->sourcePool = $sourcePool;
         $this->handlerPool = $handlerPool;
-        $this->saveHandlerPool = $saveHandlerPool;
+        $this->saveHandlerFactory = $saveHandlerFactory;
         $this->string = $string;
+        $this->indexStructure = $indexStructure;
     }
 
     /**
@@ -138,12 +158,10 @@ class Base implements ActionInterface
     protected function execute($ids = null)
     {
         $this->prepareFields();
-        $this->prepareSchema();
-        $this->prepareIndexes();
-        $this->deleteItems();
-        $this->prepareQuery(
-            $this->prepareSelect($ids)
-        );
+        $this->indexStructure->delete($this->getTableName());
+        $this->indexStructure->create($this->getTableName(), $this->filterable);
+        $this->getSaveHandler()->cleanIndex([]);
+        $this->getSaveHandler()->saveIndex([], $this->prepareDataSource($ids));
     }
 
     /**
@@ -179,40 +197,16 @@ class Base implements ActionInterface
     }
 
     /**
-     * Delete items
-     *
-     * @param null|int|array $ids
-     * @return void
-     */
-    protected function deleteItems($ids = null)
-    {
-        if ($ids === null) {
-            $this->connection->truncateTable($this->getTableName());
-        } else {
-            $ids = is_array($ids) ? $ids : [$ids];
-            $this->connection->delete(
-                $this->getTableName(),
-                $this->getPrimaryResource()->getMainTable() . '.' . $this->getPrimaryResource()->getIdFieldName()
-                . ' IN (' . $this->connection->quote($ids) . ')'
-            );
-        }
-    }
-
-    /**
      * Prepare select query
      *
      * @param array|int|null $ids
-     * @return Select
+     * @return SourceProviderInterface
      */
-    protected function prepareSelect($ids = null)
+    protected function prepareDataSource($ids = null)
     {
-        $select = $this->createResultSelect();
-        if (is_array($ids)) {
-            $select->where($this->getPrimaryResource()->getIdFieldname() . ' IN (?)', $ids);
-        } else if (is_int($ids)) {
-            $select->where($this->getPrimaryResource()->getIdFieldname() . ' = ?', $ids);
-        }
-        return $select;
+        return $ids === null
+            ? $this->createResultCollection()
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldname(), $ids);
     }
 
     /**
@@ -226,14 +220,16 @@ class Base implements ActionInterface
     }
 
     /**
-     * Prepare insert query
+     * Return save handler
      *
-     * @param Select $select
-     * @return void
+     * @return IndexerInterface
      */
-    protected function prepareQuery(Select $select)
+    protected function getSaveHandler()
     {
-        $this->saveHandlerPool->get($this->data['saveHandler'])->save($select, $this->getTableName());
+        if ($this->saveHandler === null) {
+            $this->saveHandler = $this->saveHandlerFactory->create($this->data['saveHandler'], ['data' => $this->data]);
+        }
+        return $this->saveHandler;
     }
 
     /**
@@ -243,75 +239,28 @@ class Base implements ActionInterface
      */
     protected function getPrimaryResource()
     {
-        return $this->data['fieldsets'][0]['source'];
+        return $this->getPrimaryFieldset()['source'];
     }
 
     /**
-     * Prepare schema
+     * Return primary fieldset
      *
-     * @throws \Zend_Db_Exception
-     * @return void
+     * @return []
      */
-    protected function prepareSchema()
+    protected function getPrimaryFieldset()
     {
-        $this->prepareColumns();
-        $table = $this->connection->newTable($this->getTableName())
-            ->setComment($this->string->upperCaseWords($this->getTableName(), '_', ' '));
-
-        $table->addColumn(
-            $this->getPrimaryResource()->getIdFieldName(),
-            Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'nullable' => false, 'primary' => true]
-        );
-
-        foreach ($this->columns as $column) {
-            $table->addColumn($column['name'], $column['type'], $column['size']);
-        }
-        $this->connection->createTable($table);
-    }
-
-    /**
-     * Prepare indexes
-     *
-     * @return void
-     */
-    protected function prepareIndexes()
-    {
-        foreach ($this->filterColumns as $column) {
-            $this->connection->addIndex(
-                $this->getTableName(),
-                $this->connection->getIndexName($this->getTableName(), $column['name']),
-                $column['name']
-            );
-        }
-
-        $fullTextIndex = [];
-        foreach ($this->searchColumns as $column) {
-            $fullTextIndex[] = $column['name'];
-        }
-
-        $this->connection->addIndex(
-            $this->getTableName(),
-            $this->connection->getIndexName(
-                $this->getTableName(),
-                $fullTextIndex,
-                AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            $fullTextIndex,
-            AdapterInterface::INDEX_TYPE_FULLTEXT
-        );
+        return $this->data['fieldsets'][0];
     }
 
     /**
      * Create select from indexer configuration
      *
-     * @return Select
+     * @return SourceProviderInterface
      */
-    protected function createResultSelect()
+    protected function createResultCollection()
     {
-        $select = $this->connection->select();
-        $select->from($this->getPrimaryResource()->getMainTable(), $this->getPrimaryResource()->getIdFieldName());
+        $select = $this->getPrimaryResource()->getSelect();
+        $select->columns($this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldset) {
             if (isset($fieldset['references'])) {
                 foreach ($fieldset['references'] as $reference) {
@@ -333,43 +282,11 @@ class Base implements ActionInterface
             foreach ($fieldset['fields'] as $field) {
                 $handler = $field['handler'];
                 /** @var HandlerInterface $handler */
-                $handler->prepareSql($select, $fieldset['source'], $field);
+                $handler->prepareSql($fieldset['source'], $field);
             }
         }
 
-        return $select;
-    }
-
-    /**
-     * Prepare columns by xsi:type
-     *
-     * @return void
-     */
-    protected function prepareColumns()
-    {
-        foreach ($this->data['fieldsets'] as $fieldset) {
-            foreach ($fieldset['fields'] as $fieldName => $field) {
-                $columnMap = isset($this->columnTypesMap[$field['dataType']])
-                    ? $this->columnTypesMap[$field['dataType']]
-                    : ['type' => Table::TYPE_TEXT, 'size' => Table::DEFAULT_TEXT_SIZE];
-                switch ($field['type']) {
-                    case 'filterable':
-                        $this->columns[] = $this->filterColumns[] = [
-                            'name' => $fieldName,
-                            'type' => $columnMap['type'],
-                            'size' => $columnMap['size'],
-                        ];
-                        break;
-                    case 'searchable':
-                        $this->columns[] = $this->searchColumns[] = [
-                            'name' => $fieldName,
-                            'type' => $columnMap['type'],
-                            'size' => $columnMap['size'],
-                        ];
-                        break;
-                }
-            }
-        }
+        return $this->getPrimaryResource();
     }
 
     /**
@@ -386,11 +303,30 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName] = $fieldsetObject->addDynamicData($fieldset);
             }
             foreach ($fieldset['fields'] as $fieldName => $field) {
+                $this->saveFieldByType($field);
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     $this->handlerPool->get($field['handler']);
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
                     isset($field['dataType']) ? $field['dataType'] : 'varchar';
             }
+        }
+    }
+
+    /**
+     * Save field by type
+     *
+     * @param array $field
+     * @return void
+     */
+    protected function saveFieldByType($field)
+    {
+        switch ($field['type']) {
+            case 'filterable':
+                $this->filterable[] = $field;
+                break;
+            case 'searchable':
+                $this->searchable[] = $field;
+                break;
         }
     }
 }
