@@ -756,7 +756,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
 
-        return $this->searchResponseBuilder->build($searchResponse);
+        return $this->searchResponseBuilder->build($searchResponse)
+            ->setSearchCriteria($searchCriteria);
     }
 
     /**
