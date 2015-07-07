@@ -58,17 +58,38 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
 
         foreach ($fieldsToStore as $field) {
             if ($payment->getAdditionalInformation($field) !== null) {
-                $transport->setData(
-                    (string)$this->getLabel($field),
-                    (string)$this->getValueView(
-                        $field,
-                        $payment->getAdditionalInformation($field)
-                    )
+                $this->setDataToTransfer(
+                    $transport,
+                    $field,
+                    $payment->getAdditionalInformation($field)
                 );
+
             }
         }
 
         return $transport;
+    }
+
+    /**
+     * Sets data to transport
+     *
+     * @param \Magento\Framework\Object $transport
+     * @param string $field
+     * @param string $value
+     * @return void
+     */
+    protected function setDataToTransfer(
+        \Magento\Framework\Object $transport,
+        $field,
+        $value
+    ) {
+        $transport->setData(
+            (string)$this->getLabel($field),
+            (string)$this->getValueView(
+                $field,
+                $value
+            )
+        );
     }
 
     /**
