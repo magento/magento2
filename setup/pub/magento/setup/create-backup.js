@@ -5,43 +5,29 @@
 
 'use strict';
 angular.module('create-backup', ['ngStorage'])
-    .controller('createBackupController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
+    .controller('createBackupController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
         $scope.backupInfo = {
             options: {
                 code: false,
                 media: false,
                 db: false
-            },
-            backupFiles: ''            
+            }
         };
-
-        $scope.loading = false;
 
         if ($localStorage.backupInfo) {
             $scope.backupInfo = $localStorage.backupInfo;
         }
 
-        $scope.$on('nextState', function () {
+        $scope.$watch('backupInfo.options.code', function() {
             $localStorage.backupInfo = $scope.backupInfo;
         });
 
-        $scope.takeBackup = function () {
-            $scope.loading = true;
-            $http.post('index.php/create-backup/create', $scope.backupInfo)
-                .success(function (data) {
-                    $scope.takeBackup.result = data;
-                    if ($scope.takeBackup.result.success) {
-                        $scope.backupInfo.backupFiles = $scope.takeBackup.result.backupFiles;
-                        $scope.loading = false;
-                        $scope.nextState();
-                    }
-                    $scope.loading = false;
-                })
-                .error(function (data) {
-                    $scope.takeBackup.failed = data;
-                    $scope.loading = false;
-                });
-        };
+        $scope.$watch('backupInfo.options.media', function() {
+            $localStorage.backupInfo = $scope.backupInfo;
+        });
+        $scope.$watch('backupInfo.options.db', function() {
+            $localStorage.backupInfo = $scope.backupInfo;
+        });
 
         // Listens on form validate event, dispatched by parent controller
         $scope.$on('validate-' + $state.current.id, function() {
