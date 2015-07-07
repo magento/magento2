@@ -41,6 +41,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->directoryReadMock));
         $this->ioMock = $this->getMock('Composer\IO\BufferIO', [], [], '', false);
         $this->bufferIoFactory = $this->getMock('Magento\Framework\Composer\BufferIoFactory', [], [], '', false);
+        $this->bufferIoFactory->expects($this->any())->method('create')->willReturn($this->ioMock);
     }
 
     /**
