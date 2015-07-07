@@ -30,6 +30,9 @@ class CronScriptReadinessCheck
      */
     const UPDATER_CRON_JOB_STATS_FILE = '.update_cronjob_status';
 
+    /**
+     * Key in Updater status file
+     */
     const UPDATER_KEY_FILE_PERMISSIONS_VERIFIED = 'file_permissions_verified';
 
     /**
