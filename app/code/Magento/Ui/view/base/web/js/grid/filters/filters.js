@@ -151,7 +151,21 @@ define([
          * @returns {Filters} Chainable.
          */
         cancel: function () {
+            this.convertToObject();
             this.set('filters', utils.copy(this.applied));
+
+            return this;
+        },
+
+        /**
+         * Convert empty array to empty object.
+         *
+         * @returns {Filters} Chainable.
+         */
+        convertToObject: function() {
+            if ( _.isArray(this.applied) && _.isEmpty(this.applied) ) {
+                this.applied = {};
+            }
 
             return this;
         },
