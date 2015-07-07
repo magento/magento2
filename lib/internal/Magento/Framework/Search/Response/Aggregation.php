@@ -50,6 +50,16 @@ class Aggregation implements AggregationInterface, \IteratorAggregate
     }
 
     /**
+     * Get all Document fields
+     *
+     * @return BucketInterface[]
+     */
+    public function getBuckets()
+    {
+        return $this->buckets;
+    }
+
+    /**
      * Get Document field names
      *
      * @return string[]
