@@ -20,13 +20,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 abstract class AbstractReview extends Block
 {
     /**
-     * Continue checkout button.
-     *
-     * @var string
-     */
-    protected $continueCheckoutButton = '#review-buttons-container button';
-
-    /**
      * Product item block locator.
      *
      * @var string
@@ -158,7 +151,7 @@ abstract class AbstractReview extends Block
      */
     public function getGrandTotal()
     {
-        $grandTotal = $this->_rootElement->find($this->grandTotal, Locator::SELECTOR_CSS)->getText();
+        $grandTotal = $this->_rootElement->find($this->grandTotal)->getText();
         return $this->escapeCurrency($grandTotal);
     }
 
@@ -233,7 +226,7 @@ abstract class AbstractReview extends Block
      */
     public function getGrandTotalExclTax()
     {
-        $grandTotal = $this->_rootElement->find($this->grandTotalExclTax, Locator::SELECTOR_CSS)->getText();
+        $grandTotal = $this->_rootElement->find($this->grandTotalExclTax)->getText();
         return $this->escapeCurrency($grandTotal);
     }
 
@@ -244,7 +237,7 @@ abstract class AbstractReview extends Block
      */
     public function getGrandTotalInclTax()
     {
-        $grandTotal = $this->_rootElement->find($this->grandTotalInclTax, Locator::SELECTOR_CSS)->getText();
+        $grandTotal = $this->_rootElement->find($this->grandTotalInclTax)->getText();
         return $this->escapeCurrency($grandTotal);
     }
 
@@ -266,7 +259,7 @@ abstract class AbstractReview extends Block
      */
     public function getDiscount()
     {
-        $discount = $this->_rootElement->find($this->discount, Locator::SELECTOR_CSS);
+        $discount = $this->_rootElement->find($this->discount);
         return $discount->isVisible() ? $this->escapeCurrency($discount->getText()) : null;
     }
 
@@ -277,7 +270,7 @@ abstract class AbstractReview extends Block
      */
     public function getSubtotal()
     {
-        $subTotal = $this->_rootElement->find($this->subtotal, Locator::SELECTOR_CSS)->getText();
+        $subTotal = $this->_rootElement->find($this->subtotal)->getText();
         return $this->escapeCurrency($subTotal);
     }
 
@@ -288,7 +281,7 @@ abstract class AbstractReview extends Block
      */
     public function getSubtotalExclTax()
     {
-        $subTotal = $this->_rootElement->find($this->subtotalExclTax, Locator::SELECTOR_CSS)->getText();
+        $subTotal = $this->_rootElement->find($this->subtotalExclTax)->getText();
         return $this->escapeCurrency($subTotal);
     }
 
@@ -299,7 +292,7 @@ abstract class AbstractReview extends Block
      */
     public function getSubtotalInclTax()
     {
-        $subTotal = $this->_rootElement->find($this->subtotalInclTax, Locator::SELECTOR_CSS)->getText();
+        $subTotal = $this->_rootElement->find($this->subtotalInclTax)->getText();
         return $this->escapeCurrency($subTotal);
     }
 
@@ -310,7 +303,7 @@ abstract class AbstractReview extends Block
      */
     public function getShippingInclTax()
     {
-        $subTotal = $this->_rootElement->find($this->shippingInclTax, Locator::SELECTOR_CSS);
+        $subTotal = $this->_rootElement->find($this->shippingInclTax);
         return $subTotal->isVisible() ? $this->escapeCurrency($subTotal->getText()) : null;
     }
 
@@ -321,19 +314,8 @@ abstract class AbstractReview extends Block
      */
     public function getShippingExclTax()
     {
-        $subTotal = $this->_rootElement->find($this->shippingExclTax, Locator::SELECTOR_CSS);
+        $subTotal = $this->_rootElement->find($this->shippingExclTax);
         return $subTotal->isVisible() ? $this->escapeCurrency($subTotal->getText()) : null;
-    }
-
-    /**
-     * Place order.
-     *
-     * @return void
-     */
-    public function placeOrder()
-    {
-        $this->_rootElement->find($this->continueCheckoutButton, Locator::SELECTOR_CSS)->click();
-        $this->waitForElementNotVisible($this->waitElement);
     }
 
     /**
