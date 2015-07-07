@@ -392,6 +392,7 @@
                 <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
                 <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
                 <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="state" xsi:type="string">sales_creditmemo.state</item>
                 <item name="base_grand_total" xsi:type="string">sales_creditmemo.base_grand_total</item>
                 <item name="order_status" xsi:type="string">sales_order.status</item>
                 <item name="store_id" xsi:type="string">sales_creditmemo.store_id</item>
@@ -524,7 +525,7 @@
                 <item name="order_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</item>
                 <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</item>
                 <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
-                <item name="creditmemo_grid" xsi:type="object">\CreditmemoGridAggregator</item>
+                <item name="creditmemo_grid" xsi:type="object">CreditmemoGridAggregator</item>
             </argument>
         </arguments>
     </type>

@@ -3,40 +3,40 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Ui\Component\Listing\Column;
+namespace Magento\Sales\Ui\Component\Listing\Column\Creditmemo;
 
+use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
- * Class Price
+ * Class State
  */
-class Price extends Column
+class State extends Column
 {
     /**
-     * @var PriceCurrencyInterface
+     * @var string[]
      */
-    protected $priceFormatter;
+    protected $states;
 
     /**
      * Constructor
      *
      * @param ContextInterface $context
+     * @param CreditmemoFactory $creditmemoFactory
      * @param UiComponentFactory $uiComponentFactory
-     * @param PriceCurrencyInterface $priceFormatter
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
+        CreditmemoFactory $creditmemoFactory,
         UiComponentFactory $uiComponentFactory,
-        PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = []
     ) {
-        $this->priceFormatter = $priceFormatter;
+        $this->states = $creditmemoFactory->create()->getStates();
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -50,7 +50,7 @@ class Price extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->priceFormatter->format($item[$this->getData('name')], false);
+                $item[$this->getData('name')] = $this->states[$item[$this->getData('name')]];
             }
         }
     }
