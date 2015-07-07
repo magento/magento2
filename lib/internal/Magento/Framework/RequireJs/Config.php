@@ -173,11 +173,16 @@ config;
      */
     public function getBaseConfig()
     {
+        $result = '';
         $config = [
             'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
         ];
         $config = json_encode($config, JSON_UNESCAPED_SLASHES);
-        return "require.config($config);";
+        if ($this->assetConfig->isAssetMinification('js')) {
+            $result .= $this->getMinificationCode();
+        }
+        $result .= "require.config($config);";
+        return $result;
     }
 
     /**
@@ -189,5 +194,25 @@ config;
             substr(self::CONFIG_FILE_NAME, 0, -2) . 'min.js' :
             self::CONFIG_FILE_NAME;
 
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMinificationCode()
+    {
+        return <<<code
+    if (!require.s.contexts._._nameToUrl) {
+        require.s.contexts._._nameToUrl = require.s.contexts._.nameToUrl;
+        require.s.contexts._.nameToUrl = function (moduleName, ext, skipExt) {
+            if (!ext && !skipExt) {
+                ext = '.min.js';
+            }
+            return require.s.contexts._._nameToUrl.apply(require.s.contexts._, [moduleName, ext, skipExt])
+                .replace(/(\.min\.min\.js)(\?.*)*$/, '.min.js$2');
+        }
+    }
+
+code;
     }
 }
