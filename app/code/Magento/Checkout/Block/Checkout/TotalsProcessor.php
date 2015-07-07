@@ -43,6 +43,6 @@ class TotalsProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $jsLayout['components']['checkout']['children']['sidebar']['children']['summary']
                 ['children']['totals']['children'] = $totals;
 
-        return array_merge_recursive($jsLayout, $totals);
+        return $jsLayout;
     }
 }
