@@ -12,7 +12,7 @@ namespace Magento\Sales\Model\Resource;
 class GridPool
 {
     /**
-     * @var GridInterface[]
+     * @var \Magento\Sales\Model\Resource\Grid[]
      */
     protected $grids;
 
@@ -33,8 +33,9 @@ class GridPool
     public function refreshByOrderId($orderId)
     {
         foreach ($this->grids as $grid) {
-            $grid->refresh($orderId, 'sfo.entity_id');
+            $grid->refresh($orderId, $grid->getOrderIdField());
         }
+
         return $this;
     }
 }
