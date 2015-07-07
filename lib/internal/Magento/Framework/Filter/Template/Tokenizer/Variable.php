@@ -11,6 +11,13 @@ namespace Magento\Framework\Filter\Template\Tokenizer;
 class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTokenizer
 {
     /**
+     * Internal counter used to keep track of how deep in array parsing we are
+     *
+     * @var int
+     */
+    protected $arrayDepth = 0;
+
+    /**
      * Tokenize string and return getted variable stack path
      *
      * @return array
@@ -59,11 +66,9 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
     /**
      * Get string value for method args
      *
-     * @param string|null $breaks characters to break on in abscense of quote
      * @return string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getString($breaks = null)
+    public function getString()
     {
         $value = '';
         if ($this->isWhiteSpace()) {
@@ -78,15 +83,8 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
             $value .= $this->char();
         }
 
-        if ($breaks) {
-            $breaks = str_split($breaks);
-        }
-
         while ($this->next()) {
-            if (!$breakSymbol && !$breaks && ($this->isWhiteSpace() || $this->char() == ',' || $this->char() == ')')) {
-                $this->prev();
-                break;
-            } elseif (!$breakSymbol && $breaks && in_array($this->char(), $breaks)) {
+            if (!$breakSymbol && $this->isStringBreak()) {
                 $this->prev();
                 break;
             } elseif ($breakSymbol && $this->char() == $breakSymbol) {
@@ -105,7 +103,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Get array member key or return false if none present
      *
      * @return bool|string
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getMemberKey()
     {
@@ -133,7 +130,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
             } elseif ($this->char() == ':') {
                 $this->next();
                 return $value;
-            } elseif ($this->char() == ',' || $this->char() == ']') {
+            } elseif ($this->isStringBreak()) {
                 $this->prev();
                 break;
             } else {
@@ -158,7 +155,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * [key:value, "key2":"value2", [
      *     [123, foo],
      * ]]
-     * 
+     *
      * @return array
      */
     public function getArray()
@@ -167,6 +164,8 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
         if (!$this->isArray()) {
             return $values;
         }
+
+        $this->incArrayDepth();
 
         while ($this->next()) {
             if ($this->char() == ']') {
@@ -182,7 +181,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
             } elseif ($this->isArray()) {
                 $val = $this->getArray();
             } else {
-                $val = $this->getString(',]');
+                $val = $this->getString();
             }
 
             if ($key) {
@@ -191,7 +190,44 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
                 $values[] = $val;
             }
         }
+
+        $this->decArrayDepth();
         return $values;
+    }
+
+    /**
+     * Return the internal array depth counter
+     *
+     * @return int
+     */
+    protected function getArrayDepth()
+    {
+        return $this->arrayDepth;
+    }
+
+    /**
+     * Increment the internal array depth counter
+     *
+     * @return void
+     */
+    protected function incArrayDepth()
+    {
+        $this->arrayDepth++;
+    }
+
+    /**
+     * Decrement the internal array depth counter
+     *
+     * If depth is already 0 do nothing
+     *
+     * @return void
+     */
+    protected function decArrayDepth()
+    {
+        if ($this->arrayDepth == 0) {
+            return;
+        }
+        $this->arrayDepth--;
     }
 
     /**
@@ -222,6 +258,21 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
     public function isArray()
     {
         return $this->char() == '[';
+    }
+
+    /**
+     * Return true if current char is closing boundary for string
+     *
+     * @return bool
+     */
+    public function isStringBreak()
+    {
+        if ($this->getArrayDepth() == 0 && ($this->isWhiteSpace() || $this->char() == ',' || $this->char() == ')')) {
+            return true;
+        } elseif ($this->getArrayDepth() > 0 && ($this->char() == ',' || $this->char() == ']')) {
+            return true;
+        }
+        return false;
     }
 
     /**
