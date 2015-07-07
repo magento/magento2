@@ -10,8 +10,7 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/totals',
-        'Magento_Checkout/js/model/sidebar',
-        'Magento_Checkout/js/view/sidebar'
+        'Magento_Checkout/js/model/sidebar'
     ],
     function (Component, quote, priceUtils, totals, sidebarModel) {
         'use strict';
