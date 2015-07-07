@@ -39,7 +39,7 @@ class Content extends Tab
     protected $addVariableButton = ".add-variable";
 
     /**
-     * Insert Widget button selector.
+     * Insert Frontend App button selector.
      *
      * @var string
      */
@@ -73,7 +73,7 @@ class Content extends Tab
     }
 
     /**
-     * Clicking in content tab 'Insert Widget' button.
+     * Clicking in content tab 'Insert Frontend App' button.
      *
      * @return void
      */
