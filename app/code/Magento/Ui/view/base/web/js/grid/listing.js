@@ -162,12 +162,12 @@ define([
         },
 
         /**
-         * Returns total number of columns in grid.
+         * Returns total number of displayed columns in grid.
          *
          * @returns {Number}
          */
-        getColspan: function () {
-            return this.elems().length;
+        countVisible: function () {
+            return this.elems.filter('visible').length;
         },
 
         /**

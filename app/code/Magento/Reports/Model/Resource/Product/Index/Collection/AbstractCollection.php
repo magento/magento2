@@ -179,6 +179,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\Resource\Produc
 
     /**
      * Set customer id, that will be used in 'whereCondition'
+     * @codeCoverageIgnore
      *
      * @param int $id
      * @return $this

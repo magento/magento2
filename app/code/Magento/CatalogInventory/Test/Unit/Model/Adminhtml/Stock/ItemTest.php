@@ -58,4 +58,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->_model->setCustomerGroupId(2);
         $this->assertEquals(2, $this->_model->getCustomerGroupId());
     }
+
+    public function testGetIdentities()
+    {
+        $this->_model->setProductId(1);
+        $this->assertEquals(['catalog_product_1'], $this->_model->getIdentities());
+    }
 }

@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: getBillingAgreementCode() -->
+<input type="checkbox"
+    data-bind='
+        attr: {id: getBillingAgreementCode(), name: "payment[" + getBillingAgreementCode() + "]"},
+        checked: billingAgreement
+        enable: isActive($parent) && getBillingAgreementCode()'
+    value="1" class="checkbox">
+<label
+    data-bind='
+        attr: {for: getBillingAgreementCode()}'
+    class="label">
+    <span><!-- ko text: $t('Sign a billing agreement to streamline further purchases with PayPal.') --><!-- /ko --></span>
+</label>
+<!-- /ko -->

@@ -118,35 +118,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
     <tr class="item-actions">
         <td colspan="<?php echo $cols;?>">
             <div class="actions-toolbar">
-
-                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
-                    <?php if ($isVisibleProduct): ?>
-                        <a href="#"
-                           data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>'
-                           class="use-ajax action towishlist">
-                            <span><?php echo __('Move to Wish List'); ?></span>
-                        </a>
-                    <?php endif ?>
-                <?php endif ?>
-
-                <?php if ($isVisibleProduct): ?>
-                    <a class="action edit"
-                       href="<?php echo $block->getConfigureUrl() ?>"
-                       title="<?php echo $block->escapeHtml(__('Edit item parameters')); ?>">
-                        <span>
-                            <?php echo __('Edit') ?>
-                        </span>
-                   </a>
-                <?php endif ?>
-                
-                <a href="#"
-                   title="<?php echo $block->escapeHtml(__('Remove item')); ?>"
-                   class="action delete"
-                   data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>'>
-                    <span>
-                        <?php echo __('Remove item')?>
-                    </span>
-                </a>
+                <?php echo $block->getActions($_item) ?>
             </div>
         </td>
     </tr>

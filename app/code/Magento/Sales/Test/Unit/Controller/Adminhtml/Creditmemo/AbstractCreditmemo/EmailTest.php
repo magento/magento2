@@ -171,7 +171,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with('We sent the message.');
+            ->with('You sent the message.');
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',

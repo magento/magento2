@@ -108,7 +108,7 @@ define([
                 }, this),
                 error: $.proxy(function() {
                     this._cancelEdit();
-                    alert($.mage.__('Sorry, something went wrong.'));
+                    alert($.mage.__('Sorry, something went wrong. That\'s all we know.'));
                 }, this)
             });
         },

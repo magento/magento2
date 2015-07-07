@@ -7,6 +7,8 @@
 namespace Magento\Framework\Composer;
 
 use Composer\Factory as ComposerFactory;
+use Composer\IO\BufferIO;
+use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -30,15 +32,28 @@ class ComposerInformation
      * Constructor
      *
      * @param Filesystem $filesystem
+     * @param BufferIO $io
+     * @throws \Exception
      */
     public function __construct(
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        BufferIO $io
     ) {
-        $vendor = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
-        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath() . include $vendor;
+        // composer.json is in same directory as vendor
+        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
+        $vendorDir = require "{$vendorPath}";
+        $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
+            . "/{$vendorDir}/../composer.json";
+
+        $composerJsonRealPath = realpath($composerJson);
+        if ($composerJsonRealPath === false) {
+            throw new \Exception('Composer file not found: ' . $composerJson);
+        }
+
+        putenv('COMPOSER_HOME=' . $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
+
         // Create Composer
-        $io = new \Composer\IO\BufferIO();
-        $this->composer = ComposerFactory::create($io, $vendorPath . '/../composer.json');
+        $this->composer = ComposerFactory::create($io, $composerJson);
         $this->locker = $this->composer->getLocker();
     }
 
@@ -55,12 +70,16 @@ class ComposerInformation
             $requiredPhpVersion =  $allPlatformReqs['php']->getPrettyConstraint();
         } else {
             $packages = $this->locker->getLockedRepository()->getPackages();
+            /** @var PackageInterface $package */
             foreach ($packages as $package) {
-                /** @var \Composer\Package\CompletePackage $package */
-                $packageName = $package->getPrettyName();
-                if ($packageName === 'magento/product-community-edition') {
-                    $phpRequirementLink = $package->getRequires()['php'];
-                    $requiredPhpVersion = $phpRequirementLink->getPrettyConstraint();
+                if ($package instanceof PackageInterface) {
+                    $packageName = $package->getPrettyName();
+                    if ($packageName === 'magento/product-community-edition') {
+                        $phpRequirementLink = $package->getRequires()['php'];
+                        if ($phpRequirementLink instanceof Link) {
+                            $requiredPhpVersion = $phpRequirementLink->getPrettyConstraint();
+                        }
+                    }
                 }
             }
         }
@@ -81,32 +100,23 @@ class ComposerInformation
      */
     public function getRequiredExtensions()
     {
-        if ($this->isMagentoRoot()) {
-            $allPlatformReqs = $this->locker->getPlatformRequirements(true);
-            foreach ($allPlatformReqs as $reqIndex => $constraint) {
-                if (substr($reqIndex, 0, 4) === 'ext-') {
-                    $requiredExtensions[] = substr($reqIndex, 4);
-                }
-            }
-        } else {
-            $requiredExtensions = [];
+        $requiredExtensions = [];
+        $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
 
+        if (!$this->isMagentoRoot()) {
             /** @var \Composer\Package\CompletePackage $package */
             foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
-                $requires = $package->getRequires();
-                $requires = array_merge($requires, $package->getDevRequires());
-                foreach ($requires as $reqIndex => $constraint) {
-                    if (substr($reqIndex, 0, 4) === 'ext-') {
-                        $requiredExtensions[] = substr($reqIndex, 4);
-                    }
-                }
+                $requires = array_keys($package->getRequires());
+                $requires = array_merge($requires, array_keys($package->getDevRequires()));
+                $allPlatformReqs = array_merge($allPlatformReqs, $requires);
             }
         }
-
-        if (!isset($requiredExtensions)) {
-            throw new \Exception('Cannot find extensions in \'composer.lock\' file');
+        foreach ($allPlatformReqs as $reqIndex) {
+            if (substr($reqIndex, 0, 4) === 'ext-') {
+                $requiredExtensions[] = substr($reqIndex, 4);
+            }
         }
-        return $requiredExtensions;
+        return array_unique($requiredExtensions);
     }
 
     /**
@@ -129,7 +139,7 @@ class ComposerInformation
      *
      * @return array
      */
-    public function getRootRequiredPackagesAndTypes()
+    public function getRootRequiredPackageTypesByName()
     {
         $packages = [];
         /** @var PackageInterface $package */
@@ -147,6 +157,7 @@ class ComposerInformation
     private function isMagentoRoot()
     {
         $rootPackage = $this->composer->getPackage();
-        return ('magento/magento2ce' == $rootPackage->getName());
+
+        return preg_match('/magento\/magento2.e/', $rootPackage->getName());
     }
 }
