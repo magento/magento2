@@ -125,6 +125,18 @@ class Cleaner
     {
         if (!$this->aggregationStatus->isEnabled()) {
             $this->requestData['aggregations'] = [];
+        } else {
+            $aggregations = $this->requestData['aggregations'];
+            if (is_array($aggregations)) {
+                foreach ($aggregations as $aggregationName => $aggregationValue) {
+                    switch ($aggregationValue['type']) {
+                        case 'dynamicBucket':
+                            if (is_string($aggregationValue['method']) && preg_match('/\$(.+)\$/si', $aggregationValue['method'], $matches)) {
+                                unset($this->requestData['aggregations'][$aggregationName]);
+                            }
+                    }
+                }
+            }
         }
     }
 
