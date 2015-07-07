@@ -45,7 +45,10 @@ define(
             /**
              * Place order.
              */
-            placeOrder: function () {
+            placeOrder: function (data, event) {
+                if (event) {
+                    event.preventDefault();
+                }
                 var self = this,
                     placeOrder,
                     emailValidationResult = customer.isLoggedIn(),
@@ -61,7 +64,9 @@ define(
                     $.when(placeOrder).fail(function(){
                         self.isPlaceOrderActionAllowed(true);
                     });
+                    return true;
                 }
+                return false;
             },
 
             selectPaymentMethod: function() {
