@@ -8,7 +8,7 @@ namespace Magento\Framework\Search;
 /**
  * Faceted data
  */
-interface AggregationInterface extends \IteratorAggregate
+interface AggregationInterface
 {
     /**
      * Get Document field

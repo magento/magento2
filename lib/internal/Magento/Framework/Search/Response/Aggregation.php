@@ -11,7 +11,7 @@ use Magento\Framework\Search\BucketInterface;
 /**
  * Faceted data
  */
-class Aggregation implements AggregationInterface
+class Aggregation implements AggregationInterface, \IteratorAggregate
 {
     /**
      * Buckets array
