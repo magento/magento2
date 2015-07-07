@@ -78,7 +78,7 @@ class SubSelect
     public function __toString()
     {
         $select = $this->getConnection()->select()->from(
-            $this->table,
+            $this->resource->getTableName($this->table),
             array_values($this->columns)
         )->where(
             sprintf('`%s` = %s', $this->originColumn, $this->targetColumn)
