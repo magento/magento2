@@ -117,7 +117,7 @@ class Grid extends AbstractGrid
      */
     public function getOrderIdField()
     {
-       return $this->orderIdField;
+        return $this->orderIdField;
     }
 
     /**
