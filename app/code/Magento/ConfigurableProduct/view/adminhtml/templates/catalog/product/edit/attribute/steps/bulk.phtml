@@ -510,11 +510,13 @@
                     <span><?= __('Price') ?></span>
                 </label>
                 <div class="admin__field-control">
-                    <input type="text"
-                           id="apply-single-price-input"
-                           class="admin__control-text"
-                           data-bind="value: value" />
-                    <span data-bind="text:currencySymbol"></span>
+                    <div class="currency-addon">
+                        <input type="text"
+                               id="apply-single-price-input"
+                               class="admin__control-text"
+                               data-bind="value: value" />
+                        <span class="currency-symbol" data-bind="text:currencySymbol"></span>
+                    </div>
                 </div>
             </div>
         </fieldset>
@@ -541,8 +543,11 @@
                         <span data-bind="text:label"></span>
                     </label>
                     <div class="admin__field-control">
-                        <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
-                        <span data-bind="text:$parent.currencySymbol"></span>
+                        <div class="currency-addon">
+                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                            <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
+                        </div>
+
                     </div>
                 </div>
             <!-- /ko -->
