@@ -67,7 +67,7 @@ define([
             this.initImageUpload();
         },
         getAttributesOptions: function() {
-            return this.productMatrix()[0].options;
+            return this.showVariations() ? this.productMatrix()[0].options : [];
         },
         showVariations: function() {
             return this.productMatrix().length > 0;

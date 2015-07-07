@@ -10,7 +10,7 @@
 <div data-bind="scope: '<?= $block->getComponentName()?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= __('Step 3: Bulk Images, Price, and Quantity') ?></h2>
     <div class="steps-wizard-info">
-        <?= __('Based on your selections <span class="new-products-count" data-bind="text:newProductsCount"></span>
+        <?= __('Based on your selections <span class="new-products-count" data-bind="text:countVariations"></span>
         new products will be created. Use this step to customize images and price for your new products.') ?>
     </div>
 
@@ -458,188 +458,188 @@
     </div>
 </div>
 
-<div data-bind="with: sections().pricing" class="steps-wizard-section">
-    <div data-role="section">
-        <div class="steps-wizard-section-title">
-            <span><?= __('Price') ?></span>
-        </div>
-        <ul class="steps-wizard-section-list">
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="apply-single-price-radio"
-                           class="admin__control-radio"
-                           value="single"
-                           data-bind="checked:type" />
-                    <label for="apply-single-price-radio"
-                           class="admin__field-label">
-                        <span><?= __('Apply single price to all SKUs') ?></span>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="apply-unique-prices-radio"
-                           class="admin__control-radio"
-                           value="each"
-                           data-bind="checked:type" />
-                    <label for="apply-unique-prices-radio"
-                           class="admin__field-label">
-                        <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="skip-pricing-radio"
-                           class="admin__control-radio"
-                           value="none"
-                           checked
-                           data-bind="checked:type" />
-                    <label for="skip-pricing-radio" class="admin__field-label">
-                        <span><?= __('Skip price at this time') ?></span>
-                    </label>
-                </div>
-            </li>
-        </ul>
-        <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
-            <div class="admin__field">
-                <label for="apply-single-price-input" class="admin__field-label">
-                    <span><?= __('Price') ?></span>
-                </label>
-                <div class="admin__field-control">
-                    <input type="text"
-                           id="apply-single-price-input"
-                           class="admin__control-text"
-                           data-bind="value: value" />
-                    <span data-bind="text:currencySymbol"></span>
-                </div>
+    <div data-bind="with: sections().price" class="steps-wizard-section">
+        <div data-role="section">
+            <div class="steps-wizard-section-title">
+                <span><?= __('Price') ?></span>
             </div>
-        </fieldset>
-
-        <div data-bind="visible: type() == 'each'">
-            <fieldset class="admin__fieldset bulk-attribute-values">
+            <ul class="steps-wizard-section-list">
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-single-price-radio"
+                               class="admin__control-radio"
+                               value="single"
+                               data-bind="checked:type" />
+                        <label for="apply-single-price-radio"
+                               class="admin__field-label">
+                            <span><?= __('Apply single price to all SKUs') ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-unique-prices-radio"
+                               class="admin__control-radio"
+                               value="each"
+                               data-bind="checked:type" />
+                        <label for="apply-unique-prices-radio"
+                               class="admin__field-label">
+                            <span><?= __('Apply unique prices by attribute to each SKU') ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="skip-pricing-radio"
+                               class="admin__control-radio"
+                               value="none"
+                               checked
+                               data-bind="checked:type" />
+                        <label for="skip-pricing-radio" class="admin__field-label">
+                            <span><?= __('Skip price at this time') ?></span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                 <div class="admin__field">
                     <label for="apply-single-price-input" class="admin__field-label">
-                        <span><?= __('Select attribute') ?></span>
+                        <span><?= __('Price') ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <select class="admin__control-select" data-bind="
+                        <input type="text"
+                               id="apply-single-price-input"
+                               class="admin__control-text"
+                               data-bind="value: value" />
+                        <span data-bind="text:currencySymbol"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div data-bind="visible: type() == 'each'">
+                <fieldset class="admin__fieldset bulk-attribute-values">
+                    <div class="admin__field">
+                        <label for="apply-single-price-input" class="admin__field-label">
+                            <span><?= __('Select attribute') ?></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <select class="admin__control-select" data-bind="
+                                    options: $parent.attributes,
+                                    optionsText: 'label',
+                                    value: attribute,
+                                    optionsCaption: 'Select'"></select>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                    <!-- ko foreach: attribute().chosen -->
+                    <div class="admin__field">
+                        <label for="apply-single-price-input" class="admin__field-label">
+                            <span data-bind="text:label"></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                            <span data-bind="text:$parent.currencySymbol"></span>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="with: sections().quantity" class="steps-wizard-section">
+        <div data-role="section">
+            <div class="steps-wizard-section-title">
+                <span><?= __('Quantity') ?></span>
+            </div>
+            <ul class="steps-wizard-section-list">
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-single-inventory-radio"
+                               class="admin__control-radio"
+                               value="single"
+                               data-bind="checked: type" />
+                        <label for="apply-single-inventory-radio" class="admin__field-label">
+                            <span><?= __('Apply single quantity to each SKUs') ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-unique-inventory-radio"
+                               class="admin__control-radio"
+                               value="each"
+                               data-bind="checked: type" />
+                        <label for="apply-unique-inventory-radio" class="admin__field-label">
+                            <span><?= __('Apply unique quantity by attribute to each SKU') ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="skip-inventory-radio"
+                               class="admin__control-radio"
+                               value="none"
+                               checked
+                               data-bind="checked: type" />
+                        <label for="skip-inventory-radio" class="admin__field-label">
+                            <span><?= __('Skip quantity at this time') ?></span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+
+            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
+                <div class="admin__field">
+                    <label for="apply-single-inventory-input" class="admin__field-label">
+                        <span><?= __('Quantity') ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <input type="text"
+                               id="apply-single-inventory-input"
+                               class="admin__control-text"
+                               data-bind="value: value" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <div data-bind="visible: type() == 'each'">
+                <fieldset class="admin__fieldset bulk-attribute-values">
+                    <div class="admin__field">
+                        <label for="apply-single-price-input" class="admin__field-label">
+                            <span><?= __('Select attribute') ?></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <select class="admin__control-select" data-bind="
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
                                 optionsCaption: 'Select'"></select>
+                        </div>
                     </div>
-                </div>
-            </fieldset>
-            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
-                <!-- ko foreach: attribute().chosen -->
-                <div class="admin__field">
-                    <label for="apply-single-price-input" class="admin__field-label">
-                        <span data-bind="text:label"></span>
-                    </label>
-                    <div class="admin__field-control">
-                        <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
-                        <span data-bind="text:$parent.currencySymbol"></span>
+                </fieldset>
+                <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                    <!-- ko foreach: attribute().chosen -->
+                    <div class="admin__field">
+                        <label for="apply-single-price-input" class="admin__field-label">
+                            <span data-bind="text:label"></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                        </div>
                     </div>
-                </div>
-            <!-- /ko -->
-            </fieldset>
-        </div>
-    </div>
-</div>
-
-<div data-bind="with: sections().inventory" class="steps-wizard-section">
-    <div data-role="section">
-        <div class="steps-wizard-section-title">
-            <span><?= __('Quantity') ?></span>
-        </div>
-        <ul class="steps-wizard-section-list">
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="apply-single-inventory-radio"
-                           class="admin__control-radio"
-                           value="single"
-                           data-bind="checked: type" />
-                    <label for="apply-single-inventory-radio" class="admin__field-label">
-                        <span><?= __('Apply single quantity to each SKUs') ?></span>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="apply-unique-inventory-radio"
-                           class="admin__control-radio"
-                           value="each"
-                           data-bind="checked: type" />
-                    <label for="apply-unique-inventory-radio" class="admin__field-label">
-                        <span><?= __('Apply unique quantity by attribute to each SKU') ?></span>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <div class="admin__field admin__field-option">
-                    <input type="radio"
-                           id="skip-inventory-radio"
-                           class="admin__control-radio"
-                           value="none"
-                           checked
-                           data-bind="checked: type" />
-                    <label for="skip-inventory-radio" class="admin__field-label">
-                        <span><?= __('Skip quantity at this time') ?></span>
-                    </label>
-                </div>
-            </li>
-        </ul>
-
-        <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
-            <div class="admin__field">
-                <label for="apply-single-inventory-input" class="admin__field-label">
-                    <span><?= __('Quantity') ?></span>
-                </label>
-                <div class="admin__field-control">
-                    <input type="text"
-                           id="apply-single-inventory-input"
-                           class="admin__control-text"
-                           data-bind="value: value" />
-                </div>
+                    <!-- /ko -->
+                </fieldset>
             </div>
-        </fieldset>
-
-        <div data-bind="visible: type() == 'each'">
-            <fieldset class="admin__fieldset bulk-attribute-values">
-                <div class="admin__field">
-                    <label for="apply-single-price-input" class="admin__field-label">
-                        <span><?= __('Select attribute') ?></span>
-                    </label>
-                    <div class="admin__field-control">
-                        <select class="admin__control-select" data-bind="
-                            options: $parent.attributes,
-                            optionsText: 'label',
-                            value: attribute,
-                            optionsCaption: 'Select'"></select>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
-                <!-- ko foreach: attribute().chosen -->
-                <div class="admin__field">
-                    <label for="apply-single-price-input" class="admin__field-label">
-                        <span data-bind="text:label"></span>
-                    </label>
-                    <div class="admin__field-control">
-                        <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
-                    </div>
-                </div>
-                <!-- /ko -->
-            </fieldset>
         </div>
     </div>
-</div>
 
 </div>
 
