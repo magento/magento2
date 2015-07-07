@@ -199,33 +199,25 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(200)
-            ->will($this->returnSelf());
+            ->will($this->returnSelf());;
         $this->responseMock->expects($this->once())
-            ->method('clearBody')
-            ->will($this->returnSelf());
-        $this->responseMock->expects($this->once())
-            ->method('setBody')
-            ->will($this->returnSelf());
-        $this->responseMock->expects($this->never())
             ->method('sendHeaders')
             ->will($this->returnSelf());
+        $this->dirMock->expects($this->once())
+            ->method('writeFile')
+            ->with('fileName', 'content', 'w+');
 
         $streamMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\WriteInterface')
             ->disableOriginalConstructor()->getMock();
-        $this->dirMock->expects($this->never())
+        $this->dirMock->expects($this->once())
             ->method('openFile')
             ->will($this->returnValue($streamMock));
-        $this->dirMock->expects($this->never())
-            ->method('delete')
-            ->will($this->returnValue($streamMock));
-        $streamMock->expects($this->never())
+        $streamMock->expects($this->once())
             ->method('eof')
-            ->will($this->returnValue(false));
-        $streamMock->expects($this->never())
-            ->method('read');
-        $streamMock->expects($this->never())
+            ->will($this->returnValue(true));
+        $streamMock->expects($this->once())
             ->method('close');
-        $this->assertSame($this->responseMock, $this->getModel()->create('fileName', 'content'));
+        $this->getModelMock()->create('fileName', 'content');
     }
 
     /**
