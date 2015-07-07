@@ -3825,6 +3825,12 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Billing Name'
         )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Status'
+        )->addColumn(
             'base_grand_total',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
@@ -3934,6 +3940,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['order_created_at']),
             ['order_created_at']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['state']),
+            ['state']
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
             ['billing_name']
