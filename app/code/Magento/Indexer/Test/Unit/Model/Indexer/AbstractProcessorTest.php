@@ -127,7 +127,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
     public function testIsIndexerScheduled()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+            \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub::INDEXER_ID
         )->willReturnSelf();
         $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn(false);
         $this->model->isIndexerScheduled();
