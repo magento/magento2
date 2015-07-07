@@ -5,23 +5,29 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Search\Request\Dimension;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Engine extends AbstractDb implements EngineInterface
+class Engine implements EngineInterface
 {
     const ATTRIBUTE_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
 
     /**
      * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
-    protected $_catalogProductVisibility;
+    protected $catalogProductVisibility;
 
     /**
      * Array of product collection factory names
@@ -35,86 +41,64 @@ class Engine extends AbstractDb implements EngineInterface
      *
      * @var \Magento\CatalogSearch\Helper\Data
      */
-    protected $_catalogSearchData = null;
+    protected $catalogSearchData;
+
+    /**
+     * @var \Magento\Search\Model\IndexScopeResolver
+     */
+    private $indexScopeResolver;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+    /**
+     * @var string
+     */
+    protected $tableName;
 
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param string|null $resourcePrefix
+     * @param \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Framework\App\Resource $resource
+     * @param string $tableName
      */
     public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        $resourcePrefix = null
+        \Magento\Search\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver,
+        \Magento\Framework\App\Resource $resource,
+        $tableName = 'catalogsearch_fulltext'
     ) {
-        $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_searchResource = $searchResource;
-        $this->_catalogSearchData = $catalogSearchData;
-        parent::__construct($context, $resourcePrefix);
+        $this->catalogProductVisibility = $catalogProductVisibility;
+        $this->catalogSearchData = $catalogSearchData;
+        $this->indexScopeResolver = $indexScopeResolver;
+        $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE);
+        $this->tableName = $resource->getTableName($tableName);
     }
 
     /**
-     * Init resource model
-     *
-     * @return void
+     * @inheritdoc
      */
-    protected function _construct()
-    {
-        $this->_init('catalogsearch_fulltext_index_default', 'product_id');
-    }
-
-    /**
-     * Add entity data to fulltext search table
-     *
-     * @param int $entityId
-     * @param int $storeId
-     * @param array $index
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
-    {
-        $this->_getWriteAdapter()
-            ->insert(
-                $this->getMainTable(),
-                ['product_id' => $entityId, 'store_id' => $storeId, 'data_index' => $index]
-            );
-
-        return $this;
-    }
-
-    /**
-     * Multi add entities data to fulltext search table
-     *
-     * @param int $storeId
-     * @param array $entityIndexes
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
+    public function saveIndex($dimensions, \Traversable $documents)
     {
         $data = [];
-        foreach ($entityIndexes as $entityId => $productAttributes) {
+        foreach ($documents as $entityId => $productAttributes) {
             foreach ($productAttributes as $attributeId => $indexValue) {
                 $data[] = [
                     'product_id' => (int)$entityId,
                     'attribute_id' =>(int)$attributeId,
-                    'store_id' => (int)$storeId,
                     'data_index' => $indexValue
                 ];
             }
         }
 
         if ($data) {
-            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $data, ['data_index']);
+            $this->connection->insertOnDuplicate($this->resolveTableName($dimensions), $data, ['data_index']);
         }
 
         return $this;
@@ -127,7 +111,7 @@ class Engine extends AbstractDb implements EngineInterface
      */
     public function getAllowedVisibility()
     {
-        return $this->_catalogProductVisibility->getVisibleInSiteIds();
+        return $this->catalogProductVisibility->getVisibleInSiteIds();
     }
 
     /**
@@ -181,31 +165,44 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Remove entity data from fulltext search table
-     *
-     * @param int $storeId
-     * @param int $entityId
-     * @param string $entity 'product'|'cms'
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param Dimension[] $dimensions
+     * @return string
+     * @throws LocalizedException
      */
-    public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
+    private function resolveTableName($dimensions)
+    {
+        if (empty($this->tableName)) {
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
+        }
+
+        return $this->indexScopeResolver->resolve($this->tableName, $dimensions);
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteIndex($dimensions, \Traversable $documents)
     {
         $where = [];
-
-        if ($storeId !== null) {
-            $where[] = $this->_getWriteAdapter()
-                ->quoteInto('store_id=?', $storeId);
+        $entityIds = iterator_to_array($documents);
+        if ($entityIds !== null) {
+            $where[] = $this->connection
+                ->quoteInto('product_id IN (?)', $entityIds);
         }
 
-        if ($entityId !== null) {
-            $where[] = $this->_getWriteAdapter()
-                ->quoteInto('product_id IN (?)', $entityId);
-        }
+        $this->connection
+            ->delete($this->resolveTableName($dimensions), $where);
 
-        $this->_getWriteAdapter()
-            ->delete($this->getMainTable(), $where);
+        return $this;
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function cleanIndex($dimensions)
+    {
+        $this->connection->delete($this->resolveTableName($dimensions));
         return $this;
     }
 
@@ -218,15 +215,13 @@ class Engine extends AbstractDb implements EngineInterface
      */
     public function prepareEntityIndex($index, $separator = ' ')
     {
-        return $this->_catalogSearchData->prepareIndexdata($index, $separator);
+        return $this->catalogSearchData->prepareIndexdata($index, $separator);
     }
 
     /**
-     * Define if engine is available
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function test()
+    public function isAvailable()
     {
         return true;
     }
