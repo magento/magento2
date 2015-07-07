@@ -18,10 +18,15 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     private $directoryList;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     public function setUp()
     {
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
@@ -51,7 +56,13 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDirectoryMock($composerDir);
 
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+            ]
+        );
 
         $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
     }
@@ -64,8 +75,15 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
         $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
+
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+            ]
+        );
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
         foreach ($expectedExtensions as $expectedExtension) {
@@ -81,7 +99,14 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+            ]
+        );
 
         $requiredPackagesAndTypes = $composerInfo->getRootRequiredPackageTypesByName();
 
@@ -94,16 +119,26 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $packageName = 'composer/composer';
 
         $this->setupDirectoryMock('testSkeleton');
-        $composerInfo = new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+            ]
+        );
 
         $requiredPackages = $composerInfo->getRootRequiredPackageTypesByNameVersion();
         $this->assertArrayHasKey($packageName, $requiredPackages);
 
+        $this->assertTrue($composerInfo->syncPackagesForUpdate());
+
         $packagesForUpdate = $composerInfo->getPackagesForUpdate();
-        $this->assertArrayHasKey($packageName, $packagesForUpdate);
+        $this->assertArrayHasKey('packages', $packagesForUpdate);
+        $this->assertArrayHasKey($packageName, $packagesForUpdate['packages']);
         $this->assertTrue(
             version_compare(
-                $packagesForUpdate[$packageName]['latestVersion'],
+                $packagesForUpdate['packages'][$packageName]['latestVersion'],
                 $requiredPackages[$packageName]['version'],
                 '>'
             )
@@ -131,6 +166,11 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     public function testNoLock()
     {
         $this->setupDirectoryMock('notARealDirectory');
-        new ComposerInformation(new MagentoComposerApplicationFactory($this->directoryList));
+        $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory($this->directoryList)
+            ]
+        );
     }
 }
