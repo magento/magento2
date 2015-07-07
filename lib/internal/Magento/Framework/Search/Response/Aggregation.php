@@ -29,7 +29,9 @@ class Aggregation implements AggregationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Implementation of \IteratorAggregate::getIterator()
+     *
+     * @return \ArrayIterator
      */
     public function getIterator()
     {
@@ -37,7 +39,10 @@ class Aggregation implements AggregationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Document field
+     *
+     * @param string $bucketName
+     * @return BucketInterface
      */
     public function getBucket($bucketName)
     {
@@ -45,7 +50,9 @@ class Aggregation implements AggregationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Document field names
+     *
+     * @return string[]
      */
     public function getBucketNames()
     {
