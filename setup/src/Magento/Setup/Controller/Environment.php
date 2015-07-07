@@ -293,15 +293,19 @@ class Environment extends AbstractActionController
         $data = [];
         if (!$setupCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            $data['errorMessage'] = $setupCheck['error'];
+            $data['setupErrorMessage'] = 'Error from Setup Application Cron Script:<br/>' . $setupCheck['error'];
         }
         if (!$updaterCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            if (isset($data['errorMessage'])) {
-                $data['errorMessage'] .= '<br/>' . $updaterCheck['error'];
-            } else {
-                $data['errorMessage'] = $updaterCheck['error'];
-            }
+            $data['updaterErrorMessage'] = 'Error from Updater Application Cron Script:<br/>' . $updaterCheck['error'];
+
+        }
+        if (isset($setupCheck['notice'])) {
+            $data['setupNoticeMessage'] = 'Notice from Setup Application Cron Script:<br/>' . $setupCheck['notice'];
+        }
+        if (isset($updaterCheck['notice'])) {
+            $data['updaterNoticeMessage'] = 'Notice from Updater Application Cron Script:<br/>' .
+                $updaterCheck['notice'];
         }
         $data['responseType'] = $responseType;
         return new JsonModel($data);
