@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Unit\Block\Cache;
 
-class AdditonalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Backend\Block\Cache\Additional
@@ -18,19 +18,30 @@ class AdditonalTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlBuilderMock;
 
+    /**
+     * @var \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appStateMock;
+
     protected function setUp()
     {
         $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
+        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
             'Magento\Backend\Block\Template\Context',
-            ['urlBuilder' => $this->urlBuilderMock]
+            [
+                'urlBuilder' => $this->urlBuilderMock,
+                'appState' => $this->appStateMock,
+            ]
         );
 
         $this->additonalBlock = $objectHelper->getObject(
             'Magento\Backend\Block\Cache\Additional',
-            ['context' => $context,]
+            ['context' => $context]
         );
     }
 
@@ -62,5 +73,27 @@ class AdditonalTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/cleanStaticFiles')
             ->will($this->returnValue($expectedUrl));
         $this->assertEquals($expectedUrl, $this->additonalBlock->getCleanStaticFilesUrl());
+    }
+
+    /**
+     * @param string $mode
+     * @param bool $expected
+     * @dataProvider isInProductionModeDataProvider
+     */
+    public function testIsInProductionMode($mode, $expected)
+    {
+        $this->appStateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn($mode);
+        $this->assertEquals($expected, $this->additonalBlock->isInProductionMode());
+    }
+
+    public function isInProductionModeDataProvider()
+    {
+        return [
+            [\Magento\Framework\App\State::MODE_DEFAULT, false],
+            [\Magento\Framework\App\State::MODE_DEVELOPER, false],
+            [\Magento\Framework\App\State::MODE_PRODUCTION, true],
+        ];
     }
 }

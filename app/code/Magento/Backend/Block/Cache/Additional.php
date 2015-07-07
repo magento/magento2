@@ -8,6 +8,16 @@ namespace Magento\Backend\Block\Cache;
 class Additional extends \Magento\Backend\Block\Template
 {
     /**
+     * Check if application is in production mode
+     *
+     * @return bool
+     */
+    public function isInProductionMode()
+    {
+        return $this->_appState->getMode() === \Magento\Framework\App\State::MODE_PRODUCTION;
+    }
+
+    /**
      * @return string
      */
     public function getCleanImagesUrl()
@@ -22,7 +32,6 @@ class Additional extends \Magento\Backend\Block\Template
     {
         return $this->getUrl('*/*/cleanMedia');
     }
-
 
     /**
      * @return string
