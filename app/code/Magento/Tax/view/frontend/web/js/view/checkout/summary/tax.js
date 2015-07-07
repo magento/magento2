@@ -25,13 +25,7 @@ define(
             totals: quote.getTotals(),
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
             ifShowValue: function() {
-                if (!isTaxDisplayedInGrandTotal) {
-                    return false;
-                }
-                if (!this.totals() || null == totals.getSegment('tax')) {
-                    return true;
-                }
-                if (this.getPureValue() == 0) {
+                if (this.isFullMode() && this.getPureValue() == 0) {
                     return isZeroTaxDisplayed;
                 }
                 return true;
@@ -40,7 +34,7 @@ define(
                 if (!this.isFullMode()) {
                     return false;
                 }
-                return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
+                return this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
             },
             getPureValue: function() {
                 var amount = 0;
