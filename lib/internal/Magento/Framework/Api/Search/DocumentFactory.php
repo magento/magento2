@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Api\Search;
 
-class SearchResultFactory
+class DocumentFactory
 {
     /**
      * Object manager
@@ -27,7 +27,7 @@ class SearchResultFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Api\Search\SearchCriteria'
+        $instanceName = 'Magento\Framework\Api\Search\Document'
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -37,7 +37,7 @@ class SearchResultFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return SearchResultInterface
+     * @return DocumentInterface
      */
     public function create(array $data = [])
     {
