@@ -50,10 +50,16 @@ define(
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
                         isAddressSameAsShipping: false
                     });
+
                 quote.billingAddress.subscribe(function(newAddress) {
-                    this.isAddressSameAsShipping(newAddress == quote.shippingAddress() && !quote.isVirtual());
+                    this.isAddressSameAsShipping(
+                        newAddress != null
+                        && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                        && !quote.isVirtual()
+                    );
                     this.isAddressDetailsVisible(true);
                 }, this);
+
                 return this;
             },
 
@@ -117,7 +123,9 @@ define(
                 if (quote.billingAddress()) {
                     // restore 'Same As Shipping' checkbox state
                     this.isAddressSameAsShipping(
-                        !quote.isVirtual() && (quote.shippingAddress() == quote.billingAddress())
+                        quote.billingAddress() != null
+                        && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
+                        && !quote.isVirtual()
                     );
                     this.isAddressDetailsVisible(true);
                 }
