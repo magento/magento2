@@ -37,7 +37,7 @@ class SearchCriteriaFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return DataInterface
+     * @return SearchCriteriaInterface
      */
     public function create(array $data = [])
     {
