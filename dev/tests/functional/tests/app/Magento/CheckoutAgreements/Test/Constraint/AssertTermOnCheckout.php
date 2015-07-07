@@ -79,9 +79,8 @@ class AssertTermOnCheckout extends AbstractConstraint
         $checkoutOnepage->getBillingBlock()->clickContinue();
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shipping);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod($payment);
-        $checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
-        $checkoutOnepage->getAgreementReview()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod($payment);
+        $checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,

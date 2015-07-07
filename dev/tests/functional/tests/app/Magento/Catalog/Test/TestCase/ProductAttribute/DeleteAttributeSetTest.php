@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Log in to Backend.
  * 2. Navigate to Stores > Attributes > Product Template.
  * 3. Open created Product Template.
- * 4. Click 'Delete Attribute Set' button.
+ * 4. Click 'Delete' button.
  * 5. Perform all assertions.
  *
  * @group Product_Attributes_(MX)
