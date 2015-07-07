@@ -68,6 +68,9 @@ define([], function () {
         has: function (elems) {
             var data = this.data;
 
+            if (elems.length === 0)
+                return false;
+
             return elems.every(function (elem) {
                 return typeof data[elem] !== 'undefined';
             });
