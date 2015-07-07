@@ -24,15 +24,15 @@ class Status extends Column
      * Constructor
      *
      * @param ContextInterface $context
-     * @param CollectionFactory $collectionFactory
      * @param UiComponentFactory $uiComponentFactory
+     * @param CollectionFactory $collectionFactory
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        CollectionFactory $collectionFactory,
         UiComponentFactory $uiComponentFactory,
+        CollectionFactory $collectionFactory,
         array $components = [],
         array $data = []
     ) {
