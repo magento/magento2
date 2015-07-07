@@ -72,7 +72,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             > (new \DateTime($object->getDateTo()))->getTimestamp()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Start date cannot be greater than end date.')
+                __('The start date can\'t follow the end date.')
             );
         }
 
@@ -85,10 +85,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($check) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    'Your design change for the specified store intersects with another one, please specify another'
-                    . ' date range.'
-                )
+                __('The date range for this design change overlaps another design change for the specified store.')
             );
         }
 

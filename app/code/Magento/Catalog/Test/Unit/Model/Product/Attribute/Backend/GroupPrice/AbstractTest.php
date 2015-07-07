@@ -24,7 +24,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_helper = $this->getMock('Magento\Catalog\Helper\Data', ['isPriceGlobal'], [], '', false);
         $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
 
-        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false);
+        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', ['create'], [], '', false);
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');

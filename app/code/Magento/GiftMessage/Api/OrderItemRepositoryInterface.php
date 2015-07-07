@@ -5,6 +5,10 @@
  */
 namespace Magento\GiftMessage\Api;
 
+/**
+ * Interface OrderItemRepositoryInterface
+ * @api
+ */
 interface OrderItemRepositoryInterface
 {
     /**

@@ -51,7 +51,7 @@ class PageForm extends FormTabs
     {
         $this->openTab('content');
         /** @var \Magento\Cms\Test\Block\Adminhtml\Page\Edit\Tab\Content $contentTab */
-        $contentTab = $this->getTabElement('content');
+        $contentTab = $this->getTab('content');
         /** @var \Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config $config */
         $contentTab->clickInsertVariable();
         $config = $contentTab->getWysiwygConfig();

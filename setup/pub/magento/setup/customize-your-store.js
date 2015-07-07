@@ -11,6 +11,7 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
             currency: 'USD',
             language: 'en_US',
             useSampleData: false,
+            cleanUpDatabase: false,
             loadedAllModules: false,
             showModulesControl: false,
             selectAll: true,

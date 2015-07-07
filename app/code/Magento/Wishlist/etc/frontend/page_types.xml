@@ -9,5 +9,5 @@
     <type id="wishlist_index_index" label="Customer My Account My Wish List"/>
     <type id="wishlist_index_share" label="Customer My Account Wish List Sharing Form"/>
     <type id="wishlist_shared_index" label="Customer Shared Wish List View"/>
-    <type id="wishlist_index_configure" label="Configure Wish list Item"/>
+    <type id="wishlist_index_configure" label="Configure Wish List Item"/>
 </page_types>

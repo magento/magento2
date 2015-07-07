@@ -23,7 +23,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
  * 8. Clear cache.
  * 9. Perform all assertions.
  *
- * @ticketId MAGETWO-23036
+ * @ZephyrId MAGETWO-23036
  */
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
@@ -31,7 +31,6 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
     const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const TO_MAINTAIN = 'yes'; // Selecting conditions in parallel mode
     /* end tags */
 
     /**

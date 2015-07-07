@@ -35,16 +35,6 @@ class TaxCalculationTest extends Scenario
     /* end tags */
 
     /**
-     * Skip failed tests.
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        self::markTestIncomplete("Epic: MAGETWO-30073");
-    }
-
-    /**
      * Runs tax calculation test.
      *
      * @return void

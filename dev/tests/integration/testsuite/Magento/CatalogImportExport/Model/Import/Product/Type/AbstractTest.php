@@ -25,6 +25,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             [
                 $objectManager->get('Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory'),
                 $objectManager->get('Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'),
+                $objectManager->get('Magento\Framework\App\Resource'),
                 $params
             ]
         );
@@ -46,7 +47,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'Updating existing product with attributes that do not have default values' => [
-                ['sku' => 'simple_product_1', 'price' => 55, '_attribute_set' => 'Default', '_type' => 'simple'],
+                ['sku' => 'simple_product_1', 'price' => 55, '_attribute_set' => 'Default', 'product_type' => 'simple'],
                 false,
                 ['price' => 55],
             ],
@@ -55,8 +56,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'simple_product_2',
                     'price' => 65,
                     '_attribute_set' => 'Default',
-                    '_type' => 'simple',
-                    'visibility' => 1,
+                    'product_type' => 'simple',
+                    'visibility' => 'not visible individually',
                     'tax_class_id' => '',
                 ],
                 false,
@@ -65,11 +66,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Adding new product with attributes that do not have default values' => [
                 [
                     'sku' => 'simple_product_3',
-                    '_store' => '',
+                    'store_view_code' => '',
                     '_attribute_set' => 'Default',
-                    '_type' => 'simple',
-                    '_category' => '_root_category',
-                    '_product_websites' => 'base',
+                    'product_type' => 'simple',
+                    'categories' => '_root_category',
+                    'website_code' => '',
                     'name' => 'Simple Product 3',
                     'price' => 150,
                     'status' => 1,
@@ -77,7 +78,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'weight' => 1,
                     'description' => 'a',
                     'short_description' => 'a',
-                    'visibility' => 1,
+                    'visibility' => 'not visible individually',
                 ],
                 true,
                 [
@@ -96,11 +97,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             'Adding new product with attributes that have default values' => [
                 [
                     'sku' => 'simple_product_4',
-                    '_store' => '',
+                    'store_view_code' => '',
                     '_attribute_set' => 'Default',
-                    '_type' => 'simple',
-                    '_category' => '_root_category',
-                    '_product_websites' => 'base',
+                    'product_type' => 'simple',
+                    'categories' => '_root_category',
+                    'website_code' => 'base',
                     'name' => 'Simple Product 4',
                     'price' => 100,
                     'status' => 1,
@@ -108,7 +109,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'weight' => 1,
                     'description' => 'a',
                     'short_description' => 'a',
-                    'visibility' => 2,
+                    'visibility' => 'catalog',
                     'msrp_display_actual_price_type' => 'In Cart',
                 ],
                 true,
@@ -146,17 +147,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'sku' => 'simple1',
-                    '_store' => '',
+                    'store_view_code' => '',
                     '_attribute_set' => 'Default',
-                    '_type' => 'simple',
+                    'product_type' => 'simple',
                     'name' => 'Simple 01',
                     'price' => 10,
                 ],
                 [
                     'sku' => 'simple1',
-                    '_store' => '',
+                    'store_view_code' => '',
                     '_attribute_set' => 'Default',
-                    '_type' => 'simple',
+                    'product_type' => 'simple',
                     'name' => 'Simple 01',
                     'price' => 10
                 ],
@@ -164,17 +165,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'sku' => '',
-                    '_store' => 'German',
+                    'store_view_code' => 'German',
                     '_attribute_set' => 'Default',
-                    '_type' => '',
+                    'product_type' => '',
                     'name' => 'Simple 01 German',
                     'price' => '',
                 ],
                 [
                     'sku' => '',
-                    '_store' => 'German',
+                    'store_view_code' => 'German',
                     '_attribute_set' => 'Default',
-                    '_type' => '',
+                    'product_type' => '',
                     'name' => 'Simple 01 German'
                 ]
             ]

@@ -78,50 +78,13 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     {
         /** @var $adapter \Magento\Framework\DB\Adapter\AdapterInterface */
         $adapter = $this->getConnection();
-        /** @var $firstnameAttr \Magento\Eav\Model\Entity\Attribute */
-        $firstnameAttr = $this->_customerResource->getAttribute('firstname');
-        /** @var $lastnameAttr \Magento\Eav\Model\Entity\Attribute */
-        $lastnameAttr = $this->_customerResource->getAttribute('lastname');
-
-        $firstnameCondition = ['table_customer_firstname.entity_id = detail.customer_id'];
-
-        if ($firstnameAttr->getBackend()->isStatic()) {
-            $firstnameField = 'firstname';
-        } else {
-            $firstnameField = 'value';
-            $firstnameCondition[] = $adapter->quoteInto(
-                'table_customer_firstname.attribute_id = ?',
-                (int)$firstnameAttr->getAttributeId()
-            );
-        }
-
-        $this->getSelect()->joinInner(
-            ['table_customer_firstname' => $firstnameAttr->getBackend()->getTable()],
-            implode(' AND ', $firstnameCondition),
-            []
-        );
-
-        $lastnameCondition = ['table_customer_lastname.entity_id = detail.customer_id'];
-        if ($lastnameAttr->getBackend()->isStatic()) {
-            $lastnameField = 'lastname';
-        } else {
-            $lastnameField = 'value';
-            $lastnameCondition[] = $adapter->quoteInto(
-                'table_customer_lastname.attribute_id = ?',
-                (int)$lastnameAttr->getAttributeId()
-            );
-        }
-
         //Prepare fullname field result
-        $customerFullname = $adapter->getConcatSql(
-            ["table_customer_firstname.{$firstnameField}", "table_customer_lastname.{$lastnameField}"],
-            ' '
-        );
+        $customerFullname = $adapter->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
         $this->getSelect()->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            ['table_customer_lastname' => $lastnameAttr->getBackend()->getTable()],
-            implode(' AND ', $lastnameCondition),
+            ['customer' => $adapter->getTableName('customer_entity')],
+            'customer.entity_id = detail.customer_id',
             []
         )->columns(
             [

@@ -118,7 +118,7 @@ class Storage
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot upload the file.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
         }
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
@@ -314,7 +314,9 @@ class Storage
         $pathCmp = rtrim($path, '/');
 
         if ($rootCmp == $pathCmp) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete root directory %1.', $path));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We can\'t delete root directory %1 right now.', $path)
+            );
         }
 
         return $this->mediaWriteDirectory->delete($path);

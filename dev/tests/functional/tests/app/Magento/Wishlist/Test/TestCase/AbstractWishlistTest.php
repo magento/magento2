@@ -119,11 +119,9 @@ abstract class AbstractWishlistTest extends Injectable
      */
     protected function addToWishlist(array $products, $configure = false)
     {
-        $addProductsToWishlistStep = $this->objectManager->create(
+        $this->objectManager->create(
             'Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep',
             ['products' => $products, 'configure' => $configure]
-        );
-
-        $addProductsToWishlistStep->run();
+        )->run();
     }
 }

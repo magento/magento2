@@ -286,10 +286,10 @@ abstract class AbstractEntity
     /**
      * Iterate through given collection page by page and export items
      *
-     * @param \Magento\Framework\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @return void
      */
-    protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\Db $collection)
+    protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\AbstractDb $collection)
     {
         $this->_byPagesIterator->iterate($collection, $this->_pageSize, [[$this, 'exportItem']]);
     }
@@ -344,7 +344,7 @@ abstract class AbstractEntity
     /**
      * Get entity collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     abstract protected function _getEntityCollection();
 
@@ -390,7 +390,7 @@ abstract class AbstractEntity
             ) ? __(
                 $this->_messageTemplates[$errorCode]
             ) : __(
-                "Please correct the value for '%1' column",
+                'Please correct the value for "%1" column.',
                 $errorCode
             );
             $message = (string)$message;
@@ -449,7 +449,7 @@ abstract class AbstractEntity
     public function getWriter()
     {
         if (!$this->_writer) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify writer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the writer.'));
         }
 
         return $this->_writer;

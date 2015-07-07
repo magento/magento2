@@ -170,7 +170,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('TEST QUERY PART'));
 
-        $actualResult = $this->target->process($this->filter, $isNegation, $query);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
@@ -195,7 +199,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'category_ids')
             ->will($this->returnValue($this->attribute));
 
-        $actualResult = $this->target->process($this->filter, $isNegation, $query);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
@@ -232,7 +240,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('TEST QUERY PART'));
 
-        $actualResult = $this->target->process($this->filter, $isNegation, $query);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
@@ -284,7 +296,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('TEST QUERY PART'));
 
-        $actualResult = $this->target->process($this->filter, $isNegation, $query);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 

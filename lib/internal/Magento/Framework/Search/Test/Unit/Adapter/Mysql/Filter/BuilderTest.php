@@ -161,7 +161,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildFilter($filter, $conditionType, $expectedResult)
     {
-        $actualResult = $this->builder->build($filter, $conditionType);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $actualResult = $this->builder->build($filter, $conditionType, $queryContainer);
         $this->assertEquals($expectedResult, $actualResult);
     }
 
@@ -412,6 +415,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $filter->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('unknownType'));
-        $this->builder->build($filter, RequestBoolQuery::QUERY_CONDITION_MUST);
+        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->builder->build($filter, RequestBoolQuery::QUERY_CONDITION_MUST, $queryContainer);
     }
 }

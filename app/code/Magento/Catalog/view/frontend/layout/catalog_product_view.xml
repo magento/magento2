@@ -115,7 +115,7 @@
                 </block>
                 <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" as="additional" template="product/view/attributes.phtml" group="detailed_info">
                     <arguments>
-                        <argument translate="true" name="title" xsi:type="string">Additional Information</argument>
+                        <argument translate="true" name="title" xsi:type="string">More Information</argument>
                     </arguments>
                 </block>
             </block>

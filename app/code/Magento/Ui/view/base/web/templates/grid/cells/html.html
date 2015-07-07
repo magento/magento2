@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<td
+    data-bind="
+        visible: visible,
+        css: { _dragging: dragging },
+        click: hasFieldAction() ?
+            applyFieldAction.bind($data, $parentContext.$index()) :
+            false,
+        html: getLabel(row[field.index])"
+    data-action="grid-row-edit"></td>

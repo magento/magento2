@@ -37,24 +37,17 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_localeDate;
 
     /**
-     * Centinel service model
-     *
-     * @var \Magento\Centinel\Model\Service
-     */
-    protected $_centinelService;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Logger $logger
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -65,11 +58,11 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Centinel\Model\Service $centinelService,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -79,13 +72,13 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             $customAttributeFactory,
             $paymentData,
             $scopeConfig,
+            $logger,
             $resource,
             $resourceCollection,
             $data
         );
         $this->_moduleList = $moduleList;
         $this->_localeDate = $localeDate;
-        $this->_centinelService = $centinelService;
     }
 
     /**
@@ -121,22 +114,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         )->setCcSsStartYear(
             $data->getCcSsStartYear()
         );
-        return $this;
-    }
-
-    /**
-     * Prepare info instance for save
-     *
-     * @return $this
-     */
-    public function prepareSave()
-    {
-        $info = $this->getInfoInstance();
-        if ($this->_canSaveCc) {
-            $info->setCcNumberEnc($info->encrypt($info->getCcNumber()));
-        }
-        //$info->setCcCidEnc($info->encrypt($info->getCcCid()));
-        $info->setCcNumber(null)->setCcCid(null);
         return $this;
     }
 
@@ -214,13 +191,13 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                 $ccType = $ccNumAndTypeMatches ? $info->getCcType() : 'OT';
 
                 if (!$ccNumAndTypeMatches && !$this->otherCcType($info->getCcType())) {
-                    $errorMsg = __('Credit card number mismatch with credit card type.');
+                    $errorMsg = __('The credit card number doesn\'t match the credit card type.');
                 }
             } else {
                 $errorMsg = __('Invalid Credit Card Number');
             }
         } else {
-            $errorMsg = __('Credit card type is not allowed for this payment method.');
+            $errorMsg = __('This credit card type is not allowed for this payment method.');
         }
 
         //validate credit card verification number
@@ -233,16 +210,11 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         if ($ccType != 'SS' && !$this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth())) {
-            $errorMsg = __('We found an incorrect credit card expiration date.');
+            $errorMsg = __('Please enter a valid credit card expiration date.');
         }
 
         if ($errorMsg) {
             throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
-        }
-
-        //This must be after all validation conditions
-        if ($this->getIsCentinelValidationEnabled()) {
-            $this->getCentinelValidator()->validate($this->getCentinelValidationData());
         }
 
         return $this;
@@ -368,129 +340,5 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     public function isAvailable($quote = null)
     {
         return $this->getConfigData('cctypes', $quote ? $quote->getStoreId() : null) && parent::isAvailable($quote);
-    }
-
-    /**
-     * Whether centinel service is enabled
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getIsCentinelValidationEnabled()
-    {
-        return $this->_moduleList->has('Magento_Centinel') && 1 == $this->getConfigData('centinel');
-    }
-
-    /**
-     * Instantiate centinel validator model
-     *
-     * @return \Magento\Centinel\Model\Service
-     */
-    public function getCentinelValidator()
-    {
-        $this->_centinelService->setIsModeStrict(
-            $this->getConfigData('centinel_is_mode_strict')
-        )->setCustomApiEndpointUrl(
-            $this->getConfigData('centinel_api_url')
-        )->setStore(
-            $this->getStore()
-        )->setIsPlaceOrder(
-            $this->_isPlaceOrder()
-        );
-        return $this->_centinelService;
-    }
-
-    /**
-     * Return data for Centinel validation
-     *
-     * @return \Magento\Framework\Object
-     */
-    public function getCentinelValidationData()
-    {
-        $info = $this->getInfoInstance();
-        $params = new \Magento\Framework\Object();
-        $params->setPaymentMethodCode(
-            $this->getCode()
-        )->setCardType(
-            $info->getCcType()
-        )->setCardNumber(
-            $info->getCcNumber()
-        )->setCardExpMonth(
-            $info->getCcExpMonth()
-        )->setCardExpYear(
-            $info->getCcExpYear()
-        )->setAmount(
-            $this->_getAmount()
-        )->setCurrencyCode(
-            $this->_getCurrencyCode()
-        )->setOrderNumber(
-            $this->_getOrderId()
-        );
-        return $params;
-    }
-
-    /**
-     * Order increment ID getter (either real from order or a reserved from quote)
-     *
-     * @return string
-     */
-    private function _getOrderId()
-    {
-        $info = $this->getInfoInstance();
-
-        if ($this->_isPlaceOrder()) {
-            return $info->getOrder()->getIncrementId();
-        } else {
-            if (!$info->getQuote()->getReservedOrderId()) {
-                $info->getQuote()->reserveOrderId();
-            }
-            return $info->getQuote()->getReservedOrderId();
-        }
-    }
-
-    /**
-     * Grand total getter
-     *
-     * @return string
-     */
-    private function _getAmount()
-    {
-        $info = $this->getInfoInstance();
-        if ($this->_isPlaceOrder()) {
-            return (double)$info->getOrder()->getQuoteBaseGrandTotal();
-        } else {
-            return (double)$info->getQuote()->getBaseGrandTotal();
-        }
-    }
-
-    /**
-     * Currency code getter
-     *
-     * @return string
-     */
-    private function _getCurrencyCode()
-    {
-        $info = $this->getInfoInstance();
-
-        if ($this->_isPlaceOrder()) {
-            return $info->getOrder()->getBaseCurrencyCode();
-        } else {
-            return $info->getQuote()->getBaseCurrencyCode();
-        }
-    }
-
-    /**
-     * Whether current operation is order placement
-     *
-     * @return bool
-     */
-    private function _isPlaceOrder()
-    {
-        $info = $this->getInfoInstance();
-        if ($info instanceof \Magento\Quote\Model\Quote\Payment) {
-            return false;
-        } elseif ($info instanceof \Magento\Sales\Model\Order\Payment) {
-            return true;
-        }
     }
 }

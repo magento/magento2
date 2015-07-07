@@ -10,9 +10,20 @@ namespace Magento\Framework\Module;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Dir
 {
+    /**#@+
+     * Directories within modules
+     */
+    const MODULE_ETC_DIR = 'etc';
+    const MODULE_I18N_DIR = 'i18n';
+    const MODULE_VIEW_DIR = 'view';
+    const MODULE_CONTROLLER_DIR = 'Controller';
+    /**#@-*/
+
     /**
      * Modules root directory
      *
@@ -26,13 +37,25 @@ class Dir
     protected $_string;
 
     /**
-     * @param Filesystem $filesystem
-     * @param \Magento\Framework\Stdlib\String $string
+     * Module registry
+     *
+     * @var ModuleRegistryInterface
      */
-    public function __construct(Filesystem $filesystem, \Magento\Framework\Stdlib\String $string)
-    {
+    private $moduleRegistry;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param StringHelper $string
+     * @param ModuleRegistryInterface $moduleRegistry
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        StringHelper $string,
+        ModuleRegistryInterface $moduleRegistry
+    ) {
         $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->_string = $string;
+        $this->moduleRegistry = $moduleRegistry;
     }
 
     /**
@@ -45,16 +68,23 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        $path = $this->_string->upperCaseWords($moduleName, '_', '/');
+        if (null === $path = $this->moduleRegistry->getModulePath($moduleName)) {
+            $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
+            $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
+        }
+
         if ($type) {
-            if (!in_array($type, ['etc', 'i18n', 'view', 'Controller'])) {
+            if (!in_array($type, [
+                self::MODULE_ETC_DIR,
+                self::MODULE_I18N_DIR,
+                self::MODULE_VIEW_DIR,
+                self::MODULE_CONTROLLER_DIR
+            ])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;
         }
 
-        $result = $this->_modulesDirectory->getAbsolutePath($path);
-
-        return $result;
+        return $path;
     }
 }

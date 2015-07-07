@@ -96,7 +96,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
             $maxValue = $date->timestamp($maxDate);
 
             if ($value > $maxValue) {
-                $message = __('The From Date value should be less than or equal to the To Date value.');
+                $message = __('Make sure the To Date is later than or the same as the From Date.');
                 $eavExc = new \Magento\Eav\Model\Entity\Attribute\Exception($message);
                 $eavExc->setAttributeCode($attr->getName());
                 throw $eavExc;

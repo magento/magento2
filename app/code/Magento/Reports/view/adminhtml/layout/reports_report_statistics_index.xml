@@ -26,12 +26,12 @@
                                 <item name="refresh_lifetime" xsi:type="array">
                                     <item name="label" xsi:type="string" translate="true">Refresh Lifetime Statistics</item>
                                     <item name="url" xsi:type="string">*/*/refreshLifetime</item>
-                                    <item name="confirm" xsi:type="string" translate="true">Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.</item>
+                                    <item name="confirm" xsi:type="string" translate="true">Are you sure you want to refresh lifetime statistics right now? This operation may slow down your customers' shopping experience.</item>
                                 </item>
                                 <item name="refresh_recent" xsi:type="array">
                                     <item name="label" xsi:type="string" translate="true">Refresh Statistics for the Last Day</item>
                                     <item name="url" xsi:type="string">*/*/refreshRecent</item>
-                                    <item name="confirm" xsi:type="string" translate="true">Are you sure you want to refresh statistics for last day?</item>
+                                    <item name="confirm" xsi:type="string" translate="true">Are you sure you want to refresh statistics for the last day?</item>
                                     <item name="selected" xsi:type="string">1</item>
                                 </item>
                             </argument>

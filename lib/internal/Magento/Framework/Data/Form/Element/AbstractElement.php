@@ -239,7 +239,9 @@ abstract class AbstractElement extends AbstractForm
             'readonly',
             'tabindex',
             'placeholder',
-            'data-form-part'
+            'data-form-part',
+            'data-role',
+            'data-action'
         ];
     }
 

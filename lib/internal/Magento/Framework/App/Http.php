@@ -113,7 +113,7 @@ class Http implements \Magento\Framework\AppInterface
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
         $frontController = $this->_objectManager->get('Magento\Framework\App\FrontControllerInterface');
         $result = $frontController->dispatch($this->_request);
-        // TODO: Temporary solution till all controllers are returned not ResultInterface (MAGETWO-28359)
+        // TODO: Temporary solution until all controllers return ResultInterface (MAGETWO-28359)
         if ($result instanceof ResultInterface) {
             $this->registry->register('use_page_cache_plugin', true, true);
             $result->renderResult($this->_response);

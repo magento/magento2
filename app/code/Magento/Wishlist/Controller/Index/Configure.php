@@ -63,7 +63,9 @@ class Configure extends Action\Action implements IndexInterface
             $item = $this->_objectManager->create('Magento\Wishlist\Model\Item');
             $item->loadWithOptions($id);
             if (!$item->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t load the wish list item.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('We can\'t load the Wish List item right now.')
+                );
             }
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
             if (!$wishlist) {
@@ -101,7 +103,7 @@ class Configure extends Action\Action implements IndexInterface
             $resultRedirect->setPath('*');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t configure the product.'));
+            $this->messageManager->addError(__('We can\'t configure the product right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $resultRedirect->setPath('*');
             return $resultRedirect;

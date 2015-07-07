@@ -108,7 +108,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -124,7 +124,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->jsonHelper = $jsonHelper;
@@ -278,6 +278,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Remove persistent cookie
      *
      * @return $this
+     * @api
      */
     public function removePersistentCookie()
     {
@@ -293,6 +294,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $duration Time in seconds.
      * @param string $path
      * @return $this
+     * @api
      */
     public function setPersistentCookie($duration, $path)
     {

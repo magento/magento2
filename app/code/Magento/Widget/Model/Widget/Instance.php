@@ -121,7 +121,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -140,7 +140,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = []
     ) {

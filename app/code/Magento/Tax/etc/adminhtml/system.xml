@@ -41,13 +41,13 @@
                 </field>
                 <field id="price_includes_tax" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Catalog Prices</label>
-                    <comment>This sets whether catalog prices entered by admin include tax.</comment>
+                    <comment>This sets whether catalog prices entered from Magento Admin include tax.</comment>
                     <backend_model>Magento\Tax\Model\Config\Price\IncludePrice</backend_model>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                 </field>
                 <field id="shipping_includes_tax" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipping Prices</label>
-                    <comment>This sets whether shipping amounts entered by admin or obtained from gateways include tax.</comment>
+                    <comment>This sets whether shipping amounts entered from Magento Admin or obtained from gateways include tax.</comment>
                     <backend_model>Magento\Tax\Model\Config\Price\IncludePrice</backend_model>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                 </field>
@@ -60,7 +60,7 @@
                     <label>Apply Discount On Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
-                    <comment>Apply discount on price including tax is calculated based on store tax, if "Apply Tax after Discount" is selected.</comment>
+                    <comment>Apply discount on price including tax is calculated based on store tax if "Apply Tax after Discount" is selected.</comment>
                 </field>
                 <field id="apply_tax_on" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Apply Tax On</label>
@@ -69,7 +69,7 @@
                 <field id="cross_border_trade_enabled" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enable Cross Border Trade</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>When catalog price includes tax, enable this setting will fix the price no matter what the customer's tax rate is.</comment>
+                    <comment>When catalog price includes tax, enable this setting to fix the price no matter what the customer's tax rate.</comment>
                 </field>
             </group>
             <group id="defaults" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -126,11 +126,11 @@ class Main extends \Magento\Backend\Block\Template
                 'delete_button',
                 'Magento\Backend\Block\Widget\Button',
                 [
-                    'label' => __('Delete Attribute Set'),
+                    'label' => __('Delete'),
                     'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
                         __(
-                            'You are about to delete all products in this set. ' .
-                            'Are you sure you want to delete this attribute set?'
+                            'You are about to delete all products in this product template. '
+                            . 'Are you sure you want to do that?'
                         )
                     ) . '\', \'' . $this->getUrl(
                         'catalog/*/delete',
@@ -145,7 +145,7 @@ class Main extends \Magento\Backend\Block\Template
             'save_button',
             'Magento\Backend\Block\Widget\Button',
             [
-                'label' => __('Save Attribute Set'),
+                'label' => __('Save'),
                 'onclick' => 'editSet.save();',
                 'class' => 'save primary save-attribute-set'
             ]
@@ -187,7 +187,7 @@ class Main extends \Magento\Backend\Block\Template
      */
     protected function _getHeader()
     {
-        return __("Edit Attribute Set '%1'", $this->_getAttributeSet()->getAttributeSetName());
+        return __("Edit Product Template '%1'", $this->_getAttributeSet()->getAttributeSetName());
     }
 
     /**

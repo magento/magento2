@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Most viewed product report aggregate resource model
  *
@@ -31,16 +29,22 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     const AGGREGATION_YEARLY = 'report_viewed_product_aggregated_yearly';
 
     /**
+     * Product resource instance
+     *
      * @var \Magento\Catalog\Model\Resource\Product
      */
     protected $_productResource;
 
     /**
+     * Resource helper instance
+     *
      * @var \Magento\Reports\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -98,10 +102,6 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $mainTable = $this->getMainTable();
         $adapter = $this->_getWriteAdapter();
 
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
                 $this->getTable('report_event'),
@@ -114,7 +114,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             $subSelect = null;
         }
         $this->_clearTableByDateRange($mainTable, $from, $to, $subSelect);
-        // convert dates from UTC to current admin timezone
+        // convert dates to current admin timezone
         $periodExpr = $adapter->getDatePartSql(
             $this->getStoreTZOffsetQuery(
                 ['source_table' => $this->getTable('report_event')],
