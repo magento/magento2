@@ -69,6 +69,11 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderCollectionMock;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -83,7 +88,8 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
                 'getSession',
                 'getActionFlag',
                 'getHelper',
-                'getResultRedirectFactory'
+                'getResultRedirectFactory',
+                'getResultFactory'
             ],
             [],
             '',
@@ -119,18 +125,28 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [],
-            [],
-            '',
-            false
-        );
+
+        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', ['get', 'set'], [], '', false);
         $this->helperMock = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
         $this->resultRedirectMock = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
+
+        $redirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->willReturn($redirectMock);
 
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
@@ -143,128 +159,137 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getResultRedirectFactory')
             ->willReturn($resultRedirectFactory);
+        $this->contextMock->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($resultFactoryMock);
 
         $this->massAction = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\MassUnhold',
             [
                 'context' => $this->contextMock,
-                'request' => $this->requestMock,
-                'response' => $this->responseMock
             ]
         );
     }
 
     public function testExecuteTwoOrdersReleasedFromHold()
     {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
+        $selected = [1, 2];
+        $countOrders = count($selected);
+
+        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('selected')
+            ->willReturn($selected);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('excluded')
+            ->willReturn([]);
+
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->exactly(2))
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['in' => $selected]);
+        $this->orderCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$order1, $order2]);
+
+        $order1->expects($this->once())
             ->method('canUnhold')
             ->willReturn(true);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('unhold')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->exactly(2))
-            ->method('save')
-            ->willReturnSelf();
+        $order1->expects($this->once())
+            ->method('unhold');
+        $order1->expects($this->once())
+            ->method('save');
+
+        $this->orderCollectionMock->expects($this->once())
+            ->method('count')
+            ->willReturn($countOrders);
+
+        $order2->expects($this->once())
+            ->method('canUnhold')
+            ->willReturn(false);
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addError')
+            ->with('1 order(s) were not released from on hold status.');
+
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with('2 order(s) have been released from on hold status.');
+            ->with('1 order(s) have been released from on hold status.');
+
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')
             ->willReturnSelf();
+
         $this->massAction->execute();
     }
 
     public function testExecuteOneOrderWhereNotReleasedFromHold()
     {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
-            ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->at(1))
-            ->method('canUnhold')
-            ->willReturn(true);
-        $this->orderMock->expects($this->at(2))
-            ->method('canUnhold')
-            ->willReturn(false);
-        $this->orderMock->expects($this->exactly(1))
-            ->method('unhold')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->exactly(1))
-            ->method('save')
-            ->willReturnSelf();
-        $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with('1 order(s) were not released from on hold status.');
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('sales/*/')
-            ->willReturnSelf();
-        $this->massAction->execute();
-    }
+        $excluded = [1, 2];
+        $countOrders = count($excluded);
 
-    public function testExecuteNoOrdersWhereReleasedFromHold()
-    {
-        $this->requestMock->expects($this->once())
-            ->method('getPost')
-            ->with('selected', [])
-            ->willReturn([1, 2]);
-        $this->objectManagerMock->expects($this->exactly(2))
+        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->requestMock->expects($this->at(0))
+            ->method('getParam')
+            ->with('selected')
+            ->willReturn([]);
+
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with('excluded')
+            ->willReturn($excluded);
+
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->exactly(2))
-            ->method('load')
-            ->willReturnMap(
-                [
-                    [1, null, $this->orderMock],
-                    [2, null, $this->orderMock],
-                ]
-            );
-        $this->orderMock->expects($this->exactly(2))
+            ->with('Magento\Sales\Model\Resource\Order\Collection')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(\Magento\Sales\Controller\Adminhtml\Order\MassCancel::ID_FIELD, ['nin' => $excluded]);
+        $this->orderCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$order1, $order2]);
+
+        $order1->expects($this->once())
             ->method('canUnhold')
             ->willReturn(false);
-        $this->orderMock->expects($this->never())
-            ->method('unhold')
-            ->willReturnSelf();
-        $this->orderMock->expects($this->never())
-            ->method('save')
-            ->willReturnSelf();
+
+        $this->orderCollectionMock->expects($this->once())
+            ->method('count')
+            ->willReturn($countOrders);
+
+        $order2->expects($this->once())
+            ->method('canUnhold')
+            ->willReturn(false);
+
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('No order(s) were released from on hold status.');
+
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')
             ->willReturnSelf();
+
         $this->massAction->execute();
     }
 }

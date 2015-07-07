@@ -18,24 +18,22 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
     protected function massAction(AbstractCollection $collection)
     {
         $countHoldOrder = 0;
-        $countNonHoldOrder = 0;
-
         foreach ($collection->getItems() as $order) {
-            if ($order->canHold()) {
-                $order->hold()->save();
-                ++$countHoldOrder;
-            } else {
-                ++$countNonHoldOrder;
+            if (!$order->canHold()) {
+                continue;
             }
+            $order->hold();
+            $order->save();
+            $countHoldOrder++;
+        }
+        $countNonHoldOrder = $collection->count() - $countHoldOrder;
+
+        if ($countNonHoldOrder && $countHoldOrder) {
+            $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
+        } elseif ($countNonHoldOrder) {
+            $this->messageManager->addError(__('No order(s) were put on hold.'));
         }
 
-        if ($countNonHoldOrder) {
-            if ($countHoldOrder) {
-                $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
-            } else {
-                $this->messageManager->addError(__('No order(s) were put on hold.'));
-            }
-        }
         if ($countHoldOrder) {
             $this->messageManager->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
         }
