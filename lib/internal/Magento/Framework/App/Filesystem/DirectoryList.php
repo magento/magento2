@@ -36,11 +36,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const CONFIG = 'etc';
 
     /**
-     * Email Templates
-     */
-    const EMAIL = 'email';
-
-    /**
      * Libraries or third-party components
      */
     const LIB_INTERNAL = 'lib_internal';
