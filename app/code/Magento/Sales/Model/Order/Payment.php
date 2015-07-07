@@ -274,6 +274,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function place()
     {
