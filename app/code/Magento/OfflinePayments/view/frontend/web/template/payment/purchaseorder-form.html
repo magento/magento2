@@ -49,7 +49,12 @@
                     <div class="primary">
                         <button class="action primary checkout"
                                 type="submit"
-                                data-bind="click: placeOrder, attr: {title: $t('Place Order')}, enable: (getCode() == isChecked())"
+                                data-bind="
+                                click: placeOrder,
+                                attr: {title: $t('Place Order')},
+                                enable: (getCode() == isChecked()),
+                                css: {disabled: !isPlaceOrderActionAllowed()}
+                                "
                                 data-role="review-save">
                             <span data-bind="text: $t('Place Order')"></span>
                         </button>
