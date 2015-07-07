@@ -786,14 +786,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $searchCriteria = [
             'searchCriteria' => [
-                'request_name' => 'quick_search_container',
                 'search_term' => 'simple',
-                'filter_groups' => [
-                    'filters' => [
-                    ],
-                ],
-                'current_page' => 1,
+                'request_name' => 'quick_search_container',
+                'filter_groups' => [],
                 'page_size' => 20000000000000,
+                'current_page' => 1,
             ],
         ];
 
