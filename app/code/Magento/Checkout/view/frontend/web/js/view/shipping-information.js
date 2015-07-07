@@ -11,8 +11,7 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/sidebar',
-        'Magento_Checkout/js/view/sidebar'
+        'Magento_Checkout/js/model/sidebar'
     ],
     function($, Component, quote, shippingService, stepNavigator, sidebarModel) {
         'use strict';

@@ -55,6 +55,9 @@
                                         <item name="displayArea" xsi:type="string">estimation</item>
                                         <item name="config" xsi:type="array">
                                             <item name="template" xsi:type="string">Magento_Checkout/estimation</item>
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkout.sidebar</item>
+                                            </item>
                                         </item>
                                     </item>
                                     <item name="steps" xsi:type="array">
