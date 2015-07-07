@@ -127,7 +127,7 @@
          */
         var getAttributes = function ($node) {
             return $.map(
-                $node.find('[data-role=configurable-attribute] [data-role=attribute-info]') || [],
+                $node.find('[data-role=configurable-attributes-container] [data-role=attribute-info]') || [],
                 function (attribute) {
                     var $attribute = $(attribute);
 
