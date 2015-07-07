@@ -154,6 +154,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @var SearchResponseBuilder
      */
     private $searchResponseBuilder;
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param ProductFactory $productFactory
@@ -180,6 +184,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param SearchResponseBuilder $searchResponseBuilder
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -206,7 +211,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
-        SearchResponseBuilder $searchResponseBuilder
+        SearchResponseBuilder $searchResponseBuilder,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -232,6 +238,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
         $this->searchResponseBuilder = $searchResponseBuilder;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -735,6 +742,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->addFieldToFilter($filter->getField(), $filter->getValue());
             }
         }
+
+        $priceRangeCalculation = $this->scopeConfig->getValue(
+            \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($priceRangeCalculation) {
+            $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
+        }
+
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
         $request = $this->requestBuilder->create();
