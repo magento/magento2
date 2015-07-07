@@ -160,7 +160,6 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * ]]
      * 
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getArray()
     {

@@ -59,11 +59,11 @@ abstract class AbstractTokenizer
     }
 
     /**
-     * Move current index backwwards.
+     * Move current index backwards.
      *
      * If index out of bounds returns false
      *
-     * @param $distance number of characters to backtrack
+     * @param int $distance number of characters to backtrack
      * @return bool
      */
     public function back($distance)
