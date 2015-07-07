@@ -38,6 +38,12 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Website Payments Pro -->
@@ -67,6 +73,11 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Payflow Pro -->
@@ -96,6 +107,11 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Payflow Link (Includes Express Checkout) -->
@@ -132,7 +148,6 @@
             <rule type="paypal/express/unlock-configuration" event="deactivate">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
-            <rule type="paypal/express/mark-enable" event=":load"/>
             <rule type="paypal/express/lock-configuration-conditional" event=":load"/>
         </relation>
         <relation target=":self">
@@ -141,6 +156,12 @@
             <rule type="payflow/express/enable" event="activate"/>
             <rule type="payflow/express/disable" event="deactivate"/>
             <rule type="payflow/express/lock-conditional" event=":load"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Express Checkout -->
@@ -162,6 +183,10 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="paypal/express/mark-disable" event="deactivate">
+                <argument name="wps_other">wps_other</argument>
+                <argument name="payflow_link_ca">payflow_link_ca</argument>
+            </rule>
+            <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
