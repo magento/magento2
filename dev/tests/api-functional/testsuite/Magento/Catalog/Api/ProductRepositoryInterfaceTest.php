@@ -18,6 +18,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_GROUP_PRICES = 'group_prices';
     const KEY_TIER_PRICES = 'tier_prices';
 
+    /**
+     * @var array
+     */
     private $productData = [
         [
             ProductInterface::SKU => 'simple',
@@ -774,5 +777,49 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // delete the product with tier prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
         $this->assertTrue($response);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testSearch()
+    {
+        $searchCriteria = [
+            'searchCriteria' => [
+                'request_name' => 'quick_search_container',
+                'search_term' => 'simple',
+                'filter_groups' => [
+                    'filters' => [
+                    ],
+                ],
+                'current_page' => 1,
+                'page_size' => 20000000000000,
+            ],
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Search',
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+
+        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertTrue($response['total_count'] > 0);
+        $this->assertTrue(count($response['items']) > 0);
+
+        $this->assertNotNull($response['items'][0]['sku']);
+        $this->assertEquals('simple', $response['items'][0]['sku']);
     }
 }
