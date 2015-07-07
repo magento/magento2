@@ -3825,23 +3825,17 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Billing Name'
         )->addColumn(
-            'creditmemo_status',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Creditmemo Status'
-        )->addColumn(
             'base_grand_total',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Base Grand Total'
         )->addColumn(
-            'state',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
+            'order_status',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
             [],
-            'State'
+            'Order Status'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -3920,78 +3914,6 @@ class InstallSchema implements InstallSchemaInterface
             '12,4',
             [],
             'Grand Total'
-        )->addColumn(
-            'store_to_order_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Store To Order Rate'
-        )->addColumn(
-            'base_to_order_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base To Order Rate'
-        )->addColumn(
-            'store_to_base_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Store To Base Rate'
-        )->addColumn(
-            'base_to_global_rate',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-            '12,4',
-            [],
-            'Base To Global Rate'
-        )->addColumn(
-            'invoice_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Invoice Id'
-        )->addColumn(
-            'store_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Store Currency Code'
-        )->addColumn(
-            'order_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Order Currency Code'
-        )->addColumn(
-            'base_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Base Currency Code'
-        )->addColumn(
-            'global_currency_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            3,
-            [],
-            'Global Currency Code'
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
-            ['store_id']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['grand_total']),
-            ['grand_total']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
-            ['base_grand_total']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
-            ['order_id']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['creditmemo_status']),
-            ['creditmemo_status']
-        )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['state']),
-            ['state']
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo_grid',
@@ -4015,6 +3937,21 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
             ['billing_name']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['order_status']),
+            ['order_status']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
+            ['base_grand_total']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
+            ['store_id']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['grand_total']),
+            ['grand_total']
+        )->addIndex(
+            $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
+            ['order_id']
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo_grid',
