@@ -27,7 +27,6 @@ class ReturnUrl extends \Magento\Paypal\Controller\Payflow
                     \Magento\Sales\Model\Order::STATE_COMPLETE,
                 ];
                 if (in_array($order->getState(), $allowedOrderStates)) {
-                    $this->_checkoutSession->unsLastRealOrderId();
                     $redirectBlock->setGotoSuccessPage(true);
                 } else {
                     $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));

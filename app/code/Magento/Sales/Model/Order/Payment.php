@@ -350,12 +350,12 @@ class Payment extends Info implements OrderPaymentInterface
                 break;
             case ($message):
             case ($originalOrderState && $message):
-                if ($originalOrderState != $orderState || $originalOrderStatus != $orderStatus) {
-                    $order->setState($orderState)
-                        ->setStatus($orderStatus)
-                        ->addStatusHistoryComment($message)
-                        ->setIsCustomerNotified($isCustomerNotified);
-                }
+            case ($originalOrderState != $orderState):
+            case ($originalOrderStatus != $orderStatus):
+                $order->setState($orderState)
+                    ->setStatus($orderStatus)
+                    ->addStatusHistoryComment($message)
+                    ->setIsCustomerNotified($isCustomerNotified);
                 break;
             default:
                 break;
