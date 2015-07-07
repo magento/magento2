@@ -303,7 +303,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
 
-            if (count($totalsCollection->getItems()) < 1 || !$filterData->getData('from')) {
+            if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
                 $this->setTotals(new \Magento\Framework\Object());
                 $this->setCountTotals(false);
             } else {
