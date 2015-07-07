@@ -25,7 +25,7 @@
             </thead>
 
             <tbody data-bind="foreach: grid">
-                <tr data-bind="style: {backgroundColor: $index() % 2 ? 'whitesmoke' : 'white'}">
+                <tr>
                     <!-- ko foreach: $data -->
                     <!-- ko if: $data && $data.preview -->
                     <td class="col-image">
@@ -42,7 +42,6 @@
             </tbody>
         </table>
     </div>
-
 
     <div style="display: none" data-role="product-variations-matrix-tmp">
         <script data-template-for="variation-image" type="text/x-magento-template">
@@ -67,7 +66,7 @@
                 <!-- /ko -->
             </div>
             <div class="admin__data-grid-wrap">
-                <table class="data-grid"">
+                <table class="data-grid">
                     <thead>
                         <tr>
                             <th class="data-grid-th col-display" data-column="display">
@@ -76,7 +75,7 @@
                             <th class="data-grid-th col-image" data-column="image">
                                 <?= __('Image'); ?>
                             </th>
-                            <th class="data-grid-th col-name"  data-column="name">
+                            <th class="data-grid-th col-name" data-column="name">
                                 <?= __('Name'); ?>
                             </th>
                             <th class="data-grid-th col-sku" data-column="sku">
