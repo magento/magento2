@@ -33,7 +33,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      */
     public function getItems()
     {
-        $this->_get(self::ITEMS);
+        return $this->_get(self::ITEMS);
     }
 
     /**
@@ -51,7 +51,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      */
     public function getSearchCriteria()
     {
-        $this->_get(self::SEARCH_CRITERIA);
+        return $this->_get(self::SEARCH_CRITERIA);
     }
 
     /**
@@ -72,7 +72,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      */
     public function getTotalCount()
     {
-        $this->_get(self::TOTAL_COUNT);
+        return $this->_get(self::TOTAL_COUNT);
     }
 
     /**
