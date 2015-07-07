@@ -25,6 +25,11 @@ class Grid extends AbstractGrid
     protected $mainTableName;
 
     /**
+     * @var string
+     */
+    protected $orderIdField;
+
+    /**
      * @var array
      */
     protected $joins;
@@ -38,6 +43,7 @@ class Grid extends AbstractGrid
      * @param Context $context
      * @param string $mainTableName
      * @param string $gridTableName
+     * @param string $orderIdField
      * @param array $joins
      * @param array $columns
      * @param string|null $resourcePrefix
@@ -46,12 +52,14 @@ class Grid extends AbstractGrid
         Context $context,
         $mainTableName,
         $gridTableName,
+        $orderIdField,
         array $joins = [],
         array $columns = [],
         $resourcePrefix = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
+        $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
         parent::__construct($context, $resourcePrefix);
@@ -102,6 +110,14 @@ class Grid extends AbstractGrid
                     AdapterInterface::INSERT_ON_DUPLICATE
                 )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderIdField()
+    {
+       return $this->orderIdField;
     }
 
     /**

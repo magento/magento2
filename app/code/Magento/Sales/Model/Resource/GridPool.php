@@ -12,28 +12,15 @@ namespace Magento\Sales\Model\Resource;
 class GridPool
 {
     /**
-     * @var GridInterface[]
+     * @var \Magento\Sales\Model\Resource\Grid[]
      */
     protected $grids;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Grid $orderGrid
-     * @param \Magento\Sales\Model\Resource\Grid $invoiceGrid
-     * @param \Magento\Sales\Model\Resource\Grid $shipmentGrid
-     * @param \Magento\Sales\Model\Resource\Grid $creditmemoGrid
+     * @param array $grids
      */
-    public function __construct(
-        \Magento\Sales\Model\Resource\Grid $orderGrid,
-        \Magento\Sales\Model\Resource\Grid $invoiceGrid,
-        \Magento\Sales\Model\Resource\Grid $shipmentGrid,
-        \Magento\Sales\Model\Resource\Grid $creditmemoGrid
-    ) {
-        $this->grids = [
-            'order_grid' => $orderGrid,
-            'invoice_grid' => $invoiceGrid,
-            'shipment_grid' => $shipmentGrid,
-            'creditmemo_grid' => $creditmemoGrid,
-        ];
+    public function __construct(array $grids) {
+        $this->grids = $grids;
     }
 
     /**
@@ -45,8 +32,9 @@ class GridPool
     public function refreshByOrderId($orderId)
     {
         foreach ($this->grids as $grid) {
-            $grid->refresh($orderId, 'sfo.entity_id');
+            $grid->refresh($orderId, $grid->getOrderIdField());
         }
+
         return $this;
     }
 }
