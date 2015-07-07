@@ -17,23 +17,11 @@ class GridPool
     protected $grids;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Grid $orderGrid
-     * @param \Magento\Sales\Model\Resource\Grid $invoiceGrid
-     * @param \Magento\Sales\Model\Resource\Grid $shipmentGrid
-     * @param \Magento\Sales\Model\Resource\Grid $creditmemoGrid
-     */
-    public function __construct(
-        \Magento\Sales\Model\Resource\Grid $orderGrid,
-        \Magento\Sales\Model\Resource\Grid $invoiceGrid,
-        \Magento\Sales\Model\Resource\Grid $shipmentGrid,
-        \Magento\Sales\Model\Resource\Grid $creditmemoGrid
-    ) {
-        $this->grids = [
-            'order_grid' => $orderGrid,
-            'invoice_grid' => $invoiceGrid,
-            'shipment_grid' => $shipmentGrid,
-            'creditmemo_grid' => $creditmemoGrid,
-        ];
+     * @param array $grids
+    */
+    public function __construct(array $grids)
+    {
+        $this->grids = $grids;
     }
 
     /**
