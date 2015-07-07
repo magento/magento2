@@ -24,11 +24,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Deployer
 {
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
     /** @var Files */
     private $filesUtil;
 
@@ -40,9 +35,6 @@ class Deployer
 
     /** @var Version\StorageInterface */
     private $versionStorage;
-
-    /** @var \Magento\Framework\Stdlib\DateTime */
-    private $dateTime;
 
     /** @var \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
@@ -85,29 +77,23 @@ class Deployer
 
     /**
      * @param Files $filesUtil
-     * @param Filesystem $filesystem
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      * @param JsTranslationConfig $jsTranslationConfig
      * @param bool $isDryRun
      */
     public function __construct(
         Files $filesUtil,
-        Filesystem $filesystem,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
-        $this->filesystem = $filesystem;
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
-        $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
