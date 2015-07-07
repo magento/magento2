@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Validator;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Math\Random;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Module\ConnectionFactory;
@@ -70,11 +71,11 @@ class DbValidator
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
         $connection = $this->connectionFactory->create([
-            'dbname' => $dbName,
-            'host' => $dbHost,
-            'username' => $dbUser,
-            'password' => $dbPass,
-            'active' => true,
+            ConfigOptionsListConstants::KEY_NAME => $dbName,
+            ConfigOptionsListConstants::KEY_HOST => $dbHost,
+            ConfigOptionsListConstants::KEY_USER => $dbUser,
+            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+            ConfigOptionsListConstants::KEY_ACTIVE => true,
         ]);
 
         if (!$connection) {
@@ -108,11 +109,11 @@ class DbValidator
     public function checkDatabaseWrite($dbName, $dbHost, $dbUser, $dbPass = '')
     {
         $connection = $this->connectionFactory->create([
-            'dbname' => $dbName,
-            'host' => $dbHost,
-            'username' => $dbUser,
-            'password' => $dbPass,
-            'active' => true,
+            ConfigOptionsListConstants::KEY_NAME => $dbName,
+            ConfigOptionsListConstants::KEY_HOST => $dbHost,
+            ConfigOptionsListConstants::KEY_USER => $dbUser,
+            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+            ConfigOptionsListConstants::KEY_ACTIVE => true,
         ]);
         $tableName = $this->random->getRandomString(10);
         $newTable = $connection->newTable($tableName)->addColumn('testCol', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);

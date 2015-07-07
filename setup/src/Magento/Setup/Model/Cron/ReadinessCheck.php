@@ -19,7 +19,7 @@ class ReadinessCheck
     /**
      * Basename to readiness check result file
      */
-    const CRON_JOB_STATUS_FILE = '.setup_cronjob_status';
+    const SETUP_CRON_JOB_STATUS_FILE = '.setup_cronjob_status';
 
     /**#@+
      * Keys used in status file
@@ -74,20 +74,21 @@ class ReadinessCheck
         $dbInfo = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         try {
             $this->dbValidator->checkDatabaseConnection(
-                $dbInfo['dbname'],
-                $dbInfo['host'],
-                $dbInfo['username'],
-                $dbInfo['password']
+                $dbInfo[ConfigOptionsListConstants::KEY_NAME],
+                $dbInfo[ConfigOptionsListConstants::KEY_HOST],
+                $dbInfo[ConfigOptionsListConstants::KEY_USER],
+                $dbInfo[ConfigOptionsListConstants::KEY_PASSWORD]
             );
             $dbWritable = $this->dbValidator->checkDatabaseWrite(
-                $dbInfo['dbname'],
-                $dbInfo['host'],
-                $dbInfo['username'],
-                $dbInfo['password']
+                $dbInfo[ConfigOptionsListConstants::KEY_NAME],
+                $dbInfo[ConfigOptionsListConstants::KEY_HOST],
+                $dbInfo[ConfigOptionsListConstants::KEY_USER],
+                $dbInfo[ConfigOptionsListConstants::KEY_PASSWORD]
             );
             if (!$dbWritable) {
                 $success = false;
-                $errorMsg .= 'Database user ' . $dbInfo['username'] . ' does not have write access';
+                $errorMsg .= 'Database user ' . $dbInfo[ConfigOptionsListConstants::KEY_USER] .
+                    ' does not have write access';
             }
         } catch (\Exception $e) {
             $success = false;
@@ -100,8 +101,8 @@ class ReadinessCheck
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMsg;
         }
 
-        if ($write->isExist(self::CRON_JOB_STATUS_FILE)) {
-            $jsonData = json_decode($write->readFile(self::CRON_JOB_STATUS_FILE), true);
+        if ($write->isExist(self::SETUP_CRON_JOB_STATUS_FILE)) {
+            $jsonData = json_decode($write->readFile(self::SETUP_CRON_JOB_STATUS_FILE), true);
             if (isset($jsonData[self::KEY_CURRENT_TIMESTAMP])) {
                 $resultJsonRawData[self::KEY_LAST_TIMESTAMP] = $jsonData[self::KEY_CURRENT_TIMESTAMP];
             }
@@ -109,7 +110,7 @@ class ReadinessCheck
         $resultJsonRawData[self::KEY_CURRENT_TIMESTAMP] = time();
 
         $resultJson = json_encode($resultJsonRawData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        $write->writeFile(self::CRON_JOB_STATUS_FILE, $resultJson);
+        $write->writeFile(self::SETUP_CRON_JOB_STATUS_FILE, $resultJson);
         return $success;
     }
 }

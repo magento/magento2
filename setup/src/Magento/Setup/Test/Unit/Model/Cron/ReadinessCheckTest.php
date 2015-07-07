@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\Cron\ReadinessCheck;
 
 class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +41,14 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfig->expects($this->once())
             ->method('get')
-            ->willReturn(['dbname' => 'dbname', 'host' => 'host', 'username' => 'username', 'password' => 'password']);
+            ->willReturn(
+                [
+                    ConfigOptionsListConstants::KEY_NAME => 'dbname',
+                    ConfigOptionsListConstants::KEY_HOST => 'host',
+                    ConfigOptionsListConstants::KEY_USER => 'username',
+                    ConfigOptionsListConstants::KEY_PASSWORD => 'password'
+                ]
+            );
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
@@ -57,13 +65,16 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
-            'readiness_checks' => ['db_write_permission_verified' => false, 'error' => 'Connection failure'],
-            'current_timestamp' => 100
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
+                'error' => 'Connection failure'
+            ],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->write->expects($this->once())
             ->method('writeFile')
-            ->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
+            ->with(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE, $expectedJson);
         $this->readinessCheck->runReadinessCheck();
     }
 
@@ -75,16 +86,16 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
-            'readiness_checks' => [
-                'db_write_permission_verified' => false,
+            ReadinessCheck::KEY_READINESS_CHECKS => [
+                ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => false,
                 'error' => 'Database user username does not have write access'
             ],
-            'current_timestamp' => 100
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->write->expects($this->once())
             ->method('writeFile')
-            ->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
+            ->with(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE, $expectedJson);
         $this->readinessCheck->runReadinessCheck();
     }
 
@@ -96,13 +107,13 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
-            'readiness_checks' => ['db_write_permission_verified' => true],
-            'current_timestamp' => 100
+            ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->write->expects($this->once())
             ->method('writeFile')
-            ->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
+            ->with(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE, $expectedJson);
         $this->readinessCheck->runReadinessCheck();
     }
 
@@ -114,14 +125,14 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write->expects($this->once())->method('isExist')->willReturn(true);
         $this->write->expects($this->once())->method('readFile')->willReturn('{"current_timestamp": 50}');
         $expected = [
-            'readiness_checks' => ['db_write_permission_verified' => true],
-            'last_timestamp' => 50,
-            'current_timestamp' => 100,
+            ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
+            ReadinessCheck::KEY_LAST_TIMESTAMP => 50,
+            ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100,
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->write->expects($this->once())
             ->method('writeFile')
-            ->with(ReadinessCheck::CRON_JOB_STATUS_FILE, $expectedJson);
+            ->with(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE, $expectedJson);
         $this->readinessCheck->runReadinessCheck();
     }
 }
