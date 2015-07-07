@@ -272,6 +272,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_order</argument>
             <argument name="gridTableName" xsi:type="string">sales_order_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_order.entity_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_shipping_address" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order_address</item>
@@ -318,6 +319,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_shipment</argument>
             <argument name="gridTableName" xsi:type="string">sales_shipment_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_shipment.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_order" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order</item>
@@ -363,6 +365,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_creditmemo</argument>
             <argument name="gridTableName" xsi:type="string">sales_creditmemo_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_creditmemo.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_shipping_address" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order_address</item>
@@ -389,6 +392,7 @@
                 <item name="order_increment_id" xsi:type="string">sales_order.increment_id</item>
                 <item name="order_created_at" xsi:type="string">sales_order.created_at</item>
                 <item name="billing_name" xsi:type="object">BillingNameAggregator</item>
+                <item name="state" xsi:type="string">sales_creditmemo.state</item>
                 <item name="base_grand_total" xsi:type="string">sales_creditmemo.base_grand_total</item>
                 <item name="order_status" xsi:type="string">sales_order.status</item>
                 <item name="store_id" xsi:type="string">sales_creditmemo.store_id</item>
@@ -411,6 +415,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_invoice</argument>
             <argument name="gridTableName" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_invoice.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_order" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order</item>
@@ -457,7 +462,6 @@
             </argument>
         </arguments>
     </virtualType>
-
     <virtualType name="CustomerNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
         <arguments>
             <argument name="columns" xsi:type="array">
@@ -515,6 +519,16 @@
             <argument name="targetColumn" xsi:type="string">sales_order.entity_id</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Sales\Model\Resource\GridPool">
+        <arguments>
+            <argument name="grids" xsi:type="array">
+                <item name="order_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</item>
+                <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</item>
+                <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
+                <item name="creditmemo_grid" xsi:type="object">CreditmemoGridAggregator</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="SalesGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
@@ -550,16 +564,6 @@
     <type name="Magento\Sales\Model\Order\Config">
         <arguments>
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Model\Resource\GridPool">
-        <arguments>
-            <argument name="grids" xsi:type="array">
-                <item name="order_grid" xsi:type="object">Magento\Sales\Model\Resource\Grid</item>
-                <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\Resource\Grid</item>
-                <item name="shipment_grid" xsi:type="object">Magento\Sales\Model\Resource\Grid</item>
-                <item name="creditmemo_grid" xsi:type="object">Magento\Sales\Model\Resource\Grid</item>
-            </argument>
         </arguments>
     </type>
 </config>
