@@ -39,7 +39,11 @@ define([
                 }
             );
             var previewPopup = $('<div/>').html(modalHtml);
-            previewPopup.modal({title: this.getAlt(row), buttons: []}).trigger('openModal');
+            previewPopup.modal({
+                title: this.getAlt(row),
+                innerScroll: true,
+                modalClass: '_image-box',
+                buttons: []}).trigger('openModal');
         }
     });
 });

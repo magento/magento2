@@ -5,10 +5,11 @@
  */
 -->
 
-<div data-role="thumbnail-preview">
-    <img src="<%- src %>" alt="<%- alt %>" />
-
-    <div style="text-align: center">
-        <a href="<%- link %>"><%- linkText %></a>
+<div class="thumbnail-preview" data-role="thumbnail-preview">
+    <div class="thumbnail-preview-image-block">
+        <img class="thumbnail-preview-image" src="<%- src %>" alt="<%- alt %>" />
+    </div>
+    <div class="thumbnail-preview-content">
+        <a class="thumbnail-preview-link" href="<%- link %>"><%- linkText %></a>
     </div>
 </div>
