@@ -24,15 +24,15 @@ class QueryResponse implements ResponseInterface
     /**
      * Aggregation Collection
      *
-     * @var Aggregation
+     * @var AggregationInterface
      */
     protected $aggregations;
 
     /**
      * @param Document[] $documents
-     * @param Aggregation $aggregations
+     * @param AggregationInterface $aggregations
      */
-    public function __construct(array $documents, Aggregation $aggregations)
+    public function __construct(array $documents, AggregationInterface $aggregations)
     {
         $this->documents = $documents;
         $this->aggregations = $aggregations;
