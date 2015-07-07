@@ -21,8 +21,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     public function execute($ids = null)
     {
         try {
-            $this->_useIdxTable(true);
-            $this->_emptyTable($this->_getIdxTable());
+            $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(true);
+            $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
             $this->_prepareWebsiteDateTable();
             $this->_prepareTierPriceIndex();
             $this->_prepareGroupPriceIndex();

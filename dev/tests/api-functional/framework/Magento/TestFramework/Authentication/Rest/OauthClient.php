@@ -24,6 +24,11 @@ use OAuth\OAuth1\Token\TokenInterface;
  */
 class OauthClient extends AbstractService
 {
+    /**
+     * The maximum timeout for http request in seconds
+     */
+    const DEFAULT_TIMEOUT = 120;
+
     /** @var string|null */
     protected $_oauthVerifier = null;
 
@@ -36,6 +41,7 @@ class OauthClient extends AbstractService
     ) {
         if (!isset($httpClient)) {
             $httpClient = new \OAuth\Common\Http\Client\StreamClient();
+            $httpClient->setTimeout(self::DEFAULT_TIMEOUT);
         }
         if (!isset($storage)) {
             $storage = new \OAuth\Common\Storage\Session();

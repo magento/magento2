@@ -80,7 +80,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                 if ($isCodeLengthValid && $couponCode == $this->cart->getQuote()->getCouponCode()) {
                     $this->messageManager->addSuccess(
                         __(
-                            'The coupon code "%1" was applied.',
+                            'You used coupon code "%1".',
                             $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
                         )
                     );
@@ -94,7 +94,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                     $this->cart->save();
                 }
             } else {
-                $this->messageManager->addSuccess(__('The coupon code was canceled.'));
+                $this->messageManager->addSuccess(__('You canceled the coupon code.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
 
 /**
@@ -17,16 +15,22 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
+     * GROUP BY criteria
+     *
      * @var string
      */
     protected $_columnGroupBy = 'period';
 
     /**
+     * Config factory
+     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_configFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $resourceFactory
@@ -49,7 +53,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return void
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -59,18 +64,17 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getResourceCollectionName()
     {
-        return $this->getFilterData()->getData(
-            'report_type'
-        ) ==
-            'updated_at_order' ? 'Magento\Tax\Model\Resource\Report\Updatedat\Collection' : 'Magento\Tax\Model\Resource\Report\Collection';
+        return $this->getFilterData()->getData('report_type') == 'updated_at_order'
+            ? 'Magento\Tax\Model\Resource\Report\Updatedat\Collection'
+            : 'Magento\Tax\Model\Resource\Report\Collection';
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * {@inheritdoc}
      */
     protected function _prepareColumns()
     {

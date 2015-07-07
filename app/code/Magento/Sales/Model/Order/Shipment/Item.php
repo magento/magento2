@@ -164,7 +164,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
             $this->setData('qty', $qty);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid qty to ship for item "%1".', $this->getName())
+                __('We found an invalid quantity to ship for item "%1".', $this->getName())
             );
         }
         return $this;

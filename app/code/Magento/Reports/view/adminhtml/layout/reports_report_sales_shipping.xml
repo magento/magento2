@@ -26,7 +26,7 @@
                 <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form" name="grid.filter.form">
                     <action method="addReportTypeOption">
                         <argument name="key" xsi:type="string">created_at_order</argument>
-                        <argument translate="true" name="value" xsi:type="string">Order Created Date</argument>
+                        <argument translate="true" name="value" xsi:type="string">Order Created</argument>
                     </action>
                     <action method="addReportTypeOption">
                         <argument name="key" xsi:type="string">created_at_shipment</argument>

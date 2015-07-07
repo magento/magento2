@@ -128,6 +128,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for method isNeedToLogInHistory()
+     *
+     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isNeedToLogInHistory
+     */
+    public function testIsNeedToLogInHistory()
+    {
+        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+    }
+
+    /**
      * Test for method isAttributeValid()
      *
      * @dataProvider isAttributeValidDataProvider
@@ -169,5 +179,29 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ['created_at', ['type' => 'datetime'], ['created_at' => '11.02.4 11:12:59'], 1, false],
             ['dob', ['type' => 'datetime'], ['dob' => '02/29/2012 11:12:67'], 1, false]
         ];
+    }
+
+    /**
+     * Test getCreatedItemsCount()
+     */
+    public function testGetCreatedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getCreatedItemsCount());
+    }
+
+    /**
+     * Test getUpdatedItemsCount()
+     */
+    public function testGetUpdatedItemsCount()
+    {
+        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+    }
+
+    /**
+     * Test getDeletedItemsCount()
+     */
+    public function testGetDeletedItemsCount()
+    {
+        $this->assertNotEmpty('integer', $this->_model->getDeletedItemsCount());
     }
 }

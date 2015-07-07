@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 /**
  * @magentoAppArea adminhtml
  */
-class UrlRewriteTest extends \Magento\Backend\Utility\Controller
+class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Check save cms page rewrite
