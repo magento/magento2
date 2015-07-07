@@ -28,7 +28,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      *
      * @var string
      */
-    protected $collection = 'Magento\Sales\Model\Resource\Order\Collection';
+    protected $collection = 'Magento\Sales\Model\Resource\Order\Grid\Collection';
 
     /**
      * Execute action
