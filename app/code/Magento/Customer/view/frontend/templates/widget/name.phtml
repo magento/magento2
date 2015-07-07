@@ -29,16 +29,19 @@ $prefix = $block->showPrefix();
 $middle = $block->showMiddlename();
 $suffix = $block->showSuffix();
 ?>
+
 <?php if ($prefix || $middle || $suffix && !$block->getNoWrap()): ?>
 <div class="field required fullname <?php echo $block->getContainerClassName() ?>">
     <label for="<?php echo $block->getFieldId('firstname') ?>" class="label">
         <span><?php echo __('Name') ?></span>
     </label>
     <div class="control">
-        <div class="fields group <?php echo 2 + intval($prefix) + intval($middle) + intval($suffix) ?>">
-    <?php endif; ?>
-    <?php if ($prefix): ?>$
-        <div class="field name prefix<?php if ($block->isPrefixRequired()) echo ' required' ?>">
+        <fieldset class="fieldset fieldset-fullname">
+        <div class="fields">
+<?php endif; ?>
+
+    <?php if ($prefix): ?>
+        <div class="field field-name-prefix<?php if ($block->isPrefixRequired()) echo ' required' ?>">
             <label class="label" for="<?php echo $block->getFieldId('prefix') ?>">
                 <span><?php echo $block->getStoreLabel('prefix') ?></span>
             </label>
@@ -65,7 +68,7 @@ $suffix = $block->showSuffix();
             </div>
         </div>
     <?php endif; ?>
-        <div class="field name firstname required">
+        <div class="field field-name-firstname required">
             <label class="label" for="<?php echo $block->getFieldId('firstname') ?>">
                 <span><?php echo $block->getStoreLabel('firstname') ?></span>
             </label>
@@ -80,7 +83,7 @@ $suffix = $block->showSuffix();
         </div>
     <?php if ($middle): ?>
         <?php $isMiddlenameRequired = $block->isMiddlenameRequired(); ?>
-        <div class="field name middlename<?php echo $isMiddlenameRequired ? ' required' : '' ?>">
+        <div class="field field-name-middlename<?php echo $isMiddlenameRequired ? ' required' : '' ?>">
             <label class="label" for="<?php echo $block->getFieldId('middlename') ?>">
                 <span><?php echo $block->getStoreLabel('middlename') ?></span>
             </label>
@@ -94,7 +97,7 @@ $suffix = $block->showSuffix();
             </div>
         </div>
     <?php endif; ?>
-        <div class="field name lastname required">
+        <div class="field field-name-lastname required">
             <label class="label"  for="<?php echo $block->getFieldId('lastname') ?>">
                 <span><?php echo $block->getStoreLabel('lastname') ?></span>
             </label>
@@ -108,7 +111,7 @@ $suffix = $block->showSuffix();
             </div>
         </div>
     <?php if ($suffix): ?>
-        <div class="field name suffix<?php if ($block->isSuffixRequired()) echo ' required' ?>">
+        <div class="field field-name-suffix<?php if ($block->isSuffixRequired()) echo ' required' ?>">
             <label class="label" for="<?php echo $block->getFieldId('suffix') ?>">
                 <span><?php echo $block->getStoreLabel('suffix') ?></span>
             </label>
@@ -135,8 +138,10 @@ $suffix = $block->showSuffix();
             </div>
         </div>
     <?php endif; ?>
+
     <?php if ($prefix || $middle || $suffix && !$block->getNoWrap()): ?>
-        </div>
+            </div>
+        </fieldset>
     </div>
 </div>
 <?php endif; ?>
