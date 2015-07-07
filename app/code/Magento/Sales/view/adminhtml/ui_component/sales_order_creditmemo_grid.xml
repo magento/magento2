@@ -370,10 +370,10 @@
                     </argument>
                 </filterInput>
             </filterRange>
-            <filterRange name="grand_total">
+            <filterRange name="order_base_grand_total">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">grand_total</item>
+                        <item name="dataScope" xsi:type="string">order_base_grand_total</item>
                         <item name="label" xsi:type="string" translate="true">Grand Total</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.listing_top.listing_filters</item>
@@ -726,7 +726,7 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="order_base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>

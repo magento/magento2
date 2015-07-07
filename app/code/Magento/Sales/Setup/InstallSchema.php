@@ -3947,8 +3947,8 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
             ['store_id']
         )->addIndex(
-            $installer->getIdxName('sales_creditmemo_grid', ['grand_total']),
-            ['grand_total']
+            $installer->getIdxName('sales_creditmemo_grid', ['order_base_grand_total']),
+            ['order_base_grand_total']
         )->addIndex(
             $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
             ['order_id']
