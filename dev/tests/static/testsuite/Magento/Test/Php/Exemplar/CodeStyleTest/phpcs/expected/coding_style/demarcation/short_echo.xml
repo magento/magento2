@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-    <run method="_checkShortTagsOn"/>
-    <error line="1"/>
-</config>
-
