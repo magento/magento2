@@ -17,7 +17,7 @@ use Magento\Framework\Model\Resource\AbstractResource;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class AbstractDb extends AbstractResource implements SourceProviderInterface
+abstract class AbstractDb extends AbstractResource
 {
     /**
      * Cached resources singleton
