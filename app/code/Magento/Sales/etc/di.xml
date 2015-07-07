@@ -272,6 +272,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_order</argument>
             <argument name="gridTableName" xsi:type="string">sales_order_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_order.entity_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_shipping_address" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order_address</item>
@@ -318,6 +319,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_shipment</argument>
             <argument name="gridTableName" xsi:type="string">sales_shipment_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_shipment.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_order" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order</item>
@@ -363,6 +365,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_creditmemo</argument>
             <argument name="gridTableName" xsi:type="string">sales_creditmemo_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_creditmemo.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_shipping_address" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order_address</item>
@@ -411,6 +414,7 @@
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_invoice</argument>
             <argument name="gridTableName" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="orderIdField" xsi:type="string">sales_invoice.order_id</argument>
             <argument name="joins" xsi:type="array">
                 <item name="sales_order" xsi:type="array">
                     <item name="table" xsi:type="string">sales_order</item>
@@ -457,7 +461,6 @@
             </argument>
         </arguments>
     </virtualType>
-
     <virtualType name="CustomerNameAggregator" type="Magento\Sales\Model\Resource\Order\Grid\Sql\Concat">
         <arguments>
             <argument name="columns" xsi:type="array">
@@ -517,10 +520,12 @@
     </virtualType>
     <type name="Magento\Sales\Model\Resource\GridPool">
         <arguments>
-            <argument name="orderGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
-            <argument name="invoiceGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
-            <argument name="shipmentGrid" xsi:type="object">ShipmentGridAggregator</argument>
-            <argument name="creditmemoGrid" xsi:type="object">\CreditmemoGridAggregator</argument>
+            <argument name="grids" xsi:type="array">
+                <item name="order_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</item>
+                <item name="invoice_grid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</item>
+                <item name="shipment_grid" xsi:type="object">ShipmentGridAggregator</item>
+                <item name="creditmemo_grid" xsi:type="object">\CreditmemoGridAggregator</item>
+            </argument>
         </arguments>
     </type>
     <virtualType name="SalesGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
