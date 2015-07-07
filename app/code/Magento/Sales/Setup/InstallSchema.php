@@ -3909,11 +3909,11 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Adjustment Negative'
         )->addColumn(
-            'grand_total',
+            'order_base_grand_total',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Grand Total'
+            'Order Grand Total'
         )->addIndex(
             $installer->getIdxName(
                 'sales_creditmemo_grid',
