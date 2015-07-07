@@ -15,44 +15,47 @@ define([
 ], function (Component, $, ko, _, Collapsible, mageTemplate) {
     'use strict';
 
-    var MakeSections = function(){
-        return {
-            images: {
-                label: 'images',
-                type: ko.observable('none'),
-                value: ko.observable({images:[], preview:null}),
-                attribute: ko.observable()
-            },
-            pricing: {
-                label: 'price',
-                type: ko.observable('none'),
-                value: ko.observable(0),
-                attribute: ko.observable()
-            },
-            inventory: {
-                label: 'quantity',
-                type: ko.observable('none'),
-                value: ko.observable(0),
-                attribute: ko.observable()
-            }
-        };
-    };
-
     var viewModel;
     viewModel = Component.extend({
+        initialize: function () {
+            this.makeSections = function() {
+                return {
+                    images: {
+                        label: 'images',
+                        type: ko.observable('none'),
+                        value: ko.observable({images: [], preview: null}),
+                        attribute: ko.observable()
+                    },
+                    pricing: {
+                        label: 'price',
+                        type: ko.observable('none'),
+                        value: ko.observable(0),
+                        attribute: ko.observable(),
+                        currencySymbol: this.currencySymbol
+                    },
+                    inventory: {
+                        label: 'quantity',
+                        type: ko.observable('none'),
+                        value: ko.observable(0),
+                        attribute: ko.observable()
+                    }
+                };
+            };
+            this._super();
+            this.sections = ko.observable(this.makeSections());
+        },
         attributes: ko.observableArray([]),
         newProductsCount: ko.observable(),
         types: ['each', 'single', 'none'],
-        sections: ko.observable(MakeSections()),
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
             var count = 1;
             this.attributes.each(function (attribute) {
                 count *= attribute.chosen.length;
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable(MakeSections());
-                });
-            });
+                    option.sections = ko.observable(this.makeSections());
+                }, this);
+            }, this);
             _.each(this.sections(), function (section) {
                 section.attribute(null);
             });
@@ -68,9 +71,8 @@ define([
                         });
                     }).sections()[section];
                 case 'single':
-                    return this.sections()[section].value();
                 case 'none':
-                    return null;
+                    return this.sections()[section].value();
             }
         },
         getImageProperty: function (node) {
@@ -87,11 +89,10 @@ define([
                 return image.removed == true;
             });
             preview = _.find(images, function (image) {
-                return _.contains(image.galleryTypes, 'image');
+                return _.contains(image.galleryTypes, 'thumbnail');
             });
-            return images.length && preview
-                ? {'images': images, preview: preview.url, file: preview.file}
-                : null;
+            preview = preview || {url: this.noImage, file: null};
+            return {'images': images, preview: preview.url, file: preview.file};
         },
         fillImagesSection: function () {
             switch (this.sections().images.type()) {
@@ -106,7 +107,7 @@ define([
                     this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
                     break;
                 default:
-                    this.sections().images.value(null);
+                    this.sections().images.value({'images': [], preview: this.noImage, file: null});
                     break;
             }
         },

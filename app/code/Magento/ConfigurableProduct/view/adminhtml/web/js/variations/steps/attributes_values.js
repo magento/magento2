@@ -35,7 +35,18 @@ define([
         }
     };
 
-    var viewModel = Collapsible.extend({
+    var requestAttributes = _.memoize(function (attributeIds) {
+        $.ajax({
+            type: "POST",
+            url: this.optionsUrl,
+            data: {attributes: attributeIds},
+            showLoader: true
+        }).done(function(attributes){
+            this.attributes(_.map(attributes, this.createAttribute, this));
+        }.bind(this));
+    });
+
+    return Collapsible.extend({
         attributes: ko.observableArray([]),
         createOption: function () {
             // this - current attribute
@@ -74,7 +85,7 @@ define([
             this.attributes.each(function(attribute) {
                 attribute.chosen = [];
                 if (!attribute.chosenOptions.getLength()) {
-                    throw new Error($.mage.__('Please, select option(s) for the attributes'));
+                    throw new Error($.mage.__('Select options for all attributes or remove unused attributes.'));
                 }
                 attribute.chosenOptions.each(function(id) {
                     attribute.chosen.push(attribute.options.findWhere({id:id}));
@@ -122,14 +133,7 @@ define([
         },
         render: function(wizard) {
             this.wizard = wizard;
-            $.ajax({
-                type: "POST",
-                url: this.optionsUrl,
-                data: {attributes: wizard.data.attributesIds()},
-                showLoader: true
-            }).done(function(attributes){
-                this.attributes(_.map(attributes, this.createAttribute, this));
-            }.bind(this));
+            requestAttributes.call(this, wizard.data.attributesIds());
         },
         force: function(wizard) {
             this.saveOptions();
@@ -141,5 +145,4 @@ define([
             wizard.data.attributesIds(this.attributes().pluck('id'));
         }
     });
-    return viewModel;
 });
