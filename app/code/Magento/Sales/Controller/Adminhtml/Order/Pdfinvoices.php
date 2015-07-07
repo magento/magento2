@@ -12,6 +12,23 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    protected $fileFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+    ) {
+        $this->fileFactory = $fileFactory;
+        parent::__construct($context);
+    }
+
+    /**
      * Print invoices for selected orders
      *
      * @param AbstractCollection $collection
@@ -39,7 +56,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMass
         if ($flag) {
             $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')
                 ->date('Y-m-d_H-i-s');
-            return $this->_fileFactory->create(
+            return $this->fileFactory->create(
                 'invoice' . $date . '.pdf',
                 $pdf->render(),
                 DirectoryList::VAR_DIR,
