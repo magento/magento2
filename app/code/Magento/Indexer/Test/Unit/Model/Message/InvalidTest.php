@@ -39,7 +39,7 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $collectionMock->expects($this->any())->method('getItems')->with()->willReturn(array($this->indexerMock));
+        $collectionMock->expects($this->any())->method('getItems')->with()->willReturn([$this->indexerMock]);
 
         $this->model = new \Magento\Indexer\Model\Message\Invalid(
             $collectionMock
