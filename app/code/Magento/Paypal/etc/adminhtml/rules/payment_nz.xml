@@ -26,6 +26,9 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="wps_other">wps_other</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Website Payments Standard -->
@@ -51,6 +54,10 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="simple/disable" event="deactivate"/>
+            <rule type="conflict" event=":load">
+                <argument name="paypal_payflowpro_nz">paypal_payflowpro_nz</argument>
+                <argument name="express_checkout_other">express_checkout_other</argument>
+            </rule>
         </relation>
     </payment>
     <!-- Express Checkout -->
@@ -72,6 +79,9 @@
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate"/>
             <rule type="paypal/express/mark-disable" event="deactivate">
+                <argument name="wps_other">wps_other</argument>
+            </rule>
+            <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>
         </relation>
