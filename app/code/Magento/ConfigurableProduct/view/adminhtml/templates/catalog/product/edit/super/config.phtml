@@ -77,6 +77,7 @@ require([
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
         hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        noImageUrl = '<?= $block->getNoImageUrl() ?>',
         isLocked = function (element) {
             return element.is('[data-locked]');
         },
@@ -140,14 +141,6 @@ require([
         .on('disable', '[data-role=product-variations-matrix]', function() {
             $(this).html('');
         })
-        .on('click', '[data-column=entity_id]', function() {
-            var entityCheckBox = $(this);
-            entityCheckBox.closest('tr').find('input[type!=checkbox],button').each(function () {
-                if (!isLocked($(this))) {
-                    $(this).prop('disabled', !entityCheckBox.is(':checked'));
-                }
-            });
-        })
         .on('click', '[data-action=choose]', function(event) {
             event.preventDefault();
             var grid = window.<?php echo $block->getGridJsObject() ?>;
@@ -178,37 +171,34 @@ require([
                     $.each('name,sku,qty,weight,entity_id,price'.split(','), function () {
                         var columnSelector = columnSelectorTemplate.replace('%s', this),
                             target = $matrixRow.find(columnSelector),
-                            value = $.trim($gridRow.find(columnSelector).text()),
-                            button = target.find('[data-action=choose]');
+                            value = $.trim($gridRow.find(columnSelector).text());
 
-                        target[target.is('input[type=checkbox]') ? 'val' : 'text'](value).append(button);
+                        target[target.is('input') ? 'val' : 'text'](value);//.append(button);
                     });
 
-                    $matrixRow.find(columnSelectorTemplate.replace('%s', 'entity_id'))
-                        .prop({checked: true, disabled: false});
-
-                    $matrixRow.find('[data-action=no-image]').trigger('click');
+//                    $matrixRow.find('[data-action=no-image]').trigger('click');
 
                     var parentElement = $matrixRow.find('[data-column=image]'),
                         uploaderControl = parentElement.find('[data-action=upload-image]', parentElement),
-                        imageElement = $matrixRow.find('[data-role=image]');
+                        imageElement = $matrixRow.find('[data-role=image]'),
+                        selectedImageSrc = $gridRow.find('[data-role=image-url]').val();
 
                     if (imageElement.length) {
-                        imageElement.attr('src', $gridRow.find('[data-role=image-url]').val());
+                        selectedImageSrc = selectedImageSrc || noImageUrl;
+                        imageElement.attr('src', selectedImageSrc);
                     } else {
                         var tmpl = $('[data-role=product-variations-matrix]').find('[data-template-for=variation-image]').html();
 
                         tmpl = mageTemplate(tmpl, {
                             data: {
-                                url: $gridRow.find('[data-role=image-url]').val()
+                                url: selectedImageSrc
                             }
                         });
 
                         $(tmpl).prependTo(uploaderControl);
                     }
-
                     $matrixRow.find('[name=image]')
-                        .attr('src', $gridRow.find('[data-role=image-url]').val())
+                        .attr('src', selectedImageSrc)
                         .attr('data-locked', '1')
                         .trigger('click')
                         .prop({disabled: true});
