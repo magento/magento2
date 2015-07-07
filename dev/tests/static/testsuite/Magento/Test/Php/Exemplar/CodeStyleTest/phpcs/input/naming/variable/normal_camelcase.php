@@ -1,2 +1,0 @@
-<?php
-$variableToSet = 1;
