@@ -25,9 +25,7 @@ class FileSystemReaderTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->object->read();
         // Filter values added by \Magento\CatalogSearch\Model\Search\ReaderPlugin
-        $result = array_filter($result, function ($k) {
-            return in_array($k, ['bool_query', 'filter_query', 'new_match_query']);
-        }, ARRAY_FILTER_USE_KEY);
+        $result = array_intersect_key($result, array_flip(['bool_query', 'filter_query', 'new_match_query']));
         $expected = include __DIR__ . '/../../_files/search_request_merged.php';
         $this->assertEquals($expected, $result);
     }
