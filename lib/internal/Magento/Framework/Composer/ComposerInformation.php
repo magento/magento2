@@ -9,6 +9,7 @@ namespace Magento\Framework\Composer;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Package\Version\VersionParser;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
@@ -45,19 +46,40 @@ class ComposerInformation
     private $locker;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\Write
+     */
+    protected $directory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @var string
+     */
+    protected $pathToCacheFile = 'update_composer_packages.json';
+
+
+    /**
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
+     * @param \Magento\Framework\Filesystem $filesystem
      * @throws \Exception
      */
     public function __construct(
-        MagentoComposerApplicationFactory $applicationFactory
+        MagentoComposerApplicationFactory $applicationFactory,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
 
         // Create Composer
         $this->application = $applicationFactory->create();
         $this->composer = $this->application->createComposer();
         $this->locker = $this->composer->getLocker();
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -70,7 +92,7 @@ class ComposerInformation
     {
         if ($this->isMagentoRoot()) {
             $allPlatformReqs = $this->locker->getPlatformRequirements(true);
-            $requiredPhpVersion =  $allPlatformReqs['php']->getPrettyConstraint();
+            $requiredPhpVersion = $allPlatformReqs['php']->getPrettyConstraint();
         } else {
             $packages = $this->locker->getLockedRepository()->getPackages();
             /** @var PackageInterface $package */
@@ -166,17 +188,17 @@ class ComposerInformation
                 'name' => $package->getName(),
                 'type' => $package->getType(),
                 'version' => $package->getVersion()
-                ];
+            ];
         }
         return $packages;
     }
 
     /**
-     * Get list of available for update versions for packages
+     * Sync and cache list of available for update versions for packages
      *
-     * @return array
+     * @return bool
      */
-    public function getPackagesForUpdate()
+    public function syncPackagesForUpdate()
     {
         $availableVersions = [];
         foreach ($this->getRootRequiredPackageTypesByNameVersion() as $package) {
@@ -189,7 +211,21 @@ class ComposerInformation
                 ];
             }
         }
-        return $availableVersions;
+        return $this->savePackagesForUpdateToCache($availableVersions) ? true : false;
+    }
+
+    /**
+     * Sync and cache list of available for update versions for packages
+     *
+     * @return bool|array
+     */
+    public function getPackagesForUpdate()
+    {
+        $data = $this->loadPackagesForUpdateFromCache();
+        if (!$data) {
+            return $this->syncPackagesForUpdate();
+        }
+        return $data;
     }
 
     /**
@@ -246,5 +282,42 @@ class ComposerInformation
         $rootPackage = $this->composer->getPackage();
 
         return preg_match('/magento\/magento2.e/', $rootPackage->getName());
+    }
+
+    /**
+     * Save composer packages available for update to cache
+     *
+     * @param array $availableVersions
+     * @return bool|string
+     */
+    private function savePackagesForUpdateToCache($availableVersions)
+    {
+        $syncInfo = [];
+        $syncInfo['lastSync'] = $this->dateTime->formatDate(true);
+        $syncInfo['packages'] = $availableVersions;
+        $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
+        try {
+            $this->directory->writeFile($this->pathToCacheFile, $data);
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            return false;
+        }
+        return $data;
+    }
+
+    /**
+     * Load composer packages available for update from cache
+     *
+     * @return bool|string
+     */
+    private function loadPackagesForUpdateFromCache()
+    {
+        if ($this->directory->isExist($this->pathToCacheFile) && $this->directory->isReadable($this->pathToCacheFile)) {
+            try {
+                $data = $this->directory->readFile($this->pathToCacheFile);
+                return json_decode($data, true);
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            }
+        }
+        return false;
     }
 }
