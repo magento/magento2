@@ -13,7 +13,7 @@
             <button
                 type="button"
                 class="btn btn-prime"
-                ng-click="takeBackup()"
+                ng-click="$state.go('root.complete-backup.progress')"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
@@ -34,19 +34,6 @@
     >
     <span class="message-text">{{takeBackup.result.error}}</span>
 </div>
-<div
-    class="message message-error"
-    ng-show="testConnection.failed !== undefined"
-    >
-    <span class="message-text">{{takeBackup.failed}}</span>
-</div>
-<div class="message message-spinner" ng-show="loading">
-                <span class="spinner">
-                    <span></span><span></span><span></span><span></span>
-                    <span></span><span></span><span></span><span></span>
-                </span>
-    <span class="message-text">Taking backup...</span>
-</div>
 
 <form
     novalidate
@@ -54,9 +41,11 @@
     role="form"
     >
     <fieldset class="form-fieldset">
-        <label class="form-label" color="#FF8000">
-            <b>We will put your store into maintenance mode to protect your shoppers during upgrade </b>
-        </label>
+        <div class="message message-warning">
+            <span class="message-text">
+                <strong>We will put your store into maintenance mode to protect your shoppers during upgrade</strong>
+            </span>
+        </div>
         <div class="row form-row">
             <div class="col-m-3">
                 <label class="form-label">
@@ -104,3 +93,12 @@
         </div>
     </fieldset>
 </form>
+
+<div ng-show="$state.is('root.readiness-check-updater')" class="accent-box">
+    <p>Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
+    <button
+        class="btn btn-large btn-prime"
+        ng-click="$state.go('.progress')"
+        type="button"
+        >Start Readiness Check</button>
+</div>
