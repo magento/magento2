@@ -71,7 +71,7 @@ if ($variations) {
     <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title"><?php echo __('Current Variations'); ?></h3>
 
     <script data-template-for="variation-image" type="text/x-magento-template">
-        <img src="<% -data . url %>" class="variation" data-role="image"/>
+        <img src="<%= data.url %>" class="variation" data-role="image"/>
     </script>
     <!-- ko if: showVariations() -->
         <div class="field hidden" data-bind="css: {hidden: !showVariations() }">
