@@ -41,6 +41,7 @@ class DependencyReadinessCheck
      *
      * @param ComposerJsonFinder $composerJsonFinder
      * @param DirectoryList $directoryList
+     * @param File $file
      * @param MagentoComposerApplicationFactory $composerAppFactory
      */
     public function __construct(
