@@ -84,12 +84,14 @@ class Copy
     }
 
     /**
+     * Dispatch copy fieldset event
+     *
      * @param string $fieldset
      * @param string $aspect
-     * @param $source
-     * @param $target
-     * @param $root
-     * @param $targetIsArray
+     * @param array|\Magento\Framework\Object $source
+     * @param array|\Magento\Framework\Object $target
+     * @param string $root
+     * @param bool $targetIsArray
      * @return \Magento\Framework\Object|mixed
      */
     protected function dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray)
