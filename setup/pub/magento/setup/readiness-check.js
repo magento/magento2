@@ -224,7 +224,7 @@ angular.module('readiness-check', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.componentdependency);
                 }
-            }
+            };
         }
 
         $scope.isCompleted = function() {
