@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -178,7 +180,8 @@ class Full
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
-        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
+        \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
+        \Magento\Indexer\Model\ConfigInterface $indexerConfig
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -190,7 +193,8 @@ class Full
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->engine = $engine;
-        $this->indexHandler = $indexHandlerFactory->create();
+        $configData = $indexerConfig->getIndexer(Fulltext::INDEXER_ID);
+        $this->indexHandler = $indexHandlerFactory->create(['data' => $configData]);
         $this->dateTime = $dateTime;
         $this->localeResolver = $localeResolver;
         $this->localeDate = $localeDate;
