@@ -12,7 +12,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class ItemProduct
  * Item product block.
  */
 class ItemProduct extends Form
