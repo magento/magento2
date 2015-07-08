@@ -17,49 +17,85 @@ define([
 
     var viewModel;
     viewModel = Component.extend({
-        initialize: function () {
-            this.makeSections = function() {
-                return {
-                    images: {
-                        label: 'images',
-                        type: ko.observable('none'),
-                        value: ko.observable({images: [], preview: null}),
-                        attribute: ko.observable()
-                    },
-                    pricing: {
-                        label: 'price',
-                        type: ko.observable('none'),
-                        value: ko.observable(0),
-                        attribute: ko.observable(),
-                        currencySymbol: this.currencySymbol
-                    },
-                    inventory: {
-                        label: 'quantity',
-                        type: ko.observable('none'),
-                        value: ko.observable(0),
-                        attribute: ko.observable()
-                    }
-                };
-            };
-            this._super();
-            this.sections = ko.observable(this.makeSections());
+        defaults: {
+            images: null,
+            price: "",
+            quantity: ""
         },
-        attributes: ko.observableArray([]),
-        newProductsCount: ko.observable(),
+        initialize: function () {
+            var self = this;
+            this._super();
+            this.attributes = ko.observableArray([]);
+            this.countVariations = ko.observable();
+            this.sections = ko.observable({
+                images: {
+                    label: 'images',
+                    type: ko.observable('none'),
+                    value: ko.observable(),
+                    attribute: ko.observable()
+                },
+                price: {
+                    label: 'price',
+                    type: ko.observable('none'),
+                    value: ko.observable(),
+                    attribute: ko.observable(),
+                    currencySymbol: this.currencySymbol
+                },
+                quantity: {
+                    label: 'quantity',
+                    type: ko.observable('none'),
+                    value: ko.observable(),
+                    attribute: ko.observable()
+                }
+            });
+
+            this.makeOptionSections = function () {
+                this.images = new self.makeImages(null);
+                this.price = self.price;
+                this.quantity = self.quantity;
+            };
+            this.makeImages = function (images, typePreview) {
+                if (!images) {
+                    this.images = [];
+                    this.preview = self.noImage;
+                    this.file = null;
+                } else {
+                    this.images = images;
+                    var preview = _.find(this.images, function (image) {
+                        return _.contains(image.galleryTypes, typePreview);
+                    });
+
+                    if (preview) {
+                        this.file = preview.file;
+                        this.preview = preview.url;
+                    } else {
+                        this.file = null;
+                        this.preview = self.noImage;
+                    }
+                }
+            };
+            this.images = new this.makeImages();
+        },
         types: ['each', 'single', 'none'],
         render: function (wizard) {
             this.attributes(wizard.data.attributes());
-            var count = 1;
+
+            //fill option section data
             this.attributes.each(function (attribute) {
-                count *= attribute.chosen.length;
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable(this.makeSections());
+                    option.sections = ko.observable(new this.makeOptionSections());
                 }, this);
             }, this);
+
+            //reset section.attribute
             _.each(this.sections(), function (section) {
                 section.attribute(null);
             });
-            this.newProductsCount(count);
+
+            this.countVariations(_.reduce(this.attributes(), function (memo, attribute) {
+                return memo * attribute.chosen.length;
+            }, 1));
+
             this.bindGalleries();
         },
         getSectionValue: function (section, options) {
@@ -71,12 +107,12 @@ define([
                         });
                     }).sections()[section];
                 case 'single':
-                case 'none':
                     return this.sections()[section].value();
+                case 'none':
+                    return this[section];
             }
         },
         getImageProperty: function (node) {
-            var preview;
             var types = node.find('[data-role=gallery]').productGallery('option').types;
             var images = _.map(node.find('[data-role=image]'), function (image) {
                 var imageData = $(image).data('imageData');
@@ -85,29 +121,28 @@ define([
                 }), 'code');
                 return imageData;
             });
-            images = _.reject(images, function (image) {
+            return _.reject(images, function (image) {
                 return image.removed == true;
             });
-            preview = _.find(images, function (image) {
-                return _.contains(image.galleryTypes, 'thumbnail');
-            });
-            preview = preview || {url: this.noImage, file: null};
-            return {'images': images, preview: preview.url, file: preview.file};
         },
         fillImagesSection: function () {
             switch (this.sections().images.type()) {
                 case 'each':
                     this.sections().images.attribute().chosen.each(function (option) {
-                        option.sections().images = this.getImageProperty(
-                            $('[data-role=step-gallery-option-'+option.id+']')
+                        option.sections().images = new this.makeImages(
+                            this.getImageProperty($('[data-role=step-gallery-option-'+option.id+']')),
+                            'thumbnail'
                         );
                     }, this);
                     break;
                 case 'single':
-                    this.sections().images.value(this.getImageProperty($('[data-role=step-gallery-single]')));
+                    this.sections().images.value(new this.makeImages(
+                        this.getImageProperty($('[data-role=step-gallery-single]')),
+                        'thumbnail'
+                    ));
                     break;
                 default:
-                    this.sections().images.value({'images': [], preview: this.noImage, file: null});
+                    this.sections().images.value(new this.makeImages());
                     break;
             }
         },
