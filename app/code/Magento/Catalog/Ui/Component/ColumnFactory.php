@@ -16,7 +16,7 @@ class ColumnFactory
      * @var array
      */
     protected $jsComponentMap = [
-        'text' => 'Magento_Ui/js/grid/columns/sortable',
+        'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
