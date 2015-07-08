@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Test\Unit\View\Asset\PreProcessor;
 
-use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\PreProcessor\Minify;
 
 /**
@@ -30,11 +29,6 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
     protected $adapterMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $appStateMock;
-
-    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -47,14 +41,10 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['minify'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->minify = new Minify(
             $this->configMock,
-            $this->adapterMock,
-            $this->appStateMock
+            $this->adapterMock
         );
     }
 
@@ -64,11 +54,10 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
      * @param int $minifyCalls
      * @param int $setContentCalls
      * @param bool $isEnabled
-     * @param int $appMode
      * @return void
      * @dataProvider processDataProvider
      */
-    public function testProcess($targetPath, $originalPath, $minifyCalls, $setContentCalls, $isEnabled, $appMode)
+    public function testProcess($targetPath, $originalPath, $minifyCalls, $setContentCalls, $isEnabled)
     {
         $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()
@@ -101,11 +90,6 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
             ->method('isAssetMinification')
             ->willReturnMap([['css', $isEnabled]]);
 
-        $this->appStateMock
-            ->expects($this->any())
-            ->method('getMode')
-            ->willReturn($appMode);
-
         $this->minify->process($chainMock);
     }
 
@@ -115,16 +99,13 @@ class MinifyTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            ['test.min.css', 'test.css', 1, 1, true, State::MODE_PRODUCTION],
-            ['test.min.css', 'test.css', 1, 1, true, State::MODE_DEFAULT],
-            ['test.min.css', 'test.min.css', 0, 0, true, State::MODE_PRODUCTION],
-            ['test.min.css', 'test.css', 0, 0, true, State::MODE_DEVELOPER],
-            ['test.jpeg', 'test.jpeg', 0, 0, true, State::MODE_DEFAULT],
-            ['test.css', 'test.css', 0, 0, true, State::MODE_DEFAULT],
-            ['test.jpeg', 'test.jpeg', 0, 0, true, State::MODE_DEFAULT],
-            ['test.css', 'test.css', 0, 0, true, State::MODE_DEFAULT],
-            ['test.min.css', 'test.css', 0, 0, false, State::MODE_DEFAULT],
-            ['test.css', 'test.css', 0, 0, false, State::MODE_DEFAULT]
+            ['test.min.css', 'test.css', 1, 1, true],
+            ['test.min.css', 'test.min.css', 0, 0, true],
+            ['test.jpeg', 'test.jpeg', 0, 0, true],
+            ['test.css', 'test.css', 0, 0, true],
+            ['test.jpeg', 'test.jpeg', 0, 0, true],
+            ['test.css', 'test.css', 0, 0, true],
+            ['test.css', 'test.css', 0, 0, false]
         ];
     }
 }
