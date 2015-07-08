@@ -82,7 +82,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
 
@@ -93,7 +94,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
             ->disableOriginalConstructor()
@@ -116,7 +118,8 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
 
-        $this->redirectFactory = $this->getMock('Magento\Framework\Controller\Result\RedirectFactory', [], [], '', false);
+        $this->redirectFactory =
+            $this->getMock('Magento\Framework\Controller\Result\RedirectFactory', [], [], '', false);
         $this->redirect = $this->getMock('Magento\Store\App\Response\Redirect', [], [], '', false);
 
         $this->redirect->expects($this->any())

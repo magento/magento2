@@ -113,8 +113,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                             )
                         );
                     }
-                }
-                else {
+                } else {
                     if ($isCodeLengthValid && $couponCode == $cartQuote->getCouponCode()) {
                         $this->messageManager->addSuccess(
                             __(
