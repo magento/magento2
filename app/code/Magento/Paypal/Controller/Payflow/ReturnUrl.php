@@ -34,12 +34,14 @@ class ReturnUrl extends Payflow
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
 
-            if (in_array($order->getState(), $this->allowedOrderStates)) {
-                $redirectBlock->setData('goto_success_page', true);
-            } else {
-                $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
-                $redirectBlock->setData('goto_section', $gotoSection);
-                $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
+            if ($order->getIncrementId()) {
+                if (in_array($order->getState(), $this->allowedOrderStates)) {
+                    $redirectBlock->setData('goto_success_page', true);
+                } else {
+                    $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                    $redirectBlock->setData('goto_section', $gotoSection);
+                    $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
+                }
             }
         }
 
