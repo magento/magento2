@@ -9,6 +9,7 @@ use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * This class checks for dependencies between components after an upgrade. It is used in readiness check.
@@ -31,6 +32,11 @@ class DependencyReadinessCheck
     private $composerApp;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * Constructor
      *
      * @param ComposerJsonFinder $composerJsonFinder
@@ -40,10 +46,12 @@ class DependencyReadinessCheck
     public function __construct(
         ComposerJsonFinder $composerJsonFinder,
         DirectoryList $directoryList,
+        File $file,
         MagentoComposerApplicationFactory $composerAppFactory
     ) {
         $this->composerJsonFinder = $composerJsonFinder;
         $this->directoryList = $directoryList;
+        $this->file = $file;
         $this->composerApp = $composerAppFactory->create();
     }
 
@@ -57,7 +65,7 @@ class DependencyReadinessCheck
     public function runReadinessCheck(array $packages)
     {
         $composerJson = $this->composerJsonFinder->findComposerJson();
-        copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
+        $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
             // run require

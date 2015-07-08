@@ -25,6 +25,11 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $composerApp;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Driver\File
+     */
+    private $file;
+
+    /**
      * @var DependencyReadinessCheck;
      */
     private $dependencyReadinessCheck;
@@ -36,6 +41,8 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturn('var');
         $this->composerApp = $this->getMock('Magento\Composer\MagentoComposerApplication', [], [], '', false);
+        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->file->expects($this->once())->method('copy')->with('composer.json', 'var/composer.json');
         $composerAppFactory = $this->getMock(
             'Magento\Framework\Composer\MagentoComposerApplicationFactory',
             [],
@@ -47,6 +54,7 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->dependencyReadinessCheck = new DependencyReadinessCheck(
             $this->composerJsonFinder,
             $this->directoryList,
+            $this->file,
             $composerAppFactory
         );
     }
@@ -76,12 +84,4 @@ class DependencyReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = ['success' => true];
         $this->assertEquals($expected, $this->dependencyReadinessCheck->runReadinessCheck([]));
     }
-}
-
-// function to override PHP native function
-namespace Magento\Setup\Model;
-
-function copy()
-{
-    return;
 }
