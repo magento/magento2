@@ -90,6 +90,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param string|array $field
      * @param string|null $alias
+     * @return void
      */
     public function addField($field, $alias = null)
     {

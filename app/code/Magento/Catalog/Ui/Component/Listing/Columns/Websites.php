@@ -64,6 +64,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * Prepare component configuration
+     * @return void
      */
     public function prepare()
     {

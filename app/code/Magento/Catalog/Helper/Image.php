@@ -139,7 +139,7 @@ class Image extends AbstractHelper
     /**
      * Initialize Helper to work with Image
      *
-     * @param $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $attributeName
      * @param string|null $imageFile
      * @return $this

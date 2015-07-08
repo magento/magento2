@@ -16,6 +16,11 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 interface ContextInterface
 {
     /**
+     * Filter variable name
+     */
+    const FILTER_VAR = 'filters';
+
+    /**
      * Add components definition
      *
      * @param string $name

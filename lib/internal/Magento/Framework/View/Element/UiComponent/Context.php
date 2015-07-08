@@ -195,7 +195,7 @@ class Context implements ContextInterface
      */
     public function getFiltersParams()
     {
-        return $this->getRequestParam(\Magento\Ui\Component\Filters\Type\AbstractFilter::FILTER_VAR, []);
+        return $this->getRequestParam(self::FILTER_VAR, []);
     }
 
     /**

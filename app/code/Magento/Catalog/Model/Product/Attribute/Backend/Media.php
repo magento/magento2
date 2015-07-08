@@ -624,7 +624,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     protected function getFilenameFromTmp($file)

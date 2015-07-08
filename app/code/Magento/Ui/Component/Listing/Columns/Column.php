@@ -108,6 +108,7 @@ class Column extends AbstractComponent implements ColumnInterface
 
     /**
      * Add field to select
+     * @return void
      */
     protected function addFieldToSelect()
     {

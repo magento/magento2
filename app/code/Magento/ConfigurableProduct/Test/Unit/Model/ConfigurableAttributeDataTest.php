@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
+namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 /**
  * Class CustomOptionTest
