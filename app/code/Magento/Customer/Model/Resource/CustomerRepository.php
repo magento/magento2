@@ -56,11 +56,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -93,7 +88,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Customer\Model\Resource\Customer $customerResourceModel
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
      * @param \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param DataObjectHelper $dataObjectHelper
@@ -109,7 +103,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\Resource\Customer $customerResourceModel,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
         \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         DataObjectHelper $dataObjectHelper,
@@ -123,7 +116,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->customerResourceModel = $customerResourceModel;
         $this->customerMetadata = $customerMetadata;
         $this->searchResultsFactory = $searchResultsFactory;
-        $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -215,10 +207,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
 
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
-        $this->eventManager->dispatch(
-            'customer_save_after_data_object',
-            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $customer]
-        );
         return $savedCustomer;
     }
 

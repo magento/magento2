@@ -78,18 +78,33 @@ class Copy
             }
         }
 
+        $target = $this->dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray);
+
+        return $target;
+    }
+
+    /**
+     * @param string $fieldset
+     * @param string $aspect
+     * @param $source
+     * @param $target
+     * @param $root
+     * @param $targetIsArray
+     * @return \Magento\Framework\Object|mixed
+     */
+    protected function dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray)
+    {
         $eventName = sprintf('core_copy_fieldset_%s_%s', $fieldset, $aspect);
-        if($targetIsArray) {
+        if ($targetIsArray) {
             $target = new \Magento\Framework\Object($target);
         }
         $this->_eventManager->dispatch(
             $eventName,
             ['target' => $target, 'source' => $source, 'root' => $root]
         );
-        if($targetIsArray) {
+        if ($targetIsArray) {
             $target = $target->getData();
         }
-
         return $target;
     }
 

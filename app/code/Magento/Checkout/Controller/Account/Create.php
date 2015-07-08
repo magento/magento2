@@ -48,6 +48,8 @@ class Create extends \Magento\Framework\App\Action\Action
      *
      * @throws AlreadyExistsException
      * @throws NoSuchEntityException
+     * @throws \Exception
+     * @return void
      */
     public function execute()
     {

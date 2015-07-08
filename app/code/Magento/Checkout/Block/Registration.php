@@ -28,6 +28,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * @param Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Model\Registration $registration
      * @param array $data
      */
     public function __construct(

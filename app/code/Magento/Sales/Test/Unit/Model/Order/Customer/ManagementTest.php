@@ -91,7 +91,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->orderRepository->expects($this->once())->method('get')->with(1)->will($this->returnValue($orderMock));
         $this->objectCopyService->expects($this->any())->method('copyFieldsetToTarget')->will($this->returnValueMap(
             [
-                ['order_address', 'to_customer', 'billing_address', [],  'global', ['customer_data' => []]],
+                ['order_address', 'to_customer', 'billing_address', [], 'global', ['customer_data' => []]],
                 ['order_address', 'to_customer_address', 'order_address_data', [], 'global', 'address_data']
             ]
         ));
