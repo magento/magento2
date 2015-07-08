@@ -540,8 +540,10 @@
                             <span data-bind="text:label"></span>
                         </label>
                         <div class="admin__field-control">
-                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
-                            <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
+                            <div class="currency-addon">
+                                <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                                <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
+                            </div>
                         </div>
                     </div>
                     <!-- /ko -->
