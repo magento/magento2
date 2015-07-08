@@ -5,6 +5,8 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\View\Design\ThemeInterface;
 use \Magento\Theme\Model\Theme\ThemeProvider;
 
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
@@ -54,5 +56,37 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 
         $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
         $this->assertSame($theme, $themeProvider->getThemeById($themeId));
+    }
+
+    public function testGetThemeCustomizations()
+    {
+        $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\CollectionFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeFactory = $this->getMockBuilder('Magento\Theme\Model\ThemeFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $collection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
+        $collection->expects($this->once())
+            ->method('addAreaFilter')
+            ->with(Area::AREA_FRONTEND)
+            ->willReturnSelf();
+        $collection->expects($this->once())
+            ->method('addTypeFilter')
+            ->with(ThemeInterface::TYPE_VIRTUAL)
+            ->willReturnSelf();
+
+        /** @var \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory */
+        /** @var \Magento\Theme\Model\ThemeFactory $themeFactory */
+        $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
+        $this->assertInstanceOf(get_class($collection), $themeProvider->getThemeCustomizations());
     }
 }

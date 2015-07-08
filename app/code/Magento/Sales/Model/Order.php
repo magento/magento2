@@ -1068,16 +1068,28 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Is order status in DB "Fraud detected"
+     *
+     * @return bool
+     */
+    public function isFraudDetected()
+    {
+        return $this->getOrigData(self::STATE) == self::STATE_PAYMENT_REVIEW
+            && $this->getOrigData(self::STATUS) == self::STATUS_FRAUD;
+    }
+
+    /**
      * Prepare order totals to cancellation
      *
      * @param string $comment
      * @param bool $graceful
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
-        if ($this->canCancel() || $this->isPaymentReview()) {
+        if ($this->canCancel() || $this->isPaymentReview() || $this->isFraudDetected()) {
             $state = self::STATE_CANCELED;
             foreach ($this->getAllItems() as $item) {
                 if ($state != self::STATE_PROCESSING && $item->getQtyToRefund()) {
