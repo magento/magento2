@@ -48,18 +48,17 @@ class ComposerInformation
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
      */
-    protected $directory;
+    private $directory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
      */
-    protected $dateTime;
+    private $dateTime;
 
     /**
      * @var string
      */
-    protected $pathToCacheFile = 'update_composer_packages.json';
-
+    private $pathToCacheFile = 'update_composer_packages.json';
 
     /**
      * Constructor
